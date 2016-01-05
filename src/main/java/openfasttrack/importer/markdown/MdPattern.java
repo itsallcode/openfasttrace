@@ -8,8 +8,19 @@ import java.util.regex.Pattern;
  */
 public enum MdPattern
 {
-    EVERYTHING(".*"), ID(".*<a +id *= *\"((?:\\w+\\.)+\\w+(?:~\\d+)?)\".*"), COVERS(
-            "#*\\s*Covers:\\s*"), REFERENCE(".*\\(#([^)])");
+    // @formatter:off
+    COMMENT("Comment:\\s*"),
+    COVERS("Covers:\\s*"),
+    COVERS_REF("\\s{0,3}\\*\\s*.*\\(#([^)])"),
+    DEPENDS("Depends:\\s*"),
+    DETAILS_REF("\\s{0,3}\\+\\s*.*\\(#([^)])"),
+    DEPENDS_REF("\\s{0,3}-\\s*.*\\(#([^)])"),
+    EMPTY("\\s*"),
+    EVERYTHING(".*"),
+    ID(".*<a +id *= *\"((?:\\w+\\.)+\\w+(?:~\\d+)?)\".*"),
+    NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)+)"),
+    RATIONALE("Rationale:\\s*");
+    // @formatter:on
 
     private final Pattern pattern;
 

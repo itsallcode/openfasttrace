@@ -2,32 +2,56 @@ package openfasttrack.importer.markdown;
 
 import java.util.regex.Matcher;
 
-import openfasttrack.importer.ImportEventListener;
-
+/**
+ * This machine implements the core of a state based parser
+ *
+ * Before the state machine is run, it needs to be configured with a transition
+ * table in the constructor.
+ *
+ * Each step of the state machine gets a portion of the text to be imported as
+ * input. The machine checks the current state and the input on each step and
+ * decides on resulting state and action depending on the configuration provided
+ * in the transition table.
+ */
 public class MarkdownImporterStateMachine
 {
-    private final ImportEventListener listener;
     private State state = State.START;
     private String lastToken = "";
+    private final Transition[] transitions;
 
-    public MarkdownImporterStateMachine(final ImportEventListener listener)
+    /**
+     * Create a new instance of the {@link MarkdownImporterStateMachine}
+     *
+     * @param transitions
+     *            the transition table that serves as configuration for the
+     *            state machine
+     */
+    public MarkdownImporterStateMachine(final Transition[] transitions)
     {
-        this.listener = listener;
+        this.transitions = transitions;
     }
 
+    /**
+     * Step the state machine
+     *
+     * @param line
+     *            the text fragment on which the state machine decides the next
+     *            state and action
+     */
     public void step(final String line)
     {
         for (final Transition entry : this.transitions)
         {
-            if (this.state == entry.getFrom())
+            if ((this.state == entry.getFrom()) && matchToken(line, entry))
             {
-                matchToken(line, entry);
+                break;
             }
         }
     }
 
-    private void matchToken(final String line, final Transition entry)
+    private boolean matchToken(final String line, final Transition entry)
     {
+        boolean matches = false;
         final Matcher matcher = entry.getMarkdownPattern().getPattern().matcher(line);
         if (matcher.matches())
         {
@@ -36,33 +60,25 @@ public class MarkdownImporterStateMachine
                 this.lastToken = matcher.group(1);
             }
             executeTransition(line, entry);
+            matches = true;
         }
+        return matches;
     }
 
     private void executeTransition(final String line, final Transition entry)
     {
-        entry.getTransition().transit();
         System.out.println(this.state + " -> " + entry.getTo() + " : " + line);
+        entry.getTransition().transit();
         this.state = entry.getTo();
     }
 
-    private void emitNewId()
+    /**
+     * Get the last text token that the state machine isolated
+     *
+     * @return the last text token
+     */
+    public String getLastToken()
     {
-        this.listener.foundNewSpecificationItem(this.lastToken);
+        return this.lastToken;
     }
-
-    private void emitAddCoverage()
-    {
-        this.listener.addCoverage(this.lastToken);
-    }
-
-    // @formatter:off
-    private final Transition[] transitions = {
-            new Transition(State.START    , State.OUTSIDE  , MdPattern.EVERYTHING, () -> {}),
-            new Transition(State.START    , State.SPEC_ITEM, MdPattern.ID        , () -> this.emitNewId()),
-            new Transition(State.OUTSIDE  , State.SPEC_ITEM, MdPattern.ID        , () -> this.emitNewId()),
-            new Transition(State.SPEC_ITEM, State.COVERS   , MdPattern.COVERS    , () -> {}),
-            new Transition(State.COVERS   , State.COVERS   , MdPattern.REFERENCE , () -> this.emitAddCoverage())
-    };
-    // @formatter:on
 }

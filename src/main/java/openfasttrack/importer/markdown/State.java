@@ -2,5 +2,5 @@ package openfasttrack.importer.markdown;
 
 enum State
 {
-    START, OUTSIDE, SPEC_ITEM, COVERS, NEEDS, EOF
+    START, OUTSIDE, SPEC_ITEM, DESCRIPTION, COVERS, DEPENDS, RATIONALE, COMMENT, NEEDS, EOF
 }

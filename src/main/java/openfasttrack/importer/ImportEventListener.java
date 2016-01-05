@@ -43,4 +43,11 @@ public interface ImportEventListener
      */
     public void addNeeded(final String specificationItemType);
 
+    /**
+     * Append a text block to an item description
+     *
+     * @param string
+     *            the text to be appended to the description
+     */
+    public void appendDescription(String string);
 }

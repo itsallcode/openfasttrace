@@ -2,6 +2,11 @@ package openfasttrack.importer;
 
 import static org.mockito.Mockito.verify;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.io.StringReader;
 
 import org.junit.Test;
@@ -17,17 +22,15 @@ public class TestImportMarkdown
     final private static String REQ_ID = "type.id~1";
     final private static String REQ_TITLE = "Requirement Title";
 
-    // @Test
-    // public void readSpec() throws FileNotFoundException
-    // {
-    //
-    // final FileReader fileReader = new FileReader(new
-    // File("doc/system_requirements.md"));
-    // final Reader reader = new BufferedReader(fileReader);
-    // final Importer importer = ImporterFactory.createImporter(reader,
-    // this.listenerMock);
-    // importer.runImport();
-    // }
+    @Test
+    public void readSpec() throws FileNotFoundException
+    {
+
+        final FileReader fileReader = new FileReader(new File("doc/system_requirements.md"));
+        final Reader reader = new BufferedReader(fileReader);
+        final Importer importer = ImporterFactory.createImporter(reader, this.listenerMock);
+        importer.runImport();
+    }
 
     @Test
     public void testFindRequirementId()

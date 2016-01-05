@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.util.List;
 
 import openfasttrack.core.SpecificationItem;
+import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 
@@ -52,64 +53,63 @@ public class MarkdownImporter implements Importer
 
     // @formatter:off
     private final Transition[] transitions = {
-            _T(State.START      , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.START      , State.OUTSIDE    , MdPattern.EVERYTHING , () -> {}                      ),
+            _T(State.START      , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.START      , State.OUTSIDE    , MdPattern.EVERYTHING , () -> {}               ),
 
-            _T(State.OUTSIDE    , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
+            _T(State.OUTSIDE    , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
 
-            _T(State.SPEC_ITEM  , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.SPEC_ITEM  , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}                      ),
-            _T(State.SPEC_ITEM  , State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.SPEC_ITEM  , State.COVERS     , MdPattern.COVERS     , () -> {}                      ),
-            _T(State.SPEC_ITEM  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.EVERYTHING , () -> this.appendDescription()),
+            _T(State.SPEC_ITEM  , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.SPEC_ITEM  , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.SPEC_ITEM  , State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.SPEC_ITEM  , State.COVERS     , MdPattern.COVERS     , () -> {}               ),
+            _T(State.SPEC_ITEM  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription),
 
-            _T(State.DESCRIPTION, State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.DESCRIPTION, State.RATIONALE  , MdPattern.RATIONALE  , () -> {}                      ),
-            _T(State.DESCRIPTION, State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.DESCRIPTION, State.COVERS     , MdPattern.COVERS     , () -> {}                      ),
-            _T(State.DESCRIPTION, State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.DESCRIPTION, State.DESCRIPTION, MdPattern.EVERYTHING , () -> this.appendDescription()),
+            _T(State.DESCRIPTION, State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.DESCRIPTION, State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.DESCRIPTION, State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.DESCRIPTION, State.COVERS     , MdPattern.COVERS     , () -> {}               ),
+            _T(State.DESCRIPTION, State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.DESCRIPTION, State.DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription),
 
-            _T(State.RATIONALE  , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.RATIONALE  , State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.RATIONALE  , State.COVERS     , MdPattern.COVERS     , () -> {}                      ),
-            _T(State.RATIONALE  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.RATIONALE  , State.RATIONALE  , MdPattern.EVERYTHING , () -> this.appendRationale()  ),
+            _T(State.RATIONALE  , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.RATIONALE  , State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.RATIONALE  , State.COVERS     , MdPattern.COVERS     , () -> {}               ),
+            _T(State.RATIONALE  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.RATIONALE  , State.RATIONALE  , MdPattern.EVERYTHING , this::appendRationale  ),
 
-            _T(State.COMMENT    , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.COMMENT    , State.COVERS     , MdPattern.COVERS     , () -> {}                      ),
-            _T(State.COMMENT    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.COMMENT    , State.RATIONALE  , MdPattern.EVERYTHING , () -> {}                      ),
-            _T(State.COMMENT    , State.COMMENT    , MdPattern.COMMENT    , () -> this.appendComment()    ),
+            _T(State.COMMENT    , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.COMMENT    , State.COVERS     , MdPattern.COVERS     , () -> {}               ),
+            _T(State.COMMENT    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.COMMENT    , State.RATIONALE  , MdPattern.EVERYTHING , () -> {}               ),
+            _T(State.COMMENT    , State.COMMENT    , MdPattern.COMMENT    , this::appendComment    ),
 
-            _T(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.COVERS     , State.COVERS     , MdPattern.COVERS_REF , () -> this.addCoverage()      ),
-            _T(State.COVERS     , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}                      ),
-            _T(State.COVERS     , State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.COVERS     , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.COVERS     , State.COVERS     , MdPattern.EMPTY      , () -> {}                      ),
+            _T(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.COVERS     , State.COVERS     , MdPattern.COVERS_REF , this::addCoverage      ),
+            _T(State.COVERS     , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.COVERS     , State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.COVERS     , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.COVERS     , State.COVERS     , MdPattern.EMPTY      , () -> {}               ),
 
-            _T(State.DEPENDS    , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS_REF, () -> this.addDependency()    ),
-            _T(State.DEPENDS    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}                      ),
-            _T(State.DEPENDS    , State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.EMPTY      , () -> {}                      ),
+            _T(State.DEPENDS    , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS_REF, this::addDependency    ),
+            _T(State.DEPENDS    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.DEPENDS    , State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.DEPENDS    , State.DEPENDS    , MdPattern.EMPTY      , () -> {}               ),
 
-            _T(State.NEEDS      , State.SPEC_ITEM  , MdPattern.ID         , () -> this.emitNewId()        ),
-            _T(State.NEEDS      , State.DEPENDS    , MdPattern.DEPENDS_REF, () -> {}                      ),
-            _T(State.NEEDS      , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}                      ),
-            _T(State.NEEDS      , State.COMMENT    , MdPattern.COMMENT    , () -> {}                      ),
-            _T(State.NEEDS      , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                      ),
-            _T(State.NEEDS      , State.NEEDS      , MdPattern.NEEDS      , () -> this.addNeeds()         ),
-            _T(State.NEEDS      , State.DEPENDS    , MdPattern.EMPTY      , () -> {}                      ),
+            _T(State.NEEDS      , State.SPEC_ITEM  , MdPattern.ID         , this::emitNewId        ),
+            _T(State.NEEDS      , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.NEEDS      , State.COMMENT    , MdPattern.COMMENT    , () -> {}               ),
+            _T(State.NEEDS      , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
+            _T(State.NEEDS      , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
+            _T(State.NEEDS      , State.NEEDS      , MdPattern.EMPTY      , () -> {}               )
     };
     // @formatter:on
 
@@ -150,11 +150,13 @@ public class MarkdownImporter implements Importer
 
     private void emitNewId()
     {
-        this.listener.foundNewSpecificationItem(this.stateMachine.getLastToken());
+        final String idText = this.stateMachine.getLastToken();
+        final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
+        this.listener.foundNewSpecificationItem(id);
     }
 
     private void addCoverage()
     {
-        this.listener.addCoverage(this.stateMachine.getLastToken());
+        this.listener.addCoveredId(this.stateMachine.getLastToken());
     }
 }

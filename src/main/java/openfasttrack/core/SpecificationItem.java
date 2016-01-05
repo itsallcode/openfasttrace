@@ -10,13 +10,14 @@ public class SpecificationItem
     private final String description;
     private final String rationale;
     private final String comment;
-    private final List<String> coveredIds;
-    private final List<String> dependOnIds;
+    private final List<SpecificationItemId> coveredIds;
+    private final List<SpecificationItemId> dependOnIds;
     private final List<String> neededArtifactTypes;
 
     private SpecificationItem(final SpecificationItemId id, final String description,
-            final String rationale, final String comment, final List<String> coveredIds,
-            final List<String> dependOnIds, final List<String> neededArtifactTypes)
+            final String rationale, final String comment,
+            final List<SpecificationItemId> coveredIds, final List<SpecificationItemId> dependOnIds,
+            final List<String> neededArtifactTypes)
     {
         this.id = id;
         this.description = description;
@@ -25,7 +26,6 @@ public class SpecificationItem
         this.coveredIds = coveredIds;
         this.dependOnIds = dependOnIds;
         this.neededArtifactTypes = neededArtifactTypes;
-
     }
 
     public final SpecificationItemId getId()
@@ -48,12 +48,12 @@ public class SpecificationItem
         return this.comment;
     }
 
-    public List<String> getCoveredIds()
+    public List<SpecificationItemId> getCoveredIds()
     {
         return this.coveredIds;
     }
 
-    public List<String> getDependOnIds()
+    public List<SpecificationItemId> getDependOnIds()
     {
         return this.dependOnIds;
     }
@@ -69,8 +69,8 @@ public class SpecificationItem
         private String description;
         private String rationale;
         private String comment;
-        private final List<String> coveredIds;
-        private final List<String> dependOnIds;
+        private final List<SpecificationItemId> coveredIds;
+        private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
 
         public Builder(final SpecificationItemId id)
@@ -102,13 +102,13 @@ public class SpecificationItem
             return this;
         }
 
-        public Builder addCoveredId(final String coveredId)
+        public Builder addCoveredId(final SpecificationItemId coveredId)
         {
             this.coveredIds.add(coveredId);
             return this;
         }
 
-        public Builder addDependOnId(final String dependOnId)
+        public Builder addDependOnId(final SpecificationItemId dependOnId)
         {
             this.dependOnIds.add(dependOnId);
             return this;

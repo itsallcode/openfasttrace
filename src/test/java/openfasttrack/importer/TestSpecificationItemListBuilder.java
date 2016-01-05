@@ -7,20 +7,24 @@ import java.util.List;
 
 import org.junit.Test;
 
-import openfasttrack.core.SpecificationItem;;
+import openfasttrack.core.SpecificationItem;
+import openfasttrack.core.SpecificationItemId;;
 
 public class TestSpecificationItemListBuilder
 {
+    private static final String DESCRIPTION = "description";
+    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat.id~1");
+
     @Test
     public void testBuildBasicItem()
     {
         final SpecificationItemListBuilder itemsBuilder = new SpecificationItemListBuilder();
-        itemsBuilder.foundNewSpecificationItem("feat.id");
-        itemsBuilder.appendDescription("description");
+        itemsBuilder.foundNewSpecificationItem(ID);
+        itemsBuilder.appendDescription(DESCRIPTION);
         final List<SpecificationItem> items = itemsBuilder.build();
         assertThat(items.size(), equalTo(1));
-        assertThat(items.get(0).getId(), equalTo("feat.id"));
-        assertThat(items.get(0).getDescription(), equalTo("description"));
+        assertThat(items.get(0).getId(), equalTo(ID));
+        assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
     }
 
 }

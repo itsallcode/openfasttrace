@@ -3,6 +3,8 @@ package openfasttrack.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Generated;
+
 /**
  * Specification item ID
  *
@@ -10,6 +12,8 @@ import java.util.regex.Pattern;
  */
 public class SpecificationItemId
 {
+    public static final String ARTIFACT_TYPE_SEPARATOR = ".";
+    public static final String REVISION_SEPARATOR = "~";
     private final String name;
     private final int revision;
     private final String artifactType;
@@ -52,6 +56,7 @@ public class SpecificationItemId
     }
 
     @Override
+    @Generated(value = "Eclipse")
     public int hashCode()
     {
         final int prime = 31;
@@ -63,6 +68,7 @@ public class SpecificationItemId
     }
 
     @Override
+    @Generated(value = "Eclipse")
     public boolean equals(final Object obj)
     {
         if (this == obj)
@@ -105,6 +111,15 @@ public class SpecificationItemId
         return true;
     }
 
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(this.artifactType)
+                .append(ARTIFACT_TYPE_SEPARATOR).append(this.name).append(REVISION_SEPARATOR)
+                .append(this.revision);
+        return builder.toString();
+    }
+
     /**
      * Create a new {@link Builder}
      */
@@ -142,5 +157,17 @@ public class SpecificationItemId
 
             return new SpecificationItemId(this.name, this.artifactType, this.revision);
         }
+    }
+
+    /**
+     * Parse a string for a specification item ID
+     *
+     * @param idText
+     *            the string to be parsed
+     * @return the specification item ID
+     */
+    public static SpecificationItemId parseId(final String idText)
+    {
+        return new Builder(idText).build();
     }
 }

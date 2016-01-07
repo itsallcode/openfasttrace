@@ -15,7 +15,7 @@ public interface ImportEventListener
      * {@link SpecificationItemId} must be defined using
      * {@link #setId(SpecificationItemId)}.
      */
-    public void foundNewSpecificationItem();
+    public void startSpecificationItem();
 
     /**
      * The importer found the ID of the specification item

@@ -19,7 +19,7 @@ public class TestSpecificationItemListBuilder
     public void testBuildBasicItem()
     {
         final SpecificationItemListBuilder itemsBuilder = new SpecificationItemListBuilder();
-        itemsBuilder.foundNewSpecificationItem();
+        itemsBuilder.startSpecificationItem();
         itemsBuilder.setId(ID);
         itemsBuilder.appendDescription(DESCRIPTION);
         final List<SpecificationItem> items = itemsBuilder.build();

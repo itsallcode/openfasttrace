@@ -19,7 +19,8 @@ public enum MdPattern
     EVERYTHING(".*"),
     ID(".*<a +id *= *\"((?:\\w+\\.)+\\w+(?:~\\d+)?)\".*"),
     NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)+)"),
-    RATIONALE("Rationale:\\s*");
+    RATIONALE("Rationale:\\s*"),
+    TITLE("#+\\s*(.*)");
     // @formatter:on
 
     private final Pattern pattern;

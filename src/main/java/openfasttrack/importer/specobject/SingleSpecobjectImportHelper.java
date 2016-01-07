@@ -32,7 +32,7 @@ class SingleSpecobjectImportHelper
 
     void runImport() throws XMLStreamException
     {
-        this.listener.foundNewSpecificationItem();
+        this.listener.startSpecificationItem();
         while (this.xmlEventReader.hasNext())
         {
             final XMLEvent currentEvent = this.xmlEventReader.nextEvent();

@@ -19,7 +19,7 @@ public class SpecificationItemListBuilder implements ImportEventListener
     private StringBuilder comment = new StringBuilder();
 
     @Override
-    public void foundNewSpecificationItem()
+    public void startSpecificationItem()
     {
         if (this.itemBuilder != null)
         {

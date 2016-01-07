@@ -1,9 +1,11 @@
 package openfasttrack.importer.markdown;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
 
 import java.io.StringReader;
+import java.util.regex.Matcher;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +39,34 @@ public class TestImportMarkdown
     // }
 
     @Test
+    public void testIdentifyTitle()
+    {
+        assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title");
+        assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title");
+    }
+
+    private void assertMatch(final MdPattern mdPattern, final String... samples)
+    {
+        assertMatching(samples, MdPattern.TITLE, true);
+    }
+
+    private void assertMismatch(final MdPattern mdPattern, final String... samples)
+    {
+        assertMatching(samples, MdPattern.TITLE, false);
+    }
+
+    private void assertMatching(final String[] samples, final MdPattern mdPattern,
+            final boolean mustMatch)
+    {
+        for (final String text : samples)
+        {
+            final Matcher matcher = mdPattern.getPattern().matcher(text);
+            assertThat(mdPattern.toString() + " must " + (mustMatch ? "" : "not") + "match",
+                    matcher.matches(), equalTo(mustMatch));
+        }
+    }
+
+    @Test
     public void testFindRequirementId()
     {
         final String text = "# " + TestImportMarkdown.TITLE + "<a id=\"" + ID + "\"/>";
@@ -45,7 +75,7 @@ public class TestImportMarkdown
         final Importer importer = ImporterFactory.createImporter(reader, this.listenerMock);
         importer.runImport();
         final InOrder inOrder = inOrder(this.listenerMock);
-        inOrder.verify(this.listenerMock).foundNewSpecificationItem();
+        inOrder.verify(this.listenerMock).startSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID);
         inOrder.verifyNoMoreInteractions();
     }

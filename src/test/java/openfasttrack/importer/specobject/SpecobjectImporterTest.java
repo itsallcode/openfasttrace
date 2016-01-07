@@ -10,7 +10,6 @@ import java.util.List;
 import javax.xml.stream.XMLInputFactory;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
@@ -30,7 +29,7 @@ public class SpecobjectImporterTest
     }
 
     @Test
-    @Ignore
+    // @Ignore
     public void test() throws FileNotFoundException
     {
         final List<SpecificationItem> result = runImporter("single-specobject.xml");

@@ -12,6 +12,7 @@ import javax.xml.stream.XMLStreamException;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterException;
+import openfasttrack.importer.SpecificationItemListBuilder;
 
 public class SpecobjectImporter implements Importer
 {
@@ -32,9 +33,10 @@ public class SpecobjectImporter implements Importer
         {
             final XMLEventReader xmlEventReader = this.xmlInputFactory
                     .createXMLEventReader(this.reader);
-            final ImportHelper importHelper = new ImportHelper(xmlEventReader);
+            final SpecificationItemListBuilder specItemListBuilder = new SpecificationItemListBuilder();
+            final ImportHelper importHelper = new ImportHelper(xmlEventReader, specItemListBuilder);
             importHelper.runImport();
-            return importHelper.getItems();
+            return specItemListBuilder.build();
         } catch (final XMLStreamException e)
         {
             throw new ImporterException("Error importing specobjects document", e);

@@ -11,12 +11,19 @@ import openfasttrack.core.SpecificationItemId;
 public interface ImportEventListener
 {
     /**
-     * The importer found a new specification item ID
+     * The importer found a new specification item. The
+     * {@link SpecificationItemId} must be defined using
+     * {@link #setId(SpecificationItemId)}.
+     */
+    public void foundNewSpecificationItem();
+
+    /**
+     * The importer found the ID of the specification item
      *
      * @param id
      *            the ID of the new item
      */
-    public void foundNewSpecificationItem(final SpecificationItemId id);
+    public void setId(final SpecificationItemId id);
 
     /**
      * Append a text block to an item description

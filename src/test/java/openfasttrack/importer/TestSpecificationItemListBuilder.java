@@ -19,12 +19,12 @@ public class TestSpecificationItemListBuilder
     public void testBuildBasicItem()
     {
         final SpecificationItemListBuilder itemsBuilder = new SpecificationItemListBuilder();
-        itemsBuilder.foundNewSpecificationItem(ID);
+        itemsBuilder.foundNewSpecificationItem();
+        itemsBuilder.setId(ID);
         itemsBuilder.appendDescription(DESCRIPTION);
         final List<SpecificationItem> items = itemsBuilder.build();
         assertThat(items.size(), equalTo(1));
         assertThat(items.get(0).getId(), equalTo(ID));
         assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
     }
-
 }

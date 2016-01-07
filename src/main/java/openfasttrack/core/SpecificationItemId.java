@@ -136,12 +136,56 @@ public class SpecificationItemId
             this.id = id;
         }
 
+        public Builder()
+        {
+            this(null);
+        }
+
+        public Builder artifactType(final String artifactType)
+        {
+            this.artifactType = artifactType;
+            return this;
+        }
+
+        public Builder name(final String name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public Builder revision(final int revision)
+        {
+            this.revision = revision;
+            return this;
+        }
+
         /**
          * Build a specification item ID
          *
          * @return the ID
          */
         public SpecificationItemId build()
+        {
+            if (this.id == null)
+            {
+                validateFields();
+            } else
+            {
+                parseId();
+            }
+
+            return new SpecificationItemId(this.name, this.artifactType, this.revision);
+        }
+
+        private void validateFields()
+        {
+            if (this.name == null || this.artifactType == null)
+            {
+                throw new IllegalStateException("Name or artifactType is missing");
+            }
+        }
+
+        private void parseId()
         {
             final Matcher matcher = this.idPattern.matcher(this.id);
             if (matcher.matches())
@@ -151,11 +195,9 @@ public class SpecificationItemId
                 this.revision = Integer.parseInt(matcher.group(3));
             } else
             {
-                throw new IllegalStateException(
-                        "Sting \"" + this.id + "\" cannot be parsed to a specification item ID");
+                throw new IllegalStateException("Sting \"" + this.id
+                        + "\" cannot be parsed to a specification item ID");
             }
-
-            return new SpecificationItemId(this.name, this.artifactType, this.revision);
         }
     }
 

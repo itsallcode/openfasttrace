@@ -19,13 +19,13 @@ public class SpecificationItemListBuilder implements ImportEventListener
     private StringBuilder comment = new StringBuilder();
 
     @Override
-    public void foundNewSpecificationItem(final SpecificationItemId id)
+    public void foundNewSpecificationItem()
     {
         if (this.itemBuilder != null)
         {
             createNewSpecificationItem();
         }
-        this.itemBuilder = new SpecificationItem.Builder(id);
+        this.itemBuilder = new SpecificationItem.Builder();
     }
 
     private void createNewSpecificationItem()
@@ -44,6 +44,12 @@ public class SpecificationItemListBuilder implements ImportEventListener
         this.description = new StringBuilder();
         this.rationale = new StringBuilder();
         this.comment = new StringBuilder();
+    }
+
+    @Override
+    public void setId(final SpecificationItemId id)
+    {
+        this.itemBuilder.id(id);
     }
 
     @Override

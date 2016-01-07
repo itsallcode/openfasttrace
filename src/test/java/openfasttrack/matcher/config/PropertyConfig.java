@@ -11,13 +11,13 @@ import org.hamcrest.Matcher;
  *            <P>
  *            type of the property
  */
-public class PropertyConfig<T, P>
+class PropertyConfig<T, P>
 {
     private final String propertyName;
     private final Matcher<P> matcher;
     private final Function<T, P> propertyAccessor;
 
-    public PropertyConfig(final String propertyName, final Matcher<P> matcher,
+    PropertyConfig(final String propertyName, final Matcher<P> matcher,
             final Function<T, P> propertyAccessor)
     {
         this.propertyName = propertyName;

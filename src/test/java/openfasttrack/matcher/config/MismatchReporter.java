@@ -1,4 +1,4 @@
-package openfasttrack.matcher;
+package openfasttrack.matcher.config;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -8,7 +8,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * This is a helper class used by {@link TypeSafeDiagnosingMatcher}s in
  * {@link TypeSafeDiagnosingMatcher#matchesSafely(Object,Description)}.
  */
-public class MismatchReporter
+class MismatchReporter
 {
     private final Description mismatchDescription;
     private boolean firstMismatch = true;

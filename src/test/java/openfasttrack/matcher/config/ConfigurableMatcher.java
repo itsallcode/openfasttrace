@@ -1,14 +1,10 @@
 package openfasttrack.matcher.config;
 
-import openfasttrack.matcher.BaseTypeSafeDiagnosingMatcher;
-import openfasttrack.matcher.DescriptionBuilder;
-import openfasttrack.matcher.MismatchReporter;
-
-public abstract class BaseConfigurableMatcher<T> extends BaseTypeSafeDiagnosingMatcher<T>
+public abstract class ConfigurableMatcher<T> extends BaseTypeSafeDiagnosingMatcher<T>
 {
     private final MatcherConfig<T> config;
 
-    protected BaseConfigurableMatcher(final MatcherConfig<T> config)
+    protected ConfigurableMatcher(final MatcherConfig<T> config)
     {
         super(config.getExpected());
         this.config = config;

@@ -1,4 +1,4 @@
-package openfasttrack.matcher;
+package openfasttrack.matcher.config;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -10,7 +10,7 @@ import org.hamcrest.SelfDescribing;
  * {@link org.hamcrest.TypeSafeDiagnosingMatcher.TypeSafeDiagnosingMatcher#describeTo(Description)}
  * .
  */
-public class DescriptionBuilder
+class DescriptionBuilder
 {
     private final Description description;
 

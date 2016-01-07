@@ -11,10 +11,10 @@ import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.matcher.config.BaseConfigurableMatcher;
+import openfasttrack.matcher.config.ConfigurableMatcher;
 import openfasttrack.matcher.config.MatcherConfig;
 
-public class SpecificationItemIdMatcher extends BaseConfigurableMatcher<SpecificationItemId>
+public class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId>
 {
 
     public SpecificationItemIdMatcher(final SpecificationItemId expected)

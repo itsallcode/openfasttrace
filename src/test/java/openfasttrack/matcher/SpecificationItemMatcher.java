@@ -5,10 +5,10 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matchers;
 
 import openfasttrack.core.SpecificationItem;
-import openfasttrack.matcher.config.BaseConfigurableMatcher;
+import openfasttrack.matcher.config.ConfigurableMatcher;
 import openfasttrack.matcher.config.MatcherConfig;
 
-public class SpecificationItemMatcher extends BaseConfigurableMatcher<SpecificationItem>
+public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationItem>
 {
     public SpecificationItemMatcher(final SpecificationItem expected)
     {

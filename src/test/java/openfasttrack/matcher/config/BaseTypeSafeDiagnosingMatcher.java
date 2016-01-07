@@ -1,4 +1,4 @@
-package openfasttrack.matcher;
+package openfasttrack.matcher.config;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -10,7 +10,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * @param <T>
  *            the type supported by the matcher.
  */
-public abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatcher<T>
+abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatcher<T>
 {
     protected BaseTypeSafeDiagnosingMatcher(final T expected)
     {

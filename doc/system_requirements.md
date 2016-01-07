@@ -9,19 +9,25 @@ System Requirement Specification OpenFastTrack
     database)
 
 # Features
-## Requirement Tracing <a id="feat.requirement_tracing~1"/>
+## Requirement Tracing
+`feat.requirement_tracing~1` <a id="feat.requirement_tracing~1"/>
+
 OFT traces requirements from specification to any kind of coverage (document, implementation, test, etc.)
 
 Needs: req
 
-## Requirement Import <a id="feat.requirement_import~1"/>
+## Requirement Import
+`feat.requirement_import~1` <a id="feat.requirement_import~1"/>
+
 OFT imports requirements from different text formats. The default is Markdown.
 
 Needs: req
 
 # High Level Requirements
 
-## Coverage Status of a Requirement <a id="req.coverage_status~1"/>
+## Coverage Status
+`req.coverage_status~1` <a id="req.coverage_status~1"/>
+
 OFT determines the coverage status of a requirement. The possible options are:
 
   1. Uncovered: an specification item requires coverage but is not covered
@@ -30,11 +36,12 @@ OFT determines the coverage status of a requirement. The possible options are:
 
 Covers:
 
-  * [Requirement Tracing](#feat.requirement_tracing~1)
+  * [feat.requirement_tracing~1](#feat.requirement_tracing~1)
 
-Needs: dsn, uman
+Needs: dsn
 
-##  Specification Item <a id="req.specification_item~1"/>
+## Specification Item
+`req.specification_item~1` <a id="req.specification_item~1"/>
 A specification item consists of the following parts:
 
   * ID
@@ -46,8 +53,7 @@ A specification item consists of the following parts:
   * Depends (optional)
   * Needs
 
-The ID is a unique key through which the specification item can be referenced. It also contains the
-specification item type and revision number.
+The ID is a unique key through which the specification item can be referenced. It also contains the specification item type and revision number.
 
 The title is a short summary of the specification item, mostly intended to appear in overview lists.
 
@@ -64,66 +70,52 @@ The "Needs" section list all specification item types in which coverage for this
 
 Needs: dsn
 
-## Requirement ID format <a id="req.requirement_format~1"/>
-A requirement ID in has the following format
-
-    requirement-id = type "." id "~" revision
-    
-    type = 1*ALPHA
-    
-    id = ALPHA *(ALPHA / DIGIT / "." / "_")
-    
-    revision = *DIGIT
+## Markdown Import
+`req.markdown_import~1` <a id="req.markdown_import~1"/>
+OFT imports specification items from Markdown.
 
 Rationale:
 
-The ID must only contain characters that can be used in URIs without quoting. This makes linking in formats like Markdown or HTML clean and easy. 
-Requirement type and revision must be immediately recognizable from the requirement ID. The built-in revision number makes links break if a requirement is updated - a desired behavior.
+Markdown is a clean an simple format that:
 
-## Markdown import <a id="req.markdown_import~1"/>
-OFT imports specification items from Markdown
+  * is viewable with any text editor
+  * focuses on content instead of layout
+  * is portable across platforms
+  * easy to process with text manipulation tools
+  
+For those reasons Markdown is a suitable candidate for writing specification that can be read and
+maintained over a long time.
 
 Covers:
 
-  * [Requirement Import](#feat.requirement_import~1)
+  * [feat.requirement_import~1](#feat.requirement_import~1)
 
-Needs: dsn, uman
+Needs: dsn
 
-### Requirement links <a id="req.md.requirement_links~1"/>
-In Markdown requirement links have the following format:
+### Markdown Standard syntax
+`req.markdown_standard_syntax~1` <a id="req.markdown_standard_syntax~1"/>
 
-    link = "[" link-text "]" "(" "#" requirement-id ")"
-    
-Covers:
-
-  * [Requirement Import](#feat.requirement_import~1)
-
-Needs: dsn, uman
-
-### Link relations <a id="req.md.link_relations~1"/>
-The Markdown importer interprets link relations a follows:
-
-  1. Covers
-  2. Details
-  3. Depends
-  4. Untraced
-
-To define a link, a line needs to start with the following syntax:
-
-    covers-link = *WSP "*" *WSP link
-    
-    details-link = *WSP "+" *WSP link
-    
-    depends-link = *WSP "-" *WSP link
-
-Only one traced link per line is supported. Any optional text after the link is ignored if it is separated by at least one whitespace character
+The OFT Markdown specification artifact format uses the standard markdown syntax without proprietary extensions.
 
 Rationale:
 
-Defining a link should be as natural and simple as possible in Markdown. It must also be rendered correctly by a regular Markdown renderer without modifications. Embedding links in lists to define the relationship looks nice and is language independent.
+The specification documents that the OFT Markdown importer reads must be viewable with any regular Markdown reader and as plain text.
 
 Covers:
 
-  * [Requirement Import](#feat.requirement_import~1)
+  * [feat.requirement_import~1](#feat.requirement_import~1)
 
-Needs: dsn, uman
+Needs: dsn
+
+### Markdown Outline Readable
+The Markdown outline -- an table of contents created from the heading structure by various Markdown editors -- must be human readable.
+
+Rationale:
+
+In long specification document the outline is the primary means of navigating the document. Only if the outline can be read easily, it is useful for authoring specification documents.
+
+Covers:
+
+  * [feat.requirement_import~1](#feat.requirement_import~1)
+
+Needs: dsn 

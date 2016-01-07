@@ -152,7 +152,7 @@ public class MarkdownImporter implements Importer
     {
         final String idText = this.stateMachine.getLastToken();
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
-        this.listener.foundNewSpecificationItem();
+        this.listener.startSpecificationItem();
         this.listener.setId(id);
     }
 

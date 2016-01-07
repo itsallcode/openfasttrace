@@ -70,6 +70,15 @@ class SingleSpecobjectImportHelper
             LOG.fine(() -> "Found spec object version " + version);
             this.idBuilder.revision(version);
             break;
+        case "description":
+            this.listener.appendDescription(readCharacterData(element));
+            break;
+        case "rationale":
+            this.listener.appendRationale(readCharacterData(element));
+            break;
+        case "comment":
+            this.listener.appendComment(readCharacterData(element));
+            break;
 
         default:
             LOG.warning(() -> "Found unknown start element " + element.getName());
@@ -90,6 +99,8 @@ class SingleSpecobjectImportHelper
         {
             throw new ImporterException("No character data found for element " + element);
         }
-        return characterEvent.asCharacters().getData();
+        final String data = characterEvent.asCharacters().getData().trim();
+        LOG.finest(() -> "Found char data for element '" + element.getName() + "': '" + data + "'");
+        return data;
     }
 }

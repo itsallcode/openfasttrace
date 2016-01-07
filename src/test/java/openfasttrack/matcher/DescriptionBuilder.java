@@ -10,7 +10,7 @@ import org.hamcrest.SelfDescribing;
  * {@link org.hamcrest.TypeSafeDiagnosingMatcher.TypeSafeDiagnosingMatcher#describeTo(Description)}
  * .
  */
-class DescriptionBuilder
+public class DescriptionBuilder
 {
     private final Description description;
 
@@ -28,15 +28,6 @@ class DescriptionBuilder
     public DescriptionBuilder append(final String message, final SelfDescribing matcher)
     {
         this.description.appendText(message).appendText(" ").appendDescriptionOf(matcher);
-        return this;
-    }
-
-    public DescriptionBuilder appendOptional(final String message, final SelfDescribing matcher)
-    {
-        if (matcher != null)
-        {
-            append(message, matcher);
-        }
         return this;
     }
 

@@ -8,7 +8,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * This is a helper class used by {@link TypeSafeDiagnosingMatcher}s in
  * {@link TypeSafeDiagnosingMatcher#matchesSafely(Object,Description)}.
  */
-class MismatchReporter
+public class MismatchReporter
 {
     private final Description mismatchDescription;
     private boolean firstMismatch = true;

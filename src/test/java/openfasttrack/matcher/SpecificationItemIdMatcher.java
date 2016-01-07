@@ -7,43 +7,23 @@ import java.util.stream.Collectors;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
 import openfasttrack.core.SpecificationItemId;
+import openfasttrack.matcher.config.BaseConfigurableMatcher;
+import openfasttrack.matcher.config.MatcherConfig;
 
-public class SpecificationItemIdMatcher extends BaseTypeSafeDiagnosingMatcher<SpecificationItemId>
+public class SpecificationItemIdMatcher extends BaseConfigurableMatcher<SpecificationItemId>
 {
-    private final Matcher<String> artifactType;
-    private final Matcher<String> name;
-    private final Matcher<Integer> revision;
 
     public SpecificationItemIdMatcher(final SpecificationItemId expected)
     {
-        super(expected);
-        this.artifactType = Matchers.equalTo(expected.getArtifactType());
-        this.name = Matchers.equalTo(expected.getName());
-        this.revision = Matchers.equalTo(expected.getRevision());
-    }
-
-    @Override
-    protected void describeTo(final DescriptionBuilder description)
-    {
-        description //
-                .append("artifactType", this.artifactType) //
-                .append("name", this.name) //
-                .append("revision", this.revision);
-    }
-
-    @Override
-    protected void reportMismatches(final SpecificationItemId actual,
-            final MismatchReporter mismatchReporter)
-    {
-        mismatchReporter //
-                .checkMismatch("artifactType", this.artifactType, actual.getArtifactType()) //
-                .checkMismatch("name", this.name, actual.getName()) //
-                .checkMismatch("revision", this.revision, actual.getRevision());
+        super(MatcherConfig.builder(expected) //
+                .addStringProperty("artifactType", SpecificationItemId::getArtifactType) //
+                .addStringProperty("name", SpecificationItemId::getName) //
+                .addIntProperty("revision", SpecificationItemId::getRevision) //
+                .build());
     }
 
     @Factory

@@ -37,7 +37,7 @@ public class TestSpecificationItem
 
     private SpecificationItem.Builder createSimpleItem()
     {
-        final SpecificationItem.Builder builder = new SpecificationItem.Builder(ID);
+        final SpecificationItem.Builder builder = new SpecificationItem.Builder().id(ID);
         builder.description(DESCRIPTION).rationale(RATIONALE).comment(COMMENT);
         return builder;
     }

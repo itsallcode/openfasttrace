@@ -1,11 +1,13 @@
 package openfasttrack.importer.markdown;
 
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 
 import java.io.StringReader;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -42,7 +44,10 @@ public class TestImportMarkdown
         new ImporterFactory();
         final Importer importer = ImporterFactory.createImporter(reader, this.listenerMock);
         importer.runImport();
-        verify(this.listenerMock).foundNewSpecificationItem(ID);
+        final InOrder inOrder = inOrder(this.listenerMock);
+        inOrder.verify(this.listenerMock).foundNewSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(ID);
+        inOrder.verifyNoMoreInteractions();
     }
 
     // @Test

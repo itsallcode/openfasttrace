@@ -65,7 +65,7 @@ public class SpecificationItem
 
     public static class Builder
     {
-        private final SpecificationItemId id;
+        private SpecificationItemId id;
         private String description;
         private String rationale;
         private String comment;
@@ -73,15 +73,21 @@ public class SpecificationItem
         private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
 
-        public Builder(final SpecificationItemId id)
+        public Builder()
         {
-            this.id = id;
+            this.id = null;
             this.description = "";
             this.rationale = "";
             this.comment = "";
             this.coveredIds = new ArrayList<>();
             this.dependOnIds = new ArrayList<>();
             this.neededArtifactTypes = new ArrayList<>();
+        }
+
+        public Builder id(final SpecificationItemId id)
+        {
+            this.id = id;
+            return this;
         }
 
         public Builder description(final String description)
@@ -122,6 +128,10 @@ public class SpecificationItem
 
         public SpecificationItem build()
         {
+            if (this.id == null)
+            {
+                throw new IllegalStateException("No id given");
+            }
             return new SpecificationItem(this.id, this.description, this.rationale, this.comment,
                     this.coveredIds, this.dependOnIds, this.neededArtifactTypes);
         }

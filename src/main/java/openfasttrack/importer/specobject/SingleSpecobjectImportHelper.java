@@ -1,5 +1,6 @@
 package openfasttrack.importer.specobject;
 
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.xml.stream.XMLEventReader;
@@ -56,7 +57,7 @@ class SingleSpecobjectImportHelper
         }
     }
 
-    private void foundStartElement(final StartElement element) throws XMLStreamException
+    private void foundStartElement(final StartElement element)
     {
         switch (element.getName().getLocalPart())
         {
@@ -80,13 +81,13 @@ class SingleSpecobjectImportHelper
             this.listener.appendComment(readCharacterData(element));
             break;
         case "needscoverage":
-            readNeedsCoverage();
+            readNeedsCoverage(element);
             break;
         case "providescoverage":
-            readProvidesCoverage();
+            readProvidesCoverage(element);
             break;
         case "dependencies":
-            readDependencies();
+            readDependencies(element);
             break;
 
         default:
@@ -95,104 +96,88 @@ class SingleSpecobjectImportHelper
         }
     }
 
-    private void readDependencies() throws XMLStreamException
+    private void readDependencies(final StartElement element)
     {
-        while (this.xmlEventReader.hasNext())
-        {
-            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
-
-            if (currentEvent.isEndElement()
-                    && currentEvent.asEndElement().getName().getLocalPart().equals("dependencies"))
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("dependson"))
             {
-                return;
+                final String idString = readCharacterData(childElement);
+                LOG.finest(() -> "Found depends on id '" + idString + "'");
+                this.listener.addDependsOnId(SpecificationItemId.parseId(idString));
             }
-            if (currentEvent.isStartElement()
-                    && currentEvent.asStartElement().getName().getLocalPart().equals("dependson"))
-            {
-                this.listener.addDependsOnId(SpecificationItemId
-                        .parseId(readCharacterData(currentEvent.asStartElement())));
-            }
-        }
+        });
     }
 
-    private void readProvidesCoverage() throws XMLStreamException
+    private void readProvidesCoverage(final StartElement element)
     {
-        while (this.xmlEventReader.hasNext())
-        {
-            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
-
-            if (currentEvent.isEndElement() && currentEvent.asEndElement().getName().getLocalPart()
-                    .equals("providescoverage"))
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("provcov"))
             {
-                return;
+                readProvCov(childElement);
             }
-            if (currentEvent.isStartElement()
-                    && currentEvent.asStartElement().getName().getLocalPart().equals("provcov"))
-            {
-                readProvCov();
-            }
-        }
+        });
     }
 
-    private void readProvCov() throws XMLStreamException
+    private void readProvCov(final StartElement element)
     {
         final Builder providesCoverageId = new Builder();
-        while (this.xmlEventReader.hasNext())
-        {
-            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
-
-            if (currentEvent.isEndElement()
-                    && currentEvent.asEndElement().getName().getLocalPart().equals("provcov"))
+        readElementUntilEnd(element, (childElement) -> {
+            final String elementName = childElement.getName().getLocalPart();
+            if (elementName.equals("linksto"))
             {
-                this.listener.addCoveredId(providesCoverageId.build());
-                return;
+                providesCoverageId.name(readCharacterData(childElement));
             }
-
-            if (currentEvent.isStartElement())
+            if (elementName.equals("dstversion"))
             {
-                final StartElement startElement = currentEvent.asStartElement();
-                final String elementName = startElement.getName().getLocalPart();
-                if (elementName.equals("linksto"))
-                {
-                    providesCoverageId.name(readCharacterData(startElement));
-                }
-                if (elementName.equals("dstversion"))
-                {
-                    providesCoverageId.revision(readIntCharacterData(startElement));
-                }
+                providesCoverageId.revision(readIntCharacterData(childElement));
             }
-        }
+        });
+
+        final SpecificationItemId id = providesCoverageId.build();
+        LOG.finest(() -> "Found provides coverage '" + id + "'");
+        this.listener.addCoveredId(id);
     }
 
-    private void readNeedsCoverage() throws XMLStreamException
+    private void readNeedsCoverage(final StartElement element)
+    {
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("needsobj"))
+            {
+                final String artifactType = readCharacterData(childElement);
+                LOG.finest(() -> "Found needs artifact type '" + artifactType + "'");
+                this.listener.addNeededArtifactType(artifactType);
+            }
+        });
+    }
+
+    private void readElementUntilEnd(final StartElement element,
+            final Consumer<StartElement> consumer)
     {
         while (this.xmlEventReader.hasNext())
         {
-            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
+            final XMLEvent currentEvent = readNextEvent();
 
             if (currentEvent.isEndElement()
-                    && currentEvent.asEndElement().getName().getLocalPart().equals("needscoverage"))
+                    && currentEvent.asEndElement().getName().equals(element.getName()))
             {
+                LOG.finest(() -> "Found end event of element " + element + ": stop processing");
                 return;
             }
-            if (currentEvent.isStartElement()
-                    && currentEvent.asStartElement().getName().getLocalPart().equals("needsobj"))
+            if (currentEvent.isStartElement())
             {
-                final String artifactType = readCharacterData(currentEvent.asStartElement());
-                this.listener.addNeededArtifactType(artifactType);
+                consumer.accept(currentEvent.asStartElement());
             }
         }
     }
 
     private int readIntCharacterData(final StartElement element)
-            throws NumberFormatException, XMLStreamException
     {
         return Integer.parseInt(readCharacterData(element));
     }
 
-    private String readCharacterData(final StartElement element) throws XMLStreamException
+    private String readCharacterData(final StartElement element)
     {
-        final XMLEvent characterEvent = this.xmlEventReader.peek();
+        final XMLEvent characterEvent = peekNextEvent();
         if (characterEvent == null || !characterEvent.isCharacters())
         {
             throw new ImporterException("No character data found for element " + element);
@@ -200,5 +185,27 @@ class SingleSpecobjectImportHelper
         final String data = characterEvent.asCharacters().getData().trim();
         LOG.finest(() -> "Found char data for element '" + element.getName() + "': '" + data + "'");
         return data;
+    }
+
+    private XMLEvent readNextEvent()
+    {
+        try
+        {
+            return this.xmlEventReader.nextEvent();
+        } catch (final XMLStreamException e)
+        {
+            throw new ImporterException("Exception reading next event", e);
+        }
+    }
+
+    private XMLEvent peekNextEvent()
+    {
+        try
+        {
+            return this.xmlEventReader.peek();
+        } catch (final XMLStreamException e)
+        {
+            throw new ImporterException("Exception when peeking next event", e);
+        }
     }
 }

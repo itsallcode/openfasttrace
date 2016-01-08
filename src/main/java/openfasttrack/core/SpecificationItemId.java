@@ -179,9 +179,9 @@ public class SpecificationItemId
 
         private void validateFields()
         {
-            if (this.name == null || this.artifactType == null)
+            if (this.name == null)
             {
-                throw new IllegalStateException("Name or artifactType is missing");
+                throw new IllegalStateException("Name is missing");
             }
         }
 
@@ -195,8 +195,8 @@ public class SpecificationItemId
                 this.revision = Integer.parseInt(matcher.group(3));
             } else
             {
-                throw new IllegalStateException("Sting \"" + this.id
-                        + "\" cannot be parsed to a specification item ID");
+                throw new IllegalStateException(
+                        "String \"" + this.id + "\" cannot be parsed to a specification item ID");
             }
         }
     }

@@ -35,10 +35,29 @@ public class SpecobjectImporterTest
     {
         final List<SpecificationItem> result = runImporter("single-specobject.xml");
         assertThat(result, hasSize(1));
-        final SpecificationItemId id = new SpecificationItemId.Builder().artifactType("doctype")
-                .name("id").revision(42).build();
-        final SpecificationItem expected = new SpecificationItem.Builder().id(id).comment("Comment")
-                .rationale("Rationale").description("Description").build();
+        final SpecificationItemId id = new SpecificationItemId.Builder() //
+                .artifactType("doctype") //
+                .name("id") //
+                .revision(42) //
+                .build();
+        final SpecificationItemId coveredId = new SpecificationItemId.Builder() //
+                .artifactType(null) //
+                .name("provid") //
+                .revision(43) //
+                .build();
+        final SpecificationItemId dependsOnId = new SpecificationItemId.Builder() //
+                .artifactType("dependsOnDocType") //
+                .name("dependsOnName") //
+                .revision(44) //
+                .build();
+        final SpecificationItem expected = new SpecificationItem.Builder() //
+                .id(id) //
+                .comment("Comment").rationale("Rationale") //
+                .description("Description") //
+                .addNeededArtifactType("code").addNeededArtifactType("test") //
+                .addCoveredId(coveredId) //
+                .addDependOnId(dependsOnId) //
+                .build();
         assertThat(result.get(0), SpecificationItemMatcher.equalTo(expected));
     }
 

@@ -56,7 +56,7 @@ public interface ImportEventListener
      * @param id
      *            the ID of the item that is covered
      */
-    public void addCoveredId(final String id);
+    public void addCoveredId(final SpecificationItemId id);
 
     /**
      * Add the ID of a specification item that this item depends on

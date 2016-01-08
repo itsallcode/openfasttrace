@@ -19,9 +19,12 @@
 		<providescoverage>
 			<provcov>
 				<linksto>provid</linksto>
-				<dstversion>provvers</dstversion>
+				<dstversion>43</dstversion>
 			</provcov>
 		</providescoverage>
+		<dependencies>
+			<dependson>dependsOnDocType.dependsOnName~44</dependson>
+		</dependencies>
 	</specobject>
 </specobjects>
   

@@ -79,10 +79,108 @@ class SingleSpecobjectImportHelper
         case "comment":
             this.listener.appendComment(readCharacterData(element));
             break;
+        case "needscoverage":
+            readNeedsCoverage();
+            break;
+        case "providescoverage":
+            readProvidesCoverage();
+            break;
+        case "dependencies":
+            readDependencies();
+            break;
 
         default:
             LOG.warning(() -> "Found unknown start element " + element.getName());
             break;
+        }
+    }
+
+    private void readDependencies() throws XMLStreamException
+    {
+        while (this.xmlEventReader.hasNext())
+        {
+            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
+
+            if (currentEvent.isEndElement()
+                    && currentEvent.asEndElement().getName().getLocalPart().equals("dependencies"))
+            {
+                return;
+            }
+            if (currentEvent.isStartElement()
+                    && currentEvent.asStartElement().getName().getLocalPart().equals("dependson"))
+            {
+                this.listener.addDependsOnId(SpecificationItemId
+                        .parseId(readCharacterData(currentEvent.asStartElement())));
+            }
+        }
+    }
+
+    private void readProvidesCoverage() throws XMLStreamException
+    {
+        while (this.xmlEventReader.hasNext())
+        {
+            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
+
+            if (currentEvent.isEndElement() && currentEvent.asEndElement().getName().getLocalPart()
+                    .equals("providescoverage"))
+            {
+                return;
+            }
+            if (currentEvent.isStartElement()
+                    && currentEvent.asStartElement().getName().getLocalPart().equals("provcov"))
+            {
+                readProvCov();
+            }
+        }
+    }
+
+    private void readProvCov() throws XMLStreamException
+    {
+        final Builder providesCoverageId = new Builder();
+        while (this.xmlEventReader.hasNext())
+        {
+            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
+
+            if (currentEvent.isEndElement()
+                    && currentEvent.asEndElement().getName().getLocalPart().equals("provcov"))
+            {
+                this.listener.addCoveredId(providesCoverageId.build());
+                return;
+            }
+
+            if (currentEvent.isStartElement())
+            {
+                final StartElement startElement = currentEvent.asStartElement();
+                final String elementName = startElement.getName().getLocalPart();
+                if (elementName.equals("linksto"))
+                {
+                    providesCoverageId.name(readCharacterData(startElement));
+                }
+                if (elementName.equals("dstversion"))
+                {
+                    providesCoverageId.revision(readIntCharacterData(startElement));
+                }
+            }
+        }
+    }
+
+    private void readNeedsCoverage() throws XMLStreamException
+    {
+        while (this.xmlEventReader.hasNext())
+        {
+            final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
+
+            if (currentEvent.isEndElement()
+                    && currentEvent.asEndElement().getName().getLocalPart().equals("needscoverage"))
+            {
+                return;
+            }
+            if (currentEvent.isStartElement()
+                    && currentEvent.asStartElement().getName().getLocalPart().equals("needsobj"))
+            {
+                final String artifactType = readCharacterData(currentEvent.asStartElement());
+                this.listener.addNeededArtifactType(artifactType);
+            }
         }
     }
 

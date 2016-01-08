@@ -1,6 +1,7 @@
 # openfasttrack
 
 [![Build Status](https://travis-ci.org/hamstercommunity/openfasttrack.svg)](https://travis-ci.org/hamstercommunity/openfasttrack)
+[![codecov.io](https://codecov.io/github/hamstercommunity/openfasttrack/coverage.svg?branch=master)](https://codecov.io/github/hamstercommunity/openfasttrack?branch=master)
 
 Requirement tracking suite
 

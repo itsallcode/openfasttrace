@@ -3,7 +3,6 @@ package openfasttrack.importer.specobject;
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -16,7 +15,6 @@ import openfasttrack.importer.SpecificationItemListBuilder;
 
 public class SpecobjectImporter implements Importer
 {
-    private final static Logger LOG = Logger.getLogger(SpecobjectImporter.class.getName());
     private final XMLInputFactory xmlInputFactory;
     private final Reader reader;
 

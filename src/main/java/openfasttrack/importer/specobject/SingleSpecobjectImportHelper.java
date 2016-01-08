@@ -46,12 +46,11 @@ class SingleSpecobjectImportHelper
                 if (currentEvent.asEndElement().getName().getLocalPart().equals("specobject"))
                 {
                     final SpecificationItemId id = this.idBuilder.build();
-                    LOG.fine(() -> "Specobject element closed: build id " + id);
+                    LOG.finest(() -> "Specobject element closed: build id " + id);
                     this.listener.setId(id);
                     return;
                 }
             default:
-                LOG.warning(() -> "Ignore event " + currentEvent);
                 break;
             }
         }
@@ -63,12 +62,12 @@ class SingleSpecobjectImportHelper
         {
         case "id":
             final String id = readCharacterData(element);
-            LOG.fine(() -> "Found spec object id " + id);
+            LOG.finest(() -> "Found spec object id " + id);
             this.idBuilder.name(id);
             break;
         case "version":
             final int version = readIntCharacterData(element);
-            LOG.fine(() -> "Found spec object version " + version);
+            LOG.finest(() -> "Found spec object version " + version);
             this.idBuilder.revision(version);
             break;
         case "description":

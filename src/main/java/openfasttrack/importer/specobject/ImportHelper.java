@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
@@ -30,15 +29,10 @@ class ImportHelper
         while (this.xmlEventReader.hasNext())
         {
             final XMLEvent currentEvent = this.xmlEventReader.nextEvent();
-            switch (currentEvent.getEventType())
-            {
-            case XMLStreamConstants.START_ELEMENT:
-                foundStartElement(currentEvent.asStartElement());
-                break;
 
-            default:
-                LOG.finest(() -> "Event: " + currentEvent);
-                break;
+            if (currentEvent.isStartElement())
+            {
+                foundStartElement(currentEvent.asStartElement());
             }
         }
     }
@@ -52,9 +46,11 @@ class ImportHelper
             if (doctypeAttribute != null)
             {
                 this.defaultDoctype = doctypeAttribute.getValue();
-                LOG.finest(() -> "Found specobjects with doctype " + this.defaultDoctype);
+                LOG.finest(() -> "Found specobjects with default doctype '" + this.defaultDoctype
+                        + "'");
             }
             break;
+
         case "specobject":
             new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener,
                     this.defaultDoctype).runImport();

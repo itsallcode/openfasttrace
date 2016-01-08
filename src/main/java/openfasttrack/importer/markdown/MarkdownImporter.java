@@ -104,8 +104,8 @@ public class MarkdownImporter implements Importer
             _T(State.COMMENT    , State.COVERS     , MdPattern.COVERS     , () -> {}               ),
             _T(State.COMMENT    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}               ),
             _T(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds         ),
-            _T(State.COMMENT    , State.RATIONALE  , MdPattern.EVERYTHING , () -> {}               ),
-            _T(State.COMMENT    , State.COMMENT    , MdPattern.COMMENT    , this::appendComment    ),
+            _T(State.COMMENT    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {}               ),
+            _T(State.COMMENT    , State.COMMENT    , MdPattern.EVERYTHING , this::appendComment    ),
 
             _T(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem        ),
             _T(State.COVERS     , State.TITLE      , MdPattern.TITLE      , this::endItem          ),
@@ -142,7 +142,21 @@ public class MarkdownImporter implements Importer
 
     private void beginItem()
     {
+        cleanUpLastItem();
         this.inSpecificationItem = true;
+        informListenerAboutNewItem();
+    }
+
+    private void cleanUpLastItem()
+    {
+        if(this.inSpecificationItem)
+        {
+            endItem();
+        }
+    }
+
+    private void informListenerAboutNewItem()
+    {
         final String idText = this.stateMachine.getLastToken();
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
@@ -157,6 +171,7 @@ public class MarkdownImporter implements Importer
     {
         this.inSpecificationItem = false;
         resetTitle();
+        this.listener.endSpecificationItem();
     }
 
     private void appendDescription()
@@ -182,7 +197,11 @@ public class MarkdownImporter implements Importer
 
     private void addNeeds()
     {
-        this.listener.addNeededArtifactType(this.stateMachine.getLastToken());
+        final String artifactTypes = this.stateMachine.getLastToken();
+        for(final String artifactType : artifactTypes.split(",\\s*"))
+        {
+            this.listener.addNeededArtifactType(artifactType);
+        }
     }
 
     private void rememberTitle()

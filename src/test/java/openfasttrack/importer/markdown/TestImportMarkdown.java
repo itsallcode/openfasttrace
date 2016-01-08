@@ -3,8 +3,8 @@ package openfasttrack.importer.markdown;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
 
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.regex.Matcher;
 
@@ -22,22 +22,27 @@ import openfasttrack.importer.ImporterFactory;
 @RunWith(MockitoJUnitRunner.class)
 public class TestImportMarkdown
 {
+    final private static SpecificationItemId ID1 = SpecificationItemId.parseId("type~id~1");
+    final private static SpecificationItemId ID2 = SpecificationItemId.parseId("type~id~2");
+    final private static String TITLE = "Requirement Title";
+    private static final String DESCRIPTION_LINE1 = "Description";
+    private static final String DESCRIPTION_LINE2 = "More description";
+    private static final String RATIONALE_LINE1 = "Rationale";
+    private static final String RATIONALE_LINE2 = "More rationale";
+    private static final String COMMENT_LINE1 = "Comment";
+    private static final String COMMENT_LINE2 = "More comment";
+    private static final String COVERED_ID1 = "impl~foo1~1";
+    private static final String COVERED_ID2 = "impl~baz2~2";
+    private static final String NEEDS_ARTIFACT_TYPE1 = "artA";
+    private static final String NEEDS_ARTIFACT_TYPE2 = "artB";
+    private static final String DEPENDS_ON_ID1 = "configuration~blubb.blah.blah~4711";
+    private static final String DEPENDS_ON_ID2 = "db~blah.blubb~42";
+
     @Mock
     ImportEventListener listenerMock;
-    final private static SpecificationItemId ID = SpecificationItemId.parseId("type~id~1");
-    final private static String TITLE = "Requirement Title";
 
-    // @Test
-    // public void readSpec() throws FileNotFoundException
-    // {
-    //
-    // final FileReader fileReader = new FileReader(new
-    // File("doc/system_requirements.md"));
-    // final Reader reader = new BufferedReader(fileReader);
-    // final Importer importer = ImporterFactory.createImporter(reader,
-    // this.listenerMock);
-    // importer.runImport();
-    // }
+    @Mock
+    Reader readerMock;
 
     // [utest~md.specification_item_id_format~1]
     @Test
@@ -81,18 +86,94 @@ public class TestImportMarkdown
     @Test
     public void testFindRequirement()
     {
+        final String completeItem = createCompleteSpecificationItemInMarkdownFormat();
+        runImporterOnText(completeItem);
+        assertAllImporterEventsCalled();
+    }
+
+    private String createCompleteSpecificationItemInMarkdownFormat()
+    {
         final StringBuilder builder = new StringBuilder("# ").append(TestImportMarkdown.TITLE)
                 .append("\n") //
-                .append("`").append(ID).append("` <a id=\"").append(ID).append("\"></a>");
-        final StringReader reader = new StringReader(builder.toString());
-        new ImporterFactory();
+                .append("`").append(ID1).append("` <a id=\"").append(ID1).append("\"></a>") //
+                .append("\n") //
+                .append(DESCRIPTION_LINE1).append("\n") //
+                .append(DESCRIPTION_LINE2).append("\n") //
+                .append("\nRationale:\n") //
+                .append(RATIONALE_LINE1).append("\n") //
+                .append(RATIONALE_LINE2).append("\n") //
+                .append("\nCovers:\n\n") //
+                .append("  * ").append(COVERED_ID1).append("\n") //
+                .append("  + ").append(COVERED_ID2).append("\n") //
+                .append("\nDepends:\n\n") //
+                .append("  + ").append(DEPENDS_ON_ID1).append("\n") //
+                .append("  - ").append(DEPENDS_ON_ID2).append("\n") //
+                .append("\nComment:\n\n") //
+                .append(COMMENT_LINE1).append("\n") //
+                .append(COMMENT_LINE2).append("\n") //
+                .append("\nNeeds: ").append(NEEDS_ARTIFACT_TYPE1) //
+                .append(", ").append(NEEDS_ARTIFACT_TYPE2);
+        return builder.toString();
+    }
+
+    private void runImporterOnText(final String text)
+    {
+        final StringReader reader = new StringReader(text);
         final Importer importer = ImporterFactory.createImporter(reader, this.listenerMock);
         importer.runImport();
+    }
+
+    private void assertAllImporterEventsCalled()
+    {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        verify(this.listenerMock).setId(ID);
-        verify(this.listenerMock).setTitle(TITLE);
+        inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setTitle(TITLE);
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID1));
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID2));
+        inOrder.verify(this.listenerMock)
+                .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID1));
+        inOrder.verify(this.listenerMock)
+                .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID2));
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
+        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
+        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void testTwoConsecutiveSpecificationItems()
+    {
+        final StringBuilder builder = createTwoConsecutiveItemsInMarkdownFormat();
+        runImporterOnText(builder.toString());
+        assertImporterEventsForTwoConsecutiveItemsCalled();
+    }
+
+    private StringBuilder createTwoConsecutiveItemsInMarkdownFormat()
+    {
+        final StringBuilder builder = new StringBuilder("# ").append(TestImportMarkdown.TITLE)
+                .append("\n") //
+                .append(ID1).append("\n") //
+                .append("\n").append(ID2).append("\n") //
+                .append("# Irrelevant Title");
+        return builder;
+    }
+
+    private void assertImporterEventsForTwoConsecutiveItemsCalled()
+    {
+        final InOrder inOrder = inOrder(this.listenerMock);
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setTitle(TITLE);
+        inOrder.verify(this.listenerMock).endSpecificationItem();
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(ID2);
+        inOrder.verify(this.listenerMock).endSpecificationItem();
     }
 }

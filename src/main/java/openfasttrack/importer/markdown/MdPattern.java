@@ -14,11 +14,11 @@ public enum MdPattern
     // @formatter:off
     COMMENT("Comment:\\s*"),
     COVERS("Covers:\\s*"),
-    COVERS_REF("\\s{0,3}\\*\\s*.*\\(#("+ PatternConstants.REFERENCE + ")"),
+    COVERS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
     DEPENDS("Depends:\\s*"),
-    DEPENDS_REF("\\s{0,3}\\+\\s*.*\\(#("+ PatternConstants.REFERENCE + ")"),
-    EMPTY("\\s*"),
-    EVERYTHING(".*"),
+    DEPENDS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
+    EMPTY("(\\s*)"),
+    EVERYTHING("(.*)"),
     ID("`?(" + PatternConstants.REFERENCE + ")`?.*"),
     NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)+)"),
     RATIONALE("Rationale:\\s*"),
@@ -45,5 +45,8 @@ public enum MdPattern
     private static class PatternConstants
     {
         public static final String REFERENCE = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+        public static final String BULLETS = "[+*-]";
+        public static final String REFERENCE_AFTER_BULLET = "\\s{0,3}" + PatternConstants.BULLETS
+                + "(?:.*\\W)?(" + PatternConstants.REFERENCE + ")(?:\\W.*)?";
     }
 }

@@ -114,8 +114,11 @@ public class SpecificationItemId
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder(this.artifactType)
-                .append(ARTIFACT_TYPE_SEPARATOR).append(this.name).append(REVISION_SEPARATOR)
+        final StringBuilder builder = new StringBuilder() //
+                .append(this.artifactType) //
+                .append(ARTIFACT_TYPE_SEPARATOR) //
+                .append(this.name) //
+                .append(REVISION_SEPARATOR) //
                 .append(this.revision);
         return builder.toString();
     }

@@ -3,7 +3,7 @@ package openfasttrack.core;
 import java.util.ArrayList;
 import java.util.List;
 
-// [impl.requirement_format~1]
+// [impl~requirement_format~1]
 public class SpecificationItem
 {
     private final SpecificationItemId id;
@@ -87,6 +87,11 @@ public class SpecificationItem
         public Builder id(final SpecificationItemId id)
         {
             this.id = id;
+            return this;
+        }
+
+        public Builder title(final String title)
+        {
             return this;
         }
 

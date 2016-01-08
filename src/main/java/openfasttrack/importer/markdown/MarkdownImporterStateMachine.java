@@ -67,7 +67,6 @@ public class MarkdownImporterStateMachine
 
     private void executeTransition(final String line, final Transition entry)
     {
-        System.out.println("    " + this.state + " -> " + entry.getTo());
         entry.getTransition().transit();
         this.state = entry.getTo();
     }

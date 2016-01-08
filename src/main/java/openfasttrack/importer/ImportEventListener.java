@@ -15,7 +15,7 @@ public interface ImportEventListener
      * {@link SpecificationItemId} must be defined using
      * {@link #setId(SpecificationItemId)}.
      */
-    public void startSpecificationItem();
+    public void beginSpecificationItem();
 
     /**
      * The importer found the ID of the specification item
@@ -24,6 +24,14 @@ public interface ImportEventListener
      *            the ID of the new item
      */
     public void setId(final SpecificationItemId id);
+
+    /**
+     * The importer found the title of a specification item
+     *
+     * @param title
+     *            the title
+     */
+    public void setTitle(String title);
 
     /**
      * Append a text block to an item description
@@ -75,4 +83,9 @@ public interface ImportEventListener
      *            coverage
      */
     public void addNeededArtifactType(final String artifactType);
+
+    /**
+     * The importer detected the end of a specification item
+     */
+    public void endSpecificationItem();
 }

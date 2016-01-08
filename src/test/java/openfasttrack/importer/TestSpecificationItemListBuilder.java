@@ -13,13 +13,13 @@ import openfasttrack.core.SpecificationItemId;;
 public class TestSpecificationItemListBuilder
 {
     private static final String DESCRIPTION = "description";
-    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat.id~1");
+    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
     @Test
     public void testBuildBasicItem()
     {
         final SpecificationItemListBuilder itemsBuilder = new SpecificationItemListBuilder();
-        itemsBuilder.startSpecificationItem();
+        itemsBuilder.beginSpecificationItem();
         itemsBuilder.setId(ID);
         itemsBuilder.appendDescription(DESCRIPTION);
         final List<SpecificationItem> items = itemsBuilder.build();

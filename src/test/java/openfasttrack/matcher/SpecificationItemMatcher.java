@@ -1,44 +1,34 @@
 package openfasttrack.matcher;
 
-import openfasttrack.core.SpecificationItem;
-
 import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matchers;
 
-public class SpecificationItemMatcher extends BaseMatcher<SpecificationItem>
+import openfasttrack.core.SpecificationItem;
+import openfasttrack.matcher.config.ConfigurableMatcher;
+import openfasttrack.matcher.config.MatcherConfig;
+
+public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationItem>
 {
-	private final SpecificationItem item;
+    public SpecificationItemMatcher(final SpecificationItem expected)
+    {
+        super(MatcherConfig.builder(expected) //
+                .addGenericProperty("id", SpecificationItem::getId, SpecificationItemIdMatcher::equalTo) //
+                .addStringProperty("comment", SpecificationItem::getComment) //
+                .addStringProperty("description", SpecificationItem::getDescription) //
+                .addStringProperty("rationale", SpecificationItem::getRationale) //
+                .addIterableProperty("coveredIds", SpecificationItem::getCoveredIds,
+                        SpecificationItemIdMatcher::equalTo) //
+                .addIterableProperty("dependsOnIds", SpecificationItem::getDependOnIds,
+                        SpecificationItemIdMatcher::equalTo) //
+                .addIterableProperty("neededArtifactTypes",
+                        SpecificationItem::getNeededArtifactTypes, Matchers::equalTo) //
+                .build());
+    }
 
-	public SpecificationItemMatcher(final SpecificationItem item)
-	{
-		this.item = item;
-	}
-
-	@Override
-	public boolean matches(final Object object)
-	{
-		if ((object != null) || (!(object instanceof SpecificationItem)))
-		{
-			return false;
-		}
-
-		final SpecificationItem item = (SpecificationItem) object;
-		return item.getId().equals(this.item.getId())
-		        && (item.getDescription().equals(this.item.getDescription()));
-	}
-
-	@Override
-	public void describeTo(final Description description)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Factory
-	public static BaseMatcher<SpecificationItem> equalTo(
-	        final SpecificationItem item)
-	{
-		return new SpecificationItemMatcher(item);
-	}
+    @Factory
+    public static BaseMatcher<SpecificationItem> equalTo(final SpecificationItem item)
+    {
+        return new SpecificationItemMatcher(item);
+    }
 }

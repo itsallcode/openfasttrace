@@ -1,5 +1,6 @@
 package openfasttrack.importer.specobject;
 
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.xml.stream.XMLEventReader;
@@ -45,30 +46,47 @@ class SingleSpecobjectImportHelper
                 if (currentEvent.asEndElement().getName().getLocalPart().equals("specobject"))
                 {
                     final SpecificationItemId id = this.idBuilder.build();
-                    LOG.fine(() -> "Specobject element closed: build id " + id);
+                    LOG.finest(() -> "Specobject element closed: build id " + id);
                     this.listener.setId(id);
                     return;
                 }
             default:
-                LOG.warning(() -> "Ignore event " + currentEvent);
                 break;
             }
         }
     }
 
-    private void foundStartElement(final StartElement element) throws XMLStreamException
+    private void foundStartElement(final StartElement element)
     {
         switch (element.getName().getLocalPart())
         {
         case "id":
             final String id = readCharacterData(element);
-            LOG.fine(() -> "Found spec object id " + id);
+            LOG.finest(() -> "Found spec object id " + id);
             this.idBuilder.name(id);
             break;
         case "version":
             final int version = readIntCharacterData(element);
-            LOG.fine(() -> "Found spec object version " + version);
+            LOG.finest(() -> "Found spec object version " + version);
             this.idBuilder.revision(version);
+            break;
+        case "description":
+            this.listener.appendDescription(readCharacterData(element));
+            break;
+        case "rationale":
+            this.listener.appendRationale(readCharacterData(element));
+            break;
+        case "comment":
+            this.listener.appendComment(readCharacterData(element));
+            break;
+        case "needscoverage":
+            readNeedsCoverage(element);
+            break;
+        case "providescoverage":
+            readProvidesCoverage(element);
+            break;
+        case "dependencies":
+            readDependencies(element);
             break;
 
         default:
@@ -77,19 +95,116 @@ class SingleSpecobjectImportHelper
         }
     }
 
+    private void readDependencies(final StartElement element)
+    {
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("dependson"))
+            {
+                final String idString = readCharacterData(childElement);
+                LOG.finest(() -> "Found depends on id '" + idString + "'");
+                this.listener.addDependsOnId(SpecificationItemId.parseId(idString));
+            }
+        });
+    }
+
+    private void readProvidesCoverage(final StartElement element)
+    {
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("provcov"))
+            {
+                readProvCov(childElement);
+            }
+        });
+    }
+
+    private void readProvCov(final StartElement element)
+    {
+        final Builder providesCoverageId = new Builder();
+        readElementUntilEnd(element, (childElement) -> {
+            final String elementName = childElement.getName().getLocalPart();
+            if (elementName.equals("linksto"))
+            {
+                providesCoverageId.name(readCharacterData(childElement));
+            }
+            if (elementName.equals("dstversion"))
+            {
+                providesCoverageId.revision(readIntCharacterData(childElement));
+            }
+        });
+
+        final SpecificationItemId id = providesCoverageId.build();
+        LOG.finest(() -> "Found provides coverage '" + id + "'");
+        this.listener.addCoveredId(id);
+    }
+
+    private void readNeedsCoverage(final StartElement element)
+    {
+        readElementUntilEnd(element, (childElement) -> {
+            if (childElement.getName().getLocalPart().equals("needsobj"))
+            {
+                final String artifactType = readCharacterData(childElement);
+                LOG.finest(() -> "Found needs artifact type '" + artifactType + "'");
+                this.listener.addNeededArtifactType(artifactType);
+            }
+        });
+    }
+
+    private void readElementUntilEnd(final StartElement element,
+            final Consumer<StartElement> consumer)
+    {
+        while (this.xmlEventReader.hasNext())
+        {
+            final XMLEvent currentEvent = readNextEvent();
+
+            if (currentEvent.isEndElement()
+                    && currentEvent.asEndElement().getName().equals(element.getName()))
+            {
+                LOG.finest(() -> "Found end event of element " + element + ": stop processing");
+                return;
+            }
+            if (currentEvent.isStartElement())
+            {
+                consumer.accept(currentEvent.asStartElement());
+            }
+        }
+    }
+
     private int readIntCharacterData(final StartElement element)
-            throws NumberFormatException, XMLStreamException
     {
         return Integer.parseInt(readCharacterData(element));
     }
 
-    private String readCharacterData(final StartElement element) throws XMLStreamException
+    private String readCharacterData(final StartElement element)
     {
-        final XMLEvent characterEvent = this.xmlEventReader.peek();
+        final XMLEvent characterEvent = peekNextEvent();
         if (characterEvent == null || !characterEvent.isCharacters())
         {
             throw new ImporterException("No character data found for element " + element);
         }
-        return characterEvent.asCharacters().getData();
+        final String data = characterEvent.asCharacters().getData().trim();
+        LOG.finest(() -> "Found char data for element '" + element.getName() + "': '" + data + "'");
+        return data;
+    }
+
+    private XMLEvent readNextEvent()
+    {
+        try
+        {
+            return this.xmlEventReader.nextEvent();
+        } catch (final XMLStreamException e)
+        {
+            throw new ImporterException("Exception reading next event", e);
+        }
+    }
+
+    private XMLEvent peekNextEvent()
+    {
+        try
+        {
+            return this.xmlEventReader.peek();
+        } catch (final XMLStreamException e)
+        {
+            throw new ImporterException("Exception when peeking next event", e);
+        }
     }
 }

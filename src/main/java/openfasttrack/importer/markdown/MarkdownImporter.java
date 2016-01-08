@@ -197,6 +197,6 @@ public class MarkdownImporter implements Importer
 
     private void addCoverage()
     {
-        this.listener.addCoveredId(this.stateMachine.getLastToken());
+        this.listener.addCoveredId(SpecificationItemId.parseId(this.stateMachine.getLastToken()));
     }
 }

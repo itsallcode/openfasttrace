@@ -39,9 +39,9 @@ public class SpecificationItemListBuilder implements ImportEventListener
     }
 
     @Override
-    public void addCoveredId(final String id)
+    public void addCoveredId(final SpecificationItemId id)
     {
-        this.itemBuilder.addCoveredId(SpecificationItemId.parseId(id));
+        this.itemBuilder.addCoveredId(id);
     }
 
     @Override

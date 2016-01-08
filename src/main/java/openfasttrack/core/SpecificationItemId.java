@@ -114,8 +114,11 @@ public class SpecificationItemId
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder(this.artifactType)
-                .append(ARTIFACT_TYPE_SEPARATOR).append(this.name).append(REVISION_SEPARATOR)
+        final StringBuilder builder = new StringBuilder() //
+                .append(this.artifactType) //
+                .append(ARTIFACT_TYPE_SEPARATOR) //
+                .append(this.name) //
+                .append(REVISION_SEPARATOR) //
                 .append(this.revision);
         return builder.toString();
     }
@@ -209,9 +212,9 @@ public class SpecificationItemId
 
         private void validateFields()
         {
-            if (this.name == null || this.artifactType == null)
+            if (this.name == null)
             {
-                throw new IllegalStateException("Name or artifactType is missing");
+                throw new IllegalStateException("Name is missing");
             }
         }
 
@@ -226,7 +229,7 @@ public class SpecificationItemId
             } else
             {
                 throw new IllegalStateException(
-                        "Sting \"" + this.id + "\" cannot be parsed to a specification item ID");
+                        "String \"" + this.id + "\" cannot be parsed to a specification item ID");
             }
         }
     }

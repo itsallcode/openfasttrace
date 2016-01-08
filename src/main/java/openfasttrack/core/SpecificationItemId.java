@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  */
 public class SpecificationItemId
 {
-    public static final String ARTIFACT_TYPE_SEPARATOR = ".";
+    public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     private final String name;
     private final int revision;
@@ -128,12 +128,20 @@ public class SpecificationItemId
      */
     public static class Builder
     {
-        private final Pattern idPattern = Pattern.compile("(\\w+)\\.(\\w+(?:\\.\\w+)*)~(\\d+)");
+        private final Pattern idPattern = Pattern
+                .compile("(\\p{Alpha}+)~(\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*)~(\\d+)");
         private final String id;
         private String artifactType;
         private String name;
         private int revision;
 
+        /**
+         * Create a new {@link Builder} and initialize it with the string
+         * representation of a specification item ID
+         *
+         * @param id
+         *            the string representation of a specification item ID
+         */
         public Builder(final String id)
         {
             this.id = id;
@@ -144,18 +152,40 @@ public class SpecificationItemId
             this(null);
         }
 
+        /**
+         * Set the artifact type
+         *
+         * @param artifactType
+         *            the artifact type
+         * @return this builder
+         */
         public Builder artifactType(final String artifactType)
         {
             this.artifactType = artifactType;
             return this;
         }
 
+        /**
+         * Set the ID name part
+         *
+         * @param name
+         *            the name part of the ID
+         * @return this builder
+         */
         public Builder name(final String name)
         {
             this.name = name;
             return this;
         }
 
+        /**
+         * Set the revision number of the ID
+         *
+         * @param revision
+         *            the revision number
+         *
+         * @return this builder
+         */
         public Builder revision(final int revision)
         {
             this.revision = revision;

@@ -11,14 +11,14 @@ import org.junit.Test;
 
 public class TestSpecificationItem
 {
-    final static SpecificationItemId ID = SpecificationItemId.parseId("req.foobar~1");
+    final static SpecificationItemId ID = SpecificationItemId.parseId("req~foobar~1");
     final static String DESCRIPTION = "This is a description\nwith multiple lines";
     final static String RATIONALE = "A rationale\nwith multiple lines";
     final static String COMMENT = "A comment\nwith multiple lines";
-    final static List<SpecificationItemId> COVERED_IDS = parseIds("feat.foo~1", "feat.bar~2",
-            "constr.baz~3");
+    final static List<SpecificationItemId> COVERED_IDS = parseIds("feat~foo~1", "feat~bar~2",
+            "constr~baz~3");
     final static List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList(new String[] { "dsn", "uman" });
-    final static List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req.blah~4", "req.zoo~5");
+    final static List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req~blah~4", "req~zoo~5");
 
     private static List<SpecificationItemId> parseIds(final String... ids)
     {

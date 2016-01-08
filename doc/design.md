@@ -24,17 +24,20 @@ The following definitions are used frequently throughout the document:
 
 ## Markdown Import
 
-### Requirement ID format
-`req.requirement_format~1` <a id="req.requirement_format~1"/>
+### Specification Item ID Format
+`req~md.specification_item_id_format~1` <a id="req~md.specification_item_id_format~1"></a>
+
 A requirement ID in has the following format
 
-    requirement-id = type "." id "~" revision
+    requirement-id = type "" id "~" revision
     
     type = 1*ALPHA
     
-    id = ALPHA *(ALPHA / DIGIT / "." / "_")
+    id = id-fragment *("." id-fragment)
     
-    revision = *DIGIT
+    id-fragment = ALPHA *(ALPHA / DIGIT / "_")
+
+    revision = 1*DIGIT
 
 Rationale:
 
@@ -43,12 +46,28 @@ Requirement type and revision must be immediately recognizable from the requirem
 
 Covers:
 
-  * req.markdown_import~1
+  * req~markdown_import~1
 
 Needs: impl, utest, uman
 
+### Specification Item Title
+`req~md.specification_item_title~1` <a id="req~md.specification_item_title">
+
+If a Markdown title directly precedes a specification item ID, then the Markdown title is used a title for the specification item.
+
+Rationale:
+
+Markdown titles show up in the outline an are a natural way of defining a requirment title.
+
+Covers:
+
+  * req~markdown_import~1
+
+Needs: impl, utest, uman 
+
 ### Requirement references
-`req.md.requirement_references~1` <a id="req.md.requirement_references~1"/>
+`req~md.requirement_references~1` <a id="req~md.requirement_references~1"></a>
+
 In Markdown specification item references have the following format:
 
     reference = (plain-reference | url-style-link )
@@ -59,12 +78,12 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * feat.requirement_import~1
+  * feat~requirement_import~1
 
 Needs: impl, utest, uman
 
 ### Traced reference relations
-`req.md.traced_reference_relations~1` <a id="req.md.traced_reference_relations~1"/>
+`req~md.traced_reference_relations~1` <a id="req~md.traced_reference_relations~1"></a>
 
 The Markdown importer interprets specification item reference relations a follows:
 
@@ -85,7 +104,7 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * [Requirement Import](#feat.requirement_import~1)
+  * [Requirement Import](#feat~requirement_import~1)
 
 Needs: impl, utest, uman
 

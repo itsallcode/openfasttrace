@@ -19,23 +19,9 @@ public class SpecificationItemListBuilder implements ImportEventListener
     private StringBuilder comment = new StringBuilder();
 
     @Override
-    public void startSpecificationItem()
+    public void beginSpecificationItem()
     {
-        if (this.itemBuilder != null)
-        {
-            createNewSpecificationItem();
-        }
         this.itemBuilder = new SpecificationItem.Builder();
-    }
-
-    private void createNewSpecificationItem()
-    {
-        this.itemBuilder //
-                .description(this.description.toString()) //
-                .rationale(this.rationale.toString()) //
-                .comment(this.comment.toString());
-        this.items.add(this.itemBuilder.build());
-        resetState();
     }
 
     private void resetState()
@@ -97,5 +83,30 @@ public class SpecificationItemListBuilder implements ImportEventListener
     {
         this.createNewSpecificationItem();
         return this.items;
+    }
+
+    @Override
+    public void setTitle(final String title)
+    {
+        this.itemBuilder.title(title);
+    }
+
+    @Override
+    public void endSpecificationItem()
+    {
+        if (this.itemBuilder != null)
+        {
+            createNewSpecificationItem();
+        }
+    }
+
+    private void createNewSpecificationItem()
+    {
+        this.itemBuilder //
+                .description(this.description.toString()) //
+                .rationale(this.rationale.toString()) //
+                .comment(this.comment.toString());
+        this.items.add(this.itemBuilder.build());
+        resetState();
     }
 }

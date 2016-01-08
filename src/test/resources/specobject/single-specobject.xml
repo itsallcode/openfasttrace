@@ -23,7 +23,7 @@
 			</provcov>
 		</providescoverage>
 		<dependencies>
-			<dependson>dependsOnDocType.dependsOnName~44</dependson>
+			<dependson>dependsOnDocType~dependsOnName~44</dependson>
 		</dependencies>
 	</specobject>
 </specobjects>

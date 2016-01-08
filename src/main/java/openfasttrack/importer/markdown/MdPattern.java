@@ -8,16 +8,18 @@ import java.util.regex.Pattern;
  */
 public enum MdPattern
 {
+    // [impl~md.specification_item_id_format~1]
+    // [impl~md.specification_item_title~1]
+
     // @formatter:off
     COMMENT("Comment:\\s*"),
     COVERS("Covers:\\s*"),
-    COVERS_REF("\\s{0,3}\\*\\s*.*\\(#([^)])"),
+    COVERS_REF("\\s{0,3}\\*\\s*.*\\(#("+ PatternConstants.REFERENCE + ")"),
     DEPENDS("Depends:\\s*"),
-    DETAILS_REF("\\s{0,3}\\+\\s*.*\\(#([^)])"),
-    DEPENDS_REF("\\s{0,3}-\\s*.*\\(#([^)])"),
+    DEPENDS_REF("\\s{0,3}\\+\\s*.*\\(#("+ PatternConstants.REFERENCE + ")"),
     EMPTY("\\s*"),
     EVERYTHING(".*"),
-    ID(".*<a +id *= *\"((?:\\w+\\.)+\\w+(?:~\\d+)?)\".*"),
+    ID("`?(" + PatternConstants.REFERENCE + ")`?.*"),
     NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)+)"),
     RATIONALE("Rationale:\\s*"),
     TITLE("#+\\s*(.*)");
@@ -38,5 +40,10 @@ public enum MdPattern
     public Pattern getPattern()
     {
         return this.pattern;
+    }
+
+    private static class PatternConstants
+    {
+        public static final String REFERENCE = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
     }
 }

@@ -5,3 +5,9 @@ jdk:
 cache:
   directories:
   - $HOME/.m2
+
+before_script:
+  - pip install --user codecov
+
+after_success:
+  - codecov

@@ -9,9 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.xml.stream.XMLInputFactory;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
@@ -26,13 +23,6 @@ import openfasttrack.matcher.SpecificationItemMatcher;
 public class SpecobjectImporterTest
 {
     private static final String TEST_FILE_PREFIX = "src/test/resources/specobject/";
-    private XMLInputFactory xmlInputFactory;
-
-    @Before
-    public void setUp()
-    {
-        this.xmlInputFactory = XMLInputFactory.newFactory();
-    }
 
     @Test
     public void testSingleSpecObject() throws FileNotFoundException

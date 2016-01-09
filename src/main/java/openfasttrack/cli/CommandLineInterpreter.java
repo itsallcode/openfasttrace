@@ -1,5 +1,8 @@
 package openfasttrack.cli;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toMap;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -22,7 +25,6 @@ import java.util.stream.Stream;
  */
 public class CommandLineInterpreter
 {
-
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";
     private static final String SETTER_PREFIX = "set";
@@ -50,9 +52,14 @@ public class CommandLineInterpreter
         final Class<?> receiverClass = this.argumentsReceiver.getClass();
         final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
         this.setters = methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
-                .collect(Collectors.toMap(
-                        method -> method.getName().substring(SETTER_PREFIX.length()).toLowerCase(),
-                        method -> method));
+                .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
+    }
+
+    private static String getSetterName(final Method method)
+    {
+        return method.getName() //
+                .substring(SETTER_PREFIX.length()) //
+                .toLowerCase();
     }
 
     /**
@@ -61,7 +68,7 @@ public class CommandLineInterpreter
     public void parse()
     {
         final List<String> unnamedArguments = new ArrayList<>();
-        final ListIterator<String> iterator = Arrays.asList(this.arguments).listIterator();
+        final ListIterator<String> iterator = asList(this.arguments).listIterator();
         while (iterator.hasNext())
         {
             final String argument = iterator.next();

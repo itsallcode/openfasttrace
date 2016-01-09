@@ -4,6 +4,7 @@ System Requirement Specification OpenFastTrack
 
 ## Terminology
 
+  * OFT: OpenFastTrack (this project)
   * Specification item: holds either a requirement or coverage
   * Specification artifact: a data source containing specification items (e.g. file, ticket system,
     database)
@@ -31,7 +32,7 @@ Needs: req
 OFT determines the coverage status of a requirement. The possible options are:
 
   1. Uncovered: an specification item requires coverage but is not covered
-  2. Covered: a specification item requires coverage and is covered 
+  2. Covered: a specification item requires coverage and is covered by one or more other specification items
   3. Over covered: coverage for a specification item was found that does not exist
 
 Covers:
@@ -125,7 +126,7 @@ Covers:
 Needs: dsn
 
 ### Markdown Outline Readable
-The Markdown outline -- an table of contents created from the heading structure by various Markdown editors -- must be human readable.
+The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
 
 Rationale:
 

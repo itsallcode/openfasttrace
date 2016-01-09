@@ -15,7 +15,7 @@ public class SpecobjectImporterFactory extends ImporterFactory
 {
     private final XMLInputFactory xmlInputFactory;
 
-    protected SpecobjectImporterFactory()
+    public SpecobjectImporterFactory()
     {
         super(".xml");
         this.xmlInputFactory = XMLInputFactory.newFactory();

@@ -11,7 +11,7 @@ import openfasttrack.importer.ImporterFactory;
  */
 public class MarkdownImporterFactory extends ImporterFactory
 {
-    protected MarkdownImporterFactory()
+    public MarkdownImporterFactory()
     {
         super(".md");
     }

@@ -1,7 +1,7 @@
 # Introduction
+This document is derived from the "[arc42][bib.arch42]" architectural template.
 
 ## Terminology
-
 The terminology from the [system requirement specification][bib.srs] applies.
 
 ## Conventions
@@ -16,16 +16,37 @@ The following definitions are used frequently throughout the document:
 
 # Constraints
 
+# Solution Ideas and Strategy
+
+# Context
+
 ## Technical Constraints
 
 ## Conventions
 
-# Functional view
+# Building Block View
 
-## Markdown Import
+## Importers
+For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
+
+## Import Event Listeners
+Importers emit events if they find parts of a specification item in the artifact they are importing. An Event
+
+## Command Line Interpreter
+The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
+
+# Runtime View
+
+# Deployment View
+
+# Concepts
+
+## Data Structures
+
+## Markdown-style Structures
 
 ### Specification Item ID Format
-`req~md.specification_item_id_format~1` <a id="req~md.specification_item_id_format~1"></a>
+`dsn~md.specification_item_id_format~1` <a id="dsn~md.specification_item_id_format~1"></a>
 
 A requirement ID in has the following format
 
@@ -46,12 +67,12 @@ Requirement type and revision must be immediately recognizable from the requirem
 
 Covers:
 
-  * req~markdown_import~1
+  * `req~markdown_import~1`
 
 Needs: impl, utest, uman
 
 ### Specification Item Title
-`req~md.specification_item_title~1` <a id="req~md.specification_item_title">
+`dsn~md.specification_item_title~1` <a id="dsn~md.specification_item_title">
 
 If a Markdown title directly precedes a specification item ID, then the Markdown title is used a title for the specification item.
 
@@ -61,12 +82,12 @@ Markdown titles show up in the outline an are a natural way of defining a requir
 
 Covers:
 
-  * req~markdown_import~1
+  * `req~markdown_import~1`
 
 Needs: impl, utest, uman 
 
 ### Requirement references
-`req~md.requirement_references~1` <a id="req~md.requirement_references~1"></a>
+`dsn~md.requirement_references~1` <a id="dsn~md.requirement_references~1"></a>
 
 In Markdown specification item references have the following format:
 
@@ -78,12 +99,12 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * feat~requirement_import~1
+  * `feat~requirement_import~1`
 
 Needs: impl, utest, uman
 
 ### Traced reference relations
-`req~md.traced_reference_relations~1` <a id="req~md.traced_reference_relations~1"></a>
+`dsn~md.traced_reference_relations~1` <a id="dsn~md.traced_reference_relations~1"></a>
 
 The Markdown importer interprets specification item reference relations a follows:
 
@@ -108,20 +129,46 @@ Covers:
 
 Needs: impl, utest, uman
 
-# Composition
+## User Interface
 
-# Modules
+### Command Line
 
-## Importers
-For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
+#### Input File Selection
+`dsn~input_file_selection~1` <a id="dsn~input_file_selection~1"></a>
 
-## Import Event Listeners
-Importers emit events if they find parts of a specification item in the artifact they are importing. An Event
+The CLI accepts the following two variants for defining input files:
+
+  * A list of files
+  * A list of directories
+
+In both cases relative and absolute paths are accepted. "Relative" means in relation to the current working directory.
+
+Covers:
+
+  * `req~input_file_selection~1`
+
+#### Input File De-Duplication
+`dsn~input_file_deduplication~1` <a id="dsn~input_file_deduplication~1~1></a>
+
+The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
+
+Covers:
+
+  * `req~input_file_selection~1`
+
+# Design Decisions
 
 # Bibliography
 
 [bib.srs]: system_requirements.md "OpenFastTrack System Requirement Specification"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"
+[bib.arc42]: http://arc42.org
 
-* [System Requirement Specification OpenFastTrack][bib.srs], Sebastian Bär
-* [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
+## Specifications
+
+  * [System Requirement Specification OpenFastTrack][bib.srs], Sebastian Bär
+  * [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
+
+## Web Sites
+
+  * [arc42 - Ressources for software architects][bib.arc42], Dr. Gernot Starke, Dr. Peter Hruschka

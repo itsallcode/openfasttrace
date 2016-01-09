@@ -1,6 +1,7 @@
 # openfasttrack
 
 [![Build Status](https://travis-ci.org/hamstercommunity/openfasttrack.svg)](https://travis-ci.org/hamstercommunity/openfasttrack)
+[![Circle CI](https://circleci.com/gh/hamstercommunity/openfasttrack.svg?style=svg)](https://circleci.com/gh/hamstercommunity/openfasttrack)
 [![codecov.io](https://codecov.io/github/hamstercommunity/openfasttrack/coverage.svg?branch=master)](https://codecov.io/github/hamstercommunity/openfasttrack?branch=master)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/7509/badge.svg)](https://scan.coverity.com/projects/hamstercommunity-openfasttrack)
 

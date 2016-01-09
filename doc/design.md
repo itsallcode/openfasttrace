@@ -158,6 +158,29 @@ Covers:
 
 # Design Decisions
 
+## How do we Implement the Command Line Interpreter
+`dsn~reflection_based_cli` <a id="dsn~reflection_based_cli"></a>
+
+OFT got its own simple command line interpreter that uses reflection to feed the command line arguments to a receiver object.
+
+Rationale:
+
+One of the design goal of OFT is that it works without external runtime dependencies except for the Java Standard API. So taking an existing CLI was no option.
+Using reflection allows the CLI user to implement the receiver as a POJO. No annotations are necessary.
+
+Covers:
+
+  * `req~input_file_selection~1`
+
+### Why is this architecture relevant?
+
+Exchanging the CLI later takes considerable effort.
+
+### Alternatives considered
+
+  * No CLI (plain argument list) - not flexible enough
+  * External CLI - breaks design goal
+
 # Bibliography
 
 [bib.srs]: system_requirements.md "OpenFastTrack System Requirement Specification"

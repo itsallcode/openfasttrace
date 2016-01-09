@@ -45,6 +45,16 @@ public class CommandLineInterpreter
         findAllSettersInArgumentsReceiver();
     }
 
+    private void findAllSettersInArgumentsReceiver()
+    {
+        final Class<?> receiverClass = this.argumentsReceiver.getClass();
+        final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
+        this.setters = methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
+                .collect(Collectors.toMap(
+                        method -> method.getName().substring(SETTER_PREFIX.length()).toLowerCase(),
+                        method -> method));
+    }
+
     /**
      * Parse the command line and inject the values into the receiver object
      */
@@ -55,26 +65,16 @@ public class CommandLineInterpreter
         while (iterator.hasNext())
         {
             final String argument = iterator.next();
-            if (argument.startsWith("-"))
+            if (argument.startsWith(SINGLE_CHAR_ARG_PREFIX))
             {
                 handleNamedArgument(iterator, argument);
             }
             else
             {
-                unnamedArguments.add(argument);
+                handleUnnamedArgument(unnamedArguments, argument);
             }
         }
-        handleUnnamedArguments(unnamedArguments);
-    }
-
-    private void findAllSettersInArgumentsReceiver()
-    {
-        final Class<?> receiverClass = this.argumentsReceiver.getClass();
-        final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
-        this.setters = methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
-                .collect(Collectors.toMap(
-                        method -> method.getName().substring(SETTER_PREFIX.length()).toLowerCase(),
-                        method -> method));
+        assignUnnameArgument(unnamedArguments);
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
@@ -88,6 +88,11 @@ public class CommandLineInterpreter
         {
             reportUnexpectedNamedArgument();
         }
+    }
+
+    private void handleUnnamedArgument(final List<String> unnamedArguments, final String argument)
+    {
+        unnamedArguments.add(argument);
     }
 
     private void reportUnexpectedNamedArgument()
@@ -163,7 +168,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private void handleUnnamedArguments(final List<String> unnamedArguments)
+    private void assignUnnameArgument(final List<String> unnamedArguments)
     {
         if (this.setters.containsKey(UNNAMED_ARGUMENTS_SUFFIX))
         {

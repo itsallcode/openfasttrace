@@ -174,7 +174,7 @@ Covers:
 
   * `req~input_file_selection~1`
 
-### Why is this architecture relevant?
+### Why is This Architecture Relevant?
 
 Exchanging the CLI later takes considerable effort.
 

@@ -48,6 +48,7 @@ class SingleSpecobjectImportHelper
                     final SpecificationItemId id = this.idBuilder.build();
                     LOG.finest(() -> "Specobject element closed: build id " + id);
                     this.listener.setId(id);
+                    this.listener.endSpecificationItem();
                     return;
                 }
             default:

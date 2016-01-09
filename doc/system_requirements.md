@@ -10,14 +10,14 @@ System Requirement Specification OpenFastTrack
 
 # Features
 ## Requirement Tracing
-`feat~requirement_tracing~1` <a id="feat~requirement_tracing~1"/>
+`feat~requirement_tracing~1` <a id="feat~requirement_tracing~1"></a>
 
 OFT traces requirements from specification to any kind of coverage (document, implementation, test, etc.)
 
 Needs: req
 
 ## Requirement Import
-`feat~requirement_import~1` <a id="feat~requirement_import~1"/>
+`feat~requirement_import~1` <a id="feat~requirement_import~1"></a>
 
 OFT imports requirements from different text formats. The default is Markdown.
 
@@ -26,7 +26,7 @@ Needs: req
 # High Level Requirements
 
 ## Coverage Status
-`req~coverage_status~1` <a id="req~coverage_status~1"/>
+`req~coverage_status~1` <a id="req~coverage_status~1"></a>
 
 OFT determines the coverage status of a requirement. The possible options are:
 
@@ -41,7 +41,7 @@ Covers:
 Needs: dsn
 
 ## Specification Item
-`req~specification_item~1` <a id="req~specification_item~1"/>
+`req~specification_item~1` <a id="req~specification_item~1"></a>
 
 A specification item consists of the following parts:
 
@@ -87,7 +87,7 @@ Covers:
 Needs: dsn
 
 ## Markdown Import
-`req~markdown_import~1` <a id="req~markdown_import~1"/>
+`req~markdown_import~1` <a id="req~markdown_import~1"></a>
 
 OFT imports specification items from Markdown.
 
@@ -110,7 +110,7 @@ Covers:
 Needs: dsn
 
 ### Markdown Standard syntax
-`req~markdown_standard_syntax~1` <a id="req~markdown_standard_syntax~1"/>
+`req~markdown_standard_syntax~1` <a id="req~markdown_standard_syntax~1"></a>
 
 The OFT Markdown specification artifact format uses the standard markdown syntax without proprietary extensions.
 

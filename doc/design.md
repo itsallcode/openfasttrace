@@ -1,5 +1,5 @@
 # Introduction
-This document is derived from the "[arc42][bib.arch42]" architectural template.
+This document is derived from the "[arc42][bib.arc42]" architectural template.
 
 ## Terminology
 The terminology from the [system requirement specification][bib.srs] applies.
@@ -72,7 +72,7 @@ Covers:
 Needs: impl, utest, uman
 
 ### Specification Item Title
-`dsn~md.specification_item_title~1` <a id="dsn~md.specification_item_title">
+`dsn~md.specification_item_title~1` <a id="dsn~md.specification_item_title"></a>
 
 If a Markdown title directly precedes a specification item ID, then the Markdown title is used a title for the specification item.
 
@@ -99,7 +99,8 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * `feat~requirement_import~1`
+  * `req~markdown_import~1`
+  * `req~markdown_standard_syntax~1`
 
 Needs: impl, utest, uman
 
@@ -125,7 +126,8 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * [Requirement Import](#feat~requirement_import~1)
+  * `req~markdown_import~1`
+  * `req~markdown_standard_syntax~1`
 
 Needs: impl, utest, uman
 

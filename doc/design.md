@@ -30,7 +30,7 @@ The following definitions are used frequently throughout the document:
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
 ## Import Event Listeners
-Importers emit events if they find parts of a specification item in the artifact they are importing. An Event
+Importers emit events if they find parts of a specification item in the artifact they are importing.
 
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
@@ -50,7 +50,7 @@ The command line interpreter (CLI) takes parameters given to OFT and parses them
 
 A requirement ID in has the following format
 
-    requirement-id = type "" id "~" revision
+    requirement-id = type "~" id "~" revision
     
     type = 1*ALPHA
     
@@ -74,11 +74,11 @@ Needs: impl, utest, uman
 ### Specification Item Title
 `dsn~md.specification_item_title~1` <a id="dsn~md.specification_item_title"></a>
 
-If a Markdown title directly precedes a specification item ID, then the Markdown title is used a title for the specification item.
+If a Markdown title directly precedes a specification item ID, then the Markdown title is used as title for the specification item.
 
 Rationale:
 
-Markdown titles show up in the outline an are a natural way of defining a requirment title.
+Markdown titles show up in the outline and are a natural way of defining a requirment title.
 
 Covers:
 
@@ -91,7 +91,7 @@ Needs: impl, utest, uman
 
 In Markdown specification item references have the following format:
 
-    reference = (plain-reference | url-style-link )
+    reference = (plain-reference | url-style-link)
     
     plain-reference = requirement-id
     
@@ -107,7 +107,7 @@ Needs: impl, utest, uman
 ### Traced reference relations
 `dsn~md.traced_reference_relations~1` <a id="dsn~md.traced_reference_relations~1"></a>
 
-The Markdown importer interprets specification item reference relations a follows:
+The Markdown importer interprets specification item reference relations as follows:
 
   1. Covers
   2. Depends

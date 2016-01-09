@@ -3,6 +3,7 @@ package openfasttrack.importer;
 import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
@@ -13,14 +14,14 @@ import java.util.stream.StreamSupport;
  */
 public class ImporterFactoryLoader
 {
-    private final ServiceLoader<ImporterFactory> serviceLoader;
+    private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
 
     public ImporterFactoryLoader()
     {
-        this(ServiceLoader.load(ImporterFactory.class));
+        this(ServiceLoaderWrapper.load(ImporterFactory.class));
     }
 
-    ImporterFactoryLoader(final ServiceLoader<ImporterFactory> serviceLoader)
+    ImporterFactoryLoader(final ServiceLoaderWrapper<ImporterFactory> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
     }
@@ -57,5 +58,30 @@ public class ImporterFactoryLoader
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
                 .filter((f) -> f.supportsFile(file)) //
                 .collect(toList());
+    }
+
+    /**
+     * This is a non-final wrapper for {@link ServiceLoader}. It is required as
+     * final classes cannot be mocked in unit tests.
+     */
+    static class ServiceLoaderWrapper<T> implements Iterable<T>
+    {
+        private final ServiceLoader<T> serviceLoader;
+
+        private ServiceLoaderWrapper(final ServiceLoader<T> serviceLoader)
+        {
+            this.serviceLoader = serviceLoader;
+        }
+
+        static <T> ServiceLoaderWrapper<T> load(final Class<T> service)
+        {
+            return new ServiceLoaderWrapper<>(ServiceLoader.load(service));
+        }
+
+        @Override
+        public Iterator<T> iterator()
+        {
+            return this.serviceLoader.iterator();
+        }
     }
 }

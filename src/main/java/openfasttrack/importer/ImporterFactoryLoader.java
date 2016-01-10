@@ -32,7 +32,7 @@ public class ImporterFactoryLoader
      * this throws an {@link ImporterException}.
      *
      * @param file
-     *            the file for wich to get a {@link ImporterFactory}.
+     *            the file for which to get a {@link ImporterFactory}.
      * @return a matching {@link ImporterFactory} that can handle the given
      *         {@link Path}
      * @throws ImporterException

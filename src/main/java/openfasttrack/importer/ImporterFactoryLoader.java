@@ -56,7 +56,7 @@ public class ImporterFactoryLoader
     private List<ImporterFactory> getMatchingFactories(final Path file)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter((f) -> f.supportsFile(file)) //
+                .filter(f -> f.supportsFile(file)) //
                 .collect(toList());
     }
 

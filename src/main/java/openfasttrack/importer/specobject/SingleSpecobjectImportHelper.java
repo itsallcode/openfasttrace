@@ -98,7 +98,7 @@ class SingleSpecobjectImportHelper
 
     private void readDependencies(final StartElement element)
     {
-        readElementUntilEnd(element, (childElement) -> {
+        readElementUntilEnd(element, childElement -> {
             if (childElement.getName().getLocalPart().equals("dependson"))
             {
                 final String idString = readCharacterData(childElement);
@@ -110,7 +110,7 @@ class SingleSpecobjectImportHelper
 
     private void readProvidesCoverage(final StartElement element)
     {
-        readElementUntilEnd(element, (childElement) -> {
+        readElementUntilEnd(element, childElement -> {
             if (childElement.getName().getLocalPart().equals("provcov"))
             {
                 readProvCov(childElement);
@@ -121,7 +121,7 @@ class SingleSpecobjectImportHelper
     private void readProvCov(final StartElement element)
     {
         final Builder providesCoverageId = new Builder();
-        readElementUntilEnd(element, (childElement) -> {
+        readElementUntilEnd(element, childElement -> {
             final String elementName = childElement.getName().getLocalPart();
             if (elementName.equals("linksto"))
             {
@@ -140,7 +140,7 @@ class SingleSpecobjectImportHelper
 
     private void readNeedsCoverage(final StartElement element)
     {
-        readElementUntilEnd(element, (childElement) -> {
+        readElementUntilEnd(element, childElement -> {
             if (childElement.getName().getLocalPart().equals("needsobj"))
             {
                 final String artifactType = readCharacterData(childElement);

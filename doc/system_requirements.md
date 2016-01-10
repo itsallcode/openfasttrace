@@ -8,6 +8,8 @@ System Requirement Specification OpenFastTrack
   * Specification item: holds either a requirement or coverage
   * Specification artifact: a data source containing specification items (e.g. file, ticket system,
     database)
+  * Coverage requester: a specification item that need coverage
+  * Coverage provider: a specification item that provides coverage
 
 # Features
 ## Requirement Tracing
@@ -26,14 +28,35 @@ Needs: req
 
 # High Level Requirements
 
-## Coverage Status
-`req~coverage_status~1` <a id="req~coverage_status~1"></a>
+## Forward Coverage Status
+`req~forward_coverage_status~1` <a id="req~forward_coverage_status~1"></a>
 
-OFT determines the coverage status of a requirement. The possible options are:
+OFT determines the forward coverage status of a requirement. "Forward" in this context means that the coverage is checked from the perspective of the item that needs to be covered.
 
-  1. Uncovered: an specification item requires coverage but is not covered
-  2. Covered: a specification item requires coverage and is covered by one or more other specification items
-  3. Over covered: coverage for a specification item was found that does not exist
+The possible results are:
+
+  1. Covered: a specification item requires coverage and is covered by one or more other specification items
+  2. Uncovered: an specification item requires coverage but is not covered
+  3. Outdated: coverage exists but points to a lower revision number of the requester
+  4. Predated: coverage exists but points to a higher revision number of the requester
+
+Covers:
+
+  * [feat~requirement_tracing~1](#feat~requirement_tracing~1)
+
+Needs: dsn
+
+## Backward Coverage Status
+`req~backward_coverage_status~1` <a id="req~backward_coverage_status~1"></a>
+
+OFT determines the Backward coverage status of a requirement. "Backward" means that the link towards the requester is checked from the perspective of the item that provider.
+
+The possible results are:
+
+  1. Covers
+  2. Orphaned: the provider claims to cover a non-existent requester
+  3. Outdated: the provider covers a lower revision number than the requester actually has requester
+  4. Predated: the provider covers a higher revision number
 
 Covers:
 

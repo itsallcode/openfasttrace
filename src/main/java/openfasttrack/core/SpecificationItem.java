@@ -3,6 +3,8 @@ package openfasttrack.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Generated;
+
 // [impl~requirement_format~1]
 public class SpecificationItem
 {
@@ -61,6 +63,120 @@ public class SpecificationItem
     public List<String> getNeededArtifactTypes()
     {
         return this.neededArtifactTypes;
+    }
+
+    @Generated(value = "Eclipse")
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.comment == null) ? 0 : this.comment.hashCode());
+        result = prime * result + ((this.coveredIds == null) ? 0 : this.coveredIds.hashCode());
+        result = prime * result + ((this.dependOnIds == null) ? 0 : this.dependOnIds.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result
+                + ((this.neededArtifactTypes == null) ? 0 : this.neededArtifactTypes.hashCode());
+        result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
+        return result;
+    }
+
+    @Generated(value = "Eclipse")
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final SpecificationItem other = (SpecificationItem) obj;
+        if (this.comment == null)
+        {
+            if (other.comment != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.comment.equals(other.comment))
+        {
+            return false;
+        }
+        if (this.coveredIds == null)
+        {
+            if (other.coveredIds != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.coveredIds.equals(other.coveredIds))
+        {
+            return false;
+        }
+        if (this.dependOnIds == null)
+        {
+            if (other.dependOnIds != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.dependOnIds.equals(other.dependOnIds))
+        {
+            return false;
+        }
+        if (this.description == null)
+        {
+            if (other.description != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.description.equals(other.description))
+        {
+            return false;
+        }
+        if (this.id == null)
+        {
+            if (other.id != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.id.equals(other.id))
+        {
+            return false;
+        }
+        if (this.neededArtifactTypes == null)
+        {
+            if (other.neededArtifactTypes != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.neededArtifactTypes.equals(other.neededArtifactTypes))
+        {
+            return false;
+        }
+        if (this.rationale == null)
+        {
+            if (other.rationale != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.rationale.equals(other.rationale))
+        {
+            return false;
+        }
+        return true;
     }
 
     public static class Builder

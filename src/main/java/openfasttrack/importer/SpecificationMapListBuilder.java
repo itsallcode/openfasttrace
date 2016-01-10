@@ -1,18 +1,19 @@
 package openfasttrack.importer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 
 /**
- * The {@link SpecificationItemListBuilder} consumes import events and generates
- * a list of specification items from them.
+ * The {@link SpecificationMapListBuilder} consumes import events and generates
+ * a map of specification items from them. The key to the map is the
+ * specification item ID.
  */
-public class SpecificationItemListBuilder implements ImportEventListener
+public class SpecificationMapListBuilder implements ImportEventListener
 {
-    private final List<SpecificationItem> items = new ArrayList<>();
+    private final Map<SpecificationItemId, SpecificationItem> items = new HashMap<>();
     private SpecificationItem.Builder itemBuilder = null;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
@@ -79,7 +80,7 @@ public class SpecificationItemListBuilder implements ImportEventListener
      *
      * @return the list of specification items collected up to this point
      */
-    public List<SpecificationItem> build()
+    public Map<SpecificationItemId, SpecificationItem> build()
     {
         this.endSpecificationItem();
         return this.items;
@@ -106,7 +107,8 @@ public class SpecificationItemListBuilder implements ImportEventListener
                 .description(this.description.toString()) //
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString());
-        this.items.add(this.itemBuilder.build());
+        final SpecificationItem item = this.itemBuilder.build();
+        this.items.put(item.getId(), item);
         resetState();
     }
 }

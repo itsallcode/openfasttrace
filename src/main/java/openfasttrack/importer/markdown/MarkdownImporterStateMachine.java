@@ -1,6 +1,5 @@
 package openfasttrack.importer.markdown;
 
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -19,8 +18,6 @@ public class MarkdownImporterStateMachine
     private State state = State.START;
     private String lastToken = "";
     private final Transition[] transitions;
-    private static final Logger LOG = Logger
-            .getLogger(MarkdownImporterStateMachine.class.getName());
 
     /**
      * Create a new instance of the {@link MarkdownImporterStateMachine}

@@ -9,7 +9,7 @@ import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
 
 /**
- * {@link ImporterFactory} for xml specobject files
+ * {@link ImporterFactory} for XML specobject files
  */
 public class SpecobjectImporterFactory extends ImporterFactory
 {

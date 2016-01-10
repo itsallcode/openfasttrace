@@ -8,7 +8,9 @@ import java.util.List;
 import openfasttrack.core.SpecificationItem;
 
 /**
- * This service provides a method
+ * This service provides convenient methods for importing
+ * {@link SpecificationItem}s that automatically use the correct
+ * {@link Importer} based on the filename.
  */
 public class ImporterService
 {

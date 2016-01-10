@@ -3,15 +3,13 @@ package openfasttrack.importer.markdown;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 import java.util.logging.Logger;
 
-import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 
-public class MarkdownImporter implements Importer
+class MarkdownImporter implements Importer
 {
     private final static Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
     private final BufferedReader reader;
@@ -20,18 +18,16 @@ public class MarkdownImporter implements Importer
     private String lastTitle = null;
     private boolean inSpecificationItem;
 
-    public MarkdownImporter(final Reader reader, final ImportEventListener listener)
+    MarkdownImporter(final Reader reader, final ImportEventListener listener)
     {
-        super();
         this.reader = new BufferedReader(reader);
         this.listener = listener;
         this.stateMachine = new MarkdownImporterStateMachine(this.transitions);
     }
 
     @Override
-    public List<SpecificationItem> runImport()
+    public void runImport()
     {
-
         String line;
         int lineNumber = 0;
         try
@@ -48,7 +44,6 @@ public class MarkdownImporter implements Importer
             exception.printStackTrace();
         }
         finishImport();
-        return null;
     }
 
     private void finishImport()

@@ -17,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestImportMarkdown
@@ -119,7 +118,8 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final StringReader reader = new StringReader(text);
-        final Importer importer = ImporterFactory.createImporter(reader, this.listenerMock);
+        final Importer importer = new MarkdownImporterFactory().createImporter(reader,
+                this.listenerMock);
         importer.runImport();
     }
 

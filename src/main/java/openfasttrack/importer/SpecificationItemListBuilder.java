@@ -81,7 +81,7 @@ public class SpecificationItemListBuilder implements ImportEventListener
      */
     public List<SpecificationItem> build()
     {
-        this.createNewSpecificationItem();
+        this.endSpecificationItem();
         return this.items;
     }
 

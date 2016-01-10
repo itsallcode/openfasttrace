@@ -54,7 +54,7 @@ public abstract class ImporterFactory
                 return true;
             }
         }
-        LOG.finest(() -> "Filename '" + fileName + "' does not end with any extension of "
+        LOG.finest(() -> "Filename '" + fileName + "' does not match any regexp of "
                 + this.supportedFilenamePatterns + ": not supported by "
                 + this.getClass().getName());
         return false;

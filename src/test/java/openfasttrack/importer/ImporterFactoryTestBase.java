@@ -1,6 +1,7 @@
 package openfasttrack.importer;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -58,7 +59,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         for (final String filename : filenames)
         {
             final Path path = Paths.get("dir", filename);
-            assertEquals(path.toString(), expectedResult, factory.supportsFile(path));
+            assertThat(path.toString(), factory.supportsFile(path), equalTo(expectedResult));
         }
     }
 

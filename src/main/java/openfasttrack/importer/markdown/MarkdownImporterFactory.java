@@ -13,7 +13,7 @@ public class MarkdownImporterFactory extends ImporterFactory
 {
     public MarkdownImporterFactory()
     {
-        super(".md");
+        super("(?i).*\\.markdown", "(?i).*\\.md");
     }
 
     @Override

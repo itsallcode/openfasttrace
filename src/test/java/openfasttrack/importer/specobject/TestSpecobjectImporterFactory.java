@@ -28,6 +28,7 @@ public class TestSpecobjectImporterFactory
     @Override
     protected List<String> getUnsupportedFilenames()
     {
-        return asList("file.md", "file.xm", "file.ml", "file.1xml", "file.xml1", "file.xml.md");
+        return asList("file.md", "file.xm", "file.ml", "file.1xml", "file.xml1", "file.xml.md",
+                "file_xml", "filexml");
     }
 }

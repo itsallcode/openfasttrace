@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * Factory for importers
@@ -19,17 +20,17 @@ import java.util.logging.Logger;
 public abstract class ImporterFactory
 {
     private final static Logger LOG = Logger.getLogger(ImporterFactory.class.getName());
-    private final Set<String> supportedFileExtensions;
+    private final Set<Pattern> supportedFilenamePatterns;
 
-    protected ImporterFactory(final String... supportedFileExtensions)
+    protected ImporterFactory(final String... supportedFilenamePatterns)
     {
-        this(asList(supportedFileExtensions));
+        this(asList(supportedFilenamePatterns));
     }
 
     protected ImporterFactory(final Collection<String> supportedFileExtensions)
     {
-        this.supportedFileExtensions = supportedFileExtensions.stream() //
-                .map(String::toLowerCase) //
+        this.supportedFilenamePatterns = supportedFileExtensions.stream() //
+                .map(Pattern::compile) //
                 .collect(toSet());
     }
 
@@ -43,18 +44,19 @@ public abstract class ImporterFactory
      */
     public boolean supportsFile(final Path file)
     {
-        final String fileName = file.getFileName().toString().toLowerCase();
-        for (final String extension : this.supportedFileExtensions)
+        final String fileName = file.getFileName().toString();
+        for (final Pattern pattern : this.supportedFilenamePatterns)
         {
-            if (fileName.endsWith(extension))
+            if (pattern.matcher(fileName).matches())
             {
-                LOG.finest(() -> "Filename '" + fileName + "' ends with '" + extension
+                LOG.finest(() -> "Filename '" + fileName + "' matches '" + pattern
                         + "': supported  by " + this.getClass().getName());
                 return true;
             }
         }
         LOG.finest(() -> "Filename '" + fileName + "' does not end with any extension of "
-                + this.supportedFileExtensions + ": not supported by " + this.getClass().getName());
+                + this.supportedFilenamePatterns + ": not supported by "
+                + this.getClass().getName());
         return false;
     }
 

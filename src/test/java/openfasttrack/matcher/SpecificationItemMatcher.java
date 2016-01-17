@@ -1,7 +1,12 @@
 package openfasttrack.matcher;
 
-import org.hamcrest.BaseMatcher;
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collection;
+import java.util.stream.StreamSupport;
+
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import openfasttrack.core.SpecificationItem;
@@ -13,7 +18,8 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
     public SpecificationItemMatcher(final SpecificationItem expected)
     {
         super(MatcherConfig.builder(expected) //
-                .addGenericProperty("id", SpecificationItem::getId, SpecificationItemIdMatcher::equalTo) //
+                .addGenericProperty("id", SpecificationItem::getId,
+                        SpecificationItemIdMatcher::equalTo) //
                 .addStringProperty("comment", SpecificationItem::getComment) //
                 .addStringProperty("description", SpecificationItem::getDescription) //
                 .addStringProperty("rationale", SpecificationItem::getRationale) //
@@ -27,8 +33,17 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
     }
 
     @Factory
-    public static BaseMatcher<SpecificationItem> equalTo(final SpecificationItem item)
+    public static Matcher<SpecificationItem> equalTo(final SpecificationItem item)
     {
         return new SpecificationItemMatcher(item);
+    }
+
+    @Factory
+    public static Collection<Matcher<SpecificationItem>> equalTo(
+            final Iterable<SpecificationItem> items)
+    {
+        return StreamSupport.stream(items.spliterator(), false) //
+                .map(SpecificationItemMatcher::equalTo) //
+                .collect(toList());
     }
 }

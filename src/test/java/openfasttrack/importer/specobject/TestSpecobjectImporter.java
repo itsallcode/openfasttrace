@@ -19,7 +19,7 @@ import openfasttrack.importer.ImporterService;
 /**
  * Test for {@link SpecobjectImporter}
  */
-public class SpecobjectImporterTest
+public class TestSpecobjectImporter
 {
     private static final String TEST_FILE_PREFIX = "src/test/resources/specobject/";
     private SpecificationItem specItem1;

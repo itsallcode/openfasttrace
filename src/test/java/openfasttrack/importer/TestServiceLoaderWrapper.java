@@ -15,6 +15,7 @@ import org.junit.Test;
 import openfasttrack.importer.ImporterFactoryLoader.ServiceLoaderWrapper;
 import openfasttrack.importer.markdown.MarkdownImporterFactory;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
+import openfasttrack.importer.tag.TagImporterFactory;
 
 /**
  * Test for {@link ServiceLoaderWrapper}
@@ -35,12 +36,17 @@ public class TestServiceLoaderWrapper
     @Test
     public void testServicesRegistered()
     {
-        final ServiceLoaderWrapper<ImporterFactory> serviceLoader = ServiceLoaderWrapper
-                .load(ImporterFactory.class);
-        final List<ImporterFactory> services = StreamSupport
-                .stream(serviceLoader.spliterator(), false).collect(toList());
-        assertThat(services, hasSize(2));
-        assertThat(services, contains(instanceOf(MarkdownImporterFactory.class),
-                instanceOf(SpecobjectImporterFactory.class)));
+        final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class);
+        assertThat(services, hasSize(3));
+        assertThat(services,
+                contains(instanceOf(MarkdownImporterFactory.class), //
+                        instanceOf(SpecobjectImporterFactory.class), //
+                        instanceOf(TagImporterFactory.class)));
+    }
+
+    private <T> List<T> getRegisteredServices(final Class<T> type)
+    {
+        final ServiceLoaderWrapper<T> serviceLoader = ServiceLoaderWrapper.load(type);
+        return StreamSupport.stream(serviceLoader.spliterator(), false).collect(toList());
     }
 }

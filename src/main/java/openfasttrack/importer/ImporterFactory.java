@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
- * Factory for importers
+ * Super class for factories producing {@link Importer}s.
  */
 public abstract class ImporterFactory
 {
@@ -89,7 +89,8 @@ public abstract class ImporterFactory
         try
         {
             return Files.newBufferedReader(file, charset);
-        } catch (final IOException e)
+        }
+        catch (final IOException e)
         {
             throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
         }

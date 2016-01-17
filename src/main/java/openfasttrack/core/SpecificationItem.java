@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 public class SpecificationItem
 {
     private final SpecificationItemId id;
+    private final String title;
     private final String description;
     private final String rationale;
     private final String comment;
@@ -16,12 +17,13 @@ public class SpecificationItem
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> neededArtifactTypes;
 
-    private SpecificationItem(final SpecificationItemId id, final String description,
-            final String rationale, final String comment,
+    private SpecificationItem(final SpecificationItemId id, final String title,
+            final String description, final String rationale, final String comment,
             final List<SpecificationItemId> coveredIds, final List<SpecificationItemId> dependOnIds,
             final List<String> neededArtifactTypes)
     {
         this.id = id;
+        this.title = title;
         this.description = description;
         this.rationale = rationale;
         this.comment = comment;
@@ -30,39 +32,99 @@ public class SpecificationItem
         this.neededArtifactTypes = neededArtifactTypes;
     }
 
+    /**
+     * Get the ID of the specification item
+     *
+     * @return the ID
+     */
     public final SpecificationItemId getId()
     {
         return this.id;
     }
 
+    /**
+     * Get the title of the specification item
+     *
+     * @return the title
+     */
+    public final String getTitle()
+    {
+        return this.title;
+    }
+
+    /**
+     * Get the description of the specification item
+     *
+     * @return the description
+     */
     public final String getDescription()
     {
         return this.description;
     }
 
+    /**
+     * Get the rationale of the specification item
+     *
+     * @return the rationale
+     */
     public String getRationale()
     {
         return this.rationale;
     }
 
+    /**
+     * Get the comment of the specification item
+     *
+     * @return the comment
+     */
     public String getComment()
     {
         return this.comment;
     }
 
+    /**
+     * Get the list of covered {@link SpecificationItemId}s
+     *
+     * @return the list of covered IDs
+     */
     public List<SpecificationItemId> getCoveredIds()
     {
         return this.coveredIds;
     }
 
+    /**
+     * Get the list of {@link SpecificationItemId}s this item depends on
+     *
+     * @return the list of IDs this item depends on
+     */
     public List<SpecificationItemId> getDependOnIds()
     {
         return this.dependOnIds;
     }
 
+    /**
+     * Get the list of artifact types this specification item need to be covered
+     * in
+     *
+     * @return the list of artifact types
+     */
     public List<String> getNeededArtifactTypes()
     {
         return this.neededArtifactTypes;
+    }
+
+    /**
+     * Check if this specification item needs to be covered by the given
+     * artifact type.
+     *
+     * @param artifactType
+     *            the artifact type for which needed coverage is evaluated.
+     * @return <code>true</code> if this item needs to be covered by the given
+     *         artifact type.
+     */
+    public boolean needsCoverageByArtifactType(final String artifactType)
+    {
+        return this.neededArtifactTypes.contains(artifactType);
     }
 
     @Generated(value = "Eclipse")
@@ -98,7 +160,7 @@ public class SpecificationItem
         {
             return false;
         }
-        final SpecificationItem other = (SpecificationItem) obj;
+        final Builder other = (Builder) obj;
         if (this.comment == null)
         {
             if (other.comment != null)
@@ -179,9 +241,13 @@ public class SpecificationItem
         return true;
     }
 
+    /**
+     * Builder for objects of type {@link SpecificationItem}
+     */
     public static class Builder
     {
         private SpecificationItemId id;
+        private String title;
         private String description;
         private String rationale;
         private String comment;
@@ -189,9 +255,13 @@ public class SpecificationItem
         private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
 
+        /**
+         * Create a new instance of type {@link SpecificationItem.Builder}
+         */
         public Builder()
         {
             this.id = null;
+            this.title = "";
             this.description = "";
             this.rationale = "";
             this.comment = "";
@@ -200,61 +270,143 @@ public class SpecificationItem
             this.neededArtifactTypes = new ArrayList<>();
         }
 
+        /**
+         * Set the specification item ID
+         *
+         * @param id
+         *            the ID
+         * @return this builder instance
+         */
         public Builder id(final SpecificationItemId id)
         {
             this.id = id;
             return this;
         }
 
-        public Builder title(final String title)
+        /**
+         * Set the specification item ID by its parts
+         *
+         * @param artifactType
+         *            the artifact type
+         * @param name
+         *            the artifact name
+         * @param revision
+         *            the revision number
+         * @return this builder instance
+         */
+        public Builder id(final String artifactType, final String name, final int revision)
         {
+            this.id = new SpecificationItemId.Builder() //
+                    .artifactType(artifactType).name(name).revision(revision) //
+                    .build();
             return this;
         }
 
+        /**
+         * Set the title
+         *
+         * @param title
+         *            the title
+         * @return this builder instance
+         */
+        public Builder title(final String title)
+        {
+            this.title = title;
+            return this;
+        }
+
+        /**
+         * Set the description
+         *
+         * @param description
+         *            the description
+         * @return this builder instance
+         */
         public Builder description(final String description)
         {
             this.description = description;
             return this;
         }
 
+        /**
+         * Set the rationale
+         *
+         * @param rationale
+         *            the rationale
+         * @return this builder instance
+         */
         public Builder rationale(final String rationale)
         {
             this.rationale = rationale;
             return this;
         }
 
+        /**
+         * Set the comment
+         *
+         * @param comment
+         *            the comment
+         * @return this builder instance
+         */
         public Builder comment(final String comment)
         {
             this.comment = comment;
             return this;
         }
 
+        /**
+         * Add the ID of a specification item covered by the item to build
+         *
+         * @param coveredId
+         *            the covered ID
+         * @return this builder instance
+         */
         public Builder addCoveredId(final SpecificationItemId coveredId)
         {
             this.coveredIds.add(coveredId);
             return this;
         }
 
+        /**
+         * Add the ID of a specification item the item to be build depends on
+         *
+         * @param dependOnId
+         *            the ID the item to be build depends on
+         * @return this builder instance
+         */
         public Builder addDependOnId(final SpecificationItemId dependOnId)
         {
             this.dependOnIds.add(dependOnId);
             return this;
         }
 
+        /**
+         * Add an artifact type where the specification item to be build
+         * requires to be covered
+         *
+         * @param neededArtifactType
+         *            the artifact type
+         * @return this builder instance
+         */
         public Builder addNeededArtifactType(final String neededArtifactType)
         {
             this.neededArtifactTypes.add(neededArtifactType);
             return this;
         }
 
+        /**
+         * Build a new instance of type {@link SpecificationItem}
+         *
+         * @return the specification item
+         */
         public SpecificationItem build()
         {
             if (this.id == null)
             {
                 throw new IllegalStateException("No id given");
             }
-            return new SpecificationItem(this.id, this.description, this.rationale, this.comment,
-                    this.coveredIds, this.dependOnIds, this.neededArtifactTypes);
+            return new SpecificationItem(this.id, this.title, this.description, this.rationale,
+                    this.comment, this.coveredIds, this.dependOnIds, this.neededArtifactTypes);
         }
     }
 }

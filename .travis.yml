@@ -1,4 +1,10 @@
 language: java
+
+env:
+  global:
+    # COVERITY_SCAN_TOKEN
+    - secure: OYOQdKldWIjT/RzjPwrnmiUevbAl5EE/Zhr73SpvRZsBnmvetKlI7MwqEs9HADVptbX3AtxBUB2TOErZNhDk86VU9Y2BRKV1LwUafNC/leS5QcxBMbRQURSFd0+8a/EpY5VWto5cfA/k8W8/gHd3TY0dfhH1WMB2CRxI60raf5lmQFtTCmcHTzdaYokGqm/sSIpqC7YIEIifitIL3+YjrClUtOluhs25WKgrp9/st7z9gzOcexcd6TIZ1Pbh+iptj7ZagTcFZwLJSFysyKqRyTqLxkm+H8fPGDPV6ipP4ANBMXsYNQkAlD0AxX2jNMGOIBBmyXLdvU6hYyGo7sQ/CcIbzpbQWgPq7JFOwsOrlkJZN2i+2/jPLMeKYDHq3BxQUwQXzAc+9lEKZiiRJpo2UaffavSoP/n319HZe9eS9cnDcLqnFYckZqCWcjITHUWjoRE/sio44x3XThmbhYnNz/frNZFOfNr5SKViM1JzPC6ykdSoBfq0Rr2494tiYVK1tzU959+tDRlU8ot1SpIrW4WOnf/jZkZ1tEnHtfB1dM8iqk+eW7w93NQFF0lQP56eEXumSC2NRFgnqAXxJCr7Yl8U/IebbB2xDOkHxkKReOVd6JefyW8eMjN31YGbBWZFUNzHfKYVPNyhBsZocuxVmSAkirxdk1tI4bFZ5scN67I=
+
 jdk:
   - oraclejdk8
 
@@ -11,3 +17,14 @@ before_script:
 
 after_success:
   - codecov
+
+addons:
+  coverity_scan:
+    project:
+      name: hamstercommunity/openfasttrack
+      version: 0.1.0
+      description: OpenFastTrack
+    # notification_email: scan_notifications@example.com
+    build_command_prepend: mvn clean
+    build_command: mvn
+    branch_pattern: coverity_scan

@@ -24,7 +24,7 @@ addons:
       name: hamstercommunity/openfasttrack
       version: 0.1.0
       description: OpenFastTrack
-    # notification_email: scan_notifications@example.com
+    notification_email: christoph@users.sourceforge.net
     build_command_prepend: mvn clean
     build_command: mvn -DskipTests=true compile
     branch_pattern: coverity_scan

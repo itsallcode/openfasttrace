@@ -79,44 +79,50 @@ public class TestTracer
         assertThat(this.trace.countAllLinks(), equalTo(11));
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
     public void testCountLinksWithStatus_OK()
     {
-        assertLinksWithStatus(LinkStatus.OK, 2L);
+        assertLinksWithStatus(BackwardLinkStatus.OK, 2L);
     }
 
-    private void assertLinksWithStatus(final LinkStatus status, final long expectedCount)
+    private void assertLinksWithStatus(final BackwardLinkStatus status, final long expectedCount)
     {
-        assertThat(this.trace.countLinksWithStatus(status), equalTo(expectedCount));
+        assertThat(this.trace.countBackwardLinksWithStatus(status), equalTo(expectedCount));
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
     public void testCountLinksWithStatus_UNWANTED()
     {
-        assertLinksWithStatus(LinkStatus.UNWANTED, 3L);
+        assertLinksWithStatus(BackwardLinkStatus.UNWANTED, 3L);
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
     public void testCountLinksWithStatus_OUTDATED()
     {
-        assertLinksWithStatus(LinkStatus.OUTDATED, 1L);
+        assertLinksWithStatus(BackwardLinkStatus.OUTDATED, 1L);
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
     public void testCountLinksWithStatus_PREDATED()
     {
-        assertLinksWithStatus(LinkStatus.PREDATED, 1L);
+        assertLinksWithStatus(BackwardLinkStatus.PREDATED, 1L);
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinsWithStatus_Ambiguous()
+    public void testCountLinksWithStatus_Ambiguous()
     {
-        assertLinksWithStatus(LinkStatus.AMBIGUOUS, 2L);
+        assertLinksWithStatus(BackwardLinkStatus.AMBIGUOUS, 2L);
     }
 
+    // [utest~backward_coverage_status~1]
     @Test
     public void testCountLinksWithStatus_BROKEN()
     {
-        assertLinksWithStatus(LinkStatus.BROKEN, 2L);
+        assertLinksWithStatus(BackwardLinkStatus.ORPHANED, 2L);
     }
 }

@@ -11,13 +11,14 @@ public class TestLink
 
     private static final SpecificationItemId ID1 = createId("req", "foo", 1);
     private static final SpecificationItemId ID2 = createId("impl", "bar", 2);
+    private static final SpecificationItem ITEM = new SpecificationItem.Builder().id(ID1).build();
 
     @Test
     public void test()
     {
-        final Link link = new Link(ID1, ID2, LinkStatus.OK);
-        assertThat(link.getFrom(), equalTo(ID1));
-        assertThat(link.getTo(), equalTo(ID2));
-        assertThat(link.getStatus(), equalTo(LinkStatus.OK));
+        final BackwardLink link = new BackwardLink(ITEM, ID2, BackwardLinkStatus.OK);
+        assertThat(link.getFrom(), equalTo(ITEM));
+        assertThat(link.getToId(), equalTo(ID2));
+        assertThat(link.getStatus(), equalTo(BackwardLinkStatus.OK));
     }
 }

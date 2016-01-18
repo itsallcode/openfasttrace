@@ -72,7 +72,7 @@ If instead of relying on a linear search of all provider we use an index, the nu
 
 ### Choosing the Index
 
-Since the specification item IDs inherently look similar, a text index would not produce a properly balanced tree. A hash tree should be used instead.
+Since the specification item IDs inherently look similar, load tests need to show which kind of index is best balanced and has the optimal access time.
 
 # Context
 
@@ -89,9 +89,28 @@ For each specification artifact type OFT uses an importer. The importer uses the
 Importers emit events if they find parts of a specification item in the artifact they are importing.
 
 ## Command Line Interpreter
-The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
+The Command Line Interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
+
+## Tracer
+The Tracer consumes the list of requirements collected by the importers and evaluates the link status for each link.
+
+## Reporter
+The Reporter consumes the link status list and the specification item list and generates a report in the chosen output format. 
 
 # Runtime View
+
+## Tracing
+
+### Backward tracing
+`dsn~backward_coverage_status~1`
+
+The Tracer component iterates over all covered IDs of all specification items and determines the backward coverage status of the link between the provider item and the requester item.
+
+Covers:
+
+  * `req~backward_coverage_status~1`
+
+Needs: utest, impl
 
 # Deployment View
 

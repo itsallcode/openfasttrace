@@ -1,11 +1,11 @@
 package openfasttrack.core;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tracer
 {
-    List<Link> links = new LinkedList<Link>();
+    List<TraceItem> traceItems = new ArrayList<>();
     private final SpecificationItemCollection items;
 
     public Tracer(final SpecificationItemCollection items)
@@ -19,25 +19,44 @@ public class Tracer
         {
             checkCoveredLinks(item);
         }
-        return new Trace(this.links);
+        return new Trace(this.traceItems);
     }
 
     private void checkCoveredLinks(final SpecificationItem investigatedItem)
     {
+        // for (final String artifactType :
+        // investigatedItem.getNeededArtifactTypes())
+        // {
+        // final ForwardLinkStatus status =
+        // evalForwardCoverage(investigatedItem, artifactType);
+        // this.forwareLinks.add(new ForwardLink(investigatedItem.getId(),
+        // artifactType, status));
+        // }
+        final TraceItem.Builder traceItemBuilder = new TraceItem.Builder(investigatedItem);
         for (final SpecificationItemId coveredId : investigatedItem.getCoveredIds())
         {
-            final LinkStatus status = evaluateLinkStatus(investigatedItem, coveredId);
-            this.links.add(new Link(investigatedItem.getId(), coveredId, status));
+            final BackwardLinkStatus status = evalBackwardCoverage(investigatedItem, coveredId);
+            traceItemBuilder.addBackwardLink(coveredId, status);
         }
+        this.traceItems.add(traceItemBuilder.build());
     }
 
-    private LinkStatus evaluateLinkStatus(final SpecificationItem investigatedItem,
+    // private ForwardLinkStatus evalForwardCoverage(final SpecificationItem
+    // investigatedItem,
+    // final String artifactType)
+    // {
+    // // TODO Auto-generated method stub
+    // return null;
+    // }
+
+    // [impl~backward_coverage_status~1]
+    private BackwardLinkStatus evalBackwardCoverage(final SpecificationItem investigatedItem,
             final SpecificationItemId coveredId)
     {
-        LinkStatus status = LinkStatus.BROKEN;
+        BackwardLinkStatus status = BackwardLinkStatus.ORPHANED;
         if (existsItemWithId(coveredId))
         {
-            status = evaluateLinkStatusOfDirectMatch(investigatedItem, coveredId);
+            status = evalBackwardCoverageOfDirectMatch(investigatedItem, coveredId);
         }
         else
         {
@@ -46,12 +65,12 @@ public class Tracer
             final int coveredRevision = coveredId.getRevision();
             if (existsItemWithArtifactTypeAndName(coveredArtifactType, coveredName))
             {
-                status = evaluateLinkStatusOfMatchWithoutRevision(investigatedItem,
+                status = evalBackwardCoverageOfMatchWithoutRevision(investigatedItem,
                         coveredArtifactType, coveredName, coveredRevision);
             }
             else
             {
-                status = LinkStatus.BROKEN;
+                status = BackwardLinkStatus.ORPHANED;
             }
         }
         return status;
@@ -62,26 +81,26 @@ public class Tracer
         return this.items.containsKey(coveredId);
     }
 
-    private LinkStatus evaluateLinkStatusOfDirectMatch(final SpecificationItem investigatedItem,
-            final SpecificationItemId coveredId)
+    private BackwardLinkStatus evalBackwardCoverageOfDirectMatch(
+            final SpecificationItem investigatedItem, final SpecificationItemId coveredId)
     {
-        LinkStatus status;
+        BackwardLinkStatus status;
         final List<SpecificationItem> machtes = this.items.getAll(coveredId);
         if (machtes.size() == 1)
         {
             if (this.items.getFirst(coveredId)
                     .needsCoverageByArtifactType(investigatedItem.getId().getArtifactType()))
             {
-                status = LinkStatus.OK;
+                status = BackwardLinkStatus.OK;
             }
             else
             {
-                status = LinkStatus.UNWANTED;
+                status = BackwardLinkStatus.UNWANTED;
             }
         }
         else
         {
-            status = LinkStatus.AMBIGUOUS;
+            status = BackwardLinkStatus.AMBIGUOUS;
         }
         return status;
     }
@@ -91,11 +110,11 @@ public class Tracer
         return this.items.containsKey(artifactType, name);
     }
 
-    private LinkStatus evaluateLinkStatusOfMatchWithoutRevision(
+    private BackwardLinkStatus evalBackwardCoverageOfMatchWithoutRevision(
             final SpecificationItem investigatedItem, final String coveredArtifactType,
             final String coveredName, final int coveredRevision)
     {
-        LinkStatus status;
+        BackwardLinkStatus status;
         final List<SpecificationItem> fuzzyMatches = this.items.getAll(coveredArtifactType,
                 coveredName);
         if (fuzzyMatches.size() == 1)
@@ -103,16 +122,16 @@ public class Tracer
             if (this.items.getFirst(coveredArtifactType, coveredName).getId()
                     .getRevision() < coveredRevision)
             {
-                status = LinkStatus.PREDATED;
+                status = BackwardLinkStatus.PREDATED;
             }
             else
             {
-                status = LinkStatus.OUTDATED;
+                status = BackwardLinkStatus.OUTDATED;
             }
         }
         else
         {
-            status = LinkStatus.AMBIGUOUS;
+            status = BackwardLinkStatus.AMBIGUOUS;
         }
         return status;
     }

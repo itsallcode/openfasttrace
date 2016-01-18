@@ -1,23 +1,31 @@
 package openfasttrack.core;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Trace
 {
-    private final List<Link> links;
+    private final List<TraceItem> traceItems;
 
-    public Trace(final List<Link> links)
+    public Trace(final List<TraceItem> traceItems)
     {
-        this.links = links;
+        this.traceItems = traceItems;
     }
 
     public int countAllLinks()
     {
-        return this.links.size();
+        return this.traceItems.parallelStream()
+                .collect(Collectors.summingInt(traceItem -> traceItem.getBackwardLinks().size()));
     }
 
-    public long countLinksWithStatus(final LinkStatus status)
+    public long countBackwardLinksWithStatus(final BackwardLinkStatus status)
     {
-        return this.links.stream().filter(link -> link.getStatus() == status).count();
+        return this.traceItems.parallelStream() //
+                .mapToLong(traceItem -> traceItem //
+                        .getBackwardLinks() //
+                        .stream() //
+                        .filter(link -> (link.getStatus() == status)) //
+                        .count()) //
+                .sum();
     }
 }

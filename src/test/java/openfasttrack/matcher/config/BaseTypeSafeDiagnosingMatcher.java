@@ -16,11 +16,6 @@ abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatche
     {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
-     */
     @Override
     public void describeTo(final Description description)
     {
@@ -37,17 +32,10 @@ abstract class BaseTypeSafeDiagnosingMatcher<T> extends TypeSafeDiagnosingMatche
      */
     protected abstract void describeTo(DescriptionBuilder description);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.hamcrest.TypeSafeDiagnosingMatcher#matchesSafely(java.lang.Object,
-     * org.hamcrest.Description)
-     */
     @Override
     protected boolean matchesSafely(final T actual, final Description mismatchDescription)
     {
-        final MismatchReporter mismatchReporter = new MismatchReporter(mismatchDescription);
+        final MismatchReporter mismatchReporter = MismatchReporter.start(mismatchDescription);
         reportMismatches(actual, mismatchReporter);
         return mismatchReporter.finishAndCheckMatching();
     }

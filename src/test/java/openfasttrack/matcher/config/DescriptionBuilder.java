@@ -13,6 +13,7 @@ import org.hamcrest.SelfDescribing;
 class DescriptionBuilder
 {
     private final Description description;
+    private boolean firstElement = true;
 
     private DescriptionBuilder(final Description description)
     {
@@ -27,7 +28,12 @@ class DescriptionBuilder
 
     public DescriptionBuilder append(final String message, final SelfDescribing matcher)
     {
-        this.description.appendText(message).appendText(" ").appendDescriptionOf(matcher);
+        if (!this.firstElement)
+        {
+            this.description.appendText(", ");
+        }
+        this.description.appendText(message).appendText("=").appendDescriptionOf(matcher);
+        this.firstElement = false;
         return this;
     }
 

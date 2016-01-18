@@ -1,15 +1,16 @@
 package openfasttrack.matcher.config;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hamcrest.collection.IsEmptyIterable;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
 public class MatcherConfig<T>
 {
@@ -27,9 +28,11 @@ public class MatcherConfig<T>
         return this.expected;
     }
 
-    List<PropertyConfig<T, ?>> getPropertyConfigs()
+    @SuppressWarnings("unchecked")
+    List<PropertyConfig<T, Object>> getPropertyConfigs()
     {
-        return this.propertyConfigs;
+        return this.propertyConfigs.stream().map(c -> (PropertyConfig<T, Object>) c)
+                .collect(toList());
     }
 
     public static <B> Builder<B> builder(final B expected)
@@ -37,6 +40,9 @@ public class MatcherConfig<T>
         return new Builder<B>(expected);
     }
 
+    /**
+     * Builder for {@link MatcherConfig}
+     */
     public static class Builder<B>
     {
         private final B expected;
@@ -44,57 +50,89 @@ public class MatcherConfig<T>
 
         private Builder(final B expected)
         {
-            this.expected = expected;
+            this.expected = Objects.requireNonNull(expected);
         }
 
-        public Builder<B> addStringProperty(final String propertyName,
-                final Function<B, String> propertyAccessor)
+        /**
+         * Add a property that can be compared with
+         * {@link Matchers#equalTo(Object)}.
+         *
+         * @param propertyName
+         *            name of the property.
+         * @param propertyAccessor
+         *            the accessor function for retrieving the property value.
+         * @return the builder itself for fluent programming style.
+         */
+        public <P> Builder<B> addEqualsProperty(final String propertyName,
+                final Function<B, P> propertyAccessor)
         {
-            return addPropertyInternal(propertyName, createEqualsMatcher(propertyAccessor),
-                    propertyAccessor);
+            return addProperty(propertyName, propertyAccessor, Matchers::equalTo);
         }
 
-        public Builder<B> addIntProperty(final String propertyName,
-                final Function<B, Integer> propertyAccessor)
+        /**
+         * Add a property that can be compared with
+         * {@link Matchers#equalTo(Object)}.
+         *
+         * @param propertyName
+         *            name of the property.
+         * @param propertyAccessor
+         *            the accessor function for retrieving the property value.
+         * @param matcherBuilder
+         *            a function for creating the matcher.
+         * @return the builder itself for fluent programming style.
+         */
+        public <P> Builder<B> addProperty(final String propertyName,
+                final Function<B, P> propertyAccessor, final Function<P, Matcher<P>> matcherBuilder)
         {
-            return addPropertyInternal(propertyName, createEqualsMatcher(propertyAccessor),
-                    propertyAccessor);
+            final Matcher<P> matcher = createMatcher(propertyAccessor, matcherBuilder);
+            return addPropertyInternal(propertyName, matcher, propertyAccessor);
         }
 
+        @SuppressWarnings("unchecked")
+        private <P> Matcher<P> createMatcher(final Function<B, P> propertyAccessor,
+                final Function<P, Matcher<P>> matcherBuilder)
+        {
+            final P expectedValue = propertyAccessor.apply(this.expected);
+            if (expectedValue == null)
+            {
+                return (Matcher<P>) Matchers.nullValue();
+            }
+            return matcherBuilder.apply(expectedValue);
+        }
+
+        /**
+         * Add a property of type {@link Iterable} where the element order is
+         * relevant.
+         *
+         * @param propertyName
+         *            name of the property.
+         * @param propertyAccessor
+         *            the accessor function for retrieving the property value.
+         * @param matcherBuilder
+         *            a function for creating the matcher for the list elements.
+         * @return the builder itself for fluent programming style.
+         */
         public <P> Builder<B> addIterableProperty(final String propertyName,
                 final Function<B, Iterable<? extends P>> propertyAccessor,
                 final Function<P, Matcher<P>> matcherBuilder)
         {
-            final Matcher<Iterable<? extends P>> listMatcher = createIterableMatcher(
-                    propertyAccessor.apply(this.expected), matcherBuilder);
-            return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
-        }
+            final Iterable<? extends P> expectedPropertyValue = propertyAccessor
+                    .apply(this.expected);
+            final Matcher<Iterable<? extends P>> listMatcher;
 
-        public <P> Builder<B> addGenericProperty(final String propertyName,
-                final Function<B, P> propertyAccessor, final Function<P, Matcher<P>> matcherBuilder)
-        {
-            return addPropertyInternal(propertyName,
-                    matcherBuilder.apply(propertyAccessor.apply(this.expected)), propertyAccessor);
-        }
-
-        private <P> Matcher<Iterable<? extends P>> createIterableMatcher(
-                final Iterable<? extends P> expected, final Function<P, Matcher<P>> matcherBuilder)
-        {
-            if (!expected.iterator().hasNext())
+            if (!expectedPropertyValue.iterator().hasNext())
             {
-                return IsEmptyIterable.<P> emptyIterable();
+                listMatcher = Matchers.<P> emptyIterable();
+            }
+            else
+            {
+                final List<Matcher<? super P>> matchers = StreamSupport
+                        .stream(expectedPropertyValue.spliterator(), false).map(matcherBuilder)
+                        .collect(Collectors.toList());
+                listMatcher = Matchers.contains(matchers);
             }
 
-            final List<Matcher<? super P>> matchers = StreamSupport
-                    .stream(expected.spliterator(), false) //
-                    .map(matcherBuilder) //
-                    .collect(Collectors.toList());
-            return IsIterableContainingInAnyOrder.containsInAnyOrder(matchers);
-        }
-
-        private <P> Matcher<P> createEqualsMatcher(final Function<B, P> propertyAccessor)
-        {
-            return Matchers.equalTo(propertyAccessor.apply(this.expected));
+            return addPropertyInternal(propertyName, listMatcher, propertyAccessor);
         }
 
         private <P> Builder<B> addPropertyInternal(final String propertyName,
@@ -104,9 +142,14 @@ public class MatcherConfig<T>
             return this;
         }
 
+        /**
+         * Build a new {@link MatcherConfig}.
+         *
+         * @return the new {@link MatcherConfig}.
+         */
         public MatcherConfig<B> build()
         {
-            return new MatcherConfig<B>(this.expected, this.properties);
+            return new MatcherConfig<B>(this.expected, new ArrayList<>(this.properties));
         }
     }
 }

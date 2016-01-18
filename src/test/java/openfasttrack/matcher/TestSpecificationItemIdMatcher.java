@@ -8,7 +8,7 @@ import openfasttrack.core.SpecificationItemId;
 /**
  * Unit test for {@link SpecificationItemIdMatcher}
  */
-public class TestSpecificationItemIdMatcher extends MatcherTest<SpecificationItemId>
+public class TestSpecificationItemIdMatcher extends MatcherTestBase<SpecificationItemId>
 {
     @Test
     public void testMatches()

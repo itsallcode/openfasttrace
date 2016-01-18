@@ -10,7 +10,7 @@ import openfasttrack.core.SpecificationItemId;
 /**
  * Unit test for {@link SpecificationItemMatcher}
  */
-public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
+public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 {
     private final static SpecificationItemId ID1 = new SpecificationItemId.Builder()
             .artifactType("artifactType").name("name").revision(42).build();

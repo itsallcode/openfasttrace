@@ -11,10 +11,12 @@ import org.junit.Test;
 
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
- * 
+ *
  * @param <T>
+ *            the type compared by the {@link TypeSafeDiagnosingMatcher} under
+ *            test.
  */
-public abstract class MatcherTest<T>
+public abstract class MatcherTestBase<T>
 {
     @Test(expected = NullPointerException.class)
     public void testNullObject()

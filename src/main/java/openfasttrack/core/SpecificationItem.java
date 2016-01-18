@@ -141,6 +141,7 @@ public class SpecificationItem
         result = prime * result
                 + ((this.neededArtifactTypes == null) ? 0 : this.neededArtifactTypes.hashCode());
         result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
+        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         return result;
     }
 
@@ -160,7 +161,7 @@ public class SpecificationItem
         {
             return false;
         }
-        final Builder other = (Builder) obj;
+        final SpecificationItem other = (SpecificationItem) obj;
         if (this.comment == null)
         {
             if (other.comment != null)
@@ -235,6 +236,17 @@ public class SpecificationItem
             }
         }
         else if (!this.rationale.equals(other.rationale))
+        {
+            return false;
+        }
+        if (this.title == null)
+        {
+            if (other.title != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.title.equals(other.title))
         {
             return false;
         }

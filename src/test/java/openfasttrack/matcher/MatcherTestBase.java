@@ -44,8 +44,6 @@ public abstract class MatcherTestBase<T>
 
     protected abstract Matcher<? super T> createMatcher(final T object);
 
-    protected abstract Class<T> getType();
-
     private String getDescription(final T object)
     {
         final StringDescription description = new StringDescription();

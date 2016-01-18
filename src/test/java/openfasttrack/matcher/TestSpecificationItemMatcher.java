@@ -105,10 +105,4 @@ public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationI
     {
         return SpecificationItemMatcher.equalTo(object);
     }
-
-    @Override
-    protected Class<SpecificationItem> getType()
-    {
-        return SpecificationItem.class;
-    }
 }

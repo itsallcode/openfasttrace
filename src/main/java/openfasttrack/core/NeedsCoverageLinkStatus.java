@@ -1,6 +1,6 @@
 package openfasttrack.core;
 
-public enum ForwardLinkStatus
+public enum NeedsCoverageLinkStatus
 {
     OK, UNCOVERED, PREDATED, OUTDATED
 }

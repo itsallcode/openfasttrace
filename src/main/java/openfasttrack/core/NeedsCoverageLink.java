@@ -1,14 +1,14 @@
 package openfasttrack.core;
 
-public class ForwardLink
+public class NeedsCoverageLink
 {
 
     private final SpecificationItem from;
     private final String toArtifactType;
-    private final ForwardLinkStatus status;
+    private final NeedsCoverageLinkStatus status;
 
-    public ForwardLink(final SpecificationItem item, final String toArtifactType,
-            final ForwardLinkStatus status)
+    public NeedsCoverageLink(final SpecificationItem item, final String toArtifactType,
+            final NeedsCoverageLinkStatus status)
     {
         this.from = item;
         this.toArtifactType = toArtifactType;
@@ -25,7 +25,7 @@ public class ForwardLink
         return this.toArtifactType;
     }
 
-    public ForwardLinkStatus getStatus()
+    public NeedsCoverageLinkStatus getStatus()
     {
         return this.status;
     }

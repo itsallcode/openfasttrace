@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 public class Trace
 {
-    private final List<TraceItem> traceItems;
+    private final List<TraceEntry> traceItems;
 
-    public Trace(final List<TraceItem> traceItems)
+    public Trace(final List<TraceEntry> traceItems)
     {
         this.traceItems = traceItems;
     }

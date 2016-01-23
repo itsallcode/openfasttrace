@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Tracer
 {
-    List<TraceItem> traceItems = new ArrayList<>();
+    List<TraceEntry> traceItems = new ArrayList<>();
     private final SpecificationItemCollection items;
 
     public Tracer(final SpecificationItemCollection items)
@@ -32,7 +32,7 @@ public class Tracer
         // this.forwareLinks.add(new ForwardLink(investigatedItem.getId(),
         // artifactType, status));
         // }
-        final TraceItem.Builder traceItemBuilder = new TraceItem.Builder(investigatedItem);
+        final TraceEntry.Builder traceItemBuilder = new TraceEntry.Builder(investigatedItem);
         for (final SpecificationItemId coveredId : investigatedItem.getCoveredIds())
         {
             final BackwardLinkStatus status = evalBackwardCoverage(investigatedItem, coveredId);

@@ -18,12 +18,12 @@ public class TestTraceItem
     @Test
     public void test()
     {
-        final TraceItem traceItem = new TraceItem.Builder(ITEM) //
-                .addForwardLink(NEEDED_ARTIFACT_TYPE, ForwardLinkStatus.OK) //
+        final TraceEntry traceItem = new TraceEntry.Builder(ITEM) //
+                .addNeedsCoverageLink(NEEDED_ARTIFACT_TYPE, NeedsCoverageLinkStatus.OK) //
                 .addBackwardLink(COVERED_ITEM.getId(), BackwardLinkStatus.OK) //
                 .addDuplicate(DUPLICATE) //
                 .build();
-        assertThat(traceItem.getForwardLinks().size(), equalTo(1));
+        assertThat(traceItem.getNeedsCoverageLinks().size(), equalTo(1));
         assertThat(traceItem.getBackwardLinks().size(), equalTo(1));
         assertThat(traceItem.getDuplicates().size(), equalTo(1));
     }

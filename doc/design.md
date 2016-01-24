@@ -18,6 +18,62 @@ The following definitions are used frequently throughout the document:
 
 # Solution Ideas and Strategy
 
+## Requirement tracing
+
+The algorithm that checks the requirement links has to follow each link between requester and provider at least once.
+
+Given:
+
+  r<sub>n</sub>, n ∊ {1..N}
+
+  p<sub>m</sub>, m ∊ {1..M}
+  
+  a<sub>n,l</sub>, l ∊ {1..L<sub>n</sub>}
+  
+  c<sub>m,k</sub>, k ∊ {1..M<sub>m</sub>}
+
+Where _r_ are the requesters, _p_ the providers, _a_ artifacts required by providers and _c_ the coverage provided.
+
+The number of forward links results to:
+
+  f = Σ<sup>N</sup><sub>n = 1</sub> ( L<sub>n</sub> )
+
+The number of backward links is:
+
+  b = Σ<sup>M</sup><sub>n = 1</sub> ( K<sub>n</sub> )
+
+### Lookups in the Naive Approach
+
+The naive approach is to iterate over all required artifacts in all requesters and for each iterate over the complete set of providers to see if coverage exists.
+
+If we assume a scenario where the coverage is 100% and a provider is found in average after iterating over half the providers this gives us the following number of Lookups _l_:
+
+  l = f p / 2
+
+Assuming that each requester needs to be covered by an average of _A_ artifacts we get:
+
+  f = r A
+
+  l = ( r  A ) p / 2
+
+Assuming further that each provider has an average of _C_ back links to provide coverage we further get:
+
+  p = r C
+
+  l = ( r A ) ( r C ) / 2 = r² A C / 2
+
+Note that _A_ and _C_ can be considered to have a small range in a typical project, depending only on the working style and not on the number of requirements the project need to handle.
+
+In effect the lookup using the naive approach results in a complexity of O(n²). Not good.
+
+### Lookups With an Index
+
+If instead of relying on a linear search of all provider we use an index, the number of forward lookups is reduced to. We saw earlier that iterating over the requesters gives a a complexity of O(n). A proper index lookup should give O(log n) in the worst case. That leaves us with a complexity of O(n log(n)). Better.
+
+### Choosing the Index
+
+Since the specification item IDs inherently look similar, a text index would not produce a properly balanced tree. A hash tree should be used instead.
+
 # Context
 
 ## Technical Constraints

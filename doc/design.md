@@ -101,7 +101,18 @@ The Reporter consumes the link status list and the specification item list and g
 
 ## Tracing
 
-### Backward tracing
+### Tracing Needed Coverage
+`dsn~needed_coverage_status~1`
+
+The Tracer component iterates over all needed Artifacts of all specification items and determines if an which coverage exists for.
+
+Covers:
+
+  * `req~needed_coverage_status~1`
+  
+Needs: utest, impl
+
+### Backward Tracing
 `dsn~backward_coverage_status~1`
 
 The Tracer component iterates over all covered IDs of all specification items and determines the backward coverage status of the link between the provider item and the requester item.

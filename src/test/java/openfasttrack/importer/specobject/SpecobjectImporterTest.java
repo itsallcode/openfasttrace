@@ -36,7 +36,7 @@ public class SpecobjectImporterTest
                         .build()) //
                 .comment("Comment").rationale("Rationale") //
                 .description("Description") //
-                .addNeededArtifactType("code").addNeededArtifactType("test") //
+                .addNeedsArtifactType("code").addNeedsArtifactType("test") //
                 .addCoveredId(new SpecificationItemId.Builder() //
                         .artifactType(null) //
                         .name("provid") //

@@ -22,7 +22,7 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
                 .addIterableProperty("dependsOnIds", SpecificationItem::getDependOnIds,
                         SpecificationItemIdMatcher::equalTo) //
                 .addIterableProperty("neededArtifactTypes",
-                        SpecificationItem::getNeededArtifactTypes, Matchers::equalTo) //
+                        SpecificationItem::getNeedsArtifactTypes, Matchers::equalTo) //
                 .build());
     }
 

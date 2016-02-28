@@ -71,7 +71,7 @@ public class TestSpecificationItem
         }
         for (final String neededArtifactType : NEEDED_ARTIFACT_TYPES)
         {
-            builder.addNeededArtifactType(neededArtifactType);
+            builder.addNeedsArtifactType(neededArtifactType);
         }
         final SpecificationItem item = builder.build();
         assertSimpleItemComplete(item);
@@ -82,7 +82,7 @@ public class TestSpecificationItem
     {
         assertThat(item.getCoveredIds(), equalTo(COVERED_IDS));
         assertThat(item.getDependOnIds(), equalTo(DEPEND_ON_IDS));
-        assertThat(item.getNeededArtifactTypes(), equalTo(NEEDED_ARTIFACT_TYPES));
+        assertThat(item.getNeedsArtifactTypes(), equalTo(NEEDED_ARTIFACT_TYPES));
     }
 
     @Test

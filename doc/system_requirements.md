@@ -28,10 +28,10 @@ Needs: req
 
 # High Level Requirements
 
-## Forward Coverage Status
-`req~forward_coverage_status~1` <a id="req~forward_coverage_status~1"></a>
+## Needed Coverage Status
+`req~needed_coverage_status~1` <a id="req~needed_coverage_status~1"></a>
 
-OFT determines the forward coverage status of a requirement. "Forward" in this context means that the coverage is checked from the perspective of the item that needs to be covered.
+OFT determines the status of the needed coverage of a specification item.
 
 The possible results are:
 

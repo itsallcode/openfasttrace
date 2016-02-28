@@ -29,4 +29,9 @@ public class NeedsCoverageLink
     {
         return this.status;
     }
+
+    public boolean isClean()
+    {
+        return this.status == NeedsCoverageLinkStatus.OK;
+    }
 }

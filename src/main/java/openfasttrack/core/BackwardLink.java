@@ -29,4 +29,9 @@ public class BackwardLink
     {
         return this.status;
     }
+
+    public boolean isClean()
+    {
+        return this.status == BackwardLinkStatus.OK;
+    }
 }

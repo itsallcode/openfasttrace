@@ -37,25 +37,49 @@ public class TestTracer
 
     private Trace trace;
 
+    /* @formatter:off
+     *    |          Backward Link Status           | Needs Status
+     *====#=========================================#=======================
+     *    | OK | UNW | OUT | PRE | BRO | AMB || DUP | COV | UNC | OUT | PRE
+     * A  |    |     |     |     |     |     ||     |   1 |     |     |
+     * B  |  1 |     |     |     |     |     ||     |     |     |     |
+     * C  |    |   1 |     |     |     |     ||     |     |     |     |
+     * D  |    |     |     |     |     |     ||     |     |   1 |     |
+     * E  |    |   2 |     |     |     |     ||     |     |     |     |
+     * F  |    |     |     |     |   1 |     ||     |     |     |     |
+     * G  |    |     |     |     |     |     ||     |   1 |   1 |     |
+     * H  |    |     |  1  |     |     |     ||     |     |     |     |
+     * I  |    |     |     |  1  |     |     ||     |     |     |     |
+     * J  |  1 |     |     |     |   1 |     ||     |     |     |     |
+     * K1 |    |     |     |     |     |     ||   1 |   1 |     |     |
+     * K2 |    |     |     |     |     |     ||   1 |   1 |     |     |
+     * L  |    |     |     |     |     |   1 ||     |     |     |     |
+     * M1 |    |     |     |     |     |     ||   1 |     |     |     |  1
+     * M2 |    |     |     |     |     |     ||   1 |     |     |   1 |
+     * N  |    |     |     |     |     |   1 ||     |     |     |     |
+     * @formatter:on
+     */
     static
     {
-        // @formatter:off                                                                                      | OK | UNW | OUT | PRE | BRO | AMB || DUP
-        A  = prepare("feat" , "A", 1).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||
-        B  = prepare("req"  , "B", 2).addCoveredId(A.getId()).build();                                      // |  1 |     |     |     |     |     ||
-        C  = prepare("impl" , "C", 3).addCoveredId(A.getId()).build();                                      // |    |   1 |     |     |     |     ||
-        D  = prepare("req"  , "D", 4).addNeededArtifactType("impl").build();                                // |    |     |     |     |     |     ||
-        E  = prepare("uman" , "E", 5).addCoveredId(A.getId()).addCoveredId(B.getId()).build();              // |    |   2 |     |     |     |     ||
-        F  = prepare("req"  , "F", 6).addCoveredId(NON_EXISTENT_ID).build();                                // |    |     |     |     |   1 |     ||
-        G  = prepare("req"  , "G", 7).addNeededArtifactType("impl").addNeededArtifactType("utest").build(); // |    |     |     |     |     |     ||
-        H  = prepare("impl" , "H", 8).addCoveredId(OUTDATED_G_ID).build();                                  // |    |     |  1  |     |     |     ||
-        I  = prepare("utest", "I", 9).addCoveredId(PREDATED_G_ID).build();                                  // |    |     |     |  1  |     |     ||
-        J  = prepare("utest", "J", 1).addCoveredId(G.getId()).addCoveredId(NON_EXISTENT_ID).build();        // |  1 |     |     |     |   1 |     ||
-        K1 = prepare("feat" , "K", 2).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||   1
-        K2 = prepare("feat" , "K", 2).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||   1
-        L  = prepare("req"  , "L", 3).addCoveredId(K1.getId()).build();                                     // |    |     |     |     |     |   1 ||
-        M1 = prepare("req"  , "M", 4).addNeededArtifactType("itest").build();                               // |    |     |     |     |     |     ||   1
-        M2 = prepare("req"  , "M", 6).addNeededArtifactType("itest").build();                               // |    |     |     |     |     |     ||   1
-        N  = prepare("itest", "N", 7).addCoveredId(AMBIGUOUS_M_ID).build();                                 // |    |     |     |     |     |   1 ||
+        //
+        //
+        // @formatter:off
+        A  = prepare("feat" , "A", 1).addNeedsArtifactType("req").build();
+        B  = prepare("req"  , "B", 2).addCoveredId(A.getId()).build();
+        C  = prepare("impl" , "C", 3).addCoveredId(A.getId()).build();
+        D  = prepare("req"  , "D", 4).addNeedsArtifactType("impl").build();
+        E  = prepare("uman" , "E", 5).addCoveredId(A.getId()).addCoveredId(B.getId()).build();
+        F  = prepare("req"  , "F", 6).addCoveredId(NON_EXISTENT_ID).build();
+        G  = prepare("req"  , "G", 7).addNeedsArtifactType("impl").addNeedsArtifactType("utest").build();
+        H  = prepare("impl" , "H", 8).addCoveredId(OUTDATED_G_ID).build();
+        I  = prepare("utest", "I", 9).addCoveredId(PREDATED_G_ID).build();
+        J  = prepare("utest", "J", 1).addCoveredId(G.getId()).addCoveredId(NON_EXISTENT_ID).build();
+        K1 = prepare("feat" , "K", 2).addNeedsArtifactType("req").build();
+        K2 = prepare("feat" , "K", 2).addNeedsArtifactType("req").build();
+        L  = prepare("req"  , "L", 3).addCoveredId(K1.getId()).build();
+        M1 = prepare("req"  , "M", 4).addNeedsArtifactType("itest").build();
+        M2 = prepare("req"  , "M", 6).addNeedsArtifactType("itest").build();
+        N  = prepare("itest", "N", 7).addCoveredId(AMBIGUOUS_M_ID).build();
         // @formatter:on
     }
 
@@ -81,48 +105,84 @@ public class TestTracer
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_OK()
+    public void testCountBackwardinksWithStatus_OK()
     {
-        assertLinksWithStatus(BackwardLinkStatus.OK, 2L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.OK, 2L);
     }
 
-    private void assertLinksWithStatus(final BackwardLinkStatus status, final long expectedCount)
+    private void assertBackwardLinksWithStatus(final BackwardLinkStatus status,
+            final long expectedCount)
     {
         assertThat(this.trace.countBackwardLinksWithStatus(status), equalTo(expectedCount));
     }
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_UNWANTED()
+    public void testCountBackwardLinksWithStatus_UNWANTED()
     {
-        assertLinksWithStatus(BackwardLinkStatus.UNWANTED, 3L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.UNWANTED, 3L);
     }
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_OUTDATED()
+    public void testCountBackwardLinksWithStatus_OUTDATED()
     {
-        assertLinksWithStatus(BackwardLinkStatus.OUTDATED, 1L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.OUTDATED, 1L);
     }
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_PREDATED()
+    public void testCountBackwardLinksWithStatus_PREDATED()
     {
-        assertLinksWithStatus(BackwardLinkStatus.PREDATED, 1L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.PREDATED, 1L);
     }
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_Ambiguous()
+    public void testCountBackwardLinksWithStatus_Ambiguous()
     {
-        assertLinksWithStatus(BackwardLinkStatus.AMBIGUOUS, 2L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.AMBIGUOUS, 2L);
     }
 
     // [utest~backward_coverage_status~1]
     @Test
-    public void testCountLinksWithStatus_BROKEN()
+    public void testCountBackwardLinksWithStatus_BROKEN()
     {
-        assertLinksWithStatus(BackwardLinkStatus.ORPHANED, 2L);
+        assertBackwardLinksWithStatus(BackwardLinkStatus.ORPHANED, 2L);
     }
+
+    // [utest~needed_coverage_status~1]
+    @Test
+    public void testCountNeedsCoverageWithStatus_COVERED()
+    {
+        assertNeedsCoverageWithStatus(NeedsCoverageLinkStatus.OK, 4L);
+    }
+
+    private void assertNeedsCoverageWithStatus(final NeedsCoverageLinkStatus status,
+            final long expectedCount)
+    {
+        assertThat(this.trace.countNeedsCoverageLinksWithStatus(status), equalTo(expectedCount));
+    }
+
+    // [utest~needed_coverage_status~1]
+    @Test
+    public void testCountNeedsCoverageWithStatus_UNCOVERED()
+    {
+        assertNeedsCoverageWithStatus(NeedsCoverageLinkStatus.UNCOVERED, 2L);
+    }
+
+    // [utest~needed_coverage_status~1]
+    @Test
+    public void testCountNeedsCoverageWithStatus_OUTDATED()
+    {
+        assertNeedsCoverageWithStatus(NeedsCoverageLinkStatus.OUTDATED, 1L);
+    }
+
+    // [utest~needed_coverage_status~1]
+    @Test
+    public void testCountNeedsCoverageWithStatus_PREDATED()
+    {
+        assertNeedsCoverageWithStatus(NeedsCoverageLinkStatus.PREDATED, 1L);
+    }
+
 }

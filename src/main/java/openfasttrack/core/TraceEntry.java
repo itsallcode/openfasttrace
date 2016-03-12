@@ -15,14 +15,20 @@ public class TraceEntry
     private final List<NeedsCoverageLink> needsCoverageLinks;
     private final List<BackwardLink> backwardLinks;
     private final List<SpecificationItem> duplicates;
+    private final boolean needsCoverageClean;
+    private final boolean backwardLinksClean;
 
-    private TraceEntry(final SpecificationItem item, final List<NeedsCoverageLink> needsCoverageLinks,
-            final List<BackwardLink> backwardLinks, final List<SpecificationItem> duplicates)
+    private TraceEntry(final SpecificationItem item,
+            final List<NeedsCoverageLink> needsCoverageLinks,
+            final List<BackwardLink> backwardLinks, final List<SpecificationItem> duplicates,
+            final boolean needsCoverageClean, final boolean backwardLinksClean)
     {
         this.item = item;
         this.needsCoverageLinks = needsCoverageLinks;
         this.backwardLinks = backwardLinks;
         this.duplicates = duplicates;
+        this.needsCoverageClean = needsCoverageClean;
+        this.backwardLinksClean = backwardLinksClean;
     }
 
     /**
@@ -67,6 +73,27 @@ public class TraceEntry
     }
 
     /**
+     * Determine if the backward links of the specification item this trace
+     * entry refers to are all clean.
+     *
+     * @return <code>true</code> if all backward links are clean
+     */
+    public boolean isBackwardLinksClean()
+    {
+        return this.backwardLinksClean;
+    }
+
+    /**
+     * Determine if the needed coverage is available.
+     * 
+     * @return <code>true</code> if the needed coverage was found.
+     */
+    public boolean isNeedsCoverageClean()
+    {
+        return this.needsCoverageClean;
+    }
+
+    /**
      * Builder for {@link TraceEntry} objects.
      */
     public static class Builder
@@ -75,6 +102,8 @@ public class TraceEntry
         private final List<NeedsCoverageLink> needsCoverageLinks = new ArrayList<>();
         private final List<BackwardLink> backwardLinks = new ArrayList<>();
         private final List<SpecificationItem> duplicates = new ArrayList<>();
+        private boolean backwardLinksClean = true;
+        private boolean needsCoverageClean = true;
 
         /**
          * Create a new builder for a {@link TraceEntry}.
@@ -101,6 +130,8 @@ public class TraceEntry
                 final NeedsCoverageLinkStatus status)
         {
             this.needsCoverageLinks.add(new NeedsCoverageLink(this.item, toArtifactType, status));
+            this.needsCoverageClean = this.needsCoverageClean
+                    && (status == NeedsCoverageLinkStatus.OK);
             return this;
         }
 
@@ -117,6 +148,7 @@ public class TraceEntry
                 final BackwardLinkStatus status)
         {
             this.backwardLinks.add(new BackwardLink(this.item, toId, status));
+            this.backwardLinksClean = this.backwardLinksClean && (status == BackwardLinkStatus.OK);
             return this;
         }
 
@@ -135,13 +167,13 @@ public class TraceEntry
 
         /**
          * Build a new instance of a {@link TraceEntry}
-         * 
+         *
          * @return the new trace entry.
          */
         public TraceEntry build()
         {
             return new TraceEntry(this.item, this.needsCoverageLinks, this.backwardLinks,
-                    this.duplicates);
+                    this.duplicates, this.needsCoverageClean, this.backwardLinksClean);
         }
     }
 }

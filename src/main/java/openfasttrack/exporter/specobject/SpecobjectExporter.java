@@ -1,6 +1,13 @@
 package openfasttrack.exporter.specobject;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -14,13 +21,20 @@ import openfasttrack.exporter.ExporterException;
 public class SpecobjectExporter implements Exporter
 {
     private final XMLStreamWriter writer;
-    private final Collection<LinkedSpecificationItem> items;
+    private final Map<String, List<LinkedSpecificationItem>> items;
 
     public SpecobjectExporter(final Collection<LinkedSpecificationItem> items,
             final XMLStreamWriter xmlWriter)
     {
-        this.items = items;
+        this.items = groupByDoctype(items);
         this.writer = xmlWriter;
+    }
+
+    private Map<String, List<LinkedSpecificationItem>> groupByDoctype(
+            final Collection<LinkedSpecificationItem> items)
+    {
+        return items.stream().collect(
+                groupingBy(item -> item.getId().getArtifactType(), LinkedHashMap::new, toList()));
     }
 
     @Override
@@ -40,13 +54,18 @@ public class SpecobjectExporter implements Exporter
     {
         this.writer.writeStartDocument("UTF-8", "1.0");
         this.writer.writeStartElement("specdocument");
-        this.writer.writeStartElement("specobjects");
-        this.writer.writeAttribute("doctype", "doctype");
-        for (final LinkedSpecificationItem item : this.items)
+
+        for (final Entry<String, List<LinkedSpecificationItem>> entry : this.items.entrySet())
         {
-            writeItem(item.getItem());
+            this.writer.writeStartElement("specobjects");
+            this.writer.writeAttribute("doctype", entry.getKey());
+            for (final LinkedSpecificationItem item : entry.getValue())
+            {
+                writeItem(item.getItem());
+            }
+            this.writer.writeEndElement();
         }
-        this.writer.writeEndElement();
+
         this.writer.writeEndElement();
         this.writer.writeEndDocument();
     }

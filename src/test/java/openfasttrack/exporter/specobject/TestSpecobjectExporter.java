@@ -84,6 +84,29 @@ public class TestSpecobjectExporter
                 new LinkedSpecificationItem(item1), new LinkedSpecificationItem(item2));
     }
 
+    @Test
+    public void testTwoItemsDifferentDoctype()
+    {
+        final SpecificationItem item1 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("doctype1", "id", 42)) //
+                .description("Description") //
+                .rationale("Rationale") //
+                .comment("Comment") //
+                .addNeedsArtifactType("code").addNeedsArtifactType("test") //
+                .addCoveredId(SpecificationItemId.createId(null, "provid", 43)) //
+                .addDependOnId(SpecificationItemId.parseId("dependsOnDocType~dependsOnName~44"))
+                .build();
+        final SpecificationItem item2 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("doctype2", "id2", 43)) //
+                .description("Description2") //
+                .rationale("Rationale2") //
+                .comment("Comment2") //
+                .build();
+        assertExportContent(
+                Paths.get("src/test/resources/specobject/two-specobjects-different-doctype.xml"),
+                new LinkedSpecificationItem(item1), new LinkedSpecificationItem(item2));
+    }
+
     private void assertExportContent(final Path expectedContentFile,
             final LinkedSpecificationItem... items)
     {

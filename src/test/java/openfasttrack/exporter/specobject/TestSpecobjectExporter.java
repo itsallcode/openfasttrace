@@ -2,6 +2,7 @@ package openfasttrack.exporter.specobject;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -14,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
@@ -31,26 +33,12 @@ import openfasttrack.matcher.SpecificationItemMatcher;
 
 public class TestSpecobjectExporter
 {
+    private final static Logger LOG = Logger.getLogger(TestSpecobjectExporter.class.getName());
+
     @Test
     public void testEmptyItemList()
     {
         assertExportContent(Paths.get("src/test/resources/specobject/no-specobject.xml"));
-    }
-
-    private String export(final LinkedSpecificationItem... items)
-    {
-        try
-        {
-            final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            final XMLStreamWriter xmlWriter = XMLOutputFactory.newInstance()
-                    .createXMLStreamWriter(stream);
-            new SpecobjectExporter(asList(items), xmlWriter).runExport();
-            return new String(stream.toByteArray(), StandardCharsets.UTF_8);
-        }
-        catch (XMLStreamException | FactoryConfigurationError e)
-        {
-            throw new AssertionError("Error exporting items", e);
-        }
     }
 
     private void assertExportContent(final Path expectedContentFile,
@@ -76,8 +64,17 @@ public class TestSpecobjectExporter
             final LinkedSpecificationItem... items)
     {
         final String specobjectXml = export(items);
+        LOG.info(() -> "Actual  : " + specobjectXml);
+        LOG.info(() -> "Expected: " + expectedContent);
         assertThat(specobjectXml, equalTo(expectedContent));
         final Collection<SpecificationItem> parseSpecobjects = parseSpecobjectXml(specobjectXml);
+
+        if (items.length == 0)
+        {
+            assertThat(parseSpecobjects, emptyIterable());
+            return;
+        }
+
         final Collection<SpecificationItem> expectedItems = Arrays.stream(items)
                 .map(i -> i.getItem()).collect(toList());
         assertThat(parseSpecobjects,
@@ -90,5 +87,22 @@ public class TestSpecobjectExporter
         new SpecobjectImporterFactory().createImporter(new StringReader(specobjectXml), builder)
                 .runImport();
         return builder.build().values();
+    }
+
+    private String export(final LinkedSpecificationItem... items)
+    {
+        try
+        {
+            final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+            final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
+            new SpecobjectExporter(asList(items), new IndentingXMLStreamWriter(xmlWriter))
+                    .runExport();
+            return new String(stream.toByteArray(), StandardCharsets.UTF_8);
+        }
+        catch (XMLStreamException | FactoryConfigurationError e)
+        {
+            throw new AssertionError("Error exporting items", e);
+        }
     }
 }

@@ -93,7 +93,7 @@ public class TestTracer
     {
         final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F, G, H, I, J, K1, K2, L,
                 M1, M2, N);
-        final Tracer tracer = new Tracer(new SpecificationItemCollection(items));
+        final Tracer tracer = new Tracer();
         this.trace = tracer.trace();
     }
 

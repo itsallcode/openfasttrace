@@ -39,12 +39,14 @@ public class SpecobjectExporter implements Exporter
     private void writeOutput() throws XMLStreamException
     {
         this.writer.writeStartDocument("UTF-8", "1.0");
+        this.writer.writeStartElement("specdocument");
         this.writer.writeStartElement("specobjects");
         this.writer.writeAttribute("doctype", "doctype");
         for (final LinkedSpecificationItem item : this.items)
         {
             writeItem(item.getItem());
         }
+        this.writer.writeEndElement();
         this.writer.writeEndElement();
         this.writer.writeEndDocument();
     }

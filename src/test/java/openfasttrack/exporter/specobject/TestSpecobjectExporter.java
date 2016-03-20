@@ -33,6 +33,9 @@ import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.matcher.SpecificationItemMatcher;
 import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
 
+/**
+ * Unit tests for {@link SpecobjectExporter}
+ */
 public class TestSpecobjectExporter
 {
     private final static Logger LOG = Logger.getLogger(TestSpecobjectExporter.class.getName());

@@ -14,12 +14,6 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
      */
     public static final String NORMAL_END_OF_LINE = "\n";
 
-    /** How deeply nested the current scope is. The root element is depth 1. */
-    private int depth = 0; // document scope
-
-    /** stack[depth] indicates what's been written into the current scope. */
-    private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
-
     private static final int WROTE_MARKUP = 1;
 
     private static final int WROTE_DATA = 2;
@@ -27,6 +21,12 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     private final String indent;
 
     private final String newLine;
+
+    /** How deeply nested the current scope is. The root element is depth 1. */
+    private int depth = 0; // document scope
+
+    /** stack[depth] indicates what's been written into the current scope. */
+    private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
 
     /** newLine followed by copies of indent. */
     private char[] linePrefix = null;
@@ -235,7 +235,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
 
     /**
      * Prepare to start an element, by allocating stack space.
-     * 
+     *
      * @throws XMLStreamException
      */
     protected void beforeStartElement() throws XMLStreamException

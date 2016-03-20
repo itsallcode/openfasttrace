@@ -1,4 +1,4 @@
-package openfasttrack.exporter.specobject;
+package openfasttrack.testutil.xml;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;

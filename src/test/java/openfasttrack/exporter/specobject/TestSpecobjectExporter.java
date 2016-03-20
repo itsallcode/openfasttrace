@@ -30,6 +30,7 @@ import openfasttrack.core.SpecificationItem;
 import openfasttrack.importer.SpecificationMapListBuilder;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.matcher.SpecificationItemMatcher;
+import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
 
 public class TestSpecobjectExporter
 {

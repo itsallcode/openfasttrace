@@ -53,7 +53,7 @@ public class TestSpecobjectExporter
                 .rationale("Rationale") //
                 .comment("Comment") //
                 .addNeedsArtifactType("code").addNeedsArtifactType("test") //
-                .addCoveredId(SpecificationItemId.createId("ignored", "provid", 43)) //
+                .addCoveredId(SpecificationItemId.createId(null, "provid", 43)) //
                 .addDependOnId(SpecificationItemId.parseId("dependsOnDocType~dependsOnName~44"))
                 .build();
         assertExportContent(Paths.get("src/test/resources/specobject/single-specobject.xml"),
@@ -80,22 +80,29 @@ public class TestSpecobjectExporter
     }
 
     private void assertExportContent(final String expectedContent,
-            final LinkedSpecificationItem... items)
+            final LinkedSpecificationItem... expectedLinkedItems)
     {
-        final String actualContent = export(items);
+        final String actualContent = export(expectedLinkedItems);
         LOG.info(() -> "Actual  : " + actualContent);
         LOG.info(() -> "Expected: " + expectedContent);
         assertEquals(expectedContent, actualContent);
         assertThat(actualContent, equalTo(expectedContent));
         final Collection<SpecificationItem> parseSpecobjects = parseSpecobjectXml(actualContent);
 
-        if (items.length == 0)
+        if (expectedLinkedItems.length == 0)
         {
             assertThat(parseSpecobjects, emptyIterable());
             return;
         }
 
-        final Collection<SpecificationItem> expectedItems = Arrays.stream(items)
+        if (expectedLinkedItems.length == 1)
+        {
+            assertThat(parseSpecobjects.iterator().next(),
+                    SpecificationItemMatcher.equalTo(expectedLinkedItems[0].getItem()));
+            return;
+        }
+
+        final Collection<SpecificationItem> expectedItems = Arrays.stream(expectedLinkedItems)
                 .map(i -> i.getItem()).collect(toList());
         assertThat(parseSpecobjects,
                 Matchers.containsInAnyOrder(SpecificationItemMatcher.equalTo(expectedItems)));

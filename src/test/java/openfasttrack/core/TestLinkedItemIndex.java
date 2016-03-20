@@ -51,8 +51,7 @@ public class TestLinkedItemIndex
 
     private LinkedItemIndex createIndex(final SpecificationItem... items)
     {
-        final LinkedItemIndex index = LinkedItemIndex.create(asList(items));
-        return index;
+        return LinkedItemIndex.create(asList(items));
     }
 
     @Test

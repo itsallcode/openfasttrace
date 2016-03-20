@@ -58,29 +58,41 @@ public class SpecobjectExporter implements Exporter
         writeElement("rationale", item.getRationale());
         writeElement("comment", item.getComment());
 
-        this.writer.writeStartElement("needscoverage");
-        for (final String neededArtifactType : item.getNeedsArtifactTypes())
+        if (!item.getNeedsArtifactTypes().isEmpty())
         {
-            writeElement("needsobj", neededArtifactType);
-        }
-        this.writer.writeEndElement();
 
-        this.writer.writeStartElement("providescoverage");
-        for (final SpecificationItemId coveredId : item.getCoveredIds())
-        {
-            this.writer.writeStartElement("provcov");
-            writeElement("linksto", coveredId.getName());
-            writeElement("dstversion", coveredId.getRevision());
+            this.writer.writeStartElement("needscoverage");
+            for (final String neededArtifactType : item.getNeedsArtifactTypes())
+            {
+                writeElement("needsobj", neededArtifactType);
+            }
             this.writer.writeEndElement();
         }
-        this.writer.writeEndElement();
 
-        this.writer.writeStartElement("dependencies");
-        for (final SpecificationItemId dependsOnId : item.getDependOnIds())
+        if (!item.getCoveredIds().isEmpty())
         {
-            writeElement("dependson", dependsOnId.toString());
+
+            this.writer.writeStartElement("providescoverage");
+            for (final SpecificationItemId coveredId : item.getCoveredIds())
+            {
+                this.writer.writeStartElement("provcov");
+                writeElement("linksto", coveredId.getName());
+                writeElement("dstversion", coveredId.getRevision());
+                this.writer.writeEndElement();
+            }
+            this.writer.writeEndElement();
         }
-        this.writer.writeEndElement();
+
+        if (!item.getDependOnIds().isEmpty())
+        {
+
+            this.writer.writeStartElement("dependencies");
+            for (final SpecificationItemId dependsOnId : item.getDependOnIds())
+            {
+                writeElement("dependson", dependsOnId.toString());
+            }
+            this.writer.writeEndElement();
+        }
 
         this.writer.writeEndElement();
     }

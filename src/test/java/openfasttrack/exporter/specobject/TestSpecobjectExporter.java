@@ -2,8 +2,8 @@ package openfasttrack.exporter.specobject;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +23,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import openfasttrack.core.LinkedSpecificationItem;
@@ -60,6 +59,28 @@ public class TestSpecobjectExporter
                 new LinkedSpecificationItem(item));
     }
 
+    @Test
+    public void testTwoItems()
+    {
+        final SpecificationItem item1 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("doctype", "id", 42)) //
+                .description("Description") //
+                .rationale("Rationale") //
+                .comment("Comment") //
+                .addNeedsArtifactType("code").addNeedsArtifactType("test") //
+                .addCoveredId(SpecificationItemId.createId(null, "provid", 43)) //
+                .addDependOnId(SpecificationItemId.parseId("dependsOnDocType~dependsOnName~44"))
+                .build();
+        final SpecificationItem item2 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("doctype", "id2", 43)) //
+                .description("Description2") //
+                .rationale("Rationale2") //
+                .comment("Comment2") //
+                .build();
+        assertExportContent(Paths.get("src/test/resources/specobject/two-specobjects.xml"),
+                new LinkedSpecificationItem(item1), new LinkedSpecificationItem(item2));
+    }
+
     private void assertExportContent(final Path expectedContentFile,
             final LinkedSpecificationItem... items)
     {
@@ -87,25 +108,15 @@ public class TestSpecobjectExporter
         LOG.info(() -> "Expected: " + expectedContent);
         assertEquals(expectedContent, actualContent);
         assertThat(actualContent, equalTo(expectedContent));
-        final Collection<SpecificationItem> parseSpecobjects = parseSpecobjectXml(actualContent);
-
-        if (expectedLinkedItems.length == 0)
-        {
-            assertThat(parseSpecobjects, emptyIterable());
-            return;
-        }
-
-        if (expectedLinkedItems.length == 1)
-        {
-            assertThat(parseSpecobjects.iterator().next(),
-                    SpecificationItemMatcher.equalTo(expectedLinkedItems[0].getItem()));
-            return;
-        }
+        final Collection<SpecificationItem> actualParsedSpecobjects = parseSpecobjectXml(
+                actualContent);
 
         final Collection<SpecificationItem> expectedItems = Arrays.stream(expectedLinkedItems)
                 .map(i -> i.getItem()).collect(toList());
-        assertThat(parseSpecobjects,
-                Matchers.containsInAnyOrder(SpecificationItemMatcher.equalTo(expectedItems)));
+        assertThat(actualParsedSpecobjects, hasSize(expectedLinkedItems.length));
+
+        assertThat(actualParsedSpecobjects,
+                SpecificationItemMatcher.equalToAnyOrder(expectedItems));
     }
 
     private Collection<SpecificationItem> parseSpecobjectXml(final String specobjectXml)

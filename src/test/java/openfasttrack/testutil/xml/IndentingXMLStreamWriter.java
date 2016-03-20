@@ -14,18 +14,6 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
      */
     public static final String NORMAL_END_OF_LINE = "\n";
 
-    public IndentingXMLStreamWriter(final XMLStreamWriter out)
-    {
-        super(out);
-    }
-
-    public IndentingXMLStreamWriter(final XMLStreamWriter out, final String indent)
-    {
-        super(out);
-
-        this.indent = indent;
-    }
-
     /** How deeply nested the current scope is. The root element is depth 1. */
     private int depth = 0; // document scope
 
@@ -36,54 +24,24 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
 
     private static final int WROTE_DATA = 2;
 
-    private String indent = DEFAULT_INDENT;
+    private final String indent;
 
-    private String newLine = NORMAL_END_OF_LINE;
+    private final String newLine;
 
     /** newLine followed by copies of indent. */
     private char[] linePrefix = null;
 
-    public void setIndent(final String indent)
+    public IndentingXMLStreamWriter(final XMLStreamWriter out)
     {
-        if (!indent.equals(this.indent))
-        {
-            this.indent = indent;
-            this.linePrefix = null;
-        }
+        this(out, DEFAULT_INDENT, NORMAL_END_OF_LINE);
     }
 
-    public String getIndent()
+    public IndentingXMLStreamWriter(final XMLStreamWriter out, final String indent,
+            final String newLine)
     {
-        return this.indent;
-    }
-
-    public void setNewLine(final String newLine)
-    {
-        if (!newLine.equals(this.newLine))
-        {
-            this.newLine = newLine;
-            this.linePrefix = null;
-        }
-    }
-
-    /**
-     * @return System.getProperty("line.separator"); or
-     *         {@link #NORMAL_END_OF_LINE} if that fails.
-     */
-    public static String getLineSeparator()
-    {
-        try
-        {
-            return System.getProperty("line.separator");
-        }
-        catch (final SecurityException ignored)
-        {}
-        return NORMAL_END_OF_LINE;
-    }
-
-    public String getNewLine()
-    {
-        return this.newLine;
+        super(out);
+        this.indent = indent;
+        this.newLine = newLine;
     }
 
     @Override
@@ -259,7 +217,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
             try
             {
                 writeNewLine(this.depth);
-                if (this.depth > 0 && getIndent().length() > 0)
+                if (this.depth > 0 && this.indent.length() > 0)
                 {
                     afterMarkup(); // indentation was written
                 }
@@ -343,13 +301,13 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     /** Write a line separator followed by indentation. */
     protected void writeNewLine(final int indentation) throws XMLStreamException
     {
-        final int newLineLength = getNewLine().length();
-        final int prefixLength = newLineLength + (getIndent().length() * indentation);
+        final int newLineLength = this.newLine.length();
+        final int prefixLength = newLineLength + (this.indent.length() * indentation);
         if (prefixLength > 0)
         {
             if (this.linePrefix == null)
             {
-                this.linePrefix = (getNewLine() + getIndent()).toCharArray();
+                this.linePrefix = (this.newLine + this.indent).toCharArray();
             }
             while (prefixLength > this.linePrefix.length)
             {

@@ -194,36 +194,30 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     @Override
     public void writeEndDocument() throws XMLStreamException
     {
-        try
+        while (this.depth > 0)
         {
-            while (this.depth > 0)
-            {
-                writeEndElement(); // indented
-            }
+            writeEndElement(); // indented
         }
-        catch (final Exception ignored)
-        {}
         this.out.writeEndDocument();
         afterEndDocument();
     }
 
-    /** Prepare to write markup, by writing a new line and indentation. */
-    protected void beforeMarkup()
+    /**
+     * Prepare to write markup, by writing a new line and indentation.
+     *
+     * @throws XMLStreamException
+     */
+    protected void beforeMarkup() throws XMLStreamException
     {
         final int soFar = this.stack[this.depth];
         if ((soFar & WROTE_DATA) == 0 // no data in this scope
                 && (this.depth > 0 || soFar != 0)) // not the first line
         {
-            try
+            writeNewLine(this.depth);
+            if (this.depth > 0 && this.indent.length() > 0)
             {
-                writeNewLine(this.depth);
-                if (this.depth > 0 && this.indent.length() > 0)
-                {
-                    afterMarkup(); // indentation was written
-                }
+                afterMarkup(); // indentation was written
             }
-            catch (final Exception e)
-            {}
         }
     }
 
@@ -239,8 +233,12 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
         this.stack[this.depth] |= WROTE_DATA;
     }
 
-    /** Prepare to start an element, by allocating stack space. */
-    protected void beforeStartElement()
+    /**
+     * Prepare to start an element, by allocating stack space.
+     * 
+     * @throws XMLStreamException
+     */
+    protected void beforeStartElement() throws XMLStreamException
     {
         beforeMarkup();
         if (this.stack.length <= this.depth + 1)
@@ -260,17 +258,16 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
         ++this.depth;
     }
 
-    /** Prepare to end an element, by writing a new line and indentation. */
-    protected void beforeEndElement()
+    /**
+     * Prepare to end an element, by writing a new line and indentation.
+     *
+     * @throws XMLStreamException
+     */
+    protected void beforeEndElement() throws XMLStreamException
     {
         if (this.depth > 0 && this.stack[this.depth] == WROTE_MARKUP)
         { // but not data
-            try
-            {
-                writeNewLine(this.depth - 1);
-            }
-            catch (final Exception ignored)
-            {}
+            writeNewLine(this.depth - 1);
         }
     }
 
@@ -283,17 +280,16 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
         }
     }
 
-    /** Note that a document was ended. */
-    protected void afterEndDocument()
+    /**
+     * Note that a document was ended.
+     *
+     * @throws XMLStreamException
+     */
+    protected void afterEndDocument() throws XMLStreamException
     {
         if (this.stack[this.depth = 0] == WROTE_MARKUP)
         { // but not data
-            try
-            {
-                writeNewLine(0);
-            }
-            catch (final Exception ignored)
-            {}
+            writeNewLine(0);
         }
         this.stack[this.depth] = 0; // start fresh
     }

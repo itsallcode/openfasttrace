@@ -35,19 +35,18 @@ public class LinkedItemIndex
             final List<LinkedSpecificationItem> wrappedItems)
     {
         final Map<SpecificationItemId, LinkedSpecificationItem> index = wrappedItems.stream()
-                .collect(Collectors.toMap(LinkedSpecificationItem::getId, item -> item,
-                        (item1, item2) -> {
-                            markAsDuplicates(item1, item2);
-                            return item1;
-                        }));
+                .collect(Collectors.toMap(LinkedSpecificationItem::getId, //
+                        item -> item, //
+                        LinkedItemIndex::handleDuplicates));
         return index;
     }
 
-    private static void markAsDuplicates(final LinkedSpecificationItem item1,
+    private static LinkedSpecificationItem handleDuplicates(final LinkedSpecificationItem item1,
             final LinkedSpecificationItem item2)
     {
         item1.addDuplicateIdItem(item2);
         item2.addDuplicateIdItem(item1);
+        return item1;
     }
 
     private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)

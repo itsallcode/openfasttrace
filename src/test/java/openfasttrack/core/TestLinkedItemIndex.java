@@ -1,4 +1,4 @@
-package openfasttrack.matcher;
+package openfasttrack.core;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -14,11 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import openfasttrack.core.LinkedItemIndex;
-import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 
 public class TestLinkedItemIndex
 {
@@ -56,8 +51,7 @@ public class TestLinkedItemIndex
 
     private LinkedItemIndex createIndex(final SpecificationItem... items)
     {
-        final LinkedItemIndex index = LinkedItemIndex.create(asList(items));
-        return index;
+        return LinkedItemIndex.create(asList(items));
     }
 
     @Test

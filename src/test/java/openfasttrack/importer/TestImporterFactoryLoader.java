@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import openfasttrack.importer.ImporterFactoryLoader.ServiceLoaderWrapper;
+import openfasttrack.core.ServiceLoaderWrapper;
 
 /**
  * Test for {@link ImporterFactoryLoader}

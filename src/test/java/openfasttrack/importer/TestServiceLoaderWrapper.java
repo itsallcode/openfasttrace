@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 import org.junit.Test;
 
-import openfasttrack.importer.ImporterFactoryLoader.ServiceLoaderWrapper;
+import openfasttrack.core.ServiceLoaderWrapper;
 import openfasttrack.importer.markdown.MarkdownImporterFactory;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.importer.tag.TagImporterFactory;

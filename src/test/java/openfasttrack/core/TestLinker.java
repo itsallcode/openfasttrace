@@ -1,8 +1,11 @@
 package openfasttrack.core;
 
 import static openfasttrack.core.SpecificationItemBuilders.prepare;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -25,9 +28,19 @@ public class TestLinker
     @Test
     public void testLink()
     {
-        final Linker linker = new Linker(Arrays.asList(A, B, C, D));
+        final List<SpecificationItem> items = Arrays.asList(A, B, C, D);
+        final Linker linker = new Linker(items);
         final List<LinkedSpecificationItem> linkedItems = linker.link();
-
+        assertThat(linkedItems, hasSize(items.size()));
+        final Iterator<LinkedSpecificationItem> iterator = linkedItems.iterator();
+        final LinkedSpecificationItem linkedA = iterator.next();
+        final LinkedSpecificationItem linkedB = iterator.next();
+        final LinkedSpecificationItem linkedC = iterator.next();
+        final LinkedSpecificationItem linkedD = iterator.next();
+        assertThat(linkedA.getCoveredLinks(), hasSize(0));
+        assertThat(linkedB.getCoveredLinks(), hasSize(1));
+        assertThat(linkedB.getCoveredLinks(), hasSize(1));
+        assertThat(linkedC.getCoveredLinks(), hasSize(0));
     }
 
 }

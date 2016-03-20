@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
@@ -27,6 +28,7 @@ import org.junit.Test;
 
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItem;
+import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.SpecificationMapListBuilder;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.matcher.SpecificationItemMatcher;
@@ -40,6 +42,22 @@ public class TestSpecobjectExporter
     public void testEmptyItemList()
     {
         assertExportContent(Paths.get("src/test/resources/specobject/no-specobject.xml"));
+    }
+
+    @Test
+    public void testSingleItem()
+    {
+        final SpecificationItem item = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("doctype", "id", 42)) //
+                .description("Description") //
+                .rationale("Rationale") //
+                .comment("Comment") //
+                .addNeedsArtifactType("code").addNeedsArtifactType("test") //
+                .addCoveredId(SpecificationItemId.createId("ignored", "provid", 43)) //
+                .addDependOnId(SpecificationItemId.parseId("dependsOnDocType~dependsOnName~44"))
+                .build();
+        assertExportContent(Paths.get("src/test/resources/specobject/single-specobject.xml"),
+                new LinkedSpecificationItem(item));
     }
 
     private void assertExportContent(final Path expectedContentFile,
@@ -64,11 +82,12 @@ public class TestSpecobjectExporter
     private void assertExportContent(final String expectedContent,
             final LinkedSpecificationItem... items)
     {
-        final String specobjectXml = export(items);
-        LOG.info(() -> "Actual  : " + specobjectXml);
+        final String actualContent = export(items);
+        LOG.info(() -> "Actual  : " + actualContent);
         LOG.info(() -> "Expected: " + expectedContent);
-        assertThat(specobjectXml, equalTo(expectedContent));
-        final Collection<SpecificationItem> parseSpecobjects = parseSpecobjectXml(specobjectXml);
+        assertEquals(expectedContent, actualContent);
+        assertThat(actualContent, equalTo(expectedContent));
+        final Collection<SpecificationItem> parseSpecobjects = parseSpecobjectXml(actualContent);
 
         if (items.length == 0)
         {
@@ -97,8 +116,8 @@ public class TestSpecobjectExporter
             final ByteArrayOutputStream stream = new ByteArrayOutputStream();
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
-            new SpecobjectExporter(asList(items), new IndentingXMLStreamWriter(xmlWriter))
-                    .runExport();
+            new SpecobjectExporter(asList(items),
+                    new IndentingXMLStreamWriter(xmlWriter, "\t", "\n")).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }
         catch (XMLStreamException | FactoryConfigurationError e)

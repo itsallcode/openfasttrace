@@ -3,15 +3,9 @@
 	<specobject>
 		<id>id</id>
 		<version>42</version>
-		<description>
-			Description
-		</description>
-		<rationale>
-			Rationale
-		</rationale>
-		<comment>
-			Comment
-		</comment>
+		<description>Description</description>
+		<rationale>Rationale</rationale>
+		<comment>Comment</comment>
 		<needscoverage>
 			<needsobj>code</needsobj>
 			<needsobj>test</needsobj>
@@ -27,4 +21,3 @@
 		</dependencies>
 	</specobject>
 </specobjects>
-  

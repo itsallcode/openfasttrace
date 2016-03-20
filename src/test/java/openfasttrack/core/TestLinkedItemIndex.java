@@ -70,11 +70,14 @@ public class TestLinkedItemIndex
                 this.duplicateIdItem2Mock);
         final LinkedSpecificationItem duplicateItem1 = index.getById(DUPLICATE_ID_1);
         assertThat(index.size(), equalTo(1));
-        assertThat(duplicateItem1.getItemsDuplicateId(), hasSize(1));
-        final LinkedSpecificationItem duplicateItem2 = duplicateItem1.getItemsDuplicateId().get(0);
+        assertThat(duplicateItem1.getLinksByStatus(LinkStatus.DUPLICATE), hasSize(1));
+        final LinkedSpecificationItem duplicateItem2 = duplicateItem1
+                .getLinksByStatus(LinkStatus.DUPLICATE).get(0);
 
-        assertThat(duplicateItem2.getItemsDuplicateId(), contains(sameInstance(duplicateItem1)));
-        assertThat(duplicateItem1.getItemsDuplicateId(), contains(sameInstance(duplicateItem2)));
+        assertThat(duplicateItem2.getLinksByStatus(LinkStatus.DUPLICATE),
+                contains(sameInstance(duplicateItem1)));
+        assertThat(duplicateItem1.getLinksByStatus(LinkStatus.DUPLICATE),
+                contains(sameInstance(duplicateItem2)));
     }
 
     @Test

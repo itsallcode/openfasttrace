@@ -16,31 +16,55 @@ public class TestLinker
     private static final SpecificationItem B;
     private static final SpecificationItem C;
     private static final SpecificationItem D;
+    private static final SpecificationItem E;
+    private static final SpecificationItem F;
 
     static
     {
-        A = prepare("req", "A", 1).addNeedsArtifactType("dsn").build();
-        B = prepare("dsn", "B", 1).addCoveredId(A.getId()).build();
-        C = prepare("impl", "C", 1).addCoveredId(A.getId()).build();
-        D = prepare("req", "D", 1).build();
+        A = prepare("req", "A", 2).addNeedsArtifactType("dsn").build();
+        B = prepare("dsn", "B", 2).addCoveredId(A.getId()).build();
+        C = prepare("dsn", "D", 2).addCoveredId(SpecificationItemId.createId("req", "A", 1))
+                .build();
+        D = prepare("dsn", "E", 2).addCoveredId(SpecificationItemId.createId("req", "A", 3))
+                .build();
+        E = prepare("impl", "C", 2).addCoveredId(A.getId()).build();
+        F = prepare("req", "F", 2).build();
     }
+
+    // @formatter:off
+    private static final int[][] LINK_MATRIX =
+        {
+                {0, 0, 0, 0},
+                {1, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        };
+    // @formatter:on
 
     @Test
     public void testLink()
     {
-        final List<SpecificationItem> items = Arrays.asList(A, B, C, D);
+        final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F);
         final Linker linker = new Linker(items);
         final List<LinkedSpecificationItem> linkedItems = linker.link();
         assertThat(linkedItems, hasSize(items.size()));
         final Iterator<LinkedSpecificationItem> iterator = linkedItems.iterator();
-        final LinkedSpecificationItem linkedA = iterator.next();
-        final LinkedSpecificationItem linkedB = iterator.next();
-        final LinkedSpecificationItem linkedC = iterator.next();
-        final LinkedSpecificationItem linkedD = iterator.next();
-        assertThat(linkedA.getCoveredLinks(), hasSize(0));
-        assertThat(linkedB.getCoveredLinks(), hasSize(1));
-        assertThat(linkedB.getCoveredLinks(), hasSize(1));
-        assertThat(linkedC.getCoveredLinks(), hasSize(0));
+        for (final int[] expectedCounts : LINK_MATRIX)
+        {
+            final LinkedSpecificationItem item = iterator.next();
+            assertItemLinkStatusCount(item, LinkStatus.COVERS, expectedCounts[0]);
+            assertItemLinkStatusCount(item, LinkStatus.OUTDATED, expectedCounts[1]);
+            assertItemLinkStatusCount(item, LinkStatus.PREDATED, expectedCounts[2]);
+            assertItemLinkStatusCount(item, LinkStatus.UNWANTED, expectedCounts[3]);
+        }
     }
 
+    private void assertItemLinkStatusCount(final LinkedSpecificationItem item,
+            final LinkStatus status, final int count)
+    {
+        final String message = item.getId().toString() + " must have " + count
+                + " links with status " + status.toString();
+        assertThat(message, item.getLinksByStatus(status), hasSize(count));
+    }
 }

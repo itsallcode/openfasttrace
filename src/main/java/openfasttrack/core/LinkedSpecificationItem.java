@@ -1,7 +1,10 @@
 package openfasttrack.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Specification items with links that can be followed.
@@ -10,8 +13,7 @@ public class LinkedSpecificationItem
 {
 
     private final SpecificationItem item;
-    private final List<LinkedSpecificationItem> coveredLinks = new ArrayList<>();
-    private final List<LinkedSpecificationItem> itemsDuplicateId = new ArrayList<>();
+    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new HashMap<LinkStatus, List<LinkedSpecificationItem>>();
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
@@ -41,33 +43,43 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Add a link to a covered item.
+     * Add a link to another item with a status
      *
      * @param item
-     *            the covered item
+     *            the item to be linked to
+     * @param status
+     *            the link status
      */
-    public void addCovered(final LinkedSpecificationItem item)
+    public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
-        this.coveredLinks.add(item);
+        List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
+        if (linksWithStatus == null)
+        {
+            linksWithStatus = new ArrayList<>();
+            this.links.put(status, linksWithStatus);
+        }
+        linksWithStatus.add(item);
     }
 
     /**
-     * Get all links to covered items.
+     * Get all links to the items by item status..
      *
      * @return the covered items
      */
-    public List<LinkedSpecificationItem> getCoveredLinks()
+    public List<LinkedSpecificationItem> getLinksByStatus(final LinkStatus status)
     {
-        return this.coveredLinks;
+        final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
+        return (linksWithStatus == null) ? Collections.<LinkedSpecificationItem> emptyList()
+                : linksWithStatus;
     }
 
-    public void addDuplicateIdItem(final LinkedSpecificationItem item)
+    /**
+     * Get the ID of the items this {@link LinkedSpecificationItem} covers.
+     *
+     * @return the list of IDs
+     */
+    public List<SpecificationItemId> getCoveredIds()
     {
-        this.itemsDuplicateId.add(item);
-    }
-
-    public List<LinkedSpecificationItem> getItemsDuplicateId()
-    {
-        return this.itemsDuplicateId;
+        return this.getItem().getCoveredIds();
     }
 }

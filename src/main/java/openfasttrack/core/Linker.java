@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 public class Linker
 {
-
-    private final List<SpecificationItem> items;
+    private final List<LinkedSpecificationItem> linkedItems;
+    private final LinkedItemIndex index;
 
     /**
      * Create a {@link Linker} for specification items.
@@ -16,7 +16,16 @@ public class Linker
      */
     public Linker(final List<SpecificationItem> items)
     {
-        this.items = items;
+        this.linkedItems = wrapItems(items);
+        this.index = LinkedItemIndex.createFromWrappedItems(this.linkedItems);
+    }
+
+    private List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
+    {
+        final List<LinkedSpecificationItem> linkedItems = items.stream() //
+                .map(LinkedSpecificationItem::new) //
+                .collect(Collectors.toList());
+        return linkedItems;
     }
 
     /**
@@ -26,9 +35,48 @@ public class Linker
      */
     public List<LinkedSpecificationItem> link()
     {
-        final List<LinkedSpecificationItem> linkedItems = this.items.stream().map(item -> {
-            return new LinkedSpecificationItem(item);
-        }).collect(Collectors.toList());
-        return linkedItems;
+
+        for (final LinkedSpecificationItem linkedItem : this.linkedItems)
+        {
+            linkItem(linkedItem);
+        }
+        return this.linkedItems;
     }
+
+    private void linkItem(final LinkedSpecificationItem item)
+    {
+        for (final SpecificationItemId id : item.getCoveredIds())
+        {
+            LinkedSpecificationItem coveredLinkedItem;
+            if ((coveredLinkedItem = this.index.getById(id)) != null)
+            {
+                if (coveredLinkedItem.getItem().getNeedsArtifactTypes()
+                        .contains(item.getId().getArtifactType()))
+                {
+                    item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERS);
+                }
+                else
+                {
+                    item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.UNWANTED);
+                }
+            }
+            else
+            {
+                final List<LinkedSpecificationItem> coveredLinkedItems = this.index
+                        .getByIdIgnoringVersion(id);
+                for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
+                {
+                    if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
+                    {
+                        item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.OUTDATED);
+                    }
+                    else
+                    {
+                        item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.PREDATED);
+                    }
+                }
+            }
+        }
+    }
+
 }

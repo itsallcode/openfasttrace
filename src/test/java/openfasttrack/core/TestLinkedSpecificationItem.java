@@ -12,18 +12,14 @@ import org.mockito.MockitoAnnotations;
 public class TestLinkedSpecificationItem
 {
     private LinkedSpecificationItem linkedItem;
-    private LinkedSpecificationItem coveredLinkedItem;
     @Mock
     private SpecificationItem itemMock;
-    @Mock
-    private SpecificationItem coveredItemMock;
 
     @Before
     public void prepareAllTests()
     {
         MockitoAnnotations.initMocks(this);
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
-        this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
     }
 
     @Test
@@ -33,9 +29,10 @@ public class TestLinkedSpecificationItem
     }
 
     @Test
-    public void testLinkToCovered()
+    public void testLinkWithStatus()
     {
-        this.linkedItem.addCovered(this.coveredLinkedItem);
-        assertThat(this.linkedItem.getCoveredLinks(), containsInAnyOrder(this.coveredLinkedItem));
+        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
+        assertThat(this.linkedItem.getLinksByStatus(LinkStatus.COVERS),
+                containsInAnyOrder(this.linkedItem));
     }
 }

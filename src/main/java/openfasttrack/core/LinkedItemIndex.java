@@ -18,10 +18,21 @@ public class LinkedItemIndex
 
     public static LinkedItemIndex create(final List<SpecificationItem> items)
     {
-        final List<LinkedSpecificationItem> wrappedItems = wrapItems(items);
+        return createFromWrappedItems(wrapItems(items));
+    }
+
+    private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
+    {
+        return items.stream().map(LinkedSpecificationItem::new).collect(Collectors.toList());
+    }
+
+    public static LinkedItemIndex createFromWrappedItems(
+            final List<LinkedSpecificationItem> wrappedItems)
+    {
         return new LinkedItemIndex( //
                 createIdIndex(wrappedItems), //
                 createIdIndexIgnoringVersion(wrappedItems));
+
     }
 
     private static Map<SpecificationItemIdWithoutVersion, List<LinkedSpecificationItem>> createIdIndexIgnoringVersion(
@@ -44,14 +55,9 @@ public class LinkedItemIndex
     private static LinkedSpecificationItem handleDuplicates(final LinkedSpecificationItem item1,
             final LinkedSpecificationItem item2)
     {
-        item1.addDuplicateIdItem(item2);
-        item2.addDuplicateIdItem(item1);
+        item1.addLinkToItemWithStatus(item2, LinkStatus.DUPLICATE);
+        item2.addLinkToItemWithStatus(item1, LinkStatus.DUPLICATE);
         return item1;
-    }
-
-    private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
-    {
-        return items.stream().map(LinkedSpecificationItem::new).collect(Collectors.toList());
     }
 
     public int size()

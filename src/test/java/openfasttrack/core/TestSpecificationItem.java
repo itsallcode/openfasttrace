@@ -9,9 +9,16 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import openfasttrack.matcher.SpecificationItemIdMatcher;
+
 public class TestSpecificationItem
 {
-    final static SpecificationItemId ID = SpecificationItemId.parseId("req~foobar~1");
+    final static String ARTIFACT_TYPE = "req";
+    final static String NAME = "foobar";
+    final static int REVISION = 1;
+    final static String ID_AS_TEXT = ARTIFACT_TYPE + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
+            + NAME + SpecificationItemId.REVISION_SEPARATOR + REVISION;
+    final static SpecificationItemId ID = SpecificationItemId.parseId(ID_AS_TEXT);
     final static String DESCRIPTION = "This is a description\nwith multiple lines";
     final static String RATIONALE = "A rationale\nwith multiple lines";
     final static String COMMENT = "A comment\nwith multiple lines";
@@ -64,7 +71,7 @@ public class TestSpecificationItem
         }
         for (final String neededArtifactType : NEEDED_ARTIFACT_TYPES)
         {
-            builder.addNeededArtifactType(neededArtifactType);
+            builder.addNeedsArtifactType(neededArtifactType);
         }
         final SpecificationItem item = builder.build();
         assertSimpleItemComplete(item);
@@ -75,6 +82,15 @@ public class TestSpecificationItem
     {
         assertThat(item.getCoveredIds(), equalTo(COVERED_IDS));
         assertThat(item.getDependOnIds(), equalTo(DEPEND_ON_IDS));
-        assertThat(item.getNeededArtifactTypes(), equalTo(NEEDED_ARTIFACT_TYPES));
+        assertThat(item.getNeedsArtifactTypes(), equalTo(NEEDED_ARTIFACT_TYPES));
+    }
+
+    @Test
+    public void testBuildSpecificationItemFromSeparateIdParts()
+    {
+        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
+        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        final SpecificationItem item = builder.build();
+        assertThat(item.getId(), SpecificationItemIdMatcher.equalTo(ID));
     }
 }

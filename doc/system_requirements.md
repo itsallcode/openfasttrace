@@ -28,17 +28,17 @@ Needs: req
 
 # High Level Requirements
 
-## Forward Coverage Status
-`req~forward_coverage_status~1` <a id="req~forward_coverage_status~1"></a>
+## Needed Coverage Status
+`req~needed_coverage_status~1` <a id="req~needed_coverage_status~1"></a>
 
-OFT determines the forward coverage status of a requirement. "Forward" in this context means that the coverage is checked from the perspective of the item that needs to be covered.
+OFT determines the status of the needed coverage of a specification item.
 
 The possible results are:
 
-  1. Covered: a specification item requires coverage and is covered by one or more other specification items
+  1. OK:        a specification item requires coverage and is covered by one or more other specification items
   2. Uncovered: an specification item requires coverage but is not covered
-  3. Outdated: coverage exists but points to a lower revision number of the requester
-  4. Predated: coverage exists but points to a higher revision number of the requester
+  3. Outdated:  coverage exists but points to a lower revision number of the requester
+  4. Predated:  coverage exists but points to a higher revision number of the requester
 
 Covers:
 
@@ -49,14 +49,16 @@ Needs: dsn
 ## Backward Coverage Status
 `req~backward_coverage_status~1` <a id="req~backward_coverage_status~1"></a>
 
-OFT determines the Backward coverage status of a requirement. "Backward" means that the link towards the requester is checked from the perspective of the item that provider.
+OFT determines the Backward coverage status of a requirement. "Backward" means that the links towards the requester are checked from the perspective of the item that provider.
 
 The possible results are:
 
-  1. Covers
-  2. Orphaned: the provider claims to cover a non-existent requester
-  3. Outdated: the provider covers a lower revision number than the requester actually has requester
-  4. Predated: the provider covers a higher revision number
+  1. Ok
+  2. Unwanted:  the covered item exists (in any revision) but wants to be covered in a different artifact type
+  3. Orphaned:  the provider claims to cover a non-existent requester
+  4. Outdated:  the provider covers a lower revision number than the requester actually has
+  5. Predated:  the provider covers a higher revision number than the requester actually has
+  6. Ambiguous: the covered item has one or more duplicates (in any revision)
 
 Covers:
 

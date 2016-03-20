@@ -14,6 +14,7 @@ public class SpecificationItemId
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
+    public final static int REVISION_WILDCARD = Integer.MIN_VALUE;
     private final String name;
     private final int revision;
     private final String artifactType;
@@ -68,7 +69,6 @@ public class SpecificationItemId
     }
 
     @Override
-    @Generated(value = "Eclipse")
     public boolean equals(final Object obj)
     {
         if (this == obj)
@@ -90,7 +90,8 @@ public class SpecificationItemId
             {
                 return false;
             }
-        } else if (!this.artifactType.equals(other.artifactType))
+        }
+        else if (!this.artifactType.equals(other.artifactType))
         {
             return false;
         }
@@ -100,11 +101,12 @@ public class SpecificationItemId
             {
                 return false;
             }
-        } else if (!this.name.equals(other.name))
+        }
+        else if (!this.name.equals(other.name))
         {
             return false;
         }
-        if (this.revision != other.revision)
+        if ((other.revision != REVISION_WILDCARD) && (this.revision != other.revision))
         {
             return false;
         }
@@ -121,6 +123,57 @@ public class SpecificationItemId
                 .append(REVISION_SEPARATOR) //
                 .append(this.revision);
         return builder.toString();
+    }
+
+    public SpecificationItemId toRevisionWildcard()
+    {
+        return new Builder().artifactType(this.artifactType).name(this.name).revisionWildcard()
+                .build();
+    }
+
+    /**
+     * Parse a string for a specification item ID
+     *
+     * @param idText
+     *            the string to be parsed
+     * @return the specification item ID
+     */
+    public static SpecificationItemId parseId(final String idText)
+    {
+        return new Builder(idText).build();
+    }
+
+    /**
+     * Create a specification item ID
+     *
+     * @param artifactType
+     *            the artifact type
+     * @param name
+     *            the specification item name
+     * @param revision
+     *            the revision
+     * @return the specification item ID
+     */
+    public static SpecificationItemId createId(final String artifactType, final String name,
+            final int revision)
+    {
+        return new SpecificationItemId.Builder().artifactType(artifactType).name(name)
+                .revision(revision).build();
+    }
+
+    /**
+     * Create a specification item ID with a revision wildcard
+     *
+     * @param artifactType
+     *            the artifact type
+     * @param name
+     *            the specification item name
+     * @return the specification item ID
+     */
+    public static SpecificationItemId createId(final String artifactType, final String name)
+    {
+        return new SpecificationItemId.Builder().artifactType(artifactType).name(name)
+                .revisionWildcard().build();
     }
 
     /**
@@ -193,6 +246,17 @@ public class SpecificationItemId
         }
 
         /**
+         * Turn the ID into an ID with a revision wildcard.
+         *
+         * @return this builder
+         */
+        public Builder revisionWildcard()
+        {
+            this.revision = SpecificationItemId.REVISION_WILDCARD;
+            return this;
+        }
+
+        /**
          * Build a specification item ID
          *
          * @return the ID
@@ -202,7 +266,8 @@ public class SpecificationItemId
             if (this.id == null)
             {
                 validateFields();
-            } else
+            }
+            else
             {
                 parseId();
             }
@@ -226,23 +291,12 @@ public class SpecificationItemId
                 this.artifactType = matcher.group(1);
                 this.name = matcher.group(2);
                 this.revision = Integer.parseInt(matcher.group(3));
-            } else
+            }
+            else
             {
                 throw new IllegalStateException(
                         "String \"" + this.id + "\" cannot be parsed to a specification item ID");
             }
         }
-    }
-
-    /**
-     * Parse a string for a specification item ID
-     *
-     * @param idText
-     *            the string to be parsed
-     * @return the specification item ID
-     */
-    public static SpecificationItemId parseId(final String idText)
-    {
-        return new Builder(idText).build();
     }
 }

@@ -10,7 +10,7 @@ import openfasttrack.core.SpecificationItemId;
 /**
  * Unit test for {@link SpecificationItemMatcher}
  */
-public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
+public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 {
     private final static SpecificationItemId ID1 = new SpecificationItemId.Builder()
             .artifactType("artifactType").name("name").revision(42).build();
@@ -36,7 +36,7 @@ public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
     @Test
     public void testFilledObjectMultipleIdsMatches()
     {
-        assertMatch(baseBuilder().addCoveredId(ID4).addDependOnId(ID4).addNeededArtifactType("ID4")
+        assertMatch(baseBuilder().addCoveredId(ID4).addDependOnId(ID4).addNeedsArtifactType("ID4")
                 .build());
     }
 
@@ -61,7 +61,7 @@ public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
     @Test
     public void testDifferentNeededArtifactType()
     {
-        assertDifferentFromBase(baseBuilder().addNeededArtifactType("ID4"));
+        assertDifferentFromBase(baseBuilder().addNeedsArtifactType("ID4"));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
     private Builder baseBuilder()
     {
         return new SpecificationItem.Builder().id(ID1).addCoveredId(ID2).addDependOnId(ID3)
-                .addNeededArtifactType("neededType").comment("comment").description("description")
+                .addNeedsArtifactType("neededType").comment("comment").description("description")
                 .rationale("rationale");
     }
 
@@ -104,11 +104,5 @@ public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
     protected Matcher<? super SpecificationItem> createMatcher(final SpecificationItem object)
     {
         return SpecificationItemMatcher.equalTo(object);
-    }
-
-    @Override
-    protected Class<SpecificationItem> getType()
-    {
-        return SpecificationItem.class;
     }
 }

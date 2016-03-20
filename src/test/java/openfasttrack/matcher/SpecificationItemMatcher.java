@@ -13,22 +13,24 @@ import openfasttrack.core.SpecificationItem;
 import openfasttrack.matcher.config.ConfigurableMatcher;
 import openfasttrack.matcher.config.MatcherConfig;
 
+/**
+ * {@link Matcher} for {@link SpecificationItem}
+ */
 public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationItem>
 {
-    public SpecificationItemMatcher(final SpecificationItem expected)
+    private SpecificationItemMatcher(final SpecificationItem expected)
     {
         super(MatcherConfig.builder(expected) //
-                .addGenericProperty("id", SpecificationItem::getId,
-                        SpecificationItemIdMatcher::equalTo) //
-                .addStringProperty("comment", SpecificationItem::getComment) //
-                .addStringProperty("description", SpecificationItem::getDescription) //
-                .addStringProperty("rationale", SpecificationItem::getRationale) //
+                .addProperty("id", SpecificationItem::getId, SpecificationItemIdMatcher::equalTo) //
+                .addEqualsProperty("comment", SpecificationItem::getComment) //
+                .addEqualsProperty("description", SpecificationItem::getDescription) //
+                .addEqualsProperty("rationale", SpecificationItem::getRationale) //
                 .addIterableProperty("coveredIds", SpecificationItem::getCoveredIds,
                         SpecificationItemIdMatcher::equalTo) //
                 .addIterableProperty("dependsOnIds", SpecificationItem::getDependOnIds,
                         SpecificationItemIdMatcher::equalTo) //
                 .addIterableProperty("neededArtifactTypes",
-                        SpecificationItem::getNeededArtifactTypes, Matchers::equalTo) //
+                        SpecificationItem::getNeedsArtifactTypes, Matchers::equalTo) //
                 .build());
     }
 

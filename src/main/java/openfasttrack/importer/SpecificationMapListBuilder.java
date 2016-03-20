@@ -72,7 +72,7 @@ public class SpecificationMapListBuilder implements ImportEventListener
     @Override
     public void addNeededArtifactType(final String artifactType)
     {
-        this.itemBuilder.addNeededArtifactType(artifactType);
+        this.itemBuilder.addNeedsArtifactType(artifactType);
     }
 
     /**

@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -20,6 +21,8 @@ import openfasttrack.exporter.ExporterException;
 
 public class SpecobjectExporter implements Exporter
 {
+    private final static Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
+
     private final XMLStreamWriter writer;
     private final Map<String, List<LinkedSpecificationItem>> items;
 
@@ -48,6 +51,23 @@ public class SpecobjectExporter implements Exporter
         {
             throw new ExporterException("Error exporting to specobject format", e);
         }
+        finally
+        {
+            closeXmlWriter();
+        }
+    }
+
+    private void closeXmlWriter()
+    {
+        try
+        {
+            LOG.finest(() -> "Closing xml writer");
+            this.writer.close();
+        }
+        catch (final XMLStreamException e)
+        {
+            throw new ExporterException("Error closing xml writer", e);
+        }
     }
 
     private void writeOutput() throws XMLStreamException
@@ -57,17 +77,26 @@ public class SpecobjectExporter implements Exporter
 
         for (final Entry<String, List<LinkedSpecificationItem>> entry : this.items.entrySet())
         {
-            this.writer.writeStartElement("specobjects");
-            this.writer.writeAttribute("doctype", entry.getKey());
-            for (final LinkedSpecificationItem item : entry.getValue())
-            {
-                writeItem(item.getItem());
-            }
-            this.writer.writeEndElement();
+            final String doctype = entry.getKey();
+            final List<LinkedSpecificationItem> specItems = entry.getValue();
+            writeItems(doctype, specItems);
         }
 
         this.writer.writeEndElement();
         this.writer.writeEndDocument();
+    }
+
+    private void writeItems(final String doctype, final List<LinkedSpecificationItem> specItems)
+            throws XMLStreamException
+    {
+        LOG.finest(() -> "Writing " + specItems.size() + " items with doctype " + doctype);
+        this.writer.writeStartElement("specobjects");
+        this.writer.writeAttribute("doctype", doctype);
+        for (final LinkedSpecificationItem item : specItems)
+        {
+            writeItem(item.getItem());
+        }
+        this.writer.writeEndElement();
     }
 
     private void writeItem(final SpecificationItem item) throws XMLStreamException
@@ -79,42 +108,58 @@ public class SpecobjectExporter implements Exporter
         writeElement("rationale", item.getRationale());
         writeElement("comment", item.getComment());
 
-        if (!item.getNeedsArtifactTypes().isEmpty())
-        {
+        writeNeedsArtifactTypes(item.getNeedsArtifactTypes());
+        writeCoveredIds(item.getCoveredIds());
+        writeDependsOnIds(item.getDependOnIds());
 
-            this.writer.writeStartElement("needscoverage");
-            for (final String neededArtifactType : item.getNeedsArtifactTypes())
-            {
-                writeElement("needsobj", neededArtifactType);
-            }
+        this.writer.writeEndElement();
+    }
+
+    private void writeDependsOnIds(final List<SpecificationItemId> dependOnIds)
+            throws XMLStreamException
+    {
+        if (dependOnIds.isEmpty())
+        {
+            return;
+        }
+        this.writer.writeStartElement("dependencies");
+        for (final SpecificationItemId dependsOnId : dependOnIds)
+        {
+            writeElement("dependson", dependsOnId.toString());
+        }
+        this.writer.writeEndElement();
+    }
+
+    private void writeCoveredIds(final List<SpecificationItemId> coveredIds)
+            throws XMLStreamException
+    {
+        if (coveredIds.isEmpty())
+        {
+            return;
+        }
+        this.writer.writeStartElement("providescoverage");
+        for (final SpecificationItemId coveredId : coveredIds)
+        {
+            this.writer.writeStartElement("provcov");
+            writeElement("linksto", coveredId.getName());
+            writeElement("dstversion", coveredId.getRevision());
             this.writer.writeEndElement();
         }
+        this.writer.writeEndElement();
+    }
 
-        if (!item.getCoveredIds().isEmpty())
+    private void writeNeedsArtifactTypes(final List<String> needsArtifactTypes)
+            throws XMLStreamException
+    {
+        if (needsArtifactTypes.isEmpty())
         {
-
-            this.writer.writeStartElement("providescoverage");
-            for (final SpecificationItemId coveredId : item.getCoveredIds())
-            {
-                this.writer.writeStartElement("provcov");
-                writeElement("linksto", coveredId.getName());
-                writeElement("dstversion", coveredId.getRevision());
-                this.writer.writeEndElement();
-            }
-            this.writer.writeEndElement();
+            return;
         }
-
-        if (!item.getDependOnIds().isEmpty())
+        this.writer.writeStartElement("needscoverage");
+        for (final String neededArtifactType : needsArtifactTypes)
         {
-
-            this.writer.writeStartElement("dependencies");
-            for (final SpecificationItemId dependsOnId : item.getDependOnIds())
-            {
-                writeElement("dependson", dependsOnId.toString());
-            }
-            this.writer.writeEndElement();
+            writeElement("needsobj", neededArtifactType);
         }
-
         this.writer.writeEndElement();
     }
 

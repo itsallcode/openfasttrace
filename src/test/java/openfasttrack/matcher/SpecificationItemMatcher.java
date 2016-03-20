@@ -8,6 +8,8 @@ import java.util.stream.StreamSupport;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsEmptyIterable;
+import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.matcher.config.ConfigurableMatcher;
@@ -47,5 +49,18 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
         return StreamSupport.stream(items.spliterator(), false) //
                 .map(SpecificationItemMatcher::equalTo) //
                 .collect(toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Factory
+    public static Matcher<Iterable<? extends SpecificationItem>> equalToAnyOrder(
+            final Collection<SpecificationItem> items)
+    {
+        if (items.isEmpty())
+        {
+            return IsEmptyIterable.emptyIterable();
+        }
+        return IsIterableContainingInAnyOrder
+                .<SpecificationItem> containsInAnyOrder(equalTo(items).toArray(new Matcher[0]));
     }
 }

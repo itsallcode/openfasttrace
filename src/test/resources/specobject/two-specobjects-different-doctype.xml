@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <specdocument>
-	<specobjects doctype="doctype">
+	<specobjects doctype="doctype1">
 		<specobject>
 			<id>id</id>
 			<version>42</version>
@@ -20,6 +20,15 @@
 			<dependencies>
 				<dependson>dependsOnDocType~dependsOnName~44</dependson>
 			</dependencies>
+		</specobject>
+	</specobjects>
+	<specobjects doctype="doctype2">
+		<specobject>
+			<id>id2</id>
+			<version>43</version>
+			<description>Description2</description>
+			<rationale>Rationale2</rationale>
+			<comment>Comment2</comment>
 		</specobject>
 	</specobjects>
 </specdocument>

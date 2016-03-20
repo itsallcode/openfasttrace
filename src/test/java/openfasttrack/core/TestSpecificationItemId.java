@@ -51,10 +51,17 @@ public class TestSpecificationItemId
         assertThat(id.getRevision(), equalTo(999));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testParseIdFailsForWildcardRevision()
+    {
+        parseId("feat~foo~" + SpecificationItemId.REVISION_WILDCARD);
+    }
+
     @Test
     public void testParseId_mustFailForIllegalIds()
     {
-        final String[] negatives = { "feat.foo~1", "foo~1", "req~foo" };
+        final String[] negatives = { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1",
+                "req~1foo~1", "req~.foo~1", "req~foo~-1" };
 
         for (final String sample : negatives)
         {
@@ -90,6 +97,15 @@ public class TestSpecificationItemId
         final Builder builder = new Builder();
         builder.artifactType("dsn").name("dummy").revision(3);
         assertThat(builder.build().toString(), equalTo("dsn~dummy~3"));
+    }
+
+    @Test
+    public void testToStringRevisionWildcard()
+    {
+        final Builder builder = new Builder();
+        builder.artifactType("dsn").name("dummy").revisionWildcard();
+        assertThat(builder.build().toString(),
+                equalTo("dsn~dummy~" + SpecificationItemId.REVISION_WILDCARD));
     }
 
     public void testCreate_WithRevisionWildcard()

@@ -10,7 +10,7 @@ import openfasttrack.core.SpecificationItemId;
 /**
  * Unit test for {@link SpecificationItemMatcher}
  */
-public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
+public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 {
     private final static SpecificationItemId ID1 = new SpecificationItemId.Builder()
             .artifactType("artifactType").name("name").revision(42).build();
@@ -104,11 +104,5 @@ public class TestSpecificationItemMatcher extends MatcherTest<SpecificationItem>
     protected Matcher<? super SpecificationItem> createMatcher(final SpecificationItem object)
     {
         return SpecificationItemMatcher.equalTo(object);
-    }
-
-    @Override
-    protected Class<SpecificationItem> getType()
-    {
-        return SpecificationItem.class;
     }
 }

@@ -14,13 +14,18 @@ class MismatchReporter
     private boolean firstMismatch = true;
     private boolean matches = true;
 
-    MismatchReporter(final Description mismatchDescription)
+    private MismatchReporter(final Description mismatchDescription)
     {
         this.mismatchDescription = mismatchDescription;
-        this.mismatchDescription.appendText("{");
     }
 
-    public boolean finishAndCheckMatching()
+    static MismatchReporter start(final Description mismatchDescription)
+    {
+        mismatchDescription.appendText("{");
+        return new MismatchReporter(mismatchDescription);
+    }
+
+    boolean finishAndCheckMatching()
     {
         this.mismatchDescription.appendText("}");
         return this.matches;
@@ -35,13 +40,6 @@ class MismatchReporter
             this.matches = false;
         }
         return this;
-    }
-
-    void reportMismatch(final String message)
-    {
-        this.matches = false;
-        appendComma();
-        this.mismatchDescription.appendText(message);
     }
 
     private void reportMismatch(final String name, final Matcher<?> matcher, final Object item)

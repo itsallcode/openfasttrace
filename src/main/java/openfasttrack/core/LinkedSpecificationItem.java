@@ -2,7 +2,7 @@ package openfasttrack.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +13,8 @@ public class LinkedSpecificationItem
 {
 
     private final SpecificationItem item;
-    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new HashMap<LinkStatus, List<LinkedSpecificationItem>>();
+    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
+            LinkStatus.class);
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.

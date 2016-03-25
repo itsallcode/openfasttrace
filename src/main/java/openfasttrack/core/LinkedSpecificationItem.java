@@ -3,8 +3,10 @@ package openfasttrack.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Specification items with links that can be followed.
@@ -15,6 +17,7 @@ public class LinkedSpecificationItem
     private final SpecificationItem item;
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
+    private final Set<String> coveredArtifactTypes = new HashSet<>();
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
@@ -92,5 +95,26 @@ public class LinkedSpecificationItem
     public List<String> getNeededArtifactTypes()
     {
         return this.getItem().getNeedsArtifactTypes();
+    }
+
+    /**
+     * Add a covered artifact type.
+     *
+     * @param artifactType
+     *            the covered artifact type.
+     */
+    public void addCoveredArtifactType(final String artifactType)
+    {
+        this.coveredArtifactTypes.add(artifactType);
+    }
+
+    /**
+     * Get the artifact type which are covered.
+     *
+     * @return the list of covered artifact types.
+     */
+    public Set<String> getCoveredArtifactTypes()
+    {
+        return this.coveredArtifactTypes;
     }
 }

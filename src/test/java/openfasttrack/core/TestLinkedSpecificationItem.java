@@ -1,7 +1,9 @@
 package openfasttrack.core;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static openfasttrack.core.SampleArtifactTypes.REQ;
+import static openfasttrack.core.SampleArtifactTypes.UMAN;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
@@ -34,5 +36,13 @@ public class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
         assertThat(this.linkedItem.getLinksByStatus(LinkStatus.COVERS),
                 containsInAnyOrder(this.linkedItem));
+    }
+
+    @Test
+    public void testGetCoveredArtifactTypes()
+    {
+        this.linkedItem.addCoveredArtifactType(UMAN);
+        this.linkedItem.addCoveredArtifactType(REQ);
+        assertThat(this.linkedItem.getCoveredArtifactTypes(), containsInAnyOrder(UMAN, REQ));
     }
 }

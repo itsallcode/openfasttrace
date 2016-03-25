@@ -68,10 +68,12 @@ public class Linker
     private void linkMatchingRevision(final LinkedSpecificationItem covering,
             final LinkedSpecificationItem covered)
     {
-        if (covered.getItem().getNeedsArtifactTypes().contains(covering.getId().getArtifactType()))
+        final String coveringArtifactType = covering.getId().getArtifactType();
+        if (covered.getItem().getNeedsArtifactTypes().contains(coveringArtifactType))
         {
             covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
             covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
+            covered.addCoveredArtifactType(coveringArtifactType);
         }
         else
         {

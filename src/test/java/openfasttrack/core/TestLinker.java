@@ -1,13 +1,21 @@
 package openfasttrack.core;
 
+import static openfasttrack.core.SampleArtifactTypes.DSN;
+import static openfasttrack.core.SampleArtifactTypes.IMPL;
+import static openfasttrack.core.SampleArtifactTypes.OMAN;
+import static openfasttrack.core.SampleArtifactTypes.REQ;
+import static openfasttrack.core.SampleArtifactTypes.UMAN;
 import static openfasttrack.core.SpecificationItemBuilders.prepare;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestLinker
@@ -22,15 +30,13 @@ public class TestLinker
 
     static
     {
-        A = prepare("req", "A", 2).addNeedsArtifactType("dsn").build();
-        B = prepare("dsn", "B", 2).addCoveredId(A.getId()).build();
-        C = prepare("dsn", "D", 2).addCoveredId(SpecificationItemId.createId("req", "A", 1))
-                .build();
-        D = prepare("dsn", "E", 2).addCoveredId(SpecificationItemId.createId("req", "A", 3))
-                .build();
-        E = prepare("impl", "C", 2).addCoveredId(A.getId()).build();
-        F = prepare("req", "F", 2).build();
-        G = prepare("dsn", "G", 2).addNeedsArtifactType("uman").build();
+        A = prepare(REQ, "A", 2).addNeedsArtifactType(DSN).addNeedsArtifactType(OMAN).build();
+        B = prepare(DSN, "B", 2).addCoveredId(A.getId()).build();
+        C = prepare(DSN, "D", 2).addCoveredId(SpecificationItemId.createId(REQ, "A", 1)).build();
+        D = prepare(DSN, "E", 2).addCoveredId(SpecificationItemId.createId(REQ, "A", 3)).build();
+        E = prepare(IMPL, "C", 2).addCoveredId(A.getId()).build();
+        F = prepare(REQ, "F", 2).build();
+        G = prepare(DSN, "G", 2).addNeedsArtifactType(UMAN).build();
     }
 
     // @formatter:off
@@ -45,14 +51,28 @@ public class TestLinker
         };
     // @formatter:on
 
-    @Test
-    public void testLink()
+    private Linker linker;
+    private List<SpecificationItem> items;
+    private List<LinkedSpecificationItem> linkedItems;
+
+    @Before
+    public void prepareTest()
     {
-        final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F, G);
-        final Linker linker = new Linker(items);
-        final List<LinkedSpecificationItem> linkedItems = linker.link();
-        assertThat(linkedItems, hasSize(items.size()));
-        final Iterator<LinkedSpecificationItem> iterator = linkedItems.iterator();
+        this.items = Arrays.asList(A, B, C, D, E, F, G);
+        this.linker = new Linker(this.items);
+        this.linkedItems = this.linker.link();
+    }
+
+    @Test
+    public void testItemInCountEqualsItemOutCount()
+    {
+        assertThat(this.linkedItems, hasSize(this.items.size()));
+    }
+
+    @Test
+    public void testLinkStatus()
+    {
+        final Iterator<LinkedSpecificationItem> iterator = this.linkedItems.iterator();
         for (final int[] expectedCounts : LINK_MATRIX)
         {
             final LinkedSpecificationItem item = iterator.next();
@@ -73,5 +93,12 @@ public class TestLinker
         final String message = item.getId().toString() + " must have " + count
                 + " links with status " + status.toString();
         assertThat(message, item.getLinksByStatus(status), hasSize(count));
+    }
+
+    @Test
+    public void testGetCoveredArtifactTypes()
+    {
+        assertThat(this.linkedItems.get(0).getCoveredArtifactTypes(), containsInAnyOrder(DSN));
+        assertThat(this.linkedItems.get(1).getCoveredArtifactTypes(), empty());
     }
 }

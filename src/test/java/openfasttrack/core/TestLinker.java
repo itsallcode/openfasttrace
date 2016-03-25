@@ -18,6 +18,7 @@ public class TestLinker
     private static final SpecificationItem D;
     private static final SpecificationItem E;
     private static final SpecificationItem F;
+    private static final SpecificationItem G;
 
     static
     {
@@ -29,23 +30,25 @@ public class TestLinker
                 .build();
         E = prepare("impl", "C", 2).addCoveredId(A.getId()).build();
         F = prepare("req", "F", 2).build();
+        G = prepare("dsn", "G", 2).addNeedsArtifactType("uman").build();
     }
 
     // @formatter:off
     private static final int[][] LINK_MATRIX =
         {
-                {0, 0, 0, 0},
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}
+                // CVS | OUT | PRE | UNW | CVS | COU | CPR | CUN
+                {    0 ,   0 ,   0 ,   0 ,   1 ,   1 ,   1 ,   1 },
+                {    1 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 },
+                {    0 ,   1 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 },
+                {    0 ,   0 ,   1 ,   0 ,   0 ,   0 ,   0 ,   0 },
+                {    0 ,   0 ,   0 ,   1 ,   0 ,   0 ,   0 ,   0 },
         };
     // @formatter:on
 
     @Test
     public void testLink()
     {
-        final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F);
+        final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F, G);
         final Linker linker = new Linker(items);
         final List<LinkedSpecificationItem> linkedItems = linker.link();
         assertThat(linkedItems, hasSize(items.size()));
@@ -57,6 +60,10 @@ public class TestLinker
             assertItemLinkStatusCount(item, LinkStatus.OUTDATED, expectedCounts[1]);
             assertItemLinkStatusCount(item, LinkStatus.PREDATED, expectedCounts[2]);
             assertItemLinkStatusCount(item, LinkStatus.UNWANTED, expectedCounts[3]);
+            assertItemLinkStatusCount(item, LinkStatus.COVERED_SHALLOW, expectedCounts[4]);
+            assertItemLinkStatusCount(item, LinkStatus.COVERED_OUTDATED, expectedCounts[5]);
+            assertItemLinkStatusCount(item, LinkStatus.COVERED_PREDATED, expectedCounts[6]);
+            assertItemLinkStatusCount(item, LinkStatus.COVERED_UNWANTED, expectedCounts[7]);
         }
     }
 

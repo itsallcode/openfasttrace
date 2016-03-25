@@ -83,4 +83,14 @@ public class LinkedSpecificationItem
     {
         return this.getItem().getCoveredIds();
     }
+
+    /**
+     * Get the artifact types in which this item needs to be covered.
+     *
+     * @return list of artifact types.
+     */
+    public List<String> getNeededArtifactTypes()
+    {
+        return this.getItem().getNeedsArtifactTypes();
+    }
 }

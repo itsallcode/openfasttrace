@@ -47,34 +47,57 @@ public class Linker
     {
         for (final SpecificationItemId id : item.getCoveredIds())
         {
-            LinkedSpecificationItem coveredLinkedItem;
-            if ((coveredLinkedItem = this.index.getById(id)) != null)
+            linkItemToItemWithId(item, id);
+        }
+    }
+
+    private void linkItemToItemWithId(final LinkedSpecificationItem item,
+            final SpecificationItemId id)
+    {
+        LinkedSpecificationItem coveredLinkedItem;
+        if ((coveredLinkedItem = this.index.getById(id)) != null)
+        {
+            linkMatchingRevision(item, coveredLinkedItem);
+        }
+        else
+        {
+            linkIgnoringRevision(item, id);
+        }
+    }
+
+    private void linkMatchingRevision(final LinkedSpecificationItem covering,
+            final LinkedSpecificationItem covered)
+    {
+        if (covered.getItem().getNeedsArtifactTypes().contains(covering.getId().getArtifactType()))
+        {
+            covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
+            covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
+        }
+        else
+        {
+            covering.addLinkToItemWithStatus(covered, LinkStatus.UNWANTED);
+            covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_UNWANTED);
+        }
+    }
+
+    private void linkIgnoringRevision(final LinkedSpecificationItem item,
+            final SpecificationItemId id)
+    {
+        final List<LinkedSpecificationItem> coveredLinkedItems = this.index
+                .getByIdIgnoringVersion(id);
+        for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
+        {
+            if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
             {
-                if (coveredLinkedItem.getItem().getNeedsArtifactTypes()
-                        .contains(item.getId().getArtifactType()))
-                {
-                    item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERS);
-                }
-                else
-                {
-                    item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.UNWANTED);
-                }
+                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
+                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                        LinkStatus.COVERED_OUTDATED);
             }
             else
             {
-                final List<LinkedSpecificationItem> coveredLinkedItems = this.index
-                        .getByIdIgnoringVersion(id);
-                for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
-                {
-                    if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
-                    {
-                        item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.OUTDATED);
-                    }
-                    else
-                    {
-                        item.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.PREDATED);
-                    }
-                }
+                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
+                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                        LinkStatus.COVERED_PREDATED);
             }
         }
     }

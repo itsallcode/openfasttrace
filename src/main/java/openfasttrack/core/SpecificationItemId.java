@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
  */
-public class SpecificationItemId
+public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
@@ -298,5 +298,27 @@ public class SpecificationItemId
                         "String \"" + this.id + "\" cannot be parsed to a specification item ID");
             }
         }
+    }
+
+    @Override
+    public int compareTo(final SpecificationItemId other)
+    {
+        int compared = (this.getArtifactType().compareTo(other.getArtifactType()));
+        if (compared == 0)
+        {
+            compared = (this.getName().compareTo(other.getName()));
+            if (compared == 0)
+            {
+                if (this.getRevision() > other.getRevision())
+                {
+                    compared = 1;
+                }
+                else if (this.getRevision() < other.getRevision())
+                {
+                    compared = -1;
+                }
+            }
+        }
+        return compared;
     }
 }

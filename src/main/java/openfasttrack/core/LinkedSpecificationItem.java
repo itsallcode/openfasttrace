@@ -92,7 +92,7 @@ public class LinkedSpecificationItem
      *
      * @return list of artifact types.
      */
-    public List<String> getNeededArtifactTypes()
+    public List<String> getNeedsArtifactTypes()
     {
         return this.getItem().getNeedsArtifactTypes();
     }
@@ -116,5 +116,31 @@ public class LinkedSpecificationItem
     public Set<String> getCoveredArtifactTypes()
     {
         return this.coveredArtifactTypes;
+    }
+
+    /**
+     * Check if the item is covered shallow (i.e. if for all needed artifact
+     * types coverage exists without recursive search).
+     *
+     * @return <code>true</code> if the item is covered
+     */
+    public boolean isCoveredShallow()
+    {
+        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+    }
+
+    /**
+     * Check if this item and all items providing coverage for it are covered.
+     *
+     * @return true if the item is covered recursively.
+     */
+    public boolean isCoveredDeeply()
+    {
+        boolean covered = isCoveredShallow();
+        for (final LinkedSpecificationItem coveringItem : getLinksByStatus(LinkStatus.COVERS))
+        {
+            covered = (covered && coveringItem.isCoveredDeeply());
+        }
+        return covered;
     }
 }

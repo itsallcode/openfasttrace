@@ -31,9 +31,24 @@ public class LinkedSpecificationItem
         this.item = item;
     }
 
+    /**
+     * Get the ID of the specification item.
+     *
+     * @return ID of the specification item
+     */
     public SpecificationItemId getId()
     {
         return this.item.getId();
+    }
+
+    /**
+     * Get the description of the specification item.
+     *
+     * @return the description
+     */
+    public String getDescription()
+    {
+        return this.item.getDescription();
     }
 
     /**
@@ -47,7 +62,7 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Add a link to another item with a status
+     * Add a link to another item with a status.
      *
      * @param item
      *            the item to be linked to
@@ -66,7 +81,7 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get all links to the items by item status..
+     * Get all links to the items by item status.
      *
      * @return the covered items
      */
@@ -142,5 +157,16 @@ public class LinkedSpecificationItem
             covered = (covered && coveringItem.isCoveredDeeply());
         }
         return covered;
+    }
+
+    /**
+     * Check if the item is clean (i.e. covered deeply and not having any broken
+     * links)
+     *
+     * @return <code>true</code> if the item is clean.
+     */
+    public boolean isOk()
+    {
+        return isCoveredDeeply();
     }
 }

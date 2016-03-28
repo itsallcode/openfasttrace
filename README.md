@@ -24,7 +24,13 @@ OpenFastTrack needs a Java JDK 8 (or later) implementation and Maven as build to
 
 Run `mvn test` to run unit tests.
 
-## Publishing to jcenter
+### License file header
+
+* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase, that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
+* To update files with correct license headers and generate file `LICENSE.txt`, run command `mvn license:update-project-license license:update-file-header`
+
+
+### Publishing to jcenter
 
 To publish to jcenter
 

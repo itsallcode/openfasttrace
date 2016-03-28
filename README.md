@@ -24,6 +24,13 @@ OpenFastTrack needs a Java JDK 8 (or later) implementation and Maven as build to
 
 Run `mvn test` to run unit tests.
 
+### Configure logging
+
+We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:
+```
+-Djava.util.logging.config.file=src/test/resources/logging.properties
+```
+
 ### License file header
 
 * We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase, that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.

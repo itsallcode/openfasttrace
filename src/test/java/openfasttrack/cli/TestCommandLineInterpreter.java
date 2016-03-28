@@ -10,12 +10,12 @@ package openfasttrack.cli;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -40,6 +40,18 @@ public class TestCommandLineInterpreter
         assertThat(stub.getA(), equalTo("value_a"));
     }
 
+    @Test(expected = CliException.class)
+    public void testMissingValueForStringParameter()
+    {
+        parseArguments("-a");
+    }
+
+    @Test(expected = CliException.class)
+    public void testUnexpectedArgumentName()
+    {
+        parseArguments("-unexpected");
+    }
+
     @Test
     public void testGetNamedBooleanParamter()
     {
@@ -53,6 +65,14 @@ public class TestCommandLineInterpreter
         final String[] args = { "value_1", "value_2" };
         final CommandLineArgumentsStub stub = parseArguments(args);
         assertThat(stub.getUnnamedValues(), equalTo(asList(args)));
+    }
+
+    @Test(expected = CliException.class)
+    public void testNoSetterForUnnamedParameters()
+    {
+        final String[] args = { "value_1", "value_2" };
+        new CommandLineInterpreter(args, new CommandLineArgumentsStubWithoutUnnamedParameters())
+                .parse();
     }
 
     @Test
@@ -73,5 +93,10 @@ public class TestCommandLineInterpreter
         final CommandLineInterpreter cli = new CommandLineInterpreter(args, stub);
         cli.parse();
         return stub;
+    }
+
+    private static class CommandLineArgumentsStubWithoutUnnamedParameters
+    {
+
     }
 }

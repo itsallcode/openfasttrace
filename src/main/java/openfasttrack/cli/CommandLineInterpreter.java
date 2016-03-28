@@ -10,12 +10,12 @@ package openfasttrack.cli;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -115,7 +115,7 @@ public class CommandLineInterpreter
         }
         else
         {
-            reportUnexpectedNamedArgument();
+            reportUnexpectedNamedArgument(argumentName);
         }
     }
 
@@ -124,9 +124,9 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private void reportUnexpectedNamedArgument()
+    private void reportUnexpectedNamedArgument(final String argument)
     {
-        // TODO Auto-generated method stub
+        throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
 
     private void handleExpectedNamedArgument(final ListIterator<String> iterator,
@@ -146,7 +146,7 @@ public class CommandLineInterpreter
                 if (isParamterName(successor))
                 {
                     iterator.previous();
-                    reportMissingParamterValue();
+                    reportMissingParamterValue(argumentName);
                 }
                 else
                 {
@@ -155,15 +155,14 @@ public class CommandLineInterpreter
             }
             else
             {
-                reportMissingParamterValue();
+                reportMissingParamterValue(argumentName);
             }
         }
     }
 
-    private void reportMissingParamterValue()
+    private void reportMissingParamterValue(final String argumentName)
     {
-        // TODO Auto-generated method stub
-
+        throw new CliException("No value for argument '" + argumentName + "'");
     }
 
     private void assignStringValue(final Method setter, final String value)
@@ -174,8 +173,8 @@ public class CommandLineInterpreter
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new CliException(
+                    "Error calling setter " + setter + " with argument '" + value + "'", e);
         }
     }
 
@@ -192,8 +191,8 @@ public class CommandLineInterpreter
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new CliException(
+                    "Error calling setter " + setter + " with argument '" + isSet + "'", e);
         }
     }
 
@@ -208,9 +207,15 @@ public class CommandLineInterpreter
             }
             catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new CliException(
+                        "Error calling setter " + this.setters.get(UNNAMED_ARGUMENTS_SUFFIX)
+                                + " with argument '" + unnamedArguments + "'",
+                        e);
             }
+        }
+        else
+        {
+            throw new CliException("Unnamed arguments '" + unnamedArguments + "' are not allowed");
         }
     }
 }

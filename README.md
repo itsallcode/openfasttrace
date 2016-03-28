@@ -32,17 +32,16 @@ Run `mvn test` to run unit tests.
 mvn license:update-project-license license:update-file-header
 ```
 
-
 ### Publishing to jcenter
 
 To publish to jcenter
 
-* Add the following to your `~/.m2/settings.xml`
+* Add the following to your `~/.m2/settings.xml`:
 ```xml
 	<servers>
 		<server>
 			<id>bintray-openfasttrack-maven-repo</id>
-			<username>[bintray-username]‚</username>
+			<username>[bintray-username]</username>
 			<password>[bintray-api-key]</password>
 		</server>
 	</servers>

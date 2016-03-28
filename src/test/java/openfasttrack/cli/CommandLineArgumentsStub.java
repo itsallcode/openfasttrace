@@ -10,12 +10,12 @@ package openfasttrack.cli;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,8 +26,14 @@ import java.util.List;
 
 public class CommandLineArgumentsStub
 {
+    public static enum StubEnum
+    {
+        VALUE1, VALUE2;
+    }
+
     private String a;
     private boolean b;
+    private StubEnum c;
     private List<String> unnamedValues;
 
     public void setA(final String value)
@@ -38,6 +44,11 @@ public class CommandLineArgumentsStub
     public void setB(final boolean value)
     {
         this.b = value;
+    }
+
+    public void setC(final StubEnum c)
+    {
+        this.c = c;
     }
 
     public void setUnnamedValues(final List<String> values)
@@ -53,6 +64,11 @@ public class CommandLineArgumentsStub
     public boolean isB()
     {
         return this.b;
+    }
+
+    public StubEnum getC()
+    {
+        return this.c;
     }
 
     public List<String> getUnnamedValues()

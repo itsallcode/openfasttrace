@@ -103,7 +103,10 @@ public class CommandLineInterpreter
                 handleUnnamedArgument(unnamedArguments, argument);
             }
         }
-        assignUnnameArgument(unnamedArguments);
+        if (!unnamedArguments.isEmpty())
+        {
+            assignUnnameArgument(unnamedArguments);
+        }
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
@@ -133,6 +136,10 @@ public class CommandLineInterpreter
             final String argumentName)
     {
         final Method setter = this.setters.get(argumentName);
+        if (setter.getParameterTypes().length != 1)
+        {
+            reportUnsupportedSetterArgumentCount(setter);
+        }
         final Class<?> setterParameterType = setter.getParameterTypes()[0];
         if (setterParameterType.equals(boolean.class) || setterParameterType.equals(Boolean.class))
         {
@@ -158,6 +165,21 @@ public class CommandLineInterpreter
                 reportMissingParamterValue(argumentName);
             }
         }
+        else
+        {
+            reportUnsupportedSetterArgumentType(setter);
+        }
+    }
+
+    private void reportUnsupportedSetterArgumentType(final Method setter)
+    {
+        throw new CliException("Unsupported argument type for setter '" + setter + "'");
+    }
+
+    private void reportUnsupportedSetterArgumentCount(final Method setter)
+    {
+        throw new CliException("Unsupported argument count for setter '" + setter
+                + "'. Only one argument is allowed.");
     }
 
     private void reportMissingParamterValue(final String argumentName)

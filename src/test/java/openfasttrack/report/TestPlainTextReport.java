@@ -41,7 +41,7 @@ public class TestPlainTextReport
 
     private String getReportOutput(final ReportVerbosity verbosity)
     {
-        final PlainTextReport report = new PlainTextReport(this.traceMock);
+        final Reportable report = new PlainTextReport(this.traceMock);
         report.renderToStreamWithVerbosityLevel(this.outputStream, verbosity);
         final String output = this.outputStream.toString();
         return output;

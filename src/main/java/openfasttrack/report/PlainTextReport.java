@@ -10,7 +10,7 @@ import openfasttrack.core.Trace;
  * Renders a coverage report in plain text. This is intended for command line
  * application output.
  */
-public class PlainTextReport
+public class PlainTextReport implements Reportable
 {
 
     private final Trace trace;
@@ -26,14 +26,14 @@ public class PlainTextReport
         this.trace = trace;
     }
 
-    /**
-     * Render the plain text coverage report.
-     *
-     * @param outputStream
-     *            the output stream to which the report is rendered.
-     * @param verbosity
-     *            the level of detail that is reported.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * openfasttrack.report.Reportable#renderToStreamWithVerbosityLevel(java.io.
+     * OutputStream, openfasttrack.report.ReportVerbosity)
      */
+    @Override
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {

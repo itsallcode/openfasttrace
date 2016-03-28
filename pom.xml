@@ -95,7 +95,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.8</version>
 				<configuration>
-					<verbose>true</verbose>
+					<verbose>false</verbose>
 					<detail>true</detail>
 					<licenseName>gpl_v3</licenseName>
 					<organizationName>hamstercommunity</organizationName>

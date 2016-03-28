@@ -136,7 +136,7 @@ public class CommandLineInterpreter
         final Class<?> setterParameterType = setter.getParameterTypes()[0];
         if (setterParameterType.equals(boolean.class) || setterParameterType.equals(Boolean.class))
         {
-            assignBooleanValue(setter, true);
+            assignValue(setter, true);
         }
         else if (setterParameterType.equals(String.class))
         {
@@ -150,7 +150,7 @@ public class CommandLineInterpreter
                 }
                 else
                 {
-                    assignStringValue(setter, successor);
+                    assignValue(setter, successor);
                 }
             }
             else
@@ -165,7 +165,25 @@ public class CommandLineInterpreter
         throw new CliException("No value for argument '" + argumentName + "'");
     }
 
-    private void assignStringValue(final Method setter, final String value)
+    private boolean isParamterName(final String text)
+    {
+        return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
+    }
+
+    private void assignUnnameArgument(final List<String> unnamedArguments)
+    {
+        final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
+        if (unnamedArgumentSetter != null)
+        {
+            assignValue(unnamedArgumentSetter, unnamedArguments);
+        }
+        else
+        {
+            throw new CliException("Unnamed arguments '" + unnamedArguments + "' are not allowed");
+        }
+    }
+
+    private void assignValue(final Method setter, final Object value)
     {
         try
         {
@@ -175,47 +193,6 @@ public class CommandLineInterpreter
         {
             throw new CliException(
                     "Error calling setter " + setter + " with argument '" + value + "'", e);
-        }
-    }
-
-    private boolean isParamterName(final String text)
-    {
-        return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
-    }
-
-    private void assignBooleanValue(final Method setter, final boolean isSet)
-    {
-        try
-        {
-            setter.invoke(this.argumentsReceiver, isSet);
-        }
-        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-        {
-            throw new CliException(
-                    "Error calling setter " + setter + " with argument '" + isSet + "'", e);
-        }
-    }
-
-    private void assignUnnameArgument(final List<String> unnamedArguments)
-    {
-        if (this.setters.containsKey(UNNAMED_ARGUMENTS_SUFFIX))
-        {
-            try
-            {
-                this.setters.get(UNNAMED_ARGUMENTS_SUFFIX).invoke(this.argumentsReceiver,
-                        unnamedArguments);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-            {
-                throw new CliException(
-                        "Error calling setter " + this.setters.get(UNNAMED_ARGUMENTS_SUFFIX)
-                                + " with argument '" + unnamedArguments + "'",
-                        e);
-            }
-        }
-        else
-        {
-            throw new CliException("Unnamed arguments '" + unnamedArguments + "' are not allowed");
         }
     }
 }

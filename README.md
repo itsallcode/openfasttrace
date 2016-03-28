@@ -33,7 +33,7 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 ### License file header
 
-* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase, that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
+* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
 * To update files with correct license headers and generate file `LICENSE.txt`, run command
 ```bash
 mvn license:update-project-license license:update-file-header
@@ -54,5 +54,5 @@ To publish to jcenter
 	</servers>
 ```
 * If necessary update version in `pom.xml`, commit and push it.
-* Run `mvn deploy`
-* Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) in github
+* Run `mvn deploy`.
+* Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) on GitHub.

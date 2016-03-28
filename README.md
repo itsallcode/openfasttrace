@@ -4,6 +4,7 @@
 [![Circle CI](https://circleci.com/gh/hamstercommunity/openfasttrack.svg?style=svg)](https://circleci.com/gh/hamstercommunity/openfasttrack)
 [![codecov.io](https://codecov.io/github/hamstercommunity/openfasttrack/coverage.svg?branch=master)](https://codecov.io/github/hamstercommunity/openfasttrack?branch=master)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/7509/badge.svg)](https://scan.coverity.com/projects/hamstercommunity-openfasttrack)
+[![Download](https://api.bintray.com/packages/kaklakariada/maven/openfasttrack/images/download.svg)](https://bintray.com/kaklakariada/maven/openfasttrack/_latestVersion)
 
 Requirement tracking suite
 
@@ -27,7 +28,7 @@ Run `mvn test` to run unit tests.
 
 To publish to jcenter
 
-1. Add the following to your `~/.m2/settings.xml`
+* Add the following to your `~/.m2/settings.xml`
 ```xml
 	<servers>
 		<server>
@@ -35,6 +36,7 @@ To publish to jcenter
 			<username>[bintray-username]‚</username>
 			<password>[bintray-api-key]</password>
 		</server>
-	</servers>
-```
-2. Run `mvn deploy`
+	</servers>```
+* If necessary update version in `pom.xml`, commit and push it.
+* Run `mvn deploy`
+* Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) in github

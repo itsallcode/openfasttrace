@@ -29,7 +29,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class CommandLineInterpreter
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
     private final String[] arguments;
-    private Map<String, Method> setters = new HashMap<>();
+    private final Map<String, Method> setters;
 
     /**
      * Create a new instance of type {@link CommandLineInterpreter}
@@ -66,14 +65,15 @@ public class CommandLineInterpreter
     {
         this.arguments = arguments;
         this.argumentsReceiver = argumentsReceiver;
-        findAllSettersInArgumentsReceiver();
+        this.setters = findAllSettersInArgumentsReceiver(argumentsReceiver);
     }
 
-    private void findAllSettersInArgumentsReceiver()
+    private static Map<String, Method> findAllSettersInArgumentsReceiver(
+            final Object argumentsReceiver)
     {
-        final Class<?> receiverClass = this.argumentsReceiver.getClass();
+        final Class<?> receiverClass = argumentsReceiver.getClass();
         final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
-        this.setters = methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
+        return methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
                 .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
     }
 

@@ -26,8 +26,12 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.util.List;
+
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import openfasttrack.cli.CommandLineArgumentsStub.StubEnum;
 
@@ -36,6 +40,9 @@ import openfasttrack.cli.CommandLineArgumentsStub.StubEnum;
  */
 public class TestCommandLineInterpreter
 {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void testGetNamedStringParamter()
     {
@@ -43,16 +50,18 @@ public class TestCommandLineInterpreter
         assertThat(stub.getA(), equalTo("value_a"));
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testMissingValueForStringParameter()
     {
-        parseArguments("-a");
+        expectParseException(new CommandLineArgumentsStub(), asList("-a"),
+                "No value for argument 'a'");
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testUnexpectedArgumentName()
     {
-        parseArguments("-unexpected");
+        expectParseException(new CommandLineArgumentsStub(), asList("-unexpected"),
+                "Unexpected parameter 'unexpected' is not allowed");
     }
 
     @Test
@@ -78,34 +87,34 @@ public class TestCommandLineInterpreter
         assertThat(stub.getUnnamedValues(), equalTo(asList(args)));
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testNoSetterForUnnamedParameters()
     {
-        final String[] args = { "value_1", "value_2" };
-        new CommandLineInterpreter(args, new CommandLineArgumentsStubWithoutUnnamedParameters())
-                .parse();
+        expectParseException(new CliArgsWithoutUnnamedParameters(), asList("value_1", "value_2"),
+                "Unnamed arguments '[value_1, value_2]' are not allowed");
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testSetterWithoutArgument()
     {
-        final String[] args = { "-invalid" };
-        new CommandLineInterpreter(args, new CommandLineArgumentsStubWithNoArgSetter()).parse();
+        expectParseException(new CliArgsWithNoArgSetter(), asList("-invalid"),
+                "Unsupported argument count for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
+                        + " Only one argument is allowed.");
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testSetterWithTooManyArgument()
     {
-        final String[] args = { "-invalid" };
-        new CommandLineInterpreter(args, new CommandLineArgumentsStubWithMultiArgSetter()).parse();
+        expectParseException(new CliArgsMultiArgSetter(), asList("-invalid"),
+                "Unsupported argument count for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
+                        + " Only one argument is allowed.");
     }
 
-    @Test(expected = CliException.class)
+    @Test
     public void testSetterWithUnsupportedArgumentType()
     {
-        final String[] args = { "-invalid" };
-        new CommandLineInterpreter(args, new CommandLineArgumentsStubWithUnsupportedSetterArg())
-                .parse();
+        expectParseException(new CliArgsUnsupportedSetterArg(), asList("-invalid"),
+                "Unsupported argument type for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsUnsupportedSetterArg.setInvalid(float)'");
     }
 
     @Test
@@ -129,12 +138,20 @@ public class TestCommandLineInterpreter
         return stub;
     }
 
-    private static class CommandLineArgumentsStubWithoutUnnamedParameters
+    private void expectParseException(final Object argumentsReceiver, final List<String> arguments,
+            final String expectedExceptionMessage)
+    {
+        this.thrown.expect(CliException.class);
+        this.thrown.expectMessage(expectedExceptionMessage);
+        new CommandLineInterpreter(arguments.toArray(new String[0]), argumentsReceiver).parse();
+    }
+
+    private static class CliArgsWithoutUnnamedParameters
     {
 
     }
 
-    static class CommandLineArgumentsStubWithNoArgSetter
+    static class CliArgsWithNoArgSetter
     {
         public void setInvalid()
         {
@@ -142,7 +159,7 @@ public class TestCommandLineInterpreter
         }
     }
 
-    static class CommandLineArgumentsStubWithMultiArgSetter
+    static class CliArgsMultiArgSetter
     {
         public void setInvalid(final String arg1, final int arg2)
         {
@@ -150,7 +167,7 @@ public class TestCommandLineInterpreter
         }
     }
 
-    static class CommandLineArgumentsStubWithUnsupportedSetterArg
+    static class CliArgsUnsupportedSetterArg
     {
         public void setInvalid(final float unsupportedArg)
         {

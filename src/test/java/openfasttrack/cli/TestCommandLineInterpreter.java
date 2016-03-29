@@ -28,7 +28,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -72,11 +71,17 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    @Ignore
     public void testGetNamedEnumParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "VALUE1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
+    }
+
+    @Test
+    public void testInvalidEnumParamter()
+    {
+        expectParseException(new CommandLineArgumentsStub(), asList("-c", "INVALID_VALUE"),
+                "Cannot convert value 'INVALID_VALUE' to enum openfasttrack.cli.CommandLineArgumentsStub$StubEnum");
     }
 
     @Test
@@ -113,19 +118,26 @@ public class TestCommandLineInterpreter
     @Test
     public void testSetterWithUnsupportedArgumentType()
     {
-        expectParseException(new CliArgsUnsupportedSetterArg(), asList("-invalid"),
-                "Unsupported argument type for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsUnsupportedSetterArg.setInvalid(float)'");
+        expectParseException(new CliArgsUnsupportedSetterArg(), asList("-invalid", "3.14"),
+                "Type 'float' not supported for converting argument '3.14'");
+    }
+
+    @Test
+    public void testArgumentFollowedByArgument()
+    {
+        expectParseException(new CommandLineArgumentsStub(), asList("-a", "-unexpected"),
+                "No value for argument 'a'");
     }
 
     @Test
     public void testCombinedParamters()
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
-                "value_2" /* , "-c", "VALUE2" */);
+                "value_2", "-c", "VALUE2");
         assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2")));
         assertThat(stub.isB(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
-        // assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
+        assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
     }
 
     private CommandLineArgumentsStub parseArguments(final String... args)

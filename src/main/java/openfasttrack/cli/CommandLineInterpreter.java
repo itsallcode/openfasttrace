@@ -145,7 +145,7 @@ public class CommandLineInterpreter
         {
             assignValue(setter, true);
         }
-        else if (setterParameterType.equals(String.class))
+        else
         {
             if (iterator.hasNext())
             {
@@ -157,7 +157,8 @@ public class CommandLineInterpreter
                 }
                 else
                 {
-                    assignValue(setter, successor);
+                    final Object convertedValue = convertArgument(successor, setterParameterType);
+                    assignValue(setter, convertedValue);
                 }
             }
             else
@@ -165,15 +166,38 @@ public class CommandLineInterpreter
                 reportMissingParamterValue(argumentName);
             }
         }
-        else
-        {
-            reportUnsupportedSetterArgumentType(setter);
-        }
     }
 
-    private void reportUnsupportedSetterArgumentType(final Method setter)
+    private <T> T convertArgument(final String stringValue, final Class<T> type)
     {
-        throw new CliException("Unsupported argument type for setter '" + setter + "'");
+        if (type.equals(String.class))
+        {
+            return type.cast(stringValue);
+        }
+        if (type.isEnum())
+        {
+            return convertEnum(stringValue, type);
+        }
+        throw new CliException(
+                "Type '" + type + "' not supported for converting argument '" + stringValue + "'");
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T convertEnum(final String stringValue, final Class<T> type)
+    {
+        @SuppressWarnings("rawtypes")
+        final Class enumType = type;
+        try
+        {
+            @SuppressWarnings("rawtypes")
+            final Enum enumValue = Enum.valueOf(enumType, stringValue);
+            return type.cast(enumValue);
+        }
+        catch (final IllegalArgumentException e)
+        {
+            throw new CliException(
+                    "Cannot convert value '" + stringValue + "' to enum " + type.getName(), e);
+        }
     }
 
     private void reportUnsupportedSetterArgumentCount(final Method setter)

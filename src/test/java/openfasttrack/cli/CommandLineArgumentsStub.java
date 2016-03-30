@@ -26,8 +26,14 @@ import java.util.List;
 
 public class CommandLineArgumentsStub
 {
+    public static enum StubEnum
+    {
+        VALUE1, VALUE2;
+    }
+
     private String a;
     private boolean b;
+    private StubEnum c;
     private List<String> unnamedValues;
 
     public void setA(final String value)
@@ -38,6 +44,11 @@ public class CommandLineArgumentsStub
     public void setB(final boolean value)
     {
         this.b = value;
+    }
+
+    public void setC(final StubEnum c)
+    {
+        this.c = c;
     }
 
     public void setUnnamedValues(final List<String> values)
@@ -53,6 +64,11 @@ public class CommandLineArgumentsStub
     public boolean isB()
     {
         return this.b;
+    }
+
+    public StubEnum getC()
+    {
+        return this.c;
     }
 
     public List<String> getUnnamedValues()

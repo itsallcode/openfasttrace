@@ -105,7 +105,7 @@ public class CommandLineInterpreter
         }
         if (!unnamedArguments.isEmpty())
         {
-            assignUnnameArgument(unnamedArguments);
+            assignUnnamedArgument(unnamedArguments);
         }
     }
 
@@ -216,7 +216,7 @@ public class CommandLineInterpreter
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }
 
-    private void assignUnnameArgument(final List<String> unnamedArguments)
+    private void assignUnnamedArgument(final List<String> unnamedArguments)
     {
         final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
         if (unnamedArgumentSetter != null)

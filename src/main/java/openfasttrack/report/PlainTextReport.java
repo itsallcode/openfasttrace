@@ -24,6 +24,9 @@ package openfasttrack.report;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.Trace;
@@ -48,18 +51,11 @@ public class PlainTextReport implements Reportable
         this.trace = trace;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * openfasttrack.report.Reportable#renderToStreamWithVerbosityLevel(java.io.
-     * OutputStream, openfasttrack.report.ReportVerbosity)
-     */
     @Override
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        final PrintStream report = new PrintStream(outputStream);
+        final PrintStream report = createPrintStream(outputStream, StandardCharsets.UTF_8);
         switch (verbosity)
         {
         case QUIET:
@@ -81,6 +77,19 @@ public class PlainTextReport implements Reportable
         default:
             throw new IllegalStateException(
                     "Unable to create report for unknown verbosity level " + verbosity);
+        }
+    }
+
+    private static PrintStream createPrintStream(final OutputStream outputStream,
+            final Charset charset)
+    {
+        try
+        {
+            return new PrintStream(outputStream, false, charset.displayName());
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new ReportException("Encoding charset '" + charset + "' not supported", e);
         }
     }
 

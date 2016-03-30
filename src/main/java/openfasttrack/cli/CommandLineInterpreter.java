@@ -1,5 +1,27 @@
 package openfasttrack.cli;
 
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
 
@@ -7,7 +29,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -30,7 +51,7 @@ public class CommandLineInterpreter
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
     private final String[] arguments;
-    private Map<String, Method> setters = new HashMap<>();
+    private final Map<String, Method> setters;
 
     /**
      * Create a new instance of type {@link CommandLineInterpreter}
@@ -44,14 +65,15 @@ public class CommandLineInterpreter
     {
         this.arguments = arguments;
         this.argumentsReceiver = argumentsReceiver;
-        findAllSettersInArgumentsReceiver();
+        this.setters = findAllSettersInArgumentsReceiver(argumentsReceiver);
     }
 
-    private void findAllSettersInArgumentsReceiver()
+    private static Map<String, Method> findAllSettersInArgumentsReceiver(
+            final Object argumentsReceiver)
     {
-        final Class<?> receiverClass = this.argumentsReceiver.getClass();
+        final Class<?> receiverClass = argumentsReceiver.getClass();
         final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
-        this.setters = methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
+        return methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
                 .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
     }
 
@@ -81,7 +103,10 @@ public class CommandLineInterpreter
                 handleUnnamedArgument(unnamedArguments, argument);
             }
         }
-        assignUnnameArgument(unnamedArguments);
+        if (!unnamedArguments.isEmpty())
+        {
+            assignUnnamedArgument(unnamedArguments);
+        }
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
@@ -93,7 +118,7 @@ public class CommandLineInterpreter
         }
         else
         {
-            reportUnexpectedNamedArgument();
+            reportUnexpectedNamedArgument(argumentName);
         }
     }
 
@@ -102,21 +127,25 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private void reportUnexpectedNamedArgument()
+    private void reportUnexpectedNamedArgument(final String argument)
     {
-        // TODO Auto-generated method stub
+        throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
 
     private void handleExpectedNamedArgument(final ListIterator<String> iterator,
             final String argumentName)
     {
         final Method setter = this.setters.get(argumentName);
+        if (setter.getParameterTypes().length != 1)
+        {
+            reportUnsupportedSetterArgumentCount(setter);
+        }
         final Class<?> setterParameterType = setter.getParameterTypes()[0];
         if (setterParameterType.equals(boolean.class) || setterParameterType.equals(Boolean.class))
         {
-            assignBooleanValue(setter, true);
+            assignValue(setter, true);
         }
-        else if (setterParameterType.equals(String.class))
+        else
         {
             if (iterator.hasNext())
             {
@@ -124,37 +153,62 @@ public class CommandLineInterpreter
                 if (isParamterName(successor))
                 {
                     iterator.previous();
-                    reportMissingParamterValue();
+                    reportMissingParamterValue(argumentName);
                 }
                 else
                 {
-                    assignStringValue(setter, successor);
+                    final Object convertedValue = convertArgument(successor, setterParameterType);
+                    assignValue(setter, convertedValue);
                 }
             }
             else
             {
-                reportMissingParamterValue();
+                reportMissingParamterValue(argumentName);
             }
         }
     }
 
-    private void reportMissingParamterValue()
+    private <T> T convertArgument(final String stringValue, final Class<T> type)
     {
-        // TODO Auto-generated method stub
-
+        if (type.equals(String.class))
+        {
+            return type.cast(stringValue);
+        }
+        if (type.isEnum())
+        {
+            return convertEnum(stringValue, type);
+        }
+        throw new CliException(
+                "Type '" + type + "' not supported for converting argument '" + stringValue + "'");
     }
 
-    private void assignStringValue(final Method setter, final String value)
+    @SuppressWarnings("unchecked")
+    private <T> T convertEnum(final String stringValue, final Class<T> type)
     {
+        @SuppressWarnings("rawtypes")
+        final Class enumType = type;
         try
         {
-            setter.invoke(this.argumentsReceiver, value);
+            @SuppressWarnings("rawtypes")
+            final Enum enumValue = Enum.valueOf(enumType, stringValue);
+            return type.cast(enumValue);
         }
-        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        catch (final IllegalArgumentException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new CliException(
+                    "Cannot convert value '" + stringValue + "' to enum " + type.getName(), e);
         }
+    }
+
+    private void reportUnsupportedSetterArgumentCount(final Method setter)
+    {
+        throw new CliException("Unsupported argument count for setter '" + setter
+                + "'. Only one argument is allowed.");
+    }
+
+    private void reportMissingParamterValue(final String argumentName)
+    {
+        throw new CliException("No value for argument '" + argumentName + "'");
     }
 
     private boolean isParamterName(final String text)
@@ -162,33 +216,29 @@ public class CommandLineInterpreter
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }
 
-    private void assignBooleanValue(final Method setter, final boolean isSet)
+    private void assignUnnamedArgument(final List<String> unnamedArguments)
     {
-        try
+        final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
+        if (unnamedArgumentSetter != null)
         {
-            setter.invoke(this.argumentsReceiver, isSet);
+            assignValue(unnamedArgumentSetter, unnamedArguments);
         }
-        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        else
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new CliException("Unnamed arguments '" + unnamedArguments + "' are not allowed");
         }
     }
 
-    private void assignUnnameArgument(final List<String> unnamedArguments)
+    private void assignValue(final Method setter, final Object value)
     {
-        if (this.setters.containsKey(UNNAMED_ARGUMENTS_SUFFIX))
+        try
         {
-            try
-            {
-                this.setters.get(UNNAMED_ARGUMENTS_SUFFIX).invoke(this.argumentsReceiver,
-                        unnamedArguments);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            setter.invoke(this.argumentsReceiver, value);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        {
+            throw new CliException(
+                    "Error calling setter " + setter + " with argument '" + value + "'", e);
         }
     }
 }

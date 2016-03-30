@@ -1,5 +1,27 @@
 package openfasttrack.core;
 
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +37,7 @@ public class SpecificationItem
     private final String comment;
     private final List<SpecificationItemId> coveredIds;
     private final List<SpecificationItemId> dependOnIds;
-    private final List<String> neededArtifactTypes;
+    private final List<String> needsArtifactTypes;
 
     private SpecificationItem(final SpecificationItemId id, final String title,
             final String description, final String rationale, final String comment,
@@ -29,7 +51,7 @@ public class SpecificationItem
         this.comment = comment;
         this.coveredIds = coveredIds;
         this.dependOnIds = dependOnIds;
-        this.neededArtifactTypes = neededArtifactTypes;
+        this.needsArtifactTypes = neededArtifactTypes;
     }
 
     /**
@@ -37,7 +59,7 @@ public class SpecificationItem
      *
      * @return the ID
      */
-    public final SpecificationItemId getId()
+    public SpecificationItemId getId()
     {
         return this.id;
     }
@@ -47,7 +69,7 @@ public class SpecificationItem
      *
      * @return the title
      */
-    public final String getTitle()
+    public String getTitle()
     {
         return this.title;
     }
@@ -57,7 +79,7 @@ public class SpecificationItem
      *
      * @return the description
      */
-    public final String getDescription()
+    public String getDescription()
     {
         return this.description;
     }
@@ -108,9 +130,9 @@ public class SpecificationItem
      *
      * @return the list of artifact types
      */
-    public List<String> getNeededArtifactTypes()
+    public List<String> getNeedsArtifactTypes()
     {
-        return this.neededArtifactTypes;
+        return this.needsArtifactTypes;
     }
 
     /**
@@ -124,7 +146,17 @@ public class SpecificationItem
      */
     public boolean needsCoverageByArtifactType(final String artifactType)
     {
-        return this.neededArtifactTypes.contains(artifactType);
+        return this.needsArtifactTypes.contains(artifactType);
+    }
+
+    /**
+     * Check if the item needs any coverage
+     *
+     * @return <code>true</code> if the item needs coverage
+     */
+    public boolean needsCoverage()
+    {
+        return this.needsArtifactTypes.size() > 0;
     }
 
     @Generated(value = "Eclipse")
@@ -139,7 +171,7 @@ public class SpecificationItem
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result
-                + ((this.neededArtifactTypes == null) ? 0 : this.neededArtifactTypes.hashCode());
+                + ((this.needsArtifactTypes == null) ? 0 : this.needsArtifactTypes.hashCode());
         result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
         result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         return result;
@@ -217,14 +249,14 @@ public class SpecificationItem
         {
             return false;
         }
-        if (this.neededArtifactTypes == null)
+        if (this.needsArtifactTypes == null)
         {
-            if (other.neededArtifactTypes != null)
+            if (other.needsArtifactTypes != null)
             {
                 return false;
             }
         }
-        else if (!this.neededArtifactTypes.equals(other.neededArtifactTypes))
+        else if (!this.needsArtifactTypes.equals(other.needsArtifactTypes))
         {
             return false;
         }
@@ -400,7 +432,7 @@ public class SpecificationItem
          *            the artifact type
          * @return this builder instance
          */
-        public Builder addNeededArtifactType(final String neededArtifactType)
+        public Builder addNeedsArtifactType(final String neededArtifactType)
         {
             this.neededArtifactTypes.add(neededArtifactType);
             return this;

@@ -1,5 +1,27 @@
 package openfasttrack.core;
 
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,7 +32,7 @@ import javax.annotation.Generated;
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
  */
-public class SpecificationItemId
+public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
@@ -298,5 +320,27 @@ public class SpecificationItemId
                         "String \"" + this.id + "\" cannot be parsed to a specification item ID");
             }
         }
+    }
+
+    @Override
+    public int compareTo(final SpecificationItemId other)
+    {
+        int compared = (this.getArtifactType().compareTo(other.getArtifactType()));
+        if (compared == 0)
+        {
+            compared = (this.getName().compareTo(other.getName()));
+            if (compared == 0)
+            {
+                if (this.getRevision() > other.getRevision())
+                {
+                    compared = 1;
+                }
+                else if (this.getRevision() < other.getRevision())
+                {
+                    compared = -1;
+                }
+            }
+        }
+        return compared;
     }
 }

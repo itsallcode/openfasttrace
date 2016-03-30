@@ -1,138 +1,39 @@
 package openfasttrack.core;
 
-import java.util.ArrayList;
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Tracer
 {
-    List<TraceEntry> traceItems = new ArrayList<>();
-    private final SpecificationItemCollection items;
-
-    public Tracer(final SpecificationItemCollection items)
+    public Trace trace(final List<LinkedSpecificationItem> items)
     {
-        this.items = items;
-    }
-
-    public Trace trace()
-    {
-        for (final SpecificationItem item : this.items)
-        {
-            checkCoveredLinks(item);
-        }
-        return new Trace(this.traceItems);
-    }
-
-    private void checkCoveredLinks(final SpecificationItem investigatedItem)
-    {
-        // for (final String artifactType :
-        // investigatedItem.getNeededArtifactTypes())
-        // {
-        // final ForwardLinkStatus status =
-        // evalForwardCoverage(investigatedItem, artifactType);
-        // this.forwareLinks.add(new ForwardLink(investigatedItem.getId(),
-        // artifactType, status));
-        // }
-        final TraceEntry.Builder traceItemBuilder = new TraceEntry.Builder(investigatedItem);
-        for (final SpecificationItemId coveredId : investigatedItem.getCoveredIds())
-        {
-            final BackwardLinkStatus status = evalBackwardCoverage(investigatedItem, coveredId);
-            traceItemBuilder.addBackwardLink(coveredId, status);
-        }
-        this.traceItems.add(traceItemBuilder.build());
-    }
-
-    // private ForwardLinkStatus evalForwardCoverage(final SpecificationItem
-    // investigatedItem,
-    // final String artifactType)
-    // {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
-
-    // [impl~backward_coverage_status~1]
-    private BackwardLinkStatus evalBackwardCoverage(final SpecificationItem investigatedItem,
-            final SpecificationItemId coveredId)
-    {
-        BackwardLinkStatus status = BackwardLinkStatus.ORPHANED;
-        if (existsItemWithId(coveredId))
-        {
-            status = evalBackwardCoverageOfDirectMatch(investigatedItem, coveredId);
-        }
-        else
-        {
-            final String coveredArtifactType = coveredId.getArtifactType();
-            final String coveredName = coveredId.getName();
-            final int coveredRevision = coveredId.getRevision();
-            if (existsItemWithArtifactTypeAndName(coveredArtifactType, coveredName))
-            {
-                status = evalBackwardCoverageOfMatchWithoutRevision(investigatedItem,
-                        coveredArtifactType, coveredName, coveredRevision);
-            }
-            else
-            {
-                status = BackwardLinkStatus.ORPHANED;
-            }
-        }
-        return status;
-    }
-
-    private boolean existsItemWithId(final SpecificationItemId coveredId)
-    {
-        return this.items.containsKey(coveredId);
-    }
-
-    private BackwardLinkStatus evalBackwardCoverageOfDirectMatch(
-            final SpecificationItem investigatedItem, final SpecificationItemId coveredId)
-    {
-        BackwardLinkStatus status;
-        final List<SpecificationItem> machtes = this.items.getAll(coveredId);
-        if (machtes.size() == 1)
-        {
-            if (this.items.getFirst(coveredId)
-                    .needsCoverageByArtifactType(investigatedItem.getId().getArtifactType()))
-            {
-                status = BackwardLinkStatus.OK;
-            }
-            else
-            {
-                status = BackwardLinkStatus.UNWANTED;
-            }
-        }
-        else
-        {
-            status = BackwardLinkStatus.AMBIGUOUS;
-        }
-        return status;
-    }
-
-    private boolean existsItemWithArtifactTypeAndName(final String artifactType, final String name)
-    {
-        return this.items.containsKey(artifactType, name);
-    }
-
-    private BackwardLinkStatus evalBackwardCoverageOfMatchWithoutRevision(
-            final SpecificationItem investigatedItem, final String coveredArtifactType,
-            final String coveredName, final int coveredRevision)
-    {
-        BackwardLinkStatus status;
-        final List<SpecificationItem> fuzzyMatches = this.items.getAll(coveredArtifactType,
-                coveredName);
-        if (fuzzyMatches.size() == 1)
-        {
-            if (this.items.getFirst(coveredArtifactType, coveredName).getId()
-                    .getRevision() < coveredRevision)
-            {
-                status = BackwardLinkStatus.PREDATED;
-            }
-            else
-            {
-                status = BackwardLinkStatus.OUTDATED;
-            }
-        }
-        else
-        {
-            status = BackwardLinkStatus.AMBIGUOUS;
-        }
-        return status;
+        final Trace.Builder builder = new Trace.Builder();
+        builder.items(items);
+        builder.uncleanItems(items.stream() //
+                .filter(item -> !item.isCoveredDeeply()) //
+                .collect(Collectors.toList()));
+        return builder.build();
     }
 }

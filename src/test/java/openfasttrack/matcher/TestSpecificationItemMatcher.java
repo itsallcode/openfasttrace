@@ -1,5 +1,27 @@
 package openfasttrack.matcher;
 
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
@@ -36,7 +58,7 @@ public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationI
     @Test
     public void testFilledObjectMultipleIdsMatches()
     {
-        assertMatch(baseBuilder().addCoveredId(ID4).addDependOnId(ID4).addNeededArtifactType("ID4")
+        assertMatch(baseBuilder().addCoveredId(ID4).addDependOnId(ID4).addNeedsArtifactType("ID4")
                 .build());
     }
 
@@ -61,7 +83,7 @@ public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationI
     @Test
     public void testDifferentNeededArtifactType()
     {
-        assertDifferentFromBase(baseBuilder().addNeededArtifactType("ID4"));
+        assertDifferentFromBase(baseBuilder().addNeedsArtifactType("ID4"));
     }
 
     @Test
@@ -91,7 +113,7 @@ public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationI
     private Builder baseBuilder()
     {
         return new SpecificationItem.Builder().id(ID1).addCoveredId(ID2).addDependOnId(ID3)
-                .addNeededArtifactType("neededType").comment("comment").description("description")
+                .addNeedsArtifactType("neededType").comment("comment").description("description")
                 .rationale("rationale");
     }
 

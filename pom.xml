@@ -1,11 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.ursusminor</groupId>
+	<groupId>com.github.kaklakariada</groupId>
 	<artifactId>openfasttrack</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>OpenFastTrack</name>
 	<description>Free requirement tracking suite</description>
+
+	<distributionManagement>
+		<repository>
+			<id>bintray-openfasttrack-maven-repo</id>
+			<url>https://api.bintray.com/maven/kaklakariada/maven/openfasttrack/;publish=0</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -34,7 +42,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>3.5.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -51,9 +59,22 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.5.201505241946</version>
+				<version>0.7.6.201602180812</version>
 				<executions>
 					<execution>
 						<goals>
@@ -69,6 +90,83 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
+				<configuration>
+					<verbose>false</verbose>
+					<detail>true</detail>
+					<licenseName>gpl_v3</licenseName>
+					<organizationName>hamstercommunity</organizationName>
+					<inceptionYear>2016</inceptionYear>
+					<excludes>
+						<exclude>
+							test/resources/specobject/*.xml
+						</exclude>
+					</excludes>
+					<failOnMissingHeader>true</failOnMissingHeader>
+					<failIfWarning>true</failIfWarning>
+					<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+					<addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
+				</configuration>
+				<executions>
+					<execution>
+						<id>check-file-header</id>
+						<goals>
+							<goal>check-file-header</goal>
+						</goals>
+						<phase>validate</phase>
+					</execution>
+					<execution>
+						<id>add-third-party-licenses</id>
+						<goals>
+							<goal>add-third-party</goal>
+							<goal>third-party-report</goal>
+							<goal>download-licenses</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											license-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.8,)
+										</versionRange>
+										<goals>
+											<goal>
+												check-file-header
+											</goal>
+											<goal>add-third-party</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>

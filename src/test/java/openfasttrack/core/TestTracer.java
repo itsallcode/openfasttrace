@@ -1,128 +1,88 @@
 package openfasttrack.core;
 
-import static openfasttrack.core.SpecificationItemId.createId;
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import openfasttrack.core.SpecificationItem.Builder;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class TestTracer
 {
-    private static final SpecificationItem A;
-    private static final SpecificationItem B;
-    private static final SpecificationItem C;
-    private static final SpecificationItem D;
-    private static final SpecificationItem E;
-    private static final SpecificationItem F;
-    private static final SpecificationItem G;
-    private static final SpecificationItem H;
-    private static final SpecificationItem I;
-    private static final SpecificationItem J;
-    private static final SpecificationItem K1;
-    private static final SpecificationItem K2;
-    private static final SpecificationItem L;
-    private static final SpecificationItem M1;
-    private static final SpecificationItem M2;
-    private static final SpecificationItem N;
-    private static final SpecificationItemId NON_EXISTENT_ID = createId("bogus", "dummy", 1);
-    private static final SpecificationItemId OUTDATED_G_ID = createId("req", "G", 6);
-    private static final SpecificationItemId PREDATED_G_ID = createId("req", "G", 8);
-    private static final SpecificationItemId AMBIGUOUS_M_ID = createId("req", "M", 5);
-
-    private Trace trace;
-
-    static
-    {
-        // @formatter:off                                                                                      | OK | UNW | OUT | PRE | BRO | AMB || DUP
-        A  = prepare("feat" , "A", 1).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||
-        B  = prepare("req"  , "B", 2).addCoveredId(A.getId()).build();                                      // |  1 |     |     |     |     |     ||
-        C  = prepare("impl" , "C", 3).addCoveredId(A.getId()).build();                                      // |    |   1 |     |     |     |     ||
-        D  = prepare("req"  , "D", 4).addNeededArtifactType("impl").build();                                // |    |     |     |     |     |     ||
-        E  = prepare("uman" , "E", 5).addCoveredId(A.getId()).addCoveredId(B.getId()).build();              // |    |   2 |     |     |     |     ||
-        F  = prepare("req"  , "F", 6).addCoveredId(NON_EXISTENT_ID).build();                                // |    |     |     |     |   1 |     ||
-        G  = prepare("req"  , "G", 7).addNeededArtifactType("impl").addNeededArtifactType("utest").build(); // |    |     |     |     |     |     ||
-        H  = prepare("impl" , "H", 8).addCoveredId(OUTDATED_G_ID).build();                                  // |    |     |  1  |     |     |     ||
-        I  = prepare("utest", "I", 9).addCoveredId(PREDATED_G_ID).build();                                  // |    |     |     |  1  |     |     ||
-        J  = prepare("utest", "J", 1).addCoveredId(G.getId()).addCoveredId(NON_EXISTENT_ID).build();        // |  1 |     |     |     |   1 |     ||
-        K1 = prepare("feat" , "K", 2).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||   1
-        K2 = prepare("feat" , "K", 2).addNeededArtifactType("req").build();                                 // |    |     |     |     |     |     ||   1
-        L  = prepare("req"  , "L", 3).addCoveredId(K1.getId()).build();                                     // |    |     |     |     |     |   1 ||
-        M1 = prepare("req"  , "M", 4).addNeededArtifactType("itest").build();                               // |    |     |     |     |     |     ||   1
-        M2 = prepare("req"  , "M", 6).addNeededArtifactType("itest").build();                               // |    |     |     |     |     |     ||   1
-        N  = prepare("itest", "N", 7).addCoveredId(AMBIGUOUS_M_ID).build();                                 // |    |     |     |     |     |   1 ||
-        // @formatter:on
-    }
-
-    private static Builder prepare(final String artifactType, final String name, final int revision)
-    {
-        return new SpecificationItem.Builder().id(artifactType, name, revision);
-    }
+    private static final SpecificationItemId ID_A = SpecificationItemId.parseId("req~a~1");
+    private static final SpecificationItemId ID_B = SpecificationItemId.parseId("dsn~b~2");
+    private static final SpecificationItemId ID_C = SpecificationItemId.parseId("impl~c~3");
+    @Mock
+    LinkedSpecificationItem aMock, bMock, cMock;
 
     @Before
     public void prepareTest()
     {
-        final List<SpecificationItem> items = Arrays.asList(A, B, C, D, E, F, G, H, I, J, K1, K2, L,
-                M1, M2, N);
-        final Tracer tracer = new Tracer(new SpecificationItemCollection(items));
-        this.trace = tracer.trace();
+        MockitoAnnotations.initMocks(this);
+        when(this.aMock.getId()).thenReturn(ID_A);
+        when(this.bMock.getId()).thenReturn(ID_B);
+        when(this.cMock.getId()).thenReturn(ID_C);
     }
 
     @Test
-    public void testCountAllLinks()
+    public void testAllCovered_Ok()
     {
-        assertThat(this.trace.countAllLinks(), equalTo(11));
+        when(this.aMock.isCoveredDeeply()).thenReturn(true);
+        when(this.bMock.isCoveredDeeply()).thenReturn(true);
+        final Trace trace = traceItems(this.aMock, this.bMock);
+        assertThat(trace.isAllCovered(), equalTo(true));
+        assertThat(trace.getUncoveredItems(), empty());
+        assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
+        assertThat(trace.countUncovered(), equalTo(0));
+        assertThat(trace.count(), equalTo(2));
+        assertThat(trace.getUncoveredIds(), empty());
     }
 
-    // [utest~backward_coverage_status~1]
+    private Trace traceItems(final LinkedSpecificationItem... items)
+    {
+        final Tracer tracer = new Tracer();
+        return tracer.trace(Arrays.asList(items));
+    }
+
     @Test
-    public void testCountLinksWithStatus_OK()
+    public void testAllCovered_NotOk()
     {
-        assertLinksWithStatus(BackwardLinkStatus.OK, 2L);
-    }
-
-    private void assertLinksWithStatus(final BackwardLinkStatus status, final long expectedCount)
-    {
-        assertThat(this.trace.countBackwardLinksWithStatus(status), equalTo(expectedCount));
-    }
-
-    // [utest~backward_coverage_status~1]
-    @Test
-    public void testCountLinksWithStatus_UNWANTED()
-    {
-        assertLinksWithStatus(BackwardLinkStatus.UNWANTED, 3L);
-    }
-
-    // [utest~backward_coverage_status~1]
-    @Test
-    public void testCountLinksWithStatus_OUTDATED()
-    {
-        assertLinksWithStatus(BackwardLinkStatus.OUTDATED, 1L);
-    }
-
-    // [utest~backward_coverage_status~1]
-    @Test
-    public void testCountLinksWithStatus_PREDATED()
-    {
-        assertLinksWithStatus(BackwardLinkStatus.PREDATED, 1L);
-    }
-
-    // [utest~backward_coverage_status~1]
-    @Test
-    public void testCountLinksWithStatus_Ambiguous()
-    {
-        assertLinksWithStatus(BackwardLinkStatus.AMBIGUOUS, 2L);
-    }
-
-    // [utest~backward_coverage_status~1]
-    @Test
-    public void testCountLinksWithStatus_BROKEN()
-    {
-        assertLinksWithStatus(BackwardLinkStatus.ORPHANED, 2L);
+        when(this.aMock.isCoveredDeeply()).thenReturn(true);
+        when(this.bMock.isCoveredDeeply()).thenReturn(false);
+        final Trace trace = traceItems(this.aMock, this.bMock);
+        assertThat(trace.isAllCovered(), equalTo(false));
+        assertThat(trace.getUncoveredItems(), containsInAnyOrder(this.bMock));
+        assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
+        assertThat(trace.countUncovered(), equalTo(1));
+        assertThat(trace.count(), equalTo(2));
+        assertThat(trace.getUncoveredIds(), containsInAnyOrder(ID_B));
     }
 }

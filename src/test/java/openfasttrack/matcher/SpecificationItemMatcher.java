@@ -1,5 +1,27 @@
 package openfasttrack.matcher;
 
+/*
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -8,6 +30,8 @@ import java.util.stream.StreamSupport;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsEmptyIterable;
+import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.matcher.config.ConfigurableMatcher;
@@ -30,7 +54,7 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
                 .addIterableProperty("dependsOnIds", SpecificationItem::getDependOnIds,
                         SpecificationItemIdMatcher::equalTo) //
                 .addIterableProperty("neededArtifactTypes",
-                        SpecificationItem::getNeededArtifactTypes, Matchers::equalTo) //
+                        SpecificationItem::getNeedsArtifactTypes, Matchers::equalTo) //
                 .build());
     }
 
@@ -47,5 +71,18 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
         return StreamSupport.stream(items.spliterator(), false) //
                 .map(SpecificationItemMatcher::equalTo) //
                 .collect(toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Factory
+    public static Matcher<Iterable<? extends SpecificationItem>> equalToAnyOrder(
+            final Collection<SpecificationItem> items)
+    {
+        if (items.isEmpty())
+        {
+            return IsEmptyIterable.emptyIterable();
+        }
+        return IsIterableContainingInAnyOrder
+                .<SpecificationItem> containsInAnyOrder(equalTo(items).toArray(new Matcher[0]));
     }
 }

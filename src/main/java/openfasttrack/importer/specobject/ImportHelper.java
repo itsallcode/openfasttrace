@@ -79,7 +79,7 @@ class ImportHelper
             break;
 
         default:
-            LOG.warning(() -> "Found unknown start element " + element.getName());
+            LOG.warning(() -> "Found unknown start element '" + element.getName() + "'");
             break;
         }
     }

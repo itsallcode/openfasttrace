@@ -1,5 +1,7 @@
 package openfasttrack.importer;
 
+import java.io.IOException;
+
 /*
  * #%L
  * OpenFastTrack
@@ -24,9 +26,15 @@ package openfasttrack.importer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
@@ -38,6 +46,7 @@ import openfasttrack.core.SpecificationItemId;
  */
 public class ImporterService
 {
+    private static Logger LOG = Logger.getLogger(ImporterService.class.getName());
     private final ImporterFactoryLoader factoryLoader;
 
     public ImporterService()
@@ -48,6 +57,39 @@ public class ImporterService
     ImporterService(final ImporterFactoryLoader factoryLoader)
     {
         this.factoryLoader = factoryLoader;
+    }
+
+    public Map<SpecificationItemId, SpecificationItem> importRecursiveDir(final Path dir,
+            final String glob)
+    {
+        final SpecificationMapListBuilder builder = new SpecificationMapListBuilder();
+        importRecursiveDir(dir, glob, builder);
+        return builder.build();
+    }
+
+    private void importRecursiveDir(final Path dir, final String glob,
+            final SpecificationMapListBuilder builder)
+    {
+        LOG.info(() -> "Importing files from '" + dir + "'...");
+        final FileSystem fs = dir.getFileSystem();
+        final PathMatcher matcher = fs.getPathMatcher("glob:" + glob);
+        final AtomicInteger fileCount = new AtomicInteger(0);
+        try (Stream<Path> fileStream = Files.walk(dir))
+        {
+            fileStream.filter(path -> !Files.isDirectory(path)) //
+                    .filter(matcher::matches) //
+                    .filter(this.factoryLoader::supportsFile)
+                    .map(file -> createImporter(file, StandardCharsets.UTF_8, builder))
+                    .forEach((importer) -> {
+                        importer.runImport();
+                        fileCount.incrementAndGet();
+                    });
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException("Error walking directory " + dir, e);
+        }
+        LOG.info(() -> "Imported " + fileCount + " files from '" + dir + "'.");
     }
 
     /**
@@ -87,6 +129,9 @@ public class ImporterService
             final SpecificationMapListBuilder builder)
     {
         final ImporterFactory importerFactory = this.factoryLoader.getImporterFactory(file);
-        return importerFactory.createImporter(file, charset, builder);
+        final Importer importer = importerFactory.createImporter(file, charset, builder);
+        LOG.fine(() -> "Created importer of type " + importer.getClass().getSimpleName()
+                + " for file " + file);
+        return importer;
     }
 }

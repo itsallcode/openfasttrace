@@ -50,6 +50,13 @@ public class TestCommandLineInterpreter
     }
 
     @Test
+    public void testGetNamedStringParamterCaseIndependent()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-A", "value_a");
+        assertThat(stub.getA(), equalTo("value_a"));
+    }
+
+    @Test
     public void testMissingValueForStringParameter()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-a"),

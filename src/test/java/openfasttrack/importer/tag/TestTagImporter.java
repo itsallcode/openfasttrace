@@ -166,14 +166,14 @@ public class TestTagImporter
     public void testDuplicateId()
     {
         assertItems(tag(ID1) + tag(ID1), //
-                item(ID1));
+                item(ID1), item(ID1));
     }
 
     @Test
     public void testDuplicateIdMultipleLines()
     {
         assertItems(tag(ID1) + UNIX_NEWLINE + tag(ID1), //
-                item(ID1));
+                item(ID1), item(ID1));
     }
 
     private String tag(final SpecificationItemId id)
@@ -200,7 +200,10 @@ public class TestTagImporter
     {
         final List<SpecificationItem> actual = runImporter(content);
         assertThat(actual, hasSize(expectedItems.length));
-        assertThat(actual, contains(expectedItems));
+        if (expectedItems.length > 0)
+        {
+            assertThat(actual, contains(expectedItems));
+        }
     }
 
     private List<SpecificationItem> runImporter(final String content)

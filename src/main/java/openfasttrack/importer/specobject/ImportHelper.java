@@ -32,6 +32,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import openfasttrack.importer.ImportEventListener;
+import openfasttrack.importer.ImporterException;
 
 class ImportHelper
 {
@@ -74,12 +75,16 @@ class ImportHelper
             break;
 
         case "specobject":
+            if (this.defaultDoctype == null)
+            {
+                throw new ImporterException("No specobject default doctype found");
+            }
             new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener,
                     this.defaultDoctype).runImport();
             break;
 
         default:
-            LOG.warning(() -> "Found unknown start element '" + element.getName() + "'");
+            LOG.warning(() -> "Found unknown xml element '" + element.getName() + "'");
             break;
         }
     }

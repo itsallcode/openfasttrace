@@ -152,17 +152,14 @@ public class TestPlainTextReport
 
     private String expectFailureDetails()
     {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("not ok - dsn~bar~1\n") //
-                .append("# desc B1\n") //
-                .append("not ok - req~foo~1\n") //
-                .append("# desc A1\n# desc A2\n# desc A3\n") //
-                .append("not ok - req~zoo~1\n") //
-                .append("# desc D1\n") //
-                .append("not ok - req~zoo~2\n") //
-                .append("# desc C1\n# desc C2\n") //
-                .append("\nnot ok - 6 total, 4 not covered\n");
-
-        return builder.toString();
+        return "not ok - dsn~bar~1\n" //
+                + "# desc B1\n" //
+                + "not ok - req~foo~1\n" //
+                + "# desc A1\n# desc A2\n# desc A3\n" //
+                + "not ok - req~zoo~1\n" //
+                + "# desc D1\n" //
+                + "not ok - req~zoo~2\n" //
+                + "# desc C1\n# desc C2\n" //
+                + "\nnot ok - 6 total, 4 not covered\n";
     }
 }

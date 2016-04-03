@@ -52,12 +52,12 @@ The description contains the normative part of the specification.
 
 The rationale explains the reasoning behind a requirement or decision.
 
-The "Covers" section contains a list of all specification items that are covered by this item.
+The "Covers" section contains a list of all specification item IDs that are covered by this item.
 
-The "Depends" section contains a list of all specification items that must be implemented in order
+The "Depends" section contains a list of all specification item IDs that must be implemented in order
 for this item to be complete.
 
-The "Needs" section list all specification item types in which coverage for this item is needed.
+The "Needs" section list all artifact item types in which coverage for this item is needed.
 
 Needs: dsn
 
@@ -69,12 +69,12 @@ OFT determines the status of an outgoing coverage link of a specification item.
 
 The possible results are:
 
-  1. Covers:    coverage requester the link points to wants this coverage
-  2. Outdated:  coverage requester the link points to has a higher revision number
-  3. Predated:  coverage requester the link points to has a lower revision number
+  1. Covers:    link points to a specification item which wants this coverage
+  2. Outdated:  link points to a specification item which has a higher revision number
+  3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
-  5. Unwanted:  coverage  provider has an artifact type the provider does not want
-  6. Orphaned:  link is broken - there is no matching coverage  requester
+  5. Unwanted:  coverage provider has an artifact type the provider does not want
+  6. Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:
 
@@ -104,7 +104,7 @@ Needs: dsn
 ### Deep Coverage
 `req~deep_coverage~1` <a id="req~deep_coverage~1`></a>
 
-OFT marks a specification item as _covered deeply_ if this items and all items it needs coverage from are covered recursively.
+OFT marks a specification item as _covered deeply_ if this item and all items it needs coverage from are covered recursively.
 
 Covers:
 
@@ -125,7 +125,7 @@ Covers:
 
 OFT marks a specification item as _defect_ if any of the following criteria apply
 
-  1. The specification item has duplicates
+  1. The specification item has duplicates (i.e. another specification item with the same ID exists)
   2. At least one outgoing coverage link has a different status than "Covers"
   3. The item is not covered deeply
   

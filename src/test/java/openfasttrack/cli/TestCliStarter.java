@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,7 +93,7 @@ public class TestCliStarter
         runCliStarter(asList("convert", "-inputDir", inputDir.toString(), "-outputFormat",
                 "specobject", "-outputFile", outputFile.toString()));
         assertThat(Files.exists(outputFile), equalTo(true));
-        assertThat(Files.size(outputFile), greaterThan(12400L));
+        assertThat(fileContent(outputFile).length(), greaterThan(12400));
     }
 
     @Test
@@ -100,6 +101,23 @@ public class TestCliStarter
     {
         expectException(asList("trace"), MissingArgumentException.class,
                 "Argument 'inputDir' is missing");
+    }
+
+    @Test
+    public void testTrace() throws IOException
+    {
+        final Path inputDir = Paths.get(".").toAbsolutePath();
+        final Path outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
+
+        runCliStarter(asList("trace", "-inputDir", inputDir.toString(), "-outputFile",
+                outputFile.toString()));
+        assertThat(Files.exists(outputFile), equalTo(true));
+        assertThat(fileContent(outputFile).length(), greaterThan(1500));
+    }
+
+    private String fileContent(final Path file) throws IOException
+    {
+        return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
     }
 
     private void expectException(final List<String> args,

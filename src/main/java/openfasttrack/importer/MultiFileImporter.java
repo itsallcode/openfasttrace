@@ -90,7 +90,7 @@ public class MultiFileImporter
      */
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
-        LOG.info(() -> "Importing files from '" + dir + "'...");
+        LOG.info(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
         final int itemCountBefore = this.specItemBuilder.getItemCount();

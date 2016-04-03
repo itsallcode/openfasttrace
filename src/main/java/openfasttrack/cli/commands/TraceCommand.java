@@ -59,7 +59,7 @@ public class TraceCommand
     public void start()
     {
         final List<LinkedSpecificationItem> linkedSpecItems = this.importerService.createImporter() //
-                .importRecursiveDir(this.arguments.getInputDir(), "*") //
+                .importRecursiveDir(this.arguments.getInputDir(), "**/*") //
                 .getImportedItems() //
                 .values() //
                 .stream() //
@@ -67,6 +67,6 @@ public class TraceCommand
                 .collect(toList());
         final Trace traceResult = this.tracer.trace(linkedSpecItems);
         this.reportService.generateReport(traceResult, this.arguments.getOutputFile(),
-                ReportVerbosity.ALL);
+                ReportVerbosity.FAILURE_DETAILS);
     }
 }

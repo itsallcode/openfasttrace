@@ -70,7 +70,10 @@ public class MultiFileImporter
     public MultiFileImporter importFile(final Path file)
     {
         LOG.info(() -> "Importing file '" + file + "'...");
+        final int itemCountBefore = this.specItemBuilder.getItemCount();
         createImporter(file, DEFAULT_CHARSET, this.specItemBuilder).runImport();
+        final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
+        LOG.info(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
     }
 
@@ -88,9 +91,9 @@ public class MultiFileImporter
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
         LOG.info(() -> "Importing files from '" + dir + "'...");
-        final FileSystem fs = dir.getFileSystem();
-        final PathMatcher matcher = fs.getPathMatcher("glob:" + glob);
+        final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
+        final int itemCountBefore = this.specItemBuilder.getItemCount();
         try (Stream<Path> fileStream = Files.walk(dir))
         {
             fileStream.filter(path -> !Files.isDirectory(path)) //
@@ -106,7 +109,9 @@ public class MultiFileImporter
         {
             throw new ImporterException("Error walking directory " + dir, e);
         }
-        LOG.info(() -> "Imported " + fileCount + " files from '" + dir + "'.");
+        final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
+        LOG.info(() -> "Imported " + fileCount + " files containing " + itemCountImported
+                + " items from '" + dir + "'.");
         return this;
     }
 

@@ -108,6 +108,11 @@ public class SpecificationMapListBuilder implements ImportEventListener
         return this.items;
     }
 
+    public int getItemCount()
+    {
+        return this.items.size();
+    }
+
     @Override
     public void setTitle(final String title)
     {

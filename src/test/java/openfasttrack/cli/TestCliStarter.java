@@ -48,10 +48,12 @@ public class TestCliStarter
     public TemporaryFolder tempFolder = new TemporaryFolder();
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    private Path docDir;
 
     @Before
     public void setUp()
     {
+        this.docDir = Paths.get("doc").toAbsolutePath();
     }
 
     @Test
@@ -76,10 +78,9 @@ public class TestCliStarter
     @Test
     public void testConvertUnknownExporter()
     {
-        final Path inputDir = Paths.get(".").toAbsolutePath();
         final Path outputFile = this.tempFolder.getRoot().toPath().resolve("output.xml");
         expectException(
-                asList("convert", "-inputDir", inputDir.toString(), "-outputFormat", "illegal",
+                asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat", "illegal",
                         "-outputFile", outputFile.toString()),
                 ExporterException.class, "Found no matching exporter for output format 'illegal'");
     }
@@ -87,13 +88,12 @@ public class TestCliStarter
     @Test
     public void testConvertToSpecobject() throws IOException
     {
-        final Path inputDir = Paths.get(".").toAbsolutePath();
         final Path outputFile = this.tempFolder.getRoot().toPath().resolve("output.xml");
 
-        runCliStarter(asList("convert", "-inputDir", inputDir.toString(), "-outputFormat",
+        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
                 "specobject", "-outputFile", outputFile.toString()));
         assertThat(Files.exists(outputFile), equalTo(true));
-        assertThat(fileContent(outputFile).length(), greaterThan(12400));
+        assertThat(fileContent(outputFile).length(), greaterThan(10000));
     }
 
     @Test
@@ -106,10 +106,9 @@ public class TestCliStarter
     @Test
     public void testTrace() throws IOException
     {
-        final Path inputDir = Paths.get(".").toAbsolutePath();
         final Path outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
 
-        runCliStarter(asList("trace", "-inputDir", inputDir.toString(), "-outputFile",
+        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
                 outputFile.toString()));
         assertThat(Files.exists(outputFile), equalTo(true));
         assertThat(fileContent(outputFile).length(), greaterThan(1500));

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.SpecificationMapListBuilder;
+import openfasttrack.importer.SpecificationListBuilder;
 
 /**
  * Test for {@link TagImporter}
@@ -208,7 +208,7 @@ public class TestTagImporter
 
     private List<SpecificationItem> runImporter(final String content)
     {
-        final SpecificationMapListBuilder builder = new SpecificationMapListBuilder();
+        final SpecificationListBuilder builder = new SpecificationListBuilder();
         new TagImporterFactory().createImporter(new StringReader(content), builder).runImport();
         return builder.build();
     }

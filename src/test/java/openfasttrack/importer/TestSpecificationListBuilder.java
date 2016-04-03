@@ -11,12 +11,12 @@ import openfasttrack.core.SpecificationItemId;
 public class TestSpecificationListBuilder
 {
     private static final SpecificationItemId ITEM_ID = SpecificationItemId.parseId("foo~bar~1");
-    private SpecificationMapListBuilder builder;
+    private SpecificationListBuilder builder;
 
     @Before
     public void setUp()
     {
-        this.builder = new SpecificationMapListBuilder();
+        this.builder = new SpecificationListBuilder();
     }
 
     @Test

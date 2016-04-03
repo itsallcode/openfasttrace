@@ -40,7 +40,7 @@ public class TestSpecificationItemListBuilder
     @Test
     public void testBuildBasicItem()
     {
-        final SpecificationMapListBuilder itemsBuilder = new SpecificationMapListBuilder();
+        final SpecificationListBuilder itemsBuilder = new SpecificationListBuilder();
         itemsBuilder.beginSpecificationItem();
         itemsBuilder.setId(ID);
         itemsBuilder.appendDescription(DESCRIPTION);

@@ -77,14 +77,14 @@ public class TestImporterService
 
         verify(this.importerMock).runImport();
 
-        final SpecificationMapListBuilder builder = getBuilder();
+        final SpecificationListBuilder builder = getBuilder();
         assertThat(result, sameInstance(builder.build()));
     }
 
-    private SpecificationMapListBuilder getBuilder()
+    private SpecificationListBuilder getBuilder()
     {
-        final ArgumentCaptor<SpecificationMapListBuilder> arg = ArgumentCaptor
-                .forClass(SpecificationMapListBuilder.class);
+        final ArgumentCaptor<SpecificationListBuilder> arg = ArgumentCaptor
+                .forClass(SpecificationListBuilder.class);
         verify(this.importerFactoryMock).createImporter(same(this.file),
                 same(StandardCharsets.UTF_8), arg.capture());
         return arg.getValue();

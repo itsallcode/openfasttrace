@@ -55,6 +55,6 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        return new MultiFileImporter(new SpecificationMapListBuilder(), this.factoryLoader);
+        return new MultiFileImporter(new SpecificationListBuilder(), this.factoryLoader);
     }
 }

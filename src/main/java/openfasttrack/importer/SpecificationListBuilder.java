@@ -7,11 +7,11 @@ import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 
 /**
- * The {@link SpecificationMapListBuilder} consumes import events and generates
+ * The {@link SpecificationListBuilder} consumes import events and generates
  * a map of specification items from them. The key to the map is the
  * specification item ID.
  */
-public class SpecificationMapListBuilder implements ImportEventListener
+public class SpecificationListBuilder implements ImportEventListener
 {
     private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder = null;

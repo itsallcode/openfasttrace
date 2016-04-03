@@ -51,7 +51,7 @@ import org.junit.Test;
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.SpecificationMapListBuilder;
+import openfasttrack.importer.SpecificationListBuilder;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.matcher.SpecificationItemMatcher;
 import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
@@ -169,7 +169,7 @@ public class TestSpecobjectExporter
 
     private List<SpecificationItem> parseSpecobjectXml(final String specobjectXml)
     {
-        final SpecificationMapListBuilder builder = new SpecificationMapListBuilder();
+        final SpecificationListBuilder builder = new SpecificationListBuilder();
         new SpecobjectImporterFactory().createImporter(new StringReader(specobjectXml), builder)
                 .runImport();
         return builder.build();

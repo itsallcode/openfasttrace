@@ -48,10 +48,10 @@ public class MultiFileImporter
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    private final SpecificationMapListBuilder specItemBuilder;
+    private final SpecificationListBuilder specItemBuilder;
     private final ImporterFactoryLoader factoryLoader;
 
-    MultiFileImporter(final SpecificationMapListBuilder specItemBuilder,
+    MultiFileImporter(final SpecificationListBuilder specItemBuilder,
             final ImporterFactoryLoader factoryLoader)
     {
         this.specItemBuilder = specItemBuilder;
@@ -125,7 +125,7 @@ public class MultiFileImporter
     }
 
     private Importer createImporter(final Path file, final Charset charset,
-            final SpecificationMapListBuilder builder)
+            final SpecificationListBuilder builder)
     {
         final ImporterFactory importerFactory = this.factoryLoader.getImporterFactory(file);
         final Importer importer = importerFactory.createImporter(file, charset, builder);

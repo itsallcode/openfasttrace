@@ -39,6 +39,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
+import openfasttrack.exporter.ExporterException;
+
 public class TestCliStarter
 {
     @Rule
@@ -68,6 +70,17 @@ public class TestCliStarter
     {
         expectException(asList("convert"), MissingArgumentException.class,
                 "Argument 'inputDir' is missing");
+    }
+
+    @Test
+    public void testConvertUnknownExporter()
+    {
+        final Path inputDir = Paths.get(".").toAbsolutePath();
+        final Path outputFile = this.tempFolder.getRoot().toPath().resolve("output.xml");
+        expectException(
+                asList("convert", "-inputDir", inputDir.toString(), "-outputFormat", "illegal",
+                        "-outputFile", outputFile.toString()),
+                ExporterException.class, "Found no matching exporter for output format 'illegal'");
     }
 
     @Test

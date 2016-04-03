@@ -24,6 +24,20 @@ package openfasttrack.core;
 
 public enum LinkStatus
 {
-    COVERS, UNWANTED, PREDATED, OUTDATED, AMBIGUOUS, DUPLICATE, ORPHANED, //
-    COVERED_SHALLOW, COVERED_UNWANTED, COVERED_PREDATED, COVERED_OUTDATED
+    // Outgoing coverage link status
+    COVERS, PREDATED, OUTDATED, AMBIGUOUS, UNWANTED, ORPHANED, //
+    // Incoming coverage link status
+    COVERED_SHALLOW, COVERED_UNWANTED, COVERED_PREDATED, COVERED_OUTDATED, //
+    // Duplicate link status
+    DUPLICATE;
+
+    /**
+     * Check if this is a bad link status.
+     * 
+     * @return <code>true</code> if the link status is bad.
+     */
+    public boolean isBad()
+    {
+        return (this != COVERS) && (this != COVERED_SHALLOW);
+    }
 }

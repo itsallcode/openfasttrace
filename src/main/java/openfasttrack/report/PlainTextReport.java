@@ -134,7 +134,7 @@ public class PlainTextReport implements Reportable
 
     private void reportItemDetails(final LinkedSpecificationItem item, final PrintStream report)
     {
-        report.print(translateStatus(item.isOk()));
+        report.print(translateStatus(!item.isDefect()));
         report.print(" - ");
         report.println(item.getId().toString());
         for (final String line : item.getDescription().split("\n"))

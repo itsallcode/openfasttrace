@@ -182,13 +182,26 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Check if the item is clean (i.e. covered deeply and not having any broken
-     * links)
+     * Check if the item is defect.
+     * 
+     * An item counts a defect if one of the following applies:
+     * <ul>
+     * <li>The item has offending links (broken coverage, duplicates)</li>
+     * <li>The item is not covered deeply
+     * <li>
+     * </ul>
      *
-     * @return <code>true</code> if the item is clean.
+     * @return <code>true</code> if the item is defect.
      */
-    public boolean isOk()
+    public boolean isDefect()
     {
-        return isCoveredDeeply();
+        for (final LinkStatus status : this.links.keySet())
+        {
+            if (status.isBad())
+            {
+                return true;
+            }
+        }
+        return !isCoveredDeeply();
     }
 }

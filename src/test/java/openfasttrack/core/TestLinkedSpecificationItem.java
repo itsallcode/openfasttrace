@@ -40,16 +40,20 @@ import org.mockito.MockitoAnnotations;
 
 public class TestLinkedSpecificationItem
 {
-    private LinkedSpecificationItem linkedItem, coveringLinkedItem;
+    private LinkedSpecificationItem linkedItem;
+    private LinkedSpecificationItem coveredLinkedItem;
+    private LinkedSpecificationItem otherLinkedItem;
     @Mock
-    private SpecificationItem itemMock, coveringItemMock;
+
+    private SpecificationItem itemMock, coveredItemMock, otherItemMock;
 
     @Before
     public void prepareAllTests()
     {
         MockitoAnnotations.initMocks(this);
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
-        this.coveringLinkedItem = new LinkedSpecificationItem(this.coveringItemMock);
+        this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
+        this.otherLinkedItem = new LinkedSpecificationItem(this.otherItemMock);
     }
 
     @Test
@@ -100,25 +104,70 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isCoveredShallow(), equalTo(false));
     }
 
+    // [utest~deep_coverage~1]
     @Test
     public void testIsCoveredDeeply_Ok()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
-        this.linkedItem.addCoveredArtifactType(DSN);
-        when(this.coveringItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
-        this.coveringLinkedItem.addCoveredArtifactType(IMPL);
-        this.linkedItem.addLinkToItemWithStatus(this.coveringLinkedItem, LinkStatus.COVERS);
+        prepareCoverThis();
         assertThat(this.linkedItem.isCoveredDeeply(), equalTo(true));
     }
 
+    private void prepareCoverThis()
+    {
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
+        this.linkedItem.addCoveredArtifactType(DSN);
+        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
+        this.coveredLinkedItem.addCoveredArtifactType(IMPL);
+        this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
+    }
+
+    // [utest~deep_coverage~1]
     @Test
     public void testIsCoveredDeeply_NotOk_MissingCoverage()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
         this.linkedItem.addCoveredArtifactType(DSN);
-        when(this.coveringItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
-        this.coveringLinkedItem.addCoveredArtifactType(IMPL);
-        this.linkedItem.addLinkToItemWithStatus(this.coveringLinkedItem, LinkStatus.COVERS);
+        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
+        this.coveredLinkedItem.addCoveredArtifactType(IMPL);
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
         assertThat(this.linkedItem.isCoveredDeeply(), equalTo(false));
+    }
+
+    // [utest~defect_items~1]
+    @Test
+    public void testIsDefect_False()
+    {
+        prepareCoverThis();
+        prepareCoverOther();
+        assertThat(this.linkedItem.isDefect(), equalTo(false));
+    }
+
+    private void prepareCoverOther()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
+        this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
+    }
+
+    // [utest~defect_items~1]
+    @Test
+    public void testIsDefect_TrueBecauseOfDuplicates()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
+        assertThat(this.linkedItem.isDefect(), equalTo(true));
+    }
+
+    // [utest~defect_items~1]
+    @Test
+    public void testIsDefect_TrueBecauseOfBadLink()
+    {
+        for (final LinkStatus status : LinkStatus.values())
+        {
+            final LinkedSpecificationItem item = new LinkedSpecificationItem(this.itemMock);
+            item.addLinkToItemWithStatus(this.otherLinkedItem, status);
+            final boolean expected = (status != LinkStatus.COVERS)
+                    && (status != LinkStatus.COVERED_SHALLOW);
+            assertThat("for " + status, item.isDefect(), equalTo(expected));
+        }
     }
 }

@@ -124,22 +124,6 @@ public class TestPlainTextReport
         assertThat(getReportOutput(ReportVerbosity.FAILURE_DETAILS), equalTo(expected));
     }
 
-    private String expectFailureDetails()
-    {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("not ok - dsn~bar~1\n") //
-                .append("# desc B1\n") //
-                .append("not ok - req~foo~1\n") //
-                .append("# desc A1\n# desc A2\n# desc A3\n") //
-                .append("not ok - req~zoo~1\n") //
-                .append("# desc D1\n") //
-                .append("not ok - req~zoo~2\n") //
-                .append("# desc C1\n# desc C2\n") //
-                .append("\nnot ok - 6 total, 4 not covered\n");
-
-        return builder.toString();
-    }
-
     private void prepareFailedItemDetails()
     {
         final LinkedSpecificationItem itemAMock = mock(LinkedSpecificationItem.class);
@@ -158,7 +142,24 @@ public class TestPlainTextReport
         when(itemBMock.getDescription()).thenReturn("desc B1");
         when(itemCMock.getDescription()).thenReturn("desc C1\ndesc C2");
         when(itemDMock.getDescription()).thenReturn("desc D1");
+        when(itemAMock.isDefect()).thenReturn(true);
+        when(itemBMock.isDefect()).thenReturn(true);
+        when(itemCMock.isDefect()).thenReturn(true);
+        when(itemDMock.isDefect()).thenReturn(true);
         when(this.traceMock.getUncoveredItems())
                 .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
+    }
+
+    private String expectFailureDetails()
+    {
+        return "not ok - dsn~bar~1\n" //
+                + "# desc B1\n" //
+                + "not ok - req~foo~1\n" //
+                + "# desc A1\n# desc A2\n# desc A3\n" //
+                + "not ok - req~zoo~1\n" //
+                + "# desc D1\n" //
+                + "not ok - req~zoo~2\n" //
+                + "# desc C1\n# desc C2\n" //
+                + "\nnot ok - 6 total, 4 not covered\n";
     }
 }

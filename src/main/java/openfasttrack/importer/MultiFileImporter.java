@@ -29,13 +29,12 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
@@ -120,7 +119,7 @@ public class MultiFileImporter
      * 
      * @return all imported {@link SpecificationItem}s.
      */
-    public Map<SpecificationItemId, SpecificationItem> getImportedItems()
+    public List<SpecificationItem> getImportedItems()
     {
         return this.specItemBuilder.build();
     }

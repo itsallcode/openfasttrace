@@ -61,7 +61,6 @@ public class TraceCommand
         final List<LinkedSpecificationItem> linkedSpecItems = this.importerService.createImporter() //
                 .importRecursiveDir(this.arguments.getInputDir(), "**/*") //
                 .getImportedItems() //
-                .values() //
                 .stream() //
                 .map(LinkedSpecificationItem::new) //
                 .collect(toList());

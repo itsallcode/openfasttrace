@@ -1,29 +1,7 @@
 package openfasttrack.importer;
 
-/*
- * #%L
- * OpenFastTrack
- * %%
- * Copyright (C) 2016 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
@@ -35,7 +13,7 @@ import openfasttrack.core.SpecificationItemId;
  */
 public class SpecificationMapListBuilder implements ImportEventListener
 {
-    private final Map<SpecificationItemId, SpecificationItem> items = new HashMap<>();
+    private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder = null;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
@@ -102,7 +80,7 @@ public class SpecificationMapListBuilder implements ImportEventListener
      *
      * @return the list of specification items collected up to this point
      */
-    public Map<SpecificationItemId, SpecificationItem> build()
+    public List<SpecificationItem> build()
     {
         this.endSpecificationItem();
         return this.items;
@@ -135,7 +113,7 @@ public class SpecificationMapListBuilder implements ImportEventListener
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString());
         final SpecificationItem item = this.itemBuilder.build();
-        this.items.put(item.getId(), item);
+        this.items.add(item);
         resetState();
     }
 }

@@ -25,7 +25,7 @@ package openfasttrack.importer;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.util.Map;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -44,9 +44,9 @@ public class TestSpecificationItemListBuilder
         itemsBuilder.beginSpecificationItem();
         itemsBuilder.setId(ID);
         itemsBuilder.appendDescription(DESCRIPTION);
-        final Map<SpecificationItemId, SpecificationItem> items = itemsBuilder.build();
+        final List<SpecificationItem> items = itemsBuilder.build();
         assertThat(items.size(), equalTo(1));
-        assertThat(items.get(ID).getId(), equalTo(ID));
-        assertThat(items.get(ID).getDescription(), equalTo(DESCRIPTION));
+        assertThat(items.get(0).getId(), equalTo(ID));
+        assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
     }
 }

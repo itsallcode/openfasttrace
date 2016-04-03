@@ -25,12 +25,9 @@ package openfasttrack.cli.commands;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
-import java.util.Map;
 
 import openfasttrack.cli.CliArguments;
 import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.Trace;
 import openfasttrack.core.Tracer;
 import openfasttrack.importer.ImporterService;
@@ -61,9 +58,10 @@ public class TraceCommand
 
     public void start()
     {
-        final Map<SpecificationItemId, SpecificationItem> specItems = this.importerService
-                .importRecursiveDir(this.arguments.getInputDir(), "*");
-        final List<LinkedSpecificationItem> linkedSpecItems = specItems.values() //
+        final List<LinkedSpecificationItem> linkedSpecItems = this.importerService.createImporter() //
+                .importRecursiveDir(this.arguments.getInputDir(), "*") //
+                .getImportedItems() //
+                .values() //
                 .stream() //
                 .map(LinkedSpecificationItem::new) //
                 .collect(toList());

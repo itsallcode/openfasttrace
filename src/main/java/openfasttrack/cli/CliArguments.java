@@ -77,10 +77,6 @@ public class CliArguments
 
     public String getOutputFormat()
     {
-        if (this.outputFormat == null)
-        {
-            throw new MissingArgumentException("outputFormat");
-        }
         return this.outputFormat;
     }
 

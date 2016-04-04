@@ -30,6 +30,7 @@ import openfasttrack.core.LinkedSpecificationItem;
 
 public class ExporterService
 {
+    private static final String DEFAULT_OUTPUT_FORMAT = "specobject";
     private final ExporterFactoryLoader factoryLoader;
 
     public ExporterService()
@@ -56,7 +57,10 @@ public class ExporterService
     public void exportFile(final List<LinkedSpecificationItem> items, final String outputFormat,
             final Path outputFile)
     {
-        final ExporterFactory factory = this.factoryLoader.getExporterFactory(outputFormat);
-        factory.createExporter(outputFile, outputFormat, StandardCharsets.UTF_8, items).runExport();
+        final String outputFormatToUse = outputFormat == null ? DEFAULT_OUTPUT_FORMAT
+                : outputFormat;
+        final ExporterFactory factory = this.factoryLoader.getExporterFactory(outputFormatToUse);
+        factory.createExporter(outputFile, outputFormatToUse, StandardCharsets.UTF_8, items)
+                .runExport();
     }
 }

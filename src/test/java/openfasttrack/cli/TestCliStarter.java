@@ -96,6 +96,15 @@ public class TestCliStarter
     }
 
     @Test
+    public void testConvertDefaultOutputFormat() throws IOException
+    {
+        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFile",
+                this.outputFile.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
+    }
+
+    @Test
     public void testConvertToSpecobjectStdOutNoOutputFile() throws IOException
     {
         runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",

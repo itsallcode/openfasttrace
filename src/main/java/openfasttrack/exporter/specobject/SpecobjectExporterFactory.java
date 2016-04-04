@@ -38,7 +38,7 @@ public class SpecobjectExporterFactory extends ExporterFactory
 {
     private final XMLOutputFactory xmlOutputFactory;
 
-    protected SpecobjectExporterFactory()
+    public SpecobjectExporterFactory()
     {
         super("specobject");
         this.xmlOutputFactory = XMLOutputFactory.newFactory();

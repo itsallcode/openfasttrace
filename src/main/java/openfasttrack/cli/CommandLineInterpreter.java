@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -46,6 +47,8 @@ import java.util.stream.Stream;
  */
 public class CommandLineInterpreter
 {
+    private static Logger LOG = Logger.getLogger(CommandLineInterpreter.class.getName());
+
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";
     private static final String SETTER_PREFIX = "set";
@@ -73,8 +76,12 @@ public class CommandLineInterpreter
     {
         final Class<?> receiverClass = argumentsReceiver.getClass();
         final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
-        return methods.filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
+        final Map<String, Method> setterMethods = methods
+                .filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
                 .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
+        LOG.finest(() -> "Found setter methods " + setterMethods.keySet()
+                + " for argument receiver " + argumentsReceiver.getClass());
+        return setterMethods;
     }
 
     private static String getSetterName(final Method method)
@@ -111,7 +118,8 @@ public class CommandLineInterpreter
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
     {
-        final String argumentName = argument.substring(SINGLE_CHAR_ARG_PREFIX.length());
+        final String argumentName = argument.substring(SINGLE_CHAR_ARG_PREFIX.length()) //
+                .toLowerCase();
         if (this.setters.containsKey(argumentName))
         {
             handleExpectedNamedArgument(iterator, argumentName);

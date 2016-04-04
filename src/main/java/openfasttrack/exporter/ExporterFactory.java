@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.importer.ImporterException;
 
 /**
  * Super class for factories producing {@link Exporter}s.
@@ -79,7 +78,7 @@ public abstract class ExporterFactory
     {
         if (!supportsFormat(outputFormat))
         {
-            throw new ImporterException(
+            throw new ExporterException(
                     "Output format '" + outputFormat + "' not supported for export");
         }
         final Writer writer = createWriter(file, outputFormat, charset);

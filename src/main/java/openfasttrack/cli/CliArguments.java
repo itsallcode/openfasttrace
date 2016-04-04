@@ -37,7 +37,7 @@ public class CliArguments
     {
         if (this.inputDir == null)
         {
-            throw new MissingArgumentException("inputDir");
+            return Paths.get(".").toAbsolutePath();
         }
         return Paths.get(this.inputDir);
     }

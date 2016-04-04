@@ -73,8 +73,8 @@ public class TestCliStarter
     @Test
     public void testConvertNoArg()
     {
-        expectException(asList("convert"), MissingArgumentException.class,
-                "Argument 'inputDir' is missing");
+        runCliStarter(asList("convert"));
+        assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
     @Test
@@ -105,6 +105,14 @@ public class TestCliStarter
     }
 
     @Test
+    public void testConvertDefaultInputDir() throws IOException
+    {
+        runCliStarter(asList("convert", "-outputFile", this.outputFile.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
+    }
+
+    @Test
     public void testConvertToSpecobjectStdOutNoOutputFile() throws IOException
     {
         runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
@@ -115,8 +123,8 @@ public class TestCliStarter
     @Test
     public void testTraceNoArg()
     {
-        expectException(asList("trace"), MissingArgumentException.class,
-                "Argument 'inputDir' is missing");
+        runCliStarter(asList("convert"));
+        assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
     @Test
@@ -124,6 +132,14 @@ public class TestCliStarter
     {
         runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
                 this.outputFile.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
+    }
+
+    @Test
+    public void testTraceDefaultInputDir() throws IOException
+    {
+        runCliStarter(asList("trace", "-outputFile", this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
     }

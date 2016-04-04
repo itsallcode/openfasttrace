@@ -84,7 +84,7 @@ class ImportHelper
             break;
 
         default:
-            LOG.warning(() -> "Found unknown xml element '" + element.getName() + "'");
+            LOG.warning(() -> "Found unknown XML element '" + element.getName() + "'");
             break;
         }
     }

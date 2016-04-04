@@ -79,7 +79,7 @@ public class MultiFileImporter
 
     /**
      * Import all files from the given directory that match the given
-     * {@link FileSystem#getPathMatcher(String) glob expression} using character
+     * {@link FileSystem#getPathMatcher(String) glob expression} and character
      * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
      *
      * @param dir

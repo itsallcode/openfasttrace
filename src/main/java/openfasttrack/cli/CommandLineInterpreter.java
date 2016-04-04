@@ -79,7 +79,8 @@ public class CommandLineInterpreter
         final Map<String, Method> setterMethods = methods
                 .filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
                 .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
-        LOG.finest(() -> "Found arguments " + setterMethods.keySet());
+        LOG.finest(() -> "Found setter methods " + setterMethods.keySet()
+                + " for argument receiver " + argumentsReceiver.getClass());
         return setterMethods;
     }
 

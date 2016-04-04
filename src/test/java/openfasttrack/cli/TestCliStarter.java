@@ -49,11 +49,13 @@ public class TestCliStarter
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private Path docDir;
+    private Path outputFile;
 
     @Before
     public void setUp()
     {
         this.docDir = Paths.get("doc").toAbsolutePath();
+        this.outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
     }
 
     @Test
@@ -78,22 +80,27 @@ public class TestCliStarter
     @Test
     public void testConvertUnknownExporter()
     {
-        final Path outputFile = this.tempFolder.getRoot().toPath().resolve("output.xml");
         expectException(
                 asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat", "illegal",
-                        "-outputFile", outputFile.toString()),
+                        "-outputFile", this.outputFile.toString()),
                 ExporterException.class, "Found no matching exporter for output format 'illegal'");
     }
 
     @Test
     public void testConvertToSpecobject() throws IOException
     {
-        final Path outputFile = this.tempFolder.getRoot().toPath().resolve("output.xml");
-
         runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
-                "specobject", "-outputFile", outputFile.toString()));
-        assertThat(Files.exists(outputFile), equalTo(true));
-        assertThat(fileContent(outputFile).length(), greaterThan(10000));
+                "specobject", "-outputFile", this.outputFile.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
+    }
+
+    @Test
+    public void testConvertToSpecobjectStdOutNoOutputFile() throws IOException
+    {
+        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
+                "specobject"));
+        assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
     @Test
@@ -106,12 +113,17 @@ public class TestCliStarter
     @Test
     public void testTrace() throws IOException
     {
-        final Path outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
-
         runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
-                outputFile.toString()));
-        assertThat(Files.exists(outputFile), equalTo(true));
-        assertThat(fileContent(outputFile).length(), greaterThan(1500));
+                this.outputFile.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
+    }
+
+    @Test
+    public void testTraceStdOutNoOutputFile() throws IOException
+    {
+        runCliStarter(asList("trace", "-inputDir", this.docDir.toString()));
+        assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
     private String fileContent(final Path file) throws IOException

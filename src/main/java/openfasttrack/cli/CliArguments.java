@@ -51,7 +51,7 @@ public class CliArguments
     {
         if (this.outputFile == null)
         {
-            throw new MissingArgumentException("outputFile");
+            return null;
         }
         return Paths.get(this.outputFile);
     }

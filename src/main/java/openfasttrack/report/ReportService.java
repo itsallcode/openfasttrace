@@ -35,8 +35,7 @@ public class ReportService
     public void generateReport(final Trace trace, final Path outputFile,
             final ReportVerbosity verbosity)
     {
-        try (OutputStream outputStream = new BufferedOutputStream(
-                Files.newOutputStream(outputFile)))
+        try (OutputStream outputStream = new BufferedOutputStream(createOutputStream(outputFile)))
         {
             new PlainTextReport(trace).renderToStreamWithVerbosityLevel(outputStream, verbosity);
         }
@@ -44,5 +43,10 @@ public class ReportService
         {
             throw new ReportException("Error generating report to output file " + outputFile, e);
         }
+    }
+
+    private OutputStream createOutputStream(final Path outputFile) throws IOException
+    {
+        return outputFile == null ? System.out : Files.newOutputStream(outputFile);
     }
 }

@@ -25,28 +25,33 @@ package openfasttrack.importer;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
-
+import org.junit.Before;
 import org.junit.Test;
 
-import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;;
+import openfasttrack.core.SpecificationItemId;
 
-public class TestSpecificationItemListBuilder
+public class TestSpecificationListBuilder
 {
-    private static final String DESCRIPTION = "description";
-    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
+    private static final SpecificationItemId ITEM_ID = SpecificationItemId.parseId("foo~bar~1");
+    private SpecificationListBuilder builder;
+
+    @Before
+    public void setUp()
+    {
+        this.builder = new SpecificationListBuilder();
+    }
 
     @Test
-    public void testBuildBasicItem()
+    public void testDuplicateIdNotIgnored()
     {
-        final SpecificationListBuilder itemsBuilder = new SpecificationListBuilder();
-        itemsBuilder.beginSpecificationItem();
-        itemsBuilder.setId(ID);
-        itemsBuilder.appendDescription(DESCRIPTION);
-        final List<SpecificationItem> items = itemsBuilder.build();
-        assertThat(items.size(), equalTo(1));
-        assertThat(items.get(0).getId(), equalTo(ID));
-        assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
+        this.builder.beginSpecificationItem();
+        this.builder.setId(ITEM_ID);
+        this.builder.endSpecificationItem();
+        this.builder.beginSpecificationItem();
+        this.builder.setId(ITEM_ID);
+        this.builder.endSpecificationItem();
+
+        assertThat(this.builder.getItemCount(), equalTo(2));
     }
+
 }

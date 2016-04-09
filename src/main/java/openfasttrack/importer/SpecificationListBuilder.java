@@ -22,20 +22,20 @@ package openfasttrack.importer;
  * #L%
  */
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 
 /**
- * The {@link SpecificationMapListBuilder} consumes import events and generates
+ * The {@link SpecificationListBuilder} consumes import events and generates
  * a map of specification items from them. The key to the map is the
  * specification item ID.
  */
-public class SpecificationMapListBuilder implements ImportEventListener
+public class SpecificationListBuilder implements ImportEventListener
 {
-    private final Map<SpecificationItemId, SpecificationItem> items = new HashMap<>();
+    private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder = null;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
@@ -102,7 +102,7 @@ public class SpecificationMapListBuilder implements ImportEventListener
      *
      * @return the list of specification items collected up to this point
      */
-    public Map<SpecificationItemId, SpecificationItem> build()
+    public List<SpecificationItem> build()
     {
         this.endSpecificationItem();
         return this.items;
@@ -135,7 +135,7 @@ public class SpecificationMapListBuilder implements ImportEventListener
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString());
         final SpecificationItem item = this.itemBuilder.build();
-        this.items.put(item.getId(), item);
+        this.items.add(item);
         resetState();
     }
 }

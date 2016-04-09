@@ -23,10 +23,9 @@ package openfasttrack.importer;
  */
 
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.List;
 
 import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 
 /**
  * This service provides convenient methods for importing
@@ -47,7 +46,7 @@ public class ImporterService
         this.factoryLoader = factoryLoader;
     }
 
-    public Map<SpecificationItemId, SpecificationItem> importFile(final Path file)
+    public List<SpecificationItem> importFile(final Path file)
     {
         return createImporter() //
                 .importFile(file) //
@@ -56,6 +55,6 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        return new MultiFileImporter(new SpecificationMapListBuilder(), this.factoryLoader);
+        return new MultiFileImporter(new SpecificationListBuilder(), this.factoryLoader);
     }
 }

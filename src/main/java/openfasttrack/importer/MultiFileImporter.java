@@ -29,13 +29,12 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
@@ -49,10 +48,10 @@ public class MultiFileImporter
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    private final SpecificationMapListBuilder specItemBuilder;
+    private final SpecificationListBuilder specItemBuilder;
     private final ImporterFactoryLoader factoryLoader;
 
-    MultiFileImporter(final SpecificationMapListBuilder specItemBuilder,
+    MultiFileImporter(final SpecificationListBuilder specItemBuilder,
             final ImporterFactoryLoader factoryLoader)
     {
         this.specItemBuilder = specItemBuilder;
@@ -120,13 +119,13 @@ public class MultiFileImporter
      * 
      * @return all imported {@link SpecificationItem}s.
      */
-    public Map<SpecificationItemId, SpecificationItem> getImportedItems()
+    public List<SpecificationItem> getImportedItems()
     {
         return this.specItemBuilder.build();
     }
 
     private Importer createImporter(final Path file, final Charset charset,
-            final SpecificationMapListBuilder builder)
+            final SpecificationListBuilder builder)
     {
         final ImporterFactory importerFactory = this.factoryLoader.getImporterFactory(file);
         final Importer importer = importerFactory.createImporter(file, charset, builder);

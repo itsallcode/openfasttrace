@@ -153,13 +153,13 @@ public class TestPlainTextReport
     private String expectFailureDetails()
     {
         return "not ok - dsn~bar~1\n" //
-                + "# desc B1\n" //
+                + "#\n# desc B1\n#\n" //
                 + "not ok - req~foo~1\n" //
-                + "# desc A1\n# desc A2\n# desc A3\n" //
+                + "#\n# desc A1\n# desc A2\n# desc A3\n#\n" //
                 + "not ok - req~zoo~1\n" //
-                + "# desc D1\n" //
+                + "#\n# desc D1\n#\n" //
                 + "not ok - req~zoo~2\n" //
-                + "# desc C1\n# desc C2\n" //
+                + "#\n# desc C1\n# desc C2\n#\n" //
                 + "\nnot ok - 6 total, 4 not covered\n";
     }
 }

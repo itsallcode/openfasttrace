@@ -29,9 +29,9 @@ import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 
 /**
- * The {@link SpecificationListBuilder} consumes import events and generates
- * a map of specification items from them. The key to the map is the
- * specification item ID.
+ * The {@link SpecificationListBuilder} consumes import events and generates a
+ * map of specification items from them. The key to the map is the specification
+ * item ID.
  */
 public class SpecificationListBuilder implements ImportEventListener
 {
@@ -68,21 +68,21 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
-    public void appendDescription(final String descriptionFragment)
+    public void appendDescription(final String fragment)
     {
-        this.description.append(descriptionFragment);
+        this.description.append(fragment);
     }
 
     @Override
-    public void appendRationale(final String rationaleFragment)
+    public void appendRationale(final String fragment)
     {
-        this.rationale.append(rationaleFragment);
+        this.rationale.append(fragment);
     }
 
     @Override
-    public void appendComment(final String commentFragment)
+    public void appendComment(final String fragment)
     {
-        this.comment.append(commentFragment);
+        this.comment.append(fragment);
     }
 
     @Override

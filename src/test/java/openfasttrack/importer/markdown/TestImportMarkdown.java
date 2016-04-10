@@ -47,7 +47,8 @@ public class TestImportMarkdown
     final private static SpecificationItemId ID2 = SpecificationItemId.parseId("type~id~2");
     final private static String TITLE = "Requirement Title";
     private static final String DESCRIPTION_LINE1 = "Description";
-    private static final String DESCRIPTION_LINE2 = "More description";
+    private static final String DESCRIPTION_LINE2 = "";
+    private static final String DESCRIPTION_LINE3 = "More description";
     private static final String RATIONALE_LINE1 = "Rationale";
     private static final String RATIONALE_LINE2 = "More rationale";
     private static final String COMMENT_LINE1 = "Comment";
@@ -114,27 +115,27 @@ public class TestImportMarkdown
 
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
-        final StringBuilder builder = new StringBuilder("# ").append(TestImportMarkdown.TITLE)
-                .append("\n") //
-                .append("`").append(ID1).append("` <a id=\"").append(ID1).append("\"></a>") //
-                .append("\n") //
-                .append(DESCRIPTION_LINE1).append("\n") //
-                .append(DESCRIPTION_LINE2).append("\n") //
-                .append("\nRationale:\n") //
-                .append(RATIONALE_LINE1).append("\n") //
-                .append(RATIONALE_LINE2).append("\n") //
-                .append("\nCovers:\n\n") //
-                .append("  * ").append(COVERED_ID1).append("\n") //
-                .append("  + ").append(COVERED_ID2).append("\n") //
-                .append("\nDepends:\n\n") //
-                .append("  + ").append(DEPENDS_ON_ID1).append("\n") //
-                .append("  - ").append(DEPENDS_ON_ID2).append("\n") //
-                .append("\nComment:\n\n") //
-                .append(COMMENT_LINE1).append("\n") //
-                .append(COMMENT_LINE2).append("\n") //
-                .append("\nNeeds: ").append(NEEDS_ARTIFACT_TYPE1) //
-                .append(", ").append(NEEDS_ARTIFACT_TYPE2);
-        return builder.toString();
+        return "# " + TestImportMarkdown.TITLE //
+                + "\n" //
+                + "`" + ID1 + "` <a id=\"" + ID1 + "\"></a>" //
+                + "\n" //
+                + DESCRIPTION_LINE1 + "\n" //
+                + DESCRIPTION_LINE2 + "\n" //
+                + DESCRIPTION_LINE3 + "\n" //
+                + "\nRationale:\n" //
+                + RATIONALE_LINE1 + "\n" //
+                + RATIONALE_LINE2 + "\n" //
+                + "\nCovers:\n\n" //
+                + "  * " + COVERED_ID1 + "\n" //
+                + "  + " + COVERED_ID2 + "\n" //
+                + "\nDepends:\n\n" //
+                + "  + " + DEPENDS_ON_ID1 + "\n" //
+                + "  - " + DEPENDS_ON_ID2 + "\n" //
+                + "\nComment:\n\n" //
+                + COMMENT_LINE1 + "\n" //
+                + COMMENT_LINE2 + "\n" //
+                + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
+                + ", " + NEEDS_ARTIFACT_TYPE2;
     }
 
     private void runImporterOnText(final String text)
@@ -151,18 +152,19 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID1);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
+        inOrder.verify(this.listenerMock)
+                .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
+                        + System.lineSeparator() + DESCRIPTION_LINE3);
+        inOrder.verify(this.listenerMock)
+                .appendRationale(RATIONALE_LINE1 + System.lineSeparator() + RATIONALE_LINE2);
         inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID1));
         inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID2));
         inOrder.verify(this.listenerMock)
                 .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID1));
         inOrder.verify(this.listenerMock)
                 .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID2));
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
+        inOrder.verify(this.listenerMock)
+                .appendComment(COMMENT_LINE1 + System.lineSeparator() + COMMENT_LINE2);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
@@ -172,19 +174,17 @@ public class TestImportMarkdown
     @Test
     public void testTwoConsecutiveSpecificationItems()
     {
-        final StringBuilder builder = createTwoConsecutiveItemsInMarkdownFormat();
-        runImporterOnText(builder.toString());
+        runImporterOnText(createTwoConsecutiveItemsInMarkdownFormat());
         assertImporterEventsForTwoConsecutiveItemsCalled();
     }
 
-    private StringBuilder createTwoConsecutiveItemsInMarkdownFormat()
+    private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        final StringBuilder builder = new StringBuilder("# ").append(TestImportMarkdown.TITLE)
-                .append("\n") //
-                .append(ID1).append("\n") //
-                .append("\n").append(ID2).append("\n") //
-                .append("# Irrelevant Title");
-        return builder;
+        return "# " + TestImportMarkdown.TITLE //
+                + "\n" //
+                + ID1 + "\n" //
+                + "\n" + ID2 + "\n" //
+                + "# Irrelevant Title";
     }
 
     private void assertImporterEventsForTwoConsecutiveItemsCalled()

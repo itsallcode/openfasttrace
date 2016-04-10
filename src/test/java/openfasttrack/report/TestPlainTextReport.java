@@ -58,7 +58,8 @@ public class TestPlainTextReport
     public void testReportLevel_Minimal_OK()
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("ok\n"));
+        assertThat(getReportOutput(ReportVerbosity.MINIMAL),
+                equalTo("ok" + System.lineSeparator() + ""));
     }
 
     private String getReportOutput(final ReportVerbosity verbosity)
@@ -73,7 +74,8 @@ public class TestPlainTextReport
     public void testReport_LevelMinimal_NotOk()
     {
         when(this.traceMock.isAllCovered()).thenReturn(false);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("not ok\n"));
+        assertThat(getReportOutput(ReportVerbosity.MINIMAL),
+                equalTo("not ok" + System.lineSeparator() + ""));
     }
 
     @Test
@@ -81,7 +83,8 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
-        assertThat(getReportOutput(ReportVerbosity.SUMMARY), equalTo("ok - 1 total\n"));
+        assertThat(getReportOutput(ReportVerbosity.SUMMARY),
+                equalTo("ok - 1 total" + System.lineSeparator() + ""));
     }
 
     @Test
@@ -91,7 +94,7 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countUncovered()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 2 total, 1 not covered\n"));
+                equalTo("ok - 2 total, 1 not covered" + System.lineSeparator() + ""));
     }
 
     @Test
@@ -111,7 +114,10 @@ public class TestPlainTextReport
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
         when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
         assertThat(getReportOutput(ReportVerbosity.FAILURES),
-                equalTo("dsn~bar~1\nreq~foo~1\nreq~zoo~1\nreq~zoo~2\n"));
+                equalTo("dsn~bar~1" + System.lineSeparator() //
+                        + "req~foo~1" + System.lineSeparator() //
+                        + "req~zoo~1" + System.lineSeparator() //
+                        + "req~zoo~2" + System.lineSeparator() + ""));
     }
 
     @Test
@@ -138,9 +144,10 @@ public class TestPlainTextReport
         when(itemBMock.getId()).thenReturn(idB);
         when(itemCMock.getId()).thenReturn(idC);
         when(itemDMock.getId()).thenReturn(idD);
-        when(itemAMock.getDescription()).thenReturn("desc A1\ndesc A2\ndesc A3");
+        when(itemAMock.getDescription()).thenReturn("desc A1" + System.lineSeparator() + "desc A2"
+                + System.lineSeparator() + "desc A3");
         when(itemBMock.getDescription()).thenReturn("desc B1");
-        when(itemCMock.getDescription()).thenReturn("desc C1\ndesc C2");
+        when(itemCMock.getDescription()).thenReturn("desc C1" + System.lineSeparator() + "desc C2");
         when(itemDMock.getDescription()).thenReturn("desc D1");
         when(itemAMock.isDefect()).thenReturn(true);
         when(itemBMock.isDefect()).thenReturn(true);
@@ -152,14 +159,26 @@ public class TestPlainTextReport
 
     private String expectFailureDetails()
     {
-        return "not ok - dsn~bar~1\n" //
-                + "#\n# desc B1\n#\n" //
-                + "not ok - req~foo~1\n" //
-                + "#\n# desc A1\n# desc A2\n# desc A3\n#\n" //
-                + "not ok - req~zoo~1\n" //
-                + "#\n# desc D1\n#\n" //
-                + "not ok - req~zoo~2\n" //
-                + "#\n# desc C1\n# desc C2\n#\n" //
-                + "\nnot ok - 6 total, 4 not covered\n";
+        return "not ok - dsn~bar~1" + System.lineSeparator() + "" //
+                + "#" + System.lineSeparator() //
+                + "# desc B1" + System.lineSeparator() //
+                + "#" + System.lineSeparator() + "" //
+                + "not ok - req~foo~1" + System.lineSeparator() + "" //
+                + "#" + System.lineSeparator() //
+                + "# desc A1" + System.lineSeparator() //
+                + "# desc A2" + System.lineSeparator() //
+                + "# desc A3" + System.lineSeparator() //
+                + "#" + System.lineSeparator() + "" //
+                + "not ok - req~zoo~1" + System.lineSeparator() + "" //
+                + "#" + System.lineSeparator() //
+                + "# desc D1" + System.lineSeparator() //
+                + "#" + System.lineSeparator() + "" //
+                + "not ok - req~zoo~2" + System.lineSeparator() + "" //
+                + "#" + System.lineSeparator() //
+                + "# desc C1" + System.lineSeparator() //
+                + "# desc C2" + System.lineSeparator() //
+                + "#" + System.lineSeparator() + "" //
+                + "" + System.lineSeparator() //
+                + "not ok - 6 total, 4 not covered" + System.lineSeparator() + "";
     }
 }

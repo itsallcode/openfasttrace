@@ -213,17 +213,17 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingLinks()
     {
-        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
-                entry) -> {
+
+        return countLinksWithPredicate((entry) -> {
             return entry.getKey().isOutgoing();
-        };
-        return countLinksWithPredicate(predicate);
+        });
     }
 
     private int countLinksWithPredicate(
             final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate)
     {
-        return (int) this.links.entrySet().stream().filter(predicate).count();
+        return this.links.entrySet().stream().filter(predicate)
+                .mapToInt(entry -> entry.getValue().size()).sum();
     }
 
     /**
@@ -233,11 +233,9 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingBadLinks()
     {
-        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
-                entry) -> {
+        return countLinksWithPredicate((entry) -> {
             return entry.getKey().isBadOutgoing();
-        };
-        return countLinksWithPredicate(predicate);
+        });
     }
 
     /**
@@ -247,11 +245,9 @@ public class LinkedSpecificationItem
      */
     public int countIncomingLinks()
     {
-        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
-                entry) -> {
+        return countLinksWithPredicate((entry) -> {
             return entry.getKey().isIncoming();
-        };
-        return countLinksWithPredicate(predicate);
+        });
     }
 
     /**
@@ -261,10 +257,15 @@ public class LinkedSpecificationItem
      */
     public int countIncomingBadLinks()
     {
-        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
-                entry) -> {
+        return countLinksWithPredicate((entry) -> {
             return entry.getKey().isBadIncoming();
-        };
-        return countLinksWithPredicate(predicate);
+        });
+    }
+
+    public int countDuplicateLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isDuplicate();
+        });
     }
 }

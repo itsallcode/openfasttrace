@@ -185,6 +185,12 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.countOutgoingBadLinks(), equalTo(5));
     }
 
+    private void linkToNewItemWithStatus(final LinkStatus status)
+    {
+        final SpecificationItem item = mock(SpecificationItem.class);
+        this.linkedItem.addLinkToItemWithStatus(new LinkedSpecificationItem(item), status);
+    }
+
     @Test
     public void testCountIncomingLinks()
     {
@@ -198,9 +204,12 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.countIncomingBadLinks(), equalTo(3));
     }
 
-    private void linkToNewItemWithStatus(final LinkStatus status)
+    @Test
+    public void testCountDuplicateLinks()
     {
-        final SpecificationItem item = mock(SpecificationItem.class);
-        this.linkedItem.addLinkToItemWithStatus(new LinkedSpecificationItem(item), status);
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
+        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.DUPLICATE);
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
+        assertThat(this.linkedItem.countDuplicateLinks(), equalTo(2));
     }
 }

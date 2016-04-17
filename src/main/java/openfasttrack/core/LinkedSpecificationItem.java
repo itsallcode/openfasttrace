@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Specification items with links that can be followed.
@@ -203,5 +204,67 @@ public class LinkedSpecificationItem
             }
         }
         return !isCoveredDeeply();
+    }
+
+    /**
+     * Count all outgoing links.
+     * 
+     * @return the total number of outgoing links.
+     */
+    public int countOutgoingLinks()
+    {
+        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
+                entry) -> {
+            return entry.getKey().isOutgoing();
+        };
+        return countLinksWithPredicate(predicate);
+    }
+
+    private int countLinksWithPredicate(
+            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate)
+    {
+        return (int) this.links.entrySet().stream().filter(predicate).count();
+    }
+
+    /**
+     * Count bad all outgoing links.
+     * 
+     * @return the number of outgoing links that are bad.
+     */
+    public int countOutgoingBadLinks()
+    {
+        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
+                entry) -> {
+            return entry.getKey().isBadOutgoing();
+        };
+        return countLinksWithPredicate(predicate);
+    }
+
+    /**
+     * Count all incoming links.
+     * 
+     * @return the total number of incoming links.
+     */
+    public int countIncomingLinks()
+    {
+        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
+                entry) -> {
+            return entry.getKey().isIncoming();
+        };
+        return countLinksWithPredicate(predicate);
+    }
+
+    /**
+     * Count bad all incoming links.
+     * 
+     * @return the number of incoming links that are bad.
+     */
+    public int countIncomingBadLinks()
+    {
+        final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate = (
+                entry) -> {
+            return entry.getKey().isBadIncoming();
+        };
+        return countLinksWithPredicate(predicate);
     }
 }

@@ -26,6 +26,15 @@ OFT imports requirements from different text formats. The default is Markdown.
 
 Needs: req
 
+## Reporting
+
+### Plain Text Report
+`feat~plain_text_report~1`<a id="feat~plain_text_report~1"></a>
+
+OFT produces a report in plain text that can be read directly as console output or with any text editor.
+
+Needs: req
+
 # High Level Requirements
 
 ## Anatomy of Specification Items
@@ -198,4 +207,71 @@ Covers:
 
   * [feat~requirement_import~1](#feat~requirement_import~1)
 
-Needs: dsn 
+Needs: dsn
+
+## Tracing
+
+### Exit Status According to Trancing Result
+
+`req~exit_status~1` <a id="req~exit_status~1"/></a>
+
+The return value of the OFT executable reflects the overall tracing result.
+ 
+Covers:
+
+  * [feat~plain_text_report~1](#feat~plain_text_report~1)
+
+Needs: dsn
+
+## Reports
+Reports are the main way to find out if a projects requirements are covered properly.
+
+### Report Verbosity Levels
+`req~report_verbosity_levels~1` <a id="req~report_verbosity_levels~1"></a>
+
+When running a report, users can choose between the following report levels:
+
+  * Quiet - no output
+  * Minimal - output states if all items are properly covered or not
+  * Summary - summary with aggregated coverage statistics
+  * Failures - List of all failed item IDs
+  * Failure details - List of all failed items and a overall summary
+  * All - List of all items and a summary
+
+Covers:
+
+  * [feat~plain_text_report~1](#feat~plain_text_report~1)
+
+Needs: dsn
+
+### Plain Text Report
+The plain text report is the most basic report variant. It serves two main purposes:
+
+1. Serve as input in build chains
+2. Serve as the minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
+
+#### Item Links Status
+`req~ptr.level_failure_details~1` <a id="req~ptr.item_link_summary~1"></a>
+
+On failure detail verbosity level the plain text report displays:
+
+Per specification item
+  1. Status
+  2. Number of broken incoming links 
+  3. Total number of incoming links
+  4. Number of broken outgoing links
+  5. Total number of outgoing links
+  6. Number of duplicates (not including this item)
+  7. ID
+  8. Description
+
+A summary
+  1. Overall status
+  2. Total number of links per status
+  3. Total number of duplicates
+
+Covers:
+
+  * [feat~plain_text_report~1](#feat~plain_text_report~1)
+
+Needs: dsn

@@ -58,26 +58,26 @@ public interface ImportEventListener
     /**
      * Append a text block to an item description
      *
-     * @param descriptionFragment
+     * @param fragment
      *            the text to be appended to the description
      */
-    public void appendDescription(final String descriptionFragment);
+    public void appendDescription(final String fragment);
 
     /**
      * Append a text block to the rationale
      *
-     * @param rationaleFragment
+     * @param fragment
      *            the text to be appended to the rationale
      */
-    public void appendRationale(final String rationaleFragment);
+    public void appendRationale(final String fragment);
 
     /**
      * Append a text block to the comment
      *
-     * @param commentFragment
+     * @param fragment
      *            the text to be appended to the comment
      */
-    public void appendComment(final String commentFragment);
+    public void appendComment(final String fragment);
 
     /**
      * The importer found a reference that indicates coverage of another

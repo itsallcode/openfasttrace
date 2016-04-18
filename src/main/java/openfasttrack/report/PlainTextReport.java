@@ -139,11 +139,14 @@ public class PlainTextReport implements Reportable
         renderItemLinkCounts(item, report);
         report.print(" - ");
         report.println(item.getId().toString());
-        for (final String line : item.getDescription().split("\n"))
+        report.println("#");
+
+        for (final String line : item.getDescription().split("\\r\\n|\\r|\\n"))
         {
             report.print("# ");
             report.println(line);
         }
+        report.println("#");
     }
 
     private void renderItemLinkCounts(final LinkedSpecificationItem item, final PrintStream report)

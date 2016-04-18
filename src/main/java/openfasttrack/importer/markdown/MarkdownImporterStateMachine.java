@@ -66,6 +66,8 @@ public class MarkdownImporterStateMachine
         {
             if ((this.state == entry.getFrom()) && matchToken(line, entry))
             {
+                entry.getTransition().transit();
+                this.state = entry.getTo();
                 break;
             }
         }
@@ -77,20 +79,10 @@ public class MarkdownImporterStateMachine
         final Matcher matcher = entry.getMarkdownPattern().getPattern().matcher(line);
         if (matcher.matches())
         {
-            if (matcher.groupCount() > 0)
-            {
-                this.lastToken = matcher.group(1);
-            }
-            executeTransition(line, entry);
+            this.lastToken = (matcher.groupCount() == 0) ? "" : matcher.group(1);
             matches = true;
         }
         return matches;
-    }
-
-    private void executeTransition(final String line, final Transition entry)
-    {
-        entry.getTransition().transit();
-        this.state = entry.getTo();
     }
 
     /**

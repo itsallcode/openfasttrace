@@ -129,12 +129,14 @@ public class PlainTextReport implements Reportable
     {
         this.trace.getUncoveredItems().stream() //
                 .sorted((item, other) -> item.getId().compareTo(other.getId())) //
-                .forEachOrdered(item -> reportItemDetails(item, report));
+                .forEachOrdered(item -> renderItemDetails(item, report));
     }
 
-    private void reportItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
     {
         report.print(translateStatus(!item.isDefect()));
+        report.print(" - ");
+        renderItemLinkCounts(item, report);
         report.print(" - ");
         report.println(item.getId().toString());
         for (final String line : item.getDescription().split("\n"))
@@ -142,5 +144,18 @@ public class PlainTextReport implements Reportable
             report.print("# ");
             report.println(line);
         }
+    }
+
+    private void renderItemLinkCounts(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        report.print(item.countIncomingBadLinks());
+        report.print("/");
+        report.print(item.countIncomingLinks());
+        report.print(">");
+        report.print(item.countDuplicateLinks());
+        report.print(">");
+        report.print(item.countOutgoingBadLinks());
+        report.print("/");
+        report.print(item.countOutgoingLinks());
     }
 }

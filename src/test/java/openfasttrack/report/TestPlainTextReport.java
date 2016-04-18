@@ -148,17 +148,37 @@ public class TestPlainTextReport
         when(itemDMock.isDefect()).thenReturn(true);
         when(this.traceMock.getUncoveredItems())
                 .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
+        when(itemAMock.countIncomingBadLinks()).thenReturn(0);
+        when(itemAMock.countIncomingLinks()).thenReturn(3);
+        when(itemAMock.countDuplicateLinks()).thenReturn(1);
+        when(itemAMock.countOutgoingBadLinks()).thenReturn(0);
+        when(itemAMock.countOutgoingLinks()).thenReturn(2);
+        when(itemBMock.countIncomingBadLinks()).thenReturn(0);
+        when(itemBMock.countIncomingLinks()).thenReturn(0);
+        when(itemBMock.countDuplicateLinks()).thenReturn(0);
+        when(itemBMock.countOutgoingBadLinks()).thenReturn(2);
+        when(itemBMock.countOutgoingLinks()).thenReturn(4);
+        when(itemCMock.countIncomingBadLinks()).thenReturn(1);
+        when(itemCMock.countIncomingLinks()).thenReturn(6);
+        when(itemCMock.countDuplicateLinks()).thenReturn(0);
+        when(itemCMock.countOutgoingBadLinks()).thenReturn(0);
+        when(itemCMock.countOutgoingLinks()).thenReturn(0);
+        when(itemDMock.countIncomingBadLinks()).thenReturn(3);
+        when(itemDMock.countIncomingLinks()).thenReturn(7);
+        when(itemDMock.countDuplicateLinks()).thenReturn(1);
+        when(itemDMock.countOutgoingBadLinks()).thenReturn(2);
+        when(itemDMock.countOutgoingLinks()).thenReturn(3);
     }
 
     private String expectFailureDetails()
     {
-        return "not ok - dsn~bar~1\n" //
+        return "not ok - 0/0>0>2/4 - dsn~bar~1\n" //
                 + "# desc B1\n" //
-                + "not ok - req~foo~1\n" //
+                + "not ok - 0/3>1>0/2 - req~foo~1\n" //
                 + "# desc A1\n# desc A2\n# desc A3\n" //
-                + "not ok - req~zoo~1\n" //
+                + "not ok - 3/7>1>2/3 - req~zoo~1\n" //
                 + "# desc D1\n" //
-                + "not ok - req~zoo~2\n" //
+                + "not ok - 1/6>0>0/0 - req~zoo~2\n" //
                 + "# desc C1\n# desc C2\n" //
                 + "\nnot ok - 6 total, 4 not covered\n";
     }

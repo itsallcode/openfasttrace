@@ -175,14 +175,19 @@ public class TestLinkedSpecificationItem
     @Test
     public void testCountOutgoingLinks()
     {
-        for (final LinkStatus status : Arrays.asList(LinkStatus.COVERS, LinkStatus.PREDATED,
-                LinkStatus.OUTDATED, LinkStatus.UNWANTED, LinkStatus.ORPHANED,
-                LinkStatus.AMBIGUOUS))
-        {
-            linkToNewItemWithStatus(status);
-        }
+        linkToNewItemsWithStatus(LinkStatus.COVERS, LinkStatus.PREDATED, LinkStatus.OUTDATED,
+                LinkStatus.UNWANTED, LinkStatus.ORPHANED, LinkStatus.AMBIGUOUS);
+
         assertThat(this.linkedItem.countOutgoingLinks(), equalTo(6));
         assertThat(this.linkedItem.countOutgoingBadLinks(), equalTo(5));
+    }
+
+    private void linkToNewItemsWithStatus(final LinkStatus... status)
+    {
+        for (final LinkStatus linkStatus : status)
+        {
+            linkToNewItemWithStatus(linkStatus);
+        }
     }
 
     private void linkToNewItemWithStatus(final LinkStatus status)
@@ -194,12 +199,9 @@ public class TestLinkedSpecificationItem
     @Test
     public void testCountIncomingLinks()
     {
-        for (final LinkStatus status : Arrays.asList(LinkStatus.COVERED_SHALLOW,
-                LinkStatus.COVERED_PREDATED, LinkStatus.COVERED_OUTDATED,
-                LinkStatus.COVERED_UNWANTED))
-        {
-            linkToNewItemWithStatus(status);
-        }
+        linkToNewItemsWithStatus(LinkStatus.COVERED_SHALLOW, LinkStatus.COVERED_PREDATED,
+                LinkStatus.COVERED_OUTDATED, LinkStatus.COVERED_UNWANTED);
+
         assertThat(this.linkedItem.countIncomingLinks(), equalTo(4));
         assertThat(this.linkedItem.countIncomingBadLinks(), equalTo(3));
     }

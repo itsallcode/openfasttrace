@@ -1,3 +1,5 @@
+<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+
 System Requirement Specification OpenFastTrack
 
 # Introduction
@@ -102,7 +104,7 @@ Covers:
 Needs: dsn
 
 ### Deep Coverage
-`req~deep_coverage~1` <a id="req~deep_coverage~1`></a>
+`req~deep_coverage~1` <a id="req~deep_coverage~1"></a>
 
 OFT marks a specification item as _covered deeply_ if this item and all items it needs coverage from are covered recursively.
 

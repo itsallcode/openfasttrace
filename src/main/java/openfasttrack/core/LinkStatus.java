@@ -40,4 +40,58 @@ public enum LinkStatus
     {
         return (this != COVERS) && (this != COVERED_SHALLOW);
     }
+
+    /**
+     * Check if the link is an outgoing link.
+     * 
+     * @return <code>true</code> if the link is outgoing.
+     */
+    public boolean isOutgoing()
+    {
+        return (this == LinkStatus.COVERS) || isBadOutgoing();
+    }
+
+    /**
+     * Check if the link is a bad outgoing link.
+     * 
+     * @return <code>true</code> if the link is outgoing and has an unclean
+     *         status.
+     */
+    public boolean isBadOutgoing()
+    {
+        return (this == PREDATED) || (this == OUTDATED) || (this == AMBIGUOUS) || (this == UNWANTED)
+                || (this == ORPHANED);
+    }
+
+    /**
+     * Check if the link is an incoming link.
+     * 
+     * @return <code>true</code> if the link is incoming.
+     */
+    public boolean isIncoming()
+    {
+        return (this == COVERED_SHALLOW) || isBadIncoming();
+    }
+
+    /**
+     * Check if the link is a bad incoming link.
+     * 
+     * @return <code>true</code> if the link is incoming and has an unclean
+     *         status.
+     */
+    public boolean isBadIncoming()
+    {
+        return (this == COVERED_UNWANTED) || (this == COVERED_PREDATED)
+                || (this == COVERED_OUTDATED);
+    }
+
+    /**
+     * Check if the link status indicates a duplicate.
+     * 
+     * @return <code>true</code> if the link points to duplicate.
+     */
+    public boolean isDuplicate()
+    {
+        return (this == DUPLICATE);
+    }
 }

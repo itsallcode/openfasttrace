@@ -29,6 +29,7 @@ import static openfasttrack.core.SampleArtifactTypes.UMAN;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -169,5 +170,48 @@ public class TestLinkedSpecificationItem
                     && (status != LinkStatus.COVERED_SHALLOW);
             assertThat("for " + status, item.isDefect(), equalTo(expected));
         }
+    }
+
+    @Test
+    public void testCountOutgoingLinks()
+    {
+        linkToNewItemsWithStatus(LinkStatus.COVERS, LinkStatus.PREDATED, LinkStatus.OUTDATED,
+                LinkStatus.UNWANTED, LinkStatus.ORPHANED, LinkStatus.AMBIGUOUS);
+
+        assertThat(this.linkedItem.countOutgoingLinks(), equalTo(6));
+        assertThat(this.linkedItem.countOutgoingBadLinks(), equalTo(5));
+    }
+
+    private void linkToNewItemsWithStatus(final LinkStatus... status)
+    {
+        for (final LinkStatus linkStatus : status)
+        {
+            linkToNewItemWithStatus(linkStatus);
+        }
+    }
+
+    private void linkToNewItemWithStatus(final LinkStatus status)
+    {
+        final SpecificationItem item = mock(SpecificationItem.class);
+        this.linkedItem.addLinkToItemWithStatus(new LinkedSpecificationItem(item), status);
+    }
+
+    @Test
+    public void testCountIncomingLinks()
+    {
+        linkToNewItemsWithStatus(LinkStatus.COVERED_SHALLOW, LinkStatus.COVERED_PREDATED,
+                LinkStatus.COVERED_OUTDATED, LinkStatus.COVERED_UNWANTED);
+
+        assertThat(this.linkedItem.countIncomingLinks(), equalTo(4));
+        assertThat(this.linkedItem.countIncomingBadLinks(), equalTo(3));
+    }
+
+    @Test
+    public void testCountDuplicateLinks()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
+        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.DUPLICATE);
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
+        assertThat(this.linkedItem.countDuplicateLinks(), equalTo(2));
     }
 }

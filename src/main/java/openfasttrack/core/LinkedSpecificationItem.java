@@ -29,13 +29,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Specification items with links that can be followed.
  */
 public class LinkedSpecificationItem
 {
-
     private final SpecificationItem item;
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
@@ -203,5 +203,72 @@ public class LinkedSpecificationItem
             }
         }
         return !isCoveredDeeply();
+    }
+
+    /**
+     * Count all outgoing links.
+     * 
+     * @return the total number of outgoing links.
+     */
+    public int countOutgoingLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isOutgoing();
+        });
+    }
+
+    private int countLinksWithPredicate(
+            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate)
+    {
+        return this.links.entrySet().stream().filter(predicate)
+                .mapToInt(entry -> entry.getValue().size()).sum();
+    }
+
+    /**
+     * Count all bad outgoing links.
+     * 
+     * @return the number of outgoing links that are bad.
+     */
+    public int countOutgoingBadLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isBadOutgoing();
+        });
+    }
+
+    /**
+     * Count all incoming links.
+     * 
+     * @return the total number of incoming links.
+     */
+    public int countIncomingLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isIncoming();
+        });
+    }
+
+    /**
+     * Count all bad incoming links.
+     * 
+     * @return the number of incoming links that are bad.
+     */
+    public int countIncomingBadLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isBadIncoming();
+        });
+    }
+
+    /**
+     * Count all duplicate links.
+     * 
+     * @return the number of duplicate links.
+     */
+    public int countDuplicateLinks()
+    {
+        return countLinksWithPredicate((entry) -> {
+            return entry.getKey().isDuplicate();
+        });
     }
 }

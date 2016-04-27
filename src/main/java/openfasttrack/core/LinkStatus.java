@@ -42,7 +42,7 @@ public enum LinkStatus
     }
 
     /**
-     * Check if the links is an outgoing link.
+     * Check if the link is an outgoing link.
      * 
      * @return <code>true</code> if the link is outgoing.
      */
@@ -52,7 +52,7 @@ public enum LinkStatus
     }
 
     /**
-     * Check if the links is a bad outgoing link.
+     * Check if the link is a bad outgoing link.
      * 
      * @return <code>true</code> if the link is outgoing and has an unclean
      *         status.
@@ -64,7 +64,7 @@ public enum LinkStatus
     }
 
     /**
-     * Check if the links is an incoming link.
+     * Check if the link is an incoming link.
      * 
      * @return <code>true</code> if the link is incoming.
      */
@@ -74,7 +74,7 @@ public enum LinkStatus
     }
 
     /**
-     * Check if the links is a bad incoming link.
+     * Check if the link is a bad incoming link.
      * 
      * @return <code>true</code> if the link is incoming and has an unclean
      *         status.

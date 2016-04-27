@@ -36,7 +36,6 @@ import java.util.function.Predicate;
  */
 public class LinkedSpecificationItem
 {
-
     private final SpecificationItem item;
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
@@ -213,7 +212,6 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingLinks()
     {
-
         return countLinksWithPredicate((entry) -> {
             return entry.getKey().isOutgoing();
         });
@@ -227,7 +225,7 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Count bad all outgoing links.
+     * Count all bad outgoing links.
      * 
      * @return the number of outgoing links that are bad.
      */
@@ -251,7 +249,7 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Count bad all incoming links.
+     * Count all bad incoming links.
      * 
      * @return the number of incoming links that are bad.
      */
@@ -262,6 +260,11 @@ public class LinkedSpecificationItem
         });
     }
 
+    /**
+     * Count all duplicate links.
+     * 
+     * @return the number of duplicate links.
+     */
     public int countDuplicateLinks()
     {
         return countLinksWithPredicate((entry) -> {

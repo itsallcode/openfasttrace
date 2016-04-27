@@ -211,7 +211,7 @@ Needs: dsn
 
 ## Tracing
 
-### Exit Status According to Trancing Result
+### Exit Status According to Tracing Result
 
 `req~exit_status~1` <a id="req~exit_status~1"/></a>
 
@@ -235,7 +235,7 @@ When running a report, users can choose between the following report levels:
   * Minimal - output states if all items are properly covered or not
   * Summary - summary with aggregated coverage statistics
   * Failures - List of all failed item IDs
-  * Failure details - List of all failed items and a overall summary
+  * Failure details - List of all failed items and an overall summary
   * All - List of all items and a summary
 
 Covers:
@@ -247,8 +247,8 @@ Needs: dsn
 ### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
 
-1. Serve as input in build chains
-2. Serve as the minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
+1. Input in build chains
+2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
 #### Item Links Status
 `req~ptr.level_failure_details~1` <a id="req~ptr.item_link_summary~1"></a>

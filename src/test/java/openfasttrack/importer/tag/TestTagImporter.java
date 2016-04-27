@@ -22,19 +22,19 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.io.StringReader;
-import java.util.Map;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.SpecificationMapListBuilder;
+import openfasttrack.importer.SpecificationListBuilder;
 
 /**
  * Test for {@link TagImporter}
@@ -188,14 +188,14 @@ public class TestTagImporter
     public void testDuplicateId()
     {
         assertItems(tag(ID1) + tag(ID1), //
-                item(ID1));
+                item(ID1), item(ID1));
     }
 
     @Test
     public void testDuplicateIdMultipleLines()
     {
         assertItems(tag(ID1) + UNIX_NEWLINE + tag(ID1), //
-                item(ID1));
+                item(ID1), item(ID1));
     }
 
     private String tag(final SpecificationItemId id)
@@ -220,17 +220,17 @@ public class TestTagImporter
 
     private void assertItems(final String content, final SpecificationItem... expectedItems)
     {
-        final Map<SpecificationItemId, SpecificationItem> actual = runImporter(content);
-        assertThat(actual.values(), hasSize(expectedItems.length));
-        for (final SpecificationItem expectedItem : expectedItems)
+        final List<SpecificationItem> actual = runImporter(content);
+        assertThat(actual, hasSize(expectedItems.length));
+        if (expectedItems.length > 0)
         {
-            assertThat(actual, hasEntry(expectedItem.getId(), expectedItem));
+            assertThat(actual, contains(expectedItems));
         }
     }
 
-    private Map<SpecificationItemId, SpecificationItem> runImporter(final String content)
+    private List<SpecificationItem> runImporter(final String content)
     {
-        final SpecificationMapListBuilder builder = new SpecificationMapListBuilder();
+        final SpecificationListBuilder builder = new SpecificationListBuilder();
         new TagImporterFactory().createImporter(new StringReader(content), builder).runImport();
         return builder.build();
     }

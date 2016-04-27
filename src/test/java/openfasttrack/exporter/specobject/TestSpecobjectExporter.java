@@ -23,6 +23,7 @@ package openfasttrack.exporter.specobject;
  */
 
 import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -36,8 +37,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -50,7 +51,7 @@ import org.junit.Test;
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.SpecificationMapListBuilder;
+import openfasttrack.importer.SpecificationListBuilder;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.matcher.SpecificationItemMatcher;
 import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
@@ -156,10 +157,9 @@ public class TestSpecobjectExporter
         LOG.info(() -> "Expected: " + expectedContent);
         assertEquals(expectedContent, actualContent);
         assertThat(actualContent, equalTo(expectedContent));
-        final Collection<SpecificationItem> actualParsedSpecobjects = parseSpecobjectXml(
-                actualContent);
+        final List<SpecificationItem> actualParsedSpecobjects = parseSpecobjectXml(actualContent);
 
-        final Collection<SpecificationItem> expectedItems = Arrays.stream(expectedLinkedItems)
+        final Collection<SpecificationItem> expectedItems = stream(expectedLinkedItems)
                 .map(i -> i.getItem()).collect(toList());
         assertThat(actualParsedSpecobjects, hasSize(expectedLinkedItems.length));
 
@@ -167,12 +167,12 @@ public class TestSpecobjectExporter
                 SpecificationItemMatcher.equalToAnyOrder(expectedItems));
     }
 
-    private Collection<SpecificationItem> parseSpecobjectXml(final String specobjectXml)
+    private List<SpecificationItem> parseSpecobjectXml(final String specobjectXml)
     {
-        final SpecificationMapListBuilder builder = new SpecificationMapListBuilder();
+        final SpecificationListBuilder builder = new SpecificationListBuilder();
         new SpecobjectImporterFactory().createImporter(new StringReader(specobjectXml), builder)
                 .runImport();
-        return builder.build().values();
+        return builder.build();
     }
 
     private String export(final LinkedSpecificationItem... items)

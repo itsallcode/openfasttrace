@@ -24,6 +24,7 @@ package openfasttrack.exporter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.importer.ImporterException;
 
 /**
  * Super class for factories producing {@link Exporter}s.
@@ -78,13 +78,26 @@ public abstract class ExporterFactory
     {
         if (!supportsFormat(outputFormat))
         {
-            throw new ImporterException(
+            throw new ExporterException(
                     "Output format '" + outputFormat + "' not supported for export");
         }
-        LOG.finest(
-                () -> "Creating exporter for file " + file + " and output format " + outputFormat);
-        final BufferedWriter writer = createWriter(file, charset);
+        final Writer writer = createWriter(file, outputFormat, charset);
         return createExporter(writer, items);
+    }
+
+    private Writer createWriter(final Path file, final String outputFormat, final Charset charset)
+    {
+        if (file != null)
+        {
+            LOG.finest(() -> "Creating exporter for file " + file + " and output format "
+                    + outputFormat);
+            return createWriter(file, charset);
+        }
+        else
+        {
+            LOG.finest(() -> "Creating exporter for stdout and output format " + outputFormat);
+            return new OutputStreamWriter(System.out);
+        }
     }
 
     private BufferedWriter createWriter(final Path file, final Charset charset)

@@ -29,11 +29,9 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import openfasttrack.core.ServiceLoaderWrapper;
-import openfasttrack.importer.ImporterException;
-import openfasttrack.importer.ImporterFactory;
 
 /**
- * This class is responsible for finding the matching {@link ImporterFactory}
+ * This class is responsible for finding the matching {@link ExporterFactory}
  * for a given {@link Path}.
  */
 public class ExporterFactoryLoader
@@ -56,10 +54,10 @@ public class ExporterFactoryLoader
      * throws an {@link ExporterException}.
      *
      * @param outputFormat
-     *            the output format for which to get a {@link ImporterFactory}.
+     *            the output format for which to get a {@link ExporterFactory}.
      * @return a matching {@link ExporterFactory} that can handle the given
      *         output format
-     * @throws ImporterException
+     * @throws ExporterException
      *             when no or more than one {@link ExporterFactory} is found.
      */
     public ExporterFactory getExporterFactory(final String outputFormat)
@@ -68,12 +66,12 @@ public class ExporterFactoryLoader
         switch (matchingExporters.size())
         {
         case 0:
-            throw new ImporterException(
+            throw new ExporterException(
                     "Found no matching exporter for output format '" + outputFormat + "'");
         case 1:
             return matchingExporters.get(0);
         default:
-            throw new ImporterException("Found more than one matching exporter for output format '"
+            throw new ExporterException("Found more than one matching exporter for output format '"
                     + outputFormat + "'");
         }
     }

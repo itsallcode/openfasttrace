@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import openfasttrack.core.SpecificationItem;
-import openfasttrack.core.SpecificationItemId;
 
 /**
  * Test for {@link ImporterService}
@@ -74,19 +73,18 @@ public class TestImporterService
     @Test
     public void testImport()
     {
-        final Map<SpecificationItemId, SpecificationItem> result = this.importerService
-                .importFile(this.file);
+        final List<SpecificationItem> result = this.importerService.importFile(this.file);
 
         verify(this.importerMock).runImport();
 
-        final SpecificationMapListBuilder builder = getBuilder();
+        final SpecificationListBuilder builder = getBuilder();
         assertThat(result, sameInstance(builder.build()));
     }
 
-    private SpecificationMapListBuilder getBuilder()
+    private SpecificationListBuilder getBuilder()
     {
-        final ArgumentCaptor<SpecificationMapListBuilder> arg = ArgumentCaptor
-                .forClass(SpecificationMapListBuilder.class);
+        final ArgumentCaptor<SpecificationListBuilder> arg = ArgumentCaptor
+                .forClass(SpecificationListBuilder.class);
         verify(this.importerFactoryMock).createImporter(same(this.file),
                 same(StandardCharsets.UTF_8), arg.capture());
         return arg.getValue();

@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
 import openfasttrack.core.ServiceLoaderWrapper;
@@ -36,6 +37,7 @@ import openfasttrack.core.ServiceLoaderWrapper;
  */
 public class ImporterFactoryLoader
 {
+    private static Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
     private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
 
     public ImporterFactoryLoader()
@@ -73,6 +75,13 @@ public class ImporterFactoryLoader
             throw new ImporterException(
                     "Found more than one matching importer for file '" + file + "'");
         }
+    }
+
+    public boolean supportsFile(final Path file)
+    {
+        final boolean supported = !getMatchingFactories(file).isEmpty();
+        LOG.finest(() -> "File " + file + " is supported = " + supported);
+        return supported;
     }
 
     private List<ImporterFactory> getMatchingFactories(final Path file)

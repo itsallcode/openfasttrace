@@ -153,8 +153,8 @@ public class TestSpecobjectExporter
             final LinkedSpecificationItem... expectedLinkedItems)
     {
         final String actualContent = export(expectedLinkedItems);
-        LOG.info(() -> "Actual  : " + actualContent);
-        LOG.info(() -> "Expected: " + expectedContent);
+        LOG.finest(() -> "Actual  : " + actualContent);
+        LOG.finest(() -> "Expected: " + expectedContent);
         assertEquals(expectedContent, actualContent);
         assertThat(actualContent, equalTo(expectedContent));
         final List<SpecificationItem> actualParsedSpecobjects = parseSpecobjectXml(actualContent);

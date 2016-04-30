@@ -36,6 +36,10 @@ import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.ImporterException;
 
+/**
+ * This class reads a single specobject from a {@link XMLEventReader} and
+ * reports it to an {@link ImportEventListener}.
+ */
 class SingleSpecobjectImportHelper
 {
     private final static Logger LOG = Logger
@@ -113,7 +117,7 @@ class SingleSpecobjectImportHelper
             break;
 
         default:
-            LOG.warning(() -> "Found unknown start element " + element.getName());
+            LOG.warning(() -> "Found unknown start element '" + element.getName() + "': ignore.");
             break;
         }
     }
@@ -214,7 +218,8 @@ class SingleSpecobjectImportHelper
         try
         {
             return this.xmlEventReader.nextEvent();
-        } catch (final XMLStreamException e)
+        }
+        catch (final XMLStreamException e)
         {
             throw new ImporterException("Exception reading next event", e);
         }
@@ -225,7 +230,8 @@ class SingleSpecobjectImportHelper
         try
         {
             return this.xmlEventReader.peek();
-        } catch (final XMLStreamException e)
+        }
+        catch (final XMLStreamException e)
         {
             throw new ImporterException("Exception when peeking next event", e);
         }

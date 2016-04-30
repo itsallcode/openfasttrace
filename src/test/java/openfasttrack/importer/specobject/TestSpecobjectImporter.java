@@ -36,6 +36,7 @@ import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
+import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
 
 /**
@@ -102,6 +103,12 @@ public class TestSpecobjectImporter
     {
         final List<SpecificationItem> result = runImporter("no-specobject.xml");
         assertThat(result, hasSize(0));
+    }
+
+    @Test(expected = ImporterException.class)
+    public void testSpecObjectsWithoutDoctype() throws FileNotFoundException
+    {
+        runImporter("specobject-without-doctype.xml");
     }
 
     private List<SpecificationItem> runImporter(final String fileName) throws FileNotFoundException

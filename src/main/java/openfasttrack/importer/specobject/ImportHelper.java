@@ -34,9 +34,20 @@ import javax.xml.stream.events.XMLEvent;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.ImporterException;
 
+/**
+ * This class imports specobjects from a single {@link XMLEventReader} and
+ * outputs found items to an {@link ImportEventListener} using a
+ * {@link SingleSpecobjectImportHelper}.
+ */
 class ImportHelper
 {
     private final static Logger LOG = Logger.getLogger(ImportHelper.class.getName());
+
+    private static final String SPECDOCUMENT_ROOT_ELEMENT_NAME = "specdocument";
+    private static final String SPECOBJECTS_ELEMENT_NAME = "specobjects";
+    private static final String SPECOBJECT_ELEMENT_NAME = "specobject";
+    private static final String DOCTYPE_ATTRIBUTE_NAME = "doctype";
+
     private final XMLEventReader xmlEventReader;
     private final ImportEventListener listener;
     private String defaultDoctype;
@@ -84,37 +95,45 @@ class ImportHelper
     private boolean rootElementWhitelisted(final StartElement rootElement)
     {
         final String elementName = rootElement.getName().getLocalPart();
-        return "specdocument".equals(elementName);
+        return SPECDOCUMENT_ROOT_ELEMENT_NAME.equals(elementName);
     }
 
     private void foundStartElement(final StartElement element) throws XMLStreamException
     {
         switch (element.getName().getLocalPart())
         {
-        case "specdocument":
-            LOG.fine("Found specdocument root element");
+        case SPECDOCUMENT_ROOT_ELEMENT_NAME:
+            LOG.finest("Found XML root element '" + SPECDOCUMENT_ROOT_ELEMENT_NAME + "': ignore.");
             break;
-        case "specobjects":
-            final Attribute doctypeAttribute = element.getAttributeByName(new QName("doctype"));
+        case SPECOBJECTS_ELEMENT_NAME:
+            final QName doctypeAttributeName = new QName(DOCTYPE_ATTRIBUTE_NAME);
+            final Attribute doctypeAttribute = element.getAttributeByName(doctypeAttributeName);
             if (doctypeAttribute != null)
             {
                 this.defaultDoctype = doctypeAttribute.getValue();
-                LOG.finest(() -> "Found specobjects with default doctype '" + this.defaultDoctype
-                        + "'");
+                LOG.finest(() -> "Found XML element '" + SPECOBJECTS_ELEMENT_NAME
+                        + "' with default doctype '" + this.defaultDoctype + "'.");
+            }
+            else
+            {
+                throw new ImporterException("Element " + element + " does not have an attribute '"
+                        + doctypeAttributeName + "'.");
             }
             break;
 
-        case "specobject":
+        case SPECOBJECT_ELEMENT_NAME:
             if (this.defaultDoctype == null)
             {
                 throw new ImporterException("No specobject default doctype found");
             }
+            LOG.finest(() -> "Found XML element '" + SPECOBJECT_ELEMENT_NAME
+                    + "': import using default doctype '" + this.defaultDoctype + "'.");
             new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener,
                     this.defaultDoctype).runImport();
             break;
 
         default:
-            LOG.warning(() -> "Found unknown XML element '" + element.getName() + "'");
+            LOG.warning(() -> "Found unknown XML element '" + element.getName() + "': ignore.");
             break;
         }
     }

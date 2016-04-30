@@ -40,6 +40,7 @@ class ImportHelper
     private final XMLEventReader xmlEventReader;
     private final ImportEventListener listener;
     private String defaultDoctype;
+    boolean validRootElementFound = false;
 
     public ImportHelper(final XMLEventReader xmlEventReader, final ImportEventListener listener)
     {
@@ -55,15 +56,44 @@ class ImportHelper
 
             if (currentEvent.isStartElement())
             {
+                if (skipFile(currentEvent.asStartElement()))
+                {
+                    return;
+                }
                 foundStartElement(currentEvent.asStartElement());
             }
         }
+    }
+
+    private boolean skipFile(final StartElement startElement)
+    {
+        if (this.validRootElementFound)
+        {
+            return false;
+        }
+        if (rootElementWhitelisted(startElement))
+        {
+            this.validRootElementFound = true;
+            return false;
+        }
+        LOG.warning(() -> "Found unknown XML root element '" + startElement.getName()
+                + "': skip file.");
+        return true;
+    }
+
+    private boolean rootElementWhitelisted(final StartElement rootElement)
+    {
+        final String elementName = rootElement.getName().getLocalPart();
+        return "specdocument".equals(elementName);
     }
 
     private void foundStartElement(final StartElement element) throws XMLStreamException
     {
         switch (element.getName().getLocalPart())
         {
+        case "specdocument":
+            LOG.fine("Found specdocument root element");
+            break;
         case "specobjects":
             final Attribute doctypeAttribute = element.getAttributeByName(new QName("doctype"));
             if (doctypeAttribute != null)

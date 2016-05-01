@@ -67,7 +67,7 @@ class ImportHelper
 
             if (currentEvent.isStartElement())
             {
-                if (skipFile(currentEvent.asStartElement()))
+                if (isXmlRootWhitelisted(currentEvent.asStartElement()))
                 {
                     return;
                 }
@@ -76,23 +76,22 @@ class ImportHelper
         }
     }
 
-    private boolean skipFile(final StartElement startElement)
+    private boolean isXmlRootWhitelisted(final StartElement currentElement)
     {
         if (this.validRootElementFound)
         {
             return false;
         }
-        if (rootElementWhitelisted(startElement))
+        if (isWhitelisted(currentElement))
         {
             this.validRootElementFound = true;
             return false;
         }
-        LOG.warning(() -> "Found unknown XML root element '" + startElement.getName()
-                + "': skip file.");
+        LOG.warning(() -> "Found unknown XML root element '" + currentElement + "': skip file.");
         return true;
     }
 
-    private boolean rootElementWhitelisted(final StartElement rootElement)
+    private boolean isWhitelisted(final StartElement rootElement)
     {
         final String elementName = rootElement.getName().getLocalPart();
         return SPECDOCUMENT_ROOT_ELEMENT_NAME.equals(elementName);
@@ -133,7 +132,7 @@ class ImportHelper
             break;
 
         default:
-            LOG.warning(() -> "Found unknown XML element '" + element.getName() + "': ignore.");
+            LOG.warning(() -> "Found unknown XML element '" + element + "': ignore.");
             break;
         }
     }

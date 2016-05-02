@@ -22,7 +22,6 @@ package openfasttrack.exporter;
  * #L%
  */
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -81,26 +80,22 @@ public abstract class ExporterFactory
             throw new ExporterException(
                     "Output format '" + outputFormat + "' not supported for export");
         }
-        final Writer writer = createWriter(file, outputFormat, charset);
+        final Writer writer = createWriter(file, charset);
         return createExporter(writer, items);
     }
 
-    private Writer createWriter(final Path file, final String outputFormat, final Charset charset)
+    private Writer createWriter(final Path file, final Charset charset)
     {
-        if (file != null)
+        if (file == null)
         {
-            LOG.finest(() -> "Creating exporter for file " + file + " and output format "
-                    + outputFormat);
-            return createWriter(file, charset);
+            LOG.finest(() -> "Creating exporter for stdout using charset " + charset);
+            return new OutputStreamWriter(System.out, charset);
         }
-        else
-        {
-            LOG.finest(() -> "Creating exporter for stdout and output format " + outputFormat);
-            return new OutputStreamWriter(System.out);
-        }
+        LOG.finest(() -> "Creating exporter for file " + file + " using charset " + charset);
+        return createFileWriter(file, charset);
     }
 
-    private BufferedWriter createWriter(final Path file, final Charset charset)
+    private Writer createFileWriter(final Path file, final Charset charset)
     {
         try
         {

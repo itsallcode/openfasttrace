@@ -27,15 +27,19 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.io.FileNotFoundException;
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import javax.xml.stream.XMLInputFactory;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
+import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
 
 /**
@@ -102,6 +106,18 @@ public class TestSpecobjectImporter
     {
         final List<SpecificationItem> result = runImporter("no-specobject.xml");
         assertThat(result, hasSize(0));
+    }
+
+    @Test(expected = ImporterException.class)
+    public void testSpecObjectsWithoutDoctype() throws FileNotFoundException
+    {
+        final String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + //
+                "<specdocument>\n" + //
+                "    <specobjects>\n" + //
+                "    </specobjects>\n" + //
+                "</specdocument>";
+        new SpecobjectImporter(new StringReader(content), XMLInputFactory.newFactory(), null)
+                .runImport();
     }
 
     private List<SpecificationItem> runImporter(final String fileName) throws FileNotFoundException

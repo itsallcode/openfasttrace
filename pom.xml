@@ -33,6 +33,12 @@
 			<version>2.0.2-beta</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.kaklakariada</groupId>
+			<artifactId>hamcrest-auto-matcher</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -41,10 +41,9 @@ mvn license:update-project-license license:update-file-header
 
 ### Publishing to jcenter
 
-To publish to jcenter
+1. Add the following to your `~/.m2/settings.xml`:
 
-* Add the following to your `~/.m2/settings.xml`:
-```xml
+	```xml
 	<servers>
 		<server>
 			<id>bintray-openfasttrack-maven-repo</id>
@@ -52,7 +51,14 @@ To publish to jcenter
 			<password>[bintray-api-key]</password>
 		</server>
 	</servers>
-```
-* If necessary update version in `pom.xml`, commit and push it.
-* Run `mvn deploy`.
-* Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) on GitHub.
+	```
+
+2. Update version in `pom.xml`, commit and push.
+3. Run command
+
+	```bash
+	$ mvn deploy
+	```
+
+4. Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) on GitHub.
+5. Sign in at https://bintray.com/ and publish the uploaded artifacts.

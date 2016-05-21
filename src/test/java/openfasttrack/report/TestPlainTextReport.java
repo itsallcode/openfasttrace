@@ -1,5 +1,7 @@
 package openfasttrack.report;
 
+import static java.util.stream.Collectors.joining;
+
 /*
  * #%L
  * OpenFastTrack
@@ -23,6 +25,7 @@ package openfasttrack.report;
  */
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -47,13 +50,10 @@ public class TestPlainTextReport
     @Mock
     private Trace traceMock;
 
-    private OutputStream outputStream;
-
     @Before
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
-        this.outputStream = new ByteArrayOutputStream();
     }
 
     @Test
@@ -61,13 +61,34 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
         assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("ok" + LINE_SEPARATOR));
+        assertReportOutput(ReportVerbosity.MINIMAL, "ok");
+    }
+
+    private void assertReportOutput(final ReportVerbosity verbosity,
+            final String... expectedReportLines)
+    {
+        final String expectedReportText = getExpectedReportText(expectedReportLines);
+        assertEquals(expectedReportText, getReportOutput(verbosity));
+        assertThat(getReportOutput(verbosity), equalTo(expectedReportText));
+    }
+
+    private String getExpectedReportText(final String... expectedReportLines)
+    {
+        if (expectedReportLines.length == 0)
+        {
+            return "";
+        }
+        return Arrays.stream(expectedReportLines) //
+                .collect(joining(LINE_SEPARATOR)) //
+                + LINE_SEPARATOR;
     }
 
     private String getReportOutput(final ReportVerbosity verbosity)
     {
+        final OutputStream outputStream = new ByteArrayOutputStream();
         final Reportable report = new PlainTextReport(this.traceMock);
-        report.renderToStreamWithVerbosityLevel(this.outputStream, verbosity);
-        return this.outputStream.toString();
+        report.renderToStreamWithVerbosityLevel(outputStream, verbosity);
+        return outputStream.toString();
     }
 
     @Test
@@ -75,6 +96,7 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(false);
         assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("not ok" + LINE_SEPARATOR));
+        assertReportOutput(ReportVerbosity.MINIMAL, "not ok");
     }
 
     @Test
@@ -84,6 +106,7 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
                 equalTo("ok - 1 total" + LINE_SEPARATOR));
+        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 1 total");
     }
 
     @Test
@@ -94,6 +117,7 @@ public class TestPlainTextReport
         when(this.traceMock.countUncovered()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
                 equalTo("ok - 2 total, 1 not covered" + LINE_SEPARATOR));
+        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 not covered");
     }
 
     @Test
@@ -102,6 +126,7 @@ public class TestPlainTextReport
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.FAILURES), equalTo(""));
+        assertReportOutput(ReportVerbosity.FAILURES);
     }
 
     @Test
@@ -113,8 +138,12 @@ public class TestPlainTextReport
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
         when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
         assertThat(getReportOutput(ReportVerbosity.FAILURES),
-                equalTo("dsn~bar~1" + LINE_SEPARATOR + "req~foo~1" + LINE_SEPARATOR + "req~zoo~1"
-                        + LINE_SEPARATOR + "req~zoo~2" + LINE_SEPARATOR));
+                equalTo("dsn~bar~1" + LINE_SEPARATOR //
+                        + "req~foo~1" + LINE_SEPARATOR //
+                        + "req~zoo~1" + LINE_SEPARATOR //
+                        + "req~zoo~2" + LINE_SEPARATOR));
+        assertReportOutput(ReportVerbosity.FAILURES, //
+                "dsn~bar~1", "req~foo~1", "req~zoo~1", "req~zoo~2");
     }
 
     @Test
@@ -125,6 +154,29 @@ public class TestPlainTextReport
         prepareFailedItemDetails();
         final String expected = expectFailureDetails();
         assertThat(getReportOutput(ReportVerbosity.FAILURE_DETAILS), equalTo(expected));
+
+        assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
+                "not ok - 0/0>0>2/4 - dsn~bar~1", //
+                "#", //
+                "# desc B1", //
+                "#", //
+                "not ok - 0/3>1>0/2 - req~foo~1", //
+                "#", //
+                "# desc A1", //
+                "# desc A2", //
+                "# desc A3", //
+                "#", //
+                "not ok - 3/7>1>2/3 - req~zoo~1", //
+                "#", //
+                "# desc D1", //
+                "#", //
+                "not ok - 1/6>0>0/0 - req~zoo~2", //
+                "#", //
+                "# desc C1", //
+                "# desc C2", //
+                "#", //
+                "", //
+                "not ok - 6 total, 4 not covered");
     }
 
     private void prepareFailedItemDetails()

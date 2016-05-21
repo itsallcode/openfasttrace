@@ -1,7 +1,6 @@
 package openfasttrack.report;
 
 import static java.util.stream.Collectors.joining;
-
 /*
  * #%L
  * OpenFastTrack
@@ -24,9 +23,7 @@ import static java.util.stream.Collectors.joining;
  * #L%
  */
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +57,6 @@ public class TestPlainTextReport
     public void testReportLevel_Minimal_OK()
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("ok" + LINE_SEPARATOR));
         assertReportOutput(ReportVerbosity.MINIMAL, "ok");
     }
 
@@ -69,7 +65,6 @@ public class TestPlainTextReport
     {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
         assertEquals(expectedReportText, getReportOutput(verbosity));
-        assertThat(getReportOutput(verbosity), equalTo(expectedReportText));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)
@@ -95,7 +90,6 @@ public class TestPlainTextReport
     public void testReport_LevelMinimal_NotOk()
     {
         when(this.traceMock.isAllCovered()).thenReturn(false);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("not ok" + LINE_SEPARATOR));
         assertReportOutput(ReportVerbosity.MINIMAL, "not ok");
     }
 
@@ -104,8 +98,6 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
-        assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 1 total" + LINE_SEPARATOR));
         assertReportOutput(ReportVerbosity.SUMMARY, "ok - 1 total");
     }
 
@@ -115,8 +107,6 @@ public class TestPlainTextReport
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countUncovered()).thenReturn(1);
-        assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 2 total, 1 not covered" + LINE_SEPARATOR));
         assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 not covered");
     }
 
@@ -125,7 +115,6 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
-        assertThat(getReportOutput(ReportVerbosity.FAILURES), equalTo(""));
         assertReportOutput(ReportVerbosity.FAILURES);
     }
 
@@ -137,11 +126,6 @@ public class TestPlainTextReport
         final SpecificationItemId idC = SpecificationItemId.parseId("req~zoo~2");
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
         when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
-        assertThat(getReportOutput(ReportVerbosity.FAILURES),
-                equalTo("dsn~bar~1" + LINE_SEPARATOR //
-                        + "req~foo~1" + LINE_SEPARATOR //
-                        + "req~zoo~1" + LINE_SEPARATOR //
-                        + "req~zoo~2" + LINE_SEPARATOR));
         assertReportOutput(ReportVerbosity.FAILURES, //
                 "dsn~bar~1", "req~foo~1", "req~zoo~1", "req~zoo~2");
     }
@@ -152,8 +136,6 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(6);
         when(this.traceMock.countUncovered()).thenReturn(4);
         prepareFailedItemDetails();
-        final String expected = expectFailureDetails();
-        assertThat(getReportOutput(ReportVerbosity.FAILURE_DETAILS), equalTo(expected));
 
         assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
                 "not ok - 0/0>0>2/4 - dsn~bar~1", //
@@ -224,30 +206,5 @@ public class TestPlainTextReport
         when(itemDMock.countDuplicateLinks()).thenReturn(1);
         when(itemDMock.countOutgoingBadLinks()).thenReturn(2);
         when(itemDMock.countOutgoingLinks()).thenReturn(3);
-    }
-
-    private String expectFailureDetails()
-    {
-        return "not ok - 0/0>0>2/4 - dsn~bar~1" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "# desc B1" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "not ok - 0/3>1>0/2 - req~foo~1" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "# desc A1" + LINE_SEPARATOR //
-                + "# desc A2" + LINE_SEPARATOR //
-                + "# desc A3" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "not ok - 3/7>1>2/3 - req~zoo~1" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "# desc D1" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "not ok - 1/6>0>0/0 - req~zoo~2" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + "# desc C1" + LINE_SEPARATOR //
-                + "# desc C2" + LINE_SEPARATOR //
-                + "#" + LINE_SEPARATOR //
-                + LINE_SEPARATOR //
-                + "not ok - 6 total, 4 not covered" + LINE_SEPARATOR;
     }
 }

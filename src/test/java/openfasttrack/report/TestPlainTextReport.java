@@ -25,9 +25,11 @@ package openfasttrack.report;
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 
@@ -51,6 +53,28 @@ public class TestPlainTextReport
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testOutputStreamClosed() throws IOException
+    {
+        final OutputStream outputStreamMock = mock(OutputStream.class);
+        new PlainTextReport(this.traceMock).renderToStreamWithVerbosityLevel(outputStreamMock,
+                ReportVerbosity.SUMMARY);
+        verify(outputStreamMock).close();
+    }
+
+    @Test
+    public void testReportLevel_Quiet_Ok()
+    {
+        when(this.traceMock.isAllCovered()).thenReturn(true);
+        assertReportOutput(ReportVerbosity.QUIET);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testReportLevel_All()
+    {
+        assertReportOutput(ReportVerbosity.ALL);
     }
 
     @Test

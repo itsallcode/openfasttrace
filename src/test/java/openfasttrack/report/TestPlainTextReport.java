@@ -42,6 +42,8 @@ import openfasttrack.core.Trace;
 
 public class TestPlainTextReport
 {
+    private static final String LINE_SEPARATOR = System.lineSeparator();
+
     @Mock
     private Trace traceMock;
 
@@ -58,24 +60,21 @@ public class TestPlainTextReport
     public void testReportLevel_Minimal_OK()
     {
         when(this.traceMock.isAllCovered()).thenReturn(true);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL),
-                equalTo("ok" + System.lineSeparator() + ""));
+        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("ok" + LINE_SEPARATOR));
     }
 
     private String getReportOutput(final ReportVerbosity verbosity)
     {
         final Reportable report = new PlainTextReport(this.traceMock);
         report.renderToStreamWithVerbosityLevel(this.outputStream, verbosity);
-        final String output = this.outputStream.toString();
-        return output;
+        return this.outputStream.toString();
     }
 
     @Test
     public void testReport_LevelMinimal_NotOk()
     {
         when(this.traceMock.isAllCovered()).thenReturn(false);
-        assertThat(getReportOutput(ReportVerbosity.MINIMAL),
-                equalTo("not ok" + System.lineSeparator() + ""));
+        assertThat(getReportOutput(ReportVerbosity.MINIMAL), equalTo("not ok" + LINE_SEPARATOR));
     }
 
     @Test
@@ -84,7 +83,7 @@ public class TestPlainTextReport
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 1 total" + System.lineSeparator() + ""));
+                equalTo("ok - 1 total" + LINE_SEPARATOR));
     }
 
     @Test
@@ -94,7 +93,7 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countUncovered()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 2 total, 1 not covered" + System.lineSeparator() + ""));
+                equalTo("ok - 2 total, 1 not covered" + LINE_SEPARATOR));
     }
 
     @Test
@@ -114,10 +113,8 @@ public class TestPlainTextReport
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
         when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
         assertThat(getReportOutput(ReportVerbosity.FAILURES),
-                equalTo("dsn~bar~1" + System.lineSeparator() //
-                        + "req~foo~1" + System.lineSeparator() //
-                        + "req~zoo~1" + System.lineSeparator() //
-                        + "req~zoo~2" + System.lineSeparator() + ""));
+                equalTo("dsn~bar~1" + LINE_SEPARATOR + "req~foo~1" + LINE_SEPARATOR + "req~zoo~1"
+                        + LINE_SEPARATOR + "req~zoo~2" + LINE_SEPARATOR));
     }
 
     @Test
@@ -144,10 +141,10 @@ public class TestPlainTextReport
         when(itemBMock.getId()).thenReturn(idB);
         when(itemCMock.getId()).thenReturn(idC);
         when(itemDMock.getId()).thenReturn(idD);
-        when(itemAMock.getDescription()).thenReturn("desc A1" + System.lineSeparator() + "desc A2"
-                + System.lineSeparator() + "desc A3");
+        when(itemAMock.getDescription())
+                .thenReturn("desc A1" + LINE_SEPARATOR + "desc A2" + LINE_SEPARATOR + "desc A3");
         when(itemBMock.getDescription()).thenReturn("desc B1");
-        when(itemCMock.getDescription()).thenReturn("desc C1" + System.lineSeparator() + "desc C2");
+        when(itemCMock.getDescription()).thenReturn("desc C1" + LINE_SEPARATOR + "desc C2");
         when(itemDMock.getDescription()).thenReturn("desc D1");
         when(itemAMock.isDefect()).thenReturn(true);
         when(itemBMock.isDefect()).thenReturn(true);
@@ -179,26 +176,26 @@ public class TestPlainTextReport
 
     private String expectFailureDetails()
     {
-        return "not ok - 0/0>0>2/4 - dsn~bar~1" + System.lineSeparator() + "" //
-                + "#" + System.lineSeparator() //
-                + "# desc B1" + System.lineSeparator() //
-                + "#" + System.lineSeparator() + "" //
-                + "not ok - 0/3>1>0/2 - req~foo~1" + System.lineSeparator() + "" //
-                + "#" + System.lineSeparator() //
-                + "# desc A1" + System.lineSeparator() //
-                + "# desc A2" + System.lineSeparator() //
-                + "# desc A3" + System.lineSeparator() //
-                + "#" + System.lineSeparator() + "" //
-                + "not ok - 3/7>1>2/3 - req~zoo~1" + System.lineSeparator() + "" //
-                + "#" + System.lineSeparator() //
-                + "# desc D1" + System.lineSeparator() //
-                + "#" + System.lineSeparator() + "" //
-                + "not ok - 1/6>0>0/0 - req~zoo~2" + System.lineSeparator() + "" //
-                + "#" + System.lineSeparator() //
-                + "# desc C1" + System.lineSeparator() //
-                + "# desc C2" + System.lineSeparator() //
-                + "#" + System.lineSeparator() + "" //
-                + "" + System.lineSeparator() //
-                + "not ok - 6 total, 4 not covered" + System.lineSeparator() + "";
+        return "not ok - 0/0>0>2/4 - dsn~bar~1" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "# desc B1" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "not ok - 0/3>1>0/2 - req~foo~1" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "# desc A1" + LINE_SEPARATOR //
+                + "# desc A2" + LINE_SEPARATOR //
+                + "# desc A3" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "not ok - 3/7>1>2/3 - req~zoo~1" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "# desc D1" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "not ok - 1/6>0>0/0 - req~zoo~2" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + "# desc C1" + LINE_SEPARATOR //
+                + "# desc C2" + LINE_SEPARATOR //
+                + "#" + LINE_SEPARATOR //
+                + LINE_SEPARATOR //
+                + "not ok - 6 total, 4 not covered" + LINE_SEPARATOR;
     }
 }

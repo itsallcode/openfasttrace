@@ -26,12 +26,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import openfasttrack.report.ReportVerbosity;
+
 public class CliArguments
 {
     private List<String> unnamedValues;
     private String inputDir;
     private String outputFile;
     private String outputFormat;
+    private ReportVerbosity reportVerbosity;
 
     public Path getInputDir()
     {
@@ -83,5 +86,15 @@ public class CliArguments
     public void setOutputFormat(final String outputFormat)
     {
         this.outputFormat = outputFormat;
+    }
+
+    public ReportVerbosity getReportVerbosity()
+    {
+        return this.reportVerbosity;
+    }
+
+    public void setReportVerbosity(final ReportVerbosity reportVerbosity)
+    {
+        this.reportVerbosity = reportVerbosity;
     }
 }

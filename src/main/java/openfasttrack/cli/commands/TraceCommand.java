@@ -65,7 +65,8 @@ public class TraceCommand
                 .map(LinkedSpecificationItem::new) //
                 .collect(toList());
         final Trace traceResult = this.tracer.trace(linkedSpecItems);
-        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(),
-                ReportVerbosity.FAILURE_DETAILS);
+        final ReportVerbosity verbosity = this.arguments.getReportVerbosity() == null
+                ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
+        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity);
     }
 }

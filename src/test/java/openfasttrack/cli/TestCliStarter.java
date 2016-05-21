@@ -137,6 +137,24 @@ public class TestCliStarter
     }
 
     @Test
+    public void testTraceWithReportVerbosityMinimal() throws IOException
+    {
+        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
+                this.outputFile.toString(), "-reportVerbosity", "MINIMAL"));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile), equalTo("not ok\n"));
+    }
+
+    @Test
+    public void testTraceWithReportVerbosityQuiet() throws IOException
+    {
+        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
+                this.outputFile.toString(), "-reportVerbosity", "QUIET"));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat(fileContent(this.outputFile), equalTo(""));
+    }
+
+    @Test
     public void testTraceDefaultInputDir() throws IOException
     {
         runCliStarter(asList("trace", "-outputFile", this.outputFile.toString()));

@@ -1,6 +1,5 @@
 package openfasttrack.report;
 
-import static java.util.stream.Collectors.joining;
 /*
  * #%L
  * OpenFastTrack
@@ -23,6 +22,7 @@ import static java.util.stream.Collectors.joining;
  * #L%
  */
 
+import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

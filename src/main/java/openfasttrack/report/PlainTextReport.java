@@ -27,6 +27,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.Trace;
@@ -38,6 +41,7 @@ import openfasttrack.core.Trace;
 public class PlainTextReport implements Reportable
 {
 
+    private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
 
     /**
@@ -138,15 +142,35 @@ public class PlainTextReport implements Reportable
         report.print(" - ");
         renderItemLinkCounts(item, report);
         report.print(" - ");
-        report.println(item.getId().toString());
+        report.print(item.getId().toString());
+        report.print(" ");
+        report.println(translateArtifactTypeCoverage(item));
         report.println("#");
 
-        for (final String line : item.getDescription().split("\\r\\n|\\r|\\n"))
+        for (final String line : item.getDescription().split(LINE_ENDING))
         {
             report.print("# ");
             report.println(line);
         }
         report.println("#");
+    }
+
+    private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
+    {
+        final Comparator<String> byTypeName = (a, b) -> a.replaceFirst("[-+]", "")
+                .compareTo(b.replaceFirst("[-+]", ""));
+
+        final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
+                .map(x -> "-" + x);
+        return "(" + Stream.concat( //
+                Stream.concat( //
+                        uncoveredStream, //
+                        item.getCoveredArtifactTypes().stream() //
+                ), //
+                item.getOverCoveredArtifactTypes().stream().map(x -> "+" + x) //
+        ) //
+                .sorted(byTypeName) //
+                .collect(Collectors.joining(", ")) + ")";
     }
 
     private void renderItemLinkCounts(final LinkedSpecificationItem item, final PrintStream report)

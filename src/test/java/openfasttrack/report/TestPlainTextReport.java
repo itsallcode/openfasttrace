@@ -1,5 +1,7 @@
 package openfasttrack.report;
 
+import static openfasttrack.matcher.MultilineTextMatcher.matchesAllLines;
+
 /*
  * #%L
  * OpenFastTrack
@@ -30,6 +32,8 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +46,11 @@ import openfasttrack.core.Trace;
 
 public class TestPlainTextReport
 {
+    private static final String DSN = "dsn";
+    private static final String UMAN = "uman";
+    private static final String UTEST = "utest";
+    private static final String IMPL = "impl";
+
     @Mock
     private Trace traceMock;
 
@@ -75,7 +84,7 @@ public class TestPlainTextReport
     {
         when(this.traceMock.isAllCovered()).thenReturn(false);
         assertThat(getReportOutput(ReportVerbosity.MINIMAL),
-                equalTo("not ok" + System.lineSeparator() + ""));
+                equalTo("not ok" + System.lineSeparator()));
     }
 
     @Test
@@ -84,7 +93,7 @@ public class TestPlainTextReport
         when(this.traceMock.isAllCovered()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 1 total" + System.lineSeparator() + ""));
+                equalTo("ok - 1 total" + System.lineSeparator()));
     }
 
     @Test
@@ -94,7 +103,7 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countUncovered()).thenReturn(1);
         assertThat(getReportOutput(ReportVerbosity.SUMMARY),
-                equalTo("ok - 2 total, 1 not covered" + System.lineSeparator() + ""));
+                equalTo("ok - 2 total, 1 not covered" + System.lineSeparator()));
     }
 
     @Test
@@ -114,10 +123,10 @@ public class TestPlainTextReport
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
         when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
         assertThat(getReportOutput(ReportVerbosity.FAILURES),
-                equalTo("dsn~bar~1" + System.lineSeparator() //
+                matchesAllLines("dsn~bar~1" + System.lineSeparator() //
                         + "req~foo~1" + System.lineSeparator() //
                         + "req~zoo~1" + System.lineSeparator() //
-                        + "req~zoo~2" + System.lineSeparator() + ""));
+                        + "req~zoo~2" + System.lineSeparator()));
     }
 
     @Test
@@ -126,79 +135,78 @@ public class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(6);
         when(this.traceMock.countUncovered()).thenReturn(4);
         prepareFailedItemDetails();
-        final String expected = expectFailureDetails();
-        assertThat(getReportOutput(ReportVerbosity.FAILURE_DETAILS), equalTo(expected));
+        assertThat(getReportOutput(ReportVerbosity.FAILURE_DETAILS),
+                matchesAllLines(expectFailureDetails()));
     }
 
     private void prepareFailedItemDetails()
     {
-        final LinkedSpecificationItem itemAMock = mock(LinkedSpecificationItem.class);
-        final LinkedSpecificationItem itemBMock = mock(LinkedSpecificationItem.class);
-        final LinkedSpecificationItem itemCMock = mock(LinkedSpecificationItem.class);
-        final LinkedSpecificationItem itemDMock = mock(LinkedSpecificationItem.class);
-        final SpecificationItemId idA = SpecificationItemId.parseId("req~foo~1");
-        final SpecificationItemId idB = SpecificationItemId.parseId("dsn~bar~1");
-        final SpecificationItemId idC = SpecificationItemId.parseId("req~zoo~2");
-        final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
-        when(itemAMock.getId()).thenReturn(idA);
-        when(itemBMock.getId()).thenReturn(idB);
-        when(itemCMock.getId()).thenReturn(idC);
-        when(itemDMock.getId()).thenReturn(idD);
-        when(itemAMock.getDescription()).thenReturn("desc A1" + System.lineSeparator() + "desc A2"
-                + System.lineSeparator() + "desc A3");
-        when(itemBMock.getDescription()).thenReturn("desc B1");
-        when(itemCMock.getDescription()).thenReturn("desc C1" + System.lineSeparator() + "desc C2");
-        when(itemDMock.getDescription()).thenReturn("desc D1");
-        when(itemAMock.isDefect()).thenReturn(true);
-        when(itemBMock.isDefect()).thenReturn(true);
-        when(itemCMock.isDefect()).thenReturn(true);
-        when(itemDMock.isDefect()).thenReturn(true);
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~foo~1", //
+                "desc A1" + System.lineSeparator() + "desc A2" + System.lineSeparator() + "desc A3", //
+                0, 3, 1, 0, 2);
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~bar~1", //
+                "desc B1", //
+                0, 0, 0, 2, 4);
+        final LinkedSpecificationItem itemCMock = createLinkedItemMock("req~zoo~2", //
+                "desc C1" + System.lineSeparator() + "desc C2", //
+                1, 6, 0, 0, 0);
+        final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1", //
+                "desc D1", //
+                3, 7, 1, 2, 3);
+
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(Arrays.asList(DSN)));
+        when(itemBMock.getCoveredArtifactTypes())
+                .thenReturn(new HashSet<>(Arrays.asList(IMPL, UTEST)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(UMAN));
+        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(Arrays.asList(DSN)));
+        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(Arrays.asList(UTEST));
+        when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
+        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(IMPL, UTEST));
+
         when(this.traceMock.getUncoveredItems())
                 .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
-        when(itemAMock.countIncomingBadLinks()).thenReturn(0);
-        when(itemAMock.countIncomingLinks()).thenReturn(3);
-        when(itemAMock.countDuplicateLinks()).thenReturn(1);
-        when(itemAMock.countOutgoingBadLinks()).thenReturn(0);
-        when(itemAMock.countOutgoingLinks()).thenReturn(2);
-        when(itemBMock.countIncomingBadLinks()).thenReturn(0);
-        when(itemBMock.countIncomingLinks()).thenReturn(0);
-        when(itemBMock.countDuplicateLinks()).thenReturn(0);
-        when(itemBMock.countOutgoingBadLinks()).thenReturn(2);
-        when(itemBMock.countOutgoingLinks()).thenReturn(4);
-        when(itemCMock.countIncomingBadLinks()).thenReturn(1);
-        when(itemCMock.countIncomingLinks()).thenReturn(6);
-        when(itemCMock.countDuplicateLinks()).thenReturn(0);
-        when(itemCMock.countOutgoingBadLinks()).thenReturn(0);
-        when(itemCMock.countOutgoingLinks()).thenReturn(0);
-        when(itemDMock.countIncomingBadLinks()).thenReturn(3);
-        when(itemDMock.countIncomingLinks()).thenReturn(7);
-        when(itemDMock.countDuplicateLinks()).thenReturn(1);
-        when(itemDMock.countOutgoingBadLinks()).thenReturn(2);
-        when(itemDMock.countOutgoingLinks()).thenReturn(3);
+    }
+
+    private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
+            final String description, final int incomingBadLinks, final int incomingLinks,
+            final int duplicates, final int outgoingBadLinks, final int outgoingLinks)
+    {
+        final SpecificationItemId id = SpecificationItemId.parseId(idAsText);
+        final LinkedSpecificationItem itemAMock = mock(LinkedSpecificationItem.class);
+        when(itemAMock.getDescription()).thenReturn(description);
+        when(itemAMock.getId()).thenReturn(id);
+        when(itemAMock.isDefect()).thenReturn(true);
+        when(itemAMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
+        when(itemAMock.countIncomingLinks()).thenReturn(incomingLinks);
+        when(itemAMock.countDuplicateLinks()).thenReturn(duplicates);
+        when(itemAMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
+        when(itemAMock.countOutgoingLinks()).thenReturn(outgoingLinks);
+        return itemAMock;
     }
 
     private String expectFailureDetails()
     {
-        return "not ok - 0/0>0>2/4 - dsn~bar~1" + System.lineSeparator() + "" //
+        return "not ok - 0/0>0>2/4 - dsn~bar~1 (impl, -uman, utest)" + System.lineSeparator() //
                 + "#" + System.lineSeparator() //
                 + "# desc B1" + System.lineSeparator() //
                 + "#" + System.lineSeparator() + "" //
-                + "not ok - 0/3>1>0/2 - req~foo~1" + System.lineSeparator() + "" //
+                + "not ok - 0/3>1>0/2 - req~foo~1 (dsn)" + System.lineSeparator() //
                 + "#" + System.lineSeparator() //
                 + "# desc A1" + System.lineSeparator() //
                 + "# desc A2" + System.lineSeparator() //
                 + "# desc A3" + System.lineSeparator() //
                 + "#" + System.lineSeparator() + "" //
-                + "not ok - 3/7>1>2/3 - req~zoo~1" + System.lineSeparator() + "" //
+                + "not ok - 3/7>1>2/3 - req~zoo~1 (-impl, -utest)" + System.lineSeparator() //
                 + "#" + System.lineSeparator() //
                 + "# desc D1" + System.lineSeparator() //
                 + "#" + System.lineSeparator() + "" //
-                + "not ok - 1/6>0>0/0 - req~zoo~2" + System.lineSeparator() + "" //
+                + "not ok - 1/6>0>0/0 - req~zoo~2 (dsn, +utest)" + System.lineSeparator() //
                 + "#" + System.lineSeparator() //
                 + "# desc C1" + System.lineSeparator() //
                 + "# desc C2" + System.lineSeparator() //
                 + "#" + System.lineSeparator() + "" //
                 + "" + System.lineSeparator() //
-                + "not ok - 6 total, 4 not covered" + System.lineSeparator() + "";
+                + "not ok - 6 total, 4 not covered" + System.lineSeparator();
     }
 }

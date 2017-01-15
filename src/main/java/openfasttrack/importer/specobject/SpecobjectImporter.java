@@ -41,10 +41,12 @@ class SpecobjectImporter implements Importer
     private final XMLInputFactory xmlInputFactory;
     private final Reader reader;
     private final ImportEventListener listener;
+    private final String fileName;
 
-    SpecobjectImporter(final Reader reader, final XMLInputFactory xmlInputFactory,
-            final ImportEventListener listener)
+    SpecobjectImporter(final String fileName, final Reader reader,
+            final XMLInputFactory xmlInputFactory, final ImportEventListener listener)
     {
+        this.fileName = fileName;
         this.xmlInputFactory = xmlInputFactory;
         this.listener = listener;
         this.reader = new BufferedReader(reader);
@@ -57,9 +59,11 @@ class SpecobjectImporter implements Importer
         {
             final XMLEventReader xmlEventReader = this.xmlInputFactory
                     .createXMLEventReader(this.reader);
-            final ImportHelper importHelper = new ImportHelper(xmlEventReader, this.listener);
+            final ImportHelper importHelper = new ImportHelper(this.fileName, xmlEventReader,
+                    this.listener);
             importHelper.runImport();
-        } catch (final XMLStreamException e)
+        }
+        catch (final XMLStreamException e)
         {
             throw new ImporterException("Error importing specobjects document", e);
         }

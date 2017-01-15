@@ -39,8 +39,9 @@ public class TagImporterFactory extends ImporterFactory
     }
 
     @Override
-    public Importer createImporter(final Reader reader, final ImportEventListener listener)
+    public Importer createImporter(final String fileName, final Reader reader,
+            final ImportEventListener listener)
     {
-        return new TagImporter(reader, listener);
+        return new TagImporter(fileName, reader, listener);
     }
 }

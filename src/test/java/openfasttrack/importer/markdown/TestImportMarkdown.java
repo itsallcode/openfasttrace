@@ -141,8 +141,8 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final StringReader reader = new StringReader(text);
-        final Importer importer = new MarkdownImporterFactory().createImporter(reader,
-                this.listenerMock);
+        final Importer importer = new MarkdownImporterFactory().createImporter("testfilename",
+                reader, this.listenerMock);
         importer.runImport();
     }
 

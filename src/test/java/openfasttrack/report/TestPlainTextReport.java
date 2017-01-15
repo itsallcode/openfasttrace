@@ -24,6 +24,7 @@ package openfasttrack.report;
 
 import static java.util.stream.Collectors.joining;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,6 +44,7 @@ import org.mockito.MockitoAnnotations;
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.Trace;
+import openfasttrack.matcher.MultilineTextMatcher;
 
 public class TestPlainTextReport
 {
@@ -94,6 +96,8 @@ public class TestPlainTextReport
             final String... expectedReportLines)
     {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
+        assertThat(getReportOutput(verbosity),
+                MultilineTextMatcher.matchesAllLines(expectedReportText));
         assertEquals(expectedReportText, getReportOutput(verbosity));
     }
 

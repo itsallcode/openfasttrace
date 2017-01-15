@@ -92,6 +92,6 @@ public enum LinkStatus
      */
     public boolean isDuplicate()
     {
-        return (this == DUPLICATE);
+        return this == DUPLICATE;
     }
 }

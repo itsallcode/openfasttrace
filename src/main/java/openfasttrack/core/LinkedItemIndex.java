@@ -67,11 +67,10 @@ public class LinkedItemIndex
     private static Map<SpecificationItemId, LinkedSpecificationItem> createIdIndex(
             final List<LinkedSpecificationItem> wrappedItems)
     {
-        final Map<SpecificationItemId, LinkedSpecificationItem> index = wrappedItems.stream()
+        return wrappedItems.stream()
                 .collect(Collectors.toMap(LinkedSpecificationItem::getId, //
                         item -> item, //
                         LinkedItemIndex::handleDuplicates));
-        return index;
     }
 
     private static LinkedSpecificationItem handleDuplicates(final LinkedSpecificationItem item1,

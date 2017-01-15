@@ -31,21 +31,21 @@ import openfasttrack.cli.commands.TraceCommand;
 
 public class CliStarter
 {
-    private static List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
+    private static final List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
             TraceCommand.COMMAND_NAME);
 
     private final CliArguments arguments;
+
+    CliStarter(final CliArguments arguments)
+    {
+        this.arguments = arguments;
+    }
 
     public static void main(final String[] args)
     {
         final CliArguments cliArguments = new CliArguments();
         new CommandLineInterpreter(args, cliArguments).parse();
         new CliStarter(cliArguments).start();
-    }
-
-    CliStarter(final CliArguments arguments)
-    {
-        this.arguments = arguments;
     }
 
     void start()
@@ -62,7 +62,6 @@ public class CliStarter
         case TraceCommand.COMMAND_NAME:
             new TraceCommand(this.arguments).start();
             break;
-
         default:
             throw new CliException("Invalid command '" + this.arguments.getCommand()
                     + "' given, expected one of " + AVAILABLE_COMMANDS);

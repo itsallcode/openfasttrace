@@ -27,16 +27,15 @@ class Transition
     private final State from;
     private final State to;
     private final MdPattern markdownPattern;
-    private final TransitionAction transition;
+    private final TransitionAction transitionAction;
 
     public Transition(final State from, final State to, final MdPattern markdownPattern,
-            final TransitionAction transition)
+            final TransitionAction transitionAction)
     {
-        super();
         this.from = from;
         this.to = to;
         this.markdownPattern = markdownPattern;
-        this.transition = transition;
+        this.transitionAction = transitionAction;
     }
 
     public State getFrom()
@@ -56,6 +55,6 @@ class Transition
 
     public TransitionAction getTransition()
     {
-        return this.transition;
+        return this.transitionAction;
     }
 }

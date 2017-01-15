@@ -134,7 +134,7 @@ public class PlainTextReport implements Reportable
     {
         this.trace.getUncoveredIds().stream() //
                 .sorted((id, other) -> id.compareTo(other)) //
-                .forEachOrdered(id -> report.println(id));
+                .forEachOrdered(report::println);
     }
 
     private void renderFailureDetails(final PrintStream report)

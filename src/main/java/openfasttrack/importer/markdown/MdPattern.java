@@ -66,6 +66,11 @@ public enum MdPattern
 
     private static class PatternConstants
     {
+        private PatternConstants()
+        {
+            // not instantiable
+        }
+
         public static final String REFERENCE = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
         public static final String BULLETS = "[+*-]";
         public static final String REFERENCE_AFTER_BULLET = "\\s{0,3}" + PatternConstants.BULLETS

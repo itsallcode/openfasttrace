@@ -66,7 +66,7 @@ public class CliArguments
 
     public String getCommand()
     {
-        if (this.unnamedValues != null && this.unnamedValues.size() > 0)
+        if (this.unnamedValues != null && !this.unnamedValues.isEmpty())
         {
             return this.unnamedValues.get(0);
         }

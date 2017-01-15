@@ -44,7 +44,7 @@ import openfasttrack.core.SpecificationItem;
  */
 public class MultiFileImporter
 {
-    private static Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
@@ -99,7 +99,7 @@ public class MultiFileImporter
                     .filter(matcher::matches) //
                     .filter(this.factoryLoader::supportsFile)
                     .map(file -> createImporter(file, DEFAULT_CHARSET, this.specItemBuilder))
-                    .forEach((importer) -> {
+                    .forEach(importer -> {
                         importer.runImport();
                         fileCount.incrementAndGet();
                     });

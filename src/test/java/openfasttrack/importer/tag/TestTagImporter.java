@@ -231,7 +231,8 @@ public class TestTagImporter
     private List<SpecificationItem> runImporter(final String content)
     {
         final SpecificationListBuilder builder = new SpecificationListBuilder();
-        new TagImporterFactory().createImporter(new StringReader(content), builder).runImport();
+        new TagImporterFactory().createImporter("testfilename", new StringReader(content), builder)
+                .runImport();
         return builder.build();
     }
 }

@@ -170,7 +170,8 @@ public class TestSpecobjectExporter
     private List<SpecificationItem> parseSpecobjectXml(final String specobjectXml)
     {
         final SpecificationListBuilder builder = new SpecificationListBuilder();
-        new SpecobjectImporterFactory().createImporter(new StringReader(specobjectXml), builder)
+        new SpecobjectImporterFactory()
+                .createImporter("testfilename", new StringReader(specobjectXml), builder)
                 .runImport();
         return builder.build();
     }

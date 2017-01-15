@@ -103,7 +103,7 @@ public abstract class ImporterFactory
         }
         LOG.finest(() -> "Creating importer for file " + file);
         final BufferedReader reader = createReader(file, charset);
-        return createImporter(reader, listener);
+        return createImporter(file.toString(), reader, listener);
     }
 
     private BufferedReader createReader(final Path file, final Charset charset)
@@ -121,6 +121,8 @@ public abstract class ImporterFactory
     /**
      * Create an importer that is able to read the given file
      *
+     * @param fileName
+     *            the name of the file.
      * @param reader
      *            the reader from which specification items are imported
      * @param listener
@@ -128,6 +130,6 @@ public abstract class ImporterFactory
      *            fragments
      * @return an importer instance
      */
-    public abstract Importer createImporter(final Reader reader,
+    public abstract Importer createImporter(String fileName, final Reader reader,
             final ImportEventListener listener);
 }

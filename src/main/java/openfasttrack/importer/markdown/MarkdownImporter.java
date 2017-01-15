@@ -34,6 +34,7 @@ import openfasttrack.importer.Importer;
 class MarkdownImporter implements Importer
 {
     private final static Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
+    private final String fileName;
     private final BufferedReader reader;
     private final ImportEventListener listener;
     private final MarkdownImporterStateMachine stateMachine;
@@ -43,8 +44,9 @@ class MarkdownImporter implements Importer
     private StringBuilder lastRationale;
     private StringBuilder lastComment;
 
-    MarkdownImporter(final Reader reader, final ImportEventListener listener)
+    MarkdownImporter(final String fileName, final Reader reader, final ImportEventListener listener)
     {
+        this.fileName = fileName;
         this.reader = new BufferedReader(reader);
         this.listener = listener;
         this.stateMachine = new MarkdownImporterStateMachine(this.transitions);
@@ -66,7 +68,7 @@ class MarkdownImporter implements Importer
         }
         catch (final IOException exception)
         {
-            LOG.warning("IO exception after line " + lineNumber);
+            LOG.warning("IO exception after " + this.fileName + ":" + lineNumber);
             exception.printStackTrace();
         }
         finishImport();

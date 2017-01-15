@@ -90,9 +90,7 @@ class ImportHelper
             this.validRootElementFound = true;
             return false;
         }
-        LOG.warning(
-                () -> "Found unknown XML root element '" + currentElement + "' at " + this.fileName
-                        + ":" + currentElement.getLocation().getLineNumber() + ": skip file.");
+        logUnkownElement(currentElement, "skip file");
         return true;
     }
 
@@ -142,9 +140,14 @@ class ImportHelper
             break;
 
         default:
-            LOG.warning(() -> "Found unknown XML element '" + element + "': at " + this.fileName
-                    + ":" + element.getLocation().getLineNumber());
+            logUnkownElement(element, "skip element");
             break;
         }
+    }
+
+    private void logUnkownElement(final StartElement element, final String consequence)
+    {
+        LOG.warning(() -> "Found unknown XML element '" + element + "': at " + this.fileName + ":"
+                + element.getLocation().getLineNumber() + ": " + consequence);
     }
 }

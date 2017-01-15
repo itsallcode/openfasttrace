@@ -156,6 +156,30 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get a list of all artifact types that have unwanted coverage.
+     * 
+     * @return list of over-covered artifact types.
+     */
+    public List<String> getOverCoveredArtifactTypes()
+    {
+        final List<String> overCovered = new ArrayList<>(getCoveredArtifactTypes());
+        overCovered.removeAll(getNeedsArtifactTypes());
+        return overCovered;
+    }
+
+    /**
+     * Get a list of all artifact types for which required coverage is missing.
+     * 
+     * @return list of uncovered artifact types.
+     */
+    public List<String> getUncoveredArtifactTypes()
+    {
+        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
+        uncovered.removeAll(getCoveredArtifactTypes());
+        return uncovered;
+    }
+
+    /**
      * Check if the item is covered shallow (i.e. if for all needed artifact
      * types coverage exists without recursive search).
      *
@@ -261,9 +285,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Count all duplicate links.
+     * Count the duplicate links.
      * 
-     * @return the number of duplicate links.
+     * @return the number of links that are duplicates.
      */
     public int countDuplicateLinks()
     {

@@ -80,6 +80,23 @@ public class TestLinkedSpecificationItem
     }
 
     @Test
+    public void testGetUncoveredArtifactTypes()
+    {
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, REQ));
+        this.linkedItem.addCoveredArtifactType(UMAN);
+        assertThat(this.linkedItem.getUncoveredArtifactTypes(), containsInAnyOrder(REQ));
+    }
+
+    @Test
+    public void testGetOverCoveredArtifactTypes()
+    {
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN));
+        this.linkedItem.addCoveredArtifactType(UMAN);
+        this.linkedItem.addCoveredArtifactType(REQ);
+        assertThat(this.linkedItem.getOverCoveredArtifactTypes(), containsInAnyOrder(REQ));
+    }
+
+    @Test
     public void testIsCoveredShallow_Ok()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));

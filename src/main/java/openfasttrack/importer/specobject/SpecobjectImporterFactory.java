@@ -44,8 +44,9 @@ public class SpecobjectImporterFactory extends ImporterFactory
     }
 
     @Override
-    public Importer createImporter(final Reader reader, final ImportEventListener listener)
+    public Importer createImporter(final String fileName, final Reader reader,
+            final ImportEventListener listener)
     {
-        return new SpecobjectImporter(reader, this.xmlInputFactory, listener);
+        return new SpecobjectImporter(fileName, reader, this.xmlInputFactory, listener);
     }
 }

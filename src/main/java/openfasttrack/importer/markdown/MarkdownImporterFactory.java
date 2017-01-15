@@ -39,8 +39,9 @@ public class MarkdownImporterFactory extends ImporterFactory
     }
 
     @Override
-    public Importer createImporter(final Reader reader, final ImportEventListener listener)
+    public Importer createImporter(final String fileName, final Reader reader,
+            final ImportEventListener listener)
     {
-        return new MarkdownImporter(reader, listener);
+        return new MarkdownImporter(fileName, reader, listener);
     }
 }

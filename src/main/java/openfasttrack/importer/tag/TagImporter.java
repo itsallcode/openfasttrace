@@ -45,12 +45,15 @@ class TagImporter implements Importer
     private static final String TAG_SUFFIX_PATTERN = "\\]";
 
     private final BufferedReader reader;
+    private final String fileName;
     private final ImportEventListener listener;
     private final Pattern tagPattern;
 
-    public TagImporter(final Reader reader, final ImportEventListener listener)
+    public TagImporter(final String fileName, final Reader reader,
+            final ImportEventListener listener)
     {
         this.reader = new BufferedReader(reader);
+        this.fileName = fileName;
         this.listener = listener;
         this.tagPattern = Pattern
                 .compile(TAG_PREFIX_PATTERN + "(" + ID_PATTERN + ")" + TAG_SUFFIX_PATTERN);
@@ -71,7 +74,8 @@ class TagImporter implements Importer
         }
         catch (final IOException e)
         {
-            throw new ImporterException("Error reading file after line " + lineNumber, e);
+            throw new ImporterException(
+                    "Error reading file '" + this.fileName + "' after line " + lineNumber, e);
         }
     }
 
@@ -83,7 +87,8 @@ class TagImporter implements Importer
             this.listener.beginSpecificationItem();
             final SpecificationItemId id = SpecificationItemId.parseId(matcher.group(1));
 
-            LOG.finest(() -> "Line " + lineNumber + ": found id '" + id + "'");
+            LOG.finest(() -> "File '" + this.fileName + "', line " + lineNumber + ": found id '"
+                    + id + "'");
             this.listener.setId(id);
             this.listener.endSpecificationItem();
         }

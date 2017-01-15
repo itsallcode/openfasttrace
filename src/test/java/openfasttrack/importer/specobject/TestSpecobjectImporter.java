@@ -116,8 +116,8 @@ public class TestSpecobjectImporter
                 "    <specobjects>\n" + //
                 "    </specobjects>\n" + //
                 "</specdocument>";
-        new SpecobjectImporter(new StringReader(content), XMLInputFactory.newFactory(), null)
-                .runImport();
+        new SpecobjectImporter("testfilename", new StringReader(content),
+                XMLInputFactory.newFactory(), null).runImport();
     }
 
     private List<SpecificationItem> runImporter(final String fileName) throws FileNotFoundException

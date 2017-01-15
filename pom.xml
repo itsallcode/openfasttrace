@@ -7,6 +7,13 @@
 	<name>OpenFastTrack</name>
 	<description>Free requirement tracking suite</description>
 
+	<repositories>
+		<repository>
+			<id>jcenter</id>
+			<url>http://jcenter.bintray.com/</url>
+		</repository>
+	</repositories>
+
 	<distributionManagement>
 		<repository>
 			<id>bintray-openfasttrack-maven-repo</id>
@@ -33,6 +40,12 @@
 			<version>2.0.2-beta</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.kaklakariada</groupId>
+			<artifactId>hamcrest-auto-matcher</artifactId>
+			<version>0.3.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,6 +64,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
 				<configuration>
 					<archive>
 						<manifest>

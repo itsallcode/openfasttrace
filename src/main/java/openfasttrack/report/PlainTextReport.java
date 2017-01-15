@@ -59,7 +59,15 @@ public class PlainTextReport implements Reportable
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        final PrintStream report = createPrintStream(outputStream, StandardCharsets.UTF_8);
+        try (final PrintStream report = createPrintStream(outputStream, StandardCharsets.UTF_8))
+        {
+            renderToStreamWithVerbosityLevel(report, verbosity);
+        }
+    }
+
+    private void renderToStreamWithVerbosityLevel(final PrintStream report,
+            final ReportVerbosity verbosity)
+    {
         switch (verbosity)
         {
         case QUIET:

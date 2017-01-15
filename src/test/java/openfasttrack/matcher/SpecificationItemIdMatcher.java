@@ -31,9 +31,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 
+import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
+import com.github.hamstercommunity.matcher.config.MatcherConfig;
+
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.matcher.config.ConfigurableMatcher;
-import openfasttrack.matcher.config.MatcherConfig;
 
 /**
  * {@link Matcher} for {@link SpecificationItemId}

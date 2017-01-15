@@ -90,8 +90,9 @@ class ImportHelper
             this.validRootElementFound = true;
             return false;
         }
-        LOG.warning(() -> "Found unknown XML root element '" + currentElement + "': skip file '"
-                + this.fileName + "'.");
+        LOG.warning(
+                () -> "Found unknown XML root element '" + currentElement + "' at " + this.fileName
+                        + ":" + currentElement.getLocation().getLineNumber() + ": skip file.");
         return true;
     }
 
@@ -106,8 +107,8 @@ class ImportHelper
         switch (element.getName().getLocalPart())
         {
         case SPECDOCUMENT_ROOT_ELEMENT_NAME:
-            LOG.finest("Found XML root element '" + SPECDOCUMENT_ROOT_ELEMENT_NAME + "' in file '"
-                    + this.fileName + "': ignore.");
+            LOG.finest("Found XML root element '" + SPECDOCUMENT_ROOT_ELEMENT_NAME + "' at "
+                    + this.fileName + ":" + element.getLocation().getLineNumber());
             break;
         case SPECOBJECTS_ELEMENT_NAME:
             final QName doctypeAttributeName = new QName(DOCTYPE_ATTRIBUTE_NAME);
@@ -116,13 +117,14 @@ class ImportHelper
             {
                 this.defaultDoctype = doctypeAttribute.getValue();
                 LOG.finest(() -> "Found XML element '" + SPECOBJECTS_ELEMENT_NAME
-                        + "' with default doctype '" + this.defaultDoctype + "' in file '"
-                        + this.fileName + "'.");
+                        + "' with default doctype '" + this.defaultDoctype + "' at " + this.fileName
+                        + ":" + element.getLocation().getLineNumber());
             }
             else
             {
                 throw new ImporterException("Element " + element + " does not have an attribute '"
-                        + doctypeAttributeName + "' in file '" + this.fileName + "'.");
+                        + doctypeAttributeName + "' at " + this.fileName + ":"
+                        + element.getLocation().getLineNumber());
             }
             break;
 
@@ -133,15 +135,15 @@ class ImportHelper
                         "No specobject default doctype found in file '" + this.fileName + "'");
             }
             LOG.finest(() -> "Found XML element '" + SPECOBJECT_ELEMENT_NAME
-                    + "': import using default doctype '" + this.defaultDoctype + "' from file '"
-                    + this.fileName + "'.");
+                    + "': import using default doctype '" + this.defaultDoctype + "' from "
+                    + this.fileName + ":" + element.getLocation().getLineNumber());
             new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener,
                     this.defaultDoctype).runImport();
             break;
 
         default:
-            LOG.warning(() -> "Found unknown XML element '" + element + "': in file '"
-                    + this.fileName + "' ignore.");
+            LOG.warning(() -> "Found unknown XML element '" + element + "': at " + this.fileName
+                    + ":" + element.getLocation().getLineNumber());
             break;
         }
     }

@@ -68,8 +68,7 @@ class MarkdownImporter implements Importer
         }
         catch (final IOException exception)
         {
-            LOG.warning(
-                    "IO exception after line " + lineNumber + " of file '" + this.fileName + "'");
+            LOG.warning("IO exception after " + this.fileName + ":" + lineNumber);
             exception.printStackTrace();
         }
         finishImport();

@@ -74,8 +74,8 @@ class TagImporter implements Importer
         }
         catch (final IOException e)
         {
-            throw new ImporterException(
-                    "Error reading file '" + this.fileName + "' after line " + lineNumber, e);
+            throw new ImporterException("Error reading file " + this.fileName + ":" + lineNumber,
+                    e);
         }
     }
 
@@ -87,8 +87,8 @@ class TagImporter implements Importer
             this.listener.beginSpecificationItem();
             final SpecificationItemId id = SpecificationItemId.parseId(matcher.group(1));
 
-            LOG.finest(() -> "File '" + this.fileName + "', line " + lineNumber + ": found id '"
-                    + id + "'");
+            LOG.finest(
+                    () -> "File " + this.fileName + ":" + lineNumber + ": found id '" + id + "'");
             this.listener.setId(id);
             this.listener.endSpecificationItem();
         }

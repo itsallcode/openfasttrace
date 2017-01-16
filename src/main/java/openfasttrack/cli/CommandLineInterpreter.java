@@ -51,6 +51,7 @@ public class CommandLineInterpreter
 
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";
+    private static final String MULTIPLE_CHAR_ARG_PREFIX = "--";
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
     private final String[] arguments;
@@ -101,9 +102,13 @@ public class CommandLineInterpreter
         while (iterator.hasNext())
         {
             final String argument = iterator.next();
-            if (argument.startsWith(SINGLE_CHAR_ARG_PREFIX))
+            if (argument.startsWith(MULTIPLE_CHAR_ARG_PREFIX))
             {
                 handleNamedArgument(iterator, argument);
+            }
+            else if (argument.startsWith(SINGLE_CHAR_ARG_PREFIX))
+            {
+                handleSingleCharacterArgument(iterator, argument);
             }
             else
             {
@@ -116,10 +121,30 @@ public class CommandLineInterpreter
         }
     }
 
+    private void handleSingleCharacterArgument(final ListIterator<String> iterator,
+            final String argument)
+    {
+        final String arguments = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase();
+
+        int position = 0;
+        for (final String character : arguments.split(""))
+        {
+            ++position;
+            if (this.setters.containsKey(character))
+            {
+                handleExpectedNamedArgument((position == arguments.length()) ? iterator : null,
+                        character);
+            }
+            else
+            {
+                reportUnexpectedNamedArgument(character);
+            }
+        }
+    }
+
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
     {
-        final String argumentName = argument.substring(SINGLE_CHAR_ARG_PREFIX.length()) //
-                .toLowerCase();
+        final String argumentName = argument.replaceAll("-", "").toLowerCase();
         if (this.setters.containsKey(argumentName))
         {
             handleExpectedNamedArgument(iterator, argumentName);
@@ -155,7 +180,7 @@ public class CommandLineInterpreter
         }
         else
         {
-            if (iterator.hasNext())
+            if ((iterator != null) && iterator.hasNext())
             {
                 final String successor = iterator.next();
                 if (isParamterName(successor))

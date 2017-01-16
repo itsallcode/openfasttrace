@@ -35,6 +35,7 @@ public class CommandLineArgumentsStub
     private boolean b;
     private StubEnum c;
     private List<String> unnamedValues;
+    private String theLongParameter;
 
     public void setA(final String value)
     {
@@ -56,6 +57,12 @@ public class CommandLineArgumentsStub
         this.unnamedValues = values;
     }
 
+    public void setTheLongParameter(final String theLongParameter)
+    {
+        this.theLongParameter = theLongParameter;
+
+    }
+
     public String getA()
     {
         return this.a;
@@ -74,5 +81,10 @@ public class CommandLineArgumentsStub
     public List<String> getUnnamedValues()
     {
         return this.unnamedValues;
+    }
+
+    public String getTheLongParameter()
+    {
+        return this.theLongParameter;
     }
 }

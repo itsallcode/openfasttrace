@@ -78,10 +78,24 @@ public class TestCommandLineInterpreter
     }
 
     @Test
+    public void testUnexpectedSingleCharacterArgumentName()
+    {
+        expectParseException(new CommandLineArgumentsStub(), asList("-u"),
+                "Unexpected parameter 'u' is not allowed");
+    }
+
+    @Test
     public void testGetNamedBooleanParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-b");
         assertThat(stub.isB(), equalTo(true));
+    }
+
+    @Test
+    public void testGetNamedBooleanBoxedParamter()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-d");
+        assertThat(stub.isD(), equalTo(true));
     }
 
     @Test
@@ -122,7 +136,7 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testSetterWithTooManyArgument()
+    public void testSetterWithTooManyArguments()
     {
         expectParseException(new CliArgsMultiArgSetter(), asList("--invalid"),
                 "Unsupported argument count for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
@@ -157,11 +171,21 @@ public class TestCommandLineInterpreter
     @Test
     public void testChainedSingleCharacterParameters()
     {
-        final CommandLineArgumentsStub stub = parseArguments("-ba", "value_a", "value_1",
+        final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",
                 "value_2");
         assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2")));
         assertThat(stub.isB(), equalTo(true));
+        assertThat(stub.isD(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
+    }
+
+    @Test
+    public void testChainedSingleCharacterParametersMustFailIfNonBooleanMisplaced()
+    {
+        final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
+        expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
+        assertThat(stub.isB(), equalTo(true));
+        assertThat(stub.isD(), equalTo(true));
     }
 
     private CommandLineArgumentsStub parseArguments(final String... args)

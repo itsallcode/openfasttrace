@@ -44,10 +44,9 @@ public class Linker
 
     private List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
     {
-        final List<LinkedSpecificationItem> linkedItems = items.stream() //
+        return items.stream() //
                 .map(LinkedSpecificationItem::new) //
                 .collect(Collectors.toList());
-        return linkedItems;
     }
 
     /**

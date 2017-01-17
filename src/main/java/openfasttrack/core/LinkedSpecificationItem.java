@@ -200,7 +200,7 @@ public class LinkedSpecificationItem
         boolean covered = isCoveredShallow();
         for (final LinkedSpecificationItem coveringItem : getLinksByStatus(LinkStatus.COVERS))
         {
-            covered = (covered && coveringItem.isCoveredDeeply());
+            covered = covered && coveringItem.isCoveredDeeply();
         }
         return covered;
     }
@@ -236,9 +236,7 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingLinks()
     {
-        return countLinksWithPredicate((entry) -> {
-            return entry.getKey().isOutgoing();
-        });
+        return countLinksWithPredicate(entry -> entry.getKey().isOutgoing());
     }
 
     private int countLinksWithPredicate(
@@ -255,9 +253,7 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingBadLinks()
     {
-        return countLinksWithPredicate((entry) -> {
-            return entry.getKey().isBadOutgoing();
-        });
+        return countLinksWithPredicate(entry -> entry.getKey().isBadOutgoing());
     }
 
     /**
@@ -267,9 +263,7 @@ public class LinkedSpecificationItem
      */
     public int countIncomingLinks()
     {
-        return countLinksWithPredicate((entry) -> {
-            return entry.getKey().isIncoming();
-        });
+        return countLinksWithPredicate(entry -> entry.getKey().isIncoming());
     }
 
     /**
@@ -279,9 +273,7 @@ public class LinkedSpecificationItem
      */
     public int countIncomingBadLinks()
     {
-        return countLinksWithPredicate((entry) -> {
-            return entry.getKey().isBadIncoming();
-        });
+        return countLinksWithPredicate(entry -> entry.getKey().isBadIncoming());
     }
 
     /**
@@ -291,8 +283,6 @@ public class LinkedSpecificationItem
      */
     public int countDuplicateLinks()
     {
-        return countLinksWithPredicate((entry) -> {
-            return entry.getKey().isDuplicate();
-        });
+        return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
     }
 }

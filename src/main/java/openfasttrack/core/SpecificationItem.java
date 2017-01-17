@@ -156,7 +156,7 @@ public class SpecificationItem
      */
     public boolean needsCoverage()
     {
-        return this.needsArtifactTypes.size() > 0;
+        return !this.needsArtifactTypes.isEmpty();
     }
 
     @Generated(value = "Eclipse")

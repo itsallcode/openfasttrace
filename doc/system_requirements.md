@@ -21,10 +21,29 @@ OFT traces requirements from specification to any kind of coverage (document, im
 
 Needs: req
 
-## Requirement Import
-`feat~requirement_import~1` <a id="feat~requirement_import~1"></a>
+## Markdown Import
+`feat~markdown_import~1` <a id="feat~requirement_import~1"></a>
 
-OFT imports requirements from different text formats. The default is Markdown.
+OFT imports specification items from Markdown files.
+
+Needs: req
+
+## ReqM2 Requirement Import
+`feat~reqm2_import~1` <a id="feat~requirement_import~1"></a>
+
+OFT imports specification items from ReqM2 files.
+
+Rationale:
+
+Markdown is a clean an simple format that:
+
+  * is viewable with any text editor
+  * focuses on content instead of layout
+  * is portable across platforms
+  * easy to process with text manipulation tools
+  
+For those reasons Markdown is a suitable candidate for writing specification that can be read and
+maintained over a long time.
 
 Needs: req
 
@@ -121,6 +140,9 @@ Covers:
 
   * [feat~requirement_tracing~1](#feat~requirement_tracing~1)
 
+
+Needs: dsn
+
 ### Duplicate Items
 `req~duplicate_items~1` <a id="req~duplicate_items~1></a>
 
@@ -130,6 +152,7 @@ Covers:
 
   * [feat~requirement_tracing~1](#feat~requirement_tracing~1)
 
+Needs: dsn
 
 ### Defect Items
 `req~defect_items~1` <a id="req~defect_items~1"></a>
@@ -144,6 +167,8 @@ Covers:
 
   * [feat~requirement_tracing~1](#feat~requirement_tracing~1) 
 
+Needs: dsn
+
 ## Import
 ### Input File Selection
 `req~input_file_selection~1` <a id="req~input_file_selection~1"></a>
@@ -156,32 +181,12 @@ The 90% case will be scanning a single project directory and using the contents 
 
 Covers:
 
-  * [feat~requirement_import~1](#feat~requirement_import~1)
+  * [feat~markdown_import~1](#feat~markdown_import~1)
+  * [feat~reqm2_import~1](#feat~reqm2_import~1)
 
 Needs: dsn
 
 ### Markdown Import
-`req~markdown_import~1` <a id="req~markdown_import~1"></a>
-
-OFT imports specification items from Markdown.
-
-Rationale:
-
-Markdown is a clean an simple format that:
-
-  * is viewable with any text editor
-  * focuses on content instead of layout
-  * is portable across platforms
-  * easy to process with text manipulation tools
-  
-For those reasons Markdown is a suitable candidate for writing specification that can be read and
-maintained over a long time.
-
-Covers:
-
-  * [feat~requirement_import~1](#feat~requirement_import~1)
-
-Needs: dsn
 
 #### Markdown Standard Syntax
 `req~markdown_standard_syntax~1` <a id="req~markdown_standard_syntax~1"></a>
@@ -194,7 +199,7 @@ The specification documents that the OFT Markdown importer reads must be viewabl
 
 Covers:
 
-  * [feat~requirement_import~1](#feat~requirement_import~1)
+  * [feat~markdown_import~1](#feat~markdown_import~1)
 
 Needs: dsn
 
@@ -207,7 +212,7 @@ In long specification document the outline is the primary means of navigating th
 
 Covers:
 
-  * [feat~requirement_import~1](#feat~requirement_import~1)
+  * [feat~markdown_import~1](#feat~markdown_import~1)
 
 Needs: dsn
 
@@ -221,7 +226,7 @@ The return value of the OFT executable reflects the overall tracing result.
  
 Covers:
 
-  * [feat~plain_text_report~1](#feat~plain_text_report~1)
+  * [feat~requirement_tracing~1](#feat~requirement_tracing~1)
 
 Needs: dsn
 

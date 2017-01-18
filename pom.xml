@@ -153,11 +153,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>trace</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>openfasttrack.cli.CliStarter</mainClass>
+                    <commandlineArgs>trace --input-dir doc</commandlineArgs>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings 
-                    only. It has no influence on the Maven build itself. -->
+                <!--This plugin's configuration is used to store Eclipse 
+                    m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>

@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  */
 public class CommandLineInterpreter
 {
-    private static Logger LOG = Logger.getLogger(CommandLineInterpreter.class.getName());
+    private static final Logger LOG = Logger.getLogger(CommandLineInterpreter.class.getName());
 
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";

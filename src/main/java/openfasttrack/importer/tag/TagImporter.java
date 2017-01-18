@@ -39,7 +39,7 @@ import openfasttrack.importer.ImporterException;
  */
 class TagImporter implements Importer
 {
-    private final static Logger LOG = Logger.getLogger(TagImporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());
     private static final String ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
     private static final String TAG_PREFIX_PATTERN = "\\[";
     private static final String TAG_SUFFIX_PATTERN = "\\]";

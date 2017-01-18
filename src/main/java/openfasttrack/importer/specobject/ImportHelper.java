@@ -41,7 +41,7 @@ import openfasttrack.importer.ImporterException;
  */
 class ImportHelper
 {
-    private final static Logger LOG = Logger.getLogger(ImportHelper.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImportHelper.class.getName());
 
     private static final String SPECDOCUMENT_ROOT_ELEMENT_NAME = "specdocument";
     private static final String SPECOBJECTS_ELEMENT_NAME = "specobjects";
@@ -105,44 +105,49 @@ class ImportHelper
         switch (element.getName().getLocalPart())
         {
         case SPECDOCUMENT_ROOT_ELEMENT_NAME:
-            LOG.finest("Found XML root element '" + SPECDOCUMENT_ROOT_ELEMENT_NAME + "' at "
+            LOG.finest(() -> "Found XML root element '" + SPECDOCUMENT_ROOT_ELEMENT_NAME + "' at "
                     + this.fileName + ":" + element.getLocation().getLineNumber());
             break;
         case SPECOBJECTS_ELEMENT_NAME:
-            final QName doctypeAttributeName = new QName(DOCTYPE_ATTRIBUTE_NAME);
-            final Attribute doctypeAttribute = element.getAttributeByName(doctypeAttributeName);
-            if (doctypeAttribute != null)
-            {
-                this.defaultDoctype = doctypeAttribute.getValue();
-                LOG.finest(() -> "Found XML element '" + SPECOBJECTS_ELEMENT_NAME
-                        + "' with default doctype '" + this.defaultDoctype + "' at " + this.fileName
-                        + ":" + element.getLocation().getLineNumber());
-            }
-            else
-            {
-                throw new ImporterException("Element " + element + " does not have an attribute '"
-                        + doctypeAttributeName + "' at " + this.fileName + ":"
-                        + element.getLocation().getLineNumber());
-            }
+            processSpecobjectsContainerElement(element);
             break;
-
         case SPECOBJECT_ELEMENT_NAME:
-            if (this.defaultDoctype == null)
-            {
-                throw new ImporterException(
-                        "No specobject default doctype found in file '" + this.fileName + "'");
-            }
-            LOG.finest(() -> "Found XML element '" + SPECOBJECT_ELEMENT_NAME
-                    + "': import using default doctype '" + this.defaultDoctype + "' from "
-                    + this.fileName + ":" + element.getLocation().getLineNumber());
-            new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener,
-                    this.defaultDoctype).runImport();
+            processSpecobjectElement(element);
             break;
-
         default:
             logUnkownElement(element, "skip element");
             break;
         }
+    }
+
+    private void processSpecobjectElement(final StartElement element) throws XMLStreamException
+    {
+        if (this.defaultDoctype == null)
+        {
+            throw new ImporterException(
+                    "No specobject default doctype found in file '" + this.fileName + "'");
+        }
+        LOG.finest(() -> "Found XML element '" + SPECOBJECT_ELEMENT_NAME
+                + "': import using default doctype '" + this.defaultDoctype + "' from "
+                + this.fileName + ":" + element.getLocation().getLineNumber());
+        new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener, this.defaultDoctype)
+                .runImport();
+    }
+
+    private void processSpecobjectsContainerElement(final StartElement element)
+    {
+        final QName doctypeAttributeName = new QName(DOCTYPE_ATTRIBUTE_NAME);
+        final Attribute doctypeAttribute = element.getAttributeByName(doctypeAttributeName);
+        if (doctypeAttribute == null)
+        {
+            throw new ImporterException("Element " + element + " does not have an attribute '"
+                    + doctypeAttributeName + "' at " + this.fileName + ":"
+                    + element.getLocation().getLineNumber());
+        }
+        this.defaultDoctype = doctypeAttribute.getValue();
+        LOG.finest(() -> "Found XML element '" + SPECOBJECTS_ELEMENT_NAME
+                + "' with default doctype '" + this.defaultDoctype + "' at " + this.fileName + ":"
+                + element.getLocation().getLineNumber());
     }
 
     private void logUnkownElement(final StartElement element, final String consequence)

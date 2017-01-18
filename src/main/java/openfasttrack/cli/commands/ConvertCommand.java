@@ -33,7 +33,8 @@ import openfasttrack.importer.ImporterService;
 
 public class ConvertCommand
 {
-    public final static String COMMAND_NAME = "convert";
+    public static final String COMMAND_NAME = "convert";
+
     private final CliArguments arguments;
     private final ImporterService importerService;
     private final ExporterService exporterService;

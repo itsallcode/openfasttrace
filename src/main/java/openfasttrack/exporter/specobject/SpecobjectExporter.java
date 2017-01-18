@@ -43,7 +43,7 @@ import openfasttrack.exporter.ExporterException;
 
 public class SpecobjectExporter implements Exporter
 {
-    private final static Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
 
     private final XMLStreamWriter writer;
     private final Map<String, List<LinkedSpecificationItem>> items;

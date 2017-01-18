@@ -108,7 +108,7 @@ public class CommandLineInterpreter
             }
             else if (argument.startsWith(SINGLE_CHAR_ARG_PREFIX))
             {
-                handleSingleCharacterArgument(iterator, argument);
+                handleChainedSingleCharacterArguments(iterator, argument);
             }
             else
             {
@@ -121,19 +121,25 @@ public class CommandLineInterpreter
         }
     }
 
-    private void handleSingleCharacterArgument(final ListIterator<String> iterator,
+    private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
             final String argument)
     {
-        final String arguments = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase();
+        final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase();
+        final int lastPosition = characters.length() - 1;
 
-        int position = 0;
-        for (final String character : arguments.split(""))
+        for (int position = 0; position <= lastPosition; ++position)
         {
-            ++position;
+            final String character = characters.substring(position, position + 1);
             if (this.setters.containsKey(character))
             {
-                handleExpectedNamedArgument((position == arguments.length()) ? iterator : null,
-                        character);
+                if (position == lastPosition)
+                {
+                    handleExpectedNamedArgument(iterator, character);
+                }
+                else
+                {
+                    handleExpectedNamedArgument(null, character);
+                }
             }
             else
             {

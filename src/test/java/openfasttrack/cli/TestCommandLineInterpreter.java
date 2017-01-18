@@ -23,6 +23,7 @@ package openfasttrack.cli;
  */
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -173,7 +174,7 @@ public class TestCommandLineInterpreter
     {
         final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",
                 "value_2");
-        assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2")));
+        assertThat(stub.getUnnamedValues(), containsInAnyOrder("value_1", "value_2"));
         assertThat(stub.isB(), equalTo(true));
         assertThat(stub.isD(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
@@ -184,8 +185,6 @@ public class TestCommandLineInterpreter
     {
         final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
         expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
-        assertThat(stub.isB(), equalTo(true));
-        assertThat(stub.isD(), equalTo(true));
     }
 
     private CommandLineArgumentsStub parseArguments(final String... args)

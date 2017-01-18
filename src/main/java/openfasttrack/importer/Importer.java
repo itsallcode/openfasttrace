@@ -25,6 +25,7 @@ package openfasttrack.importer;
 /**
  * Common interface for all importer implementations
  */
+@FunctionalInterface
 public interface Importer
 {
     /**

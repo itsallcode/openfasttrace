@@ -37,7 +37,8 @@ import openfasttrack.core.ServiceLoaderWrapper;
  */
 public class ImporterFactoryLoader
 {
-    private static Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
+
     private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
 
     public ImporterFactoryLoader()

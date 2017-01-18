@@ -36,7 +36,8 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
-    public final static int REVISION_WILDCARD = Integer.MIN_VALUE;
+    public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
+
     private final String name;
     private final int revision;
     private final String artifactType;
@@ -325,10 +326,10 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     @Override
     public int compareTo(final SpecificationItemId other)
     {
-        int compared = (this.getArtifactType().compareTo(other.getArtifactType()));
+        int compared = this.getArtifactType().compareTo(other.getArtifactType());
         if (compared == 0)
         {
-            compared = (this.getName().compareTo(other.getName()));
+            compared = this.getName().compareTo(other.getName());
             if (compared == 0)
             {
                 if (this.getRevision() > other.getRevision())

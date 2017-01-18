@@ -69,18 +69,24 @@ class SingleSpecobjectImportHelper
                 foundStartElement(currentEvent.asStartElement());
                 break;
             case XMLStreamConstants.END_ELEMENT:
-                if (currentEvent.asEndElement().getName().getLocalPart().equals("specobject"))
+                if ("specobject".equals(currentEvent.asEndElement().getName().getLocalPart()))
                 {
-                    final SpecificationItemId id = this.idBuilder.build();
-                    LOG.finest(() -> "Specobject element closed: build id " + id);
-                    this.listener.setId(id);
-                    this.listener.endSpecificationItem();
+                    processSpecobjectId();
                     return;
                 }
+                break;
             default:
                 break;
             }
         }
+    }
+
+    private void processSpecobjectId()
+    {
+        final SpecificationItemId id = this.idBuilder.build();
+        LOG.finest(() -> "Specobject element closed: build id " + id);
+        this.listener.setId(id);
+        this.listener.endSpecificationItem();
     }
 
     private void foundStartElement(final StartElement element)
@@ -125,7 +131,7 @@ class SingleSpecobjectImportHelper
     private void readDependencies(final StartElement element)
     {
         readElementUntilEnd(element, childElement -> {
-            if (childElement.getName().getLocalPart().equals("dependson"))
+            if ("dependson".equals(childElement.getName().getLocalPart()))
             {
                 final String idString = readCharacterData(childElement);
                 LOG.finest(() -> "Found depends on id '" + idString + "'");
@@ -137,7 +143,7 @@ class SingleSpecobjectImportHelper
     private void readProvidesCoverage(final StartElement element)
     {
         readElementUntilEnd(element, childElement -> {
-            if (childElement.getName().getLocalPart().equals("provcov"))
+            if ("provcov".equals(childElement.getName().getLocalPart()))
             {
                 readProvCov(childElement);
             }
@@ -149,11 +155,11 @@ class SingleSpecobjectImportHelper
         final Builder providesCoverageId = new Builder();
         readElementUntilEnd(element, childElement -> {
             final String elementName = childElement.getName().getLocalPart();
-            if (elementName.equals("linksto"))
+            if ("linksto".equals(elementName))
             {
                 providesCoverageId.name(readCharacterData(childElement));
             }
-            if (elementName.equals("dstversion"))
+            if ("dstversion".equals(elementName))
             {
                 providesCoverageId.revision(readIntCharacterData(childElement));
             }
@@ -167,7 +173,7 @@ class SingleSpecobjectImportHelper
     private void readNeedsCoverage(final StartElement element)
     {
         readElementUntilEnd(element, childElement -> {
-            if (childElement.getName().getLocalPart().equals("needsobj"))
+            if ("needsobj".equals(childElement.getName().getLocalPart()))
             {
                 final String artifactType = readCharacterData(childElement);
                 LOG.finest(() -> "Found needs artifact type '" + artifactType + "'");

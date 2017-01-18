@@ -36,7 +36,8 @@ import openfasttrack.report.ReportVerbosity;
 
 public class TraceCommand
 {
-    public final static String COMMAND_NAME = "trace";
+    public static final String COMMAND_NAME = "trace";
+
     private final CliArguments arguments;
     private final ImporterService importerService;
     private final ReportService reportService;

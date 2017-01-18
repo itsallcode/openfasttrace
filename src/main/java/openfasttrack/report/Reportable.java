@@ -27,6 +27,7 @@ import java.io.OutputStream;
 /**
  * Interface for coverage reports.
  */
+@FunctionalInterface
 public interface Reportable
 {
     /**

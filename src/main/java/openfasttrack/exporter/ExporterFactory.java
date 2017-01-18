@@ -38,7 +38,8 @@ import openfasttrack.core.LinkedSpecificationItem;
  */
 public abstract class ExporterFactory
 {
-    private final static Logger LOG = Logger.getLogger(ExporterFactory.class.getName());
+    private static final Logger LOG = Logger.getLogger(ExporterFactory.class.getName());
+
     private final String supportedOutputFormat;
 
     protected ExporterFactory(final String supportedOutputFormat)

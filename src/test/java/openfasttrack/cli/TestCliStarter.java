@@ -46,7 +46,6 @@ public class TestCliStarter
 {
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
-    private static final String INPUT_DIR_PARAMETER = "--input-dir";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
@@ -88,18 +87,16 @@ public class TestCliStarter
     public void testConvertUnknownExporter()
     {
         expectException(
-                asList(CONVERT_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                        OUTPUT_FORMAT_PARAMETER, "illegal", OUTPUT_FILE_PARAMETER,
-                        this.outputFile.toString()),
+                asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER, "illegal",
+                        OUTPUT_FILE_PARAMETER, this.outputFile.toString()),
                 ExporterException.class, "Found no matching exporter for output format 'illegal'");
     }
 
     @Test
     public void testConvertToSpecobject() throws IOException
     {
-        runCliStarter(asList(CONVERT_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FORMAT_PARAMETER, "specobject", OUTPUT_FILE_PARAMETER,
-                this.outputFile.toString()));
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER,
+                "specobject", OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
     }
@@ -107,8 +104,8 @@ public class TestCliStarter
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
     {
-        runCliStarter(asList(CONVERT_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
     }
@@ -124,8 +121,8 @@ public class TestCliStarter
     @Test
     public void testConvertToSpecobjectStdOutNoOutputFile() throws IOException
     {
-        runCliStarter(asList(CONVERT_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FORMAT_PARAMETER, "specobject"));
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER,
+                "specobject"));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
@@ -139,8 +136,8 @@ public class TestCliStarter
     @Test
     public void testTrace() throws IOException
     {
-        runCliStarter(asList(TRACE_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
     }
@@ -148,9 +145,8 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityMinimal() throws IOException
     {
-        runCliStarter(asList(TRACE_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER,
-                "MINIMAL"));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER, "MINIMAL"));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile), equalTo("not ok\n"));
     }
@@ -158,9 +154,8 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuiet() throws IOException
     {
-        runCliStarter(asList(TRACE_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString(),
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER,
-                "QUIET"));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER, "QUIET"));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile), equalTo(""));
     }
@@ -176,7 +171,7 @@ public class TestCliStarter
     @Test
     public void testTraceStdOutNoOutputFile() throws IOException
     {
-        runCliStarter(asList(TRACE_COMMAND, INPUT_DIR_PARAMETER, this.docDir.toString()));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 

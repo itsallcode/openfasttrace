@@ -24,31 +24,18 @@ package openfasttrack.cli;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import openfasttrack.report.ReportVerbosity;
 
 public class CliArguments
 {
+    private static final String CURRENT_DIRECTORY = ".";
     private List<String> unnamedValues;
-    private String inputDir;
     private String outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
-
-    public Path getInputDir()
-    {
-        if (this.inputDir == null)
-        {
-            return Paths.get(".").toAbsolutePath();
-        }
-        return Paths.get(this.inputDir);
-    }
-
-    public void setInputDir(final String inputDir)
-    {
-        this.inputDir = inputDir;
-    }
 
     public Path getOutputFile()
     {
@@ -66,11 +53,20 @@ public class CliArguments
 
     public String getCommand()
     {
-        if (this.unnamedValues != null && !this.unnamedValues.isEmpty())
+        if (this.unnamedValues == null || this.unnamedValues.isEmpty())
         {
-            return this.unnamedValues.get(0);
+            return null;
         }
-        return null;
+        return this.unnamedValues.get(0);
+    }
+
+    public List<String> getInputs()
+    {
+        if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
+        {
+            return Arrays.asList(CURRENT_DIRECTORY);
+        }
+        return this.unnamedValues.subList(1, this.unnamedValues.size());
     }
 
     public void setUnnamedValues(final List<String> unnamedValues)

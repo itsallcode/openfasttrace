@@ -1,5 +1,7 @@
 package openfasttrack.importer;
 
+import java.io.File;
+
 /*
  * #%L
  * OpenFastTrack
@@ -45,8 +47,8 @@ import openfasttrack.core.SpecificationItem;
 public class MultiFileImporter
 {
     private static final Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
-
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private static final String ALL_RECURSIVE_GLOB = "**/*";
 
     private final SpecificationListBuilder specItemBuilder;
     private final ImporterFactoryLoader factoryLoader;
@@ -73,6 +75,39 @@ public class MultiFileImporter
         createImporter(file, DEFAULT_CHARSET, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.info(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
+        return this;
+    }
+
+    /**
+     * Import from the path, independently of whether it is represents a
+     * directory or a file.
+     * 
+     * @param paths
+     *            lists of paths to files or directories
+     * @return <code>this</code> for fluent programming style.
+     */
+    public MultiFileImporter importAny(final List<Path> paths)
+    {
+        for (final Path path : paths)
+        {
+            final File file = path.toFile();
+            if (file.exists())
+            {
+                if (file.isDirectory())
+                {
+                    importRecursiveDir(path, ALL_RECURSIVE_GLOB);
+                }
+                else if (file.isFile())
+                {
+                    importFile(path);
+                }
+            }
+            else
+            {
+                LOG.warning(() -> "No such input file or directory \"" + path.toString()
+                        + "\". Skipping.");
+            }
+        }
         return this;
     }
 

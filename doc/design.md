@@ -234,15 +234,19 @@ In both cases relative and absolute paths are accepted. "Relative" means in rela
 Covers:
 
   * `req~input_file_selection~1`
+  
+Needs: impl, utest, uman
 
 #### Input File De-Duplication
-`dsn~input_file_deduplication~1` <a id="dsn~input_file_deduplication~1~1></a>
+`dsn~input_file_deduplication~1` <a id="dsn~input_file_deduplication~1></a>
 
 The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
 
 Covers:
 
   * `req~input_file_selection~1`
+
+Needs: impl, utest, uman
 
 # Design Decisions
 

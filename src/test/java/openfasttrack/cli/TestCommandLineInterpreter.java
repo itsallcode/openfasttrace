@@ -170,6 +170,17 @@ public class TestCommandLineInterpreter
     }
 
     @Test
+    public void testCombinedParametersWithDifferentOrder()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
+                "value_2", "value_3", "-c", "VALUE2");
+        assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2", "value_3")));
+        assertThat(stub.isB(), equalTo(true));
+        assertThat(stub.getA(), equalTo("value_a"));
+        assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
+    }
+
+    @Test
     public void testChainedSingleCharacterParameters()
     {
         final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",

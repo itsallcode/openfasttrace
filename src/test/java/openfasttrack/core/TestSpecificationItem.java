@@ -133,6 +133,16 @@ public class TestSpecificationItem
     }
 
     @Test
+    public void testNeedsCoverage()
+    {
+        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
+        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        assertThat(builder.build().needsCoverage(), equalTo(false));
+        builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
+        assertThat(builder.build().needsCoverage(), equalTo(true));
+    }
+
+    @Test
     public void equalsContract()
     {
         EqualsVerifier.forClass(SpecificationItem.class).verify();

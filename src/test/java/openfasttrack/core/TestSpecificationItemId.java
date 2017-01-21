@@ -30,6 +30,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import openfasttrack.core.SpecificationItemId.Builder;
 
 public class TestSpecificationItemId
@@ -136,5 +137,11 @@ public class TestSpecificationItemId
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
         assertThat(id.getName(), equalTo(NAME));
         assertThat(id.getRevision(), equalTo(SpecificationItemId.REVISION_WILDCARD));
+    }
+
+    @Test
+    public void equalsContract()
+    {
+        EqualsVerifier.forClass(SpecificationItemId.class).verify();
     }
 }

@@ -25,12 +25,12 @@ package openfasttrack.exporter.specobject;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -48,17 +48,17 @@ public class SpecobjectExporter implements Exporter
     private final XMLStreamWriter writer;
     private final Map<String, List<LinkedSpecificationItem>> items;
 
-    public SpecobjectExporter(final Collection<LinkedSpecificationItem> items,
+    public SpecobjectExporter(final Stream<LinkedSpecificationItem> itemStream,
             final XMLStreamWriter xmlWriter)
     {
-        this.items = groupByDoctype(items);
+        this.items = groupByDoctype(itemStream);
         this.writer = xmlWriter;
     }
 
     private Map<String, List<LinkedSpecificationItem>> groupByDoctype(
-            final Collection<LinkedSpecificationItem> items)
+            final Stream<LinkedSpecificationItem> itemStream)
     {
-        return items.stream().collect(
+        return itemStream.collect(
                 groupingBy(item -> item.getId().getArtifactType(), LinkedHashMap::new, toList()));
     }
 

@@ -31,8 +31,8 @@ import java.util.stream.StreamSupport;
 import openfasttrack.core.ServiceLoaderWrapper;
 
 /**
- * This class is responsible for finding the matching {@link ExporterFactory}
- * for a given {@link Path}.
+ * This class is responsible for finding the matching
+ * {@link ExporterFactory} for a given {@link Path}.
  */
 public class ExporterFactoryLoader
 {
@@ -49,16 +49,19 @@ public class ExporterFactoryLoader
     }
 
     /**
-     * Finds a matching {@link ExporterFactory} that can handle the given output
-     * format. If no or more than one {@link ExporterFactory} is found, this
-     * throws an {@link ExporterException}.
+     * Finds a matching {@link ExporterFactory} that can handle the
+     * given output format. If no or more than one
+     * {@link ExporterFactory} is found, this throws an
+     * {@link ExporterException}.
      *
      * @param outputFormat
-     *            the output format for which to get a {@link ExporterFactory}.
-     * @return a matching {@link ExporterFactory} that can handle the given
-     *         output format
+     *            the output format for which to get a
+     *            {@link ExporterFactory}.
+     * @return a matching {@link ExporterFactory} that can handle the
+     *         given output format
      * @throws ExporterException
-     *             when no or more than one {@link ExporterFactory} is found.
+     *             when no or more than one {@link ExporterFactory} is
+     *             found.
      */
     public ExporterFactory getExporterFactory(final String outputFormat)
     {

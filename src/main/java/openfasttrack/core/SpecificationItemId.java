@@ -81,7 +81,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 
     @Override
     @Generated(value = "Eclipse")
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = 1;
@@ -92,7 +92,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -102,7 +102,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof SpecificationItemId))
         {
             return false;
         }

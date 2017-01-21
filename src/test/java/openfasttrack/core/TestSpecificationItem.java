@@ -127,7 +127,6 @@ public class TestSpecificationItem
         final SpecificationItem.Builder builder = new SpecificationItem.Builder();
         builder.id(ARTIFACT_TYPE, NAME, REVISION);
         builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
-        builder.addNeedsArtifactType(NOT_NEEDED_ARTIFACT_TYPE);
         final SpecificationItem item = builder.build();
         assertThat(item.needsCoverageByArtifactType(NEEDED_ARTIFACT_TYPE), equalTo(true));
         assertThat(item.needsCoverageByArtifactType(NOT_NEEDED_ARTIFACT_TYPE), equalTo(false));

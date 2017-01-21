@@ -161,7 +161,7 @@ public class SpecificationItem
 
     @Generated(value = "Eclipse")
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = 1;
@@ -179,7 +179,7 @@ public class SpecificationItem
 
     @Generated(value = "Eclipse")
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -189,7 +189,7 @@ public class SpecificationItem
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof SpecificationItem))
         {
             return false;
         }

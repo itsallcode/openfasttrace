@@ -4,7 +4,7 @@ package openfasttrack.cli.commands;
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,27 @@ package openfasttrack.cli.commands;
  * #L%
  */
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
+import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.exporter.ExporterService;
 import openfasttrack.importer.ImporterService;
 
-public class ConvertCommand
+/**
+ * Handler for specification item conversion CLI command.
+ */
+public class ConvertCommand extends AbstractCommand
 {
     public static final String COMMAND_NAME = "convert";
-
-    private final CliArguments arguments;
-    private final ImporterService importerService;
     private final ExporterService exporterService;
 
+    /**
+     * Create a {@link ConvertCommand}
+     * 
+     * @param arguments
+     *            the command line arguments
+     */
     public ConvertCommand(final CliArguments arguments)
     {
         this(arguments, new ImporterService(), new ExporterService());
@@ -47,21 +51,15 @@ public class ConvertCommand
     ConvertCommand(final CliArguments arguments, final ImporterService importerService,
             final ExporterService exporterService)
     {
-        this.arguments = arguments;
-        this.importerService = importerService;
+        super(arguments, importerService);
         this.exporterService = exporterService;
     }
 
-    public void start()
+    @Override
+    protected void processSpecificationItemStream(
+            final Stream<LinkedSpecificationItem> linkedSpecItemStream)
     {
-        final List<LinkedSpecificationItem> linkedSpecItems = this.importerService.createImporter() //
-                .importRecursiveDir(this.arguments.getInputDir(), "**/*") //
-                .getImportedItems() //
-                .stream() //
-                .map(LinkedSpecificationItem::new) //
-                .collect(toList());
-
-        this.exporterService.exportFile(linkedSpecItems, this.arguments.getOutputFormat(),
+        this.exporterService.exportFile(linkedSpecItemStream, this.arguments.getOutputFormat(),
                 this.arguments.getOutputFile());
     }
 }

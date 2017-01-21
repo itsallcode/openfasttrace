@@ -183,7 +183,7 @@ public class TestSpecobjectExporter
             final ByteArrayOutputStream stream = new ByteArrayOutputStream();
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
-            new SpecobjectExporter(asList(items),
+            new SpecobjectExporter(asList(items).stream(),
                     new IndentingXMLStreamWriter(xmlWriter, "\t", "\n")).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }

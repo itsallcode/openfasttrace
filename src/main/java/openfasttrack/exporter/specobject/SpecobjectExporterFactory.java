@@ -23,33 +23,34 @@ package openfasttrack.exporter.specobject;
  */
 
 import java.io.Writer;
-import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.exporter.ExporterFactory;
 import openfasttrack.exporter.Exporter;
 import openfasttrack.exporter.ExporterException;
-import openfasttrack.exporter.ExporterFactory;
 
 public class SpecobjectExporterFactory extends ExporterFactory
 {
+    private static final String SUPPORTED_FORMAT = "specobject";
     private final XMLOutputFactory xmlOutputFactory;
 
     public SpecobjectExporterFactory()
     {
-        super("specobject");
+        super(SUPPORTED_FORMAT);
         this.xmlOutputFactory = XMLOutputFactory.newFactory();
     }
 
     @Override
     protected Exporter createExporter(final Writer writer,
-            final List<LinkedSpecificationItem> items)
+            final Stream<LinkedSpecificationItem> itemStream)
     {
         final XMLStreamWriter xmlWriter = createXmlWriter(writer);
-        return new SpecobjectExporter(items, xmlWriter);
+        return new SpecobjectExporter(itemStream, xmlWriter);
     }
 
     private XMLStreamWriter createXmlWriter(final Writer writer)

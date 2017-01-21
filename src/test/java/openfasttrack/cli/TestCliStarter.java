@@ -44,6 +44,12 @@ import openfasttrack.exporter.ExporterException;
 
 public class TestCliStarter
 {
+    private static final String CONVERT_COMMAND = "convert";
+    private static final String TRACE_COMMAND = "trace";
+    private static final String OUTPUT_FILE_PARAMETER = "--output-file";
+    private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
+    private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
+
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
     @Rule
@@ -73,7 +79,7 @@ public class TestCliStarter
     @Test
     public void testConvertNoArg()
     {
-        runCliStarter(asList("convert"));
+        runCliStarter(asList(CONVERT_COMMAND));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
@@ -81,16 +87,16 @@ public class TestCliStarter
     public void testConvertUnknownExporter()
     {
         expectException(
-                asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat", "illegal",
-                        "-outputFile", this.outputFile.toString()),
+                asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER, "illegal",
+                        OUTPUT_FILE_PARAMETER, this.outputFile.toString()),
                 ExporterException.class, "Found no matching exporter for output format 'illegal'");
     }
 
     @Test
     public void testConvertToSpecobject() throws IOException
     {
-        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
-                "specobject", "-outputFile", this.outputFile.toString()));
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER,
+                "specobject", OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
     }
@@ -98,7 +104,7 @@ public class TestCliStarter
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
     {
-        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFile",
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
                 this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
@@ -107,7 +113,7 @@ public class TestCliStarter
     @Test
     public void testConvertDefaultInputDir() throws IOException
     {
-        runCliStarter(asList("convert", "-outputFile", this.outputFile.toString()));
+        runCliStarter(asList(CONVERT_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(10000));
     }
@@ -115,7 +121,7 @@ public class TestCliStarter
     @Test
     public void testConvertToSpecobjectStdOutNoOutputFile() throws IOException
     {
-        runCliStarter(asList("convert", "-inputDir", this.docDir.toString(), "-outputFormat",
+        runCliStarter(asList(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER,
                 "specobject"));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
@@ -123,14 +129,14 @@ public class TestCliStarter
     @Test
     public void testTraceNoArg()
     {
-        runCliStarter(asList("convert"));
+        runCliStarter(asList(CONVERT_COMMAND));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 
     @Test
     public void testTrace() throws IOException
     {
-        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
                 this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
@@ -139,8 +145,8 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityMinimal() throws IOException
     {
-        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
-                this.outputFile.toString(), "-reportVerbosity", "MINIMAL"));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER, "MINIMAL"));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile), equalTo("not ok\n"));
     }
@@ -148,8 +154,8 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuiet() throws IOException
     {
-        runCliStarter(asList("trace", "-inputDir", this.docDir.toString(), "-outputFile",
-                this.outputFile.toString(), "-reportVerbosity", "QUIET"));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), REPORT_VERBOSITY_PARAMETER, "QUIET"));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile), equalTo(""));
     }
@@ -157,7 +163,7 @@ public class TestCliStarter
     @Test
     public void testTraceDefaultInputDir() throws IOException
     {
-        runCliStarter(asList("trace", "-outputFile", this.outputFile.toString()));
+        runCliStarter(asList(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
     }
@@ -165,7 +171,7 @@ public class TestCliStarter
     @Test
     public void testTraceStdOutNoOutputFile() throws IOException
     {
-        runCliStarter(asList("trace", "-inputDir", this.docDir.toString()));
+        runCliStarter(asList(TRACE_COMMAND, this.docDir.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(false));
     }
 

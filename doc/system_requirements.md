@@ -28,14 +28,31 @@ OFT imports requirements from different text formats. The default is Markdown.
 
 Needs: req
 
-## Reporting
+## Requirement Conversion
+`feat~requirement_conversion~1` <a id="feat~requirement_conversion~1"></a>
 
+OFT can convert from one requirement format into another one.
+
+Needs: req
+
+
+## Reporting
 ### Plain Text Report
 `feat~plain_text_report~1`<a id="feat~plain_text_report~1"></a>
 
 OFT produces a report in plain text that can be read directly as console output or with any text editor.
 
 Needs: req
+
+## User Interface
+### Command Line Interface
+`feat~command_line_interface~1`<a id="feat~command_line_interface~1"></a>
+
+OFT offers a command line interface.
+
+Rationale:
+
+Running traces automatically in a scripted environment is the most important use case. 
 
 # High Level Requirements
 
@@ -276,4 +293,46 @@ Covers:
 
   * [feat~plain_text_report~1](#feat~plain_text_report~1)
 
+Needs: dsn
+
+## User Interface
+
+### Requirement Tracing
+
+#### Requirement Tracing Command
+`req~cli.requirement_tracing` <a id="req~cli.requirement_tracing~1"></a>
+
+OFT allows requirement tracing via the command line.
+
+Covers:
+
+  * [feat~command_line_interface~1](#feat~command_line_interface~1)
+  * [feat~requirement_tracing~1](#feat~requirement_tracing~1)
+  
+Needs: dsn
+
+### Tracing Input Selection
+`req~tracing_input_selection~1` <a id="req~tracing_input_selection~1"></a>
+
+Users can select tracing inputs as combinations of files and directories.
+
+Covers:
+
+  * [feat~command_line_interface~1](#feat~command_line_interface~1)
+  * [feat~requirement_tracing](#feat~requirement_tracing)
+
+Needs: dsn
+
+### Requirement Conversion
+
+#### Requirement Conversion Command
+`req~cli.requirement_conversion` <a id="req~cli.requirement_conversion~1"></a>
+
+OFT allows requirement tracing via the command line.
+
+Covers:
+
+  * [feat~command_line_interface~1](#feat~command_line_interface~1)
+  * [feat~requirement_conversion~1](#feat~requirement_conversion~1)
+  
 Needs: dsn

@@ -31,10 +31,13 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import openfasttrack.matcher.SpecificationItemIdMatcher;
 
 public class TestSpecificationItem
 {
+    private static final String NOT_NEEDED_ARTIFACT_TYPE = "not_needed";
+    private static final String NEEDED_ARTIFACT_TYPE = "needed";
     final static String ARTIFACT_TYPE = "req";
     final static String NAME = "foobar";
     final static int REVISION = 1;
@@ -48,6 +51,7 @@ public class TestSpecificationItem
             "constr~baz~3");
     final static List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList(new String[] { "dsn", "uman" });
     final static List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req~blah~4", "req~zoo~5");
+    private static final String TITLE = "The title";
 
     private static List<SpecificationItemId> parseIds(final String... ids)
     {
@@ -67,13 +71,14 @@ public class TestSpecificationItem
     private SpecificationItem.Builder createSimpleItem()
     {
         final SpecificationItem.Builder builder = new SpecificationItem.Builder().id(ID);
-        builder.description(DESCRIPTION).rationale(RATIONALE).comment(COMMENT);
+        builder.title(TITLE).description(DESCRIPTION).rationale(RATIONALE).comment(COMMENT);
         return builder;
     }
 
     private void assertSimpleItemComplete(final SpecificationItem item)
     {
         assertThat(item.getId(), equalTo(ID));
+        assertThat(item.getTitle(), equalTo(TITLE));
         assertThat(item.getDescription(), equalTo(DESCRIPTION));
         assertThat(item.getRationale(), equalTo(RATIONALE));
         assertThat(item.getComment(), equalTo(COMMENT));
@@ -97,10 +102,10 @@ public class TestSpecificationItem
         }
         final SpecificationItem item = builder.build();
         assertSimpleItemComplete(item);
-        assertReationsComplete(item);
+        assertRelationsComplete(item);
     }
 
-    private void assertReationsComplete(final SpecificationItem item)
+    private void assertRelationsComplete(final SpecificationItem item)
     {
         assertThat(item.getCoveredIds(), equalTo(COVERED_IDS));
         assertThat(item.getDependOnIds(), equalTo(DEPEND_ON_IDS));
@@ -114,5 +119,32 @@ public class TestSpecificationItem
         builder.id(ARTIFACT_TYPE, NAME, REVISION);
         final SpecificationItem item = builder.build();
         assertThat(item.getId(), SpecificationItemIdMatcher.equalTo(ID));
+    }
+
+    @Test
+    public void testNeedsCoverageByArtifactType()
+    {
+        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
+        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
+        final SpecificationItem item = builder.build();
+        assertThat(item.needsCoverageByArtifactType(NEEDED_ARTIFACT_TYPE), equalTo(true));
+        assertThat(item.needsCoverageByArtifactType(NOT_NEEDED_ARTIFACT_TYPE), equalTo(false));
+    }
+
+    @Test
+    public void testNeedsCoverage()
+    {
+        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
+        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        assertThat(builder.build().needsCoverage(), equalTo(false));
+        builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
+        assertThat(builder.build().needsCoverage(), equalTo(true));
+    }
+
+    @Test
+    public void equalsContract()
+    {
+        EqualsVerifier.forClass(SpecificationItem.class).verify();
     }
 }

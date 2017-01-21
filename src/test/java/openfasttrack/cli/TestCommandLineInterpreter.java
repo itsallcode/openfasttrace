@@ -23,6 +23,7 @@ package openfasttrack.cli;
  */
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -50,6 +51,13 @@ public class TestCommandLineInterpreter
     }
 
     @Test
+    public void testGetLongNamedStringParamter()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("--the-long-parameter", "value_a");
+        assertThat(stub.getTheLongParameter(), equalTo("value_a"));
+    }
+
+    @Test
     public void testGetNamedStringParamterCaseIndependent()
     {
         final CommandLineArgumentsStub stub = parseArguments("-A", "value_a");
@@ -66,8 +74,15 @@ public class TestCommandLineInterpreter
     @Test
     public void testUnexpectedArgumentName()
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("-unexpected"),
+        expectParseException(new CommandLineArgumentsStub(), asList("--unexpected"),
                 "Unexpected parameter 'unexpected' is not allowed");
+    }
+
+    @Test
+    public void testUnexpectedSingleCharacterArgumentName()
+    {
+        expectParseException(new CommandLineArgumentsStub(), asList("-u"),
+                "Unexpected parameter 'u' is not allowed");
     }
 
     @Test
@@ -75,6 +90,13 @@ public class TestCommandLineInterpreter
     {
         final CommandLineArgumentsStub stub = parseArguments("-b");
         assertThat(stub.isB(), equalTo(true));
+    }
+
+    @Test
+    public void testGetNamedBooleanBoxedParamter()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-d");
+        assertThat(stub.isD(), equalTo(true));
     }
 
     @Test
@@ -109,15 +131,15 @@ public class TestCommandLineInterpreter
     @Test
     public void testSetterWithoutArgument()
     {
-        expectParseException(new CliArgsWithNoArgSetter(), asList("-invalid"),
+        expectParseException(new CliArgsWithNoArgSetter(), asList("--invalid"),
                 "Unsupported argument count for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
                         + " Only one argument is allowed.");
     }
 
     @Test
-    public void testSetterWithTooManyArgument()
+    public void testSetterWithTooManyArguments()
     {
-        expectParseException(new CliArgsMultiArgSetter(), asList("-invalid"),
+        expectParseException(new CliArgsMultiArgSetter(), asList("--invalid"),
                 "Unsupported argument count for setter 'public void openfasttrack.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
                         + " Only one argument is allowed.");
     }
@@ -125,19 +147,19 @@ public class TestCommandLineInterpreter
     @Test
     public void testSetterWithUnsupportedArgumentType()
     {
-        expectParseException(new CliArgsUnsupportedSetterArg(), asList("-invalid", "3.14"),
+        expectParseException(new CliArgsUnsupportedSetterArg(), asList("--invalid", "3.14"),
                 "Type 'float' not supported for converting argument '3.14'");
     }
 
     @Test
     public void testArgumentFollowedByArgument()
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("-a", "-unexpected"),
+        expectParseException(new CommandLineArgumentsStub(), asList("-a", "--unexpected"),
                 "No value for argument 'a'");
     }
 
     @Test
-    public void testCombinedParamters()
+    public void testCombinedParameters()
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "-c", "VALUE2");
@@ -145,6 +167,35 @@ public class TestCommandLineInterpreter
         assertThat(stub.isB(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
         assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
+    }
+
+    @Test
+    public void testCombinedParametersWithDifferentOrder()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
+                "value_2", "value_3", "-c", "VALUE2");
+        assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2", "value_3")));
+        assertThat(stub.isB(), equalTo(true));
+        assertThat(stub.getA(), equalTo("value_a"));
+        assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
+    }
+
+    @Test
+    public void testChainedSingleCharacterParameters()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",
+                "value_2");
+        assertThat(stub.getUnnamedValues(), containsInAnyOrder("value_1", "value_2"));
+        assertThat(stub.isB(), equalTo(true));
+        assertThat(stub.isD(), equalTo(true));
+        assertThat(stub.getA(), equalTo("value_a"));
+    }
+
+    @Test
+    public void testChainedSingleCharacterParametersMustFailIfNonBooleanMisplaced()
+    {
+        final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
+        expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
     }
 
     private CommandLineArgumentsStub parseArguments(final String... args)
@@ -170,24 +221,27 @@ public class TestCommandLineInterpreter
 
     }
 
-    static class CliArgsWithNoArgSetter
+    private static class CliArgsWithNoArgSetter
     {
+        @SuppressWarnings("unused")
         public void setInvalid()
         {
             // ignore
         }
     }
 
-    static class CliArgsMultiArgSetter
+    private static class CliArgsMultiArgSetter
     {
+        @SuppressWarnings("unused")
         public void setInvalid(final String arg1, final int arg2)
         {
             // ignore
         }
     }
 
-    static class CliArgsUnsupportedSetterArg
+    private static class CliArgsUnsupportedSetterArg
     {
+        @SuppressWarnings("unused")
         public void setInvalid(final float unsupportedArg)
         {
             // ignore

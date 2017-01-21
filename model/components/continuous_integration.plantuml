@@ -1,0 +1,3 @@
+@startuml
+component "Continuous\nIntegration" as continuous_integration
+@enduml

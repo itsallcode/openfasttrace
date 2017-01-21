@@ -1,0 +1,4 @@
+@startuml
+skinparam monochrome true
+skinparam style strictuml
+@enduml

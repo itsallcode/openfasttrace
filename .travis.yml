@@ -1,0 +1,36 @@
+language: java
+
+env:
+  global:
+    # COVERITY_SCAN_TOKEN
+    - secure: UYBQVziOzbe5mGrE9y7rcXxYA2Kxzce77Jj2M/ptbWoHAALtjdrddu+3tIjkjdT4jr8af8G+L6qLet17fw411id5WD9W5g7oxZGfaak7YY9pJHt/v4E3SZUtLDZs8ukWnDz4Ry7XbGR+CMFpLRGTEDjCjCaC/3umH3z082I27JsqIj2AhsWIcJ1liNZcasiB9shLhNqkY2YEnpMrssKvaHBs2NTpExO8raNXF1pFOCiskbEqqT8fkgfQ1AyELd+qZL7Lxapnm0ROg+zncOu9IupHeSPFulEdMC4rM66aoKoYnLNyEusLPXJLMLpEo39k4QwhA7cdrRMrkbsZ/KEjWjvvmOCPq74EdeD9nSgOM950LLx6c1+P9v2EdzA67CmG2oXhfLVmOXvG8ngleqFCTuFPv4XTwrQL6qHS6tStypmpfgHkfyTOzKCfd2i/jeMgeuMpOFHRC4hAJ0eb9pdvKGVUDW1FjzrVUm4SgvrWkAtNTW4OMnAHs4s5UnpDh6PkRzG9kBJp/pNnLELJYGiyhxWeC0zny2S/l9owG5tuodVXZCBmAsjH1EqMtoQZoRhw/nTJvc/+oNqXW+WJTfMsRBcOjWp9Bj7p6hjZ2V1KZXun1UZv38/PVpS0hefTW1CvsyjO1Ly8CZB/IG0EaWwHYf6D56p0TGYRCeQbEL8c5FU=
+
+jdk:
+  - oraclejdk8
+
+cache:
+  directories:
+  - $HOME/.m2
+
+before_script:
+  - pip install --user codecov
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+
+after_success:
+  - codecov
+
+addons:
+  coverity_scan:
+    project:
+      name: hamstercommunity/openfasttrack
+      version: 0.1.0
+      description: OpenFastTrack
+    notification_email: christoph@users.sourceforge.net
+    build_command_prepend: mvn clean
+    build_command: mvn -DskipTests=true compile
+    branch_pattern: coverity_scan
+  sonarqube:
+    token:
+      secure: B9xAZRpN6EIQhzKh40+l/EGvsyq+GkwfnFEAnkYbp4QMy5xwhok7Xwh6d7L4lWd6ywJPLNl+ka2TVWxlKXkrpitI3LgFUbxGianIntTwHCqM6uz36uY9h5w2TtVKM9zWgN1jWZ9rvzdDAngjMOrk3UBm4cxPeQ2eCUixCt1zfbo41N7Dh77uw6KbJdiquYdZIzp6JCKNr4jnQqkfjizcXJMVs4vl8d6pCv0NX76N3EMNPbkIGwd5nyzKJE8lEEoVhjAkNGWedFoZNo/q8QqOt+3VbFmOiuYISjvrBmf4Pk8AK4ko0u9etlvT9t8E/ZielJUZ0g11Rygy6dWWfDxtZCbvqHMZHiO5s6ePqaDul7UIlmQGIj8bHHFoqzOPUrGOhaXrHA4vlaSJl9GwojfvSw17RcBHJVpbQChsXlhutXMQW7p/nJZLMGM8KKjy6OCdgBpOsOyArwXJtJ2qysVznIDnjzVbXYX9v/D6c/gnNBe3p/QhgsrkjHmnn+25MYTgU4ijo2LdfvrFXQTWcIUf7hk46u9LsRo3+oajlusIugfsnOTxFWo767dR8BFd7Fhl4JFjLjqvOIsxAYa8xP5wgnYRy3mlyC4S5UvPvhy9mXrnVinaeklQoru2/ovH6SczZe/LRoz7NllEqmbMFlU0YFWKNh0mkkAresgMh5FQhx0=

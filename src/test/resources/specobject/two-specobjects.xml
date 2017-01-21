@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<specdocument>
+	<specobjects doctype="doctype">
+		<specobject>
+			<id>id</id>
+			<version>42</version>
+			<description>Description</description>
+			<rationale>Rationale</rationale>
+			<comment>Comment</comment>
+			<needscoverage>
+				<needsobj>code</needsobj>
+				<needsobj>test</needsobj>
+			</needscoverage>
+			<providescoverage>
+				<provcov>
+					<linksto>provid</linksto>
+					<dstversion>43</dstversion>
+				</provcov>
+			</providescoverage>
+			<dependencies>
+				<dependson>dependsOnDocType~dependsOnName~44</dependson>
+			</dependencies>
+		</specobject>
+		<specobject>
+			<id>id2</id>
+			<version>43</version>
+			<description>Description2</description>
+			<rationale>Rationale2</rationale>
+			<comment>Comment2</comment>
+		</specobject>
+	</specobjects>
+</specdocument>

@@ -26,6 +26,18 @@ Needs: req
 
 OFT imports specification items from Markdown files.
 
+Rationale:
+
+Markdown is a clean an simple format that:
+
+  * is viewable with any text editor
+  * focuses on content instead of layout
+  * is portable across platforms
+  * easy to process with text manipulation tools
+  
+For those reasons Markdown is a suitable candidate for writing specification that can be read and
+maintained over a long time.
+
 Needs: req
 
 ## ReqM2 Requirement Import
@@ -53,7 +65,6 @@ Needs: req
 OFT can convert from one requirement format into another one.
 
 Needs: req
-
 
 ## Reporting
 ### Plain Text Report

@@ -86,6 +86,11 @@ public class PlainTextReport implements Reportable
             report.println();
             renderSummary(report);
             break;
+        case ALL:
+            renderAll(report);
+            report.println();
+            renderSummary(report);
+            break;
         default:
             throw new IllegalStateException(
                     "Unable to create report for unknown verbosity level " + verbosity);
@@ -192,5 +197,12 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingBadLinks());
         report.print("/");
         report.print(item.countOutgoingLinks());
+    }
+
+    private void renderAll(final PrintStream report)
+    {
+        this.trace.getItems().stream() //
+                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
+                .forEachOrdered(item -> renderItemDetails(item, report));
     }
 }

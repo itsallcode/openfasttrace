@@ -79,11 +79,11 @@ public class TestPlainTextReport
         assertReportOutput(ReportVerbosity.QUIET);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testReportLevel_All()
-    {
-        assertReportOutput(ReportVerbosity.ALL);
-    }
+    // @Test(expected = IllegalStateException.class)
+    // public void testReportLevel_All()
+    // {
+    // assertReportOutput(ReportVerbosity.ALL);
+    // }
 
     @Test
     public void testReportLevel_Minimal_OK()

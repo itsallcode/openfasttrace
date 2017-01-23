@@ -1,3 +1,9 @@
 /target/
 /cov-int/
 .README.md.html
+/bin/
+/doc/system_requirements.html
+/doc/design.html
+/.project
+/.classpath
+

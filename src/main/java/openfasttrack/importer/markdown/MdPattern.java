@@ -42,7 +42,7 @@ public enum MdPattern
     EMPTY("(\\s*)"),
     EVERYTHING("(.*)"),
     ID("`?(" + PatternConstants.REFERENCE + ")`?.*"),
-    NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)+)"),
+    NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
     RATIONALE("Rationale:\\s*"),
     TITLE("#+\\s*(.*)");
     // @formatter:on

@@ -25,6 +25,8 @@ package openfasttrack.importer.markdown;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -197,5 +199,13 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
+    }
+
+    @Test
+    public void testSingleNeeds()
+    {
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + NEEDS_ARTIFACT_TYPE1;
+        runImporterOnText(singleNeedsItem);
+        verify(this.listenerMock, times(1)).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
     }
 }

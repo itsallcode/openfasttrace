@@ -29,7 +29,6 @@ import static org.junit.Assert.assertThat;
 import java.io.StringReader;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import openfasttrack.core.SpecificationItem;
@@ -45,14 +44,13 @@ public class TestTagImporter
     private static final SpecificationItemId ID2 = id("artifactTypeB", "name2.suffix", 2);
     private static final SpecificationItemId ID3 = id("artifactTypeC", "prefix.name3", 3);
 
+    private static final String ID1_TEXT = "artifactTypeA~name1~1";
+    private static final String ID2_TEXT = "artifactTypeB~name2.suffix~2";
+    private static final String ID3_TEXT = "artifactTypeC~prefix.name3~3";
+
     private static final String UNIX_NEWLINE = "\n";
     private static final String CARRIAGE_RETURN = "\r";
     private static final String WINDOWS_NEWLINE = CARRIAGE_RETURN + UNIX_NEWLINE;
-
-    @Before
-    public void setUp() throws Exception
-    {
-    }
 
     @Test
     public void testEmptyString()
@@ -75,132 +73,132 @@ public class TestTagImporter
     @Test
     public void testSingleTag()
     {
-        assertItems(tag(ID1), //
+        assertItems(tag(ID1_TEXT), //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagTrailingNewline()
     {
-        assertItems(tag(ID1) + UNIX_NEWLINE, //
+        assertItems(tag(ID1_TEXT) + UNIX_NEWLINE, //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataBefore()
     {
-        assertItems("data before" + tag(ID1), //
+        assertItems("data before" + tag(ID1_TEXT), //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeWithSpaceSeparator()
     {
-        assertItems("data before " + tag(ID1), //
+        assertItems("data before " + tag(ID1_TEXT), //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataAfter()
     {
-        assertItems(tag(ID1) + "data after", //
+        assertItems(tag(ID1_TEXT) + "data after", //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataAfterWithSpaceSeparator()
     {
-        assertItems(tag(ID1) + " data after", //
+        assertItems(tag(ID1_TEXT) + " data after", //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeAndAfter()
     {
-        assertItems("data before" + tag(ID1) + "data after", //
+        assertItems("data before" + tag(ID1_TEXT) + "data after", //
                 item(ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeAndAfterWithSpaceSeparator()
     {
-        assertItems("data before " + tag(ID1) + " data after", //
+        assertItems("data before " + tag(ID1_TEXT) + " data after", //
                 item(ID1));
     }
 
     @Test
     public void testMultipleTagsPerLineWithSeparatorWithoutSpace()
     {
-        assertItems(tag(ID1) + "separator" + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + "separator" + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testMultipleTagsPerLineWithSeparatorWithSpace()
     {
-        assertItems(tag(ID1) + " separator " + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + " separator " + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testMultipleTagsPerLineWithSpaceSeparator()
     {
-        assertItems(tag(ID1) + " " + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + " " + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testMultipleTagsPerLineWithoutSeparator()
     {
-        assertItems(tag(ID1) + "" + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + "" + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testThreeTagsOnOneLine()
     {
-        assertItems(tag(ID1) + tag(ID2) + tag(ID3), //
+        assertItems(tag(ID1_TEXT) + tag(ID2_TEXT) + tag(ID3_TEXT), //
                 item(ID1), item(ID2), item(ID3));
     }
 
     @Test
     public void testLinesSeparatedWithUnixNewLine()
     {
-        assertItems(tag(ID1) + UNIX_NEWLINE + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + UNIX_NEWLINE + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testLinesSeparatedWithWindowsNewLine()
     {
-        assertItems(tag(ID1) + WINDOWS_NEWLINE + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + WINDOWS_NEWLINE + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testLinesSeparatedWithCarriageReturn()
     {
-        assertItems(tag(ID1) + CARRIAGE_RETURN + tag(ID2), //
+        assertItems(tag(ID1_TEXT) + CARRIAGE_RETURN + tag(ID2_TEXT), //
                 item(ID1), item(ID2));
     }
 
     @Test
     public void testDuplicateId()
     {
-        assertItems(tag(ID1) + tag(ID1), //
+        assertItems(tag(ID1_TEXT) + tag(ID1_TEXT), //
                 item(ID1), item(ID1));
     }
 
     @Test
     public void testDuplicateIdMultipleLines()
     {
-        assertItems(tag(ID1) + UNIX_NEWLINE + tag(ID1), //
+        assertItems(tag(ID1_TEXT) + UNIX_NEWLINE + tag(ID1_TEXT), //
                 item(ID1), item(ID1));
     }
 
-    private String tag(final SpecificationItemId id)
+    private String tag(final String id)
     {
-        return "[" + id.toString() + "]";
+        return "[" + id + "]";
     }
 
     private static SpecificationItemId id(final String artifactType, final String name,

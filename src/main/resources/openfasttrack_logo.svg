@@ -1,0 +1,104 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: fig2dev Version 3.2 Patchlevel 5e -->
+<!-- CreationDate: Sun Apr 10 12:45:01 2016 -->
+<!-- Magnification: 1.050 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="9.4in" height="3.3in"
+	viewBox="2744 2980 11282 3960">
+<g style="stroke-width:.025in; fill:none">
+<!-- Line: box -->
+<rect x="2834" y="3070" width="11102" height="3779" rx="314" 
+style="stroke:#565656;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#c5c5c5;
+"/>
+<!-- Line -->
+<polygon points="3307,5433
+4251,3543
+6141,3543
+6614,4488
+5669,6377
+4015,6377
+3307,5433
+3307,5433
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#00eb00;
+"/>
+<!-- Line -->
+<polygon points="10866,3543
+11574,4960
+10866,6377
+11811,6377
+12519,4960
+11811,3543
+10866,3543
+10866,3543
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#ffffff;
+"/>
+<!-- Line -->
+<polygon points="7086,3543
+5669,6377
+6614,6377
+7086,5433
+8031,5433
+8503,4488
+9448,4488
+8976,3543
+7086,3543
+7086,3543
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#00eb00;
+"/>
+<!-- Line -->
+<polyline points="7559,4488
+8503,4488
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+"/>
+<!-- Line -->
+<polygon points="4724,4488
+4251,5433
+5196,5433
+5669,4488
+4724,4488
+4724,4488
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#c5c5c5;
+"/>
+<!-- Line -->
+<polygon points="9448,4488
+8976,3543
+10866,3543
+11338,4488
+10393,4488
+9448,6377
+8503,6377
+9448,4488
+9448,4488
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#00eb00;
+"/>
+<!-- Line -->
+<polygon points="11811,3543
+12519,4960
+11811,6377
+12755,6377
+13464,4960
+12755,3543
+11811,3543
+11811,3543
+" style="stroke:#006000;stroke-width:111;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#ffffff;
+"/>
+</g>
+</svg>

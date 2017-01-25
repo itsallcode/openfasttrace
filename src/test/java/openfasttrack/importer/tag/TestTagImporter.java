@@ -27,7 +27,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import org.junit.Test;
 
@@ -78,56 +80,56 @@ public class TestTagImporter
     public void testSingleTag()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagTrailingNewline()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE, //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataBefore()
     {
         assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeWithSpaceSeparator()
     {
         assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataAfter()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataAfterWithSpaceSeparator()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeAndAfter()
     {
         assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
     public void testSingleTagWithDataBeforeAndAfterWithSpaceSeparator()
     {
         assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
@@ -136,8 +138,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "separator"
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
     }
 
     @Test
@@ -146,8 +147,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " separator "
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
     }
 
     @Test
@@ -156,8 +156,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
     }
 
     @Test
@@ -166,8 +165,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + ""
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
     }
 
     @Test
@@ -176,9 +174,8 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT)
                         + tag(COVERING_ARTIFACT_TYPE1, ID3_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID2),
-                item(COVERING_ARTIFACT_TYPE1, "1-2", ID3));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2),
+                item(COVERING_ARTIFACT_TYPE1, 1, 2, ID3));
     }
 
     @Test
@@ -187,8 +184,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "2-0", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
     }
 
     @Test
@@ -197,8 +193,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + WINDOWS_NEWLINE
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "2-0", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
     }
 
     @Test
@@ -207,16 +202,14 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + CARRIAGE_RETURN
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "2-0", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
     }
 
     @Test
     public void testDuplicateId()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "1-1", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID1));
     }
 
     @Test
@@ -225,8 +218,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
                         + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE1, "2-0", ID1));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID1));
     }
 
     @Test
@@ -235,8 +227,7 @@ public class TestTagImporter
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "
                         + tag(COVERING_ARTIFACT_TYPE2, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, "1-0", ID1),
-                item(COVERING_ARTIFACT_TYPE2, "1-1", ID2));
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE2, 1, 1, ID2));
     }
 
     private String tag(final String coveringArtifactType, final String coveredId)
@@ -254,15 +245,24 @@ public class TestTagImporter
                 .build();
     }
 
-    private static SpecificationItem item(final String artifactType, final String nameSuffix,
-            final SpecificationItemId coveredId)
+    private static SpecificationItem item(final String artifactType, final int lineNumber,
+            final int counter, final SpecificationItemId coveredId)
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
-                FILENAME + ":" + nameSuffix, 0);
+                generateName(coveredId, lineNumber, counter), 0);
         return new SpecificationItem.Builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .build();
+    }
+
+    private static String generateName(final SpecificationItemId coveredId, final int lineNumber,
+            final int counter)
+    {
+        final String uniqueName = FILENAME + lineNumber + counter + coveredId.toString();
+        final CRC32 checksum = new CRC32();
+        checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
+        return Long.toString(checksum.getValue());
     }
 
     private void assertItems(final String content, final SpecificationItem... expectedItems)

@@ -68,7 +68,7 @@ In effect the lookup using the naive approach results in a complexity of O(n²).
 
 ### Lookups With an Index
 
-If instead of relying on a linear search of all provider we use an index, the number of forward lookups is reduced to. We saw earlier that iterating over the requesters gives a a complexity of O(n). A proper index lookup should give O(log n) in the worst case. That leaves us with a complexity of O(n log(n)). Better.
+If instead of relying on a linear search of all providers, we use an index. We saw earlier that iterating over the requesters gives a a complexity of O(n). A proper index lookup should give O(log n) in the worst case. That leaves us with a complexity of O(n log(n)). Better.
 
 ### Choosing the Index
 

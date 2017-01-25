@@ -82,7 +82,9 @@ OFT offers a command line interface.
 
 Rationale:
 
-Running traces automatically in a scripted environment is the most important use case. 
+Running traces automatically in a scripted environment is the most important use case.
+
+Needs: req
 
 # High Level Requirements
 

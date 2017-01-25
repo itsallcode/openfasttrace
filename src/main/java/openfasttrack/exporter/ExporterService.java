@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.SpecificationItem;
 
 public class ExporterService
 {
@@ -47,21 +48,20 @@ public class ExporterService
      * Export the given {@link LinkedSpecificationItem} in the given output
      * format to a file
      *
-     * @param linkedSpecItemStream
-     *            the {@link LinkedSpecificationItem} to export
+     * @param itemStream
+     *            the {@link SpecificationItem} to export
      * @param outputFormat
      *            the output format
      * @param outputFile
      *            the output file
      */
-    public void exportFile(final Stream<LinkedSpecificationItem> linkedSpecItemStream,
-            final String outputFormat, final Path outputFile)
+    public void exportFile(final Stream<SpecificationItem> itemStream, final String outputFormat,
+            final Path outputFile)
     {
         final String outputFormatToUse = outputFormat == null ? DEFAULT_OUTPUT_FORMAT
                 : outputFormat;
-        final ExporterFactory factory = this.factoryLoader
-                .getExporterFactory(outputFormatToUse);
-        factory.createExporter(outputFile, outputFormatToUse, StandardCharsets.UTF_8,
-                linkedSpecItemStream).runExport();
+        final ExporterFactory factory = this.factoryLoader.getExporterFactory(outputFormatToUse);
+        factory.createExporter(outputFile, outputFormatToUse, StandardCharsets.UTF_8, itemStream)
+                .runExport();
     }
 }

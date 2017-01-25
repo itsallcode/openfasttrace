@@ -69,7 +69,7 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
         for (int i = 0; i < lineCount; ++i)
         {
             final String line = lines[i];
-            if (i > originalLineCount)
+            if (i > originalLineCount - 1)
             {
                 mismatchDescription.appendText("+>> ");
             }

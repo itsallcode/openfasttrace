@@ -1,5 +1,7 @@
 package openfasttrack.core;
 
+import java.util.Collections;
+
 /*
  * #%L
  * OpenFastTrack
@@ -98,7 +100,9 @@ public class LinkedItemIndex
 
     public List<LinkedSpecificationItem> getByIdIgnoringVersion(final SpecificationItemId id)
     {
-        return this.idIndexIgnoringVersion.get(new SpecificationItemIdWithoutVersion(id));
+        final List<LinkedSpecificationItem> items = this.idIndexIgnoringVersion
+                .get(new SpecificationItemIdWithoutVersion(id));
+        return items == null ? Collections.emptyList() : items;
     }
 
     private static class SpecificationItemIdWithoutVersion

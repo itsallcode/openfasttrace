@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.SpecificationItem;
 import openfasttrack.importer.ImporterService;
 
 /**
@@ -61,18 +61,16 @@ public abstract class AbstractCommand
      */
     public void start()
     {
-        final Stream<LinkedSpecificationItem> linkedSpecItems = importItemsFromPaths(
-                getNormalizedPaths());
-        processSpecificationItemStream(linkedSpecItems);
+        final Stream<SpecificationItem> items = importItemsFromPaths(getNormalizedPaths());
+        processSpecificationItemStream(items);
     }
 
-    private Stream<LinkedSpecificationItem> importItemsFromPaths(final List<Path> paths)
+    private Stream<SpecificationItem> importItemsFromPaths(final List<Path> paths)
     {
         return this.importerService.createImporter() //
                 .importAny(paths) //
                 .getImportedItems() //
-                .stream() //
-                .map(LinkedSpecificationItem::new);
+                .stream();
     }
 
     private List<Path> getNormalizedPaths()
@@ -83,12 +81,10 @@ public abstract class AbstractCommand
     }
 
     /**
-     * The actual processing of the imported {@link LinkedSpecificationItem}
-     * list.
+     * The actual processing of the imported {@link SpecificationItem} list.
      * 
-     * @param linkedSpecItems
+     * @param items
      *            specification items to be processed
      */
-    abstract protected void processSpecificationItemStream(
-            Stream<LinkedSpecificationItem> linkedSpecItems);
+    abstract protected void processSpecificationItemStream(Stream<SpecificationItem> items);
 }

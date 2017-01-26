@@ -25,7 +25,7 @@ package openfasttrack.cli.commands;
 import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.SpecificationItem;
 import openfasttrack.exporter.ExporterService;
 import openfasttrack.importer.ImporterService;
 
@@ -56,10 +56,9 @@ public class ConvertCommand extends AbstractCommand
     }
 
     @Override
-    protected void processSpecificationItemStream(
-            final Stream<LinkedSpecificationItem> linkedSpecItemStream)
+    protected void processSpecificationItemStream(final Stream<SpecificationItem> itemStream)
     {
-        this.exporterService.exportFile(linkedSpecItemStream, this.arguments.getOutputFormat(),
+        this.exporterService.exportFile(itemStream, this.arguments.getOutputFormat(),
                 this.arguments.getOutputFile());
     }
 }

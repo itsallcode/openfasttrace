@@ -141,18 +141,12 @@ public class PlainTextReport implements Reportable
     {
         this.trace.getUncoveredItems().stream() //
                 .sorted((item, other) -> item.getId().compareTo(other.getId())) //
-                .forEachOrdered(item -> renderItemDetails(item, report));
+                .forEachOrdered(item -> renderItemSummary(item, report));
     }
 
     private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
     {
-        report.print(translateStatus(!item.isDefect()));
-        report.print(" - ");
-        renderItemLinkCounts(item, report);
-        report.print(" - ");
-        report.print(item.getId().toString());
-        report.print(" ");
-        report.println(translateArtifactTypeCoverage(item));
+        renderItemSummary(item, report);
         report.println("#");
 
         for (final String line : item.getDescription().split(LINE_ENDING))
@@ -161,6 +155,17 @@ public class PlainTextReport implements Reportable
             report.println(line);
         }
         report.println("#");
+    }
+
+    private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        report.print(translateStatus(!item.isDefect()));
+        report.print(" - ");
+        renderItemLinkCounts(item, report);
+        report.print(" - ");
+        report.print(item.getId().toString());
+        report.print(" ");
+        report.println(translateArtifactTypeCoverage(item));
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)

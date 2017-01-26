@@ -31,6 +31,8 @@ import javax.annotation.Generated;
  * Specification item ID
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
+ * 
+ * [impl->dsn~md.specification_item_id_format~1]
  */
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {

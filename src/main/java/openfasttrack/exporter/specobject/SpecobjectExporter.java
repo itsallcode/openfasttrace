@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.exporter.Exporter;
@@ -46,17 +45,17 @@ public class SpecobjectExporter implements Exporter
     private static final Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
 
     private final XMLStreamWriter writer;
-    private final Map<String, List<LinkedSpecificationItem>> items;
+    private final Map<String, List<SpecificationItem>> items;
 
-    public SpecobjectExporter(final Stream<LinkedSpecificationItem> itemStream,
+    public SpecobjectExporter(final Stream<SpecificationItem> itemStream,
             final XMLStreamWriter xmlWriter)
     {
         this.items = groupByDoctype(itemStream);
         this.writer = xmlWriter;
     }
 
-    private Map<String, List<LinkedSpecificationItem>> groupByDoctype(
-            final Stream<LinkedSpecificationItem> itemStream)
+    private Map<String, List<SpecificationItem>> groupByDoctype(
+            final Stream<SpecificationItem> itemStream)
     {
         return itemStream.collect(
                 groupingBy(item -> item.getId().getArtifactType(), LinkedHashMap::new, toList()));
@@ -97,10 +96,10 @@ public class SpecobjectExporter implements Exporter
         this.writer.writeStartDocument("UTF-8", "1.0");
         this.writer.writeStartElement("specdocument");
 
-        for (final Entry<String, List<LinkedSpecificationItem>> entry : this.items.entrySet())
+        for (final Entry<String, List<SpecificationItem>> entry : this.items.entrySet())
         {
             final String doctype = entry.getKey();
-            final List<LinkedSpecificationItem> specItems = entry.getValue();
+            final List<SpecificationItem> specItems = entry.getValue();
             writeItems(doctype, specItems);
         }
 
@@ -108,15 +107,15 @@ public class SpecobjectExporter implements Exporter
         this.writer.writeEndDocument();
     }
 
-    private void writeItems(final String doctype, final List<LinkedSpecificationItem> specItems)
+    private void writeItems(final String doctype, final List<SpecificationItem> specItems)
             throws XMLStreamException
     {
         LOG.finest(() -> "Writing " + specItems.size() + " items with doctype " + doctype);
         this.writer.writeStartElement("specobjects");
         this.writer.writeAttribute("doctype", doctype);
-        for (final LinkedSpecificationItem item : specItems)
+        for (final SpecificationItem item : specItems)
         {
-            writeItem(item.getItem());
+            writeItem(item);
         }
         this.writer.writeEndElement();
     }

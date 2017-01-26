@@ -22,11 +22,14 @@ package openfasttrack.cli.commands;
  * #L%
  */
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Linker;
+import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.Trace;
 import openfasttrack.core.Tracer;
 import openfasttrack.importer.ImporterService;
@@ -63,10 +66,11 @@ public class TraceCommand extends AbstractCommand
     }
 
     @Override
-    protected void processSpecificationItemStream(
-            final Stream<LinkedSpecificationItem> linkedSpecItems)
+    protected void processSpecificationItemStream(final Stream<SpecificationItem> items)
     {
-        final Trace traceResult = this.tracer.trace(linkedSpecItems.collect(Collectors.toList()));
+        final Linker linker = new Linker(items.collect(Collectors.toList()));
+        final List<LinkedSpecificationItem> linkedItems = linker.link();
+        final Trace traceResult = this.tracer.trace(linkedItems);
         final ReportVerbosity verbosity = this.arguments.getReportVerbosity() == null
                 ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
         this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity);

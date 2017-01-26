@@ -139,7 +139,7 @@ public class TestCliStarter
         runCliStarter(asList(TRACE_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
                 this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
-        assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(1000));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class TestCliStarter
     {
         runCliStarter(asList(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(true));
-        assertThat(fileContent(this.outputFile).length(), greaterThan(1500));
+        assertThat(fileContent(this.outputFile).length(), greaterThan(1000));
     }
 
     @Test

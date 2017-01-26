@@ -47,22 +47,18 @@ OFT imports specification items from ReqM2 files.
 
 Rationale:
 
-Markdown is a clean an simple format that:
-
-  * is viewable with any text editor
-  * focuses on content instead of layout
-  * is portable across platforms
-  * easy to process with text manipulation tools
-  
-For those reasons Markdown is a suitable candidate for writing specification that can be read and
-maintained over a long time.
+One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 
-## Requirement Conversion
-`feat~requirement_conversion~1` <a id="feat~requirement_conversion~1"></a>
+## ReqM2 Requirement Export
+`feat~reqm2_export~1` <a id="feat~requirement_export~1"></a>
 
-OFT can convert from one requirement format into another one.
+OFT exports specification items from ReqM2 files.
+
+Rationale:
+
+One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 
@@ -200,6 +196,7 @@ Covers:
 Needs: dsn
 
 ## Import
+
 ### Input File Selection
 `req~input_file_selection~1` <a id="req~input_file_selection~1"></a>
 
@@ -310,6 +307,19 @@ A summary
 Covers:
 
   * [feat~plain_text_report~1](#feat~plain_text_report~1)
+
+Needs: dsn
+
+## Export
+
+### ReqM2 Export
+`req~reqm2_exprt~1` <a id="req~export.reqm2~1"></a>
+
+OFT exports to ReqM2's "SpecObject" format.
+
+Covers:
+
+  * [feat~reqm2_export~1](#feat~reqm2_export~1)
 
 Needs: dsn
 

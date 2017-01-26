@@ -23,7 +23,6 @@ package openfasttrack.report;
  */
 
 import static java.util.stream.Collectors.joining;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -79,12 +78,6 @@ public class TestPlainTextReport
         assertReportOutput(ReportVerbosity.QUIET);
     }
 
-    // @Test(expected = IllegalStateException.class)
-    // public void testReportLevel_All()
-    // {
-    // assertReportOutput(ReportVerbosity.ALL);
-    // }
-
     @Test
     public void testReportLevel_Minimal_OK()
     {
@@ -98,7 +91,6 @@ public class TestPlainTextReport
         final String expectedReportText = getExpectedReportText(expectedReportLines);
         assertThat(getReportOutput(verbosity),
                 MultilineTextMatcher.matchesAllLines(expectedReportText));
-        assertEquals(expectedReportText, getReportOutput(verbosity));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)
@@ -173,24 +165,9 @@ public class TestPlainTextReport
 
         assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
                 "not ok - 0/0>0>2/4 - dsn~bar~1 (impl, -uman, utest)", //
-                "#", //
-                "# desc B1", //
-                "#", //
                 "not ok - 0/3>1>0/2 - req~foo~1 (dsn)", //
-                "#", //
-                "# desc A1", //
-                "# desc A2", //
-                "# desc A3", //
-                "#", //
                 "not ok - 3/7>1>2/3 - req~zoo~1 (-impl, -utest)", //
-                "#", //
-                "# desc D1", //
-                "#", //
                 "not ok - 1/6>0>0/0 - req~zoo~2 (dsn, +utest)", //
-                "#", //
-                "# desc C1", //
-                "# desc C2", //
-                "#", //
                 "", //
                 "not ok - 6 total, 4 not covered");
     }
@@ -223,6 +200,43 @@ public class TestPlainTextReport
                 .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
     }
 
+    @Test
+    public void testReport_LevelAll()
+    {
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countUncovered()).thenReturn(1);
+        prepareMixedItemDetails();
+
+        assertReportOutput(ReportVerbosity.ALL, //
+                "not ok - 0/0>3>1/4 - dsn~failure~0 (impl, uman, -utest)", //
+                "#", //
+                "# This is a failure.", //
+                "#", //
+                "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
+                "#", //
+                "# This is a success.", //
+                "#", //
+                "", //
+                "not ok - 2 total, 1 not covered");
+    }
+
+    private void prepareMixedItemDetails()
+    {
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~success~20170126", //
+                "This is a success." + System.lineSeparator(), //
+                0, 0, 0, 0, 0);
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~failure~0", //
+                "This is a failure.", //
+                0, 0, 3, 1, 4);
+
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(Arrays.asList(DSN)));
+        when(itemBMock.getCoveredArtifactTypes())
+                .thenReturn(new HashSet<>(Arrays.asList(IMPL, UMAN)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(UTEST));
+        when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemAMock, itemBMock));
+    }
+
     private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
             final String description, final int incomingBadLinks, final int incomingLinks,
             final int duplicates, final int outgoingBadLinks, final int outgoingLinks)
@@ -231,7 +245,7 @@ public class TestPlainTextReport
         final LinkedSpecificationItem itemAMock = mock(LinkedSpecificationItem.class);
         when(itemAMock.getDescription()).thenReturn(description);
         when(itemAMock.getId()).thenReturn(id);
-        when(itemAMock.isDefect()).thenReturn(true);
+        when(itemAMock.isDefect()).thenReturn(incomingBadLinks + outgoingBadLinks + duplicates > 0);
         when(itemAMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
         when(itemAMock.countIncomingLinks()).thenReturn(incomingLinks);
         when(itemAMock.countDuplicateLinks()).thenReturn(duplicates);

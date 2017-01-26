@@ -43,6 +43,8 @@ public class PlainTextReport implements Reportable
 
     private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
+    private static final Comparator<? super LinkedSpecificationItem> LINKED_ITEM_BY_ID = (item,
+            other) -> item.getId().compareTo(other.getId());
 
     /**
      * Create a new instance of {@link PlainTextReport}
@@ -145,11 +147,11 @@ public class PlainTextReport implements Reportable
     private void renderFailureDetails(final PrintStream report)
     {
         this.trace.getUncoveredItems().stream() //
-                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
-                .forEachOrdered(item -> renderItemDetails(item, report));
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemSummary(item, report));
     }
 
-    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
     {
         report.print(translateStatus(!item.isDefect()));
         report.print(" - ");
@@ -158,14 +160,6 @@ public class PlainTextReport implements Reportable
         report.print(item.getId().toString());
         report.print(" ");
         report.println(translateArtifactTypeCoverage(item));
-        report.println("#");
-
-        for (final String line : item.getDescription().split(LINE_ENDING))
-        {
-            report.print("# ");
-            report.println(line);
-        }
-        report.println("#");
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
@@ -202,7 +196,20 @@ public class PlainTextReport implements Reportable
     private void renderAll(final PrintStream report)
     {
         this.trace.getItems().stream() //
-                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
+                .sorted(LINKED_ITEM_BY_ID) //
                 .forEachOrdered(item -> renderItemDetails(item, report));
+    }
+
+    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        renderItemSummary(item, report);
+        report.println("#");
+    
+        for (final String line : item.getDescription().split(LINE_ENDING))
+        {
+            report.print("# ");
+            report.println(line);
+        }
+        report.println("#");
     }
 }

@@ -25,9 +25,11 @@ package openfasttrack.importer.tag;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.CRC32;
 
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
@@ -40,7 +42,8 @@ import openfasttrack.importer.ImporterException;
 class TagImporter implements Importer
 {
     private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());
-    private static final String ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+    private static final String COVERED_ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+    private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     private static final String TAG_PREFIX_PATTERN = "\\[";
     private static final String TAG_SUFFIX_PATTERN = "\\]";
 
@@ -55,8 +58,11 @@ class TagImporter implements Importer
         this.reader = new BufferedReader(reader);
         this.fileName = fileName;
         this.listener = listener;
-        this.tagPattern = Pattern
-                .compile(TAG_PREFIX_PATTERN + "(" + ID_PATTERN + ")" + TAG_SUFFIX_PATTERN);
+        this.tagPattern = Pattern.compile(TAG_PREFIX_PATTERN //
+                + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
+                + "->" //
+                + "(" + COVERED_ID_PATTERN + ")" //
+                + TAG_SUFFIX_PATTERN);
     }
 
     @Override
@@ -82,15 +88,30 @@ class TagImporter implements Importer
     private void processLine(final int lineNumber, final String line)
     {
         final Matcher matcher = this.tagPattern.matcher(line);
+        int counter = 0;
         while (matcher.find())
         {
             this.listener.beginSpecificationItem();
-            final SpecificationItemId id = SpecificationItemId.parseId(matcher.group(1));
+            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
+            final String generatedName = generateName(coveredId, lineNumber, counter);
+            final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
+                    generatedName, 0);
 
-            LOG.finest(
-                    () -> "File " + this.fileName + ":" + lineNumber + ": found id '" + id + "'");
-            this.listener.setId(id);
+            LOG.finest(() -> "File " + this.fileName + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId + "'");
+            this.listener.setId(generatedId);
+            this.listener.addCoveredId(coveredId);
             this.listener.endSpecificationItem();
+            counter++;
         }
+    }
+
+    private String generateName(final SpecificationItemId coveredId, final int lineNumber,
+            final int counter)
+    {
+        final String uniqueName = this.fileName + lineNumber + counter + coveredId.toString();
+        final CRC32 checksum = new CRC32();
+        checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
+        return Long.toString(checksum.getValue());
     }
 }

@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.SpecificationItem;
 
 /**
  * Super class for factories producing {@link Exporter}s.
@@ -48,8 +48,8 @@ public abstract class ExporterFactory
     }
 
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory}
-     * supports exporting the given output format.
+     * Returns <code>true</code> if this {@link ExporterFactory} supports
+     * exporting the given output format.
      *
      * @param type
      *            the output type to check.
@@ -69,12 +69,12 @@ public abstract class ExporterFactory
      *            the output format
      * @param charset
      *            the character set used for exporting
-     * @param linkedSpecItemStream
+     * @param itemStream
      *            the items to export
      * @return an exporter instance
      */
     public Exporter createExporter(final Path file, final String outputFormat,
-            final Charset charset, final Stream<LinkedSpecificationItem> linkedSpecItemStream)
+            final Charset charset, final Stream<SpecificationItem> itemStream)
     {
         if (!supportsFormat(outputFormat))
         {
@@ -82,7 +82,7 @@ public abstract class ExporterFactory
                     "Output format '" + outputFormat + "' not supported for export");
         }
         final Writer writer = createWriter(file, charset);
-        return createExporter(writer, linkedSpecItemStream);
+        return createExporter(writer, itemStream);
     }
 
     private Writer createWriter(final Path file, final Charset charset)
@@ -113,10 +113,10 @@ public abstract class ExporterFactory
      *
      * @param writer
      *            the {@link Writer} to which specification items are exported
-     * @param linkedSpecItemStream
+     * @param itemStream
      *            the {@link Stream} of items to export
      * @return an {@link Exporter} instance
      */
     protected abstract Exporter createExporter(final Writer writer,
-            Stream<LinkedSpecificationItem> linkedSpecItemStream);
+            Stream<SpecificationItem> linkedSpecItemStream);
 }

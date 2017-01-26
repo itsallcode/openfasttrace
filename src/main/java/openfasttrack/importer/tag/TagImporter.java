@@ -40,7 +40,8 @@ import openfasttrack.importer.ImporterException;
 class TagImporter implements Importer
 {
     private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());
-    private static final String ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+    private static final String COVERED_ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+    private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     private static final String TAG_PREFIX_PATTERN = "\\[";
     private static final String TAG_SUFFIX_PATTERN = "\\]";
 
@@ -55,8 +56,11 @@ class TagImporter implements Importer
         this.reader = new BufferedReader(reader);
         this.fileName = fileName;
         this.listener = listener;
-        this.tagPattern = Pattern
-                .compile(TAG_PREFIX_PATTERN + "(" + ID_PATTERN + ")" + TAG_SUFFIX_PATTERN);
+        this.tagPattern = Pattern.compile(TAG_PREFIX_PATTERN //
+                + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
+                + "->" //
+                + "(" + COVERED_ID_PATTERN + ")" //
+                + TAG_SUFFIX_PATTERN);
     }
 
     @Override
@@ -82,15 +86,21 @@ class TagImporter implements Importer
     private void processLine(final int lineNumber, final String line)
     {
         final Matcher matcher = this.tagPattern.matcher(line);
+        int counter = 0;
         while (matcher.find())
         {
             this.listener.beginSpecificationItem();
-            final SpecificationItemId id = SpecificationItemId.parseId(matcher.group(1));
+            final String generatedName = this.fileName + ":" + lineNumber + "-" + counter;
+            final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
+                    generatedName, 0);
+            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
 
-            LOG.finest(
-                    () -> "File " + this.fileName + ":" + lineNumber + ": found id '" + id + "'");
-            this.listener.setId(id);
+            LOG.finest(() -> "File " + this.fileName + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId + "'");
+            this.listener.setId(generatedId);
+            this.listener.addCoveredId(coveredId);
             this.listener.endSpecificationItem();
+            counter++;
         }
     }
 }

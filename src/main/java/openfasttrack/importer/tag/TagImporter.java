@@ -25,9 +25,11 @@ package openfasttrack.importer.tag;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.CRC32;
 
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
@@ -90,10 +92,10 @@ class TagImporter implements Importer
         while (matcher.find())
         {
             this.listener.beginSpecificationItem();
-            final String generatedName = this.fileName + ":" + lineNumber + "-" + counter;
+            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
+            final String generatedName = generateName(coveredId, lineNumber, counter);
             final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
                     generatedName, 0);
-            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
 
             LOG.finest(() -> "File " + this.fileName + ":" + lineNumber + ": found '" + generatedId
                     + "' covering id '" + coveredId + "'");
@@ -102,5 +104,14 @@ class TagImporter implements Importer
             this.listener.endSpecificationItem();
             counter++;
         }
+    }
+
+    private String generateName(final SpecificationItemId coveredId, final int lineNumber,
+            final int counter)
+    {
+        final String uniqueName = this.fileName + lineNumber + counter + coveredId.toString();
+        final CRC32 checksum = new CRC32();
+        checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
+        return Long.toString(checksum.getValue());
     }
 }

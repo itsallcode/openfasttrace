@@ -102,26 +102,37 @@ The Reporter consumes the link status list and the specification item list and g
 ## Tracing
 
 ### Tracing Needed Coverage
-`dsn~needed_coverage_status~1`
+`dsn~needed-coverage-status~1`
 
-The Tracer component iterates over all needed Artifacts of all specification items and determines if an which coverage exists for.
+The Tracer component iterates over all needed artifacts of all specification items and determines if and which coverage exists for.
 
 Covers:
 
-  * `req~needed_coverage_status~1`
+  * `req~needed-coverage-status~1`
   
 Needs: utest, impl
 
-### Backward Tracing
-`dsn~backward_coverage_status~1`
+### Outgoing Coverage Link Status
+`dsn~outgoing-coverage-link-status~1`
 
-The Tracer component iterates over all covered IDs of all specification items and determines the backward coverage status of the link between the provider item and the requester item.
+The Linker component iterates over all covered IDs of all specification items and determines the coverage status of the outgoing link between the provider item and the requester item.
 
 Covers:
 
-  * `req~backward_coverage_status~1`
+  * `req~outgoing-coverage-link-status~1`
 
 Needs: utest, impl
+
+#### Deep Coverage
+`dsn~deep-coverage~1`
+
+The [Tracer](#tracer) marks a [SpecificationItem] as _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
+
+Covers:
+
+  * `req~deep-coverage~1`
+
+Needs: impl, utest, uman
 
 # Deployment View
 
@@ -129,10 +140,46 @@ Needs: utest, impl
 
 ## Data Structures
 
-## Markdown-style Structures
+### Internal Data Structures
 
-### Specification Item ID Format
-`dsn~md.specification_item_id_format~1` <a id="dsn~md.specification_item_id_format~1"></a>
+#### Specification Item
+`dsn~specification-item~1`
+
+A `SpecificationItem` consists of the following parts:
+
+  * ID (String)
+  * Title (String, optional)
+  * Description (String, optional)
+  * Rationale (String, optional)
+  * Comment (String, optional)
+  * Covers (List of Strings, optional)
+  * Depends (List of Strings, optional)
+  * Needs (List of Strings, optional)
+
+Covers:
+
+  * `req~specification-item~1`
+
+Needs: impl, utest, uman
+
+#### Linked Specification Item
+`dsn~linked-specification-item~1`
+
+A `LinkedSpecificationItem` is a subclass of the [SpecificationItem](#specification-item) that is enriched with references to other LinkedSpecificationItems.
+
+Rationale:
+This allows navigating between specification items.
+
+Covers:
+
+  * `req~specification-item~1`
+
+Needs: impl, utest, uman
+
+### Markdown-style Structures
+
+#### Specification Item ID Format
+`dsn~md.specification-item-id-format~2`
 
 A requirement ID in has the following format
 
@@ -142,7 +189,7 @@ A requirement ID in has the following format
     
     id = id-fragment *("." id-fragment)
     
-    id-fragment = ALPHA *(ALPHA / DIGIT / "_")
+    id-fragment = ALPHA *(ALPHA / DIGIT / "_" / "-")
 
     revision = 1*DIGIT
 
@@ -153,12 +200,12 @@ Requirement type and revision must be immediately recognizable from the requirem
 
 Covers:
 
-  * `req~markdown_import~1`
+  * `req~markdown-import~1`
 
 Needs: impl, utest, uman
 
-### Specification Item Title
-`dsn~md.specification_item_title~1` <a id="dsn~md.specification_item_title"></a>
+#### Specification Item Title
+`dsn~md.specification-item-title~1`
 
 If a Markdown title directly precedes a specification item ID, then the Markdown title is used as title for the specification item.
 
@@ -168,12 +215,12 @@ Markdown titles show up in the outline and are a natural way of defining a requi
 
 Covers:
 
-  * `req~markdown_import~1`
+  * `req~markdown-import~1`
 
 Needs: impl, utest, uman 
 
-### Requirement references
-`dsn~md.requirement_references~1` <a id="dsn~md.requirement_references~1"></a>
+#### Requirement references
+`dsn~md.requirement-references~1`
 
 In Markdown specification item references have the following format:
 
@@ -185,13 +232,13 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * `req~markdown_import~1`
-  * `req~markdown_standard_syntax~1`
+  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest, uman
 
-### Traced reference relations
-`dsn~md.traced_reference_relations~1` <a id="dsn~md.traced_reference_relations~1"></a>
+#### Traced reference relations
+`dsn~md.traced-reference-relations~1`
 
 The Markdown importer interprets specification item reference relations as follows:
 
@@ -212,8 +259,8 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown_import~1`
-  * `req~markdown_standard_syntax~1`
+  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest, uman
 
@@ -222,7 +269,7 @@ Needs: impl, utest, uman
 ### Command Line
 
 #### Input File Selection
-`dsn~input_file_selection~1` <a id="dsn~input_file_selection~1"></a>
+`dsn~input-file-selection~1`
 
 The CLI accepts the following two variants for defining input files:
 
@@ -233,25 +280,25 @@ In both cases relative and absolute paths are accepted. "Relative" means in rela
 
 Covers:
 
-  * `req~input_file_selection~1`
+  * `req~input-file-selection~1`
   
 Needs: impl, utest, uman
 
-#### Input File De-Duplication
-`dsn~input_file_deduplication~1` <a id="dsn~input_file_deduplication~1></a>
+#### Input File Deduplication
+`dsn~input-file-deduplication~1`
 
 The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
 
 Covers:
 
-  * `req~input_file_selection~1`
+  * `req~input-file-selection~1`
 
 Needs: impl, utest, uman
 
 # Design Decisions
 
 ## How do we Implement the Command Line Interpreter
-`dsn~reflection_based_cli` <a id="dsn~reflection_based_cli"></a>
+`dsn~reflection-based-cli`
 
 OFT got its own simple command line interpreter that uses reflection to feed the command line arguments to a receiver object.
 
@@ -262,7 +309,7 @@ Using reflection allows the CLI user to implement the receiver as a POJO. No ann
 
 Covers:
 
-  * `req~input_file_selection~1`
+  * `req~input-file-selection~1`
 
 ### Why is This Architecture Relevant?
 

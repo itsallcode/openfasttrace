@@ -31,14 +31,17 @@ import javax.annotation.Generated;
  * Specification item ID
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
- * 
- * [impl->dsn~md.specification_item_id_format~1]
  */
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
+    public static final Pattern ID_PATTERN = Pattern.compile("(\\p{Alpha}+)" //
+            + ARTIFACT_TYPE_SEPARATOR //
+            + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
+            + REVISION_SEPARATOR //
+            + "(\\d+)");
 
     private final String name;
     private final int revision;
@@ -206,8 +209,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
      */
     public static class Builder
     {
-        private final Pattern idPattern = Pattern
-                .compile("(\\p{Alpha}+)~(\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*)~(\\d+)");
+        // [impl->dsn~md.specification_item_id_format~2]
         private final String id;
         private String artifactType;
         private String name;
@@ -310,7 +312,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 
         private void parseId()
         {
-            final Matcher matcher = this.idPattern.matcher(this.id);
+            final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
                 this.artifactType = matcher.group(1);

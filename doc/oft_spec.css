@@ -1,6 +1,7 @@
 @CHARSET "UTF-8";
 
 body {
+  counter-reset: section;
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
   line-height: 1.5;
@@ -11,17 +12,42 @@ body {
   color: #333;
 }
 
+h1:before {
+  counter-increment: section;
+  content: counter(section) " ";
+}
+
 h1 {
+  counter-reset: sub-section;
   font-size: 20px;
   border-bottom: 1px solid lightgrey;
 }
 
+h2:before {
+  counter-increment: sub-section;
+  content: counter(section) "." counter(sub-section) " ";
+}
+
 h2 {
+  counter-reset: composite;
   font-size: 18px;
 }
 
+h3:before {
+  counter-increment: composite;
+  content: counter(section) "." counter(sub-section) "."
+    counter(composite) " ";
+}
+
 h3 {
+  counter-reset: detail;
   font-size: 16px;
+}
+
+h4:before {
+  counter-increment: detail;
+  content: counter(section) "." counter(sub-section) "."
+    counter(composite) "." counter(detail) " ";
 }
 
 h4 {

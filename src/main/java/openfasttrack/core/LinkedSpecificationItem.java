@@ -192,17 +192,35 @@ public class LinkedSpecificationItem
 
     /**
      * Check if this item and all items providing coverage for it are covered.
-     *
-     * @return true if the item is covered recursively.
+     * 
+     * @return covered, uncovered or ring.
      */
-    public boolean isCoveredDeeply()
+    public DeepCoverageStatus getDeepCoverageStatus()
     {
-        boolean covered = isCoveredShallow();
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId());
+    }
+
+    private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
+            final SpecificationItemId startId)
+    {
+        final boolean covered = isCoveredShallow();
         for (final LinkedSpecificationItem coveringItem : getLinksByStatus(LinkStatus.COVERS))
         {
-            covered = covered && coveringItem.isCoveredDeeply();
+            if (coveringItem.getId().equals(startId))
+            {
+                return DeepCoverageStatus.RING;
+            }
+            else
+            {
+                final DeepCoverageStatus otherStatus = coveringItem
+                        .getDeepCoverageStatusEndRecursionStartingAt(startId);
+                if (!DeepCoverageStatus.COVERED.equals(otherStatus))
+                {
+                    return otherStatus;
+                }
+            }
         }
-        return covered;
+        return covered ? DeepCoverageStatus.COVERED : DeepCoverageStatus.UNCOVERED;
     }
 
     /**
@@ -226,7 +244,7 @@ public class LinkedSpecificationItem
                 return true;
             }
         }
-        return !isCoveredDeeply();
+        return getDeepCoverageStatus() != DeepCoverageStatus.COVERED;
     }
 
     /**

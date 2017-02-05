@@ -68,7 +68,7 @@ In effect the lookup using the naive approach results in a complexity of O(n²).
 
 ### Lookups With an Index
 
-If instead of relying on a linear search of all providers, we use an index. We saw earlier that iterating over the requesters gives a a complexity of O(n). A proper index lookup should give O(log n) in the worst case. That leaves us with a complexity of O(n log(n)). Better.
+If instead of relying on a linear search of all providers, we use an index. We saw earlier that iterating over the requesters results in a complexity of O(n). A proper index lookup should give O(log n) in the worst case. That leaves us with a complexity of O(n log(n)). Better.
 
 ### Choosing the Index
 
@@ -86,13 +86,17 @@ Since the specification item IDs inherently look similar, load tests need to sho
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
 ## Import Event Listeners
-Importers emit events if they find parts of a specification item in the artifact they are importing.
+Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
 ## Command Line Interpreter
-The Command Line Interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
+The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
+
+## Linker
+The linker is responsible for turning the imported [specification items](#specification-item) collected by the [importers](#importers) into [linked specification items](#linked-specification-item). 
 
 ## Tracer
-The Tracer consumes the list of requirements collected by the importers and evaluates the link status for each link.
+The tracer consumes the list of [linked specification items](#linked-specification-item) and evaluates the link status for each link.
+
 
 ## Reporter
 The Reporter consumes the link status list and the specification item list and generates a report in the chosen output format. 
@@ -102,35 +106,178 @@ The Reporter consumes the link status list and the specification item list and g
 ## Tracing
 
 ### Tracing Needed Coverage
-`dsn~needed-coverage-status~1`
+`dsn~tracing.needed-coverage-status~1`
 
-The Tracer component iterates over all needed artifacts of all specification items and determines if and which coverage exists for.
+The [tracer](#tracer) component iterates over all needed artifacts of all specification items and determines if and which coverage exists for each.
 
 Covers:
 
-  * `req~needed-coverage-status~1`
+  * `req~tracing.needed-coverage-status~1`
   
 Needs: utest, impl
 
 ### Outgoing Coverage Link Status
-`dsn~outgoing-coverage-link-status~1`
+`dsn~tracing.outgoing-coverage-link-status~1`
 
-The Linker component iterates over all covered IDs of all specification items and determines the coverage status of the outgoing link between the provider item and the requester item.
+The [linker](#linker) component determines the coverage status of the outgoing link between the provider item and the requester item.
+
+The possible results are:
+
+  1. Covers:    link points to a specification item which wants this coverage
+  2. Outdated:  link points to a specification item which has a higher revision number
+  3. Predated:  link points to a specification item which has a lower revision number
+  4. Ambiguous: link points to a specification item that has duplicates
+  5. Unwanted:  coverage provider has an artifact type the provider does not want
+  6. Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:
 
-  * `req~outgoing-coverage-link-status~1`
+  * `req~tracing.outgoing-coverage-link-status~1`
 
 Needs: utest, impl
 
-#### Deep Coverage
-`dsn~deep-coverage~1`
+### Incoming Coverage Link Status
+`dsn~tracing.incoming-coverage-link-status~1`
 
-The [Tracer](#tracer) marks a [SpecificationItem] as _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
+The [linker](#linker) component determines the coverage status of the incoming link between the requester item and the provider item.
+
+The possible results are:
+
+  1. Covered shallow:  coverage provider for a required coverage exists
+  2. Covered unwanted: coverage provider covers an artifact type the requester does not want
+  3. Covered predated: coverage provider covers a higher revision number than the requester has
+  4. Covered outdated: coverage provider covers a lower revision number than the requester has
 
 Covers:
 
-  * `req~deep-coverage~1`
+  * `req~tracing.incoming-coverage-link-status~1`
+
+Needs: impl, utest, uman
+
+### Deep Coverage
+`dsn~tracing.deep-coverage~1`
+
+The [tracer](#tracer) marks a [specification item](#specification-item) as _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
+
+Covers:
+
+  * `req~tracing.deep-coverage~1`
+
+Needs: impl, utest, uman
+
+### Duplicate Items
+`dsn~tracing.tracing.duplicate-items~1`
+
+The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exists
+
+Covers:
+
+  * `req~tracing.duplicate-items~1`
+
+Needs: impl, utest, uman
+
+
+### Defect Items
+`dsn~tracing.defect-items~1`
+
+The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if any of the following criteria apply
+
+  1. The specification item has duplicates
+  2. At least one outgoing coverage link has a different status than "Covers"
+  3. The item is not covered deeply
+  
+Covers:
+
+  * `req~tracing.defect-items~1`
+
+Needs: dsn
+
+## Tracing Reports
+
+### Plain Text Report
+
+#### Plain Text Report Summary
+`dsn~reporting.plain-text-summary~1`
+
+The summary in the plain text report includes:
+
+  * Result status
+  * Total number of specification items
+  * Total number of specification items that are not covered (if any)
+  * Total number of duplicate specification items (if any)
+
+Covers:
+
+  * `req~reporting.plain-text-summary~1`
+
+Needs: dsn
+
+#### Plain Text Report Specification Item Overview
+`dsn~reporting.plain-text.specification-item-overview~1`
+
+An item summary consist in the plain text report includes
+
+  1. Status
+  2. Number of broken incoming links 
+  3. Total number of incoming links
+  4. Number of broken outgoing links
+  5. Total number of outgoing links
+  6. Number of duplicates (not including this item)
+  7. ID
+  8. Artifact types indicating coverage
+  9. Source file name and line (optional)
+
+Covers:
+
+  * `req~reporting.plain-text.specification-item-overview~1`
+
+Needs: dsn
+
+#### Plain Text Report Options
+`dsn~reporting.plain-text.report-options~1`
+
+The following parts of the plain text reports can be switched on and off:
+
+  * Summary
+  * Overview per defect specification item
+  * Overview per clean specification item
+  * Source file name and line
+  * Specification item description
+
+Covers:
+
+  * `req~reporting.plain-text.report-options~1`
+
+Needs: dsn
+
+#### Default Plain Text Report
+`dsn~reporting.plain-text.default-report-options~1`
+
+The following options are set by default in the plain text report unless options are specified by the user:
+
+  * Summary
+  * Overview per defect specification item
+  * Source file name and line
+
+Covers:
+
+  * `req~reporting.plain-text.default-report-options~1`
+
+Needs: dsn
+
+## Requirement Format Conversion
+
+#### ReqM2 Export
+`dsn~conversion.reqm2-export~1`
+
+OFT exports to ReqM2's "SpecObject" format.
+
+Comment:
+The ReqM2 format is specified in the ReqM2 handbook by Elektrobit.
+
+Covers:
+
+  * `req~conversion.reqm2-export~1`
 
 Needs: impl, utest, uman
 
@@ -147,14 +294,14 @@ Needs: impl, utest, uman
 
 A `SpecificationItem` consists of the following parts:
 
-  * ID (String)
-  * Title (String, optional)
-  * Description (String, optional)
-  * Rationale (String, optional)
-  * Comment (String, optional)
-  * Covers (List of Strings, optional)
-  * Depends (List of Strings, optional)
-  * Needs (List of Strings, optional)
+  * ID (`SpecificationItemId`)
+  * Title (`String`, optional)
+  * Description (`String`, optional)
+  * Rationale (`String`, optional)
+  * Comment (`String`, optional)
+  * Covers (List of `SpecificationItemId`, optional)
+  * Depends (List of `SpecificationItemId`, optional)
+  * Needs (List of `String`, optional)
 
 Covers:
 
@@ -176,9 +323,24 @@ Covers:
 
 Needs: impl, utest, uman
 
+#### Specification Item Id
+`dsn~specification-item-id~1`
+
+A `SpecificationItemId` consists of:
+
+  * Artifact type (String)
+  * name (String)
+  * revision (number)
+
+Covers:
+
+  * `req~specification-item~1`
+
+Needs: impl, utest, uman
+
 ### Markdown-style Structures
 
-#### Specification Item ID Format
+#### Markdown Specification Item ID Format
 `dsn~md.specification-item-id-format~2`
 
 A requirement ID in has the following format
@@ -204,14 +366,14 @@ Covers:
 
 Needs: impl, utest, uman
 
-#### Specification Item Title
+#### Markdown Specification Item Title
 `dsn~md.specification-item-title~1`
 
 If a Markdown title directly precedes a specification item ID, then the Markdown title is used as title for the specification item.
 
 Rationale:
 
-Markdown titles show up in the outline and are a natural way of defining a requirment title.
+Markdown titles show up in the outline and are a natural way of defining a requirement title.
 
 Covers:
 
@@ -219,7 +381,7 @@ Covers:
 
 Needs: impl, utest, uman 
 
-#### Requirement references
+#### Markdown Requirement References
 `dsn~md.requirement-references~1`
 
 In Markdown specification item references have the following format:
@@ -237,19 +399,16 @@ Covers:
 
 Needs: impl, utest, uman
 
-#### Traced reference relations
-`dsn~md.traced-reference-relations~1`
+#### Markdown "Covers" list
+`dsn~md.covers_list~1`
 
-The Markdown importer interprets specification item reference relations as follows:
+The Markdown Importer supports the following format for links that cover a different specification item.
 
-  1. Covers
-  2. Depends
-
-References of type "Covers" and "Depends" must be in a paragraph preceded by the relation name.
-
-    covers-link = "Covers:" *SP 1*LINEBREAK *WSP "*" *WSP reference
+    covers-list = covers-header 1*(LINEBREAK covers-line)
     
-    depends-link = "Depends:" *SP 1*LINEBREAK *WSP "*" *WSP reference
+    covers-header = "Covers:" *WSP
+    
+    covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
 
@@ -264,12 +423,62 @@ Covers:
 
 Needs: impl, utest, uman
 
+#### Markdown "Depends" List
+`dsn~md.depends_list~1`
+
+The Markdown Importer supports the following format for links to a different specification item which the current depends on.
+
+    depends-list = depends-header 1*(LINEBREAK depends-line)
+    
+    depends-header = "Depends:" *WSP
+    
+    depends-line = *WSP "*" *WSP reference
+
+Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
+
+Rationale:
+
+Defining a link should be as natural and simple as possible in Markdown. It must also be rendered correctly by a regular Markdown renderer without modifications. Embedding links in lists to define the relationship looks nice and is language independent.
+
+Covers:
+
+  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
+
+Needs: impl, utest, uman
+
+#### Markdown "Needs" List
+`dsn~md.needs_coverage_list~1`
+
+The Markdown Importer supports the following format for defining the list of artifact types that are needed to fully cover the current specification item.
+
+    needs-list = "Needs:" *WSP reference *("," *WSP reference)
+
+Covers:
+
+  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
+
 ## User Interface
 
-### Command Line
+### CLI Command Selection
+`dsn~cli.command-selection~1`
+
+The CLI expects one of the following commands as first unnamed command line parameter:
+
+    command = "trace" / "convert"
+
+Covers:
+
+  * `req~cli.tracing.command~1`
+  * `req~cli.conversion.command~1`
+
+Needs: impl, utest, uman
+
+### Common
 
 #### Input File Selection
-`dsn~input-file-selection~1`
+`dsn~cli.input-file-selection~1`
 
 The CLI accepts the following two variants for defining input files:
 
@@ -280,25 +489,139 @@ In both cases relative and absolute paths are accepted. "Relative" means in rela
 
 Covers:
 
-  * `req~input-file-selection~1`
+  * `req~cli.input-selection~1`
   
 Needs: impl, utest, uman
 
+#### Input Directory Recursive Traversal
+`dsn~input-directory-recursive-traversal~1`
+
+The Importer reads all requirement input files from all input directories recursively.
+
+Covers:
+
+  * `req~cli.input-directory-selection~1`
+
+Needs: impl, utest, uman
+
+#### Default Input
+`dsn~cli.default-input~1`
+
+If the user does not specify any inputs as CLI parameters, the CLI uses the current working directory as default input.
+
+Covers:
+
+  * `req~cli.default-input~1`
+
+Needs: impl, utest, uman
+
 #### Input File Deduplication
-`dsn~input-file-deduplication~1`
+`dsn~cli.input-file-deduplication~1`
 
 The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
 
 Covers:
 
-  * `req~input-file-selection~1`
+  * `req~cli.input-deduplication~1`
+
+Needs: impl, utest, uman
+
+#### Newline Format
+`dsn~newline-format~1`
+
+The CLI accepts one of the following newline formats:
+
+    new-line-format = "unix" / "windows"
+
+Rationale:
+
+When users work together in teams where the team members use different platforms, configuring the newline helps the team to set a common standard.
+
+Covers:
+
+  * `req~cli.newline-format~1`
+
+#### Default Newline Format
+`dsn~cli.default-newline-format~1`
+
+If the user does not specify the newline format as parameter, the importer uses the native newline format of the platform OFT is executed on.
+
+Covers:
+
+  * `req~cli.default-newline-format~1`
+
+Needs: impl, utest, uman
+
+### Requirement Tracing
+
+#### Tracing Output Format
+`dsn~cli.tracing.output-format~1`
+
+The CLI accepts one of the following requirement tracing report formats as parameter:
+
+    report-formats = "plain"
+
+Covers:
+
+  * `req~cli.tracing.output-format~1`
+
+Needs: impl, utest, uman
+
+#### Default Tracing Output Format
+`dsn~cli.tracing.default-format~1`
+
+The CLI uses plain text as requirement tracing report format if none is given as a parameter.
+
+Covers:
+
+  * `req~cli.tracing.default-output-format~1`
+
+Needs: impl, utest, uman
+
+#### Tracing Exit Status
+`dsn~cli.tracing.exit-status~1`
+
+The return value of the OFT executable is:
+
+    * `0` tracing was successful
+    * `1` tracing ran successfully, but the tracing result is negative
+
+Covers:
+
+  * `req~cli.tracing.exit-status~1`
+
+Needs: impl, utest, uman
+
+### Requirement Format Conversion
+
+#### Conversion Output Format
+`dsn~cli.conversion.output-format~1`
+
+The CLI accepts one of the following export formats as parameter:
+
+    export-formats = "reqm2"
+
+Covers:
+
+  * `req~cli.conversion.output-format~1`
+
+Needs: impl, utest, uman
+
+#### Default Conversion Output Format
+`dsn~cli.conversion.default-format~1`
+
+The CLI uses ReqM2 as export format if none is given as a parameter.
+
+Covers:
+
+  * `req~cli.conversion.default-output-format~1`
 
 Needs: impl, utest, uman
 
 # Design Decisions
 
 ## How do we Implement the Command Line Interpreter
-`dsn~reflection-based-cli`
+`dsn~reflection-based-cli~1`
 
 OFT got its own simple command line interpreter that uses reflection to feed the command line arguments to a receiver object.
 
@@ -309,7 +632,8 @@ Using reflection allows the CLI user to implement the receiver as a POJO. No ann
 
 Covers:
 
-  * `req~input-file-selection~1`
+  * `req~cli.tracing.command~1`
+  * `req~cli.conversion.command~1`
 
 ### Why is This Architecture Relevant?
 
@@ -321,6 +645,8 @@ Exchanging the CLI later takes considerable effort.
   * External CLI - breaks design goal
 
 # Bibliography
+
+The following documents or are referenced in this specification.
 
 [bib.srs]: system_requirements.md "OpenFastTrack System Requirement Specification"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"

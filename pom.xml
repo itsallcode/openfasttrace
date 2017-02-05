@@ -164,6 +164,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <executions>
+                    <!-- Run a self trace -->
                     <execution>
                         <id>trace</id>
                         <phase>verify</phase>
@@ -174,7 +175,7 @@
                 </executions>
                 <configuration>
                     <mainClass>openfasttrack.cli.CliStarter</mainClass>
-                    <commandlineArgs>trace --input-dir doc</commandlineArgs>
+                    <commandlineArgs>trace doc</commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>

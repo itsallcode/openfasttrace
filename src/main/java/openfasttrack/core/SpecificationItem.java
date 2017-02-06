@@ -39,19 +39,16 @@ public class SpecificationItem
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> needsArtifactTypes;
 
-    private SpecificationItem(final SpecificationItemId id, final String title,
-            final String description, final String rationale, final String comment,
-            final List<SpecificationItemId> coveredIds, final List<SpecificationItemId> dependOnIds,
-            final List<String> neededArtifactTypes)
+    private SpecificationItem(final Builder builder)
     {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.rationale = rationale;
-        this.comment = comment;
-        this.coveredIds = coveredIds;
-        this.dependOnIds = dependOnIds;
-        this.needsArtifactTypes = neededArtifactTypes;
+        this.id = builder.id;
+        this.title = builder.title;
+        this.description = builder.description;
+        this.rationale = builder.rationale;
+        this.comment = builder.comment;
+        this.coveredIds = builder.coveredIds;
+        this.dependOnIds = builder.dependOnIds;
+        this.needsArtifactTypes = builder.neededArtifactTypes;
     }
 
     /**
@@ -449,8 +446,7 @@ public class SpecificationItem
             {
                 throw new IllegalStateException("No id given");
             }
-            return new SpecificationItem(this.id, this.title, this.description, this.rationale,
-                    this.comment, this.coveredIds, this.dependOnIds, this.neededArtifactTypes);
+            return new SpecificationItem(this);
         }
     }
 }

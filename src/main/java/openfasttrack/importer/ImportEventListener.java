@@ -107,6 +107,16 @@ public interface ImportEventListener
     public void addNeededArtifactType(final String artifactType);
 
     /**
+     * Set the location of the imported file.
+     * 
+     * @param path
+     *            the path of the imported file
+     * @param line
+     *            the current line number
+     */
+    public void setLocation(final String path, int line);
+
+    /**
      * The importer detected the end of a specification item
      */
     public void endSpecificationItem();

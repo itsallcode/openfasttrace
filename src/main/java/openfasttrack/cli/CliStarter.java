@@ -27,6 +27,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import openfasttrack.cli.commands.ConvertCommand;
+import openfasttrack.cli.commands.Performable;
 import openfasttrack.cli.commands.TraceCommand;
 
 public class CliStarter
@@ -45,26 +46,29 @@ public class CliStarter
     {
         final CliArguments cliArguments = new CliArguments();
         new CommandLineInterpreter(args, cliArguments).parse();
-        new CliStarter(cliArguments).start();
+        new CliStarter(cliArguments).run();
     }
 
-    void start()
+    void run()
     {
         if (this.arguments.getCommand() == null)
         {
             throw new CliException("No command given, expected one of " + AVAILABLE_COMMANDS);
         }
+        Performable performable;
         switch (this.arguments.getCommand())
         {
         case ConvertCommand.COMMAND_NAME:
-            new ConvertCommand(this.arguments).start();
+            performable = new ConvertCommand(this.arguments);
             break;
         case TraceCommand.COMMAND_NAME:
-            new TraceCommand(this.arguments).start();
+            performable = new TraceCommand(this.arguments);
             break;
         default:
             throw new CliException("Invalid command '" + this.arguments.getCommand()
                     + "' given, expected one of " + AVAILABLE_COMMANDS);
         }
+        final ExitStatus status = ExitStatus.fromBoolean(performable.run());
+        System.exit(status.getCode());
     }
 }

@@ -265,7 +265,7 @@ public class TestTagImporter
         final String uniqueName = FILENAME + lineNumber + counter + coveredId.toString();
         final CRC32 checksum = new CRC32();
         checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
-        return Long.toString(checksum.getValue());
+        return coveredId.getName() + "-" + checksum.getValue();
     }
 
     private void assertItems(final String content, final SpecificationItem... expectedItems)

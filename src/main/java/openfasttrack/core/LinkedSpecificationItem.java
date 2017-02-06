@@ -208,13 +208,13 @@ public class LinkedSpecificationItem
         {
             if (coveringItem.getId().equals(startId))
             {
-                return DeepCoverageStatus.RING;
+                return DeepCoverageStatus.CYCLE;
             }
             else
             {
                 final DeepCoverageStatus otherStatus = coveringItem
                         .getDeepCoverageStatusEndRecursionStartingAt(startId);
-                if (!DeepCoverageStatus.COVERED.equals(otherStatus))
+                if (otherStatus != DeepCoverageStatus.COVERED)
                 {
                     return otherStatus;
                 }

@@ -235,18 +235,18 @@ public class TestLinkedSpecificationItem
 
     // [utest->dsn~tracing.link-ring~1]
     @Test
-    public void testGetDeepCoverageStatus_RingIfSelfLink()
+    public void testGetDeepCoverageStatus_CylceIfSelfLink()
     {
         this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
-        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.RING));
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
 
     // [utest->dsn~tracing.link-ring~1]
     @Test
-    public void testGetDeepCoverageStatus_DeepRing()
+    public void testGetDeepCoverageStatus_DeepCylce()
     {
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
         this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
-        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.RING));
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
 }

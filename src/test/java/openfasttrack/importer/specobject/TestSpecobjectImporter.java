@@ -37,7 +37,10 @@ import javax.xml.stream.XMLInputFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.hamstercommunity.matcher.auto.AutoMatcher;
+
 import openfasttrack.core.SpecificationItem;
+import openfasttrack.core.SpecificationItem.Builder;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
@@ -47,14 +50,20 @@ import openfasttrack.importer.ImporterService;
  */
 public class TestSpecobjectImporter
 {
-    private static final String TEST_FILE_PREFIX = "src/test/resources/specobject/";
-    private SpecificationItem specItem1;
-    private SpecificationItem specItem2;
+    private static final Path TEST_FILE_PREFIX = Paths.get("src/test/resources/specobject/")
+            .toAbsolutePath();
+    private static final Path SINGLE_SPECOBJECT_FILE = TEST_FILE_PREFIX
+            .resolve("single-specobject.xml");
+    private static final Path TWO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("two-specobjects.xml");
+    private static final Path NO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("no-specobject.xml");
+
+    private Builder specItem1Builder;
+    private Builder specItem2Builder;
 
     @Before
     public void setup()
     {
-        this.specItem1 = new SpecificationItem.Builder() //
+        this.specItem1Builder = new SpecificationItem.Builder() //
                 .id(new SpecificationItemId.Builder() //
                         .artifactType("doctype") //
                         .name("id") //
@@ -72,39 +81,49 @@ public class TestSpecobjectImporter
                         .artifactType("dependsOnDocType") //
                         .name("dependsOnName") //
                         .revision(44) //
-                        .build()) //
-                .build();
-        this.specItem2 = new SpecificationItem.Builder() //
+                        .build()); //
+        this.specItem2Builder = new SpecificationItem.Builder() //
                 .id(new SpecificationItemId.Builder() //
                         .artifactType("doctype") //
                         .name("id2") //
                         .revision(42 + 1) //
                         .build()) //
                 .comment("Comment2").rationale("Rationale2") //
-                .description("Description2") //
-                .build();
+                .description("Description2");
     }
 
     @Test
     public void testSingleSpecObject() throws FileNotFoundException
     {
-        final List<SpecificationItem> result = runImporter("single-specobject.xml");
+        final List<SpecificationItem> result = runImporter(SINGLE_SPECOBJECT_FILE);
         assertThat(result, hasSize(1));
-        assertThat(result, contains(this.specItem1));
+        final SpecificationItem item1 = this.specItem1Builder
+                .location(SINGLE_SPECOBJECT_FILE.toString(), 5) //
+                .build();
+        assertThat(result, AutoMatcher.contains(item1));
+        assertThat(result, contains(item1));
     }
 
     @Test
     public void testTwoSpecObjects() throws FileNotFoundException
     {
-        final List<SpecificationItem> result = runImporter("two-specobjects.xml");
+        final List<SpecificationItem> result = runImporter(TWO_SPECOBJECT_FILE);
         assertThat(result, hasSize(2));
-        assertThat(result, contains(this.specItem1, this.specItem2));
+
+        final SpecificationItem item1 = this.specItem1Builder
+                .location(TWO_SPECOBJECT_FILE.toString(), 5) //
+                .build();
+        final SpecificationItem item2 = this.specItem2Builder
+                .location(TWO_SPECOBJECT_FILE.toString(), 25) //
+                .build();
+        assertThat(result, AutoMatcher.contains(item1, item2));
+        assertThat(result, contains(item1, item2));
     }
 
     @Test
     public void testEmptySpecObjects() throws FileNotFoundException
     {
-        final List<SpecificationItem> result = runImporter("no-specobject.xml");
+        final List<SpecificationItem> result = runImporter(NO_SPECOBJECT_FILE);
         assertThat(result, hasSize(0));
     }
 
@@ -120,9 +139,8 @@ public class TestSpecobjectImporter
                 XMLInputFactory.newFactory(), null).runImport();
     }
 
-    private List<SpecificationItem> runImporter(final String fileName) throws FileNotFoundException
+    private List<SpecificationItem> runImporter(final Path path) throws FileNotFoundException
     {
-        final Path file = Paths.get(TEST_FILE_PREFIX, fileName).toAbsolutePath();
-        return new ImporterService().importFile(file);
+        return new ImporterService().importFile(path);
     }
 }

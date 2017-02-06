@@ -58,7 +58,7 @@ class SpecobjectImporter implements Importer
         try
         {
             final XMLEventReader xmlEventReader = this.xmlInputFactory
-                    .createXMLEventReader(this.reader);
+                    .createXMLEventReader(this.fileName, this.reader);
             final ImportHelper importHelper = new ImportHelper(this.fileName, xmlEventReader,
                     this.listener);
             importHelper.runImport();

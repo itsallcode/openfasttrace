@@ -83,7 +83,10 @@ public class PlainTextReport implements Reportable
             break;
         case FAILURE_DETAILS:
             renderFailureDetails(report);
-            report.println();
+            if (this.trace.countUncovered() > 0)
+            {
+                report.println();
+            }
             renderSummary(report);
             break;
         default:

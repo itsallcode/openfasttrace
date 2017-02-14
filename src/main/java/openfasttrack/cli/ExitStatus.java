@@ -24,7 +24,7 @@ package openfasttrack.cli;
 
 public enum ExitStatus
 {
-    OK(0), FAILURE(1);
+    OK(0), FAILURE(1), CLI_ERROR(2);
 
     private int code;
 

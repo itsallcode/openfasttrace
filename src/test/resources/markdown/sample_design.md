@@ -1,32 +1,23 @@
-# Features
+# Design
 
-## Tracing
-`feat~tracing~1`
+This sample document contains a few design requirements that exist to cover the
+sample system requirements.
 
-The sample project supports requirement tracing. 
-
-Needs: req
-
-# Requirements
 
 ## First Requirement
-`req~sample.first_requirement~1`
+`dsn~sample.first_requirement~1`
 
-This is the first sample requirement.
+This is the design for the first sample requirement.
 
 Covers:
 
-  * [feat~tracing~1](#tracing)
-
-Needs: dsn
+  * `req~sample.first_requirement~1`
 
 ## Second Requirement
-`req~sample.second_requirement~1`
+`dsn~sample.second_requirement~1`
 
-This is the second sample requirement.
+This is the design for the second sample requirement.
 
 Covers:
 
-  * [feat~tracing~1](#tracing)
-
-Needs: dsn
+  * `req~sample.second_requirement~1`

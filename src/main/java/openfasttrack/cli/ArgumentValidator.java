@@ -1,4 +1,4 @@
-package openfasttrack.cli.commands;
+package openfasttrack.cli;
 
 /*
  * #%L
@@ -27,7 +27,8 @@ import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import openfasttrack.cli.CliArguments;
+import openfasttrack.cli.commands.ConvertCommand;
+import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.exporter.ExporterFactoryLoader;
 import openfasttrack.report.ReportVerbosity;
 

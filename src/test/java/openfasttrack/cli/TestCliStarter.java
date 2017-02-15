@@ -160,7 +160,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertOutputFileContent("ok");
+            assertOutputFileContentStartsWith("ok");
         });
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
@@ -168,7 +168,18 @@ public class TestCliStarter
     }
 
     @Test
-    public void testTraceWithReportVerbosityQuiet() throws IOException
+    public void testTraceWithReportVerbosityQuietToStdOut() throws IOException
+    {
+        expectCliExitOkWithAssertions(() -> {
+            assertOutputFileExists(false);
+            assertThat("No output to STDOUT", getOutputFileContent(), equalTo(null));
+        });
+        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
+                REPORT_VERBOSITY_PARAMETER, "QUIET");
+    }
+
+    @Test
+    public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
     {
         expectCliExitWithError(ExitStatus.CLI_ERROR, "oft: combining report");
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
@@ -190,7 +201,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertOutputFileContent(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
+            assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
         });
     }
 
@@ -198,7 +209,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertOutputFileContent("ok - 5 total");
+            assertOutputFileContentStartsWith("ok - 5 total");
         });
     }
 
@@ -252,7 +263,7 @@ public class TestCliStarter
         assertThat(TestCliStarter.this.output.toString(), startsWith(content));
     }
 
-    private void assertOutputFileContent(final String content)
+    private void assertOutputFileContentStartsWith(final String content)
     {
         assertThat(getOutputFileContent(), startsWith(content));
     }

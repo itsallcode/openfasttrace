@@ -22,7 +22,6 @@ package openfasttrack.cli;
  * #L%
  */
 
-import openfasttrack.cli.commands.ArgumentValidator;
 import openfasttrack.cli.commands.ConvertCommand;
 import openfasttrack.cli.commands.Performable;
 import openfasttrack.cli.commands.TraceCommand;

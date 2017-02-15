@@ -32,16 +32,26 @@ import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.exporter.ExporterFactoryLoader;
 import openfasttrack.report.ReportVerbosity;
 
+/**
+ * The {@link ArgumentValidator} checks whether the command line arguments given
+ * by the user contain valid values and are valid in combination.
+ */
 public class ArgumentValidator
 {
     private static final List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
             TraceCommand.COMMAND_NAME);
 
     private final CliArguments arguments;
-    private String error;
-    private String suggestion;
+    private String error = "";
+    private String suggestion = "";
     private final boolean valid;
 
+    /**
+     * Create a new {@link ArgumentValidator}
+     * 
+     * @param arguments
+     *            the command line arguments to be validated
+     */
     public ArgumentValidator(final CliArguments arguments)
     {
         this.arguments = arguments;
@@ -57,11 +67,6 @@ public class ArgumentValidator
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
         }
-        else if (!AVAILABLE_COMMANDS.contains(command))
-        {
-            this.error = "'" + command + "' is not an OFT command.";
-            this.suggestion = "Choose one of " + listCommands() + ".";
-        }
         else if (TraceCommand.COMMAND_NAME.equals(command))
         {
             valid = validateTraceCommand();
@@ -72,7 +77,8 @@ public class ArgumentValidator
         }
         else
         {
-            valid = true;
+            this.error = "'" + command + "' is not an OFT command.";
+            this.suggestion = "Choose one of " + listCommands() + ".";
         }
 
         return valid;
@@ -115,16 +121,31 @@ public class ArgumentValidator
                 .collect(Collectors.joining(","));
     }
 
+    /**
+     * Check if the command line arguments are valid
+     * 
+     * @return <code>true</code> if the command line arguments are valid
+     */
     public boolean isValid()
     {
         return this.valid;
     }
 
+    /**
+     * Get the error message
+     * 
+     * @return the error message
+     */
     public String getError()
     {
         return this.error;
     }
 
+    /**
+     * Get a suggestion on how to solve an error
+     * 
+     * @return the error resolution suggestion
+     */
     public String getSuggestion()
     {
         return this.suggestion;

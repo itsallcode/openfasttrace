@@ -301,6 +301,7 @@ A `SpecificationItem` consists of the following parts:
   * Description (`String`, optional)
   * Rationale (`String`, optional)
   * Comment (`String`, optional)
+  * Source file + line (`String`, `int`, optional)
   * Covers (List of `SpecificationItemId`, optional)
   * Depends (List of `SpecificationItemId`, optional)
   * Needs (List of `String`, optional)
@@ -345,7 +346,7 @@ Needs: impl, utest, uman
 #### Markdown Specification Item ID Format
 `dsn~md.specification-item-id-format~2`
 
-A requirement ID in has the following format
+A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
     
@@ -361,6 +362,14 @@ Rationale:
 
 The ID must only contain characters that can be used in URIs without quoting. This makes linking in formats like Markdown or HTML clean and easy. 
 Requirement type and revision must be immediately recognizable from the requirement ID. The built-in revision number makes links break if a requirement is updated - a desired behavior.
+
+Comment:
+
+Note that the artifact type is integral part of the ID. That means that `dsn~my-requirement~1` is something completely different then `utest~my-requirement~1`. One of the benefits of making the artifact type mandatory part of the ID is that this allows for typical coverage chains like.
+
+    req~my-requirement~2 -> dsn~my-requirement~4 -> impl~my-requirement~4
+
+Otherwise users would be forced to invent different names for each link in the chain.
 
 Covers:
 

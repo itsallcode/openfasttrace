@@ -43,6 +43,8 @@ public class PlainTextReport implements Reportable
 
     private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
+    private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
+            .comparing(LinkedSpecificationItem::getId);
 
     /**
      * Create a new instance of {@link PlainTextReport}
@@ -83,6 +85,11 @@ public class PlainTextReport implements Reportable
             break;
         case FAILURE_DETAILS:
             renderFailureDetails(report);
+            report.println();
+            renderSummary(report);
+            break;
+        case ALL:
+            renderAll(report);
             report.println();
             renderSummary(report);
             break;
@@ -133,28 +140,15 @@ public class PlainTextReport implements Reportable
     private void renderFailureIds(final PrintStream report)
     {
         this.trace.getUncoveredIds().stream() //
-                .sorted((id, other) -> id.compareTo(other)) //
+                .sorted()//
                 .forEachOrdered(report::println);
     }
 
     private void renderFailureDetails(final PrintStream report)
     {
         this.trace.getUncoveredItems().stream() //
-                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
+                .sorted(LINKED_ITEM_BY_ID) //
                 .forEachOrdered(item -> renderItemSummary(item, report));
-    }
-
-    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
-    {
-        renderItemSummary(item, report);
-        report.println("#");
-
-        for (final String line : item.getDescription().split(LINE_ENDING))
-        {
-            report.print("# ");
-            report.println(line);
-        }
-        report.println("#");
     }
 
     private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
@@ -197,5 +191,25 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingBadLinks());
         report.print("/");
         report.print(item.countOutgoingLinks());
+    }
+
+    private void renderAll(final PrintStream report)
+    {
+        this.trace.getItems().stream() //
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemDetails(item, report));
+    }
+
+    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        renderItemSummary(item, report);
+        report.println("#");
+
+        for (final String line : item.getDescription().split(LINE_ENDING))
+        {
+            report.print("# ");
+            report.println(line);
+        }
+        report.println("#");
     }
 }

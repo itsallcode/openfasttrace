@@ -43,8 +43,8 @@ public class PlainTextReport implements Reportable
 
     private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
-    private static final Comparator<? super LinkedSpecificationItem> LINKED_ITEM_BY_ID = (item,
-            other) -> item.getId().compareTo(other.getId());
+    private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
+            .comparing(LinkedSpecificationItem::getId);
 
     /**
      * Create a new instance of {@link PlainTextReport}
@@ -140,7 +140,7 @@ public class PlainTextReport implements Reportable
     private void renderFailureIds(final PrintStream report)
     {
         this.trace.getUncoveredIds().stream() //
-                .sorted((id, other) -> id.compareTo(other)) //
+                .sorted()//
                 .forEachOrdered(report::println);
     }
 
@@ -204,7 +204,7 @@ public class PlainTextReport implements Reportable
     {
         renderItemSummary(item, report);
         report.println("#");
-    
+
         for (final String line : item.getDescription().split(LINE_ENDING))
         {
             report.print("# ");

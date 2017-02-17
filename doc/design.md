@@ -1,3 +1,5 @@
+<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+
 # Introduction
 This document is derived from the "[arc42][bib.arc42]" architectural template.
 

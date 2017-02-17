@@ -21,10 +21,15 @@ Requirement tracing is a recurring and frankly quite boring task best performed 
 
 It looks strange first that "useful" needs to be spelled out as a goal. The reason is that the authors felt that existing tracing tools are mostly optimized for producing proof that you worked according to process - i.e. reports that you can shelve until an quality auditor wants to see them. While OFT can do this to, it is not a main goal. Instead OFT wants to help developers and technical writers to find gaps and mismatches in their requirement coverage fast and with as little effort as possible.
 
-OFT aims to help developers independently of their platform. I should not matter if you are developing on Linux, a Mac, BSD, Windows. Also it should not matter which programming language or development environment you are using. OFT aims to be portable and provide interfaces that allow integration into your existing toolchain. 
+OFT aims to help developers independently of their platform. I should not matter if you are developing on Linux, a Mac, BSD, Windows. Also it should not matter which programming language or development environment you are using. OFT aims to be portable and provide interfaces that allow integration into your existing toolchain.
 
-## Terminology
+## Terms and Abbreviations
 
+The following list gives you an overview of terms and abbreviations commonly used in OFT documents.
+
+  * Artifact: a container for specification items
+  * Artifact type: the role of an artifact in a specification hierarchy
+  * Coverage: Specification items covering other specification items
   * Coverage provider: a specification item that provides coverage
   * Coverage requester: a specification item that need coverage
   * OFT: OpenFastTrack (this project)
@@ -32,6 +37,22 @@ OFT aims to help developers independently of their platform. I should not matter
   * Specification item: holds either a requirement or coverage
   * Specification artifact: a data source containing specification items (e.g. file, ticket system,
     database)
+
+In the following subsections central terms are explained in more detail.
+
+### Specification Items
+
+In OFT requirements and artifacts covering them are represented by [specification items](#specification-item). Each item is a container for attributes of requirements and covering artifacts like the name, artifact type and the location where OFT found them.
+
+A specification item can also contain information about its relationships to other specification items. For more details about those relationships check [section "tracing"](#tracing). 
+
+### Coverage
+
+Coverage is a measure of how well the tracing result matches the required relations between specification items.
+
+Full coverage is what a project aims to achieve: all required relations between specification items exist.
+
+An item is undercovered if at least one of the required relations is missing. It is overcovered if at least one relation exists that is not required.
 
 # Features
 
@@ -139,10 +160,9 @@ The rationale explains the reasoning behind a requirement or decision.
 
 The "Covers" section contains a list of all specification item IDs that are covered by this item.
 
-The "Depends" section contains a list of all specification item IDs that must be implemented in order
-for this item to be complete.
+The "Depends" section contains a list of all specification item IDs that must be implemented in order for this item to be complete.
 
-The "Needs" section list all artifact item types in which coverage for this item is ing) 
+The "Needs" section list all artifact item types in which coverage for this item must be provided.
 
 Needs: dsn
 
@@ -198,7 +218,6 @@ The possible results are:
 Covers:
 
   * [feat~requirement-tracing~1](#requirement-tracing)
-.
 
 Needs: dsn
 
@@ -236,7 +255,7 @@ Needs: dsn
 ### Duplicate Items
 `req~tracing.duplicate-items~1`
 
-OFT marks a specification item as -duplicate- if other items with the same ID exist.
+OFT marks a specification item as _duplicate_ if other items with the same ID exist.
 
 Covers:
 

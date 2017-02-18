@@ -41,6 +41,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Location;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.Trace;
 import openfasttrack.matcher.MultilineTextMatcher;
@@ -198,6 +199,10 @@ public class TestPlainTextReport
         when(itemDMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(IMPL, UTEST));
         when(this.traceMock.getUncoveredItems())
                 .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
+        when(itemAMock.getLocation()).thenReturn(Location.create("/tmp/foo.md", 1));
+        when(itemBMock.getLocation()).thenReturn(Location.create("/tmp/bar.md", 2));
+        when(itemCMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 13));
+        when(itemDMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 17));
     }
 
     private LinkedSpecificationItem createLinkedItemMock(final String idAsText,

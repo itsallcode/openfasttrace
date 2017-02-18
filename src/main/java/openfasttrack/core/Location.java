@@ -35,6 +35,16 @@ public class Location
         this.line = line;
     }
 
+    /**
+     * Create a new {@link Location} with the given file path and line.
+     * 
+     * @param path
+     *            the file path of the new {@link Location}.
+     * @param line
+     *            the line number the new {@link Location}, must be
+     *            <code>&gt;=0</code>.
+     * @return the new {@link Location}.
+     */
     public static Location create(final String path, final int line)
     {
         if (line <= 0)

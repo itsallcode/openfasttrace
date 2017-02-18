@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 
 /**
@@ -69,12 +70,15 @@ public abstract class ExporterFactory
      *            the output format
      * @param charset
      *            the character set used for exporting
+     * @param newline
+     *            the newline format
      * @param itemStream
      *            the items to export
      * @return an exporter instance
      */
     public Exporter createExporter(final Path file, final String outputFormat,
-            final Charset charset, final Stream<SpecificationItem> itemStream)
+            final Charset charset, final Newline newline,
+            final Stream<SpecificationItem> itemStream)
     {
         if (!supportsFormat(outputFormat))
         {
@@ -82,7 +86,7 @@ public abstract class ExporterFactory
                     "Output format '" + outputFormat + "' not supported for export");
         }
         final Writer writer = createWriter(file, charset);
-        return createExporter(writer, itemStream);
+        return createExporter(writer, itemStream, newline);
     }
 
     private Writer createWriter(final Path file, final Charset charset)
@@ -115,8 +119,10 @@ public abstract class ExporterFactory
      *            the {@link Writer} to which specification items are exported
      * @param itemStream
      *            the {@link Stream} of items to export
+     * @param newline
+     *            the newline format
      * @return an {@link Exporter} instance
      */
     protected abstract Exporter createExporter(final Writer writer,
-            Stream<SpecificationItem> linkedSpecItemStream);
+            Stream<SpecificationItem> linkedSpecItemStream, final Newline newline);
 }

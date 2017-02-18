@@ -28,16 +28,18 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.Trace;
 
 public class ReportService
 {
     public void generateReport(final Trace trace, final Path outputFile,
-            final ReportVerbosity verbosity)
+            final ReportVerbosity verbosity, final Newline newline)
     {
         try (OutputStream outputStream = new BufferedOutputStream(createOutputStream(outputFile)))
         {
-            new PlainTextReport(trace).renderToStreamWithVerbosityLevel(outputStream, verbosity);
+            new PlainTextReport(trace, newline).renderToStreamWithVerbosityLevel(outputStream,
+                    verbosity);
         }
         catch (final IOException e)
         {

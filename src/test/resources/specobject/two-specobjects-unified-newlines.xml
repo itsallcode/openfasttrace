@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<specdocument>
+	<specobjects doctype="foo">
+		<specobject>
+			<id>single-newlines</id>
+			<version>1</version>
+			<description>This contains
+a unix-style newline.</description>
+			<rationale>This contains
+a MacOS 9 newline.</rationale>
+			<comment>This contains
+a DOS/Windows newline.</comment>
+		</specobject>
+	</specobjects>
+	<specobjects doctype="bar">
+		<specobject>
+			<id>mixed-newlines</id>
+			<version>2</version>
+			<description>This contains
+a unix-style and
+an old-mac-style newline.</description>
+			<rationale>This contains
+a unix-style and
+a DOS/Windows newline.</rationale>
+			<comment>This
+contains
+a mixture
+of all three.</comment>
+		</specobject>
+	</specobjects>
+</specdocument>

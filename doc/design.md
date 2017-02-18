@@ -552,6 +552,8 @@ Covers:
 
   * `req~cli.newline-format~1`
 
+Needs: impl, utest, itest, uman
+
 #### Default Newline Format
 `dsn~cli.default-newline-format~1`
 
@@ -561,7 +563,7 @@ Covers:
 
   * `req~cli.default-newline-format~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest, uman
 
 ### Requirement Tracing
 

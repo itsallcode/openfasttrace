@@ -111,7 +111,7 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
      * 
      * @param text
      *            the text to be matched against the original
-     * @return
+     * @return the matcher
      */
     public static MultilineTextMatcher matchesAllLines(final String text)
     {

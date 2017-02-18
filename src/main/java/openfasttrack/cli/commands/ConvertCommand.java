@@ -59,6 +59,6 @@ public class ConvertCommand extends AbstractCommand
     protected void processSpecificationItemStream(final Stream<SpecificationItem> itemStream)
     {
         this.exporterService.exportFile(itemStream, this.arguments.getOutputFormat(),
-                this.arguments.getOutputFile());
+                this.arguments.getOutputFile(), this.arguments.getNewline());
     }
 }

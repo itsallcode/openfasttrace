@@ -24,13 +24,14 @@ package openfasttrack.importer.markdown;
 
 import java.util.regex.Pattern;
 
+import openfasttrack.core.SpecificationItemId;
+
 /**
  * Patterns that describe tokens to be recognized within Markdown-style
  * specifications.
  */
 public enum MdPattern
 {
-    // [impl~md.specification_item_id_format~1]
     // [impl~md.specification_item_title~1]
 
     // @formatter:off
@@ -41,7 +42,7 @@ public enum MdPattern
     DEPENDS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
     EMPTY("(\\s*)"),
     EVERYTHING("(.*)"),
-    ID("`?(" + PatternConstants.REFERENCE + ")`?.*"),
+    ID("`?(" + SpecificationItemId.ID_PATTERN + ")`?.*"),
     NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
     RATIONALE("Rationale:\\s*"),
     TITLE("#+\\s*(.*)");
@@ -71,9 +72,8 @@ public enum MdPattern
             // not instantiable
         }
 
-        public static final String REFERENCE = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
         public static final String BULLETS = "[+*-]";
         public static final String REFERENCE_AFTER_BULLET = "\\s{0,3}" + PatternConstants.BULLETS
-                + "(?:.*\\W)?(" + PatternConstants.REFERENCE + ")(?:\\W.*)?";
+                + "(?:.*\\W)?(" + SpecificationItemId.ID_PATTERN + ")(?:\\W.*)?";
     }
 }

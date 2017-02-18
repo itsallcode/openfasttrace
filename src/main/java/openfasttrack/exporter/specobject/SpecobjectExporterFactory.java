@@ -29,6 +29,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.exporter.Exporter;
 import openfasttrack.exporter.ExporterException;
@@ -47,10 +48,10 @@ public class SpecobjectExporterFactory extends ExporterFactory
 
     @Override
     protected Exporter createExporter(final Writer writer,
-            final Stream<SpecificationItem> itemStream)
+            final Stream<SpecificationItem> itemStream, final Newline newline)
     {
         final XMLStreamWriter xmlWriter = createXmlWriter(writer);
-        return new SpecobjectExporter(itemStream, xmlWriter);
+        return new SpecobjectExporter(itemStream, xmlWriter, newline);
     }
 
     private XMLStreamWriter createXmlWriter(final Writer writer)

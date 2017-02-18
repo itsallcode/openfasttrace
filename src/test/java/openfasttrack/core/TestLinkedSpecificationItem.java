@@ -44,8 +44,8 @@ public class TestLinkedSpecificationItem
     private LinkedSpecificationItem linkedItem;
     private LinkedSpecificationItem coveredLinkedItem;
     private LinkedSpecificationItem otherLinkedItem;
-    @Mock
 
+    @Mock
     private SpecificationItem itemMock, coveredItemMock, otherItemMock;
 
     @Before
@@ -55,6 +55,9 @@ public class TestLinkedSpecificationItem
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
         this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
         this.otherLinkedItem = new LinkedSpecificationItem(this.otherItemMock);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
+        when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
+        when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
     }
 
     @Test
@@ -122,12 +125,11 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isCoveredShallow(), equalTo(false));
     }
 
-    // [utest~deep_coverage~1]
     @Test
-    public void testIsCoveredDeeply_Ok()
+    public void testGetDeepCoverageStatus_Covered()
     {
         prepareCoverThis();
-        assertThat(this.linkedItem.isCoveredDeeply(), equalTo(true));
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.COVERED));
     }
 
     private void prepareCoverThis()
@@ -140,16 +142,15 @@ public class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
     }
 
-    // [utest~deep_coverage~1]
     @Test
-    public void testIsCoveredDeeply_NotOk_MissingCoverage()
+    public void testGetDeepCoverageStatus_MissingCoverage()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
         this.linkedItem.addCoveredArtifactType(DSN);
         when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
         this.coveredLinkedItem.addCoveredArtifactType(IMPL);
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
-        assertThat(this.linkedItem.isCoveredDeeply(), equalTo(false));
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.UNCOVERED));
     }
 
     // [utest~defect_items~1]
@@ -230,5 +231,22 @@ public class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.DUPLICATE);
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
         assertThat(this.linkedItem.countDuplicateLinks(), equalTo(2));
+    }
+
+    // [utest->dsn~tracing.link-ring~1]
+    @Test
+    public void testGetDeepCoverageStatus_CylceIfSelfLink()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
+    }
+
+    // [utest->dsn~tracing.link-ring~1]
+    @Test
+    public void testGetDeepCoverageStatus_DeepCylce()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
+        this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
+        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
 }

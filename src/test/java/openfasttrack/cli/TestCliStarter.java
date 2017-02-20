@@ -172,7 +172,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(false);
-            assertThat("No output to STDOUT", getOutputFileContent(), equalTo(null));
+            assertStdOutEmpty();
         });
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET");
@@ -263,6 +263,11 @@ public class TestCliStarter
         assertThat(TestCliStarter.this.output.toString(), startsWith(content));
     }
 
+    private void assertStdOutEmpty()
+    {
+        assertThat(TestCliStarter.this.output.size(), equalTo(0));
+    }
+
     private void assertOutputFileContentStartsWith(final String content)
     {
         assertThat(getOutputFileContent(), startsWith(content));
@@ -280,11 +285,12 @@ public class TestCliStarter
         {
             return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
-            e.printStackTrace();
+            // Need to convert this to an unchecked exception. Otherwise we get
+            // stuck with the checked exceptions in the assertion lambdas.
+            throw new RuntimeException(exception);
         }
-        return null;
     }
 
     private void runCliStarter(final String... arguments)

@@ -265,7 +265,7 @@ public class TestCliStarter
 
     private void assertStdOutEmpty()
     {
-        assertThat(TestCliStarter.this.output.size(), equalTo(0));
+        assertThat("STDOUT stream is empty", TestCliStarter.this.output.size(), equalTo(0));
     }
 
     private void assertOutputFileContentStartsWith(final String content)

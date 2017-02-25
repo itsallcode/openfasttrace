@@ -1,8 +1,5 @@
 package openfasttrack.cli;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-
 /*
  * #%L
  * OpenFastTrack
@@ -25,6 +22,8 @@ import static org.hamcrest.Matchers.greaterThan;
  * #L%
  */
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
@@ -63,7 +62,7 @@ public class TestCliStarter
 
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final ByteArrayOutputStream error = new ByteArrayOutputStream();
 
     @Before
@@ -71,14 +70,14 @@ public class TestCliStarter
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
         this.outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
-        System.setOut(new PrintStream(this.output, true, "UTF-8"));
+        System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
         System.setErr(new PrintStream(this.error, true, "UTF-8"));
     }
 
     @Test
     public void testNoArguments()
     {
-        expectCliExitWithError(ExitStatus.CLI_ERROR, "oft: Missing command");
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: Missing command");
         runCliStarter();
 
     }
@@ -87,7 +86,7 @@ public class TestCliStarter
     public void testIllegalCommand()
     {
 
-        expectCliExitWithError(ExitStatus.CLI_ERROR,
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
                 "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.");
         runCliStarter(ILLEGAL_COMMAND);
     }
@@ -97,7 +96,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(false);
-            assertStdOutContent(REQM2_PREAMBLE);
+            assertStdOutStartsWith(REQM2_PREAMBLE);
         });
         runCliStarter(CONVERT_COMMAND);
     }
@@ -105,7 +104,7 @@ public class TestCliStarter
     @Test
     public void testConvertUnknownExporter()
     {
-        expectCliExitWithError(ExitStatus.CLI_ERROR,
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
                 "oft: export format 'illegal' is not supported.");
         runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER, "illegal",
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
@@ -181,7 +180,7 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
     {
-        expectCliExitWithError(ExitStatus.CLI_ERROR, "oft: combining report");
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining report");
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET");
@@ -245,7 +244,8 @@ public class TestCliStarter
         });
     }
 
-    private void expectCliExitWithError(final ExitStatus status, final String expectedError)
+    private void expectCliExitOnErrorThatStartsWith(final ExitStatus status,
+            final String expectedError)
     {
         this.exit.expectSystemExitWithStatus(status.getCode());
         this.exit.checkAssertionAfterwards(new Assertion()
@@ -258,14 +258,14 @@ public class TestCliStarter
         });
     }
 
-    private void assertStdOutContent(final String content)
+    private void assertStdOutStartsWith(final String content)
     {
-        assertThat(TestCliStarter.this.output.toString(), startsWith(content));
+        assertThat(TestCliStarter.this.outputStream.toString(), startsWith(content));
     }
 
     private void assertStdOutEmpty()
     {
-        assertThat("STDOUT stream is empty", TestCliStarter.this.output.size(), equalTo(0));
+        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.size(), equalTo(0));
     }
 
     private void assertOutputFileContentStartsWith(final String content)

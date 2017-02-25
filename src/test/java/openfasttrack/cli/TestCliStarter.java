@@ -44,6 +44,7 @@ import openfasttrack.exporter.ExporterException;
 
 public class TestCliStarter
 {
+    private static final String NEWLINE_PARAMETER = "--newline";
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
@@ -173,6 +174,18 @@ public class TestCliStarter
     {
         runCliStarter(asList(TRACE_COMMAND, this.docDir.toString()));
         assertThat(Files.exists(this.outputFile), equalTo(false));
+    }
+
+    @Test
+    public void testTraceMacNewlines() throws IOException
+    {
+        runCliStarter(asList(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                this.docDir.toString(), NEWLINE_PARAMETER, "OLDMAC"));
+        assertThat(Files.exists(this.outputFile), equalTo(true));
+        assertThat("Has old Mac newlines", fileContent(this.outputFile).contains("\r"),
+                equalTo(true));
+        assertThat("Has no Unix newlines", fileContent(this.outputFile).contains("\n"),
+                equalTo(false));
     }
 
     private String fileContent(final Path file) throws IOException

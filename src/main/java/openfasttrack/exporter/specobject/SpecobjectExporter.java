@@ -30,11 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.exporter.Exporter;
@@ -46,10 +48,12 @@ public class SpecobjectExporter implements Exporter
 
     private final XMLStreamWriter writer;
     private final Map<String, List<SpecificationItem>> items;
+    private final Newline newline;
 
     public SpecobjectExporter(final Stream<SpecificationItem> itemStream,
-            final XMLStreamWriter xmlWriter)
+            final XMLStreamWriter xmlWriter, final Newline newline)
     {
+        this.newline = newline;
         this.items = groupByDoctype(itemStream);
         this.writer = xmlWriter;
     }
@@ -122,18 +126,32 @@ public class SpecobjectExporter implements Exporter
 
     private void writeItem(final SpecificationItem item) throws XMLStreamException
     {
+        final String description = processMultilineText(item.getDescription());
+        final String rationale = processMultilineText(item.getRationale());
+        final String comment = processMultilineText(item.getComment());
         this.writer.writeStartElement("specobject");
         writeElement("id", item.getId().getName());
         writeElement("version", item.getId().getRevision());
-        writeElement("description", item.getDescription());
-        writeElement("rationale", item.getRationale());
-        writeElement("comment", item.getComment());
+        writeElement("description", description);
+        writeElement("rationale", rationale);
+        writeElement("comment", comment);
 
         writeNeedsArtifactTypes(item.getNeedsArtifactTypes());
         writeCoveredIds(item.getCoveredIds());
         writeDependsOnIds(item.getDependOnIds());
 
         this.writer.writeEndElement();
+    }
+
+    private String processMultilineText(final String text)
+    {
+        return unifyNewlines(text);
+    }
+
+    private String unifyNewlines(final String text)
+    {
+        final Matcher matcher = Newline.anyNewlinePattern().matcher(text);
+        return matcher.replaceAll(this.newline.toString());
     }
 
     private void writeDependsOnIds(final List<SpecificationItemId> dependOnIds)

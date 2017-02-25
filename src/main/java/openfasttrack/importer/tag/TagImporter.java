@@ -42,7 +42,7 @@ import openfasttrack.importer.ImporterException;
 class TagImporter implements Importer
 {
     private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());
-    private static final String COVERED_ID_PATTERN = "\\p{Alpha}+~\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*~\\d+";
+    private static final Pattern COVERED_ID_PATTERN = SpecificationItemId.ID_PATTERN;
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     private static final String TAG_PREFIX_PATTERN = "\\[";
     private static final String TAG_SUFFIX_PATTERN = "\\]";

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Newline;
 import openfasttrack.core.Trace;
 
 /**
@@ -41,18 +42,24 @@ import openfasttrack.core.Trace;
 public class PlainTextReport implements Reportable
 {
 
-    private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
+    private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
+            .comparing(LinkedSpecificationItem::getId);
+    private final Newline newline;
 
     /**
      * Create a new instance of {@link PlainTextReport}
      *
      * @param trace
      *            the trace that will be reported.
+     * @param newline
+     *            the newline format
      */
-    public PlainTextReport(final Trace trace)
+    // [impl->dsn~newline-format~1]
+    public PlainTextReport(final Trace trace, final Newline newline)
     {
         this.trace = trace;
+        this.newline = newline;
     }
 
     @Override
@@ -85,8 +92,13 @@ public class PlainTextReport implements Reportable
             renderFailureDetails(report);
             if (this.trace.countUncovered() > 0)
             {
-                report.println();
+                report.print(this.newline);
             }
+            renderSummary(report);
+            break;
+        case ALL:
+            renderAll(report);
+            report.print(this.newline);
             renderSummary(report);
             break;
         default:
@@ -130,34 +142,21 @@ public class PlainTextReport implements Reportable
             report.print(this.trace.countUncovered());
             report.print(" not covered");
         }
-        report.println();
+        report.print(this.newline);
     }
 
     private void renderFailureIds(final PrintStream report)
     {
         this.trace.getUncoveredIds().stream() //
-                .sorted((id, other) -> id.compareTo(other)) //
+                .sorted()//
                 .forEachOrdered(report::println);
     }
 
     private void renderFailureDetails(final PrintStream report)
     {
         this.trace.getUncoveredItems().stream() //
-                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
+                .sorted(LINKED_ITEM_BY_ID) //
                 .forEachOrdered(item -> renderItemSummary(item, report));
-    }
-
-    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
-    {
-        renderItemSummary(item, report);
-        report.println("#");
-
-        for (final String line : item.getDescription().split(LINE_ENDING))
-        {
-            report.print("# ");
-            report.println(line);
-        }
-        report.println("#");
     }
 
     private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
@@ -168,7 +167,8 @@ public class PlainTextReport implements Reportable
         report.print(" - ");
         report.print(item.getId().toString());
         report.print(" ");
-        report.println(translateArtifactTypeCoverage(item));
+        report.print(translateArtifactTypeCoverage(item));
+        report.print(this.newline);
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
@@ -200,5 +200,28 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingBadLinks());
         report.print("/");
         report.print(item.countOutgoingLinks());
+    }
+
+    private void renderAll(final PrintStream report)
+    {
+        this.trace.getItems().stream() //
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemDetails(item, report));
+    }
+
+    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        renderItemSummary(item, report);
+        report.print("#");
+        report.print(this.newline);
+
+        for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
+        {
+            report.print("# ");
+            report.print(line);
+            report.print(this.newline);
+        }
+        report.print("#");
+        report.print(this.newline);
     }
 }

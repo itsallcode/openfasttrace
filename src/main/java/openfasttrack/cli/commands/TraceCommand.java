@@ -73,7 +73,8 @@ public class TraceCommand extends AbstractCommand
         final Trace traceResult = this.tracer.trace(linkedItems);
         final ReportVerbosity verbosity = this.arguments.getReportVerbosity() == null
                 ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
-        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity);
+        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity,
+                this.arguments.getNewline());
         return traceResult.isAllCovered();
     }
 }

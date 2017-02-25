@@ -22,7 +22,9 @@ package openfasttrack.report;
  * #L%
  */
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -40,6 +42,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.LinkedSpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.Trace;
@@ -51,8 +54,6 @@ public class TestPlainTextReport
     private static final String UMAN = "uman";
     private static final String UTEST = "utest";
     private static final String IMPL = "impl";
-    private static final String LINE_SEPARATOR = System.lineSeparator();
-
     @Mock
     private Trace traceMock;
 
@@ -66,8 +67,8 @@ public class TestPlainTextReport
     public void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
-        new PlainTextReport(this.traceMock).renderToStreamWithVerbosityLevel(outputStreamMock,
-                ReportVerbosity.SUMMARY);
+        new PlainTextReport(this.traceMock, Newline.UNIX)
+                .renderToStreamWithVerbosityLevel(outputStreamMock, ReportVerbosity.SUMMARY);
         verify(outputStreamMock).close();
     }
 
@@ -100,14 +101,21 @@ public class TestPlainTextReport
             return "";
         }
         return Arrays.stream(expectedReportLines) //
-                .collect(joining(LINE_SEPARATOR)) //
-                + LINE_SEPARATOR;
+                .collect(joining(Newline.UNIX.toString())) //
+                + Newline.UNIX;
     }
 
     private String getReportOutput(final ReportVerbosity verbosity)
     {
+        final Newline newline = Newline.UNIX;
+        return getReportOutputWithNewline(verbosity, newline);
+    }
+
+    private String getReportOutputWithNewline(final ReportVerbosity verbosity,
+            final Newline newline)
+    {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new PlainTextReport(this.traceMock);
+        final Reportable report = new PlainTextReport(this.traceMock, newline);
         report.renderToStreamWithVerbosityLevel(outputStream, verbosity);
         return outputStream.toString();
     }
@@ -151,7 +159,7 @@ public class TestPlainTextReport
         final SpecificationItemId idB = SpecificationItemId.parseId("dsn~bar~1");
         final SpecificationItemId idC = SpecificationItemId.parseId("req~zoo~2");
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
-        when(this.traceMock.getUncoveredIds()).thenReturn(Arrays.asList(idA, idB, idC, idD));
+        when(this.traceMock.getUncoveredIds()).thenReturn(asList(idA, idB, idC, idD));
         assertReportOutput(ReportVerbosity.FAILURES, //
                 "dsn~bar~1", "req~foo~1", "req~zoo~1", "req~zoo~2");
     }
@@ -187,17 +195,52 @@ public class TestPlainTextReport
                 "desc D1", //
                 3, 7, 1, 2, 3);
 
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(Arrays.asList(DSN)));
-        when(itemBMock.getCoveredArtifactTypes())
-                .thenReturn(new HashSet<>(Arrays.asList(IMPL, UTEST)));
-        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(UMAN));
-        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(Arrays.asList(DSN)));
-        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(Arrays.asList(UTEST));
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UTEST)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UMAN));
+        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(asList(UTEST));
         when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
-        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(Arrays.asList(IMPL, UTEST));
+        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(asList(IMPL, UTEST));
         when(this.traceMock.getUncoveredItems())
-                .thenReturn(Arrays.asList(itemAMock, itemBMock, itemCMock, itemDMock));
+                .thenReturn(asList(itemAMock, itemBMock, itemCMock, itemDMock));
+    }
+
+    @Test
+    public void testReport_LevelAll()
+    {
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countUncovered()).thenReturn(1);
+        prepareMixedItemDetails();
+
+        assertReportOutput(ReportVerbosity.ALL, //
+                "not ok - 0/0>3>1/4 - dsn~failure~0 (impl, uman, -utest)", //
+                "#", //
+                "# This is a failure.", //
+                "#", //
+                "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
+                "#", //
+                "# This is a success.", //
+                "#", //
+                "", //
+                "not ok - 2 total, 1 not covered");
+    }
+
+    private void prepareMixedItemDetails()
+    {
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~success~20170126", //
+                "This is a success." + System.lineSeparator(), //
+                0, 0, 0, 0, 0);
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~failure~0", //
+                "This is a failure.", //
+                0, 0, 3, 1, 4);
+
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UMAN)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UTEST));
+        when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
     }
 
     private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
@@ -215,5 +258,41 @@ public class TestPlainTextReport
         when(itemAMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
         when(itemAMock.countOutgoingLinks()).thenReturn(outgoingLinks);
         return itemAMock;
+    }
+
+    // [utest->dsn~newline-format~1]
+    @Test
+    public void testReportWithDifferentLineSeparator()
+    {
+        final Newline separator = Newline.OLDMAC;
+
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countUncovered()).thenReturn(0);
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("a~a~1", //
+                "This is" + separator + "a multiline description", //
+                0, 0, 0, 0, 0);
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("b~b~2", //
+                "Yet another" + separator + "multiline text", //
+                0, 0, 0, 0, 0);
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL)));
+        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
+
+        assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator), //
+                equalTo("ok - 0/0>0>0/0 - a~a~1 (dsn)" + separator//
+                        + "#" + separator //
+                        + "# This is" + separator //
+                        + "# a multiline description" + separator //
+                        + "#" + separator //
+                        + "ok - 0/0>0>0/0 - b~b~2 (impl)" + separator //
+                        + "#" + separator //
+                        + "# Yet another" + separator //
+                        + "# multiline text" + separator //
+                        + "#" + separator //
+                        + "" + separator //
+                        + "ok - 2 total" + separator));
+
     }
 }

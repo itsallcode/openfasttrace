@@ -23,6 +23,7 @@ package openfasttrack.exporter.specobject;
  */
 
 import static java.util.Arrays.asList;
+import static openfasttrack.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
@@ -39,13 +40,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.*;
 
 import org.junit.Test;
 
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.SpecificationListBuilder;
@@ -58,6 +57,7 @@ import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
  */
 public class TestSpecobjectExporter
 {
+    private static final String SPECOBJECT_RESOURCES = "src/test/resources/specobject/";
     private final static Logger LOG = Logger.getLogger(TestSpecobjectExporter.class.getName());
 
     @Test
@@ -99,8 +99,12 @@ public class TestSpecobjectExporter
                 .rationale("Rationale2") //
                 .comment("Comment2") //
                 .build();
-        assertExportContent(Paths.get("src/test/resources/specobject/two-specobjects.xml"), item1,
-                item2);
+        assertExportContent(getSpecobjecResourcePath("two-specobjects.xml"), item1, item2);
+    }
+
+    private Path getSpecobjecResourcePath(final String resource)
+    {
+        return Paths.get(SPECOBJECT_RESOURCES + resource);
     }
 
     @Test
@@ -121,9 +125,27 @@ public class TestSpecobjectExporter
                 .rationale("Rationale2") //
                 .comment("Comment2") //
                 .build();
-        assertExportContent(
-                Paths.get("src/test/resources/specobject/two-specobjects-different-doctype.xml"),
+        assertExportContent(getSpecobjecResourcePath("two-specobjects-different-doctype.xml"),
                 item1, item2);
+    }
+
+    @Test
+    public void testNewlineUnification()
+    {
+        final SpecificationItem item1 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("foo", "single-newlines", 1)) //
+                .description("This contains\na unix-style newline.") //
+                .rationale("This contains\ra MacOS 9 newline.") //
+                .comment("This contains\r\na DOS/Windows newline.") //
+                .build();
+        final SpecificationItem item2 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("bar", "mixed-newlines", 2)) //
+                .description("This contains\na unix-style and\ran old-mac-style newline.") //
+                .rationale("This contains\na unix-style and\r\na DOS/Windows newline.") //
+                .comment("This\r\ncontains\ra mixture\nof all three.") //
+                .build();
+        assertThat(export(item1, item2), matchesAllLines(
+                readFile(getSpecobjecResourcePath("two-specobjects-unified-newlines.xml"))));
     }
 
     private void assertExportContent(final Path expectedContentFile,
@@ -178,7 +200,8 @@ public class TestSpecobjectExporter
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
             new SpecobjectExporter(asList(items).stream(),
-                    new IndentingXMLStreamWriter(xmlWriter, "\t", "\n")).runExport();
+                    new IndentingXMLStreamWriter(xmlWriter, "\t", Newline.UNIX.toString()),
+                    Newline.UNIX).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }
         catch (XMLStreamException | FactoryConfigurationError e)

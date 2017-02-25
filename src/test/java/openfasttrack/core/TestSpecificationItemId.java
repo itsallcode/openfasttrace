@@ -33,6 +33,9 @@ import org.junit.Test;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import openfasttrack.core.SpecificationItemId.Builder;
 
+/**
+ * [utest->dsn~md.specification-item-id-format~2]
+ */
 public class TestSpecificationItemId
 {
     private static final int REVISION = 1;
@@ -59,9 +62,9 @@ public class TestSpecificationItemId
     @Test
     public void testParseId_multipleFragmentName()
     {
-        final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz~1");
+        final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz-narf~1");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo("foo.bar_zoo.baz"));
+        assertThat(id.getName(), equalTo("foo.bar_zoo.baz-narf"));
         assertThat(id.getRevision(), equalTo(1));
     }
 

@@ -56,9 +56,10 @@ public class ConvertCommand extends AbstractCommand
     }
 
     @Override
-    protected void processSpecificationItemStream(final Stream<SpecificationItem> itemStream)
+    protected boolean processSpecificationItemStream(final Stream<SpecificationItem> itemStream)
     {
         this.exporterService.exportFile(itemStream, this.arguments.getOutputFormat(),
                 this.arguments.getOutputFile(), this.arguments.getNewline());
+        return true;
     }
 }

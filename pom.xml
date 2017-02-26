@@ -41,6 +41,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.16.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.kaklakariada</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
             <version>0.3.2</version>
@@ -159,12 +165,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Self trace.
+                 Disabled until coverage complete in impl, uman, utest, itest
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <executions>
-                    <!-- Run a self trace -->
+                    
                     <execution>
                         <id>trace</id>
                         <phase>verify</phase>
@@ -178,6 +186,7 @@
                     <commandlineArgs>trace doc</commandlineArgs>
                 </configuration>
             </plugin>
+            -->
         </plugins>
         <pluginManagement>
             <plugins>

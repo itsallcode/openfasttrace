@@ -36,7 +36,7 @@ import openfasttrack.importer.ImporterService;
  * This class is the abstract base class for all commands that process a list of
  * input files and directories.
  */
-public abstract class AbstractCommand
+public abstract class AbstractCommand implements Performable
 {
 
     protected final CliArguments arguments;
@@ -58,11 +58,14 @@ public abstract class AbstractCommand
 
     /**
      * Run the importer on the list of inputs and process the results.
+     * 
+     * @return <code>true</code> if the command succeeded.
      */
-    public void start()
+    @Override
+    public boolean run()
     {
         final Stream<SpecificationItem> items = importItemsFromPaths(getNormalizedPaths());
-        processSpecificationItemStream(items);
+        return processSpecificationItemStream(items);
     }
 
     private Stream<SpecificationItem> importItemsFromPaths(final List<Path> paths)
@@ -85,6 +88,8 @@ public abstract class AbstractCommand
      * 
      * @param items
      *            specification items to be processed
+     * 
+     * @return <code>true</code> if processing result is positive.
      */
-    abstract protected void processSpecificationItemStream(Stream<SpecificationItem> items);
+    abstract protected boolean processSpecificationItemStream(Stream<SpecificationItem> items);
 }

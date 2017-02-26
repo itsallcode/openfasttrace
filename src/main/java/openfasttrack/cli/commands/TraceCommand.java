@@ -66,7 +66,7 @@ public class TraceCommand extends AbstractCommand
     }
 
     @Override
-    protected void processSpecificationItemStream(final Stream<SpecificationItem> items)
+    protected boolean processSpecificationItemStream(final Stream<SpecificationItem> items)
     {
         final Linker linker = new Linker(items.collect(Collectors.toList()));
         final List<LinkedSpecificationItem> linkedItems = linker.link();
@@ -75,6 +75,6 @@ public class TraceCommand extends AbstractCommand
                 ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
         this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity,
                 this.arguments.getNewline());
-
+        return traceResult.isAllCovered();
     }
 }

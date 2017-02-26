@@ -23,6 +23,7 @@ package openfasttrack.cli;
  */
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
@@ -30,12 +31,17 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
+import openfasttrack.core.Newline;
+import openfasttrack.report.ReportVerbosity;
+
 public class TestCliArguments
 {
+    private static final String AFTER_SETTER = "after setter";
+    private static final String BEFORE_SETTER = "before setter";
     private CliArguments arguments;
 
     @Before
-    public void setUp()
+    public void testSetUp()
     {
         this.arguments = new CliArguments();
     }
@@ -44,13 +50,93 @@ public class TestCliArguments
     public void testGetCommandWithUnnamedValuesNull()
     {
         this.arguments.setUnnamedValues(null);
-        assertThat(this.arguments.getCommand(), equalTo(null));
+        assertThat(this.arguments.getCommand(), isEmptyOrNullString());
     }
 
     @Test
     public void testGetCommandWithUnnamedValuesEmpty()
     {
         this.arguments.setUnnamedValues(Collections.emptyList());
-        assertThat(this.arguments.getCommand(), equalTo(null));
+        assertThat(this.arguments.getCommand(), isEmptyOrNullString());
+    }
+
+    @Test
+    public void testSetOuptuFormat()
+    {
+        final String value = "foobar";
+        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), isEmptyOrNullString());
+        this.arguments.setOutputFormat(value);
+        assertThat(AFTER_SETTER, this.arguments.getOutputFormat(), equalTo(value));
+    }
+
+    @Test
+    public void testSetO()
+    {
+        final String value = "foobar";
+        assertBeforeSetter(this.arguments.getOutputFormat());
+        this.arguments.setO(value);
+        assertAfterSetter(value, this.arguments.getOutputFormat());
+    }
+
+    private void assertAfterSetter(final String value, final String outputFormat)
+    {
+        assertThat(AFTER_SETTER, outputFormat, equalTo(value));
+    }
+
+    private void assertBeforeSetter(final String outputFormat)
+    {
+        assertThat(BEFORE_SETTER, outputFormat, isEmptyOrNullString());
+    }
+
+    @Test
+    public void testSetOutputFile()
+    {
+        final String value = "/tmp/foobar";
+        assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
+        this.arguments.setOutputFile(value);
+        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(value));
+    }
+
+    @Test
+    public void testSetF()
+    {
+        final String value = "/tmp/foobar";
+        assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
+        this.arguments.setF(value);
+        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(value));
+    }
+
+    @Test
+    public void testSetReportVerbositiy()
+    {
+        final ReportVerbosity value = ReportVerbosity.QUIET;
+        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(), equalTo(null));
+        this.arguments.setReportVerbosity(value);
+        assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
+    }
+
+    @Test
+    public void testSetV()
+    {
+        final ReportVerbosity value = ReportVerbosity.QUIET;
+        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(), equalTo(null));
+        this.arguments.setV(value);
+        assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
+    }
+
+    @Test
+    public void testSetNewline()
+    {
+        final Newline value = Newline.OLDMAC;
+        this.arguments.setNewline(value);
+        assertThat(AFTER_SETTER, this.arguments.getNewline(), equalTo(value));
+    }
+
+    @Test
+    public void testSetN()
+    {
+        final Newline value = Newline.OLDMAC;
+        this.arguments.setN(value);
+        assertThat(AFTER_SETTER, this.arguments.getNewline(), equalTo(value));
     }
 }

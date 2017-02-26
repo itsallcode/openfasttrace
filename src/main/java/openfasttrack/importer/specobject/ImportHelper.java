@@ -130,8 +130,8 @@ class ImportHelper
         LOG.finest(() -> "Found XML element '" + SPECOBJECT_ELEMENT_NAME
                 + "': import using default doctype '" + this.defaultDoctype + "' from "
                 + this.fileName + ":" + element.getLocation().getLineNumber());
-        new SingleSpecobjectImportHelper(this.xmlEventReader, this.listener, this.defaultDoctype)
-                .runImport();
+        new SingleSpecobjectImportHelper(this.xmlEventReader, this.fileName, this.listener,
+                this.defaultDoctype).runImport();
     }
 
     private void processSpecobjectsContainerElement(final StartElement element)

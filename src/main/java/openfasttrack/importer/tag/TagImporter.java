@@ -92,6 +92,7 @@ class TagImporter implements Importer
         while (matcher.find())
         {
             this.listener.beginSpecificationItem();
+            this.listener.setLocation(this.fileName, lineNumber);
             final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
             final String generatedName = generateName(coveredId, lineNumber, counter);
             final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),

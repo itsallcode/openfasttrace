@@ -118,6 +118,7 @@ class MarkdownImporter implements Importer
     private StringBuilder lastDescription;
     private StringBuilder lastRationale;
     private StringBuilder lastComment;
+    private int lineNumber = 0;
 
     MarkdownImporter(final String fileName, final Reader reader, final ImportEventListener listener)
     {
@@ -132,18 +133,18 @@ class MarkdownImporter implements Importer
     {
         LOG.fine(() -> "Starting import of file " + this.fileName);
         String line;
-        int lineNumber = 0;
+        this.lineNumber = 0;
         try
         {
             while ((line = this.reader.readLine()) != null)
             {
-                ++lineNumber;
+                ++this.lineNumber;
                 this.stateMachine.step(line);
             }
         }
         catch (final IOException exception)
         {
-            throw new ImporterException("IO exception after " + this.fileName + ":" + lineNumber,
+            throw new ImporterException("IO exception after " + this.fileName + ":" + this.lineNumber,
                     exception);
         }
         finishImport();
@@ -184,6 +185,7 @@ class MarkdownImporter implements Importer
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
         this.listener.setId(id);
+        this.listener.setLocation(this.fileName, this.lineNumber);
         if(this.lastTitle != null)
         {
             this.listener.setTitle(this.lastTitle);
@@ -212,10 +214,10 @@ class MarkdownImporter implements Importer
         this.listener.appendDescription(this.lastDescription.toString().trim());
         this.lastDescription = null;
     }
-
+    
     private void beginRationale()
     {
-        this.lastRationale=new StringBuilder();
+        this.lastRationale = new StringBuilder();
     }
     
     private void appendRationale()

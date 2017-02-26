@@ -61,6 +61,7 @@ public class TestImportMarkdown
     private static final String NEEDS_ARTIFACT_TYPE2 = "artB";
     private static final String DEPENDS_ON_ID1 = "configuration~blubb.blah.blah~4711";
     private static final String DEPENDS_ON_ID2 = "db~blah.blubb~42";
+    private static final String FILENAME = "file name";
 
     @Mock
     ImportEventListener listenerMock;
@@ -143,8 +144,8 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final StringReader reader = new StringReader(text);
-        final Importer importer = new MarkdownImporterFactory().createImporter("testfilename",
-                reader, this.listenerMock);
+        final Importer importer = new MarkdownImporterFactory().createImporter(FILENAME, reader,
+                this.listenerMock);
         importer.runImport();
     }
 
@@ -153,6 +154,7 @@ public class TestImportMarkdown
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock)
                 .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
@@ -194,11 +196,14 @@ public class TestImportMarkdown
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID2);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 4);
         inOrder.verify(this.listenerMock).endSpecificationItem();
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test

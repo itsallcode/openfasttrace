@@ -74,6 +74,16 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get the source location of the item.
+     * 
+     * @return the location
+     */
+    public Location getLocation()
+    {
+        return this.item.getLocation();
+    }
+    
+    /**
      * Get the specification item.
      *
      * @return the specification item

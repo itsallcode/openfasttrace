@@ -33,6 +33,8 @@ import java.util.zip.CRC32;
 
 import org.junit.Test;
 
+import com.github.hamstercommunity.matcher.auto.AutoMatcher;
+
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.SpecificationListBuilder;
@@ -253,6 +255,7 @@ public class TestTagImporter
         return new SpecificationItem.Builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
+                .location(FILENAME, lineNumber) //
                 .build();
     }
 
@@ -271,6 +274,7 @@ public class TestTagImporter
         assertThat(actual, hasSize(expectedItems.length));
         if (expectedItems.length > 0)
         {
+            assertThat(actual, AutoMatcher.contains(expectedItems));
             assertThat(actual, contains(expectedItems));
         }
     }

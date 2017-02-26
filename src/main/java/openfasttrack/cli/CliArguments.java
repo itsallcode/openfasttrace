@@ -69,6 +69,17 @@ public class CliArguments
     }
 
     /**
+     * Set the output file path
+     * 
+     * @param outputFile
+     *            output file path
+     */
+    public void setF(final String outputFile)
+    {
+        setOutputFile(outputFile);
+    }
+
+    /**
      * Get the OFT command (verb).
      * 
      * @return the OFT command

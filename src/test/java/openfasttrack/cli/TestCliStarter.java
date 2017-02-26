@@ -45,9 +45,9 @@ import org.junit.rules.TemporaryFolder;
 
 public class TestCliStarter
 {
-    private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>" //
-    ;
+    private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
+    private static final String NEWLINE_PARAMETER = "--newline";
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
@@ -202,6 +202,20 @@ public class TestCliStarter
             assertOutputFileExists(true);
             assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
         });
+    }
+
+    @Test
+    public void testTraceMacNewlines() throws IOException
+    {
+        expectCliExitOkWithAssertions(() -> {
+            assertThat(Files.exists(this.outputFile), equalTo(true));
+            assertThat("Has old Mac newlines", getOutputFileContent().contains("\r"),
+                    equalTo(true));
+            assertThat("Has no Unix newlines", getOutputFileContent().contains("\n"),
+                    equalTo(false));
+        });
+        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                this.docDir.toString(), NEWLINE_PARAMETER, "OLDMAC");
     }
 
     private void expectStandardReportFileResult()

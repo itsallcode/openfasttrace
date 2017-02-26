@@ -69,6 +69,17 @@ public class CliArguments
     }
 
     /**
+     * Set the output file path
+     * 
+     * @param outputFile
+     *            output file path
+     */
+    public void setF(final String outputFile)
+    {
+        setOutputFile(outputFile);
+    }
+
+    /**
      * Get the OFT command (verb).
      * 
      * @return the OFT command
@@ -130,6 +141,17 @@ public class CliArguments
     }
 
     /**
+     * Set the output format for an export or report
+     * 
+     * @param outputFormat
+     *            the output format
+     */
+    public void setO(final String outputFormat)
+    {
+        setOutputFormat(outputFormat);
+    }
+
+    /**
      * Get the report verbosity of a report
      * 
      * @return the report verbosity of a report
@@ -151,6 +173,17 @@ public class CliArguments
     }
 
     /**
+     * Set the report verbosity for a report
+     * 
+     * @param reportVerbosity
+     *            the verbosity of the report
+     */
+    public void setV(final ReportVerbosity reportVerbosity)
+    {
+        setReportVerbosity(reportVerbosity);
+    }
+
+    /**
      * Get the line separator representation for output files
      * 
      * @return the line separator
@@ -169,5 +202,16 @@ public class CliArguments
     public void setNewline(final Newline newline)
     {
         this.newline = newline;
+    }
+
+    /**
+     * Set the line separator representation for output files
+     * 
+     * @param newline
+     *            the line separator
+     */
+    public void setN(final Newline newline)
+    {
+        setNewline(newline);
     }
 }

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.kaklakariada</groupId>
     <artifactId>openfasttrack</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>OpenFastTrack</name>
     <description>Free requirement tracking suite</description>
 

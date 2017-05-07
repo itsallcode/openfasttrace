@@ -52,6 +52,7 @@ public class CliStarter
         }
     }
 
+    // [impl->dsn~cli.command-selection~1]
     void run()
     {
         Performable performable = null;

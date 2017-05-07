@@ -45,6 +45,8 @@ import org.junit.rules.TemporaryFolder;
 
 public class TestCliStarter
 {
+    private static final String NEWLINE = "\n";
+    private static final String CARRIAGE_RETURN = "\r";
     private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
@@ -82,6 +84,7 @@ public class TestCliStarter
 
     }
 
+    // [utest->dsn~cli.command-selection~1]
     @Test
     public void testIllegalCommand()
     {
@@ -91,6 +94,7 @@ public class TestCliStarter
         runCliStarter(ILLEGAL_COMMAND);
     }
 
+    // [utest->dsn~cli.command-selection~1]
     @Test
     public void testConvertWithoutExplicitInputs()
     {
@@ -111,6 +115,7 @@ public class TestCliStarter
     }
 
     @Test
+    // [utest->dsn~cli.conversion.output-format~1]
     public void testConvertToSpecobjectFile() throws IOException
     {
         expectStandardFileExportResult();
@@ -119,6 +124,7 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
+    // [utest->dsn~cli.conversion.default-format~1]
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
     {
@@ -128,6 +134,7 @@ public class TestCliStarter
     }
 
     @Test
+    // [utest->dsn~cli.default-input~1]
     public void testConvertDefaultInputDir() throws IOException
     {
         expectCliExitOkWithAssertions(() -> {
@@ -146,6 +153,7 @@ public class TestCliStarter
         runCliStarter(TRACE_COMMAND);
     }
 
+    // [utest->dsn~cli.command-selection~1]
     @Test
     public void testTrace() throws IOException
     {
@@ -187,6 +195,7 @@ public class TestCliStarter
     }
 
     @Test
+    // [utest->dsn~cli.default-input~1]
     public void testTraceDefaultInputDir() throws IOException
     {
         expectCliExitWithAssertions(() -> {
@@ -209,13 +218,43 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertThat(Files.exists(this.outputFile), equalTo(true));
-            assertThat("Has old Mac newlines", getOutputFileContent().contains("\r"),
+            assertThat("Has old Mac newlines", getOutputFileContent().contains(CARRIAGE_RETURN),
                     equalTo(true));
-            assertThat("Has no Unix newlines", getOutputFileContent().contains("\n"),
+            assertThat("Has no Unix newlines", getOutputFileContent().contains(NEWLINE),
                     equalTo(false));
         });
         runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
                 this.docDir.toString(), NEWLINE_PARAMETER, "OLDMAC");
+    }
+
+    @Test
+    // [itest->dsn~cli.default-newline-format~1]
+    public void testTraceDefaultNewlines() throws IOException
+    {
+        expectCliExitOkWithAssertions(() -> {
+            assertThat(Files.exists(this.outputFile), equalTo(true));
+            assertThat("Has native platform line separator",
+                    getOutputFileContent().contains(System.lineSeparator()), equalTo(true));
+            switch (System.lineSeparator())
+            {
+            case NEWLINE:
+                assertThat("Has no carriage returns",
+                        getOutputFileContent().contains(CARRIAGE_RETURN), equalTo(false));
+                break;
+
+            case CARRIAGE_RETURN:
+                assertThat("Has no newlines", getOutputFileContent().contains(NEWLINE),
+                        equalTo(false));
+                break;
+
+            case NEWLINE + CARRIAGE_RETURN:
+                assertThat("Has no newline without carriage return and vice-versa",
+                        getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
+                break;
+            }
+        });
+        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                this.docDir.toString());
     }
 
     private void expectStandardReportFileResult()

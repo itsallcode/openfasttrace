@@ -165,14 +165,12 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Self trace.
-                 Disabled until coverage complete in impl, uman, utest, itest
+            <!-- Self trace. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <executions>
-                    
                     <execution>
                         <id>trace</id>
                         <phase>verify</phase>
@@ -183,10 +181,9 @@
                 </executions>
                 <configuration>
                     <mainClass>openfasttrack.cli.CliStarter</mainClass>
-                    <commandlineArgs>trace doc</commandlineArgs>
+                    <commandlineArgs>trace doc src/main/java src/test/java</commandlineArgs>
                 </configuration>
             </plugin>
-            -->
         </plugins>
         <pluginManagement>
             <plugins>

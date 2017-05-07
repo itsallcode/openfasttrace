@@ -1,5 +1,7 @@
 package openfasttrack.cli;
 
+import static java.util.Arrays.asList;
+
 /*
  * #%L
  * OpenFastTrack
@@ -31,6 +33,8 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
+import openfasttrack.cli.commands.ConvertCommand;
+import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.core.Newline;
 import openfasttrack.report.ReportVerbosity;
 
@@ -61,19 +65,35 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetOuptuFormat()
+    public void testSetOutputFormat()
     {
         final String value = "foobar";
-        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), isEmptyOrNullString());
+        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), equalTo(null));
         this.arguments.setOutputFormat(value);
-        assertThat(AFTER_SETTER, this.arguments.getOutputFormat(), equalTo(value));
+        assertAfterSetter(value, this.arguments.getOutputFormat());
+    }
+
+    // [utest->dsn~cli.conversion.default-format~1]
+    @Test
+    public void getStandardOutputFormatForExport()
+    {
+        this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
+        assertThat(this.arguments.getOutputFormat(), equalTo(CliArguments.DEFAULT_EXPORT_FORMAT));
+    }
+
+    // [utest->dsn~cli.tracing.default-format~1]
+    @Test
+    public void getStandardOutputFormatForReport()
+    {
+        this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
+        assertThat(this.arguments.getOutputFormat(), equalTo(CliArguments.DEFAULT_REPORT_FORMAT));
     }
 
     @Test
     public void testSetO()
     {
         final String value = "foobar";
-        assertBeforeSetter(this.arguments.getOutputFormat());
+        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), equalTo(null));
         this.arguments.setO(value);
         assertAfterSetter(value, this.arguments.getOutputFormat());
     }
@@ -81,11 +101,6 @@ public class TestCliArguments
     private void assertAfterSetter(final String value, final String outputFormat)
     {
         assertThat(AFTER_SETTER, outputFormat, equalTo(value));
-    }
-
-    private void assertBeforeSetter(final String outputFormat)
-    {
-        assertThat(BEFORE_SETTER, outputFormat, isEmptyOrNullString());
     }
 
     @Test

@@ -85,6 +85,7 @@ public class TestLinkedItemIndex
                 sameInstance(this.duplicateIdItem1Mock));
     }
 
+    // [utest->dsn~tracing.tracing.duplicate-items~1]
     @Test
     public void testDuplicateId()
     {

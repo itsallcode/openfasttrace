@@ -278,6 +278,20 @@ Covers:
 
 Needs: dsn
 
+#### Link Cycle
+`req~tracing.link-cycle~1`
+
+OFT detects if specification items are linked in a cycle.
+
+Rationale:
+Link cycles are never intended and hard to find by hand in large collections of requirements.
+
+Covers:
+
+  * [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 ## Reports
 Reports are the main way to find out if a projects requirements are covered properly.
 

@@ -82,7 +82,7 @@ public class LinkedSpecificationItem
     {
         return this.item.getLocation();
     }
-    
+
     /**
      * Get the specification item.
      *
@@ -205,11 +205,13 @@ public class LinkedSpecificationItem
      * 
      * @return covered, uncovered or ring.
      */
+    // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
         return getDeepCoverageStatusEndRecursionStartingAt(this.getId());
     }
 
+    // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
             final SpecificationItemId startId)
     {
@@ -245,6 +247,7 @@ public class LinkedSpecificationItem
      *
      * @return <code>true</code> if the item is defect.
      */
+    // [impl->dsn~tracing.defect-items~1]
     public boolean isDefect()
     {
         for (final LinkStatus status : this.links.keySet())

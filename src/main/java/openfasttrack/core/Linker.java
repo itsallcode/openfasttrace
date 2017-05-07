@@ -54,6 +54,7 @@ public class Linker
      *
      * @return a list of {@link LinkedSpecificationItem}s.
      */
+    // [impl->dsn~tracing.needed-coverage-status~1]
     public List<LinkedSpecificationItem> link()
     {
 
@@ -72,6 +73,8 @@ public class Linker
         }
     }
 
+    // [impl->dsn~tracing.outgoing-coverage-link-status~1]
+    // [impl->dsn~tracing.incoming-coverage-link-status~1]
     private void linkItemToItemWithId(final LinkedSpecificationItem item,
             final SpecificationItemId id)
     {

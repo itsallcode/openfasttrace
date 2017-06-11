@@ -69,6 +69,7 @@ public class CliStarter
         exit(status);
     }
 
+    // [impl->dsn~cli.tracing.exit-status~1]
     private static void exit(final ExitStatus exitStatus)
     {
         System.exit(exitStatus.getCode());

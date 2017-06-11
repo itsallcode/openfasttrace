@@ -66,6 +66,7 @@ public class SpecobjectExporter implements Exporter
     }
 
     @Override
+    // [impl->dsn~conversion.reqm2-export~1]
     public void runExport()
     {
         try

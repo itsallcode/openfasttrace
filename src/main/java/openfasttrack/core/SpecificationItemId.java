@@ -32,11 +32,13 @@ import javax.annotation.Generated;
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
  */
+// [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
+    // [impl->dsn~md.specification-item-id-format~2]
     public static final Pattern ID_PATTERN = Pattern.compile("(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
             + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //

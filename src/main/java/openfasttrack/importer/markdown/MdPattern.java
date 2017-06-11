@@ -73,6 +73,7 @@ public enum MdPattern
         }
 
         public static final String BULLETS = "[+*-]";
+        // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = "\\s{0,3}" + PatternConstants.BULLETS
                 + "(?:.*\\W)?(" + SpecificationItemId.ID_PATTERN + ")(?:\\W.*)?";
     }

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// [impl~requirement_format~1]
+// [impl->dsn~specification-item~1]
 public class SpecificationItem
 {
     private final SpecificationItemId id;

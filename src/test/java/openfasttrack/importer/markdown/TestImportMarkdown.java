@@ -130,7 +130,7 @@ public class TestImportMarkdown
                 + RATIONALE_LINE2 + "\n" //
                 + "\nCovers:\n\n" //
                 + "  * " + COVERED_ID1 + "\n" //
-                + "  + " + COVERED_ID2 + "\n" //
+                + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
                 + "  + " + DEPENDS_ON_ID1 + "\n" //
                 + "  - " + DEPENDS_ON_ID2 + "\n" //
@@ -149,6 +149,9 @@ public class TestImportMarkdown
         importer.runImport();
     }
 
+    // [utest->dsn~md.covers_list~1]
+    // [utest->dsn~md.depends_list~1]
+    // [utest->dsn~md.requirement-references~1]
     private void assertAllImporterEventsCalled()
     {
         final InOrder inOrder = inOrder(this.listenerMock);

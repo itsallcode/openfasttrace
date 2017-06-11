@@ -130,6 +130,7 @@ public class PlainTextReport implements Reportable
         return ok ? "ok" : "not ok";
     }
 
+    // [impl->dsn~reporting.plain-text.summary~1]
     private void renderSummary(final PrintStream report)
     {
         report.print(translateStatus(this.trace.isAllCovered()));
@@ -159,6 +160,7 @@ public class PlainTextReport implements Reportable
                 .forEachOrdered(item -> renderItemSummary(item, report));
     }
 
+    // [impl->dsn~reporting.plain-text.specification-item-overview~1]
     private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
     {
         report.print(translateStatus(!item.isDefect()));

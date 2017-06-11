@@ -81,7 +81,7 @@ class MarkdownImporter implements Importer
         transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> {endComment(); addNeeds();}          ),
         transition(State.COMMENT    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(State.COMMENT    , State.COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),
-    
+        // [impl->dsn~md.covers_list~1]
         transition(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.COVERS     , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.COVERS     , State.COVERS     , MdPattern.COVERS_REF , this::addCoverage                          ),
@@ -90,7 +90,7 @@ class MarkdownImporter implements Importer
         transition(State.COVERS     , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
         transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
         transition(State.COVERS     , State.COVERS     , MdPattern.EMPTY      , () -> {}                                   ),
-    
+        // [impl->dsn~md.depends_list~1]
         transition(State.DEPENDS    , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.DEPENDS    , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS_REF, this::addDependency                        ),

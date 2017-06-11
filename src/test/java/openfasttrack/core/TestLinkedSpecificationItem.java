@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~linked-specification-item~1]
 public class TestLinkedSpecificationItem
 {
     private LinkedSpecificationItem linkedItem;
@@ -155,7 +156,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.UNCOVERED));
     }
 
-    // [utest->dsn~defect_items~1]
+    // [utest->dsn~tracing.defect_items~1]
     @Test
     public void testIsDefect_False()
     {
@@ -170,7 +171,7 @@ public class TestLinkedSpecificationItem
         this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
     }
 
-    // [utest->dsn~defect_items~1]
+    // [utest->dsn~tracing.defect-items~1]
     @Test
     public void testIsDefect_TrueBecauseOfDuplicates()
     {
@@ -178,7 +179,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isDefect(), equalTo(true));
     }
 
-    // [utest->dsn~defect_items~1]
+    // [utest->dsn~tracing.defect-items~1]
     @Test
     public void testIsDefect_TrueBecauseOfBadLink()
     {

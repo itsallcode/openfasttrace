@@ -133,6 +133,7 @@ public class CliArguments
      */
     // [impl->dsn~cli.tracing.default-format~1]
     // [impl->dsn~cli.conversion.default-format~1]]
+    // [impl->dsn~cli.tracing.output-format~1]
     public String getOutputFormat()
     {
         if (this.outputFormat == null)

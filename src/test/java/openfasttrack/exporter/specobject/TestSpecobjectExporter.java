@@ -40,7 +40,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.xml.stream.*;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.junit.Test;
 
@@ -167,6 +170,7 @@ public class TestSpecobjectExporter
         }
     }
 
+    // [itest->dsn~conversion.reqm2-export~1]
     private void assertExportContent(final String expectedContent,
             final SpecificationItem... expectedItems)
     {

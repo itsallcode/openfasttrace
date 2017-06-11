@@ -84,7 +84,7 @@ public class TestCliStarter
 
     }
 
-    // [utest->dsn~cli.command-selection~1]
+    // [itest->dsn~cli.command-selection~1]
     @Test
     public void testIllegalCommand()
     {
@@ -94,7 +94,7 @@ public class TestCliStarter
         runCliStarter(ILLEGAL_COMMAND);
     }
 
-    // [utest->dsn~cli.command-selection~1]
+    // [itest->dsn~cli.command-selection~1]
     @Test
     public void testConvertWithoutExplicitInputs()
     {
@@ -115,7 +115,7 @@ public class TestCliStarter
     }
 
     @Test
-    // [utest->dsn~cli.conversion.output-format~1]
+    // [itest->dsn~cli.conversion.output-format~1]
     public void testConvertToSpecobjectFile() throws IOException
     {
         expectStandardFileExportResult();
@@ -124,7 +124,8 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
-    // [utest->dsn~cli.conversion.default-format~1]
+    // [itest->dsn~cli.conversion.default-format~1]
+    // [itest->dsn~cli.input-file-selection~1]
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
     {
@@ -134,7 +135,7 @@ public class TestCliStarter
     }
 
     @Test
-    // [utest->dsn~cli.default-input~1]
+    // [itest->dsn~cli.default-input~1]
     public void testConvertDefaultInputDir() throws IOException
     {
         expectCliExitOkWithAssertions(() -> {
@@ -153,7 +154,7 @@ public class TestCliStarter
         runCliStarter(TRACE_COMMAND);
     }
 
-    // [utest->dsn~cli.command-selection~1]
+    // [itest->dsn~cli.command-selection~1]
     @Test
     public void testTrace() throws IOException
     {
@@ -195,12 +196,12 @@ public class TestCliStarter
     }
 
     @Test
-    // [utest->dsn~cli.default-input~1]
+    // [itest->dsn~cli.default-input~1]
     public void testTraceDefaultInputDir() throws IOException
     {
         expectCliExitWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertThat(getOutputFileContent().length(), greaterThan(1000));
+            assertThat(getOutputFileContent().length(), greaterThan(800));
         });
         runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
@@ -211,6 +212,17 @@ public class TestCliStarter
             assertOutputFileExists(true);
             assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
         });
+    }
+
+    // [itest->dsn~cli.tracing.output-format~1]]
+    public void testTraceOutputFormatPlain() throws IOException
+    {
+        expectCliExitWithAssertions(() -> {
+            assertOutputFileExists(true);
+            assertThat(getOutputFileContent().length(), greaterThan(1000));
+        });
+        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                OUTPUT_FORMAT_PARAMETER, "plain");
     }
 
     @Test
@@ -270,6 +282,7 @@ public class TestCliStarter
         expectCliExitStatusWithAssertions(ExitStatus.OK, assertions);
     }
 
+    // [itest->dsn~cli.tracing.exit-status~1]
     private void expectCliExitStatusWithAssertions(final ExitStatus status,
             final ExitAssertable assertions)
     {

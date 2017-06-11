@@ -198,7 +198,7 @@ Covers:
 
   * `req~tracing.defect-items~1`
 
-Needs: dsn
+Needs: impl, utest
 
 #### Link Cycle
 `dsn~tracing.link-cycle~1`
@@ -216,20 +216,19 @@ Needs: impl, utest
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text-summary~1`
+`dsn~reporting.plain-text.summary~1`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
   * Total number of specification items that are not covered (if any)
-  * Total number of duplicate specification items (if any)
 
 Covers:
 
-  * `req~reporting.plain-text-summary~1`
+  * `req~reporting.plain-text.summary~1`
 
-Needs: dsn
+Needs: impl, utest
 
 #### Plain Text Report Specification Item Overview
 `dsn~reporting.plain-text.specification-item-overview~1`
@@ -244,13 +243,12 @@ An item summary consist in the plain text report includes
   6. Number of duplicates (not including this item)
   7. ID
   8. Artifact types indicating coverage
-  9. Source file name and line (optional)
 
 Covers:
 
   * `req~reporting.plain-text.specification-item-overview~1`
 
-Needs: dsn
+Needs: impl, utest
 
 #### Plain Text Report Options
 `dsn~reporting.plain-text.report-options~1`
@@ -267,7 +265,7 @@ Covers:
 
   * `req~reporting.plain-text.report-options~1`
 
-Needs: dsn
+Needs: impl, utest
 
 #### Default Plain Text Report
 `dsn~reporting.plain-text.default-report-options~1`
@@ -282,7 +280,7 @@ Covers:
 
   * `req~reporting.plain-text.default-report-options~1`
 
-Needs: dsn
+Needs: impl, uest
 
 ## Requirement Format Conversion
 
@@ -298,7 +296,7 @@ Covers:
 
   * `req~conversion.reqm2-export~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 # Deployment View
 
@@ -414,7 +412,7 @@ Needs: impl, utest
 
 In Markdown specification item references have the following format:
 
-    reference = (plain-reference | url-style-link)
+    reference = (plain-reference / url-style-link)
     
     plain-reference = requirement-id
     
@@ -501,7 +499,7 @@ Covers:
   * `req~cli.tracing.command~1`
   * `req~cli.conversion.command~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 ### Common
 
@@ -519,7 +517,7 @@ Covers:
 
   * `req~cli.input-selection~1`
   
-Needs: impl, utest
+Needs: impl, itest
 
 #### Input Directory Recursive Traversal
 `dsn~input-directory-recursive-traversal~1`
@@ -530,7 +528,7 @@ Covers:
 
   * `req~cli.input-directory-selection~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Default Input
 `dsn~cli.default-input~1`
@@ -541,7 +539,7 @@ Covers:
 
   * `req~cli.default-input~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Input File Deduplication
 `dsn~cli.input-file-deduplication~1`
@@ -552,7 +550,7 @@ Covers:
 
   * `req~cli.input-deduplication~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Newline Format
 `dsn~newline-format~1`
@@ -569,7 +567,7 @@ Covers:
 
   * `req~cli.newline-format~1`
 
-Needs: impl, utest, itest
+Needs: impl, itest
 
 #### Default Newline Format
 `dsn~cli.default-newline-format~1`
@@ -595,7 +593,7 @@ Covers:
 
   * `req~cli.tracing.output-format~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Default Tracing Output Format
 `dsn~cli.tracing.default-format~1`
@@ -620,7 +618,7 @@ Covers:
 
   * `req~cli.tracing.exit-status~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 ### Requirement Format Conversion
 
@@ -635,7 +633,7 @@ Covers:
 
   * `req~cli.conversion.output-format~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Default Conversion Output Format
 `dsn~cli.conversion.default-format~1`
@@ -646,7 +644,7 @@ Covers:
 
   * `req~cli.conversion.default-output-format~1`
 
-Needs: impl, utest
+Needs: impl, itest
 
 # Design Decisions
 

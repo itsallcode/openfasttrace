@@ -304,7 +304,7 @@ The plain text report is the most basic report variant. It serves two main purpo
 2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
 #### Plain Text Report Summary
-`req~reporting.plain-text-summary~1`
+`req~reporting.plain-text.summary~1`
 
 The summary in the plain text report includes:
 

@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 /**
  * Specification items with links that can be followed.
  */
+// [impl->dsn~linked-specification-item~1]
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;

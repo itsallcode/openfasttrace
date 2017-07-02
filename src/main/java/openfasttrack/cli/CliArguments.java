@@ -1,5 +1,7 @@
 package openfasttrack.cli;
 
+import static java.util.Arrays.asList;
+
 /*
  * #%L
  * OpenFastTrack
@@ -24,7 +26,6 @@ package openfasttrack.cli;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 import openfasttrack.cli.commands.ConvertCommand;
@@ -109,14 +110,13 @@ public class CliArguments
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return Arrays.asList(CURRENT_DIRECTORY);
+            return asList(CURRENT_DIRECTORY);
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }
 
     /**
-     * Set all parameter values that are not led in by a command line parameter
-     * name
+     * Set all parameter values that are not led in by a command line parameter name
      * 
      * @param unnamedValues
      *            list of unnamed values

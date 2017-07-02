@@ -1,6 +1,7 @@
 package openfasttrack.cli;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 /*
  * #%L
@@ -27,8 +28,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
-
-import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +59,7 @@ public class TestCliArguments
     @Test
     public void testGetCommandWithUnnamedValuesEmpty()
     {
-        this.arguments.setUnnamedValues(Collections.emptyList());
+        this.arguments.setUnnamedValues(emptyList());
         assertThat(this.arguments.getCommand(), isEmptyOrNullString());
     }
 

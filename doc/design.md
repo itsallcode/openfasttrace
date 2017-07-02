@@ -280,7 +280,7 @@ Covers:
 
   * `req~reporting.plain-text.default-report-options~1`
 
-Needs: impl, uest
+Needs: impl, utest
 
 ## Requirement Format Conversion
 
@@ -544,7 +544,7 @@ Needs: impl, itest
 #### Input File Deduplication
 `dsn~cli.input-file-deduplication~1`
 
-The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
+The CLI generates a duplicate-free list of input files calculated from the inputs given via the command line.
 
 Covers:
 

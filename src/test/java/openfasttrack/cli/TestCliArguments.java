@@ -29,6 +29,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
 
+import java.nio.file.Paths;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -106,18 +108,20 @@ public class TestCliArguments
     public void testSetOutputFile()
     {
         final String value = "/tmp/foobar";
+        final String expectedPath = Paths.get(value).toString();
         assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
         this.arguments.setOutputFile(value);
-        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(value));
+        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(expectedPath));
     }
 
     @Test
     public void testSetF()
     {
         final String value = "/tmp/foobar";
+        final String expectedPath = Paths.get(value).toString();
         assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
         this.arguments.setF(value);
-        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(value));
+        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(expectedPath));
     }
 
     @Test

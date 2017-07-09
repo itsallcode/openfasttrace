@@ -51,10 +51,12 @@ import openfasttrack.matcher.MultilineTextMatcher;
 
 public class TestPlainTextReport
 {
+    private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
     private static final String DSN = "dsn";
     private static final String UMAN = "uman";
     private static final String UTEST = "utest";
     private static final String IMPL = "impl";
+
     @Mock
     private Trace traceMock;
 
@@ -68,7 +70,7 @@ public class TestPlainTextReport
     public void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
-        new PlainTextReport(this.traceMock, Newline.UNIX)
+        new PlainTextReport(this.traceMock, NEWLINE_SEPARATOR)
                 .renderToStreamWithVerbosityLevel(outputStreamMock, ReportVerbosity.SUMMARY);
         verify(outputStreamMock).close();
     }
@@ -102,13 +104,13 @@ public class TestPlainTextReport
             return "";
         }
         return Arrays.stream(expectedReportLines) //
-                .collect(joining(Newline.UNIX.toString())) //
-                + Newline.UNIX;
+                .collect(joining(NEWLINE_SEPARATOR.toString())) //
+                + NEWLINE_SEPARATOR;
     }
 
     private String getReportOutput(final ReportVerbosity verbosity)
     {
-        final Newline newline = Newline.UNIX;
+        final Newline newline = NEWLINE_SEPARATOR;
         return getReportOutputWithNewline(verbosity, newline);
     }
 
@@ -187,13 +189,13 @@ public class TestPlainTextReport
     private void prepareFailedItemDetails()
     {
         final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~foo~1", //
-                "desc A1" + System.lineSeparator() + "desc A2" + System.lineSeparator() + "desc A3", //
+                "desc A1" + NEWLINE_SEPARATOR + "desc A2" + NEWLINE_SEPARATOR + "desc A3", //
                 0, 3, 1, 0, 2);
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~bar~1", //
                 "desc B1", //
                 0, 0, 0, 2, 4);
         final LinkedSpecificationItem itemCMock = createLinkedItemMock("req~zoo~2", //
-                "desc C1" + System.lineSeparator() + "desc C2", //
+                "desc C1" + NEWLINE_SEPARATOR + "desc C2", //
                 1, 6, 0, 0, 0);
         final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1", //
                 "desc D1", //
@@ -238,7 +240,7 @@ public class TestPlainTextReport
     private void prepareMixedItemDetails()
     {
         final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~success~20170126", //
-                "This is a success." + System.lineSeparator(), //
+                "This is a success." + NEWLINE_SEPARATOR, //
                 0, 0, 0, 0, 0);
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~failure~0", //
                 "This is a failure.", //

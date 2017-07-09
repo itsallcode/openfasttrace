@@ -201,7 +201,7 @@ public class TestCliStarter
     {
         expectCliExitWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertThat(getOutputFileContent().length(), greaterThan(800));
+            assertThat(getOutputFileContent().length(), greaterThan(700));
         });
         runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }

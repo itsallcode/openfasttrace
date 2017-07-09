@@ -41,7 +41,6 @@ import openfasttrack.core.Trace;
  */
 public class PlainTextReport implements Reportable
 {
-
     private final Trace trace;
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
@@ -122,7 +121,8 @@ public class PlainTextReport implements Reportable
 
     private void renderResultStatus(final PrintStream report)
     {
-        report.println(translateStatus(this.trace.isAllCovered()));
+        report.print(translateStatus(this.trace.isAllCovered()));
+        report.print(this.newline.toString());
     }
 
     private String translateStatus(final boolean ok)
@@ -150,7 +150,10 @@ public class PlainTextReport implements Reportable
     {
         this.trace.getUncoveredIds().stream() //
                 .sorted()//
-                .forEachOrdered(report::println);
+                .forEachOrdered(id -> {
+                    report.print(id);
+                    report.print(this.newline.toString());
+                });
     }
 
     private void renderFailureDetails(final PrintStream report)

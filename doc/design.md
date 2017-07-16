@@ -541,17 +541,6 @@ Covers:
 
 Needs: impl, itest
 
-#### Input File Deduplication
-`dsn~cli.input-file-deduplication~1`
-
-The CLI generates a duplicate-free list of input files calculated from the inputs given via the command line.
-
-Covers:
-
-  * `req~cli.input-deduplication~1`
-
-Needs: impl, itest
-
 #### Newline Format
 `dsn~newline-format~1`
 

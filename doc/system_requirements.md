@@ -522,19 +522,6 @@ Covers:
 
 Needs: dsn
 
-#### Input Deduplication
-`req~cli.input-deduplication~1`
-
-OFT imports each file only once, even if the user selections for import intersect.
-
-Covers:
-
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~markdown-import~1](#markdown-import)
-  * [feat~reqm2-import~1](#reqm2-import)
-
-Needs: dsn
-
 #### Newline Format
 `req~cli.newline-format~1`
 

@@ -22,6 +22,7 @@ package openfasttrack.exporter;
  * #L%
  */
 
+@FunctionalInterface
 public interface Exporter
 {
     void runExport();

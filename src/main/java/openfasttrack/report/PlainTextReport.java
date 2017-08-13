@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Newline;
 import openfasttrack.core.Trace;
 
 /**
@@ -40,19 +41,24 @@ import openfasttrack.core.Trace;
  */
 public class PlainTextReport implements Reportable
 {
-
-    private static final String LINE_ENDING = "\\r\\n|\\r|\\n";
     private final Trace trace;
+    private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
+            .comparing(LinkedSpecificationItem::getId);
+    private final Newline newline;
 
     /**
      * Create a new instance of {@link PlainTextReport}
      *
      * @param trace
      *            the trace that will be reported.
+     * @param newline
+     *            the newline format
      */
-    public PlainTextReport(final Trace trace)
+    // [impl->dsn~newline-format~1]
+    public PlainTextReport(final Trace trace, final Newline newline)
     {
         this.trace = trace;
+        this.newline = newline;
     }
 
     @Override
@@ -83,7 +89,15 @@ public class PlainTextReport implements Reportable
             break;
         case FAILURE_DETAILS:
             renderFailureDetails(report);
-            report.println();
+            if (this.trace.countUncovered() > 0)
+            {
+                report.print(this.newline);
+            }
+            renderSummary(report);
+            break;
+        case ALL:
+            renderAll(report);
+            report.print(this.newline);
             renderSummary(report);
             break;
         default:
@@ -107,7 +121,8 @@ public class PlainTextReport implements Reportable
 
     private void renderResultStatus(final PrintStream report)
     {
-        report.println(translateStatus(this.trace.isAllCovered()));
+        report.print(translateStatus(this.trace.isAllCovered()));
+        report.print(this.newline.toString());
     }
 
     private String translateStatus(final boolean ok)
@@ -115,6 +130,7 @@ public class PlainTextReport implements Reportable
         return ok ? "ok" : "not ok";
     }
 
+    // [impl->dsn~reporting.plain-text.summary~1]
     private void renderSummary(final PrintStream report)
     {
         report.print(translateStatus(this.trace.isAllCovered()));
@@ -127,24 +143,28 @@ public class PlainTextReport implements Reportable
             report.print(this.trace.countUncovered());
             report.print(" not covered");
         }
-        report.println();
+        report.print(this.newline);
     }
 
     private void renderFailureIds(final PrintStream report)
     {
         this.trace.getUncoveredIds().stream() //
-                .sorted((id, other) -> id.compareTo(other)) //
-                .forEachOrdered(id -> report.println(id));
+                .sorted()//
+                .forEachOrdered(id -> {
+                    report.print(id);
+                    report.print(this.newline.toString());
+                });
     }
 
     private void renderFailureDetails(final PrintStream report)
     {
         this.trace.getUncoveredItems().stream() //
-                .sorted((item, other) -> item.getId().compareTo(other.getId())) //
-                .forEachOrdered(item -> renderItemDetails(item, report));
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemSummary(item, report));
     }
 
-    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    // [impl->dsn~reporting.plain-text.specification-item-overview~1]
+    private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
     {
         report.print(translateStatus(!item.isDefect()));
         report.print(" - ");
@@ -152,15 +172,8 @@ public class PlainTextReport implements Reportable
         report.print(" - ");
         report.print(item.getId().toString());
         report.print(" ");
-        report.println(translateArtifactTypeCoverage(item));
-        report.println("#");
-
-        for (final String line : item.getDescription().split(LINE_ENDING))
-        {
-            report.print("# ");
-            report.println(line);
-        }
-        report.println("#");
+        report.print(translateArtifactTypeCoverage(item));
+        report.print(this.newline);
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
@@ -192,5 +205,28 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingBadLinks());
         report.print("/");
         report.print(item.countOutgoingLinks());
+    }
+
+    private void renderAll(final PrintStream report)
+    {
+        this.trace.getItems().stream() //
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemDetails(item, report));
+    }
+
+    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        renderItemSummary(item, report);
+        report.print("#");
+        report.print(this.newline);
+
+        for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
+        {
+            report.print("# ");
+            report.print(line);
+            report.print(this.newline);
+        }
+        report.print("#");
+        report.print(this.newline);
     }
 }

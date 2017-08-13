@@ -1,5 +1,7 @@
 package openfasttrack.core;
 
+import java.util.Collections;
+
 /*
  * #%L
  * OpenFastTrack
@@ -67,13 +69,13 @@ public class LinkedItemIndex
     private static Map<SpecificationItemId, LinkedSpecificationItem> createIdIndex(
             final List<LinkedSpecificationItem> wrappedItems)
     {
-        final Map<SpecificationItemId, LinkedSpecificationItem> index = wrappedItems.stream()
+        return wrappedItems.stream()
                 .collect(Collectors.toMap(LinkedSpecificationItem::getId, //
                         item -> item, //
                         LinkedItemIndex::handleDuplicates));
-        return index;
     }
 
+    // [impl->dsn~tracing.tracing.duplicate-items~1]
     private static LinkedSpecificationItem handleDuplicates(final LinkedSpecificationItem item1,
             final LinkedSpecificationItem item2)
     {
@@ -99,7 +101,9 @@ public class LinkedItemIndex
 
     public List<LinkedSpecificationItem> getByIdIgnoringVersion(final SpecificationItemId id)
     {
-        return this.idIndexIgnoringVersion.get(new SpecificationItemIdWithoutVersion(id));
+        final List<LinkedSpecificationItem> items = this.idIndexIgnoringVersion
+                .get(new SpecificationItemIdWithoutVersion(id));
+        return items == null ? Collections.emptyList() : items;
     }
 
     private static class SpecificationItemIdWithoutVersion

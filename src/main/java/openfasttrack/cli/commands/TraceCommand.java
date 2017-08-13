@@ -4,7 +4,7 @@ package openfasttrack.cli.commands;
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,26 +22,36 @@ package openfasttrack.cli.commands;
  * #L%
  */
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
 import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Linker;
+import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.Trace;
 import openfasttrack.core.Tracer;
 import openfasttrack.importer.ImporterService;
 import openfasttrack.report.ReportService;
 import openfasttrack.report.ReportVerbosity;
 
-public class TraceCommand
+/**
+ * Handler for requirement tracing CLI command.
+ */
+public class TraceCommand extends AbstractCommand
 {
-    public final static String COMMAND_NAME = "trace";
-    private final CliArguments arguments;
-    private final ImporterService importerService;
-    private final ReportService reportService;
-    private final Tracer tracer;
+    public static final String COMMAND_NAME = "trace";
 
+    final ReportService reportService;
+    final Tracer tracer;
+
+    /**
+     * Create a {@link TraceCommand}.
+     * 
+     * @param arguments
+     *            the command line arguments.
+     */
     public TraceCommand(final CliArguments arguments)
     {
         this(arguments, new ImporterService(), new Tracer(), new ReportService());
@@ -50,23 +60,21 @@ public class TraceCommand
     TraceCommand(final CliArguments arguments, final ImporterService importerService,
             final Tracer tracer, final ReportService reportService)
     {
-        this.arguments = arguments;
-        this.importerService = importerService;
+        super(arguments, importerService);
         this.tracer = tracer;
         this.reportService = reportService;
     }
 
-    public void start()
+    @Override
+    protected boolean processSpecificationItemStream(final Stream<SpecificationItem> items)
     {
-        final List<LinkedSpecificationItem> linkedSpecItems = this.importerService.createImporter() //
-                .importRecursiveDir(this.arguments.getInputDir(), "**/*") //
-                .getImportedItems() //
-                .stream() //
-                .map(LinkedSpecificationItem::new) //
-                .collect(toList());
-        final Trace traceResult = this.tracer.trace(linkedSpecItems);
+        final Linker linker = new Linker(items.collect(Collectors.toList()));
+        final List<LinkedSpecificationItem> linkedItems = linker.link();
+        final Trace traceResult = this.tracer.trace(linkedItems);
         final ReportVerbosity verbosity = this.arguments.getReportVerbosity() == null
                 ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
-        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity);
+        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity,
+                this.arguments.getNewline());
+        return traceResult.isAllCovered();
     }
 }

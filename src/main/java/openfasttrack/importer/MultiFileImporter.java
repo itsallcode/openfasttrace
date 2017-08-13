@@ -1,5 +1,7 @@
 package openfasttrack.importer;
 
+import java.io.File;
+
 /*
  * #%L
  * OpenFastTrack
@@ -44,9 +46,9 @@ import openfasttrack.core.SpecificationItem;
  */
 public class MultiFileImporter
 {
-    private static Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
-
+    private static final Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private static final String ALL_RECURSIVE_GLOB = "**/*";
 
     private final SpecificationListBuilder specItemBuilder;
     private final ImporterFactoryLoader factoryLoader;
@@ -77,6 +79,39 @@ public class MultiFileImporter
     }
 
     /**
+     * Import from the path, independently of whether it is represents a
+     * directory or a file.
+     * 
+     * @param paths
+     *            lists of paths to files or directories
+     * @return <code>this</code> for fluent programming style.
+     */
+    public MultiFileImporter importAny(final List<Path> paths)
+    {
+        for (final Path path : paths)
+        {
+            final File file = path.toFile();
+            if (file.exists())
+            {
+                if (file.isDirectory())
+                {
+                    importRecursiveDir(path, ALL_RECURSIVE_GLOB);
+                }
+                else if (file.isFile())
+                {
+                    importFile(path);
+                }
+            }
+            else
+            {
+                LOG.warning(() -> "No such input file or directory \"" + path.toString()
+                        + "\". Skipping.");
+            }
+        }
+        return this;
+    }
+
+    /**
      * Import all files from the given directory that match the given
      * {@link FileSystem#getPathMatcher(String) glob expression} and character
      * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
@@ -87,9 +122,10 @@ public class MultiFileImporter
      *            the {@link FileSystem#getPathMatcher(String) glob expression}
      * @return <code>this</code> for fluent programming style.
      */
+    // [impl->dsn~input-directory-recursive-traversal~1]
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
-        LOG.info(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
+        LOG.fine(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
         final int itemCountBefore = this.specItemBuilder.getItemCount();
@@ -99,7 +135,7 @@ public class MultiFileImporter
                     .filter(matcher::matches) //
                     .filter(this.factoryLoader::supportsFile)
                     .map(file -> createImporter(file, DEFAULT_CHARSET, this.specItemBuilder))
-                    .forEach((importer) -> {
+                    .forEach(importer -> {
                         importer.runImport();
                         fileCount.incrementAndGet();
                     });
@@ -109,7 +145,7 @@ public class MultiFileImporter
             throw new ImporterException("Error walking directory " + dir, e);
         }
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
-        LOG.info(() -> "Imported " + fileCount + " files containing " + itemCountImported
+        LOG.fine(() -> "Imported " + fileCount + " files containing " + itemCountImported
                 + " items from '" + dir + "'.");
         return this;
     }

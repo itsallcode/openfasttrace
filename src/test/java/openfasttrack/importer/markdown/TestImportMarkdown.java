@@ -25,6 +25,8 @@ package openfasttrack.importer.markdown;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -34,7 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
@@ -59,6 +61,7 @@ public class TestImportMarkdown
     private static final String NEEDS_ARTIFACT_TYPE2 = "artB";
     private static final String DEPENDS_ON_ID1 = "configuration~blubb.blah.blah~4711";
     private static final String DEPENDS_ON_ID2 = "db~blah.blubb~42";
+    private static final String FILENAME = "file name";
 
     @Mock
     ImportEventListener listenerMock;
@@ -127,7 +130,7 @@ public class TestImportMarkdown
                 + RATIONALE_LINE2 + "\n" //
                 + "\nCovers:\n\n" //
                 + "  * " + COVERED_ID1 + "\n" //
-                + "  + " + COVERED_ID2 + "\n" //
+                + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
                 + "  + " + DEPENDS_ON_ID1 + "\n" //
                 + "  - " + DEPENDS_ON_ID2 + "\n" //
@@ -141,16 +144,20 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final StringReader reader = new StringReader(text);
-        final Importer importer = new MarkdownImporterFactory().createImporter("testfilename",
-                reader, this.listenerMock);
+        final Importer importer = new MarkdownImporterFactory().createImporter(FILENAME, reader,
+                this.listenerMock);
         importer.runImport();
     }
 
+    // [utest->dsn~md.covers_list~1]
+    // [utest->dsn~md.depends_list~1]
+    // [utest->dsn~md.requirement-references~1]
     private void assertAllImporterEventsCalled()
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock)
                 .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
@@ -192,10 +199,21 @@ public class TestImportMarkdown
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(ID2);
+        inOrder.verify(this.listenerMock).setLocation(FILENAME, 4);
         inOrder.verify(this.listenerMock).endSpecificationItem();
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void testSingleNeeds()
+    {
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + NEEDS_ARTIFACT_TYPE1;
+        runImporterOnText(singleNeedsItem);
+        verify(this.listenerMock, times(1)).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
     }
 }

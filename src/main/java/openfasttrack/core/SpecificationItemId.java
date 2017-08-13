@@ -32,11 +32,19 @@ import javax.annotation.Generated;
  *
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
  */
+// [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
-    public final static int REVISION_WILDCARD = Integer.MIN_VALUE;
+    public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
+    // [impl->dsn~md.specification-item-id-format~2]
+    public static final Pattern ID_PATTERN = Pattern.compile("(\\p{Alpha}+)" //
+            + ARTIFACT_TYPE_SEPARATOR //
+            + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
+            + REVISION_SEPARATOR //
+            + "(\\d+)");
+
     private final String name;
     private final int revision;
     private final String artifactType;
@@ -80,7 +88,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 
     @Override
     @Generated(value = "Eclipse")
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = 1;
@@ -91,7 +99,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -101,7 +109,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof SpecificationItemId))
         {
             return false;
         }
@@ -203,8 +211,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
      */
     public static class Builder
     {
-        private final Pattern idPattern = Pattern
-                .compile("(\\p{Alpha}+)~(\\p{Alpha}\\w*(?:\\.\\p{Alpha}\\w*)*)~(\\d+)");
+        // [impl->dsn~md.specification_item_id_format~2]
         private final String id;
         private String artifactType;
         private String name;
@@ -307,7 +314,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 
         private void parseId()
         {
-            final Matcher matcher = this.idPattern.matcher(this.id);
+            final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
                 this.artifactType = matcher.group(1);
@@ -325,10 +332,10 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     @Override
     public int compareTo(final SpecificationItemId other)
     {
-        int compared = (this.getArtifactType().compareTo(other.getArtifactType()));
+        int compared = this.getArtifactType().compareTo(other.getArtifactType());
         if (compared == 0)
         {
-            compared = (this.getName().compareTo(other.getName()));
+            compared = this.getName().compareTo(other.getName());
             if (compared == 0)
             {
                 if (this.getRevision() > other.getRevision())

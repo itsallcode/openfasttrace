@@ -24,10 +24,9 @@ package openfasttrack.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import javax.annotation.Generated;
-
-// [impl~requirement_format~1]
+// [impl->dsn~specification-item~1]
 public class SpecificationItem
 {
     private final SpecificationItemId id;
@@ -38,20 +37,19 @@ public class SpecificationItem
     private final List<SpecificationItemId> coveredIds;
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> needsArtifactTypes;
+    private final Location location;
 
-    private SpecificationItem(final SpecificationItemId id, final String title,
-            final String description, final String rationale, final String comment,
-            final List<SpecificationItemId> coveredIds, final List<SpecificationItemId> dependOnIds,
-            final List<String> neededArtifactTypes)
+    private SpecificationItem(final Builder builder)
     {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.rationale = rationale;
-        this.comment = comment;
-        this.coveredIds = coveredIds;
-        this.dependOnIds = dependOnIds;
-        this.needsArtifactTypes = neededArtifactTypes;
+        this.id = builder.id;
+        this.title = builder.title;
+        this.description = builder.description;
+        this.rationale = builder.rationale;
+        this.comment = builder.comment;
+        this.coveredIds = builder.coveredIds;
+        this.dependOnIds = builder.dependOnIds;
+        this.needsArtifactTypes = builder.neededArtifactTypes;
+        this.location = builder.location;
     }
 
     /**
@@ -156,12 +154,21 @@ public class SpecificationItem
      */
     public boolean needsCoverage()
     {
-        return this.needsArtifactTypes.size() > 0;
+        return !this.needsArtifactTypes.isEmpty();
     }
 
-    @Generated(value = "Eclipse")
+    /**
+     * Get the location where this specification item was defined.
+     * 
+     * @return the location of this item.
+     */
+    public Location getLocation()
+    {
+        return this.location;
+    }
+
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         final int prime = 31;
         int result = 1;
@@ -170,6 +177,7 @@ public class SpecificationItem
         result = prime * result + ((this.dependOnIds == null) ? 0 : this.dependOnIds.hashCode());
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
         result = prime * result
                 + ((this.needsArtifactTypes == null) ? 0 : this.needsArtifactTypes.hashCode());
         result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
@@ -177,9 +185,8 @@ public class SpecificationItem
         return result;
     }
 
-    @Generated(value = "Eclipse")
     @Override
-    public boolean equals(final Object obj)
+    public final boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -189,7 +196,7 @@ public class SpecificationItem
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof SpecificationItem))
         {
             return false;
         }
@@ -249,6 +256,17 @@ public class SpecificationItem
         {
             return false;
         }
+        if (this.location == null)
+        {
+            if (other.location != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.location.equals(other.location))
+        {
+            return false;
+        }
         if (this.needsArtifactTypes == null)
         {
             if (other.needsArtifactTypes != null)
@@ -298,6 +316,7 @@ public class SpecificationItem
         private final List<SpecificationItemId> coveredIds;
         private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
+        private Location location;
 
         /**
          * Create a new instance of type {@link SpecificationItem.Builder}
@@ -312,6 +331,7 @@ public class SpecificationItem
             this.coveredIds = new ArrayList<>();
             this.dependOnIds = new ArrayList<>();
             this.neededArtifactTypes = new ArrayList<>();
+            this.location = null;
         }
 
         /**
@@ -439,6 +459,35 @@ public class SpecificationItem
         }
 
         /**
+         * Set the location
+         *
+         * @param location
+         *            the location
+         * @return this builder instance
+         */
+        public Builder location(final Location location)
+        {
+            this.location = location;
+            return this;
+        }
+
+        /**
+         * Set the location
+         *
+         * @param path
+         *            the path of the location
+         * @param line
+         *            the line of the location
+         * @return this builder instance
+         */
+        public Builder location(final String path, final Integer line)
+        {
+            Objects.requireNonNull(path, "path");
+            Objects.requireNonNull(line, "line");
+            return this.location(Location.create(path, line));
+        }
+
+        /**
          * Build a new instance of type {@link SpecificationItem}
          *
          * @return the specification item
@@ -449,8 +498,7 @@ public class SpecificationItem
             {
                 throw new IllegalStateException("No id given");
             }
-            return new SpecificationItem(this.id, this.title, this.description, this.rationale,
-                    this.comment, this.coveredIds, this.dependOnIds, this.neededArtifactTypes);
+            return new SpecificationItem(this);
         }
     }
 }

@@ -32,7 +32,7 @@ public class Tracer
         final Trace.Builder builder = new Trace.Builder();
         builder.items(items);
         builder.uncleanItems(items.stream() //
-                .filter(item -> !item.isCoveredDeeply()) //
+                .filter(item -> item.getDeepCoverageStatus() != DeepCoverageStatus.COVERED) //
                 .collect(Collectors.toList()));
         return builder.build();
     }

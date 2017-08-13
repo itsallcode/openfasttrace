@@ -25,17 +25,18 @@ package openfasttrack.exporter.specobject;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.exporter.Exporter;
@@ -43,26 +44,29 @@ import openfasttrack.exporter.ExporterException;
 
 public class SpecobjectExporter implements Exporter
 {
-    private final static Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
 
     private final XMLStreamWriter writer;
-    private final Map<String, List<LinkedSpecificationItem>> items;
+    private final Map<String, List<SpecificationItem>> items;
+    private final Newline newline;
 
-    public SpecobjectExporter(final Collection<LinkedSpecificationItem> items,
-            final XMLStreamWriter xmlWriter)
+    public SpecobjectExporter(final Stream<SpecificationItem> itemStream,
+            final XMLStreamWriter xmlWriter, final Newline newline)
     {
-        this.items = groupByDoctype(items);
+        this.newline = newline;
+        this.items = groupByDoctype(itemStream);
         this.writer = xmlWriter;
     }
 
-    private Map<String, List<LinkedSpecificationItem>> groupByDoctype(
-            final Collection<LinkedSpecificationItem> items)
+    private Map<String, List<SpecificationItem>> groupByDoctype(
+            final Stream<SpecificationItem> itemStream)
     {
-        return items.stream().collect(
+        return itemStream.collect(
                 groupingBy(item -> item.getId().getArtifactType(), LinkedHashMap::new, toList()));
     }
 
     @Override
+    // [impl->dsn~conversion.reqm2-export~1]
     public void runExport()
     {
         try
@@ -97,10 +101,10 @@ public class SpecobjectExporter implements Exporter
         this.writer.writeStartDocument("UTF-8", "1.0");
         this.writer.writeStartElement("specdocument");
 
-        for (final Entry<String, List<LinkedSpecificationItem>> entry : this.items.entrySet())
+        for (final Entry<String, List<SpecificationItem>> entry : this.items.entrySet())
         {
             final String doctype = entry.getKey();
-            final List<LinkedSpecificationItem> specItems = entry.getValue();
+            final List<SpecificationItem> specItems = entry.getValue();
             writeItems(doctype, specItems);
         }
 
@@ -108,33 +112,47 @@ public class SpecobjectExporter implements Exporter
         this.writer.writeEndDocument();
     }
 
-    private void writeItems(final String doctype, final List<LinkedSpecificationItem> specItems)
+    private void writeItems(final String doctype, final List<SpecificationItem> specItems)
             throws XMLStreamException
     {
         LOG.finest(() -> "Writing " + specItems.size() + " items with doctype " + doctype);
         this.writer.writeStartElement("specobjects");
         this.writer.writeAttribute("doctype", doctype);
-        for (final LinkedSpecificationItem item : specItems)
+        for (final SpecificationItem item : specItems)
         {
-            writeItem(item.getItem());
+            writeItem(item);
         }
         this.writer.writeEndElement();
     }
 
     private void writeItem(final SpecificationItem item) throws XMLStreamException
     {
+        final String description = processMultilineText(item.getDescription());
+        final String rationale = processMultilineText(item.getRationale());
+        final String comment = processMultilineText(item.getComment());
         this.writer.writeStartElement("specobject");
         writeElement("id", item.getId().getName());
         writeElement("version", item.getId().getRevision());
-        writeElement("description", item.getDescription());
-        writeElement("rationale", item.getRationale());
-        writeElement("comment", item.getComment());
+        writeElement("description", description);
+        writeElement("rationale", rationale);
+        writeElement("comment", comment);
 
         writeNeedsArtifactTypes(item.getNeedsArtifactTypes());
         writeCoveredIds(item.getCoveredIds());
         writeDependsOnIds(item.getDependOnIds());
 
         this.writer.writeEndElement();
+    }
+
+    private String processMultilineText(final String text)
+    {
+        return unifyNewlines(text);
+    }
+
+    private String unifyNewlines(final String text)
+    {
+        final Matcher matcher = Newline.anyNewlinePattern().matcher(text);
+        return matcher.replaceAll(this.newline.toString());
     }
 
     private void writeDependsOnIds(final List<SpecificationItemId> dependOnIds)

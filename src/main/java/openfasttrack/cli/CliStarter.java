@@ -4,7 +4,7 @@ package openfasttrack.cli;
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,50 +22,56 @@ package openfasttrack.cli;
  * #L%
  */
 
-import static java.util.Arrays.asList;
-
-import java.util.List;
-
 import openfasttrack.cli.commands.ConvertCommand;
+import openfasttrack.cli.commands.Performable;
 import openfasttrack.cli.commands.TraceCommand;
 
 public class CliStarter
 {
-    private static List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
-            TraceCommand.COMMAND_NAME);
-
     private final CliArguments arguments;
-
-    public static void main(final String[] args)
-    {
-        final CliArguments cliArguments = new CliArguments();
-        new CommandLineInterpreter(args, cliArguments).parse();
-        new CliStarter(cliArguments).start();
-    }
 
     CliStarter(final CliArguments arguments)
     {
         this.arguments = arguments;
     }
 
-    void start()
+    public static void main(final String[] args)
     {
-        if (this.arguments.getCommand() == null)
+        final CliArguments arguments = new CliArguments();
+        new CommandLineInterpreter(args, arguments).parse();
+        final ArgumentValidator validator = new ArgumentValidator(arguments);
+        if (validator.isValid())
         {
-            throw new CliException("No command given, expected one of " + AVAILABLE_COMMANDS);
+            new CliStarter(arguments).run();
         }
+        else
+        {
+            System.err.println(
+                    "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
+            exit(ExitStatus.CLI_ERROR);
+        }
+    }
+
+    // [impl->dsn~cli.command-selection~1]
+    void run()
+    {
+        Performable performable = null;
         switch (this.arguments.getCommand())
         {
         case ConvertCommand.COMMAND_NAME:
-            new ConvertCommand(this.arguments).start();
+            performable = new ConvertCommand(this.arguments);
             break;
         case TraceCommand.COMMAND_NAME:
-            new TraceCommand(this.arguments).start();
+            performable = new TraceCommand(this.arguments);
             break;
-
-        default:
-            throw new CliException("Invalid command '" + this.arguments.getCommand()
-                    + "' given, expected one of " + AVAILABLE_COMMANDS);
         }
+        final ExitStatus status = ExitStatus.fromBoolean(performable.run());
+        exit(status);
+    }
+
+    // [impl->dsn~cli.tracing.exit-status~1]
+    private static void exit(final ExitStatus exitStatus)
+    {
+        System.exit(exitStatus.getCode());
     }
 }

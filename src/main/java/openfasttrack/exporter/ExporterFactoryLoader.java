@@ -82,4 +82,16 @@ public class ExporterFactoryLoader
                 .filter(f -> f.supportsFormat(format)) //
                 .collect(toList());
     }
+
+    /**
+     * Determines if the requested format is supported
+     * 
+     * @param format
+     *            the requested exporter format
+     * @return <code>true</code> if the format is supported
+     */
+    public boolean isFormatSupported(final String format)
+    {
+        return !getMatchingFactories(format).isEmpty();
+    }
 }

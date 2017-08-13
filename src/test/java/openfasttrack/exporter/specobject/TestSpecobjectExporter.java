@@ -23,8 +23,7 @@ package openfasttrack.exporter.specobject;
  */
 
 import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
+import static openfasttrack.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
@@ -37,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -48,7 +47,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.junit.Test;
 
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.Newline;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.SpecificationListBuilder;
@@ -61,6 +60,7 @@ import openfasttrack.testutil.xml.IndentingXMLStreamWriter;
  */
 public class TestSpecobjectExporter
 {
+    private static final String SPECOBJECT_RESOURCES = "src/test/resources/specobject/";
     private final static Logger LOG = Logger.getLogger(TestSpecobjectExporter.class.getName());
 
     @Test
@@ -81,8 +81,7 @@ public class TestSpecobjectExporter
                 .addCoveredId(SpecificationItemId.createId(null, "provid", 43)) //
                 .addDependOnId(SpecificationItemId.parseId("dependsOnDocType~dependsOnName~44"))
                 .build();
-        assertExportContent(Paths.get("src/test/resources/specobject/single-specobject.xml"),
-                new LinkedSpecificationItem(item));
+        assertExportContent(Paths.get("src/test/resources/specobject/single-specobject.xml"), item);
     }
 
     @Test
@@ -103,8 +102,12 @@ public class TestSpecobjectExporter
                 .rationale("Rationale2") //
                 .comment("Comment2") //
                 .build();
-        assertExportContent(Paths.get("src/test/resources/specobject/two-specobjects.xml"),
-                new LinkedSpecificationItem(item1), new LinkedSpecificationItem(item2));
+        assertExportContent(getSpecobjecResourcePath("two-specobjects.xml"), item1, item2);
+    }
+
+    private Path getSpecobjecResourcePath(final String resource)
+    {
+        return Paths.get(SPECOBJECT_RESOURCES + resource);
     }
 
     @Test
@@ -125,13 +128,31 @@ public class TestSpecobjectExporter
                 .rationale("Rationale2") //
                 .comment("Comment2") //
                 .build();
-        assertExportContent(
-                Paths.get("src/test/resources/specobject/two-specobjects-different-doctype.xml"),
-                new LinkedSpecificationItem(item1), new LinkedSpecificationItem(item2));
+        assertExportContent(getSpecobjecResourcePath("two-specobjects-different-doctype.xml"),
+                item1, item2);
+    }
+
+    @Test
+    public void testNewlineUnification()
+    {
+        final SpecificationItem item1 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("foo", "single-newlines", 1)) //
+                .description("This contains\na unix-style newline.") //
+                .rationale("This contains\ra MacOS 9 newline.") //
+                .comment("This contains\r\na DOS/Windows newline.") //
+                .build();
+        final SpecificationItem item2 = new SpecificationItem.Builder()
+                .id(SpecificationItemId.createId("bar", "mixed-newlines", 2)) //
+                .description("This contains\na unix-style and\ran old-mac-style newline.") //
+                .rationale("This contains\na unix-style and\r\na DOS/Windows newline.") //
+                .comment("This\r\ncontains\ra mixture\nof all three.") //
+                .build();
+        assertThat(export(item1, item2), matchesAllLines(
+                readFile(getSpecobjecResourcePath("two-specobjects-unified-newlines.xml"))));
     }
 
     private void assertExportContent(final Path expectedContentFile,
-            final LinkedSpecificationItem... items)
+            final SpecificationItem... items)
     {
         final String expectedContent = readFile(expectedContentFile);
         assertExportContent(expectedContent, items);
@@ -149,22 +170,21 @@ public class TestSpecobjectExporter
         }
     }
 
+    // [itest->dsn~conversion.reqm2-export~1]
     private void assertExportContent(final String expectedContent,
-            final LinkedSpecificationItem... expectedLinkedItems)
+            final SpecificationItem... expectedItems)
     {
-        final String actualContent = export(expectedLinkedItems);
+        final String actualContent = export(expectedItems);
         LOG.finest(() -> "Actual  : " + actualContent);
         LOG.finest(() -> "Expected: " + expectedContent);
         assertEquals(expectedContent, actualContent);
         assertThat(actualContent, equalTo(expectedContent));
         final List<SpecificationItem> actualParsedSpecobjects = parseSpecobjectXml(actualContent);
 
-        final Collection<SpecificationItem> expectedItems = stream(expectedLinkedItems)
-                .map(i -> i.getItem()).collect(toList());
-        assertThat(actualParsedSpecobjects, hasSize(expectedLinkedItems.length));
+        assertThat(actualParsedSpecobjects, hasSize(expectedItems.length));
 
         assertThat(actualParsedSpecobjects,
-                SpecificationItemMatcher.equalToAnyOrder(expectedItems));
+                SpecificationItemMatcher.equalToAnyOrder(Arrays.asList(expectedItems)));
     }
 
     private List<SpecificationItem> parseSpecobjectXml(final String specobjectXml)
@@ -176,15 +196,16 @@ public class TestSpecobjectExporter
         return builder.build();
     }
 
-    private String export(final LinkedSpecificationItem... items)
+    private String export(final SpecificationItem... items)
     {
         try
         {
             final ByteArrayOutputStream stream = new ByteArrayOutputStream();
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
-            new SpecobjectExporter(asList(items),
-                    new IndentingXMLStreamWriter(xmlWriter, "\t", "\n")).runExport();
+            new SpecobjectExporter(asList(items).stream(),
+                    new IndentingXMLStreamWriter(xmlWriter, "\t", Newline.UNIX.toString()),
+                    Newline.UNIX).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }
         catch (XMLStreamException | FactoryConfigurationError e)

@@ -41,7 +41,8 @@ import java.util.regex.Pattern;
  */
 public abstract class ImporterFactory
 {
-    private final static Logger LOG = Logger.getLogger(ImporterFactory.class.getName());
+    private static final Logger LOG = Logger.getLogger(ImporterFactory.class.getName());
+
     private final Set<Pattern> supportedFilenamePatterns;
 
     protected ImporterFactory(final String... supportedFilenamePatterns)

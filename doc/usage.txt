@@ -1,0 +1,25 @@
+OpenFastTrack
+
+Usage:
+  oft trace [option ...] [<input file or directory> ...]
+
+Commands
+  trace                        Create a trace document
+  convert                      Convert to a different requirements format
+
+Tracing options:
+  -o, --output-format          Report format, one of "plain"
+                               Defaults to "plain"
+
+Converting options:
+  -o, --output-format format   Requirements format, one of "specobject"
+                               Defaults to "specobject"
+
+Common options: 
+  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
+  -f, --file path              The output file. Defaults to STDOUT.
+
+Returns:
+  0   on success
+  1   on OFT error
+  2   on command line error

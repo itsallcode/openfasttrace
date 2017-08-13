@@ -250,38 +250,6 @@ Covers:
 
 Needs: impl, utest
 
-#### Plain Text Report Options
-`dsn~reporting.plain-text.report-options~1`
-
-The following parts of the plain text reports can be switched on and off:
-
-  * Summary
-  * Overview per defect specification item
-  * Overview per clean specification item
-  * Source file name and line
-  * Specification item description
-
-Covers:
-
-  * `req~reporting.plain-text.report-options~1`
-
-Needs: impl, utest
-
-#### Default Plain Text Report
-`dsn~reporting.plain-text.default-report-options~1`
-
-The following options are set by default in the plain text report unless options are specified by the user:
-
-  * Summary
-  * Overview per defect specification item
-  * Source file name and line
-
-Covers:
-
-  * `req~reporting.plain-text.default-report-options~1`
-
-Needs: impl, utest
-
 ## Requirement Format Conversion
 
 #### ReqM2 Export

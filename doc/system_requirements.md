@@ -340,38 +340,6 @@ Covers:
 
 Needs: dsn
 
-#### Plain Text Report Options
-`req~reporting.plain-text.report-options~1`
-
-The following parts of the plain text reports can be switched on and off:
-
-  * Summary
-  * Overview per defect specification item
-  * Overview per clean specification item
-  * Source file name and line
-  * Specification item description
-
-Covers:
-
-  * [feat~plain-text-report~1](#plain-text-report)
-
-Needs: dsn
-
-#### Default Plain Text Report
-`req~reporting.plain-text.default-report-options~1`
-
-The following options are set by default in the plain text report unless options are specified by the user:
-
-  * Summary
-  * Overview per defect specification item
-  * Source file name and line
-
-Covers:
-
-  * [feat~plain-text-report~1](#plain-text-report)
-
-Needs: dsn
-
 ## Requirement Format Conversion
 OFT supports conversion from one requirement format into another for example from Markdown to ReqM2.
 

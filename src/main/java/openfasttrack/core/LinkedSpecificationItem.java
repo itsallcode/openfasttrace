@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 /**
  * Specification items with links that can be followed.
  */
+// [impl->dsn~linked-specification-item~1]
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
@@ -82,7 +83,7 @@ public class LinkedSpecificationItem
     {
         return this.item.getLocation();
     }
-    
+
     /**
      * Get the specification item.
      *
@@ -205,11 +206,13 @@ public class LinkedSpecificationItem
      * 
      * @return covered, uncovered or ring.
      */
+    // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
         return getDeepCoverageStatusEndRecursionStartingAt(this.getId());
     }
 
+    // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
             final SpecificationItemId startId)
     {
@@ -245,6 +248,7 @@ public class LinkedSpecificationItem
      *
      * @return <code>true</code> if the item is defect.
      */
+    // [impl->dsn~tracing.defect-items~1]
     public boolean isDefect()
     {
         for (final LinkStatus status : this.links.keySet())

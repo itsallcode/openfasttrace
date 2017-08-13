@@ -278,6 +278,20 @@ Covers:
 
 Needs: dsn
 
+#### Link Cycle
+`req~tracing.link-cycle~1`
+
+OFT detects if specification items are linked in a cycle.
+
+Rationale:
+Link cycles are never intended and hard to find by hand in large collections of requirements.
+
+Covers:
+
+  * [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 ## Reports
 Reports are the main way to find out if a projects requirements are covered properly.
 
@@ -290,7 +304,7 @@ The plain text report is the most basic report variant. It serves two main purpo
 2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
 #### Plain Text Report Summary
-`req~reporting.plain-text-summary~1`
+`req~reporting.plain-text.summary~1`
 
 The summary in the plain text report includes:
 
@@ -319,38 +333,6 @@ An item summary consist in the plain text report includes
   7. ID
   8. Artifact types indicating coverage
   9. Source file name and line (optional)
-
-Covers:
-
-  * [feat~plain-text-report~1](#plain-text-report)
-
-Needs: dsn
-
-#### Plain Text Report Options
-`req~reporting.plain-text.report-options~1`
-
-The following parts of the plain text reports can be switched on and off:
-
-  * Summary
-  * Overview per defect specification item
-  * Overview per clean specification item
-  * Source file name and line
-  * Specification item description
-
-Covers:
-
-  * [feat~plain-text-report~1](#plain-text-report)
-
-Needs: dsn
-
-#### Default Plain Text Report
-`req~reporting.plain-text.default-report-options~1`
-
-The following options are set by default in the plain text report unless options are specified by the user:
-
-  * Summary
-  * Overview per defect specification item
-  * Source file name and line
 
 Covers:
 
@@ -499,19 +481,6 @@ Needs: dsn
 `req~cli.default-input~1`
 
 If users select neither files nor directories for input, OFT imports from the current working directory recursively.
-
-Covers:
-
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~markdown-import~1](#markdown-import)
-  * [feat~reqm2-import~1](#reqm2-import)
-
-Needs: dsn
-
-#### Input Deduplication
-`req~cli.input-deduplication~1`
-
-OFT imports each file only once, even if the user selections for import intersect.
 
 Covers:
 

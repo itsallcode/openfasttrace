@@ -122,9 +122,10 @@ public class MultiFileImporter
      *            the {@link FileSystem#getPathMatcher(String) glob expression}
      * @return <code>this</code> for fluent programming style.
      */
+    // [impl->dsn~input-directory-recursive-traversal~1]
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
-        LOG.info(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
+        LOG.fine(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
         final int itemCountBefore = this.specItemBuilder.getItemCount();
@@ -144,7 +145,7 @@ public class MultiFileImporter
             throw new ImporterException("Error walking directory " + dir, e);
         }
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
-        LOG.info(() -> "Imported " + fileCount + " files containing " + itemCountImported
+        LOG.fine(() -> "Imported " + fileCount + " files containing " + itemCountImported
                 + " items from '" + dir + "'.");
         return this;
     }

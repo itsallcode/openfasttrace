@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.importer.ImportEventListener;
@@ -130,7 +130,7 @@ public class TestImportMarkdown
                 + RATIONALE_LINE2 + "\n" //
                 + "\nCovers:\n\n" //
                 + "  * " + COVERED_ID1 + "\n" //
-                + "  + " + COVERED_ID2 + "\n" //
+                + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
                 + "  + " + DEPENDS_ON_ID1 + "\n" //
                 + "  - " + DEPENDS_ON_ID2 + "\n" //
@@ -149,6 +149,9 @@ public class TestImportMarkdown
         importer.runImport();
     }
 
+    // [utest->dsn~md.covers_list~1]
+    // [utest->dsn~md.depends_list~1]
+    // [utest->dsn~md.requirement-references~1]
     private void assertAllImporterEventsCalled()
     {
         final InOrder inOrder = inOrder(this.listenerMock);

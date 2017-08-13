@@ -36,6 +36,7 @@ import openfasttrack.core.SpecificationItemId.Builder;
 /**
  * [utest->dsn~md.specification-item-id-format~2]
  */
+// [utest->dsn~specification-item-id~1]
 public class TestSpecificationItemId
 {
     private static final int REVISION = 1;

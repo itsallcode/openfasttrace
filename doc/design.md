@@ -110,7 +110,10 @@ The Reporter consumes the link status list and the specification item list and g
 ### Tracing Needed Coverage
 `dsn~tracing.needed-coverage-status~1`
 
-The [tracer](#tracer) component iterates over all needed artifacts of all specification items and determines if and which coverage exists for each.
+The [linker](#linker) component iterates over all needed artifacts of all specification items and determines if and which coverage exists for each.
+
+Comment:
+Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component. 
 
 Covers:
 
@@ -129,8 +132,11 @@ The possible results are:
   2. Outdated:  link points to a specification item which has a higher revision number
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
-  5. Unwanted:  coverage provider has an artifact type the provider does not want
-  6. Orphaned:  link is broken - there is no matching coverage requester
+
+Comment:
+The following results are planned for future releases
+  * Unwanted:  coverage provider has an artifact type the provider does not want
+  * Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:
 
@@ -154,18 +160,18 @@ Covers:
 
   * `req~tracing.incoming-coverage-link-status~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 ### Deep Coverage
 `dsn~tracing.deep-coverage~1`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
+The [Linked Specification Item](#linked-specification-item) declares itself _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
 
 Covers:
 
   * `req~tracing.deep-coverage~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 ### Duplicate Items
 `dsn~tracing.tracing.duplicate-items~1`
@@ -176,7 +182,7 @@ Covers:
 
   * `req~tracing.duplicate-items~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 
 ### Defect Items
@@ -192,27 +198,37 @@ Covers:
 
   * `req~tracing.defect-items~1`
 
-Needs: dsn
+Needs: impl, utest
+
+#### Link Cycle
+`dsn~tracing.link-cycle~1`
+
+The [tracer](#tracer) detects cycles in links between [Linked Specification Items](#linked-specification-item).
+
+Covers:
+
+  * `req~tracing.link-cycle~1`
+
+Needs: impl, utest
 
 ## Tracing Reports
 
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text-summary~1`
+`dsn~reporting.plain-text.summary~1`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
   * Total number of specification items that are not covered (if any)
-  * Total number of duplicate specification items (if any)
 
 Covers:
 
-  * `req~reporting.plain-text-summary~1`
+  * `req~reporting.plain-text.summary~1`
 
-Needs: dsn
+Needs: impl, utest
 
 #### Plain Text Report Specification Item Overview
 `dsn~reporting.plain-text.specification-item-overview~1`
@@ -227,45 +243,12 @@ An item summary consist in the plain text report includes
   6. Number of duplicates (not including this item)
   7. ID
   8. Artifact types indicating coverage
-  9. Source file name and line (optional)
 
 Covers:
 
   * `req~reporting.plain-text.specification-item-overview~1`
 
-Needs: dsn
-
-#### Plain Text Report Options
-`dsn~reporting.plain-text.report-options~1`
-
-The following parts of the plain text reports can be switched on and off:
-
-  * Summary
-  * Overview per defect specification item
-  * Overview per clean specification item
-  * Source file name and line
-  * Specification item description
-
-Covers:
-
-  * `req~reporting.plain-text.report-options~1`
-
-Needs: dsn
-
-#### Default Plain Text Report
-`dsn~reporting.plain-text.default-report-options~1`
-
-The following options are set by default in the plain text report unless options are specified by the user:
-
-  * Summary
-  * Overview per defect specification item
-  * Source file name and line
-
-Covers:
-
-  * `req~reporting.plain-text.default-report-options~1`
-
-Needs: dsn
+Needs: impl, utest
 
 ## Requirement Format Conversion
 
@@ -281,7 +264,7 @@ Covers:
 
   * `req~conversion.reqm2-export~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 # Deployment View
 
@@ -310,7 +293,7 @@ Covers:
 
   * `req~specification-item~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Linked Specification Item
 `dsn~linked-specification-item~1`
@@ -324,7 +307,7 @@ Covers:
 
   * `req~specification-item~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Specification Item Id
 `dsn~specification-item-id~1`
@@ -339,7 +322,7 @@ Covers:
 
   * `req~specification-item~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 ### Markdown-style Structures
 
@@ -375,7 +358,7 @@ Covers:
 
   * `req~markdown-import~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Markdown Specification Item Title
 `dsn~md.specification-item-title~1`
@@ -390,14 +373,14 @@ Covers:
 
   * `req~markdown-import~1`
 
-Needs: impl, utest, uman 
+Needs: impl, utest 
 
 #### Markdown Requirement References
 `dsn~md.requirement-references~1`
 
 In Markdown specification item references have the following format:
 
-    reference = (plain-reference | url-style-link)
+    reference = (plain-reference / url-style-link)
     
     plain-reference = requirement-id
     
@@ -408,7 +391,7 @@ Covers:
   * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Markdown "Covers" list
 `dsn~md.covers_list~1`
@@ -432,7 +415,7 @@ Covers:
   * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Markdown "Depends" List
 `dsn~md.depends_list~1`
@@ -456,7 +439,7 @@ Covers:
   * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Markdown "Needs" List
 `dsn~md.needs_coverage_list~1`
@@ -484,7 +467,7 @@ Covers:
   * `req~cli.tracing.command~1`
   * `req~cli.conversion.command~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 ### Common
 
@@ -502,7 +485,7 @@ Covers:
 
   * `req~cli.input-selection~1`
   
-Needs: impl, utest, uman
+Needs: impl, itest
 
 #### Input Directory Recursive Traversal
 `dsn~input-directory-recursive-traversal~1`
@@ -513,7 +496,7 @@ Covers:
 
   * `req~cli.input-directory-selection~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 #### Default Input
 `dsn~cli.default-input~1`
@@ -524,18 +507,7 @@ Covers:
 
   * `req~cli.default-input~1`
 
-Needs: impl, utest, uman
-
-#### Input File Deduplication
-`dsn~cli.input-file-deduplication~1`
-
-The CLI generates a duplicate-free list of input files calculated form the inputs given via the command line.
-
-Covers:
-
-  * `req~cli.input-deduplication~1`
-
-Needs: impl, utest, uman
+Needs: impl, itest
 
 #### Newline Format
 `dsn~newline-format~1`
@@ -552,18 +524,18 @@ Covers:
 
   * `req~cli.newline-format~1`
 
-Needs: impl, utest, itest, uman
+Needs: impl, itest
 
 #### Default Newline Format
 `dsn~cli.default-newline-format~1`
 
-If the user does not specify the newline format as parameter, the importer uses the native newline format of the platform OFT is executed on.
+If the user does not specify the newline format as parameter, the exporter uses the native newline format of the platform OFT is executed on.
 
 Covers:
 
   * `req~cli.default-newline-format~1`
 
-Needs: impl, itest, uman
+Needs: impl, itest
 
 ### Requirement Tracing
 
@@ -578,7 +550,7 @@ Covers:
 
   * `req~cli.tracing.output-format~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 #### Default Tracing Output Format
 `dsn~cli.tracing.default-format~1`
@@ -589,7 +561,7 @@ Covers:
 
   * `req~cli.tracing.default-output-format~1`
 
-Needs: impl, utest, uman
+Needs: impl, utest
 
 #### Tracing Exit Status
 `dsn~cli.tracing.exit-status~1`
@@ -603,7 +575,7 @@ Covers:
 
   * `req~cli.tracing.exit-status~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 ### Requirement Format Conversion
 
@@ -618,7 +590,7 @@ Covers:
 
   * `req~cli.conversion.output-format~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 #### Default Conversion Output Format
 `dsn~cli.conversion.default-format~1`
@@ -629,7 +601,7 @@ Covers:
 
   * `req~cli.conversion.default-output-format~1`
 
-Needs: impl, utest, uman
+Needs: impl, itest
 
 # Design Decisions
 

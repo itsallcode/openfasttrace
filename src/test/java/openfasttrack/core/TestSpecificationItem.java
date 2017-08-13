@@ -85,6 +85,7 @@ public class TestSpecificationItem
     }
 
     @Test
+    // [utest->dsn~specification-item~1]
     public void testBuildComplexSpecificationItem()
     {
         final SpecificationItem.Builder builder = createSimpleItem();

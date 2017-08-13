@@ -52,6 +52,7 @@ public class CliStarter
         }
     }
 
+    // [impl->dsn~cli.command-selection~1]
     void run()
     {
         Performable performable = null;
@@ -68,6 +69,7 @@ public class CliStarter
         exit(status);
     }
 
+    // [impl->dsn~cli.tracing.exit-status~1]
     private static void exit(final ExitStatus exitStatus)
     {
         System.exit(exitStatus.getCode());

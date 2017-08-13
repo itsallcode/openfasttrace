@@ -1,5 +1,7 @@
 package openfasttrack.cli;
 
+import static java.util.Arrays.asList;
+
 /*
  * #%L
  * OpenFastTrack
@@ -24,9 +26,10 @@ package openfasttrack.cli;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
+import openfasttrack.cli.commands.ConvertCommand;
+import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.core.Newline;
 import openfasttrack.report.ReportVerbosity;
 
@@ -36,11 +39,14 @@ import openfasttrack.report.ReportVerbosity;
  */
 public class CliArguments
 {
+    public static final String DEFAULT_EXPORT_FORMAT = "specobject";
+    public static final String DEFAULT_REPORT_FORMAT = "plain";
     private static final String CURRENT_DIRECTORY = ".";
     private List<String> unnamedValues;
     private String outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
+    // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
 
     /**
@@ -98,18 +104,19 @@ public class CliArguments
      * 
      * @return input paths
      */
+    // [impl->dsn~cli.input-file-selection~1]
+    // [impl->dsn~cli.default-input~1]
     public List<String> getInputs()
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return Arrays.asList(CURRENT_DIRECTORY);
+            return asList(CURRENT_DIRECTORY);
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }
 
     /**
-     * Set all parameter values that are not led in by a command line parameter
-     * name
+     * Set all parameter values that are not led in by a command line parameter name
      * 
      * @param unnamedValues
      *            list of unnamed values
@@ -124,8 +131,22 @@ public class CliArguments
      * 
      * @return the output format
      */
+    // [impl->dsn~cli.tracing.default-format~1]
+    // [impl->dsn~cli.conversion.default-format~1]]
+    // [impl->dsn~cli.tracing.output-format~1]
     public String getOutputFormat()
     {
+        if (this.outputFormat == null)
+        {
+            if (this.getCommand() == TraceCommand.COMMAND_NAME)
+            {
+                return DEFAULT_REPORT_FORMAT;
+            }
+            else if (this.getCommand() == ConvertCommand.COMMAND_NAME)
+            {
+                return DEFAULT_EXPORT_FORMAT;
+            }
+        }
         return this.outputFormat;
     }
 
@@ -135,6 +156,7 @@ public class CliArguments
      * @param outputFormat
      *            the output format
      */
+    // [impl->dsn~cli.conversion.output-format~1]
     public void setOutputFormat(final String outputFormat)
     {
         this.outputFormat = outputFormat;

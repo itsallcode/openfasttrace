@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~linked-specification-item~1]
 public class TestLinkedSpecificationItem
 {
     private LinkedSpecificationItem linkedItem;
@@ -125,6 +126,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isCoveredShallow(), equalTo(false));
     }
 
+    // [utest->dsn~tracing.deep-coverage~1]
     @Test
     public void testGetDeepCoverageStatus_Covered()
     {
@@ -142,6 +144,7 @@ public class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
     }
 
+    // [utest->dsn~tracing.deep-coverage~1]
     @Test
     public void testGetDeepCoverageStatus_MissingCoverage()
     {
@@ -153,7 +156,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.UNCOVERED));
     }
 
-    // [utest~defect_items~1]
+    // [utest->dsn~tracing.defect_items~1]
     @Test
     public void testIsDefect_False()
     {
@@ -168,7 +171,7 @@ public class TestLinkedSpecificationItem
         this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
     }
 
-    // [utest~defect_items~1]
+    // [utest->dsn~tracing.defect-items~1]
     @Test
     public void testIsDefect_TrueBecauseOfDuplicates()
     {
@@ -176,7 +179,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isDefect(), equalTo(true));
     }
 
-    // [utest~defect_items~1]
+    // [utest->dsn~tracing.defect-items~1]
     @Test
     public void testIsDefect_TrueBecauseOfBadLink()
     {
@@ -233,7 +236,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.countDuplicateLinks(), equalTo(2));
     }
 
-    // [utest->dsn~tracing.link-ring~1]
+    // [utest->dsn~tracing.link-cycle~1]
     @Test
     public void testGetDeepCoverageStatus_CylceIfSelfLink()
     {
@@ -241,7 +244,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
 
-    // [utest->dsn~tracing.link-ring~1]
+    // [utest->dsn~tracing.link-cycle~1]
     @Test
     public void testGetDeepCoverageStatus_DeepCylce()
     {

@@ -55,8 +55,8 @@ public class TestTracer
     @Test
     public void testAllCovered_Ok()
     {
-        when(this.aMock.isCoveredDeeply()).thenReturn(true);
-        when(this.bMock.isCoveredDeeply()).thenReturn(true);
+        when(this.aMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
+        when(this.bMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
         final Trace trace = traceItems(this.aMock, this.bMock);
         assertThat(trace.isAllCovered(), equalTo(true));
         assertThat(trace.getUncoveredItems(), empty());
@@ -75,8 +75,8 @@ public class TestTracer
     @Test
     public void testAllCovered_NotOk()
     {
-        when(this.aMock.isCoveredDeeply()).thenReturn(true);
-        when(this.bMock.isCoveredDeeply()).thenReturn(false);
+        when(this.aMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
+        when(this.bMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.UNCOVERED);
         final Trace trace = traceItems(this.aMock, this.bMock);
         assertThat(trace.isAllCovered(), equalTo(false));
         assertThat(trace.getUncoveredItems(), containsInAnyOrder(this.bMock));

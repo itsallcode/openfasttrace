@@ -25,6 +25,7 @@ package openfasttrack.importer;
 import java.util.LinkedList;
 import java.util.List;
 
+import openfasttrack.core.Location;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItemId;
 
@@ -40,6 +41,7 @@ public class SpecificationListBuilder implements ImportEventListener
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
+    private Location location;
 
     @Override
     public void beginSpecificationItem()
@@ -53,6 +55,7 @@ public class SpecificationListBuilder implements ImportEventListener
         this.description = new StringBuilder();
         this.rationale = new StringBuilder();
         this.comment = new StringBuilder();
+        this.location = null;
     }
 
     @Override
@@ -120,6 +123,12 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    public void setLocation(final String path, final int line)
+    {
+        this.location = Location.create(path, line);
+    }
+
+    @Override
     public void endSpecificationItem()
     {
         if (this.itemBuilder != null)
@@ -133,7 +142,8 @@ public class SpecificationListBuilder implements ImportEventListener
         this.itemBuilder //
                 .description(this.description.toString()) //
                 .rationale(this.rationale.toString()) //
-                .comment(this.comment.toString());
+                .comment(this.comment.toString()) //
+                .location(this.location);
         final SpecificationItem item = this.itemBuilder.build();
         this.items.add(item);
         resetState();

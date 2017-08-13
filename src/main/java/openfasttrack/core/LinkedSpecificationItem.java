@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 /**
  * Specification items with links that can be followed.
  */
+// [impl->dsn~linked-specification-item~1]
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
@@ -71,6 +72,16 @@ public class LinkedSpecificationItem
     public String getDescription()
     {
         return this.item.getDescription();
+    }
+
+    /**
+     * Get the source location of the item.
+     * 
+     * @return the location
+     */
+    public Location getLocation()
+    {
+        return this.item.getLocation();
     }
 
     /**
@@ -192,17 +203,37 @@ public class LinkedSpecificationItem
 
     /**
      * Check if this item and all items providing coverage for it are covered.
-     *
-     * @return true if the item is covered recursively.
+     * 
+     * @return covered, uncovered or ring.
      */
-    public boolean isCoveredDeeply()
+    // [impl->dsn~tracing.deep-coverage~1]
+    public DeepCoverageStatus getDeepCoverageStatus()
     {
-        boolean covered = isCoveredShallow();
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId());
+    }
+
+    // [impl->dsn~tracing.link-cycle~1]
+    private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
+            final SpecificationItemId startId)
+    {
+        final boolean covered = isCoveredShallow();
         for (final LinkedSpecificationItem coveringItem : getLinksByStatus(LinkStatus.COVERS))
         {
-            covered = covered && coveringItem.isCoveredDeeply();
+            if (coveringItem.getId().equals(startId))
+            {
+                return DeepCoverageStatus.CYCLE;
+            }
+            else
+            {
+                final DeepCoverageStatus otherStatus = coveringItem
+                        .getDeepCoverageStatusEndRecursionStartingAt(startId);
+                if (otherStatus != DeepCoverageStatus.COVERED)
+                {
+                    return otherStatus;
+                }
+            }
         }
-        return covered;
+        return covered ? DeepCoverageStatus.COVERED : DeepCoverageStatus.UNCOVERED;
     }
 
     /**
@@ -217,6 +248,7 @@ public class LinkedSpecificationItem
      *
      * @return <code>true</code> if the item is defect.
      */
+    // [impl->dsn~tracing.defect-items~1]
     public boolean isDefect()
     {
         for (final LinkStatus status : this.links.keySet())
@@ -226,7 +258,7 @@ public class LinkedSpecificationItem
                 return true;
             }
         }
-        return !isCoveredDeeply();
+        return getDeepCoverageStatus() != DeepCoverageStatus.COVERED;
     }
 
     /**

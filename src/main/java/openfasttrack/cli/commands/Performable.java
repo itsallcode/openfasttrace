@@ -1,10 +1,10 @@
-package openfasttrack.core;
+package openfasttrack.cli.commands;
 
 /*
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,15 @@ package openfasttrack.core;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Tracer
+/**
+ * Interface for OpenFastTrack commands.
+ */
+public interface Performable
 {
-    public Trace trace(final List<LinkedSpecificationItem> items)
-    {
-        final Trace.Builder builder = new Trace.Builder();
-        builder.items(items);
-        builder.uncleanItems(items.stream() //
-                .filter(item -> item.getDeepCoverageStatus() != DeepCoverageStatus.COVERED) //
-                .collect(Collectors.toList()));
-        return builder.build();
-    }
+    /**
+     * Run an OpenFastTrack command
+     * 
+     * @return <code>true</code> if the operation performed was successful.
+     */
+    public boolean run();
 }

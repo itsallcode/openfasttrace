@@ -47,10 +47,12 @@ class SingleSpecobjectImportHelper
     private final XMLEventReader xmlEventReader;
     private final ImportEventListener listener;
     private final Builder idBuilder;
+    private final String fileName;
 
-    public SingleSpecobjectImportHelper(final XMLEventReader xmlEventReader,
+    public SingleSpecobjectImportHelper(final XMLEventReader xmlEventReader, final String fileName,
             final ImportEventListener listener, final String defaultDoctype)
     {
+        this.fileName = fileName;
         this.idBuilder = new SpecificationItemId.Builder() //
                 .artifactType(defaultDoctype);
         this.xmlEventReader = xmlEventReader;
@@ -97,6 +99,7 @@ class SingleSpecobjectImportHelper
             final String id = readCharacterData(element);
             LOG.finest(() -> "Found spec object id " + id);
             this.idBuilder.name(id);
+            this.listener.setLocation(this.fileName, element.getLocation().getLineNumber());
             break;
         case "version":
             final int version = readIntCharacterData(element);

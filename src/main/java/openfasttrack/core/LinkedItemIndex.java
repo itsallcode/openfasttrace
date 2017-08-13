@@ -1,5 +1,7 @@
 package openfasttrack.core;
 
+import java.util.Collections;
+
 /*
  * #%L
  * OpenFastTrack
@@ -73,6 +75,7 @@ public class LinkedItemIndex
                         LinkedItemIndex::handleDuplicates));
     }
 
+    // [impl->dsn~tracing.tracing.duplicate-items~1]
     private static LinkedSpecificationItem handleDuplicates(final LinkedSpecificationItem item1,
             final LinkedSpecificationItem item2)
     {
@@ -98,7 +101,9 @@ public class LinkedItemIndex
 
     public List<LinkedSpecificationItem> getByIdIgnoringVersion(final SpecificationItemId id)
     {
-        return this.idIndexIgnoringVersion.get(new SpecificationItemIdWithoutVersion(id));
+        final List<LinkedSpecificationItem> items = this.idIndexIgnoringVersion
+                .get(new SpecificationItemIdWithoutVersion(id));
+        return items == null ? Collections.emptyList() : items;
     }
 
     private static class SpecificationItemIdWithoutVersion

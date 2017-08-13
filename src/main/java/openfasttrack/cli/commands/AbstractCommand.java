@@ -29,14 +29,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.LinkedSpecificationItem;
+import openfasttrack.core.SpecificationItem;
 import openfasttrack.importer.ImporterService;
 
 /**
  * This class is the abstract base class for all commands that process a list of
  * input files and directories.
  */
-public abstract class AbstractCommand
+public abstract class AbstractCommand implements Performable
 {
 
     protected final CliArguments arguments;
@@ -58,21 +58,22 @@ public abstract class AbstractCommand
 
     /**
      * Run the importer on the list of inputs and process the results.
+     * 
+     * @return <code>true</code> if the command succeeded.
      */
-    public void start()
+    @Override
+    public boolean run()
     {
-        final Stream<LinkedSpecificationItem> linkedSpecItems = importItemsFromPaths(
-                getNormalizedPaths());
-        processSpecificationItemStream(linkedSpecItems);
+        final Stream<SpecificationItem> items = importItemsFromPaths(getNormalizedPaths());
+        return processSpecificationItemStream(items);
     }
 
-    private Stream<LinkedSpecificationItem> importItemsFromPaths(final List<Path> paths)
+    private Stream<SpecificationItem> importItemsFromPaths(final List<Path> paths)
     {
         return this.importerService.createImporter() //
                 .importAny(paths) //
                 .getImportedItems() //
-                .stream() //
-                .map(LinkedSpecificationItem::new);
+                .stream();
     }
 
     private List<Path> getNormalizedPaths()
@@ -83,12 +84,12 @@ public abstract class AbstractCommand
     }
 
     /**
-     * The actual processing of the imported {@link LinkedSpecificationItem}
-     * list.
+     * The actual processing of the imported {@link SpecificationItem} list.
      * 
-     * @param linkedSpecItems
+     * @param items
      *            specification items to be processed
+     * 
+     * @return <code>true</code> if processing result is positive.
      */
-    abstract protected void processSpecificationItemStream(
-            Stream<LinkedSpecificationItem> linkedSpecItems);
+    abstract protected boolean processSpecificationItemStream(Stream<SpecificationItem> items);
 }

@@ -4,7 +4,7 @@ package openfasttrack.core;
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,15 @@ package openfasttrack.core;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
+import org.junit.Test;
 
-public class Tracer
+import nl.jqno.equalsverifier.EqualsVerifier;
+
+public class TestLocation
 {
-    public Trace trace(final List<LinkedSpecificationItem> items)
+    @Test
+    public void equalsContract()
     {
-        final Trace.Builder builder = new Trace.Builder();
-        builder.items(items);
-        builder.uncleanItems(items.stream() //
-                .filter(item -> item.getDeepCoverageStatus() != DeepCoverageStatus.COVERED) //
-                .collect(Collectors.toList()));
-        return builder.build();
+        EqualsVerifier.forClass(Location.class).verify();
     }
 }

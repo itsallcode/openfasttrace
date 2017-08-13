@@ -91,6 +91,9 @@ public class TestLinker
         assertThat(this.linkedItems, hasSize(this.items.size()));
     }
 
+    // [utest->dsn~tracing.needed-coverage-status~1]
+    // [utest->dsn~tracing.outgoing-coverage-link-status~1]
+    // [utest->dsn~tracing.incoming-coverage-link-status~1]]
     @Test
     public void testLinkStatus()
     {

@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.cli;
 
 /*
  * #%L
@@ -22,18 +22,24 @@ package openfasttrack.core;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Tracer
+public enum ExitStatus
 {
-    public Trace trace(final List<LinkedSpecificationItem> items)
+    OK(0), FAILURE(1), CLI_ERROR(2);
+
+    private int code;
+
+    ExitStatus(final int code)
     {
-        final Trace.Builder builder = new Trace.Builder();
-        builder.items(items);
-        builder.uncleanItems(items.stream() //
-                .filter(item -> item.getDeepCoverageStatus() != DeepCoverageStatus.COVERED) //
-                .collect(Collectors.toList()));
-        return builder.build();
+        this.code = code;
+    }
+
+    int getCode()
+    {
+        return this.code;
+    }
+
+    public static ExitStatus fromBoolean(final boolean status)
+    {
+        return status ? OK : FAILURE;
     }
 }

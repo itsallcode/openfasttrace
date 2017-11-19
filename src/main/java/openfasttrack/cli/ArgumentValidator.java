@@ -88,7 +88,7 @@ public class ArgumentValidator
     {
         boolean valid = false;
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
-                && this.arguments.getOutputFile() != null)
+                && this.arguments.getOutputPath() != null)
         {
             this.error = "combining report verbosity 'quiet' and ouput to file is not supported.";
             this.suggestion = "remove output file parameter.";

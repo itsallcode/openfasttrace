@@ -53,8 +53,8 @@ public class ImporterFactoryLoader
 
     /**
      * Finds a matching {@link ImporterFactory} that can handle the given
-     * {@link Path}. If no or more than one {@link ImporterFactory} is found,
-     * this throws an {@link ImporterException}.
+     * {@link Path}. If no or more than one {@link ImporterFactory} is found, this
+     * throws an {@link ImporterException}.
      *
      * @param file
      *            the file for which to get a {@link ImporterFactory}.

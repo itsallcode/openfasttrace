@@ -37,7 +37,7 @@ import openfasttrack.exporter.ExporterFactory;
 
 public class SpecobjectExporterFactory extends ExporterFactory
 {
-    private static final String SUPPORTED_FORMAT = "specobject";
+    public static final String SUPPORTED_FORMAT = "specobject";
     private final XMLOutputFactory xmlOutputFactory;
 
     public SpecobjectExporterFactory()

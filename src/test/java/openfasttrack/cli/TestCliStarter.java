@@ -43,6 +43,7 @@ import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 
+// FIXME: reduce to unit test. Move integration tests to API level.
 public class TestCliStarter
 {
     private static final String NEWLINE = "\n";
@@ -331,7 +332,8 @@ public class TestCliStarter
 
     private void assertStdOutEmpty()
     {
-        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.size(), equalTo(0));
+        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.toString(),
+                equalTo(""));
     }
 
     private void assertOutputFileContentStartsWith(final String content)

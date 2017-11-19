@@ -46,23 +46,23 @@ public class ExporterService
     }
 
     /**
-     * Export the given {@link LinkedSpecificationItem} in the given output
-     * format to a file
+     * Export the given {@link LinkedSpecificationItem} in the given output format
+     * to a file
      *
      * @param itemStream
      *            the {@link SpecificationItem} to export
-     * @param outputFormat
+     * @param format
      *            the output format
      * @param outputFile
      *            the output file
      * @param newline
      *            the newline format
      */
-    public void exportFile(final Stream<SpecificationItem> itemStream, final String outputFormat,
+    public void exportFile(final Stream<SpecificationItem> itemStream, final String format,
             final Path outputFile, final Newline newline)
     {
-        final ExporterFactory factory = this.factoryLoader.getExporterFactory(outputFormat);
-        factory.createExporter(outputFile, outputFormat, StandardCharsets.UTF_8, newline,
-                itemStream).runExport();
+        final ExporterFactory factory = this.factoryLoader.getExporterFactory(format);
+        factory.createExporter(outputFile, format, StandardCharsets.UTF_8, newline, itemStream)
+                .runExport();
     }
 }

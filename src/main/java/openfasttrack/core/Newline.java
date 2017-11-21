@@ -1,8 +1,6 @@
 package openfasttrack.core;
 
-import java.util.regex.Pattern;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -23,6 +21,9 @@ import java.util.regex.Pattern;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import java.util.regex.Pattern;
+
 
 public enum Newline
 {

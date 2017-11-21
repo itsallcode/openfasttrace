@@ -1,12 +1,10 @@
 package openfasttrack.cli;
 
-import static java.util.Arrays.asList;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,6 +21,9 @@ import static java.util.Arrays.asList;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import static java.util.Arrays.asList;
+
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

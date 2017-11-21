@@ -1,6 +1,6 @@
 package openfasttrack.cli;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.cli;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import static java.util.Arrays.asList;
 

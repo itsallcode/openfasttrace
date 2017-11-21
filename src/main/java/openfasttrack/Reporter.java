@@ -1,3 +1,6 @@
+
+package openfasttrack;
+
 /*-
  * #%L
  * OpenFastTrack
@@ -19,7 +22,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package openfasttrack;
 
 import java.nio.file.Path;
 import java.util.List;

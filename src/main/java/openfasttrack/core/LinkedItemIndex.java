@@ -1,12 +1,10 @@
 package openfasttrack.core;
 
-import java.util.Collections;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,6 +21,9 @@ import java.util.Collections;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import java.util.Collections;
+
 
 import java.util.List;
 import java.util.Map;

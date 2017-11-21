@@ -41,7 +41,7 @@ public interface Converter
      *            input files
      * @return a <code>Converter</code> instance for fluent programming
      */
-    public Converter addInputs(final Path... inputs);
+    Converter addInputs(final Path... inputs);
 
     /**
      * Select one or more input files
@@ -50,7 +50,7 @@ public interface Converter
      *            input files
      * @return a <code>Converter</code> instance for fluent programming
      */
-    public Converter addInputs(final List<Path> inputs);
+    Converter addInputs(final List<Path> inputs);
 
     /**
      * Set the representation for new line
@@ -59,7 +59,7 @@ public interface Converter
      *            type of newline
      * @return a <code>Converter</code> instance for fluent programming
      */
-    public Converter setNewline(Newline newline);
+    Converter setNewline(Newline newline);
 
     /**
      * Convert the collected requirements into target requirement format
@@ -71,5 +71,5 @@ public interface Converter
      *            target format (this is a name defined in the respective exporter
      *            plug-in)
      */
-    public void convertToFileInFormat(final Path output, final String format);
+    void convertToFileInFormat(final Path output, final String format);
 }

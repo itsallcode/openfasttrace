@@ -1,5 +1,7 @@
 package openfasttrack.core.xml;
 
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 
 import org.xml.sax.Attributes;
@@ -10,14 +12,22 @@ public class StartElementEvent
 {
     private final QName qName;
     private final Location location;
-    private final Attributes attributes;
+    private final Map<String, Attribute> attributeMap;
 
-    public StartElementEvent(final String uri, final String localName, final String qName,
-            final Attributes attributes, final Location location)
+    private StartElementEvent(final QName qName, final Map<String, Attribute> attributeMap,
+            final Location location)
     {
-        this.attributes = attributes;
+        this.attributeMap = attributeMap;
         this.location = location;
-        this.qName = new QName(uri, localName, "");
+        this.qName = qName;
+    }
+
+    public static StartElementEvent create(final String uri, final String localName,
+            final String qName, final Attributes attributes, final Location location)
+    {
+        final Map<String, Attribute> attributeMap = Attribute.buildMap(attributes);
+        final QName qualifiedName = new QName(uri, localName, "");
+        return new StartElementEvent(qualifiedName, attributeMap, location);
     }
 
     public QName getName()
@@ -32,18 +42,13 @@ public class StartElementEvent
 
     public Attribute getAttributeValueByName(final String name)
     {
-        final String value = this.attributes.getValue(name);
-        if (value != null)
-        {
-            return new Attribute(name, value);
-        }
-        return null;
+        return this.attributeMap.get(name);
     }
 
     @Override
     public String toString()
     {
-        return "StartElementEvent [qName=" + this.qName + ", attributes=" + this.attributes
+        return "StartElementEvent [qName=" + this.qName + ", attributeMap=" + this.attributeMap
                 + ", location=" + this.location + "]";
     }
 }

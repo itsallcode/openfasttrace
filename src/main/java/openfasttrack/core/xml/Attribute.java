@@ -10,7 +10,7 @@ public class Attribute
     private final String qName;
     private final String value;
 
-    public Attribute(final String qName, final String value)
+    private Attribute(final String qName, final String value)
     {
         this.qName = qName;
         this.value = value;
@@ -26,7 +26,7 @@ public class Attribute
         return this.value;
     }
 
-    public Map<String, Attribute> convertAttributes(final Attributes attr)
+    public static Map<String, Attribute> buildMap(final Attributes attr)
     {
         final Map<String, Attribute> attributes = new HashMap<>();
         for (int i = 0; i < attr.getLength(); i++)
@@ -37,4 +37,9 @@ public class Attribute
         return attributes;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Attribute [qName=" + this.qName + ", value=" + this.value + "]";
+    }
 }

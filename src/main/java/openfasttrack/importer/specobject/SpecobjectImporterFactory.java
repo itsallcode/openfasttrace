@@ -26,6 +26,7 @@ import java.io.Reader;
 
 import javax.xml.parsers.SAXParserFactory;
 
+import openfasttrack.core.xml.SaxParserConfigurator;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
@@ -40,8 +41,7 @@ public class SpecobjectImporterFactory extends ImporterFactory
     public SpecobjectImporterFactory()
     {
         super("(?i).*\\.xml");
-        this.saxParserFactory = SAXParserFactory.newInstance();
-        this.saxParserFactory.setNamespaceAware(true);
+        this.saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
     }
 
     @Override

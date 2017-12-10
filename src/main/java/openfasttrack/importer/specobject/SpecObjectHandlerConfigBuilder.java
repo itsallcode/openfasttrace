@@ -1,5 +1,7 @@
 package openfasttrack.importer.specobject;
 
+import java.util.logging.Logger;
+
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.core.xml.Attribute;
@@ -10,28 +12,43 @@ import openfasttrack.importer.ImporterException;
 
 public class SpecObjectHandlerConfigBuilder
 {
+    private static final Logger LOG = Logger
+            .getLogger(SpecObjectHandlerConfigBuilder.class.getName());
+
     private static final String DOCTYPE_ATTRIBUTE_NAME = "doctype";
     private final CallbackBasedContentHandler handler;
-    private boolean validRootElementFound = false;
     private String defaultDoctype;
     private final String fileName;
     private final ImportEventListener listener;
 
-    private boolean needsCoverageSection;
-    private boolean providesCoverageSection;
-    private Builder providesCoverageId;
-    private boolean dependenciesSection;
-    private Builder idBuilder;
+    private boolean validRootElementFound = false;
+
+    private boolean needsCoverageSection = false;
+    private boolean providesCoverageSection = false;
+    private boolean dependenciesSection = false;
+    private Builder providesCoverageIdBuilder = null;
+    private Builder idBuilder = null;
 
     public SpecObjectHandlerConfigBuilder(final String fileName, final ImportEventListener listener)
     {
         this.fileName = fileName;
         this.listener = listener;
+
         this.handler = new CallbackBasedContentHandler();
     }
 
     public EventContentHandler build()
     {
+        this.handler.setDefaultStartElementHandler(startElement -> {
+            if (this.validRootElementFound)
+            {
+                LOG.warning("Found unknown element " + startElement);
+                return;
+            }
+            LOG.info("Found unknown root element " + startElement + ": skip file");
+            this.handler.stopParsing();
+        });
+
         this.handler.addStartElementListener("specdocument",
                 elem -> this.validRootElementFound = true);
         this.handler.addStartElementListener("specobjects", elem -> {
@@ -90,27 +107,27 @@ public class SpecObjectHandlerConfigBuilder
         this.handler.addStartElementListener("provcov", elem -> {
             if (this.providesCoverageSection)
             {
-                this.providesCoverageId = new Builder();
+                this.providesCoverageIdBuilder = new Builder();
             }
         });
         this.handler.addEndElementListener("provcov", elem -> {
             if (this.providesCoverageSection)
             {
-                this.listener.addCoveredId(this.providesCoverageId.build());
-                this.providesCoverageId = null;
+                this.listener.addCoveredId(this.providesCoverageIdBuilder.build());
+                this.providesCoverageIdBuilder = null;
             }
         });
 
         this.handler.addCharacterDataListener("linksto", (data) -> {
-            if (this.providesCoverageId != null)
+            if (this.providesCoverageIdBuilder != null)
             {
-                this.providesCoverageId.name(data);
+                this.providesCoverageIdBuilder.name(data);
             }
         });
         this.handler.addCharacterDataListener("dstversion", (data) -> {
-            if (this.providesCoverageId != null)
+            if (this.providesCoverageIdBuilder != null)
             {
-                this.providesCoverageId.revision(Integer.parseInt(data));
+                this.providesCoverageIdBuilder.revision(Integer.parseInt(data));
             }
         });
 

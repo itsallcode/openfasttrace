@@ -41,12 +41,6 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
     }
 
     @Override
-    public void delegateToSubHandler(final EventContentHandler subDelegate)
-    {
-        new ContentHandlerAdapter(this.fileName, this.xmlReader, subDelegate).registerListener();
-    }
-
-    @Override
     public void setDocumentLocator(final Locator locator)
     {
         this.locator = locator;
@@ -58,7 +52,7 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
     {
         LOG.finest(() -> "Start element: uri=" + uri + ", localName=" + localName + ", qName="
                 + qName);
-        final StartElementEvent event = new StartElementEvent(uri, localName, qName, attributes,
+        final StartElementEvent event = StartElementEvent.create(uri, localName, qName, attributes,
                 getCurrentLocation());
         this.delegate.startElement(event);
     }
@@ -69,7 +63,7 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
     {
         LOG.finest(
                 () -> "End element: uri=" + uri + ", localName=" + localName + ", qName=" + qName);
-        final EndElementEvent event = new EndElementEvent(uri, localName, qName,
+        final EndElementEvent event = EndElementEvent.create(uri, localName, qName,
                 getCurrentLocation());
         this.delegate.endElement(event);
     }
@@ -89,10 +83,6 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
     @Override
     public void parsingFinished()
     {
-        if (this.originalContentHandler == null)
-        {
-            throw new IllegalStateException("No original handler");
-        }
         this.xmlReader.setContentHandler(this.originalContentHandler);
     }
 }

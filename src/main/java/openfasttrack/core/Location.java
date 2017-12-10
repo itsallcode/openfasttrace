@@ -24,7 +24,7 @@ package openfasttrack.core;
 
 import javax.annotation.Generated;
 
-public class Location
+public final class Location
 {
     private final String path;
     private final int line;

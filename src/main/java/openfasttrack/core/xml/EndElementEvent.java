@@ -9,11 +9,17 @@ public class EndElementEvent
     private final QName qName;
     private final Location location;
 
-    public EndElementEvent(final String uri, final String localName, final String qName,
-            final Location location)
+    private EndElementEvent(final QName qName, final Location location)
     {
         this.location = location;
-        this.qName = new QName(uri, localName, "");
+        this.qName = qName;
+    }
+
+    public static EndElementEvent create(final String uri, final String localName,
+            final String qName, final Location location)
+    {
+        final QName qualifiedName = new QName(uri, localName, "");
+        return new EndElementEvent(qualifiedName, location);
     }
 
     public QName getName()

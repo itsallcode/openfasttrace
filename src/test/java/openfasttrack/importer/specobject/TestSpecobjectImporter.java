@@ -42,6 +42,7 @@ import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItem.Builder;
 import openfasttrack.core.SpecificationItemId;
+import openfasttrack.core.xml.SaxParserConfigurator;
 import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
 
@@ -135,8 +136,7 @@ public class TestSpecobjectImporter
                 "    <specobjects>\n" + //
                 "    </specobjects>\n" + //
                 "</specdocument>";
-        final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        parserFactory.setNamespaceAware(true);
+        final SAXParserFactory parserFactory = SaxParserConfigurator.createSaxParserFactory();
         new SpecobjectImporter("testfilename", new StringReader(content), parserFactory, null)
                 .runImport();
     }

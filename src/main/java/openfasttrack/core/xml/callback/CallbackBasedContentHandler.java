@@ -9,6 +9,7 @@ import openfasttrack.core.xml.ContentHandlerAdapterController;
 import openfasttrack.core.xml.EndElementEvent;
 import openfasttrack.core.xml.EventContentHandler;
 import openfasttrack.core.xml.StartElementEvent;
+import openfasttrack.importer.ImporterException;
 
 public class CallbackBasedContentHandler implements EventContentHandler
 {
@@ -17,22 +18,20 @@ public class CallbackBasedContentHandler implements EventContentHandler
     private ContentHandlerAdapterController contentHandlerAdapter;
 
     private final Map<String, Consumer<StartElementEvent>> startElementListeners = new HashMap<>();
-    private final Consumer<StartElementEvent> defaultStartElementHandler;
+    private Consumer<StartElementEvent> defaultStartElementHandler;
     private final Map<String, Consumer<EndElementEvent>> endElementListeners = new HashMap<>();
-    private final Consumer<EndElementEvent> defaultEndElementHandler;
+    private Consumer<EndElementEvent> defaultEndElementHandler;
     private StringBuilder characterData;
 
-    public CallbackBasedContentHandler()
-    {
-        this(startElement -> LOG.warning("Unexpected start element " + startElement),
-                endElement -> LOG.warning("Unexpected end element " + endElement));
-    }
-
-    private CallbackBasedContentHandler(
-            final Consumer<StartElementEvent> defaultStartElementHandler,
-            final Consumer<EndElementEvent> defaultEndElementHandler)
+    public void setDefaultStartElementHandler(
+            final Consumer<StartElementEvent> defaultStartElementHandler)
     {
         this.defaultStartElementHandler = defaultStartElementHandler;
+    }
+
+    public void setDefaultEndElementHandler(
+            final Consumer<EndElementEvent> defaultEndElementHandler)
+    {
         this.defaultEndElementHandler = defaultEndElementHandler;
     }
 
@@ -68,32 +67,67 @@ public class CallbackBasedContentHandler implements EventContentHandler
             this.characterData = new StringBuilder();
         });
         addEndElementListener(elementName, event -> {
-            consumer.accept(this.characterData.toString());
+            try
+            {
+                consumer.accept(this.characterData.toString());
+            }
+            catch (final Exception e)
+            {
+                throw new ImporterException("Error handling character data '"
+                        + replaceWhitespace(this.characterData.toString()) + "' with consumer "
+                        + consumer + ": " + e.getMessage(), e);
+            }
             this.characterData = null;
         });
     }
 
-    public void delegateTo(final EventContentHandler subDelegate)
+    public void stopParsing()
     {
-        this.contentHandlerAdapter.delegateToSubHandler(subDelegate);
+        this.contentHandlerAdapter.parsingFinished();
     }
 
     @Override
     public void startElement(final StartElementEvent event)
     {
         LOG.finest(() -> "Start element: " + event);
-        this.startElementListeners
-                .getOrDefault(event.getName().getLocalPart(), this.defaultStartElementHandler)
-                .accept(event);
+        final Consumer<StartElementEvent> consumer = this.startElementListeners
+                .getOrDefault(event.getName().getLocalPart(), this.defaultStartElementHandler);
+        if (consumer == null)
+        {
+            LOG.warning("No default consumer for event " + event);
+            return;
+        }
+        try
+        {
+            consumer.accept(event);
+        }
+        catch (final Exception e)
+        {
+            throw new ImporterException("Error handling " + event + " with consumer " + consumer
+                    + ": " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void endElement(final EndElementEvent event)
     {
         LOG.finest(() -> "End element: " + event);
-        this.endElementListeners
-                .getOrDefault(event.getName().getLocalPart(), this.defaultEndElementHandler)
-                .accept(event);
+        final Consumer<EndElementEvent> consumer = this.endElementListeners
+                .getOrDefault(event.getName().getLocalPart(), this.defaultEndElementHandler);
+        if (consumer == null)
+        {
+            LOG.warning("No default consumer for event " + event);
+            return;
+        }
+        try
+        {
+            consumer.accept(event);
+        }
+        catch (final Exception e)
+        {
+            throw new ImporterException("Error handling " + event + " with consumer " + consumer
+                    + ": " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -105,10 +139,13 @@ public class CallbackBasedContentHandler implements EventContentHandler
         }
         else
         {
-            LOG.fine(() -> "Ignoring character data '"
-                    + characters.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
-                    + "'");
+            LOG.fine(() -> "Ignoring character data '" + replaceWhitespace(characters) + "'");
         }
+    }
+
+    private static String replaceWhitespace(final String characters)
+    {
+        return characters.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");
     }
 
     @Override

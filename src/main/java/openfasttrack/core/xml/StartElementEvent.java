@@ -17,7 +17,7 @@ public class StartElementEvent
     {
         this.attributes = attributes;
         this.location = location;
-        this.qName = new QName(uri, localName, null);
+        this.qName = new QName(uri, localName, "");
     }
 
     public QName getName()
@@ -32,6 +32,18 @@ public class StartElementEvent
 
     public Attribute getAttributeValueByName(final String name)
     {
-        return new Attribute(name, this.attributes.getValue(name));
+        final String value = this.attributes.getValue(name);
+        if (value != null)
+        {
+            return new Attribute(name, value);
+        }
+        return null;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "StartElementEvent [qName=" + this.qName + ", attributes=" + this.attributes
+                + ", location=" + this.location + "]";
     }
 }

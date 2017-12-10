@@ -33,6 +33,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import openfasttrack.core.xml.ContentHandlerAdapter;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterException;
@@ -62,8 +63,10 @@ class SpecobjectImporter implements Importer
         try
         {
             final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
-            xmlReader.setContentHandler(
-                    new SpecobjectContentHandler(this.fileName, xmlReader, this.listener));
+            final SpecObjectHandlerConfigBuilder config = new SpecObjectHandlerConfigBuilder(this.fileName,
+                    this.listener);
+            xmlReader.setContentHandler(new ContentHandlerAdapter(this.fileName, xmlReader,
+                    config.build()));
             final InputSource input = new InputSource(this.reader);
             xmlReader.parse(input);
         }

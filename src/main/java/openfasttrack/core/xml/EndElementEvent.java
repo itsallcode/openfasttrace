@@ -13,7 +13,7 @@ public class EndElementEvent
             final Location location)
     {
         this.location = location;
-        this.qName = new QName(uri, localName, null);
+        this.qName = new QName(uri, localName, "");
     }
 
     public QName getName()
@@ -24,5 +24,11 @@ public class EndElementEvent
     public Location getLocation()
     {
         return this.location;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "EndElementEvent [qName=" + this.qName + ", location=" + this.location + "]";
     }
 }

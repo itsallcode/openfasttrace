@@ -22,7 +22,6 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -33,7 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.xml.stream.XMLInputFactory;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -99,7 +98,7 @@ public class TestSpecobjectImporter
         final List<SpecificationItem> result = runImporter(SINGLE_SPECOBJECT_FILE);
         assertThat(result, hasSize(1));
         final SpecificationItem item1 = this.specItem1Builder
-                .location(SINGLE_SPECOBJECT_FILE.toString(), 5) //
+                .location(SINGLE_SPECOBJECT_FILE.toString(), 4) //
                 .build();
         assertThat(result, AutoMatcher.contains(item1));
         assertThat(result, contains(item1));
@@ -112,10 +111,10 @@ public class TestSpecobjectImporter
         assertThat(result, hasSize(2));
 
         final SpecificationItem item1 = this.specItem1Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 5) //
+                .location(TWO_SPECOBJECT_FILE.toString(), 4) //
                 .build();
         final SpecificationItem item2 = this.specItem2Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 25) //
+                .location(TWO_SPECOBJECT_FILE.toString(), 24) //
                 .build();
         assertThat(result, AutoMatcher.contains(item1, item2));
         assertThat(result, contains(item1, item2));
@@ -136,8 +135,10 @@ public class TestSpecobjectImporter
                 "    <specobjects>\n" + //
                 "    </specobjects>\n" + //
                 "</specdocument>";
-        new SpecobjectImporter("testfilename", new StringReader(content),
-                XMLInputFactory.newFactory(), null).runImport();
+        final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        parserFactory.setNamespaceAware(true);
+        new SpecobjectImporter("testfilename", new StringReader(content), parserFactory, null)
+                .runImport();
     }
 
     private List<SpecificationItem> runImporter(final Path path) throws FileNotFoundException

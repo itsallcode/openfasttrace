@@ -25,6 +25,7 @@ package openfasttrack.importer.specobject;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.io.StringReader;
@@ -32,10 +33,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.xml.sax.SAXException;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
@@ -58,12 +63,16 @@ public class TestSpecobjectImporter
     private static final Path TWO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("two-specobjects.xml");
     private static final Path NO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("no-specobject.xml");
 
+    @Mock
+    private SAXParserFactory parserFactoryMock;
+
     private Builder specItem1Builder;
     private Builder specItem2Builder;
 
     @Before
     public void setup()
     {
+        MockitoAnnotations.initMocks(this);
         this.specItem1Builder = new SpecificationItem.Builder() //
                 .id(new SpecificationItemId.Builder() //
                         .artifactType("doctype") //
@@ -138,6 +147,15 @@ public class TestSpecobjectImporter
                 "</specdocument>";
         final SAXParserFactory parserFactory = SaxParserConfigurator.createSaxParserFactory();
         new SpecobjectImporter("testfilename", new StringReader(content), parserFactory, null)
+                .runImport();
+    }
+
+    @Test(expected = ImporterException.class)
+    public void testSaxExceptionWhenCreatingReaderThrowsImporterException()
+            throws FileNotFoundException, ParserConfigurationException, SAXException
+    {
+        when(this.parserFactoryMock.newSAXParser()).thenThrow(new SAXException("expected"));
+        new SpecobjectImporter("testfilename", new StringReader(""), this.parserFactoryMock, null)
                 .runImport();
     }
 

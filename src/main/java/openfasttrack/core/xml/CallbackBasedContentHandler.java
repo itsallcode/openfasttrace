@@ -1,4 +1,4 @@
-package openfasttrack.core.xml.callback;
+package openfasttrack.core.xml;
 
 /*-
  * #%L
@@ -27,10 +27,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import openfasttrack.core.xml.ContentHandlerAdapterController;
-import openfasttrack.core.xml.EndElementEvent;
-import openfasttrack.core.xml.EventContentHandler;
-import openfasttrack.core.xml.StartElementEvent;
 import openfasttrack.importer.ImporterException;
 
 public class CallbackBasedContentHandler implements EventContentHandler

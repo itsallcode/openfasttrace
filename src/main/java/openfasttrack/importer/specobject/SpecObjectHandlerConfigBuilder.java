@@ -27,8 +27,8 @@ import java.util.logging.Logger;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.core.xml.Attribute;
+import openfasttrack.core.xml.CallbackBasedContentHandler;
 import openfasttrack.core.xml.EventContentHandler;
-import openfasttrack.core.xml.callback.CallbackBasedContentHandler;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.ImporterException;
 

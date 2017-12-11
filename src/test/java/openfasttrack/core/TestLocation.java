@@ -22,16 +22,35 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 public class TestLocation
 {
+    private static final String PATH = "path";
+
     @Test
     public void equalsContract()
     {
         EqualsVerifier.forClass(Location.class).verify();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateLocationWithNegativeLineFails()
+    {
+        Location.create(PATH, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateLocationWithNegativeLineFails2()
+    {
+        Location.create(PATH, -1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateLocationWithNegativeColumnFails()
+    {
+        Location.create(PATH, 1, -1);
     }
 }

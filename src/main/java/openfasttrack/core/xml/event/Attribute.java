@@ -1,4 +1,4 @@
-package openfasttrack.core.xml;
+package openfasttrack.core.xml.event;
 
 /*-
  * #%L

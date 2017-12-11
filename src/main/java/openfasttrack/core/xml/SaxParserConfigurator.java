@@ -28,13 +28,10 @@ public class SaxParserConfigurator
 {
     private SaxParserConfigurator()
     {
-        // not instantiable
     }
 
     public static SAXParserFactory createSaxParserFactory()
     {
-        final SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        return factory;
+        return SAXParserFactory.newInstance();
     }
 }

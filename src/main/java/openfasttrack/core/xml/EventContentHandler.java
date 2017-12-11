@@ -1,5 +1,8 @@
 package openfasttrack.core.xml;
 
+import openfasttrack.core.xml.event.EndElementEvent;
+import openfasttrack.core.xml.event.StartElementEvent;
+
 /*-
  * #%L
  * OpenFastTrack

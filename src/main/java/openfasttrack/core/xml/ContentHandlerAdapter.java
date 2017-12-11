@@ -32,6 +32,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import openfasttrack.core.Location;
+import openfasttrack.core.xml.event.EndElementEvent;
+import openfasttrack.core.xml.event.StartElementEvent;
 
 public class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController
 {

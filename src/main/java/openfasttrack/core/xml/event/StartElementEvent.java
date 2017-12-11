@@ -1,4 +1,4 @@
-package openfasttrack.core.xml;
+package openfasttrack.core.xml.event;
 
 /*-
  * #%L
@@ -22,26 +22,34 @@ package openfasttrack.core.xml;
  * #L%
  */
 
+import java.util.Map;
+
 import javax.xml.namespace.QName;
+
+import org.xml.sax.Attributes;
 
 import openfasttrack.core.Location;
 
-public class EndElementEvent
+public class StartElementEvent
 {
     private final QName qName;
     private final Location location;
+    private final Map<String, Attribute> attributeMap;
 
-    private EndElementEvent(final QName qName, final Location location)
+    private StartElementEvent(final QName qName, final Map<String, Attribute> attributeMap,
+            final Location location)
     {
+        this.attributeMap = attributeMap;
         this.location = location;
         this.qName = qName;
     }
 
-    public static EndElementEvent create(final String uri, final String localName,
-            final String qName, final Location location)
+    public static StartElementEvent create(final String uri, final String localName,
+            final String qName, final Attributes attributes, final Location location)
     {
-        final QName qualifiedName = new QName(uri, localName, "");
-        return new EndElementEvent(qualifiedName, location);
+        final Map<String, Attribute> attributeMap = Attribute.buildMap(attributes);
+        final QName qualifiedName = QNameFactory.create(uri, localName, qName);
+        return new StartElementEvent(qualifiedName, attributeMap, location);
     }
 
     public QName getName()
@@ -54,9 +62,15 @@ public class EndElementEvent
         return this.location;
     }
 
+    public Attribute getAttributeValueByName(final String name)
+    {
+        return this.attributeMap.get(name);
+    }
+
     @Override
     public String toString()
     {
-        return "EndElementEvent [qName=" + this.qName + ", location=" + this.location + "]";
+        return "StartElementEvent [qName=" + this.qName + ", attributeMap=" + this.attributeMap
+                + ", location=" + this.location + "]";
     }
 }

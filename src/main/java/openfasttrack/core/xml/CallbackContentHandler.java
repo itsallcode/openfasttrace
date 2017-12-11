@@ -27,11 +27,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import openfasttrack.core.xml.event.EndElementEvent;
+import openfasttrack.core.xml.event.StartElementEvent;
 import openfasttrack.importer.ImporterException;
 
-public class CallbackBasedContentHandler implements EventContentHandler
+public class CallbackContentHandler implements EventContentHandler
 {
-    private static final Logger LOG = Logger.getLogger(CallbackBasedContentHandler.class.getName());
+    private static final Logger LOG = Logger.getLogger(CallbackContentHandler.class.getName());
 
     private ContentHandlerAdapterController contentHandlerAdapter;
 
@@ -80,7 +82,9 @@ public class CallbackBasedContentHandler implements EventContentHandler
         addStartElementListener(elementName, (elem) -> {
             if (this.characterData != null)
             {
-                throw new IllegalArgumentException("Already reading character data");
+                throw new IllegalStateException("Already reading character data '"
+                        + replaceWhitespace(this.characterData.toString()) + "' but found element "
+                        + elem);
             }
             this.characterData = new StringBuilder();
         });

@@ -35,7 +35,8 @@ public class IgnoringEntityResolver implements EntityResolver
     @Override
     public InputSource resolveEntity(final String publicId, final String systemId)
     {
-        LOG.warning("Ignoring entity " + publicId + " / " + systemId);
+        LOG.warning(() -> "Ignoring entity with public id '" + publicId + "' and system id '"
+                + systemId + "'.");
         return new InputSource(new StringReader(""));
     }
 }

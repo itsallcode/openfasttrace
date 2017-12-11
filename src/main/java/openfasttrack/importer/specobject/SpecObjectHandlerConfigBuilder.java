@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.SpecificationItemId.Builder;
-import openfasttrack.core.xml.Attribute;
-import openfasttrack.core.xml.CallbackBasedContentHandler;
+import openfasttrack.core.xml.CallbackContentHandler;
 import openfasttrack.core.xml.EventContentHandler;
+import openfasttrack.core.xml.event.Attribute;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.ImporterException;
 
@@ -38,7 +38,7 @@ public class SpecObjectHandlerConfigBuilder
             .getLogger(SpecObjectHandlerConfigBuilder.class.getName());
 
     private static final String DOCTYPE_ATTRIBUTE_NAME = "doctype";
-    private final CallbackBasedContentHandler handler;
+    private final CallbackContentHandler handler;
     private String defaultDoctype;
     private final String fileName;
     private final ImportEventListener listener;
@@ -56,7 +56,7 @@ public class SpecObjectHandlerConfigBuilder
         this.fileName = fileName;
         this.listener = listener;
 
-        this.handler = new CallbackBasedContentHandler();
+        this.handler = new CallbackContentHandler();
     }
 
     public EventContentHandler build()

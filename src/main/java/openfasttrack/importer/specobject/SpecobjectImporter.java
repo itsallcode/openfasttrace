@@ -35,6 +35,8 @@ import org.xml.sax.XMLReader;
 
 import openfasttrack.core.xml.ContentHandlerAdapter;
 import openfasttrack.core.xml.IgnoringEntityResolver;
+import openfasttrack.core.xml.tree.TreeBuildingContentHandler;
+import openfasttrack.core.xml.tree.TreeContentHandler;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterException;
@@ -65,9 +67,11 @@ class SpecobjectImporter implements Importer
         {
             final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
             xmlReader.setEntityResolver(new IgnoringEntityResolver());
-            final SpecObjectHandlerConfigBuilder config = new SpecObjectHandlerConfigBuilder(
-                    this.fileName, this.listener);
-            new ContentHandlerAdapter(this.fileName, xmlReader, config.build()).registerListener();
+            final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.fileName,
+                    this.listener);
+            final TreeContentHandler treeContentHandler = config.build();
+            new ContentHandlerAdapter(this.fileName, xmlReader,
+                    new TreeBuildingContentHandler(treeContentHandler)).registerListener();
             final InputSource input = new InputSource(this.reader);
             xmlReader.parse(input);
         }

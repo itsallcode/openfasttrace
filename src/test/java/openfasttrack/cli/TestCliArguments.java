@@ -1,9 +1,6 @@
 package openfasttrack.cli;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -24,6 +21,10 @@ import static java.util.Collections.emptyList;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;

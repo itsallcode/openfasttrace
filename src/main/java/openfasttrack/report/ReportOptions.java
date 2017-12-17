@@ -1,6 +1,6 @@
 package openfasttrack.report;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.report;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 public class ReportOptions
 {

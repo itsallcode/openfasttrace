@@ -1,6 +1,6 @@
 package openfasttrack.core;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import javax.annotation.Generated;
 

@@ -22,6 +22,7 @@ package openfasttrack.mode;
  * #L%
  */
 
+
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;

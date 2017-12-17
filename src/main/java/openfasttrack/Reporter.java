@@ -1,3 +1,6 @@
+
+package openfasttrack;
+
 /*-
  * #%L
  * OpenFastTrack
@@ -19,7 +22,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package openfasttrack;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -43,7 +45,7 @@ public interface Reporter
      *            input files
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    public Reporter addInputs(final Path... inputs);
+    Reporter addInputs(final Path... inputs);
 
     /**
      * Select one or more input files
@@ -52,7 +54,7 @@ public interface Reporter
      *            input files
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    public Reporter addInputs(final List<Path> inputs);
+    Reporter addInputs(final List<Path> inputs);
 
     /**
      * Set the representation for new line
@@ -61,7 +63,7 @@ public interface Reporter
      *            type of newline
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    public Reporter setNewline(Newline newline);
+    Reporter setNewline(Newline newline);
 
     /**
      * Select how verbose the tracing report should be
@@ -70,12 +72,12 @@ public interface Reporter
      *            report verbosity
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    public Reporter setReportVerbosity(final ReportVerbosity verbosity);
+    Reporter setReportVerbosity(final ReportVerbosity verbosity);
 
     /**
      * Run a trace on the input files
      */
-    public Trace trace();
+    Trace trace();
 
     /**
      * Write the tracing report to a file
@@ -90,7 +92,7 @@ public interface Reporter
      *            report format (this is a name defined in the respective reporter
      *            plug-in)
      */
-    public void reportToFileInFormat(final Trace trace, final Path output, final String format);
+    void reportToFileInFormat(final Trace trace, final Path output, final String format);
 
     /**
      * Write the tracing report to standard out
@@ -102,5 +104,5 @@ public interface Reporter
      *            report format (this is a name defined in the respective reporter
      *            plug-in)
      */
-    public void reportToStdOutInFormat(final Trace trace, final String format);
+    void reportToStdOutInFormat(final Trace trace, final String format);
 }

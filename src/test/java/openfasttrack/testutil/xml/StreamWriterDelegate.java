@@ -1,10 +1,10 @@
 package openfasttrack.testutil.xml;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,6 +21,7 @@ package openfasttrack.testutil.xml;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;

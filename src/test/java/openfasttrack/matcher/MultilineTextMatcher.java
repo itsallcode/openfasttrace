@@ -1,6 +1,6 @@
 package openfasttrack.matcher;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.matcher;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;

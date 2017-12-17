@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.core.xml.event;
 
 /*-
  * #%L
@@ -22,35 +22,21 @@ package openfasttrack.core;
  * #L%
  */
 
-import org.junit.Test;
+import javax.xml.namespace.QName;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-public class TestLocation
+class QNameFactory
 {
-    private static final String PATH = "path";
-
-    @Test
-    public void equalsContract()
+    private QNameFactory()
     {
-        EqualsVerifier.forClass(Location.class).verify();
+
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
+    static QName create(final String uri, final String localName, final String qName)
     {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        if (localName == null || localName.isEmpty())
+        {
+            return new QName(uri, qName, "");
+        }
+        return new QName(uri, localName);
     }
 }

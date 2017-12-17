@@ -22,11 +22,11 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-
 import java.io.Reader;
 
-import javax.xml.stream.XMLInputFactory;
+import javax.xml.parsers.SAXParserFactory;
 
+import openfasttrack.core.xml.SaxParserConfigurator;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
@@ -36,18 +36,18 @@ import openfasttrack.importer.ImporterFactory;
  */
 public class SpecobjectImporterFactory extends ImporterFactory
 {
-    private final XMLInputFactory xmlInputFactory;
+    private final SAXParserFactory saxParserFactory;
 
     public SpecobjectImporterFactory()
     {
         super("(?i).*\\.xml");
-        this.xmlInputFactory = XMLInputFactory.newFactory();
+        this.saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
     }
 
     @Override
     public Importer createImporter(final String fileName, final Reader reader,
             final ImportEventListener listener)
     {
-        return new SpecobjectImporter(fileName, reader, this.xmlInputFactory, listener);
+        return new SpecobjectImporter(fileName, reader, this.saxParserFactory, listener);
     }
 }

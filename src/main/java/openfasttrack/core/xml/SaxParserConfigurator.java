@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.core.xml;
 
 /*-
  * #%L
@@ -22,35 +22,16 @@ package openfasttrack.core;
  * #L%
  */
 
-import org.junit.Test;
+import javax.xml.parsers.SAXParserFactory;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-public class TestLocation
+public class SaxParserConfigurator
 {
-    private static final String PATH = "path";
-
-    @Test
-    public void equalsContract()
+    private SaxParserConfigurator()
     {
-        EqualsVerifier.forClass(Location.class).verify();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
+    public static SAXParserFactory createSaxParserFactory()
     {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        return SAXParserFactory.newInstance();
     }
 }

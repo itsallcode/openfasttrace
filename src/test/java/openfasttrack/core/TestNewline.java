@@ -22,35 +22,34 @@ package openfasttrack.core;
  * #L%
  */
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-public class TestLocation
+public class TestNewline
 {
-    private static final String PATH = "path";
+    @Test
+    public void testUnix()
+    {
+        assertThat(Newline.fromRepresentation("\n"), equalTo(Newline.UNIX));
+    }
 
     @Test
-    public void equalsContract()
+    public void testWindows()
     {
-        EqualsVerifier.forClass(Location.class).verify();
+        assertThat(Newline.fromRepresentation("\r\n"), equalTo(Newline.WINDOWS));
+    }
+
+    @Test
+    public void testOldMac()
+    {
+        assertThat(Newline.fromRepresentation("\r"), equalTo(Newline.OLDMAC));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
+    public void testUnknown()
     {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        Newline.fromRepresentation("unknown");
     }
 }

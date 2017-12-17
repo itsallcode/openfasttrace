@@ -22,10 +22,10 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.io.FileNotFoundException;
 import java.io.StringReader;
@@ -33,16 +33,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.xml.stream.XMLInputFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.xml.sax.SAXException;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItem.Builder;
 import openfasttrack.core.SpecificationItemId;
+import openfasttrack.core.xml.SaxParserConfigurator;
 import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
 
@@ -58,12 +63,16 @@ public class TestSpecobjectImporter
     private static final Path TWO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("two-specobjects.xml");
     private static final Path NO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("no-specobject.xml");
 
+    @Mock
+    private SAXParserFactory parserFactoryMock;
+
     private Builder specItem1Builder;
     private Builder specItem2Builder;
 
     @Before
     public void setup()
     {
+        MockitoAnnotations.initMocks(this);
         this.specItem1Builder = new SpecificationItem.Builder() //
                 .id(new SpecificationItemId.Builder() //
                         .artifactType("doctype") //
@@ -99,7 +108,7 @@ public class TestSpecobjectImporter
         final List<SpecificationItem> result = runImporter(SINGLE_SPECOBJECT_FILE);
         assertThat(result, hasSize(1));
         final SpecificationItem item1 = this.specItem1Builder
-                .location(SINGLE_SPECOBJECT_FILE.toString(), 5) //
+                .location(SINGLE_SPECOBJECT_FILE.toString(), 4) //
                 .build();
         assertThat(result, AutoMatcher.contains(item1));
         assertThat(result, contains(item1));
@@ -112,10 +121,10 @@ public class TestSpecobjectImporter
         assertThat(result, hasSize(2));
 
         final SpecificationItem item1 = this.specItem1Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 5) //
+                .location(TWO_SPECOBJECT_FILE.toString(), 4) //
                 .build();
         final SpecificationItem item2 = this.specItem2Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 25) //
+                .location(TWO_SPECOBJECT_FILE.toString(), 24) //
                 .build();
         assertThat(result, AutoMatcher.contains(item1, item2));
         assertThat(result, contains(item1, item2));
@@ -136,8 +145,18 @@ public class TestSpecobjectImporter
                 "    <specobjects>\n" + //
                 "    </specobjects>\n" + //
                 "</specdocument>";
-        new SpecobjectImporter("testfilename", new StringReader(content),
-                XMLInputFactory.newFactory(), null).runImport();
+        final SAXParserFactory parserFactory = SaxParserConfigurator.createSaxParserFactory();
+        new SpecobjectImporter("testfilename", new StringReader(content), parserFactory, null)
+                .runImport();
+    }
+
+    @Test(expected = ImporterException.class)
+    public void testSaxExceptionWhenCreatingReaderThrowsImporterException()
+            throws FileNotFoundException, ParserConfigurationException, SAXException
+    {
+        when(this.parserFactoryMock.newSAXParser()).thenThrow(new SAXException("expected"));
+        new SpecobjectImporter("testfilename", new StringReader(""), this.parserFactoryMock, null)
+                .runImport();
     }
 
     private List<SpecificationItem> runImporter(final Path path) throws FileNotFoundException

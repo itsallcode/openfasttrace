@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.importer.specobject.handler;
 
 /*-
  * #%L
@@ -22,35 +22,27 @@ package openfasttrack.core;
  * #L%
  */
 
-import org.junit.Test;
+import openfasttrack.core.SpecificationItemId;
+import openfasttrack.core.xml.tree.CallbackContentHandler;
+import openfasttrack.core.xml.tree.TreeContentHandler;
+import openfasttrack.importer.ImportEventListener;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-public class TestLocation
+public class DependenciesHandlerBuilder
 {
-    private static final String PATH = "path";
+    private final ImportEventListener listener;
+    private final CallbackContentHandler handler;
 
-    @Test
-    public void equalsContract()
+    public DependenciesHandlerBuilder(final ImportEventListener listener)
     {
-        EqualsVerifier.forClass(Location.class).verify();
+        this.listener = listener;
+        this.handler = new CallbackContentHandler();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
+    public TreeContentHandler build()
     {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        this.handler.addCharacterDataListener("dependson", (data) -> {
+            this.listener.addDependsOnId(SpecificationItemId.parseId(data));
+        });
+        return this.handler;
     }
 }

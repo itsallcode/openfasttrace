@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
@@ -37,6 +36,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
+import openfasttrack.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
 
 public class TestLinkedItemIndex
 {
@@ -62,6 +64,12 @@ public class TestLinkedItemIndex
         when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
         when(this.duplicateIdIgnoringVersionItemMock.getId())
                 .thenReturn(DUPLICATE_ID_INGORING_VERSION);
+    }
+
+    @Test
+    public void equalsSpecificationItemIdWithoutVersionContract()
+    {
+        EqualsVerifier.forClass(SpecificationItemIdWithoutVersion.class).verify();
     }
 
     @Test

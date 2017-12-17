@@ -23,8 +23,6 @@ package openfasttrack.core;
  */
 
 import java.util.Collections;
-
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,10 +68,9 @@ public class LinkedItemIndex
     private static Map<SpecificationItemId, LinkedSpecificationItem> createIdIndex(
             final List<LinkedSpecificationItem> wrappedItems)
     {
-        return wrappedItems.stream()
-                .collect(Collectors.toMap(LinkedSpecificationItem::getId, //
-                        item -> item, //
-                        LinkedItemIndex::handleDuplicates));
+        return wrappedItems.stream().collect(Collectors.toMap(LinkedSpecificationItem::getId, //
+                item -> item, //
+                LinkedItemIndex::handleDuplicates));
     }
 
     // [impl->dsn~tracing.tracing.duplicate-items~1]
@@ -107,7 +104,7 @@ public class LinkedItemIndex
         return items == null ? Collections.emptyList() : items;
     }
 
-    private static class SpecificationItemIdWithoutVersion
+    static final class SpecificationItemIdWithoutVersion
     {
         private final String name;
         private final String artifcatType;

@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.core.xml;
 
 /*-
  * #%L
@@ -22,35 +22,21 @@ package openfasttrack.core;
  * #L%
  */
 
-import org.junit.Test;
+import java.io.StringReader;
+import java.util.logging.Logger;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
-public class TestLocation
+public class IgnoringEntityResolver implements EntityResolver
 {
-    private static final String PATH = "path";
+    private static final Logger LOG = Logger.getLogger(IgnoringEntityResolver.class.getName());
 
-    @Test
-    public void equalsContract()
+    @Override
+    public InputSource resolveEntity(final String publicId, final String systemId)
     {
-        EqualsVerifier.forClass(Location.class).verify();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
-    {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        LOG.warning(() -> "Ignoring entity with public id '" + publicId + "' and system id '"
+                + systemId + "'.");
+        return new InputSource(new StringReader(""));
     }
 }

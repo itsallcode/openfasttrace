@@ -22,33 +22,41 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Reader;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import openfasttrack.core.xml.ContentHandlerAdapter;
+import openfasttrack.core.xml.IgnoringEntityResolver;
+import openfasttrack.core.xml.tree.TreeBuildingContentHandler;
+import openfasttrack.core.xml.tree.TreeContentHandler;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterException;
+import openfasttrack.importer.specobject.handler.SpecDocumentHandlerBuilder;
 
 /**
  * Importer for xml files in specobject format.
  */
 class SpecobjectImporter implements Importer
 {
-    private final XMLInputFactory xmlInputFactory;
     private final Reader reader;
     private final ImportEventListener listener;
     private final String fileName;
+    private final SAXParserFactory saxParserFactory;
 
     SpecobjectImporter(final String fileName, final Reader reader,
-            final XMLInputFactory xmlInputFactory, final ImportEventListener listener)
+            final SAXParserFactory saxParserFactory, final ImportEventListener listener)
     {
         this.fileName = fileName;
-        this.xmlInputFactory = xmlInputFactory;
+        this.saxParserFactory = saxParserFactory;
         this.listener = listener;
         this.reader = new BufferedReader(reader);
     }
@@ -58,15 +66,19 @@ class SpecobjectImporter implements Importer
     {
         try
         {
-            final XMLEventReader xmlEventReader = this.xmlInputFactory
-                    .createXMLEventReader(this.fileName, this.reader);
-            final ImportHelper importHelper = new ImportHelper(this.fileName, xmlEventReader,
+            final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
+            xmlReader.setEntityResolver(new IgnoringEntityResolver());
+            final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.fileName,
                     this.listener);
-            importHelper.runImport();
+            final TreeContentHandler treeContentHandler = config.build();
+            new ContentHandlerAdapter(this.fileName, xmlReader,
+                    new TreeBuildingContentHandler(treeContentHandler)).registerListener();
+            final InputSource input = new InputSource(this.reader);
+            xmlReader.parse(input);
         }
-        catch (final XMLStreamException e)
+        catch (SAXException | ParserConfigurationException | IOException e)
         {
-            throw new ImporterException("Error importing specobjects document", e);
+            throw new ImporterException("Error importing specobjects document " + this.fileName, e);
         }
     }
 }

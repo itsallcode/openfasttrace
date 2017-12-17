@@ -1,4 +1,7 @@
-package openfasttrack.core;
+package openfasttrack.core.xml;
+
+import openfasttrack.core.xml.event.EndElementEvent;
+import openfasttrack.core.xml.event.StartElementEvent;
 
 /*-
  * #%L
@@ -22,35 +25,13 @@ package openfasttrack.core;
  * #L%
  */
 
-import org.junit.Test;
-
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-public class TestLocation
+public interface EventContentHandler
 {
-    private static final String PATH = "path";
+    void startElement(StartElementEvent event);
 
-    @Test
-    public void equalsContract()
-    {
-        EqualsVerifier.forClass(Location.class).verify();
-    }
+    void endElement(EndElementEvent event);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
-    {
-        Location.create(PATH, -1);
-    }
+    void characters(String characters);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
-    }
+    void init(ContentHandlerAdapterController contentHandlerAdapter);
 }

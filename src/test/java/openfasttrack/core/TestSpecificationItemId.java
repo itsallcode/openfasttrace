@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import static openfasttrack.core.SpecificationItemId.createId;
 import static openfasttrack.core.SpecificationItemId.parseId;
 import static org.hamcrest.Matchers.equalTo;
@@ -50,6 +49,14 @@ public class TestSpecificationItemId
         final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME, REVISION);
         assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
                 .revision(REVISION).build()));
+    }
+
+    @Test
+    public void testCreateIdWithoutRevision()
+    {
+        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
+        assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
+                .revision(Integer.MIN_VALUE).build()));
     }
 
     @Test

@@ -1,4 +1,4 @@
-package openfasttrack.importer.specobject;
+package openfasttrack.importer.specobject.handler;
 
 /*-
  * #%L
@@ -22,16 +22,18 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
+import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.core.xml.tree.CallbackContentHandler;
 import openfasttrack.core.xml.tree.TreeContentHandler;
 import openfasttrack.importer.ImportEventListener;
 
-public class NeedsCoverageHandlerBuilder
+public class ProvidesCoverageHandlerBuilder
 {
     private final ImportEventListener listener;
     private final CallbackContentHandler handler;
+    private Builder providesCoverageIdBuilder;
 
-    public NeedsCoverageHandlerBuilder(final ImportEventListener listener)
+    public ProvidesCoverageHandlerBuilder(final ImportEventListener listener)
     {
         this.listener = listener;
         this.handler = new CallbackContentHandler();
@@ -39,9 +41,17 @@ public class NeedsCoverageHandlerBuilder
 
     public TreeContentHandler build()
     {
-        this.handler.addCharacterDataListener("needsobj", data -> {
-            this.listener.addNeededArtifactType(data);
-        });
+        this.handler.addElementListener("provcov",
+                elem -> this.providesCoverageIdBuilder = new Builder(), //
+                endElem -> {
+                    this.listener.addCoveredId(this.providesCoverageIdBuilder.build());
+                    this.providesCoverageIdBuilder = null;
+                });
+
+        this.handler.addCharacterDataListener("linksto",
+                data -> this.providesCoverageIdBuilder.name(data));
+        this.handler.addIntDataListener("dstversion",
+                data -> this.providesCoverageIdBuilder.revision(data));
 
         return this.handler;
     }

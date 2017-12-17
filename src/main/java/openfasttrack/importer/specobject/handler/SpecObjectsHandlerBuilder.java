@@ -1,4 +1,4 @@
-package openfasttrack.importer.specobject;
+package openfasttrack.importer.specobject.handler;
 
 /*-
  * #%L
@@ -22,8 +22,6 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-import java.util.logging.Logger;
-
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.core.xml.tree.CallbackContentHandler;
@@ -31,8 +29,6 @@ import openfasttrack.importer.ImportEventListener;
 
 public class SpecObjectsHandlerBuilder
 {
-    private static final Logger LOG = Logger.getLogger(SpecObjectsHandlerBuilder.class.getName());
-
     private final CallbackContentHandler handler;
     private final String fileName;
     private final ImportEventListener listener;
@@ -46,7 +42,6 @@ public class SpecObjectsHandlerBuilder
         this.fileName = fileName;
         this.defaultDoctype = defaultDoctype;
         this.listener = listener;
-
         this.handler = new CallbackContentHandler();
     }
 

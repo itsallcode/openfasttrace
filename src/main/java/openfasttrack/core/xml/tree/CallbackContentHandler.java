@@ -25,6 +25,7 @@ package openfasttrack.core.xml.tree;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import openfasttrack.importer.ImporterException;
@@ -42,6 +43,12 @@ public class CallbackContentHandler implements TreeContentHandler
             final Consumer<TreeElement> defaultSTartElementListener)
     {
         this.defaultStartElementListener = defaultSTartElementListener;
+    }
+
+    public void addSubTreeHandler(final String elementName,
+            final Supplier<TreeContentHandler> supplier)
+    {
+        addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
     }
 
     public void addElementListener(final String elementName,
@@ -113,6 +120,18 @@ public class CallbackContentHandler implements TreeContentHandler
         this.treeParsingController.setDelegate(delegate);
         this.treeParsingController.getCurrentElement().setEndElementListener(endElement -> {
             this.treeParsingController.setDelegate(this);
+        });
+    }
+
+    public void addIntDataListener(final String elementName, final Consumer<Integer> listener)
+    {
+        addCharacterDataListener(elementName, data -> {
+            if (data == null || data.isEmpty())
+            {
+                throw new IllegalStateException("No string data found for element " + elementName);
+            }
+            final int parsedInt = Integer.parseInt(data);
+            listener.accept(parsedInt);
         });
     }
 

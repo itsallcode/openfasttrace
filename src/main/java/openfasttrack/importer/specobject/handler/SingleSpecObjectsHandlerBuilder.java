@@ -1,4 +1,4 @@
-package openfasttrack.importer.specobject;
+package openfasttrack.importer.specobject.handler;
 
 /*-
  * #%L
@@ -22,20 +22,14 @@ package openfasttrack.importer.specobject;
  * #L%
  */
 
-import java.util.logging.Logger;
-
 import openfasttrack.core.SpecificationItemId.Builder;
 import openfasttrack.core.xml.tree.CallbackContentHandler;
 import openfasttrack.importer.ImportEventListener;
 
 public class SingleSpecObjectsHandlerBuilder
 {
-    private static final Logger LOG = Logger
-            .getLogger(SingleSpecObjectsHandlerBuilder.class.getName());
-
     private final CallbackContentHandler handler;
     private final ImportEventListener listener;
-
     private final Builder idBuilder;
 
     public SingleSpecObjectsHandlerBuilder(final ImportEventListener listener,
@@ -48,27 +42,18 @@ public class SingleSpecObjectsHandlerBuilder
 
     public CallbackContentHandler build()
     {
-        this.handler.addCharacterDataListener("id", data -> {
-            this.idBuilder.name(data);
-        });
-        this.handler.addCharacterDataListener("version",
-                data -> this.idBuilder.revision(Integer.parseInt(data)));
+        this.handler.addCharacterDataListener("id", this.idBuilder::name);
+        this.handler.addIntDataListener("version", this.idBuilder::revision);
+        this.handler.addCharacterDataListener("description", this.listener::appendDescription);
+        this.handler.addCharacterDataListener("rationale", this.listener::appendRationale);
+        this.handler.addCharacterDataListener("comment", this.listener::appendComment);
 
-        this.handler.addCharacterDataListener("description",
-                data -> this.listener.appendDescription(data));
-        this.handler.addCharacterDataListener("rationale",
-                data -> this.listener.appendRationale(data));
-        this.handler.addCharacterDataListener("comment", data -> this.listener.appendComment(data));
-
-        this.handler.addElementListener("needscoverage", elem -> this.handler
-                .pushDelegate(new NeedsCoverageHandlerBuilder(this.listener).build()));
-
-        this.handler.addElementListener("providescoverage", elem -> this.handler
-                .pushDelegate(new ProvidesCoverageHandlerBuilder(this.listener).build()));
-
-        this.handler.addElementListener("dependencies", elem -> this.handler
-                .pushDelegate(new DependenciesHandlerBuilder(this.listener).build()));
-
+        this.handler.addSubTreeHandler("needscoverage",
+                new NeedsCoverageHandlerBuilder(this.listener)::build);
+        this.handler.addSubTreeHandler("providescoverage",
+                new ProvidesCoverageHandlerBuilder(this.listener)::build);
+        this.handler.addSubTreeHandler("dependencies",
+                new DependenciesHandlerBuilder(this.listener)::build);
         return this.handler;
     }
 }

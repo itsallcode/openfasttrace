@@ -1,4 +1,4 @@
-package openfasttrack.importer.specobject;
+package openfasttrack.importer.specobject.handler;
 
 /*-
  * #%L
@@ -45,5 +45,4 @@ public class DependenciesHandlerBuilder
         });
         return this.handler;
     }
-
 }

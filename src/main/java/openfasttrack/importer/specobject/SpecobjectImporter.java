@@ -40,6 +40,7 @@ import openfasttrack.core.xml.tree.TreeContentHandler;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterException;
+import openfasttrack.importer.specobject.handler.SpecDocumentHandlerBuilder;
 
 /**
  * Importer for xml files in specobject format.

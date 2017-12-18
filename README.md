@@ -24,7 +24,7 @@ OpenFastTrack needs a Java JDK 8 (or later) implementation and Maven as build to
 ## Development
 
 * Run `mvn test` to run unit tests.
-* Run `mvn exec:java@trace` to run requirements tracing.
+* Run `mvn --projects oft exec:java@trace` to run requirements tracing.
 
 ### Configure logging
 

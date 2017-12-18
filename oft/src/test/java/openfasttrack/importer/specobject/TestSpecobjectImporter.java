@@ -48,6 +48,7 @@ import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.SpecificationItem.Builder;
 import openfasttrack.core.SpecificationItemId;
 import openfasttrack.core.xml.SaxParserConfigurator;
+import openfasttrack.core.xml.XmlParserException;
 import openfasttrack.importer.ImporterException;
 import openfasttrack.importer.ImporterService;
 
@@ -137,7 +138,7 @@ public class TestSpecobjectImporter
         assertThat(result, hasSize(0));
     }
 
-    @Test(expected = ImporterException.class)
+    @Test(expected = XmlParserException.class)
     public void testSpecObjectsWithoutDoctype() throws FileNotFoundException
     {
         final String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + //

@@ -28,16 +28,16 @@ import javax.xml.namespace.QName;
 
 import org.xml.sax.Attributes;
 
-import openfasttrack.core.Location;
+import openfasttrack.core.xml.XmlLocation;
 
 public class StartElementEvent
 {
     private final QName qName;
-    private final Location location;
+    private final XmlLocation location;
     private final Map<String, Attribute> attributeMap;
 
     private StartElementEvent(final QName qName, final Map<String, Attribute> attributeMap,
-            final Location location)
+            final XmlLocation location)
     {
         this.attributeMap = attributeMap;
         this.location = location;
@@ -45,7 +45,7 @@ public class StartElementEvent
     }
 
     public static StartElementEvent create(final String uri, final String localName,
-            final String qName, final Attributes attributes, final Location location)
+            final String qName, final Attributes attributes, final XmlLocation location)
     {
         final Map<String, Attribute> attributeMap = Attribute.buildMap(attributes);
         final QName qualifiedName = QNameFactory.create(uri, localName, qName);
@@ -57,7 +57,7 @@ public class StartElementEvent
         return this.qName;
     }
 
-    public Location getLocation()
+    public XmlLocation getLocation()
     {
         return this.location;
     }

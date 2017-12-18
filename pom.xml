@@ -7,9 +7,15 @@
 	<name>OpenFastTrack</name>
 	<packaging>pom</packaging>
 	<description>Free requirement tracking suite</description>
-
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0</name>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<modules>
 		<module>oft</module>
+		<module>xml-parser</module>
 	</modules>
 
 	<repositories>

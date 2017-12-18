@@ -24,21 +24,21 @@ package openfasttrack.core.xml.event;
 
 import javax.xml.namespace.QName;
 
-import openfasttrack.core.Location;
+import openfasttrack.core.xml.XmlLocation;
 
 public class EndElementEvent
 {
     private final QName qName;
-    private final Location location;
+    private final XmlLocation location;
 
-    private EndElementEvent(final QName qName, final Location location)
+    private EndElementEvent(final QName qName, final XmlLocation location)
     {
         this.location = location;
         this.qName = qName;
     }
 
     public static EndElementEvent create(final String uri, final String localName,
-            final String qName, final Location location)
+            final String qName, final XmlLocation location)
     {
         final QName qualifiedName = QNameFactory.create(uri, localName, qName);
         return new EndElementEvent(qualifiedName, location);
@@ -49,7 +49,7 @@ public class EndElementEvent
         return this.qName;
     }
 
-    public Location getLocation()
+    public XmlLocation getLocation()
     {
         return this.location;
     }

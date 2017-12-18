@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import openfasttrack.core.Location;
+import openfasttrack.core.xml.XmlLocation;
 import openfasttrack.core.xml.event.Attribute;
 import openfasttrack.core.xml.event.StartElementEvent;
 
@@ -80,7 +80,7 @@ public class TreeElement
         return this.element.getAttributeValueByName(name);
     }
 
-    public Location getLocation()
+    public XmlLocation getLocation()
     {
         return this.element.getLocation();
     }

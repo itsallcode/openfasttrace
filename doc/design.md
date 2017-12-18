@@ -99,9 +99,15 @@ The linker is responsible for turning the imported [specification items](#specif
 ## Tracer
 The tracer consumes the list of [linked specification items](#linked-specification-item) and evaluates the link status for each link.
 
-
 ## Reporter
-The Reporter consumes the link status list and the specification item list and generates a report in the chosen output format. 
+The reporter consumes the link status list and the specification item list and generates a report in the chosen output format.
+
+API users select reporters via their name as strings. This allows plugging in custom reporters in a loosely coupled fashion.
+
+## Exporters
+The exporter transforms the internal representation of [specification items](#specification-item) into the desired target format (e.g. Markdown).
+
+API users select exporters via their name as strings.
 
 # Runtime View
 
@@ -624,7 +630,7 @@ Covers:
 
 Exchanging the CLI later takes considerable effort.
 
-### Alternatives considered
+### Alternatives Considered
 
   * No CLI (plain argument list) - not flexible enough
   * External CLI - breaks design goal

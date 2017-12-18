@@ -1,6 +1,7 @@
+
 package openfasttrack.cli.commands;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -24,13 +25,10 @@ package openfasttrack.cli.commands;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.SpecificationItem;
-import openfasttrack.importer.ImporterService;
 
 /**
  * This class is the abstract base class for all commands that process a list of
@@ -38,58 +36,20 @@ import openfasttrack.importer.ImporterService;
  */
 public abstract class AbstractCommand implements Performable
 {
+    protected CliArguments arguments;
 
-    protected final CliArguments arguments;
-    protected final ImporterService importerService;
-
-    /**
-     * Construct the {@link AbstractCommand}.
-     * 
-     * @param arguments
-     *            the command line arguments
-     * @param importerService
-     *            the importer service
-     */
-    public AbstractCommand(final CliArguments arguments, final ImporterService importerService)
+    protected AbstractCommand(final CliArguments arguments)
     {
         this.arguments = arguments;
-        this.importerService = importerService;
     }
 
-    /**
-     * Run the importer on the list of inputs and process the results.
-     * 
-     * @return <code>true</code> if the command succeeded.
-     */
-    @Override
-    public boolean run()
+    public List<Path> toPaths(final List<String> inputs)
     {
-        final Stream<SpecificationItem> items = importItemsFromPaths(getNormalizedPaths());
-        return processSpecificationItemStream(items);
+        final List<Path> inputsAsPaths = new ArrayList<>();
+        for (final String input : inputs)
+        {
+            inputsAsPaths.add(Paths.get(input));
+        }
+        return inputsAsPaths;
     }
-
-    private Stream<SpecificationItem> importItemsFromPaths(final List<Path> paths)
-    {
-        return this.importerService.createImporter() //
-                .importAny(paths) //
-                .getImportedItems() //
-                .stream();
-    }
-
-    private List<Path> getNormalizedPaths()
-    {
-        return this.arguments.getInputs().stream() //
-                .map(input -> Paths.get(input).toAbsolutePath().normalize()) //
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * The actual processing of the imported {@link SpecificationItem} list.
-     * 
-     * @param items
-     *            specification items to be processed
-     * 
-     * @return <code>true</code> if processing result is positive.
-     */
-    abstract protected boolean processSpecificationItemStream(Stream<SpecificationItem> items);
 }

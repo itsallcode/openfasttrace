@@ -1,6 +1,6 @@
 package openfasttrack.cli;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.cli;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import static java.util.Arrays.asList;
 
@@ -88,7 +89,7 @@ public class ArgumentValidator
     {
         boolean valid = false;
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
-                && this.arguments.getOutputFile() != null)
+                && this.arguments.getOutputPath() != null)
         {
             this.error = "combining report verbosity 'quiet' and ouput to file is not supported.";
             this.suggestion = "remove output file parameter.";

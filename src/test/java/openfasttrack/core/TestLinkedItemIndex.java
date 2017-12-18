@@ -1,10 +1,10 @@
 package openfasttrack.core;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,6 +37,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import openfasttrack.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
+
 public class TestLinkedItemIndex
 {
     private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
@@ -61,6 +64,12 @@ public class TestLinkedItemIndex
         when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
         when(this.duplicateIdIgnoringVersionItemMock.getId())
                 .thenReturn(DUPLICATE_ID_INGORING_VERSION);
+    }
+
+    @Test
+    public void equalsSpecificationItemIdWithoutVersionContract()
+    {
+        EqualsVerifier.forClass(SpecificationItemIdWithoutVersion.class).verify();
     }
 
     @Test

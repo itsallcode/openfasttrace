@@ -1,6 +1,7 @@
+
 package openfasttrack.cli.commands;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -22,19 +23,12 @@ package openfasttrack.cli.commands;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.nio.file.Path;
 
+import openfasttrack.Reporter;
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.Linker;
-import openfasttrack.core.SpecificationItem;
 import openfasttrack.core.Trace;
-import openfasttrack.core.Tracer;
-import openfasttrack.importer.ImporterService;
-import openfasttrack.report.ReportService;
-import openfasttrack.report.ReportVerbosity;
+import openfasttrack.mode.ReportMode;
 
 /**
  * Handler for requirement tracing CLI command.
@@ -43,38 +37,48 @@ public class TraceCommand extends AbstractCommand
 {
     public static final String COMMAND_NAME = "trace";
 
-    final ReportService reportService;
-    final Tracer tracer;
-
     /**
      * Create a {@link TraceCommand}.
      * 
      * @param arguments
-     *            the command line arguments.
+     *            command line arguments.
      */
     public TraceCommand(final CliArguments arguments)
     {
-        this(arguments, new ImporterService(), new Tracer(), new ReportService());
-    }
-
-    TraceCommand(final CliArguments arguments, final ImporterService importerService,
-            final Tracer tracer, final ReportService reportService)
-    {
-        super(arguments, importerService);
-        this.tracer = tracer;
-        this.reportService = reportService;
+        super(arguments);
     }
 
     @Override
-    protected boolean processSpecificationItemStream(final Stream<SpecificationItem> items)
+    public boolean run()
     {
-        final Linker linker = new Linker(items.collect(Collectors.toList()));
-        final List<LinkedSpecificationItem> linkedItems = linker.link();
-        final Trace traceResult = this.tracer.trace(linkedItems);
-        final ReportVerbosity verbosity = this.arguments.getReportVerbosity() == null
-                ? ReportVerbosity.FAILURE_DETAILS : this.arguments.getReportVerbosity();
-        this.reportService.generateReport(traceResult, this.arguments.getOutputFile(), verbosity,
-                this.arguments.getNewline());
-        return traceResult.isAllCovered();
+        final Reporter reporter = createReporter();
+        final Trace trace = report(reporter);
+        return trace.isAllCovered();
+    }
+
+    private Reporter createReporter()
+    {
+        final Reporter reporter = new ReportMode();
+        reporter.addInputs(toPaths(this.arguments.getInputs())) //
+                .setNewline(this.arguments.getNewline())
+                .setReportVerbosity(this.arguments.getReportVerbosity());
+        return reporter;
+    }
+
+    private Trace report(final Reporter reporter)
+    {
+        final Trace trace = reporter.trace();
+        final Path outputPath = this.arguments.getOutputPath();
+        if (null == outputPath)
+        {
+            reporter.reportToStdOutInFormat(trace, this.arguments.getOutputFormat());
+
+        }
+        else
+        {
+            reporter.reportToFileInFormat(trace, this.arguments.getOutputPath(),
+                    this.arguments.getOutputFormat());
+        }
+        return trace;
     }
 }

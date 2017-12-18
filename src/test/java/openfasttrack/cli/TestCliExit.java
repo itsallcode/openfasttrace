@@ -1,16 +1,10 @@
 package openfasttrack.cli;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Rule;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,6 +21,13 @@ import org.junit.Rule;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Rule;
+
 
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;

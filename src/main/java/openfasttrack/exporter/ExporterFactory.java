@@ -1,10 +1,10 @@
 package openfasttrack.exporter;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,6 +21,7 @@ package openfasttrack.exporter;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -49,16 +50,16 @@ public abstract class ExporterFactory
     }
 
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory} supports
-     * exporting the given output format.
+     * Returns <code>true</code> if this {@link ExporterFactory} supports exporting
+     * the given output format.
      *
-     * @param type
+     * @param format
      *            the output type to check.
      * @return <code>true</code> if the given type is supported for exporting.
      */
-    public boolean supportsFormat(final String type)
+    public boolean supportsFormat(final String format)
     {
-        return this.supportedOutputFormat.equals(type);
+        return this.supportedOutputFormat.equals(format);
     }
 
     /**
@@ -66,7 +67,7 @@ public abstract class ExporterFactory
      *
      * @param file
      *            the file to which specification items are written
-     * @param outputFormat
+     * @param format
      *            the output format
      * @param charset
      *            the character set used for exporting
@@ -76,14 +77,12 @@ public abstract class ExporterFactory
      *            the items to export
      * @return an exporter instance
      */
-    public Exporter createExporter(final Path file, final String outputFormat,
-            final Charset charset, final Newline newline,
-            final Stream<SpecificationItem> itemStream)
+    public Exporter createExporter(final Path file, final String format, final Charset charset,
+            final Newline newline, final Stream<SpecificationItem> itemStream)
     {
-        if (!supportsFormat(outputFormat))
+        if (!supportsFormat(format))
         {
-            throw new ExporterException(
-                    "Output format '" + outputFormat + "' not supported for export");
+            throw new ExporterException("Output format '" + format + "' not supported for export");
         }
         final Writer writer = createWriter(file, charset);
         return createExporter(writer, itemStream, newline);

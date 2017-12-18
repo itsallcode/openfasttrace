@@ -1,9 +1,6 @@
 package openfasttrack.cli;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -25,6 +22,10 @@ import static java.util.Collections.emptyList;
  * #L%
  */
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
@@ -34,6 +35,8 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
+import openfasttrack.Converter;
+import openfasttrack.Reporter;
 import openfasttrack.cli.commands.ConvertCommand;
 import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.core.Newline;
@@ -79,7 +82,7 @@ public class TestCliArguments
     public void getStandardOutputFormatForExport()
     {
         this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(CliArguments.DEFAULT_EXPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(), equalTo(Converter.DEFAULT_EXPORT_FORMAT));
     }
 
     // [utest->dsn~cli.tracing.default-format~1]
@@ -87,7 +90,7 @@ public class TestCliArguments
     public void getStandardOutputFormatForReport()
     {
         this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(CliArguments.DEFAULT_REPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(), equalTo(Reporter.DEFAULT_REPORT_FORMAT));
     }
 
     @Test
@@ -109,9 +112,9 @@ public class TestCliArguments
     {
         final String value = "/tmp/foobar";
         final String expectedPath = Paths.get(value).toString();
-        assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
+        assertThat(BEFORE_SETTER, this.arguments.getOutputPath(), equalTo(null));
         this.arguments.setOutputFile(value);
-        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(expectedPath));
+        assertThat(AFTER_SETTER, this.arguments.getOutputPath().toString(), equalTo(expectedPath));
     }
 
     @Test
@@ -119,16 +122,17 @@ public class TestCliArguments
     {
         final String value = "/tmp/foobar";
         final String expectedPath = Paths.get(value).toString();
-        assertThat(BEFORE_SETTER, this.arguments.getOutputFile(), equalTo(null));
+        assertThat(BEFORE_SETTER, this.arguments.getOutputPath(), equalTo(null));
         this.arguments.setF(value);
-        assertThat(AFTER_SETTER, this.arguments.getOutputFile().toString(), equalTo(expectedPath));
+        assertThat(AFTER_SETTER, this.arguments.getOutputPath().toString(), equalTo(expectedPath));
     }
 
     @Test
     public void testSetReportVerbositiy()
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
-        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(), equalTo(null));
+        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
+                equalTo(Reporter.DEFAULT_VERBOSITY));
         this.arguments.setReportVerbosity(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }
@@ -137,7 +141,8 @@ public class TestCliArguments
     public void testSetV()
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
-        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(), equalTo(null));
+        assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
+                equalTo(Reporter.DEFAULT_VERBOSITY));
         this.arguments.setV(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }

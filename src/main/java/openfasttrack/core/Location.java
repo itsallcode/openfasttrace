@@ -1,6 +1,6 @@
 package openfasttrack.core;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -24,15 +24,17 @@ package openfasttrack.core;
 
 import javax.annotation.Generated;
 
-public class Location
+public final class Location
 {
     private final String path;
     private final int line;
+    private final int column;
 
-    private Location(final String path, final int line)
+    private Location(final String path, final int line, final int column)
     {
         this.path = path;
         this.line = line;
+        this.column = column;
     }
 
     /**
@@ -51,7 +53,20 @@ public class Location
         {
             throw new IllegalArgumentException("Illegal value for line: " + line);
         }
-        return new Location(path, line);
+        return new Location(path, line, -1);
+    }
+
+    public static Location create(final String path, final int line, final int column)
+    {
+        if (line <= 0)
+        {
+            throw new IllegalArgumentException("Illegal value for line: " + line);
+        }
+        if (column <= 0)
+        {
+            throw new IllegalArgumentException("Illegal value for line: " + line);
+        }
+        return new Location(path, line, column);
     }
 
     public String getPath()
@@ -64,19 +79,26 @@ public class Location
         return this.line;
     }
 
+    public int getColumn()
+    {
+        return this.column;
+    }
+
     @Generated("Eclipse")
     @Override
-    public final int hashCode()
+    public int hashCode()
     {
         final int prime = 31;
         int result = 1;
+        result = prime * result + this.column;
         result = prime * result + this.line;
         result = prime * result + ((this.path == null) ? 0 : this.path.hashCode());
         return result;
     }
 
+    @Generated("Eclipse")
     @Override
-    public final boolean equals(final Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
         {
@@ -86,11 +108,15 @@ public class Location
         {
             return false;
         }
-        if (!(obj instanceof Location))
+        if (getClass() != obj.getClass())
         {
             return false;
         }
         final Location other = (Location) obj;
+        if (this.column != other.column)
+        {
+            return false;
+        }
         if (this.line != other.line)
         {
             return false;
@@ -112,6 +138,6 @@ public class Location
     @Override
     public String toString()
     {
-        return this.path + ":" + this.line;
+        return this.path + ":" + this.line + (this.column != -1 ? ":" + this.column : "");
     }
 }

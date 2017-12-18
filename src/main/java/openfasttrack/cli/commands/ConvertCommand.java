@@ -1,6 +1,7 @@
+
 package openfasttrack.cli.commands;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -22,44 +23,49 @@ package openfasttrack.cli.commands;
  * #L%
  */
 
-import java.util.stream.Stream;
+import java.nio.file.Path;
 
+import openfasttrack.Converter;
 import openfasttrack.cli.CliArguments;
-import openfasttrack.core.SpecificationItem;
-import openfasttrack.exporter.ExporterService;
-import openfasttrack.importer.ImporterService;
+import openfasttrack.mode.ConvertMode;
 
 /**
  * Handler for specification item conversion CLI command.
  */
-public class ConvertCommand extends AbstractCommand
+public class ConvertCommand extends AbstractCommand implements Performable
 {
     public static final String COMMAND_NAME = "convert";
-    private final ExporterService exporterService;
 
     /**
-     * Create a {@link ConvertCommand}
+     * Create a {@link ConvertCommand}.
      * 
      * @param arguments
-     *            the command line arguments
+     *            command line arguments.
      */
     public ConvertCommand(final CliArguments arguments)
     {
-        this(arguments, new ImporterService(), new ExporterService());
-    }
-
-    ConvertCommand(final CliArguments arguments, final ImporterService importerService,
-            final ExporterService exporterService)
-    {
-        super(arguments, importerService);
-        this.exporterService = exporterService;
+        super(arguments);
     }
 
     @Override
-    protected boolean processSpecificationItemStream(final Stream<SpecificationItem> itemStream)
+    public boolean run()
     {
-        this.exporterService.exportFile(itemStream, this.arguments.getOutputFormat(),
-                this.arguments.getOutputFile(), this.arguments.getNewline());
+        final Converter converter = createConverter();
+        convert(converter);
         return true;
+    }
+
+    private Converter createConverter()
+    {
+        final Converter converter = new ConvertMode();
+        converter.addInputs(toPaths(this.arguments.getInputs())) //
+                .setNewline(this.arguments.getNewline());
+        return converter;
+    }
+
+    private void convert(final Converter converter)
+    {
+        final Path outputPath = this.arguments.getOutputPath();
+        converter.convertToFileInFormat(outputPath, this.arguments.getOutputFormat());
     }
 }

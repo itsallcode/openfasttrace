@@ -1,6 +1,6 @@
 package openfasttrack.cli.commands;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.cli.commands;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 /**
  * Interface for OpenFastTrack commands.

@@ -1,10 +1,10 @@
 package openfasttrack.core;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -49,6 +49,14 @@ public class TestSpecificationItemId
         final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME, REVISION);
         assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
                 .revision(REVISION).build()));
+    }
+
+    @Test
+    public void testCreateIdWithoutRevision()
+    {
+        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
+        assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
+                .revision(Integer.MIN_VALUE).build()));
     }
 
     @Test

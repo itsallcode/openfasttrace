@@ -1,10 +1,10 @@
 package openfasttrack.importer;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,6 +21,7 @@ package openfasttrack.importer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -53,8 +54,8 @@ public class ImporterFactoryLoader
 
     /**
      * Finds a matching {@link ImporterFactory} that can handle the given
-     * {@link Path}. If no or more than one {@link ImporterFactory} is found,
-     * this throws an {@link ImporterException}.
+     * {@link Path}. If no or more than one {@link ImporterFactory} is found, this
+     * throws an {@link ImporterException}.
      *
      * @param file
      *            the file for which to get a {@link ImporterFactory}.

@@ -1,12 +1,10 @@
 package openfasttrack.cli;
 
-import static java.util.Arrays.asList;
-
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,10 +22,15 @@ import static java.util.Arrays.asList;
  * #L%
  */
 
+import static java.util.Arrays.asList;
+
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import openfasttrack.Converter;
+import openfasttrack.Reporter;
 import openfasttrack.cli.commands.ConvertCommand;
 import openfasttrack.cli.commands.TraceCommand;
 import openfasttrack.core.Newline;
@@ -39,28 +42,26 @@ import openfasttrack.report.ReportVerbosity;
  */
 public class CliArguments
 {
-    public static final String DEFAULT_EXPORT_FORMAT = "specobject";
-    public static final String DEFAULT_REPORT_FORMAT = "plain";
     private static final String CURRENT_DIRECTORY = ".";
-    private List<String> unnamedValues;
-    private String outputFile;
-    private String outputFormat;
-    private ReportVerbosity reportVerbosity;
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
+    private List<String> unnamedValues;
+    private Path outputFile;
+    private String outputFormat;
+    private ReportVerbosity reportVerbosity;
 
     /**
      * Get the output file path
      * 
      * @return output file path
      */
-    public Path getOutputFile()
+    public Path getOutputPath()
     {
         if (this.outputFile == null)
         {
             return null;
         }
-        return Paths.get(this.outputFile);
+        return this.outputFile;
     }
 
     /**
@@ -71,7 +72,7 @@ public class CliArguments
      */
     public void setOutputFile(final String outputFile)
     {
-        this.outputFile = outputFile;
+        this.outputFile = Paths.get(outputFile);
     }
 
     /**
@@ -140,11 +141,11 @@ public class CliArguments
         {
             if (this.getCommand() == TraceCommand.COMMAND_NAME)
             {
-                return DEFAULT_REPORT_FORMAT;
+                return Reporter.DEFAULT_REPORT_FORMAT;
             }
             else if (this.getCommand() == ConvertCommand.COMMAND_NAME)
             {
-                return DEFAULT_EXPORT_FORMAT;
+                return Converter.DEFAULT_EXPORT_FORMAT;
             }
         }
         return this.outputFormat;
@@ -180,7 +181,7 @@ public class CliArguments
      */
     public ReportVerbosity getReportVerbosity()
     {
-        return this.reportVerbosity;
+        return (null == this.reportVerbosity) ? Reporter.DEFAULT_VERBOSITY : this.reportVerbosity;
     }
 
     /**

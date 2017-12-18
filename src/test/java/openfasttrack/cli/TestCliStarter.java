@@ -1,6 +1,6 @@
 package openfasttrack.cli;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
@@ -21,6 +21,7 @@ package openfasttrack.cli;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -43,6 +44,7 @@ import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 
+// FIXME: reduce to unit test. Move integration tests to API level.
 public class TestCliStarter
 {
     private static final String NEWLINE = "\n";
@@ -331,7 +333,8 @@ public class TestCliStarter
 
     private void assertStdOutEmpty()
     {
-        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.size(), equalTo(0));
+        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.toString(),
+                equalTo(""));
     }
 
     private void assertOutputFileContentStartsWith(final String content)

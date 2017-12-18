@@ -1,10 +1,10 @@
 package openfasttrack.report;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,7 @@ package openfasttrack.report;
  * #L%
  */
 
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,22 +34,33 @@ import openfasttrack.core.Trace;
 
 public class ReportService
 {
-    public void generateReport(final Trace trace, final Path outputFile,
+    public void reportTraceToPath(final Trace trace, final Path outputPath,
             final ReportVerbosity verbosity, final Newline newline)
     {
-        try (OutputStream outputStream = new BufferedOutputStream(createOutputStream(outputFile)))
+
+        try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            new PlainTextReport(trace, newline).renderToStreamWithVerbosityLevel(outputStream,
-                    verbosity);
+            reportTraceToStream(trace, verbosity, newline, outputStream);
         }
         catch (final IOException e)
         {
-            throw new ReportException("Error generating report to output file " + outputFile, e);
+            throw new ReportException("Error generating report to output path " + outputPath, e);
         }
     }
 
-    private OutputStream createOutputStream(final Path outputFile) throws IOException
+    public void reportTraceToStdOut(final Trace trace, final ReportVerbosity verbosity,
+            final Newline newline)
     {
-        return outputFile == null ? System.out : Files.newOutputStream(outputFile);
+
+        reportTraceToStream(trace, verbosity, newline, System.out);
     }
+
+    private void reportTraceToStream(final Trace trace, final ReportVerbosity verbosity,
+            final Newline newline, final OutputStream outputStream)
+    {
+        final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+        new PlainTextReport(trace, newline).renderToStreamWithVerbosityLevel(bufferedOutputStream,
+                verbosity);
+    }
+
 }

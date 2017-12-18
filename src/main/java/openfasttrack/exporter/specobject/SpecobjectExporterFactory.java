@@ -1,10 +1,10 @@
 package openfasttrack.exporter.specobject;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,7 @@ package openfasttrack.exporter.specobject;
  * #L%
  */
 
+
 import java.io.Writer;
 import java.util.stream.Stream;
 
@@ -37,7 +38,7 @@ import openfasttrack.exporter.ExporterFactory;
 
 public class SpecobjectExporterFactory extends ExporterFactory
 {
-    private static final String SUPPORTED_FORMAT = "specobject";
+    public static final String SUPPORTED_FORMAT = "specobject";
     private final XMLOutputFactory xmlOutputFactory;
 
     public SpecobjectExporterFactory()

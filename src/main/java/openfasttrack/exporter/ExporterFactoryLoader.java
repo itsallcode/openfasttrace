@@ -1,10 +1,10 @@
 package openfasttrack.exporter;
 
-/*
+/*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 hamstercommunity
+ * Copyright (C) 2016 - 2017 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,6 +21,7 @@ package openfasttrack.exporter;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -50,13 +51,13 @@ public class ExporterFactoryLoader
 
     /**
      * Finds a matching {@link ExporterFactory} that can handle the given output
-     * format. If no or more than one {@link ExporterFactory} is found, this
-     * throws an {@link ExporterException}.
+     * format. If no or more than one {@link ExporterFactory} is found, this throws
+     * an {@link ExporterException}.
      *
      * @param outputFormat
      *            the output format for which to get a {@link ExporterFactory}.
-     * @return a matching {@link ExporterFactory} that can handle the given
-     *         output format
+     * @return a matching {@link ExporterFactory} that can handle the given output
+     *         format
      * @throws ExporterException
      *             when no or more than one {@link ExporterFactory} is found.
      */

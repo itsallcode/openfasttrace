@@ -22,7 +22,6 @@ package openfasttrack.importer.markdown;
  * #L%
  */
 
-
 import java.util.regex.Pattern;
 
 import openfasttrack.core.SpecificationItemId;
@@ -41,9 +40,10 @@ public enum MdPattern
     COVERS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
     DEPENDS("Depends:\\s*"),
     DEPENDS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
+    DESCRIPTION("Description:\\s*"),
     EMPTY("(\\s*)"),
     EVERYTHING("(.*)"),
-    ID("`?(" + SpecificationItemId.ID_PATTERN + ")`?.*"),
+    ID("`?(" + SpecificationItemId.ID_PATTERN + "|" + SpecificationItemId.LEGACY_ID_PATTERN + ")`?.*"),
     NEEDS("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
     RATIONALE("Rationale:\\s*"),
     TITLE("#+\\s*(.*)");

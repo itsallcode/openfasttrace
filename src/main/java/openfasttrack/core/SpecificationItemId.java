@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +39,19 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
     // [impl->dsn~md.specification-item-id-format~2]
-    public static final Pattern ID_PATTERN = Pattern.compile("(\\p{Alpha}+)" //
+    private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
             + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
             + REVISION_SEPARATOR //
-            + "(\\d+)");
+            + "(\\d+)";
+    private static final String LEGACY_ID = "(\\p{Alpha}+)" //
+            + "\\." //
+            + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
+            + ", *v" //
+            + "(\\d+)";
+
+    public static final Pattern ID_PATTERN = Pattern.compile(ID);
+    public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
 
     private final String name;
     private final int revision;
@@ -318,14 +325,37 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
-                this.artifactType = matcher.group(1);
-                this.name = matcher.group(2);
-                this.revision = Integer.parseInt(matcher.group(3));
+                extractIdPartsFromMatcher(matcher);
             }
             else
             {
-                throw new IllegalStateException(
-                        "String \"" + this.id + "\" cannot be parsed to a specification item ID");
+                final Matcher legacyMatcher = LEGACY_ID_PATTERN.matcher(this.id);
+                if (legacyMatcher.matches())
+                {
+                    extractIdPartsFromMatcher(legacyMatcher);
+                }
+                else
+                {
+                    throw new IllegalStateException("String \"" + this.id
+                            + "\" cannot be parsed to a specification item ID");
+                }
+            }
+        }
+
+        private void extractIdPartsFromMatcher(final Matcher matcher)
+        {
+            this.artifactType = matcher.group(1);
+            this.name = matcher.group(2);
+            try
+            {
+                this.revision = Integer.parseInt(matcher.group(3));
+            }
+            catch (final NumberFormatException exception)
+            {
+                throw new IllegalArgumentException(
+                        "Error parsing version number from specification item ID: \"" + this.id
+                                + "\"",
+                        exception);
             }
         }
     }

@@ -22,7 +22,7 @@ public class MarkdownTestConstants
     static final String DEPENDS_ON_ID1 = "configuration~blubb.blah.blah~4711";
     static final String DEPENDS_ON_ID2 = "db~blah.blubb~42";
     // Legacy Markdown format
-    static final String LEGACY_ID1 = "type.legacy_id, v3";
+    static final SpecificationItemId LEGACY_ID1 = SpecificationItemId.parseId("type.legacy_id, v3");
     static final String LEGACY_COVERED_ID1 = "impl.legacy_foo1, v3";
     static final String LEGACY_COVERED_ID2 = "impl.legacy_baz2,v4";
     static final String LEGACY_DEPENDS_ON_ID1 = "configuration.legacy.blah, v4711";

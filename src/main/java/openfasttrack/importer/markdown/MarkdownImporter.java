@@ -22,7 +22,6 @@ package openfasttrack.importer.markdown;
  * #L%
  */
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -56,6 +55,7 @@ class MarkdownImporter implements Importer
         transition(State.SPEC_ITEM  , State.COVERS     , MdPattern.COVERS     , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
+        transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                     ),
         transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.EVERYTHING , this::beginDescription                     ),
     
         transition(State.DESCRIPTION, State.SPEC_ITEM  , MdPattern.ID         , () -> {endDescription(); beginItem();}     ),

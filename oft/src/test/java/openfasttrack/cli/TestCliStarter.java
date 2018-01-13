@@ -1,5 +1,7 @@
 package openfasttrack.cli;
 
+import static org.hamcrest.Matchers.containsString;
+
 /*-
  * #%L
  * OpenFastTrack
@@ -21,7 +23,6 @@ package openfasttrack.cli;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -81,7 +82,7 @@ public class TestCliStarter
     @Test
     public void testNoArguments()
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: Missing command");
+        expectCliExitOnErrorThatContains(ExitStatus.CLI_ERROR, "oft: Missing command");
         runCliStarter();
 
     }
@@ -91,7 +92,7 @@ public class TestCliStarter
     public void testIllegalCommand()
     {
 
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
+        expectCliExitOnErrorThatContains(ExitStatus.CLI_ERROR,
                 "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.");
         runCliStarter(ILLEGAL_COMMAND);
     }
@@ -102,7 +103,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(false);
-            assertStdOutStartsWith(REQM2_PREAMBLE);
+            assertStdOutContains(REQM2_PREAMBLE);
         });
         runCliStarter(CONVERT_COMMAND);
     }
@@ -110,7 +111,7 @@ public class TestCliStarter
     @Test
     public void testConvertUnknownExporter()
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
+        expectCliExitOnErrorThatContains(ExitStatus.CLI_ERROR,
                 "oft: export format 'illegal' is not supported.");
         runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER, "illegal",
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
@@ -191,7 +192,7 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining report");
+        expectCliExitOnErrorThatContains(ExitStatus.CLI_ERROR, "oft: combining report");
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET");
@@ -312,7 +313,7 @@ public class TestCliStarter
         });
     }
 
-    private void expectCliExitOnErrorThatStartsWith(final ExitStatus status,
+    private void expectCliExitOnErrorThatContains(final ExitStatus status,
             final String expectedError)
     {
         this.exit.expectSystemExitWithStatus(status.getCode());
@@ -321,14 +322,14 @@ public class TestCliStarter
             @Override
             public void checkAssertion() throws Exception
             {
-                assertThat(TestCliStarter.this.error.toString(), startsWith(expectedError));
+                assertThat(TestCliStarter.this.error.toString(), containsString(expectedError));
             }
         });
     }
 
-    private void assertStdOutStartsWith(final String content)
+    private void assertStdOutContains(final String content)
     {
-        assertThat(TestCliStarter.this.outputStream.toString(), startsWith(content));
+        assertThat(TestCliStarter.this.outputStream.toString(), containsString(content));
     }
 
     private void assertStdOutEmpty()

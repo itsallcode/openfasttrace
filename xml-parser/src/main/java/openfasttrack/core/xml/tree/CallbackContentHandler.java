@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-import openfasttrack.importer.ImporterException;
+import openfasttrack.core.xml.XmlParserException;
 
 public class CallbackContentHandler implements TreeContentHandler
 {
@@ -99,7 +99,7 @@ public class CallbackContentHandler implements TreeContentHandler
         }
         catch (final Exception e)
         {
-            throw new ImporterException("Error handling " + treeElement + " with consumer "
+            throw new XmlParserException("Error handling " + treeElement + " with consumer "
                     + consumer + ": " + e.getMessage(), e);
         }
     }

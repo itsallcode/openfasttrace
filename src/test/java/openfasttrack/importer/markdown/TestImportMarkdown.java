@@ -73,7 +73,7 @@ public class TestImportMarkdown
                 + "  * " + COVERED_ID1 + "\n" //
                 + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + MarkdownTestConstants.DEPENDS_ON_ID1 + "\n" //
+                + "  + " + DEPENDS_ON_ID1 + "\n" //
                 + "  - " + DEPENDS_ON_ID2 + "\n" //
                 + "\nComment:\n\n" //
                 + COMMENT_LINE1 + "\n" //
@@ -161,9 +161,9 @@ public class TestImportMarkdown
     @Test
     public void testIdentifyLegacyId()
     {
-        assertMatch(MdPattern.ID, "a.b, v0", "req.test, v1", "req.test,v1", "req.test, v999",
-                "req.test.requirement, v1", "req.test_underscore, v1",
-                "`req.test1, v1`arbitrary text");
+        assertMatch(MdPattern.ID, "a:b, v0", "req:test, v1", "req:test,v1", "req:test, v999",
+                "req:test.requirement, v1", "req:test_underscore, v1",
+                "`req:test1, v1`arbitrary text");
         assertMismatch(MdPattern.ID, "test, v1", "req-test, v1", "req.4test, v1");
     }
 
@@ -179,31 +179,32 @@ public class TestImportMarkdown
     {
         return "# " + TITLE //
                 + "\n" //
-                + "`" + LEGACY_ID1 + "`" //
+                + "`" + LEGACY_ID + "`" //
                 + "\nDescription:\n" + DESCRIPTION_LINE1 + "\n" //
                 + DESCRIPTION_LINE2 + "\n" //
                 + DESCRIPTION_LINE3 + "\n" //
                 + "\nRationale:\n" //
                 + RATIONALE_LINE1 + "\n" //
                 + RATIONALE_LINE2 + "\n" //
-                + "\nCovers:\n\n" //
-                + "  * " + LEGACY_COVERED_ID1 + "\n" //
-                + " + " + LEGACY_COVERED_ID2 + "\n" //
                 + "\nDepends:\n\n" //
                 + "  + " + LEGACY_DEPENDS_ON_ID1 + "\n" //
                 + "  - " + LEGACY_DEPENDS_ON_ID2 + "\n" //
+                + "\nCovers:\n\n" //
+                + "  * " + LEGACY_COVERED_ID1 + "\n" //
+                + " + " + LEGACY_COVERED_ID2 + "\n" //
                 + "\nComment:\n\n" //
                 + COMMENT_LINE1 + "\n" //
                 + COMMENT_LINE2 + "\n" //
-                + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
-                + ", " + NEEDS_ARTIFACT_TYPE2;
+                + "\nNeeds:\n" //
+                + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
+                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n";
     }
 
     private void assertAllImporterEventsForLegacyItemCalled()
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(LEGACY_ID1);
+        inOrder.verify(this.listenerMock).setId(PARSED_LEGACY_ID);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock)
@@ -211,14 +212,10 @@ public class TestImportMarkdown
                         + System.lineSeparator() + DESCRIPTION_LINE3);
         inOrder.verify(this.listenerMock)
                 .appendRationale(RATIONALE_LINE1 + System.lineSeparator() + RATIONALE_LINE2);
-        inOrder.verify(this.listenerMock)
-                .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID1));
-        inOrder.verify(this.listenerMock)
-                .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID2));
-        inOrder.verify(this.listenerMock).addDependsOnId(
-                SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_DEPENDS_ON_ID1));
-        inOrder.verify(this.listenerMock)
-                .addDependsOnId(SpecificationItemId.parseId(LEGACY_DEPENDS_ON_ID2));
+        inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID1);
+        inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID2);
+        inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID1);
+        inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID2);
         inOrder.verify(this.listenerMock)
                 .appendComment(COMMENT_LINE1 + System.lineSeparator() + COMMENT_LINE2);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);

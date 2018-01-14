@@ -45,7 +45,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + REVISION_SEPARATOR //
             + "(\\d+)";
     private static final String LEGACY_ID = "(\\p{Alpha}+)" //
-            + "\\." //
+            + ":" //
             + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
             + ", *v" //
             + "(\\d+)";

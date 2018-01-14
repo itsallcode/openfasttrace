@@ -173,7 +173,6 @@
                 <executions>
                     <execution>
                         <id>trace</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>java</goal>
                         </goals>

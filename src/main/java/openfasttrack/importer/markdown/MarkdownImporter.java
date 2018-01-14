@@ -55,7 +55,7 @@ class MarkdownImporter implements Importer
         transition(State.SPEC_ITEM  , State.COVERS     , MdPattern.COVERS     , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
-        transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , () -> {}                             ),
+        transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                     ),
         transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.EVERYTHING , this::beginDescription                     ),
     
@@ -66,7 +66,7 @@ class MarkdownImporter implements Importer
         transition(State.DESCRIPTION, State.COVERS     , MdPattern.COVERS     , this::endDescription                       ),
         transition(State.DESCRIPTION, State.DEPENDS    , MdPattern.DEPENDS    , this::endDescription                       ),
         transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endDescription(); addNeeds();}      ),
-        transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , () -> endDescription()          ),
+        transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , () -> endDescription()                     ),
         transition(State.DESCRIPTION, State.DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription                    ),
     
         transition(State.RATIONALE  , State.SPEC_ITEM  , MdPattern.ID         , () -> {endRationale(); beginItem();}       ),
@@ -75,7 +75,7 @@ class MarkdownImporter implements Importer
         transition(State.RATIONALE  , State.COVERS     , MdPattern.COVERS     , this::endRationale                         ),
         transition(State.RATIONALE  , State.DEPENDS    , MdPattern.DEPENDS    , this::endRationale                         ),
         transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endRationale(); addNeeds();}        ),
-        transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , () -> endRationale()          ),
+        transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , () -> endRationale()                       ),
         transition(State.RATIONALE  , State.RATIONALE  , MdPattern.EVERYTHING , this::appendRationale                      ),
     
         transition(State.COMMENT    , State.SPEC_ITEM  , MdPattern.ID         , () -> {endComment(); beginItem();}         ),
@@ -83,7 +83,7 @@ class MarkdownImporter implements Importer
         transition(State.COMMENT    , State.COVERS     , MdPattern.COVERS     , this::endComment                           ),
         transition(State.COMMENT    , State.DEPENDS    , MdPattern.DEPENDS    , this::endComment                           ),
         transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endComment(); addNeeds();}          ),
-        transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> endComment()          ),
+        transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> endComment()                         ),
         
         transition(State.COMMENT    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(State.COMMENT    , State.COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),

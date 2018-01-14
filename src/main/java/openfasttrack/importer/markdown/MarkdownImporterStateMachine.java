@@ -22,7 +22,6 @@ package openfasttrack.importer.markdown;
  * #L%
  */
 
-
 import java.util.regex.Matcher;
 
 /**

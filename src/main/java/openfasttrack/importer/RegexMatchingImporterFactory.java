@@ -25,6 +25,11 @@ package openfasttrack.importer;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
@@ -33,7 +38,8 @@ import java.util.regex.Pattern;
 
 public abstract class RegexMatchingImporterFactory extends ImporterFactory
 {
-    private static final Logger LOG = Logger.getLogger(ImporterFactory.class.getName());
+    private static final Logger LOG = Logger
+            .getLogger(RegexMatchingImporterFactory.class.getName());
 
     private final Set<Pattern> supportedFilenamePatterns;
 
@@ -50,8 +56,8 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
     }
 
     /**
-     * Returns <code>true</code> if this {@link ImporterFactory} supports importing
-     * the given file based on its file extension.
+     * Returns <code>true</code> if this {@link ImporterFactory} supports
+     * importing the given file based on its file extension.
      *
      * @param file
      *            the file to check.
@@ -75,4 +81,56 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
                 + this.getClass().getName());
         return false;
     }
+
+    /**
+     * Create an importer that is able to read the given file.
+     *
+     * @param file
+     *            the file from which specification items are imported
+     * @param charset
+     *            the charset used for importing
+     * @param listener
+     *            the listener to be informed about detected specification item
+     *            fragments
+     * @return an importer instance
+     */
+    @Override
+    public Importer createImporter(final Path file, final Charset charset,
+            final ImportEventListener listener)
+    {
+        if (!supportsFile(file))
+        {
+            throw new ImporterException("File '" + file + "' not supported for import");
+        }
+        LOG.finest(() -> "Creating importer for file " + file);
+        final BufferedReader reader = createReader(file, charset);
+        return createImporter(file.toString(), reader, listener);
+    }
+
+    private BufferedReader createReader(final Path file, final Charset charset)
+    {
+        try
+        {
+            return Files.newBufferedReader(file, charset);
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Create an importer that is able to read the given file
+     *
+     * @param fileName
+     *            the name of the file.
+     * @param reader
+     *            the reader from which specification items are imported
+     * @param listener
+     *            the listener to be informed about detected specification item
+     *            fragments
+     * @return an importer instance
+     */
+    public abstract Importer createImporter(String fileName, final Reader reader,
+            final ImportEventListener listener);
 }

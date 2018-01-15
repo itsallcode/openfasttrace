@@ -26,10 +26,8 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
@@ -105,18 +103,6 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
         LOG.finest(() -> "Creating importer for file " + file);
         final BufferedReader reader = createReader(file, charset);
         return createImporter(file.toString(), reader, listener);
-    }
-
-    private BufferedReader createReader(final Path file, final Charset charset)
-    {
-        try
-        {
-            return Files.newBufferedReader(file, charset);
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
-        }
     }
 
     /**

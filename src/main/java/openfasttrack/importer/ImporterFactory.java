@@ -1,6 +1,9 @@
 package openfasttrack.importer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -32,4 +35,16 @@ public abstract class ImporterFactory
      */
     public abstract Importer createImporter(final Path file, final Charset charset,
             final ImportEventListener listener);
+
+    protected static BufferedReader createReader(final Path file, final Charset charset)
+    {
+        try
+        {
+            return Files.newBufferedReader(file, charset);
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
+        }
+    }
 }

@@ -22,17 +22,17 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-
 import java.io.Reader;
 
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
+import openfasttrack.importer.RegexMatchingImporterFactory;
 
 /**
  * {@link ImporterFactory} for tags in source code files.
  */
-public class TagImporterFactory extends ImporterFactory
+public class TagImporterFactory extends RegexMatchingImporterFactory
 {
     public TagImporterFactory()
     {

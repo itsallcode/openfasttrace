@@ -128,7 +128,7 @@ Covers:
 Needs: utest, impl
 
 ### Outgoing Coverage Link Status
-`dsn~tracing.outgoing-coverage-link-status~1`
+`dsn~tracing.outgoing-coverage-link-status~2`
 
 The [linker](#linker) component determines the coverage status of the outgoing link between the provider item and the requester item.
 
@@ -138,11 +138,11 @@ The possible results are:
   2. Outdated:  link points to a specification item which has a higher revision number
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
+  5. Orphaned:  link is broken - there is no matching coverage requester
 
 Comment:
 The following results are planned for future releases
   * Unwanted:  coverage provider has an artifact type the provider does not want
-  * Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:
 

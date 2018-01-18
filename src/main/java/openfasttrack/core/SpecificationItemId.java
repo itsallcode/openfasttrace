@@ -44,6 +44,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
             + REVISION_SEPARATOR //
             + "(\\d+)";
+    // [impl->dsn~md.eb-markdown-id~1]
     private static final String LEGACY_ID = "(\\p{Alpha}+)" //
             + ":" //
             + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
@@ -219,7 +220,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
      */
     public static class Builder
     {
-        // [impl->dsn~md.specification_item_id_format~2]
+        // [impl->dsn~md.specification-item-id-format~2]
         private final String id;
         private String artifactType;
         private String name;

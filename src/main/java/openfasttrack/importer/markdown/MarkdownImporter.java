@@ -87,7 +87,7 @@ class MarkdownImporter implements Importer
         
         transition(State.COMMENT    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(State.COMMENT    , State.COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),
-        // [impl->dsn~md.covers_list~1]
+        // [impl->dsn~md.covers-list~1]
         transition(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.COVERS     , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.COVERS     , State.COVERS     , MdPattern.COVERS_REF , this::addCoverage                          ),
@@ -97,7 +97,7 @@ class MarkdownImporter implements Importer
         transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
         transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(State.COVERS     , State.COVERS     , MdPattern.EMPTY      , () -> {}                                   ),
-        // [impl->dsn~md.depends_list~1]
+        // [impl->dsn~md.depends-list~1]
         transition(State.DEPENDS    , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.DEPENDS    , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS_REF, this::addDependency                        ),
@@ -108,7 +108,8 @@ class MarkdownImporter implements Importer
         transition(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.EMPTY      , () -> {}                                   ),
         transition(State.DEPENDS    , State.COVERS     , MdPattern.COVERS     , () -> {}                                   ),
-    
+        // [impl->dsn~md.needs-coverage-list~2]
+        // [impl->dsn~md.needs-coverage-list-compact~1]
         transition(State.NEEDS      , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.NEEDS      , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.NEEDS      , State.RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),

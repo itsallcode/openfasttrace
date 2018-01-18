@@ -1,5 +1,27 @@
 package openfasttrack.importer.markdown;
 
+/*-
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 - 2018 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import static openfasttrack.importer.markdown.MarkdownAsserts.assertMatch;
 import static openfasttrack.importer.markdown.MarkdownAsserts.assertMismatch;
 import static openfasttrack.importer.markdown.MarkdownTestConstants.*;
@@ -57,6 +79,7 @@ public class TestImportMarkdown
         assertAllImporterEventsCalled();
     }
 
+    // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
         return "# " + TITLE //
@@ -90,8 +113,8 @@ public class TestImportMarkdown
         importer.runImport();
     }
 
-    // [utest->dsn~md.covers_list~1]
-    // [utest->dsn~md.depends_list~1]
+    // [utest->dsn~md.covers-list~1]
+    // [utest->dsn~md.depends-list~1]
     // [utest->dsn~md.requirement-references~1]
     private void assertAllImporterEventsCalled()
     {
@@ -158,6 +181,7 @@ public class TestImportMarkdown
         verify(this.listenerMock, times(1)).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
     }
 
+    // [utest->dsn~md.eb-markdown-id~1]
     @Test
     public void testIdentifyLegacyId()
     {
@@ -175,6 +199,7 @@ public class TestImportMarkdown
         assertAllImporterEventsForLegacyItemCalled();
     }
 
+    // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
         return "# " + TITLE //

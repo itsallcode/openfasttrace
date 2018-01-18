@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,19 +111,29 @@ public class Linker
     {
         final List<LinkedSpecificationItem> coveredLinkedItems = this.index
                 .getByIdIgnoringVersion(id);
-        for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
+        if (coveredLinkedItems.isEmpty())
         {
-            if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
+            // FIXME: Collect list of covered specification items that do not
+            // exist
+            // https://github.com/hamstercommunity/openfasttrack/issues/86
+            System.err.println("Error: " + item.getId() + " links to non-existent " + id);
+        }
+        else
+        {
+            for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
             {
-                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
-                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
-                        LinkStatus.COVERED_OUTDATED);
-            }
-            else
-            {
-                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
-                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
-                        LinkStatus.COVERED_PREDATED);
+                if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
+                {
+                    item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
+                    itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                            LinkStatus.COVERED_OUTDATED);
+                }
+                else
+                {
+                    item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
+                    itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                            LinkStatus.COVERED_PREDATED);
+                }
             }
         }
     }

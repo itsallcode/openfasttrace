@@ -122,17 +122,23 @@ public class Linker
         {
             for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
             {
-                if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
+                final int coveredItemRevision = itemCoveredIgnoringVersion.getId().getRevision();
+                if (id.getRevision() < coveredItemRevision)
                 {
                     item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
                     itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
                             LinkStatus.COVERED_OUTDATED);
                 }
-                else
+                else if (id.getRevision() > coveredItemRevision)
                 {
                     item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
                     itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
                             LinkStatus.COVERED_PREDATED);
+                }
+                else
+                {
+                    throw new IllegalStateException("Used version-less match on a link to ID \""
+                            + id + " but versions are identical.");
                 }
             }
         }

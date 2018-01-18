@@ -31,9 +31,9 @@ public class MarkdownTestConstants
         // not instantiable
     }
 
-    final static SpecificationItemId ID1 = SpecificationItemId.parseId("type~id~1");
-    final static SpecificationItemId ID2 = SpecificationItemId.parseId("type~id~2");
-    final static String TITLE = "Requirement Title";
+    static final SpecificationItemId ID1 = SpecificationItemId.parseId("type~id~1");
+    static final SpecificationItemId ID2 = SpecificationItemId.parseId("type~id~2");
+    static final String TITLE = "Requirement Title";
     static final String DESCRIPTION_LINE1 = "Description";
     static final String DESCRIPTION_LINE2 = "";
     static final String DESCRIPTION_LINE3 = "More description";

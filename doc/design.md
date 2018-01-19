@@ -182,14 +182,13 @@ Needs: impl, utest
 ### Duplicate Items
 `dsn~tracing.tracing.duplicate-items~1`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exists
+The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exist.
 
 Covers:
 
   * `req~tracing.duplicate-items~1`
 
 Needs: impl, utest
-
 
 ### Defect Items
 `dsn~tracing.defect-items~1`

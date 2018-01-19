@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -148,5 +147,25 @@ public class TestSpecificationItem
     public void equalsContract()
     {
         EqualsVerifier.forClass(SpecificationItem.class).verify();
+    }
+
+    @Test
+    public void testCoverageBuilderWithIdParts()
+    {
+        final SpecificationItem item = new SpecificationItem.Builder() //
+                .id(ARTIFACT_TYPE, NAME, REVISION) //
+                .addCoveredId("foo", "bar", 3) //
+                .build();
+        assertThat(item.getCoveredIds(), equalTo(parseIds("foo~bar~3")));
+    }
+
+    @Test
+    public void testDependencyBuilderWithIdParts()
+    {
+        final SpecificationItem item = new SpecificationItem.Builder() //
+                .id(ARTIFACT_TYPE, NAME, REVISION) //
+                .addDependOnId("foo", "bar", 3) //
+                .build();
+        assertThat(item.getDependOnIds(), equalTo(parseIds("foo~bar~3")));
     }
 }

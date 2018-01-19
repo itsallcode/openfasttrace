@@ -116,7 +116,7 @@ API users select exporters via their name as strings.
 ### Tracing Needed Coverage
 `dsn~tracing.needed-coverage-status~1`
 
-The [linker](#linker) component iterates over all needed artifacts of all specification items and determines if and which coverage exists for each.
+The [linker](#linker) component iterates over all needed artifact types of all specification items and determines if and which coverage exists for each.
 
 Comment:
 Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component. 
@@ -128,7 +128,7 @@ Covers:
 Needs: utest, impl
 
 ### Outgoing Coverage Link Status
-`dsn~tracing.outgoing-coverage-link-status~2`
+`dsn~tracing.outgoing-coverage-link-status~3`
 
 The [linker](#linker) component determines the coverage status of the outgoing link between the provider item and the requester item.
 
@@ -139,10 +139,7 @@ The possible results are:
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
   5. Orphaned:  link is broken - there is no matching coverage requester
-
-Comment:
-The following results are planned for future releases
-  * Unwanted:  coverage provider has an artifact type the provider does not want
+  6. Unwanted:  coverage provider has an artifact type the provider does not want
 
 Covers:
 

@@ -78,7 +78,7 @@ public class Linker
         }
     }
 
-    // [impl->dsn~tracing.outgoing-coverage-link-status~1]
+    // [impl->dsn~tracing.outgoing-coverage-link-status~3]
     // [impl->dsn~tracing.incoming-coverage-link-status~1]
     private void linkItemToItemWithId(final LinkedSpecificationItem item,
             final SpecificationItemId id)

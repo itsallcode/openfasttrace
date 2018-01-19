@@ -170,6 +170,14 @@ Needs: dsn
 
 ### Markdown
 
+Markdown is a simple ASCII-based markup format that is designed to be human readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.
+
+Markdown focuses on content over formatting by giving the document structure like headlines, paragraphs and lists. The combination of being lightweight, human-readable and structure-oriented makes it a good fit for writing specifications as code.
+
+OFT defines a Markdown format that we call "Requirement-Enhanced Markdown" which is a superset of the regular Markdown. Any Markdown renderer can render this format without understanding it. The additional structural definitions tell OFT which part of the text is a specification item.
+
+For backward compatibility OFT supports a variant of this format that was introduced at Elektrobit. This format is a little bit closer to ReqM2, the predecessor that sparked the OFT idea. We recommend using standard OFT Markdown format in new documents though since this format is cleaner.
+
 #### Markdown Standard Syntax
 `req~markdown-standard-syntax~1`
 
@@ -195,6 +203,21 @@ In long specification document the outline is the primary means of navigating th
 Covers:
 
   * [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
+#### Support for EB Markdown Requirements
+`req~eb-markdown~1`
+
+In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elektrobit's variant.
+
+Rationale:
+
+This allows stepwise migration to the OFT standard format. The Elektrobit format is a little bit closer to ReqM2.
+
+Covers:
+
+  * [feat~markdown-import~1](#feat~markdown-import~1)
 
 Needs: dsn
 

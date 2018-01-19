@@ -123,8 +123,8 @@ Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-
 
 Covers:
 
-  * `req~tracing.needed-coverage-status~1`
-  
+  * `req~tracing.outgoing-coverage-link-status~1`
+
 Needs: utest, impl
 
 ### Outgoing Coverage Link Status
@@ -361,7 +361,7 @@ Otherwise users would be forced to invent different names for each link in the c
 
 Covers:
 
-  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -376,7 +376,7 @@ Markdown titles show up in the outline and are a natural way of defining a requi
 
 Covers:
 
-  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest 
 
@@ -393,13 +393,12 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
 #### Markdown "Covers" list
-`dsn~md.covers_list~1`
+`dsn~md.covers-list~1`
 
 The Markdown Importer supports the following format for links that cover a different specification item.
 
@@ -417,13 +416,12 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
 #### Markdown "Depends" List
-`dsn~md.depends_list~1`
+`dsn~md.depends-list~1`
 
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
@@ -441,22 +439,72 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
+#### Markdown Compact "Needs" List
+`dsn~md.needs-coverage-list-compact~1`
+
+The Markdown Importer supports the following compact format for defining the list of artifact types that are needed to fully cover the current specification item.
+
+    needs-list = needs-header 1*(LINEBREAK depends-line)
+    
+    needs-header = "Needs:" *WSP
+    
+    needs-line = *WSP "*" *WSP reference
+
+Rationale:
+
+This alternative style of the "needs" list provides backward compatibility to Elektrobit's legacy requirement enhanced Markdown format.
+
+Covers:
+
+  * `req~markdown-standard-syntax~1`
+
+Needs: impl, utest
+
+### Elektrobit Markdown-style Structures
+
 #### Markdown "Needs" List
-`dsn~md.needs_coverage_list~1`
+`dsn~md.needs-coverage-list~2`
 
 The Markdown Importer supports the following format for defining the list of artifact types that are needed to fully cover the current specification item.
 
     needs-list = "Needs:" *WSP reference *("," *WSP reference)
 
+Rationale:
+
+Unlike the the references to other requirements, tags are usually very short, so it is visually beneficial to use a compact style with a comma separated list in a single line.
+
 Covers:
 
-  * `req~markdown-import~1`
-  * `req~markdown-standard-syntax~1`
+  * `req~eb-markdown~1`
+
+Needs: impl, utest
+  
+#### Legacy Markdown Specification Item ID Format
+`dsn~md.eb-markdown-id~1`
+
+Alternatively a Markdown requirement ID can have the following format
+
+    requirement-id = *1(type~)type ":" id "," *WSP "v" revision
+
+See `dsn~md.specification-item-id-format~2` for definitions of the ABNF sub-rules referred to here. 
+
+Rationale:
+
+This ID format is supported for backwards compatibility with Elektrobit's legacy requirement-enhanced Markdown format.
+
+Comment:
+
+This format is deprecated. Please use the one specified in `dsn~md.specification-item-id-format~2` for new documents.
+
+Covers:
+
+  * `req~eb-markdown~1`
+
+Needs: impl, utest
 
 ## User Interface
 

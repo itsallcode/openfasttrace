@@ -154,15 +154,17 @@ public class Linker
     private void linkToOutdatedOrPredated(final LinkedSpecificationItem item,
             final SpecificationItemId id, final List<LinkedSpecificationItem> coveredLinkedItems)
     {
+
         for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
         {
-            if (id.getRevision() < itemCoveredIgnoringVersion.getId().getRevision())
+            final int coveredItemRevision = itemCoveredIgnoringVersion.getId().getRevision();
+            if (id.getRevision() < coveredItemRevision)
             {
                 item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
                 itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
                         LinkStatus.COVERED_OUTDATED);
             }
-            else if (id.getRevision() > itemCoveredIgnoringVersion.getId().getRevision())
+            else if (id.getRevision() > coveredItemRevision)
             {
                 item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
                 itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
@@ -170,9 +172,9 @@ public class Linker
             }
             else
             {
-                //
+                throw new IllegalStateException("Used version-less match on a link to ID \"" + id
+                        + " but versions are identical.");
             }
         }
     }
-
 }

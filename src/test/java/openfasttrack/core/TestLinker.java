@@ -1,5 +1,26 @@
 package openfasttrack.core;
 
+/*-
+ * #%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 - 2017 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 import static openfasttrack.core.SampleArtifactTypes.IMPL;
 import static openfasttrack.core.SampleArtifactTypes.REQ;
 import static openfasttrack.core.SpecificationItemId.createId;
@@ -7,10 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -21,9 +39,11 @@ public class TestLinker
     //
     // Out
     // 1. Covers: link points to a specification item which wants this coverage
-    // 2. Outdated: link points to a specification item which has a higher revision
+    // 2. Outdated: link points to a specification item which has a higher
+    // revision
     // number
-    // 3. Predated: link points to a specification item which has a lower revision
+    // 3. Predated: link points to a specification item which has a lower
+    // revision
     // number
     // 4. Ambiguous: link points to a specification item that has duplicates
     // 5. Orphaned: link is broken - there is no matching coverage requester
@@ -142,11 +162,14 @@ public class TestLinker
 
     // In
     // 1. Covered shallow: coverage provider for a required coverage exists
-    // 2. Covered unwanted: coverage provider covers an artifact type the requester
+    // 2. Covered unwanted: coverage provider covers an artifact type the
+    // requester
     // does not want
-    // 3. Covered predated: coverage provider covers a higher revision number than
+    // 3. Covered predated: coverage provider covers a higher revision number
+    // than
     // the requester has
-    // 4. Covered outdated: coverage provider covers a lower revision number than
+    // 4. Covered outdated: coverage provider covers a lower revision number
+    // than
     // the requester has
 
     @Test

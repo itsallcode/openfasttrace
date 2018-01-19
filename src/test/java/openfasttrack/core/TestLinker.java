@@ -21,13 +21,7 @@ package openfasttrack.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import static openfasttrack.core.SampleArtifactTypes.DSN;
-import static openfasttrack.core.SampleArtifactTypes.IMPL;
-import static openfasttrack.core.SampleArtifactTypes.OMAN;
-import static openfasttrack.core.SampleArtifactTypes.REQ;
-import static openfasttrack.core.SampleArtifactTypes.UMAN;
+import static openfasttrack.core.SampleArtifactTypes.*;
 import static openfasttrack.core.SpecificationItemBuilders.prepare;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;

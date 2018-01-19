@@ -21,12 +21,7 @@ package openfasttrack.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import static openfasttrack.core.SampleArtifactTypes.DSN;
-import static openfasttrack.core.SampleArtifactTypes.IMPL;
-import static openfasttrack.core.SampleArtifactTypes.REQ;
-import static openfasttrack.core.SampleArtifactTypes.UMAN;
+import static openfasttrack.core.SampleArtifactTypes.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
@@ -157,7 +152,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.UNCOVERED));
     }
 
-    // [utest->dsn~tracing.defect_items~1]
+    // [utest->dsn~tracing.defect-items~1]
     @Test
     public void testIsDefect_False()
     {

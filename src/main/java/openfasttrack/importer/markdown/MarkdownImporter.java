@@ -22,7 +22,6 @@ package openfasttrack.importer.markdown;
  * #L%
  */
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -55,7 +54,9 @@ class MarkdownImporter implements Importer
         transition(State.SPEC_ITEM  , State.COMMENT    , MdPattern.COMMENT    , this::beginComment                         ),
         transition(State.SPEC_ITEM  , State.COVERS     , MdPattern.COVERS     , () -> {}                                   ),
         transition(State.SPEC_ITEM  , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
-        transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
+        transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
+        transition(State.SPEC_ITEM  , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
+        transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                     ),
         transition(State.SPEC_ITEM  , State.DESCRIPTION, MdPattern.EVERYTHING , this::beginDescription                     ),
     
         transition(State.DESCRIPTION, State.SPEC_ITEM  , MdPattern.ID         , () -> {endDescription(); beginItem();}     ),
@@ -64,7 +65,8 @@ class MarkdownImporter implements Importer
         transition(State.DESCRIPTION, State.COMMENT    , MdPattern.COMMENT    , () -> {endDescription(); beginComment();}  ),
         transition(State.DESCRIPTION, State.COVERS     , MdPattern.COVERS     , this::endDescription                       ),
         transition(State.DESCRIPTION, State.DEPENDS    , MdPattern.DEPENDS    , this::endDescription                       ),
-        transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , () -> {endDescription(); addNeeds();}      ),
+        transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endDescription(); addNeeds();}      ),
+        transition(State.DESCRIPTION, State.NEEDS      , MdPattern.NEEDS      , () -> endDescription()                     ),
         transition(State.DESCRIPTION, State.DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription                    ),
     
         transition(State.RATIONALE  , State.SPEC_ITEM  , MdPattern.ID         , () -> {endRationale(); beginItem();}       ),
@@ -72,42 +74,51 @@ class MarkdownImporter implements Importer
         transition(State.RATIONALE  , State.COMMENT    , MdPattern.COMMENT    , () -> {endRationale(); beginComment();}    ),
         transition(State.RATIONALE  , State.COVERS     , MdPattern.COVERS     , this::endRationale                         ),
         transition(State.RATIONALE  , State.DEPENDS    , MdPattern.DEPENDS    , this::endRationale                         ),
-        transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , () -> {endRationale(); addNeeds();}        ),
+        transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endRationale(); addNeeds();}        ),
+        transition(State.RATIONALE  , State.NEEDS      , MdPattern.NEEDS      , () -> endRationale()                       ),
         transition(State.RATIONALE  , State.RATIONALE  , MdPattern.EVERYTHING , this::appendRationale                      ),
     
         transition(State.COMMENT    , State.SPEC_ITEM  , MdPattern.ID         , () -> {endComment(); beginItem();}         ),
         transition(State.COMMENT    , State.TITLE      , MdPattern.TITLE      , () -> {endComment(); endItem();}           ),
         transition(State.COMMENT    , State.COVERS     , MdPattern.COVERS     , this::endComment                           ),
         transition(State.COMMENT    , State.DEPENDS    , MdPattern.DEPENDS    , this::endComment                           ),
-        transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> {endComment(); addNeeds();}          ),
+        transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS_INT  , () -> {endComment(); addNeeds();}          ),
+        transition(State.COMMENT    , State.NEEDS      , MdPattern.NEEDS      , () -> endComment()                         ),
+        
         transition(State.COMMENT    , State.RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(State.COMMENT    , State.COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),
-        // [impl->dsn~md.covers_list~1]
+        // [impl->dsn~md.covers-list~1]
         transition(State.COVERS     , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.COVERS     , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.COVERS     , State.COVERS     , MdPattern.COVERS_REF , this::addCoverage                          ),
         transition(State.COVERS     , State.RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),
         transition(State.COVERS     , State.COMMENT    , MdPattern.COMMENT    , this::beginComment                         ),
         transition(State.COVERS     , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
-        transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
+        transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
+        transition(State.COVERS     , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(State.COVERS     , State.COVERS     , MdPattern.EMPTY      , () -> {}                                   ),
-        // [impl->dsn~md.depends_list~1]
+        // [impl->dsn~md.depends-list~1]
         transition(State.DEPENDS    , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.DEPENDS    , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS_REF, this::addDependency                        ),
         transition(State.DEPENDS    , State.RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),
         transition(State.DEPENDS    , State.COMMENT    , MdPattern.COMMENT    , this::beginComment                         ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
-        transition(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
+        transition(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
+        transition(State.DEPENDS    , State.NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(State.DEPENDS    , State.DEPENDS    , MdPattern.EMPTY      , () -> {}                                   ),
-    
+        transition(State.DEPENDS    , State.COVERS     , MdPattern.COVERS     , () -> {}                                   ),
+        // [impl->dsn~md.needs-coverage-list~2]
+        // [impl->dsn~md.needs-coverage-list-compact~1]
         transition(State.NEEDS      , State.SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(State.NEEDS      , State.TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(State.NEEDS      , State.RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),
         transition(State.NEEDS      , State.COMMENT    , MdPattern.COMMENT    , this::beginComment                         ),
         transition(State.NEEDS      , State.DEPENDS    , MdPattern.DEPENDS    , () -> {}                                   ),
-        transition(State.NEEDS      , State.NEEDS      , MdPattern.NEEDS      , this::addNeeds                             ),
-        transition(State.NEEDS      , State.NEEDS      , MdPattern.EMPTY      , () -> {}                                   )
+        transition(State.NEEDS      , State.NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
+        transition(State.NEEDS      , State.NEEDS      , MdPattern.NEEDS_REF  , this::addNeeds                             ),
+        transition(State.NEEDS      , State.NEEDS      , MdPattern.EMPTY      , () -> {}                                   ),
+        transition(State.NEEDS      , State.COVERS     , MdPattern.COVERS     , () -> {}                                   )
     };
 
     private final String fileName;

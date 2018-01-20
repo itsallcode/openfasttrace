@@ -1,5 +1,7 @@
 package openfasttrack.importer.legacytag;
 
+import static java.util.stream.Collectors.toList;
+
 /*-
  * #%L
  * OpenFastTrack
@@ -23,6 +25,7 @@ package openfasttrack.importer.legacytag;
  */
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
@@ -66,10 +69,30 @@ public class LegacyTagImporterFactory extends ImporterFactory
         final Optional<PathConfig> config = findConfig(file);
         if (!config.isPresent())
         {
-            throw new ImporterException("File '" + file + "' not supported for import");
+            final List<String> patterns = this.pathConfigs.stream()
+                    .map(pathConfig -> pathConfig.getPattern())
+                    .collect(toList());
+            throw new ImporterException(
+                    "File '" + file + "' not supported for import, supported patterns: "
+                            + patterns);
         }
+        return () -> runImporter(file, charset, config.get(), listener);
+    }
+
+    private void runImporter(final Path file, final Charset charset, final PathConfig config,
+            final ImportEventListener listener)
+    {
         LOG.finest(() -> "Creating importer for file " + file);
-        final BufferedReader reader = createReader(file, charset);
-        return new LegacyTagImporter(config.get(), file, reader, listener);
+        try (final BufferedReader reader = createReader(file, charset))
+        {
+            final LegacyTagImporter importer = new LegacyTagImporter(config, file, reader,
+                    listener);
+            importer.runImport();
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException(
+                    "Error importing file '" + file + "': " + e.getMessage(), e);
+        }
     }
 }

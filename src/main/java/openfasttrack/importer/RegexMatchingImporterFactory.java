@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -53,14 +54,6 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
                 .collect(toSet());
     }
 
-    /**
-     * Returns <code>true</code> if this {@link ImporterFactory} supports
-     * importing the given file based on its file extension.
-     *
-     * @param file
-     *            the file to check.
-     * @return <code>true</code> if the given file is supported for importing.
-     */
     @Override
     public boolean supportsFile(final Path file)
     {
@@ -90,7 +83,7 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
      * @param listener
      *            the listener to be informed about detected specification item
      *            fragments
-     * @return an importer instance
+     * @return an {@link Importer} instance
      */
     @Override
     public Importer createImporter(final Path file, final Charset charset,
@@ -98,11 +91,28 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
     {
         if (!supportsFile(file))
         {
-            throw new ImporterException("File '" + file + "' not supported for import");
+            throw new ImporterException(
+                    "File '" + file + "' not supported for import. Supported file name patterns: "
+                            + this.supportedFilenamePatterns);
         }
         LOG.finest(() -> "Creating importer for file " + file);
-        final BufferedReader reader = createReader(file, charset);
-        return createImporter(file.toString(), reader, listener);
+
+        return () -> runImporter(file, charset, listener);
+    }
+
+    private void runImporter(final Path file, final Charset charset,
+            final ImportEventListener listener)
+    {
+        try (final BufferedReader reader = createReader(file, charset))
+        {
+            final Importer importer = createImporter(file.toString(), reader, listener);
+            importer.runImport();
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException(
+                    "Error importing file '" + file + "': " + e.getMessage(), e);
+        }
     }
 
     /**

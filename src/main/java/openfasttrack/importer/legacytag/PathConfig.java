@@ -46,10 +46,10 @@ public class PathConfig
 
     private static PathMatcher createMatcher(final String pattern)
     {
-        return FileSystems.getDefault().getPathMatcher(normalizePattern(pattern));
+        return FileSystems.getDefault().getPathMatcher(addMissingPatternPrefix(pattern));
     }
 
-    private static String normalizePattern(final String pattern)
+    private static String addMissingPatternPrefix(final String pattern)
     {
         if (pattern.startsWith(GLOB_PREFIX) || pattern.startsWith(REGEX_PREFIX))
         {

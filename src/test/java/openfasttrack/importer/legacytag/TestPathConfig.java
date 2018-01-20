@@ -53,13 +53,13 @@ public class TestPathConfig
     }
 
     @Test
-    public void testGlobDoesntMatches()
+    public void testGlobDoesNotMatch()
     {
         assertMatches("glob:pattern", "wrongpattern", false);
     }
 
     @Test
-    public void testRegexpMatches()
+    public void testLiteralMatches()
     {
         assertMatches("regex:pattern", "pattern", true);
     }
@@ -72,7 +72,7 @@ public class TestPathConfig
     }
 
     @Test
-    public void testRegexDoesntMatches()
+    public void testRegexDoesNotMatch()
     {
         assertMatches("regex:pattern", "wrongpattern", false);
     }

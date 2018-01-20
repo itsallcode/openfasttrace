@@ -102,6 +102,6 @@ public class TestPathConfig
 
     private PathConfig create(final String pattern)
     {
-        return new PathConfig(pattern);
+        return new PathConfig(pattern, null, null, null);
     }
 }

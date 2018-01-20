@@ -122,6 +122,6 @@ public class TestLegacyTagImporterFactory
 
     private PathConfig createConfig(final String globPattern)
     {
-        return new PathConfig("glob:" + globPattern);
+        return new PathConfig("glob:" + globPattern, null, null, null);
     }
 }

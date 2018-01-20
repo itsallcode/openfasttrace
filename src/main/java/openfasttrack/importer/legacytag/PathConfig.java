@@ -30,18 +30,29 @@ public class PathConfig
 {
     private static final String REGEX_PREFIX = "regex:";
     private static final String GLOB_PREFIX = "glob:";
+
     private final String pattern;
     private final PathMatcher pathMatcher;
+    private final String coveredItemNamePrefix;
+    private final String coveredItemArtifactType;
+    private final String tagArtifactType;
 
-    public PathConfig(final String pattern)
+    public PathConfig(final String pattern, final String coveredItemArtifactType,
+            final String coveredItemNamePrefix, final String tagArtifactType)
     {
-        this(pattern, createMatcher(pattern));
+        this(pattern, createMatcher(pattern), coveredItemArtifactType, coveredItemNamePrefix,
+                tagArtifactType);
     }
 
-    private PathConfig(final String pattern, final PathMatcher pathMatcher)
+    private PathConfig(final String pattern, final PathMatcher pathMatcher,
+            final String coveredItemArtifactType, final String coveredItemNamePrefix,
+            final String tagArtifactType)
     {
         this.pattern = pattern;
         this.pathMatcher = pathMatcher;
+        this.coveredItemNamePrefix = coveredItemNamePrefix;
+        this.coveredItemArtifactType = coveredItemArtifactType;
+        this.tagArtifactType = tagArtifactType;
     }
 
     private static PathMatcher createMatcher(final String pattern)
@@ -70,19 +81,25 @@ public class PathConfig
 
     public String getTagArtifactType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.tagArtifactType;
     }
 
     public String getCoveredItemArtifactType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.coveredItemArtifactType;
     }
 
     public String getCoveredItemNamePrefix()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.coveredItemNamePrefix;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PathConfig [pattern=" + this.pattern + ", pathMatcher=" + this.pathMatcher
+                + ", coveredItemNamePrefix=" + this.coveredItemNamePrefix
+                + ", coveredItemArtifactType="
+                + this.coveredItemArtifactType + ", tagArtifactType=" + this.tagArtifactType + "]";
     }
 }

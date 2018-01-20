@@ -67,4 +67,22 @@ public class PathConfig
     {
         return this.pathMatcher.matches(file);
     }
+
+    public String getTagArtifactType()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public String getCoveredItemArtifactType()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public String getCoveredItemNamePrefix()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

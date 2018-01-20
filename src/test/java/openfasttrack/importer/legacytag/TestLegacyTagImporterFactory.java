@@ -25,7 +25,7 @@ package openfasttrack.importer.legacytag;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -93,14 +93,14 @@ public class TestLegacyTagImporterFactory
         final File tempFile = this.temp.newFile();
         final Importer importer = createImporter(asList(createConfig(tempFile.getAbsolutePath())),
                 tempFile.toPath());
-        assertThat(importer, instanceOf(LegacyTagImporter.class));
+        assertThat(importer, notNullValue());
     }
 
     @Test(expected = ImporterException.class)
     public void testFactoryThrowsExceptionForMissingFile() throws IOException
     {
         final Importer importer = createImporter(asList(createConfig(PATH1)), Paths.get(PATH1));
-        assertThat(importer, instanceOf(LegacyTagImporter.class));
+        importer.runImport();
     }
 
     private void assertSupportsFile(final List<PathConfig> pathConfigs, final String path,

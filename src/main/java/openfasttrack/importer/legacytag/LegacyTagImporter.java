@@ -66,14 +66,16 @@ class LegacyTagImporter implements Importer
         int counter = 0;
         while (matcher.find())
         {
-            final SpecificationItemId coveredId = createCoveredItem(matcher.group(1),
-                    matcher.group(2));
-            final String generatedName = generateName(coveredId, lineNumber, counter);
+            final String coveredItemName = matcher.group(1);
+            final String coveredItemRevision = matcher.group(2);
+            final SpecificationItemId coveredId = createCoveredItem(coveredItemName,
+                    coveredItemRevision);
 
+            final String generatedName = generateName(coveredId, lineNumber, counter);
             final SpecificationItemId tagItemId = SpecificationItemId
                     .createId(this.pathConfig.getTagArtifactType(), generatedName);
 
-            LOG.info(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
                     + "' covering id '" + coveredId + "'");
 
             addItem(lineNumber, coveredId, tagItemId);
@@ -91,14 +93,25 @@ class LegacyTagImporter implements Importer
         this.listener.endSpecificationItem();
     }
 
-    private SpecificationItemId createCoveredItem(final String coveredIdString,
-            final String revisionString)
+    private SpecificationItemId createCoveredItem(final String name, final String revision)
     {
-        final int coveredItemRevision = Integer.parseInt(revisionString);
-        final String coveredItemName = getCoveredItemNamePrefix() + coveredIdString;
-        final SpecificationItemId coveredId = SpecificationItemId.createId(
-                this.pathConfig.getCoveredItemArtifactType(), coveredItemName, coveredItemRevision);
-        return coveredId;
+        final int parsedRevision = parseRevision(name, revision);
+        final String nameWithPrefix = getCoveredItemNamePrefix() + name;
+        return SpecificationItemId.createId(this.pathConfig.getCoveredItemArtifactType(),
+                nameWithPrefix, parsedRevision);
+    }
+
+    private int parseRevision(final String name, final String revision)
+    {
+        try
+        {
+            return Integer.parseInt(revision);
+        }
+        catch (final NumberFormatException e)
+        {
+            throw new ImporterException(
+                    "Error parsing revision '" + revision + "' for item '" + name + "'.", e);
+        }
     }
 
     private String getCoveredItemNamePrefix()

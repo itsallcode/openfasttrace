@@ -22,7 +22,6 @@ package openfasttrack.mode;
  * #L%
  */
 
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +29,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.Linker;
-import openfasttrack.core.Newline;
-import openfasttrack.core.SpecificationItem;
+import openfasttrack.core.*;
 import openfasttrack.importer.ImporterService;
+import openfasttrack.importer.legacytag.LegacyTagImporterConfig;
+import openfasttrack.importer.legacytag.LegacyTagImporterFactory;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
 {
@@ -60,6 +58,12 @@ abstract class AbstractMode<T extends AbstractMode<T>>
     {
 
         this.newline = newline;
+        return self();
+    }
+
+    public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config)
+    {
+        LegacyTagImporterFactory.setPathConfig(config);
         return self();
     }
 

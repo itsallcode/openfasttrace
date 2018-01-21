@@ -1,10 +1,10 @@
-package openfasttrack.importer.tag;
+package openfasttrack.importer;
 
 /*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 - 2017 hamstercommunity
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,20 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.CRC32;
 
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterFactory;
-import openfasttrack.importer.RegexMatchingImporterFactory;
-
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-public class TagImporterFactory extends RegexMatchingImporterFactory
+public class ChecksumCalculator
 {
-    public TagImporterFactory()
+    private ChecksumCalculator()
     {
-        super("(?i).*\\.java");
+
     }
 
-    @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public static long calculateCrc32(final String value)
     {
-        return new TagImporter(fileName, reader, listener);
+        final CRC32 checksum = new CRC32();
+        checksum.update(value.getBytes(StandardCharsets.UTF_8));
+        return checksum.getValue();
     }
 }

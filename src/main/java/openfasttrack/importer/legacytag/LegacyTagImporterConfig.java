@@ -1,10 +1,10 @@
-package openfasttrack.importer.tag;
+package openfasttrack.importer.legacytag;
 
 /*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 - 2017 hamstercommunity
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,26 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-import java.io.Reader;
+import static java.util.Collections.emptyList;
 
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterFactory;
-import openfasttrack.importer.RegexMatchingImporterFactory;
+import java.util.List;
 
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-public class TagImporterFactory extends RegexMatchingImporterFactory
+public class LegacyTagImporterConfig
 {
-    public TagImporterFactory()
+    private final List<PathConfig> pathConfigs;
+
+    public LegacyTagImporterConfig()
     {
-        super("(?i).*\\.java");
+        this(emptyList());
     }
 
-    @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public LegacyTagImporterConfig(final List<PathConfig> pathConfigs)
     {
-        return new TagImporter(fileName, reader, listener);
+        this.pathConfigs = pathConfigs;
+    }
+
+    public List<PathConfig> getPathConfigs()
+    {
+        return this.pathConfigs;
     }
 }

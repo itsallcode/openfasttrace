@@ -1,10 +1,10 @@
-package openfasttrack.importer.tag;
+package openfasttrack.core;
 
 /*-
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 - 2017 hamstercommunity
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,30 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-import java.io.Reader;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterFactory;
-import openfasttrack.importer.RegexMatchingImporterFactory;
+import org.junit.Test;
 
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-public class TagImporterFactory extends RegexMatchingImporterFactory
+import openfasttrack.importer.ChecksumCalculator;
+
+public class TestChecksumCalculator
 {
-    public TagImporterFactory()
+    @Test
+    public void testCalculateCrc32OfEmptyString()
     {
-        super("(?i).*\\.java");
+        assertThat(ChecksumCalculator.calculateCrc32(""), equalTo(0L));
     }
 
-    @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    @Test
+    public void testCalculateCrc32OfSimpleString()
     {
-        return new TagImporter(fileName, reader, listener);
+        assertThat(ChecksumCalculator.calculateCrc32("abcd"), equalTo(3984772369L));
+    }
+
+    @Test
+    public void testCalculateCrc32OfUtf8String()
+    {
+        assertThat(ChecksumCalculator.calculateCrc32("äöüÖÄÜß"), equalTo(2866547662L));
     }
 }

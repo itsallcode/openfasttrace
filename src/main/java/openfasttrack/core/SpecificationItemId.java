@@ -35,21 +35,23 @@ import javax.annotation.Generated;
 // [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
+    public static final String ITEM_REVISION_PATTERN = "(\\d+)";
+    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
     // [impl->dsn~md.specification-item-id-format~2]
     private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
-            + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
+            + ITEM_NAME_PATTERN //
             + REVISION_SEPARATOR //
-            + "(\\d+)";
+            + ITEM_REVISION_PATTERN;
     // [impl->dsn~md.eb-markdown-id~1]
     private static final String LEGACY_ID = "(\\p{Alpha}+)" //
             + ":" //
-            + "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)" //
+            + ITEM_NAME_PATTERN //
             + ", *v" //
-            + "(\\d+)";
+            + ITEM_REVISION_PATTERN;
 
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);

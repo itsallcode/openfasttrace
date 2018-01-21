@@ -28,6 +28,8 @@ import java.util.List;
 
 import openfasttrack.core.Newline;
 import openfasttrack.core.Trace;
+import openfasttrack.importer.legacytag.LegacyTagImporterConfig;
+import openfasttrack.importer.legacytag.LegacyTagImporterFactory;
 import openfasttrack.report.ReportVerbosity;
 
 /**
@@ -75,6 +77,16 @@ public interface Reporter
     Reporter setReportVerbosity(final ReportVerbosity verbosity);
 
     /**
+     * Set the {@link LegacyTagImporterConfig} for the
+     * {@link LegacyTagImporterFactory}.
+     * 
+     * @param config
+     *            the {@link LegacyTagImporterConfig} to set.
+     * @return a <code>Reporter</code> instance for fluent programming
+     */
+    Reporter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+
+    /**
      * Run a trace on the input files
      */
     Trace trace();
@@ -89,8 +101,8 @@ public interface Reporter
      *            output file or directory
      * 
      * @param format
-     *            report format (this is a name defined in the respective reporter
-     *            plug-in)
+     *            report format (this is a name defined in the respective
+     *            reporter plug-in)
      */
     void reportToFileInFormat(final Trace trace, final Path output, final String format);
 
@@ -101,8 +113,8 @@ public interface Reporter
      *            trace result to be written
      * 
      * @param format
-     *            report format (this is a name defined in the respective reporter
-     *            plug-in)
+     *            report format (this is a name defined in the respective
+     *            reporter plug-in)
      */
     void reportToStdOutInFormat(final Trace trace, final String format);
 }

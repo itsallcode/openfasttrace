@@ -1,5 +1,7 @@
 package openfasttrack.core;
 
+import java.util.HashMap;
+
 /*-
  * #%L
  * OpenFastTrack
@@ -23,12 +25,14 @@ package openfasttrack.core;
  */
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Linker
 {
     private final List<LinkedSpecificationItem> linkedItems;
     private final LinkedItemIndex index;
+    private final Map<SpecificationItemId, LinkedSpecificationItem> staleIndex;
 
     /**
      * Create a {@link Linker} for specification items.
@@ -40,6 +44,7 @@ public class Linker
     {
         this.linkedItems = wrapItems(items);
         this.index = LinkedItemIndex.createFromWrappedItems(this.linkedItems);
+        this.staleIndex = new HashMap<>();
     }
 
     private List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
@@ -73,7 +78,7 @@ public class Linker
         }
     }
 
-    // [impl->dsn~tracing.outgoing-coverage-link-status~1]
+    // [impl->dsn~tracing.outgoing-coverage-link-status~3]
     // [impl->dsn~tracing.incoming-coverage-link-status~1]
     private void linkItemToItemWithId(final LinkedSpecificationItem item,
             final SpecificationItemId id)
@@ -95,9 +100,16 @@ public class Linker
         final String coveringArtifactType = covering.getId().getArtifactType();
         if (covered.getItem().getNeedsArtifactTypes().contains(coveringArtifactType))
         {
-            covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
-            covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
-            covered.addCoveredArtifactType(coveringArtifactType);
+            if (covered.hasDuplicates())
+            {
+                covering.addLinkToItemWithStatus(covered, LinkStatus.AMBIGUOUS);
+            }
+            else
+            {
+                covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
+                covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
+                covered.addCoveredArtifactType(coveringArtifactType);
+            }
         }
         else
         {
@@ -113,35 +125,56 @@ public class Linker
                 .getByIdIgnoringVersion(id);
         if (coveredLinkedItems.isEmpty())
         {
-            // FIXME: Collect list of covered specification items that do not
-            // exist
-            // https://github.com/hamstercommunity/openfasttrack/issues/86
-            System.err.println("Error: " + item.getId() + " links to non-existent " + id);
+            linkOrphanToStaleId(item, id);
         }
         else
         {
-            for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
-            {
-                final int coveredItemRevision = itemCoveredIgnoringVersion.getId().getRevision();
-                if (id.getRevision() < coveredItemRevision)
-                {
-                    item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
-                    itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
-                            LinkStatus.COVERED_OUTDATED);
-                }
-                else if (id.getRevision() > coveredItemRevision)
-                {
-                    item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
-                    itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
-                            LinkStatus.COVERED_PREDATED);
-                }
-                else
-                {
-                    throw new IllegalStateException("Used version-less match on a link to ID \""
-                            + id + " but versions are identical.");
-                }
-            }
+            linkToOutdatedOrPredated(item, id, coveredLinkedItems);
         }
     }
 
+    private void linkOrphanToStaleId(final LinkedSpecificationItem item,
+            final SpecificationItemId id)
+    {
+        final LinkedSpecificationItem deadItem = findOrCreateStaleItem(id);
+        item.addLinkToItemWithStatus(deadItem, LinkStatus.ORPHANED);
+    }
+
+    private LinkedSpecificationItem findOrCreateStaleItem(final SpecificationItemId id)
+    {
+        LinkedSpecificationItem staleItem = this.staleIndex.get(id);
+        if (staleItem == null)
+        {
+            staleItem = new LinkedSpecificationItem(new SpecificationItem.Builder().id(id).build());
+            this.staleIndex.put(id, staleItem);
+        }
+        return staleItem;
+    }
+
+    private void linkToOutdatedOrPredated(final LinkedSpecificationItem item,
+            final SpecificationItemId id, final List<LinkedSpecificationItem> coveredLinkedItems)
+    {
+
+        for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
+        {
+            final int coveredItemRevision = itemCoveredIgnoringVersion.getId().getRevision();
+            if (id.getRevision() < coveredItemRevision)
+            {
+                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);
+                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                        LinkStatus.COVERED_OUTDATED);
+            }
+            else if (id.getRevision() > coveredItemRevision)
+            {
+                item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.PREDATED);
+                itemCoveredIgnoringVersion.addLinkToItemWithStatus(item,
+                        LinkStatus.COVERED_PREDATED);
+            }
+            else
+            {
+                throw new IllegalStateException("Used version-less match on a link to ID \"" + id
+                        + " but versions are identical.");
+            }
+        }
+    }
 }

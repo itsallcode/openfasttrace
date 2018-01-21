@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -47,8 +46,7 @@ public class LinkedSpecificationItem
      * Create a new instance of class {@link LinkedSpecificationItem}.
      *
      * @param item
-     *            the actual specification item that is at the center of the
-     *            links
+     *            the actual specification item that is at the center of the links
      */
     public LinkedSpecificationItem(final SpecificationItem item)
     {
@@ -115,7 +113,17 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get all links to the items by item status.
+     * Get all links to the item
+     *
+     * @return linked item
+     */
+    public Map<LinkStatus, List<LinkedSpecificationItem>> getLinks()
+    {
+        return this.links;
+    }
+
+    /**
+     * Get all links to the item by item status.
      *
      * @return the covered items
      */
@@ -192,8 +200,8 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Check if the item is covered shallow (i.e. if for all needed artifact
-     * types coverage exists without recursive search).
+     * Check if the item is covered shallow (i.e. if for all needed artifact types
+     * coverage exists without recursive search).
      *
      * @return <code>true</code> if the item is covered
      */
@@ -317,5 +325,10 @@ public class LinkedSpecificationItem
     public int countDuplicateLinks()
     {
         return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
+    }
+
+    public boolean hasDuplicates()
+    {
+        return countDuplicateLinks() != 0;
     }
 }

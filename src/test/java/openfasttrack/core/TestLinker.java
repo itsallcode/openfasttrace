@@ -21,104 +21,302 @@ package openfasttrack.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static openfasttrack.core.SampleArtifactTypes.*;
-import static openfasttrack.core.SpecificationItemBuilders.prepare;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import static openfasttrack.core.LinkStatus.*;
+import static openfasttrack.core.SampleArtifactTypes.IMPL;
+import static openfasttrack.core.SampleArtifactTypes.REQ;
+import static openfasttrack.core.SampleArtifactTypes.UTEST;
+import static openfasttrack.core.SpecificationItemId.createId;
+import static org.junit.Assert.fail;
 
-import org.junit.Before;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 
 public class TestLinker
 {
-    private static final SpecificationItem A;
-    private static final SpecificationItem B;
-    private static final SpecificationItem C;
-    private static final SpecificationItem D;
-    private static final SpecificationItem E;
-    private static final SpecificationItem F;
-    private static final SpecificationItem G;
-
-    static
-    {
-        A = prepare(REQ, "A", 2).addNeedsArtifactType(DSN).addNeedsArtifactType(OMAN).build();
-        B = prepare(DSN, "B", 2).addCoveredId(A.getId()).build();
-        C = prepare(DSN, "D", 2).addCoveredId(SpecificationItemId.createId(REQ, "A", 1)).build();
-        D = prepare(DSN, "E", 2).addCoveredId(SpecificationItemId.createId(REQ, "A", 3)).build();
-        E = prepare(IMPL, "C", 2).addCoveredId(A.getId()).build();
-        F = prepare(REQ, "F", 2).build();
-        G = prepare(DSN, "G", 2).addNeedsArtifactType(UMAN).build();
-    }
-
-    // @formatter:off
-    private static final int[][] LINK_MATRIX =
-        {
-                // CVS | OUT | PRE | UNW | CVS | COU | CPR | CUN
-                {    0 ,   0 ,   0 ,   0 ,   1 ,   1 ,   1 ,   1 },
-                {    1 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 },
-                {    0 ,   1 ,   0 ,   0 ,   0 ,   0 ,   0 ,   0 },
-                {    0 ,   0 ,   1 ,   0 ,   0 ,   0 ,   0 ,   0 },
-                {    0 ,   0 ,   0 ,   1 ,   0 ,   0 ,   0 ,   0 },
-        };
-    // @formatter:on
-
-    private Linker linker;
-    private List<SpecificationItem> items;
-    private List<LinkedSpecificationItem> linkedItems;
-
-    @Before
-    public void prepareTest()
-    {
-        this.items = Arrays.asList(A, B, C, D, E, F, G);
-        this.linker = new Linker(this.items);
-        this.linkedItems = this.linker.link();
-    }
-
+    // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testItemInCountEqualsItemOutCount()
+    public void testDetectOutgoingLinkStatusCovered()
     {
-        assertThat(this.linkedItems, hasSize(this.items.size()));
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "covered", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, COVERS);
     }
 
-    // [utest->dsn~tracing.needed-coverage-status~1]
-    // [utest->dsn~tracing.outgoing-coverage-link-status~1]
-    // [utest->dsn~tracing.incoming-coverage-link-status~1]]
-    @Test
-    public void testLinkStatus()
+    private List<LinkedSpecificationItem> linkItems(final SpecificationItem... items)
     {
-        final Iterator<LinkedSpecificationItem> iterator = this.linkedItems.iterator();
-        for (final int[] expectedCounts : LINK_MATRIX)
+        return new Linker(Arrays.asList(items)).link();
+    }
+
+    private void assertItemUnderTestHasExactlyOneLinkWithStatus(
+            final SpecificationItem itemUnderTest, final List<LinkedSpecificationItem> linkedItems,
+            final LinkStatus expected_status)
+    {
+        final Optional<LinkedSpecificationItem> linkedItemUnderTest = findLinkedItem(itemUnderTest,
+                linkedItems);
+        if (linkedItemUnderTest.isPresent())
         {
-            final LinkedSpecificationItem item = iterator.next();
-            assertItemLinkStatusCount(item, LinkStatus.COVERS, expectedCounts[0]);
-            assertItemLinkStatusCount(item, LinkStatus.OUTDATED, expectedCounts[1]);
-            assertItemLinkStatusCount(item, LinkStatus.PREDATED, expectedCounts[2]);
-            assertItemLinkStatusCount(item, LinkStatus.UNWANTED, expectedCounts[3]);
-            assertItemLinkStatusCount(item, LinkStatus.COVERED_SHALLOW, expectedCounts[4]);
-            assertItemLinkStatusCount(item, LinkStatus.COVERED_OUTDATED, expectedCounts[5]);
-            assertItemLinkStatusCount(item, LinkStatus.COVERED_PREDATED, expectedCounts[6]);
-            assertItemLinkStatusCount(item, LinkStatus.COVERED_UNWANTED, expectedCounts[7]);
+            assertItemHasExactlyOneLinkWithStatus(linkedItemUnderTest.get(), expected_status);
+        }
+        else
+        {
+            fail("Item under test \"" + itemUnderTest.getId() + "\" missing in linked items");
         }
     }
 
-    private void assertItemLinkStatusCount(final LinkedSpecificationItem item,
-            final LinkStatus status, final int count)
+    private Optional<LinkedSpecificationItem> findLinkedItem(final SpecificationItem itemUnderTest,
+            final List<LinkedSpecificationItem> linkedItems)
     {
-        final String message = item.getId().toString() + " must have " + count
-                + " links with status " + status.toString();
-        assertThat(message, item.getLinksByStatus(status), hasSize(count));
+        return linkedItems.stream() //
+                .filter(item -> item.getId().equals(itemUnderTest.getId())) //
+                .findFirst();
     }
 
+    // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testGetCoveredArtifactTypes()
+    public void testDetectOutgoingLinkStatusOrphaned()
     {
-        assertThat(this.linkedItems.get(0).getCoveredArtifactTypes(), containsInAnyOrder(DSN));
-        assertThat(this.linkedItems.get(1).getCoveredArtifactTypes(), empty());
+        final SpecificationItem orphan = new SpecificationItem.Builder() //
+                .id(IMPL, "orphan", 1) //
+                .addCoveredId(createId(REQ, "non-existent", 1)) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(orphan);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(orphan, linkedItems, ORPHANED);
+    }
+
+    // [utest->dsn~tracing.outgoing-coverage-link-status~3]
+    @Test
+    public void testDetectOutgoingLinkStatusOutdated()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "this-is-newer-than-link", 2) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "this-is-newer-than-link", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, OUTDATED);
+    }
+
+    // [utest->dsn~tracing.outgoing-coverage-link-status~3]
+    @Test
+    public void testDetectOutgoingLinkStatusPredated()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "this-is-older-than-link", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "this-is-older-than-link", 2) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, PREDATED);
+    }
+
+    // [utest->dsn~tracing.outgoing-coverage-link-status~3]
+    @Test
+    public void testDetectOutgoingLinkStatusAmbiguous()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem duplicate = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "covered", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered, duplicate);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, AMBIGUOUS);
+    }
+
+    // [utest->dsn~tracing.tracing.duplicate-items~1]
+    @Test
+    public void testDetectOutgoingLinkStatusDuplicate()
+    {
+        final SpecificationItem original = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .build();
+        final SpecificationItem duplicate = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(original, duplicate);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(original, linkedItems, DUPLICATE);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(duplicate, linkedItems, DUPLICATE);
+    }
+
+    // [utest->dsn~tracing.incoming-coverage-link-status~1]
+    @Test
+    public void testDetectIncomingLinkStatusCoveredShallow()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "covered", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covered, linkedItems, COVERED_SHALLOW);
+    }
+
+    private void assertItemHasExactlyOneLinkWithStatus(final LinkedSpecificationItem itemUnderTest,
+            final LinkStatus expectedStatus)
+    {
+        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        expectedStatuses.put(expectedStatus, 1);
+        assertItemHasLinksWithStatus(itemUnderTest, expectedStatuses);
+    }
+
+    private void assertItemHasLinksWithStatus(final LinkedSpecificationItem itemUnderTest,
+            final Map<LinkStatus, Integer> expectedStatuses)
+    {
+        final Map<LinkStatus, List<LinkedSpecificationItem>> linksWithStatus = itemUnderTest
+                .getLinks();
+        boolean ok = !linksWithStatus.isEmpty();
+        for (final LinkStatus status : linksWithStatus.keySet())
+        {
+            final int linkCount = linksWithStatus.get(status).size();
+            final Integer expectedLinkCount = (expectedStatuses.get(status) == null) ? 0
+                    : expectedStatuses.get(status);
+            ok = ok && (linkCount == expectedLinkCount);
+        }
+        if (!ok)
+        {
+            final String expected = createDebugInfoFromExpectedStatuses(expectedStatuses);
+            final StringBuilder actual = createDebugInfoFromLinksWithStatus(linksWithStatus);
+            fail("\nExpected: \"" + itemUnderTest.getId() + "\" has links with statuses: "
+                    + expected + ".\n" + "     but: was " + actual);
+        }
+    }
+
+    private String createDebugInfoFromExpectedStatuses(
+            final Map<LinkStatus, Integer> expectedStatuses)
+    {
+        return expectedStatuses.entrySet().stream() //
+                .map(entry -> entry.getKey().toString() + ": " + entry.getValue().toString()) //
+                .collect(Collectors.joining(", "));
+    }
+
+    private StringBuilder createDebugInfoFromLinksWithStatus(
+            final Map<LinkStatus, List<LinkedSpecificationItem>> linksWithStatus)
+    {
+        final StringBuilder debugInfo = new StringBuilder();
+        final Set<LinkStatus> keySet = linksWithStatus.keySet();
+        if (keySet.isEmpty())
+        {
+            debugInfo.append("no links");
+        }
+        else
+        {
+            for (final LinkStatus status : keySet)
+            {
+                final List<LinkedSpecificationItem> items = linksWithStatus.get(status);
+                debugInfo.append(status);
+                debugInfo.append(": ");
+                debugInfo.append(items.stream().map(item -> item.getId().toString())
+                        .collect(Collectors.joining(", ")));
+                debugInfo.append("; ");
+            }
+        }
+        return debugInfo;
+    }
+
+    // [utest->dsn~tracing.incoming-coverage-link-status~1]
+    @Test
+    public void testDetectIncomingLinkStatusUnwanted()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "covered", 1) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "covered", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covered, linkedItems, COVERED_UNWANTED);
+    }
+
+    // [utest->dsn~tracing.incoming-coverage-link-status~1]
+    @Test
+    public void testDetectIncomingLinkStatusCoveredOutdated()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "newer", 2) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "newer", 1) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covered, linkedItems, COVERED_OUTDATED);
+    }
+
+    // [utest->dsn~tracing.incoming-coverage-link-status~1]
+    @Test
+    public void testDetectIncomingLinkStatusCoveredPredated()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "older", 1) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "older", 2) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
+        assertItemUnderTestHasExactlyOneLinkWithStatus(covered, linkedItems, COVERED_PREDATED);
+    }
+
+    // [utest->dsn~tracing.needed-coverage-status~1]
+    @Test
+    public void testCoverageForDifferentArtifactTypes()
+    {
+        final SpecificationItem covered = new SpecificationItem.Builder() //
+                .id(REQ, "to-be-covered", 42) //
+                .addNeedsArtifactType(IMPL) //
+                .addNeedsArtifactType(UTEST) //
+                .build();
+        final SpecificationItem covering = new SpecificationItem.Builder() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "to-be-covered", 42) //
+                .build();
+        final SpecificationItem unwanted = new SpecificationItem.Builder() //
+                .id(REQ, "unwanted", 1) //
+                .addCoveredId(REQ, "to-be-covered", 42) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered, unwanted);
+        final Optional<LinkedSpecificationItem> linkedCovered = findLinkedItem(covered,
+                linkedItems);
+        if (linkedCovered.isPresent())
+        {
+            final Map<LinkStatus, Integer> expectedLinksOnCovered = new HashMap<>();
+            expectedLinksOnCovered.put(COVERED_SHALLOW, 1);
+            expectedLinksOnCovered.put(COVERED_UNWANTED, 1);
+            assertItemHasLinksWithStatus(linkedCovered.get(), expectedLinksOnCovered);
+            assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, COVERS);
+            assertItemUnderTestHasExactlyOneLinkWithStatus(unwanted, linkedItems, UNWANTED);
+        }
+        else
+        {
+            fail("Covered item " + covered.getId() + " not found in linked items");
+        }
     }
 }

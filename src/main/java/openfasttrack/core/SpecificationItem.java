@@ -22,7 +22,6 @@ package openfasttrack.core;
  * #L%
  */
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -124,8 +123,7 @@ public class SpecificationItem
     }
 
     /**
-     * Get the list of artifact types this specification item need to be covered
-     * in
+     * Get the list of artifact types this specification item need to be covered in
      *
      * @return the list of artifact types
      */
@@ -135,8 +133,8 @@ public class SpecificationItem
     }
 
     /**
-     * Check if this specification item needs to be covered by the given
-     * artifact type.
+     * Check if this specification item needs to be covered by the given artifact
+     * type.
      *
      * @param artifactType
      *            the artifact type for which needed coverage is evaluated.
@@ -433,6 +431,26 @@ public class SpecificationItem
         }
 
         /**
+         * Add the ID of a specification item covered by the item to build
+         *
+         * @param artifactType
+         *            the artifact type of the covered item
+         * @param name
+         *            the artifact name of the covered item
+         * @param revision
+         *            the revision number of the covered item
+         * @return this builder instance
+         */
+        public Builder addCoveredId(final String artifactType, final String name,
+                final int revision)
+        {
+            this.coveredIds.add(new SpecificationItemId.Builder() //
+                    .artifactType(artifactType).name(name).revision(revision) //
+                    .build());
+            return this;
+        }
+
+        /**
          * Add the ID of a specification item the item to be build depends on
          *
          * @param dependOnId
@@ -446,8 +464,28 @@ public class SpecificationItem
         }
 
         /**
-         * Add an artifact type where the specification item to be build
-         * requires to be covered
+         * Add the ID of a specification item the item to be build depends on
+         *
+         * @param artifactType
+         *            the artifact type of item to be build depends on
+         * @param name
+         *            the artifact name of item to be build depends on
+         * @param revision
+         *            the revision number of item to be build depends on
+         * @return this builder instance
+         */
+        public Builder addDependOnId(final String artifactType, final String name,
+                final int revision)
+        {
+            this.dependOnIds.add(new SpecificationItemId.Builder() //
+                    .artifactType(artifactType).name(name).revision(revision) //
+                    .build());
+            return this;
+        }
+
+        /**
+         * Add an artifact type where the specification item to be build requires to be
+         * covered
          *
          * @param neededArtifactType
          *            the artifact type

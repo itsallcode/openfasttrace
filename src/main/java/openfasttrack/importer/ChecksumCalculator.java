@@ -1,4 +1,4 @@
-package openfasttrack.core;
+package openfasttrack.importer;
 
 /*-
  * #%L

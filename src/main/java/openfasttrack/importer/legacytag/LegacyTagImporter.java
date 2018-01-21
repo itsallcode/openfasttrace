@@ -27,11 +27,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import openfasttrack.core.ChecksumCalculator;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.LineReader;
+import openfasttrack.importer.*;
 
 class LegacyTagImporter implements Importer
 {

@@ -29,11 +29,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import openfasttrack.core.ChecksumCalculator;
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterException;
+import openfasttrack.importer.*;
 
 /**
  * {@link Importer} for tags in source code files.

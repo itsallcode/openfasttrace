@@ -27,6 +27,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+import openfasttrack.importer.ChecksumCalculator;
+
 public class TestChecksumCalculator
 {
     @Test

@@ -22,7 +22,6 @@ package openfasttrack.report;
  * #L%
  */
 
-
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -218,16 +217,16 @@ public class PlainTextReport implements Reportable
     private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
     {
         renderItemSummary(item, report);
-        report.print("#");
+        report.print("|");
         report.print(this.newline);
 
         for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
         {
-            report.print("# ");
+            report.print("| ");
             report.print(line);
             report.print(this.newline);
         }
-        report.print("#");
+        report.print("|");
         report.print(this.newline);
     }
 }

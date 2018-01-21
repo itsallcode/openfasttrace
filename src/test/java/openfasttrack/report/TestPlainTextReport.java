@@ -4,7 +4,7 @@ package openfasttrack.report;
  * #%L
  * OpenFastTrack
  * %%
- * Copyright (C) 2016 - 2017 hamstercommunity
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,27 @@ package openfasttrack.report;
  * #L%
  */
 
+/*-
+ * |%L
+ * OpenFastTrack
+ * %%
+ * Copyright (C) 2016 - 2017 hamstercommunity
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * |L%
+ */
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
@@ -43,11 +64,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.Location;
-import openfasttrack.core.Newline;
-import openfasttrack.core.SpecificationItemId;
-import openfasttrack.core.Trace;
+import openfasttrack.core.*;
 import openfasttrack.matcher.MultilineTextMatcher;
 
 public class TestPlainTextReport
@@ -226,14 +243,20 @@ public class TestPlainTextReport
         prepareMixedItemDetails();
 
         assertReportOutput(ReportVerbosity.ALL, //
-                "not ok - 0/0>3>1/4 - dsn~failure~0 (impl, uman, -utest)", //
-                "#", //
-                "# This is a failure.", //
-                "#", //
+                "not ok - 0/1>3>2/4 - dsn~failure~0 (impl, uman, -utest)", //
+                "|", //
+                "| This is a failure.", //
+                "|", //
+                "|<-- ( ) imp~failure~0", //
+                "|--> ( ) req~bar~1 ", //
+                "|--> (+) req~baz~1 ", //
+                "|--> ( ) req~foo~1 ", //
+                "|--> (<) req~zoo~1:2 ", //
+                "|", //
                 "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
-                "#", //
-                "# This is a success.", //
-                "#", //
+                "|", //
+                "| This is a success.", //
+                "|", //
                 "", //
                 "not ok - 2 total, 1 not covered");
     }
@@ -245,12 +268,13 @@ public class TestPlainTextReport
                 0, 0, 0, 0, 0);
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~failure~0", //
                 "This is a failure.", //
-                0, 0, 3, 1, 4);
+                0, 1, 3, 2, 4);
 
         when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UMAN)));
         when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UTEST));
+        // FIXME: when(itemBMock.getLinks())
         when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
     }
 
@@ -293,15 +317,15 @@ public class TestPlainTextReport
 
         assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator), //
                 equalTo("ok - 0/0>0>0/0 - a~a~1 (dsn)" + separator//
-                        + "#" + separator //
-                        + "# This is" + separator //
-                        + "# a multiline description" + separator //
-                        + "#" + separator //
+                        + "|" + separator //
+                        + "| This is" + separator //
+                        + "| a multiline description" + separator //
+                        + "|" + separator //
                         + "ok - 0/0>0>0/0 - b~b~2 (impl)" + separator //
-                        + "#" + separator //
-                        + "# Yet another" + separator //
-                        + "# multiline text" + separator //
-                        + "#" + separator //
+                        + "|" + separator //
+                        + "| Yet another" + separator //
+                        + "| multiline text" + separator //
+                        + "|" + separator //
                         + "" + separator //
                         + "ok - 2 total" + separator));
 

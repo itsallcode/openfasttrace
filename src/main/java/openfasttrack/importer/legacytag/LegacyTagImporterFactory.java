@@ -31,18 +31,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterException;
-import openfasttrack.importer.ImporterFactory;
-import openfasttrack.importer.LineReader;
+import openfasttrack.importer.*;
 
 public class LegacyTagImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger
             .getLogger(LegacyTagImporterFactory.class.getName());
 
+    private static LegacyTagImporterConfig defaultConfig = new LegacyTagImporterConfig();
+
     private final List<PathConfig> pathConfigs;
+
+    public LegacyTagImporterFactory()
+    {
+        this(defaultConfig.getPathConfigs());
+    }
 
     public LegacyTagImporterFactory(final List<PathConfig> pathConfigs)
     {
@@ -94,5 +97,10 @@ public class LegacyTagImporterFactory extends ImporterFactory
             throw new ImporterException(
                     "Error importing file '" + file + "': " + e.getMessage(), e);
         }
+    }
+
+    public static void setPathConfig(final LegacyTagImporterConfig config)
+    {
+        defaultConfig = config;
     }
 }

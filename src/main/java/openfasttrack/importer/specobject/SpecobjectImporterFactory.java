@@ -30,11 +30,12 @@ import openfasttrack.core.xml.SaxParserConfigurator;
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
+import openfasttrack.importer.RegexMatchingImporterFactory;
 
 /**
  * {@link ImporterFactory} for XML specobject files
  */
-public class SpecobjectImporterFactory extends ImporterFactory
+public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
 {
     private final SAXParserFactory saxParserFactory;
 

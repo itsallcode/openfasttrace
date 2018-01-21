@@ -22,20 +22,15 @@ package openfasttrack.importer.tag;
  * #L%
  */
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.CRC32;
 
 import openfasttrack.core.SpecificationItemId;
-import openfasttrack.importer.ImportEventListener;
-import openfasttrack.importer.Importer;
-import openfasttrack.importer.ImporterException;
+import openfasttrack.importer.*;
 
 /**
  * {@link Importer} for tags in source code files.
@@ -112,8 +107,7 @@ class TagImporter implements Importer
             final int counter)
     {
         final String uniqueName = this.fileName + lineNumber + counter + coveredId.toString();
-        final CRC32 checksum = new CRC32();
-        checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
-        return coveredId.getName() + "-" + Long.toString(checksum.getValue());
+        final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
+        return coveredId.getName() + "-" + checksum;
     }
 }

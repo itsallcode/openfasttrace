@@ -1,5 +1,4 @@
 
-
 package openfasttrack;
 
 /*-
@@ -28,6 +27,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 import openfasttrack.core.Newline;
+import openfasttrack.importer.legacytag.LegacyTagImporterConfig;
+import openfasttrack.importer.legacytag.LegacyTagImporterFactory;
 
 /**
  * Convert between different requirements formats (e.g. from ReqM2 to Markdown)
@@ -64,14 +65,24 @@ public interface Converter
     Converter setNewline(Newline newline);
 
     /**
+     * Set the {@link LegacyTagImporterConfig} for the
+     * {@link LegacyTagImporterFactory}.
+     * 
+     * @param config
+     *            the {@link LegacyTagImporterConfig} to set.
+     * @return a <code>Converter</code> instance for fluent programming
+     */
+    Converter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+
+    /**
      * Convert the collected requirements into target requirement format
      * 
      * @param output
      *            output file
      * 
      * @param format
-     *            target format (this is a name defined in the respective exporter
-     *            plug-in)
+     *            target format (this is a name defined in the respective
+     *            exporter plug-in)
      */
     void convertToFileInFormat(final Path output, final String format);
 }

@@ -22,7 +22,6 @@ package openfasttrack.importer;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -73,7 +72,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
         this.thrown.expectMessage("Error reading file '" + supportedPath + "'");
-        createFactory().createImporter(supportedPath, StandardCharsets.UTF_8, null);
+        createFactory().createImporter(supportedPath, StandardCharsets.UTF_8, null).runImport();
     }
 
     private void assertSupported(final List<String> filenames, final boolean expectedResult)

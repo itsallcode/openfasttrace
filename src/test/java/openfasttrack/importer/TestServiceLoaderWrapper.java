@@ -22,12 +22,8 @@ package openfasttrack.importer;
  * #L%
  */
 
-
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -36,6 +32,7 @@ import java.util.stream.StreamSupport;
 import org.junit.Test;
 
 import openfasttrack.core.ServiceLoaderWrapper;
+import openfasttrack.importer.legacytag.LegacyTagImporterFactory;
 import openfasttrack.importer.markdown.MarkdownImporterFactory;
 import openfasttrack.importer.specobject.SpecobjectImporterFactory;
 import openfasttrack.importer.tag.TagImporterFactory;
@@ -60,11 +57,12 @@ public class TestServiceLoaderWrapper
     public void testServicesRegistered()
     {
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class);
-        assertThat(services, hasSize(3));
+        assertThat(services, hasSize(4));
         assertThat(services,
                 contains(instanceOf(MarkdownImporterFactory.class), //
                         instanceOf(SpecobjectImporterFactory.class), //
-                        instanceOf(TagImporterFactory.class)));
+                        instanceOf(TagImporterFactory.class),
+                        instanceOf(LegacyTagImporterFactory.class)));
     }
 
     private <T> List<T> getRegisteredServices(final Class<T> type)

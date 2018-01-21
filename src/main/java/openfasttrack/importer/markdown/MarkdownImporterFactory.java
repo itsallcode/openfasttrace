@@ -22,17 +22,17 @@ package openfasttrack.importer.markdown;
  * #L%
  */
 
-
 import java.io.Reader;
 
 import openfasttrack.importer.ImportEventListener;
 import openfasttrack.importer.Importer;
 import openfasttrack.importer.ImporterFactory;
+import openfasttrack.importer.RegexMatchingImporterFactory;
 
 /**
  * {@link ImporterFactory} for Markdown files
  */
-public class MarkdownImporterFactory extends ImporterFactory
+public class MarkdownImporterFactory extends RegexMatchingImporterFactory
 {
     public MarkdownImporterFactory()
     {

@@ -49,9 +49,9 @@ class LegacyTagImporter implements Importer
         this.file = file;
         this.reader = reader;
         this.listener = listener;
-        this.tagPattern = Pattern.compile(TAG_PREFIX
-                + "([\\p{Alnum}_-]+):(\\d+)"
-                + TAG_SUFFIX);
+        this.tagPattern = Pattern.compile(TAG_PREFIX //
+                + SpecificationItemId.ITEM_NAME_PATTERN + ":"
+                + SpecificationItemId.ITEM_REVISION_PATTERN + TAG_SUFFIX);
     }
 
     @Override
@@ -70,8 +70,8 @@ class LegacyTagImporter implements Importer
                     matcher.group(2));
             final String generatedName = generateName(coveredId, lineNumber, counter);
 
-            final SpecificationItemId tagItemId = SpecificationItemId.createId(
-                    this.pathConfig.getTagArtifactType(), generatedName);
+            final SpecificationItemId tagItemId = SpecificationItemId
+                    .createId(this.pathConfig.getTagArtifactType(), generatedName);
 
             LOG.info(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
                     + "' covering id '" + coveredId + "'");

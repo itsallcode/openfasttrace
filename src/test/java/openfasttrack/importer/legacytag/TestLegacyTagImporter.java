@@ -101,8 +101,8 @@ public class TestLegacyTagImporter
     @Test
     public void testFileWithLegacyTagFormatTwoTagsInTwoLines()
     {
-        runImport("[[" + COVERED_ITEM_NAME1 + ":1]]\n" +
-                "[[" + COVERED_ITEM_NAME2 + ":2]]");
+        runImport("[[" + COVERED_ITEM_NAME1 + ":1]]\n" //
+                + "[[" + COVERED_ITEM_NAME2 + ":2]]");
         verifyTag(1, SpecificationItemId.createId(COVERED_ITEM_TYPE, COVERED_ITEM_NAME1, 1),
                 SpecificationItemId.createId(COVERING_ITEM_TYPE,
                         COVERED_ITEM_NAME1 + "-135790575"));
@@ -115,8 +115,8 @@ public class TestLegacyTagImporter
     @Test
     public void testFileWithLegacyTagFormatTwoTagsInSameLine()
     {
-        runImport("[[" + COVERED_ITEM_NAME1 + ":1]]" +
-                "[[" + COVERED_ITEM_NAME2 + ":2]]");
+        runImport("[[" + COVERED_ITEM_NAME1 + ":1]]" //
+                + "[[" + COVERED_ITEM_NAME2 + ":2]]");
         verifyTag(1, SpecificationItemId.createId(COVERED_ITEM_TYPE, COVERED_ITEM_NAME1, 1),
                 SpecificationItemId.createId(COVERING_ITEM_TYPE,
                         COVERED_ITEM_NAME1 + "-135790575"));
@@ -143,8 +143,7 @@ public class TestLegacyTagImporter
             final SpecificationItemId tagItemId)
     {
         this.inOrderListener.verify(this.listenerMock).beginSpecificationItem();
-        this.inOrderListener.verify(this.listenerMock)
-                .setLocation(FILE.toString(), lineNumber);
+        this.inOrderListener.verify(this.listenerMock).setLocation(FILE.toString(), lineNumber);
         this.inOrderListener.verify(this.listenerMock).setId(tagItemId);
         this.inOrderListener.verify(this.listenerMock).addCoveredId(coveredId);
         this.inOrderListener.verify(this.listenerMock).endSpecificationItem();

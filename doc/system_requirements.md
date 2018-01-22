@@ -1,10 +1,10 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
-System Requirement Specification OpenFastTrack
+System Requirement Specification OpenFastTrace
 
 # Introduction
 
-OpenFastTrack (OFT) is a requirement tracing suite written in Java.
+OpenFastTrace (OFT) is a requirement tracing suite written in Java.
 
 ## Goals
 
@@ -32,7 +32,7 @@ The following list gives you an overview of terms and abbreviations commonly use
   * Coverage: Specification items covering other specification items
   * Coverage provider: a specification item that provides coverage
   * Coverage requester: a specification item that need coverage
-  * OFT: OpenFastTrack (this project)
+  * OFT: OpenFastTrace (this project)
   * ReqM2: A requirement tracing suite
   * Specification item: holds either a requirement or coverage
   * Specification artifact: a data source containing specification items (e.g. file, ticket system,
@@ -89,7 +89,7 @@ OFT imports specification items from ReqM2 files.
 
 Rationale:
 
-One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
+One of the OpenFastTrace design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 
@@ -100,7 +100,7 @@ OFT exports specification items to ReqM2 files.
 
 Rationale:
 
-One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
+One of the OpenFastTrace design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 

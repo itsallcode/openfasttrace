@@ -683,13 +683,13 @@ Exchanging the CLI later takes considerable effort.
 
 The following documents or are referenced in this specification.
 
-[bib.srs]: system_requirements.md "OpenFastTrack System Requirement Specification"
+[bib.srs]: system_requirements.md "OpenFastTrace System Requirement Specification"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"
 [bib.arc42]: http://arc42.org
 
 ## Specifications
 
-  * [System Requirement Specification OpenFastTrack][bib.srs], Sebastian Bär
+  * [System Requirement Specification OpenFastTrace][bib.srs], Sebastian Bär
   * [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
 
 ## Web Sites

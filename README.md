@@ -1,4 +1,4 @@
-# openfasttrack
+# OpenFastTrace
 
 [![Build Status](https://travis-ci.org/hamstercommunity/openfasttrack.svg)](https://travis-ci.org/hamstercommunity/openfasttrack)
 [![Circle CI](https://circleci.com/gh/hamstercommunity/openfasttrack.svg?style=svg)](https://circleci.com/gh/hamstercommunity/openfasttrack)
@@ -13,7 +13,7 @@ Requirement tracking suite
 
 ## Dependencies
 
-OpenFastTrack needs a Java JDK 8 (or later) implementation and Maven as build tool.
+OpenFastTrace needs a Java JDK 8 (or later) implementation and Maven as build tool.
 
 ## On Linux
 
@@ -62,5 +62,5 @@ mvn license:update-project-license license:update-file-header
 	$ mvn deploy
 	```
 
-4. Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) on GitHub.
+4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
 5. Sign in at https://bintray.com/ and publish the uploaded artifacts.

@@ -24,9 +24,9 @@ after_success:
 addons:
   coverity_scan:
     project:
-      name: hamstercommunity/openfasttrack
+      name: itsallcode/openfasttrace
       version: 0.1.0
-      description: OpenFastTrack
+      description: OpenFastTrace
     notification_email: christoph@users.sourceforge.net
     build_command_prepend: mvn clean
     build_command: mvn -DskipTests=true compile

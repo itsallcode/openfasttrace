@@ -1,11 +1,11 @@
 # OpenFastTrace
 
-[![Build Status](https://travis-ci.org/hamstercommunity/openfasttrack.svg)](https://travis-ci.org/hamstercommunity/openfasttrack)
-[![Circle CI](https://circleci.com/gh/hamstercommunity/openfasttrack.svg?style=svg)](https://circleci.com/gh/hamstercommunity/openfasttrack)
+[![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
+[![Circle CI](https://circleci.com/gh/itsallcode/openfasttrace.svg?style=svg)](https://circleci.com/gh/itsallcode/openfasttrace)
 [![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.kaklakariada%3Aopenfasttrack)](https://sonarcloud.io/dashboard?id=com.github.kaklakariada%3Aopenfasttrack-gradle%3Adevelop)
-[![codecov.io](https://codecov.io/github/hamstercommunity/openfasttrack/coverage.svg?branch=master)](https://codecov.io/github/hamstercommunity/openfasttrack?branch=master)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/7509/badge.svg)](https://scan.coverity.com/projects/hamstercommunity-openfasttrack)
-[![Download](https://api.bintray.com/packages/kaklakariada/maven/openfasttrack/images/download.svg)](https://bintray.com/kaklakariada/maven/openfasttrack/_latestVersion)
+[![codecov.io](https://codecov.io/github/itsallcode/openfasttrace/coverage.svg?branch=develop)](https://codecov.io/github/itsallcode/openfasttrace?branch=develop)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
+[![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
 Requirement tracking suite
 

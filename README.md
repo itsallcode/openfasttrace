@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
 [![Circle CI](https://circleci.com/gh/itsallcode/openfasttrace.svg?style=svg)](https://circleci.com/gh/itsallcode/openfasttrace)
 [![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.kaklakariada%3Aopenfasttrack)](https://sonarcloud.io/dashboard?id=com.github.kaklakariada%3Aopenfasttrack-gradle%3Adevelop)
-[![codecov.io](https://codecov.io/github/itsallcode/openfasttrace/coverage.svg?branch=develop)](https://codecov.io/github/itsallcode/openfasttrace?branch=develop)
+[![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
 [![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 

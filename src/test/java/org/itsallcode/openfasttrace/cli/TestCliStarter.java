@@ -214,7 +214,7 @@ public class TestCliStarter
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
+            assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"");
         });
     }
 

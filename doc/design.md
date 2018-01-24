@@ -116,19 +116,19 @@ API users select exporters via their name as strings.
 ### Tracing Needed Coverage
 `dsn~tracing.needed-coverage-status~1`
 
-The [linker](#linker) component iterates over all needed artifacts of all specification items and determines if and which coverage exists for each.
+The [linker](#linker) component iterates over all needed artifact types of all specification items and determines if and which coverage exists for each.
 
 Comment:
 Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component. 
 
 Covers:
 
-  * `req~tracing.needed-coverage-status~1`
-  
+  * `req~tracing.outgoing-coverage-link-status~1`
+
 Needs: utest, impl
 
 ### Outgoing Coverage Link Status
-`dsn~tracing.outgoing-coverage-link-status~1`
+`dsn~tracing.outgoing-coverage-link-status~3`
 
 The [linker](#linker) component determines the coverage status of the outgoing link between the provider item and the requester item.
 
@@ -138,11 +138,8 @@ The possible results are:
   2. Outdated:  link points to a specification item which has a higher revision number
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
-
-Comment:
-The following results are planned for future releases
-  * Unwanted:  coverage provider has an artifact type the provider does not want
-  * Orphaned:  link is broken - there is no matching coverage requester
+  5. Orphaned:  link is broken - there is no matching coverage requester
+  6. Unwanted:  coverage provider has an artifact type the provider does not want
 
 Covers:
 
@@ -182,14 +179,13 @@ Needs: impl, utest
 ### Duplicate Items
 `dsn~tracing.tracing.duplicate-items~1`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exists
+The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exist.
 
 Covers:
 
   * `req~tracing.duplicate-items~1`
 
 Needs: impl, utest
-
 
 ### Defect Items
 `dsn~tracing.defect-items~1`
@@ -362,7 +358,7 @@ Otherwise users would be forced to invent different names for each link in the c
 
 Covers:
 
-  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -377,7 +373,7 @@ Markdown titles show up in the outline and are a natural way of defining a requi
 
 Covers:
 
-  * `req~markdown-import~1`
+  * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest 
 
@@ -394,13 +390,12 @@ In Markdown specification item references have the following format:
     
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
 #### Markdown "Covers" list
-`dsn~md.covers_list~1`
+`dsn~md.covers-list~1`
 
 The Markdown Importer supports the following format for links that cover a different specification item.
 
@@ -418,13 +413,12 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
 #### Markdown "Depends" List
-`dsn~md.depends_list~1`
+`dsn~md.depends-list~1`
 
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
@@ -442,22 +436,72 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-import~1`
   * `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
+#### Markdown Compact "Needs" List
+`dsn~md.needs-coverage-list-compact~1`
+
+The Markdown Importer supports the following compact format for defining the list of artifact types that are needed to fully cover the current specification item.
+
+    needs-list = needs-header 1*(LINEBREAK depends-line)
+    
+    needs-header = "Needs:" *WSP
+    
+    needs-line = *WSP "*" *WSP reference
+
+Rationale:
+
+This alternative style of the "needs" list provides backward compatibility to Elektrobit's legacy requirement enhanced Markdown format.
+
+Covers:
+
+  * `req~markdown-standard-syntax~1`
+
+Needs: impl, utest
+
+### Elektrobit Markdown-style Structures
+
 #### Markdown "Needs" List
-`dsn~md.needs_coverage_list~1`
+`dsn~md.needs-coverage-list~2`
 
 The Markdown Importer supports the following format for defining the list of artifact types that are needed to fully cover the current specification item.
 
     needs-list = "Needs:" *WSP reference *("," *WSP reference)
 
+Rationale:
+
+Unlike the the references to other requirements, tags are usually very short, so it is visually beneficial to use a compact style with a comma separated list in a single line.
+
 Covers:
 
-  * `req~markdown-import~1`
-  * `req~markdown-standard-syntax~1`
+  * `req~eb-markdown~1`
+
+Needs: impl, utest
+  
+#### Legacy Markdown Specification Item ID Format
+`dsn~md.eb-markdown-id~1`
+
+Alternatively a Markdown requirement ID can have the following format
+
+    requirement-id = *1(type~)type ":" id "," *WSP "v" revision
+
+See `dsn~md.specification-item-id-format~2` for definitions of the ABNF sub-rules referred to here. 
+
+Rationale:
+
+This ID format is supported for backwards compatibility with Elektrobit's legacy requirement-enhanced Markdown format.
+
+Comment:
+
+This format is deprecated. Please use the one specified in `dsn~md.specification-item-id-format~2` for new documents.
+
+Covers:
+
+  * `req~eb-markdown~1`
+
+Needs: impl, utest
 
 ## User Interface
 
@@ -639,13 +683,13 @@ Exchanging the CLI later takes considerable effort.
 
 The following documents or are referenced in this specification.
 
-[bib.srs]: system_requirements.md "OpenFastTrack System Requirement Specification"
+[bib.srs]: system_requirements.md "OpenFastTrace System Requirement Specification"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"
 [bib.arc42]: http://arc42.org
 
 ## Specifications
 
-  * [System Requirement Specification OpenFastTrack][bib.srs], Sebastian Bär
+  * [System Requirement Specification OpenFastTrace][bib.srs], Sebastian Bär
   * [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
 
 ## Web Sites

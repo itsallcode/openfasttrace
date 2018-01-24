@@ -1,10 +1,10 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
-System Requirement Specification OpenFastTrack
+System Requirement Specification OpenFastTrace
 
 # Introduction
 
-OpenFastTrack (OFT) is a requirement tracing suite written in Java.
+OpenFastTrace (OFT) is a requirement tracing suite written in Java.
 
 ## Goals
 
@@ -32,7 +32,7 @@ The following list gives you an overview of terms and abbreviations commonly use
   * Coverage: Specification items covering other specification items
   * Coverage provider: a specification item that provides coverage
   * Coverage requester: a specification item that need coverage
-  * OFT: OpenFastTrack (this project)
+  * OFT: OpenFastTrace (this project)
   * ReqM2: A requirement tracing suite
   * Specification item: holds either a requirement or coverage
   * Specification artifact: a data source containing specification items (e.g. file, ticket system,
@@ -89,7 +89,7 @@ OFT imports specification items from ReqM2 files.
 
 Rationale:
 
-One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
+One of the OpenFastTrace design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 
@@ -100,7 +100,7 @@ OFT exports specification items to ReqM2 files.
 
 Rationale:
 
-One of the OpenFastTrack design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
+One of the OpenFastTrace design goals is to provide a Java-based drop-in replacement for ReqM2, so file format compatibility is essential.
 
 Needs: req
 
@@ -170,6 +170,14 @@ Needs: dsn
 
 ### Markdown
 
+Markdown is a simple ASCII-based markup format that is designed to be human readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.
+
+Markdown focuses on content over formatting by giving the document structure like headlines, paragraphs and lists. The combination of being lightweight, human-readable and structure-oriented makes it a good fit for writing specifications as code.
+
+OFT defines a Markdown format that we call "Requirement-Enhanced Markdown" which is a superset of the regular Markdown. Any Markdown renderer can render this format without understanding it. The additional structural definitions tell OFT which part of the text is a specification item.
+
+For backward compatibility OFT supports a variant of this format that was introduced at Elektrobit. This format is a little bit closer to ReqM2, the predecessor that sparked the OFT idea. We recommend using standard OFT Markdown format in new documents though since this format is cleaner.
+
 #### Markdown Standard Syntax
 `req~markdown-standard-syntax~1`
 
@@ -195,6 +203,21 @@ In long specification document the outline is the primary means of navigating th
 Covers:
 
   * [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
+#### Support for EB Markdown Requirements
+`req~eb-markdown~1`
+
+In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elektrobit's variant.
+
+Rationale:
+
+This allows stepwise migration to the OFT standard format. The Elektrobit format is a little bit closer to ReqM2.
+
+Covers:
+
+  * [feat~markdown-import~1](#feat~markdown-import~1)
 
 Needs: dsn
 

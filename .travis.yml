@@ -2,7 +2,7 @@ language: java
 env:
   global:
     # COVERITY_SCAN_TOKEN
-    - secure: UYBQVziOzbe5mGrE9y7rcXxYA2Kxzce77Jj2M/ptbWoHAALtjdrddu+3tIjkjdT4jr8af8G+L6qLet17fw411id5WD9W5g7oxZGfaak7YY9pJHt/v4E3SZUtLDZs8ukWnDz4Ry7XbGR+CMFpLRGTEDjCjCaC/3umH3z082I27JsqIj2AhsWIcJ1liNZcasiB9shLhNqkY2YEnpMrssKvaHBs2NTpExO8raNXF1pFOCiskbEqqT8fkgfQ1AyELd+qZL7Lxapnm0ROg+zncOu9IupHeSPFulEdMC4rM66aoKoYnLNyEusLPXJLMLpEo39k4QwhA7cdrRMrkbsZ/KEjWjvvmOCPq74EdeD9nSgOM950LLx6c1+P9v2EdzA67CmG2oXhfLVmOXvG8ngleqFCTuFPv4XTwrQL6qHS6tStypmpfgHkfyTOzKCfd2i/jeMgeuMpOFHRC4hAJ0eb9pdvKGVUDW1FjzrVUm4SgvrWkAtNTW4OMnAHs4s5UnpDh6PkRzG9kBJp/pNnLELJYGiyhxWeC0zny2S/l9owG5tuodVXZCBmAsjH1EqMtoQZoRhw/nTJvc/+oNqXW+WJTfMsRBcOjWp9Bj7p6hjZ2V1KZXun1UZv38/PVpS0hefTW1CvsyjO1Ly8CZB/IG0EaWwHYf6D56p0TGYRCeQbEL8c5FU=
+    - secure: "BpZB7xQ/TQEM79gN6CPkZ5t/xlw+BWLn5TjAS7DzmNAy2UNka/apr6AbFcampUSJaxvPjl4zkqatlRjEjGvv3O/SIFZRP1x0GQsVoGvpC6xbTTgPohJ1wRkkQQrlGONOr+SpNNBT7kgZAZPKuZ7k4lBvngYwPzgpfxxgzkiIZzqxuY5dGaohIpzmdcHFSzw6XOowxeRLr+pN2ELzuA69bA7mp82euyL9JxUhrAAY0pTezMJF3NXLswPNZTtVMajDIm+7reL2JX0CyNaCsgKgv727x4mMOKkJN4tsCsNAw0BmYlaVGSVkWfPvLjvya7zq/kn6v9yglwSYBYuZteQ9p0oGvmEPOx1mQlevt46KSz0Wl+mE+gTUlwR10dcJOzTc3TBYbqUDkMawIsyWznMrojG4VPmdVHzi9MnHLU1RrRBAv7e348UTHLUb89nKWLh2ot6RVxocbEDZtJVGX1zPkpDWt3bSvxOnNdxb18u4cB1eNS+AM7tQaox48G7bMpFUPJWwXWuZbbVA8UH9bZu/d82V9lIm/IO2RALRm0zZFfC1+w40b58NzMJ8SIXaH8QDdIOAYYuuIJZGyiNz/oKT7ssOEfNy6IIM4HiaMNZ2zAhnEJoEwTXax4qAkm16mvxYGv16G0WZZGYPu0oZjPIHgjJUaTM4MbzC2uOZ2oOLhBg="
 
 jdk:
   - oraclejdk8
@@ -14,6 +14,9 @@ cache:
 
 before_script:
   - pip install --user codecov
+
+before_install:
+  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar

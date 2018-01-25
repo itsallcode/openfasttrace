@@ -31,7 +31,7 @@ The following list gives you an overview of terms and abbreviations commonly use
   * Artifact type: the role of an artifact in a specification hierarchy
   * Coverage: Specification items covering other specification items
   * Coverage provider: a specification item that provides coverage
-  * Coverage requester: a specification item that need coverage
+  * Coverage requester: a specification item that needs coverage
   * OFT: OpenFastTrace (this project)
   * ReqM2: A requirement tracing suite
   * Specification item: holds either a requirement or coverage

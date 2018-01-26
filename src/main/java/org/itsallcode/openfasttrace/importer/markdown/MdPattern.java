@@ -50,7 +50,13 @@ public enum MdPattern
             + "(?:.*\\W)?" //
             + "(\\p{Alpha}+)" //
             + "(?:\\W.*)?"),
+    NOT_EMPTY("([^\n\r]+)"),
     RATIONALE("Rationale:\\s*"),
+    STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
+    TAGS("Tags:\\s*"),
+    TAG_ENTRY("\\s{0,3}" + MdPattern.PatternConstants.BULLETS
+            + "\\s*" //
+            + "(.*)"),
     TITLE("#+\\s*(.*)");
     // @formatter:on
 

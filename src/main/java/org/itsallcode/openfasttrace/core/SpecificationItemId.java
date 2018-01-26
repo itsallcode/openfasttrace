@@ -47,7 +47,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + REVISION_SEPARATOR //
             + ITEM_REVISION_PATTERN;
     // [impl->dsn~md.eb-markdown-id~1]
-    private static final String LEGACY_ID = "(\\p{Alpha}+)" //
+    private static final String LEGACY_ID = "(?:\\p{Alpha}+~)?(\\p{Alpha}+)" //
             + ":" //
             + ITEM_NAME_PATTERN //
             + ", *v" //

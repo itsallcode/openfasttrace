@@ -35,8 +35,6 @@ import java.io.StringReader;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
-import org.itsallcode.openfasttrace.importer.markdown.MdPattern;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -206,6 +204,8 @@ public class TestImportMarkdown
         return "# " + TITLE //
                 + "\n" //
                 + "`" + LEGACY_ID + "`" //
+                + "\n" //
+                + "\nStatus: approved\n" //
                 + "\nDescription:\n" + DESCRIPTION_LINE1 + "\n" //
                 + DESCRIPTION_LINE2 + "\n" //
                 + DESCRIPTION_LINE3 + "\n" //
@@ -213,17 +213,20 @@ public class TestImportMarkdown
                 + RATIONALE_LINE1 + "\n" //
                 + RATIONALE_LINE2 + "\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + LEGACY_DEPENDS_ON_ID1 + "\n" //
-                + "  - " + LEGACY_DEPENDS_ON_ID2 + "\n" //
+                + "  + `" + LEGACY_DEPENDS_ON_ID1 + "`\n" //
+                + "  - `" + LEGACY_DEPENDS_ON_ID2 + "`\n" //
                 + "\nCovers:\n\n" //
-                + "  * " + LEGACY_COVERED_ID1 + "\n" //
-                + " + " + LEGACY_COVERED_ID2 + "\n" //
+                + "  * `" + LEGACY_COVERED_ID1 + "`\n" //
+                + " + `" + LEGACY_COVERED_ID2 + "`\n" //
                 + "\nComment:\n\n" //
                 + COMMENT_LINE1 + "\n" //
                 + COMMENT_LINE2 + "\n" //
                 + "\nNeeds:\n" //
                 + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
-                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n";
+                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
+                + "\nTags:\n" //
+                + " * Tag1\n" //
+                + "   + Tag2";
     }
 
     private void assertAllImporterEventsForLegacyItemCalled()

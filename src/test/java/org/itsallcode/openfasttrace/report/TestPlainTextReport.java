@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,9 +39,6 @@ import java.util.HashSet;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.matcher.MultilineTextMatcher;
-import org.itsallcode.openfasttrace.report.PlainTextReport;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.report.Reportable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -177,28 +173,26 @@ public class TestPlainTextReport
         prepareFailedItemDetails();
 
         assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
-                "not ok - 0/0>0>2/4 - dsn~bar~1 (impl, -uman, utest)", //
+                "not ok - 0/0>0>2/4 - dsn~bar~1 [proposed] (impl, -uman, utest)", //
                 "not ok - 0/3>1>0/2 - req~foo~1 (dsn)", //
-                "not ok - 3/7>1>2/3 - req~zoo~1 (-impl, -utest)", //
-                "not ok - 1/6>0>0/0 - req~zoo~2 (dsn, +utest)", //
+                "not ok - 3/7>1>2/3 - req~zoo~1 [rejected] (-impl, -utest)", //
+                "not ok - 1/6>0>0/0 - req~zoo~2 [draft] (dsn, +utest)", //
                 "", //
                 "not ok - 6 total, 4 not covered");
     }
 
     private void prepareFailedItemDetails()
     {
-        final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~foo~1", //
-                "desc A1" + NEWLINE_SEPARATOR + "desc A2" + NEWLINE_SEPARATOR + "desc A3", //
-                0, 3, 1, 0, 2);
-        final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~bar~1", //
-                "desc B1", //
-                0, 0, 0, 2, 4);
-        final LinkedSpecificationItem itemCMock = createLinkedItemMock("req~zoo~2", //
-                "desc C1" + NEWLINE_SEPARATOR + "desc C2", //
-                1, 6, 0, 0, 0);
-        final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1", //
-                "desc D1", //
-                3, 7, 1, 2, 3);
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~foo~1",
+                ItemStatus.APPROVED,
+                "desc A1" + NEWLINE_SEPARATOR + "desc A2" + NEWLINE_SEPARATOR + "desc A3", 0, 3, 1,
+                0, 2);
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~bar~1",
+                ItemStatus.PROPOSED, "desc B1", 0, 0, 0, 2, 4);
+        final LinkedSpecificationItem itemCMock = createLinkedItemMock("req~zoo~2",
+                ItemStatus.DRAFT, "desc C1" + NEWLINE_SEPARATOR + "desc C2", 1, 6, 0, 0, 0);
+        final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1",
+                ItemStatus.REJECTED, "desc D1", 3, 7, 1, 2, 3);
 
         when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
@@ -225,13 +219,14 @@ public class TestPlainTextReport
 
         assertReportOutput(ReportVerbosity.ALL, //
                 "not ok - 0/0>3>1/4 - dsn~failure~0 (impl, uman, -utest)", //
-                "#", //
-                "# This is a failure.", //
-                "#", //
+                "|", //
+                "| This is a failure.", //
+                "|", //
                 "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
-                "#", //
-                "# This is a success.", //
-                "#", //
+                "|", //
+                "| This is a success.", //
+                "|", //
+                "| #: tag, another tag", //
                 "", //
                 "not ok - 2 total, 1 not covered");
     }
@@ -247,26 +242,38 @@ public class TestPlainTextReport
 
         when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemAMock.getTags()).thenReturn(asList("tag", "another tag"));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UMAN)));
         when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UTEST));
         when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
     }
 
     private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
+            final ItemStatus status, final String description, final int incomingBadLinks,
+            final int incomingLinks, final int duplicates, final int outgoingBadLinks,
+            final int outgoingLinks)
+    {
+        final SpecificationItemId id = SpecificationItemId.parseId(idAsText);
+        final LinkedSpecificationItem linkedItemMock = mock(LinkedSpecificationItem.class);
+        when(linkedItemMock.getDescription()).thenReturn(description);
+        when(linkedItemMock.getId()).thenReturn(id);
+        when(linkedItemMock.getStatus()).thenReturn(status);
+        when(linkedItemMock.isDefect())
+                .thenReturn(incomingBadLinks + outgoingBadLinks + duplicates > 0);
+        when(linkedItemMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
+        when(linkedItemMock.countIncomingLinks()).thenReturn(incomingLinks);
+        when(linkedItemMock.countDuplicateLinks()).thenReturn(duplicates);
+        when(linkedItemMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
+        when(linkedItemMock.countOutgoingLinks()).thenReturn(outgoingLinks);
+        return linkedItemMock;
+    }
+
+    private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
             final String description, final int incomingBadLinks, final int incomingLinks,
             final int duplicates, final int outgoingBadLinks, final int outgoingLinks)
     {
-        final SpecificationItemId id = SpecificationItemId.parseId(idAsText);
-        final LinkedSpecificationItem itemAMock = mock(LinkedSpecificationItem.class);
-        when(itemAMock.getDescription()).thenReturn(description);
-        when(itemAMock.getId()).thenReturn(id);
-        when(itemAMock.isDefect()).thenReturn(incomingBadLinks + outgoingBadLinks + duplicates > 0);
-        when(itemAMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
-        when(itemAMock.countIncomingLinks()).thenReturn(incomingLinks);
-        when(itemAMock.countDuplicateLinks()).thenReturn(duplicates);
-        when(itemAMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
-        when(itemAMock.countOutgoingLinks()).thenReturn(outgoingLinks);
-        return itemAMock;
+        return createLinkedItemMock(idAsText, ItemStatus.APPROVED, description, incomingBadLinks,
+                incomingLinks, duplicates, outgoingBadLinks, outgoingLinks);
     }
 
     // [itest->dsn~newline-format~1]
@@ -291,15 +298,15 @@ public class TestPlainTextReport
 
         assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator), //
                 equalTo("ok - 0/0>0>0/0 - a~a~1 (dsn)" + separator//
-                        + "#" + separator //
-                        + "# This is" + separator //
-                        + "# a multiline description" + separator //
-                        + "#" + separator //
+                        + "|" + separator //
+                        + "| This is" + separator //
+                        + "| a multiline description" + separator //
+                        + "|" + separator //
                         + "ok - 0/0>0>0/0 - b~b~2 (impl)" + separator //
-                        + "#" + separator //
-                        + "# Yet another" + separator //
-                        + "# multiline text" + separator //
-                        + "#" + separator //
+                        + "|" + separator //
+                        + "| Yet another" + separator //
+                        + "| multiline text" + separator //
+                        + "|" + separator //
                         + "" + separator //
                         + "ok - 2 total" + separator));
 

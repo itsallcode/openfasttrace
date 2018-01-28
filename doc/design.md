@@ -277,12 +277,13 @@ Needs: impl, itest
 ### Internal Data Structures
 
 #### Specification Item
-`dsn~specification-item~1`
+`dsn~specification-item~2`
 
 A `SpecificationItem` consists of the following parts:
 
   * ID (`SpecificationItemId`)
   * Title (`String`, optional)
+  * Status (`Enum`, optional)
   * Description (`String`, optional)
   * Rationale (`String`, optional)
   * Comment (`String`, optional)
@@ -290,24 +291,25 @@ A `SpecificationItem` consists of the following parts:
   * Covers (List of `SpecificationItemId`, optional)
   * Depends (List of `SpecificationItemId`, optional)
   * Needs (List of `String`, optional)
+  * Tags (List of `String`, optional)
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 
 #### Linked Specification Item
 `dsn~linked-specification-item~1`
 
-A `LinkedSpecificationItem` is a subclass of the [SpecificationItem](#specification-item) that is enriched with references to other LinkedSpecificationItems.
+A `LinkedSpecificationItem` is a container for a [SpecificationItem](#specification-item) that is enriched with references to other `LinkedSpecificationItem`s.
 
 Rationale:
 This allows navigating between specification items.
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -322,7 +324,7 @@ A `SpecificationItemId` consists of:
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 

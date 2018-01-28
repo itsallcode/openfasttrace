@@ -21,14 +21,7 @@ package org.itsallcode.openfasttrace.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -46,7 +39,8 @@ public class LinkedSpecificationItem
      * Create a new instance of class {@link LinkedSpecificationItem}.
      *
      * @param item
-     *            the actual specification item that is at the center of the links
+     *            the actual specification item that is at the center of the
+     *            links
      */
     public LinkedSpecificationItem(final SpecificationItem item)
     {
@@ -61,6 +55,26 @@ public class LinkedSpecificationItem
     public SpecificationItemId getId()
     {
         return this.item.getId();
+    }
+
+    /**
+     * Get the title of the specification item.
+     *
+     * @return title of the specification item
+     */
+    public String getTitle()
+    {
+        return this.item.getTitle();
+    }
+
+    /**
+     * Get the maturity status of the specification item.
+     *
+     * @return maturity status of the specification item
+     */
+    public ItemStatus getStatus()
+    {
+        return this.item.getStatus();
     }
 
     /**
@@ -81,6 +95,16 @@ public class LinkedSpecificationItem
     public Location getLocation()
     {
         return this.item.getLocation();
+    }
+
+    /**
+     * Get the tags associated with this item.
+     * 
+     * @return list of tags
+     */
+    public List<String> getTags()
+    {
+        return null;
     }
 
     /**
@@ -200,8 +224,8 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Check if the item is covered shallow (i.e. if for all needed artifact types
-     * coverage exists without recursive search).
+     * Check if the item is covered shallow (i.e. if for all needed artifact
+     * types coverage exists without recursive search).
      *
      * @return <code>true</code> if the item is covered
      */

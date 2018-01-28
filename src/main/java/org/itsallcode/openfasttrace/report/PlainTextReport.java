@@ -22,19 +22,18 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.core.*;
 
 /**
  * Renders a coverage report in plain text. This is intended for command line
@@ -173,6 +172,7 @@ public class PlainTextReport implements Reportable
         report.print(" - ");
         report.print(item.getId().toString());
         report.print(" ");
+        renderMaturity(item, report);
         report.print(translateArtifactTypeCoverage(item));
         report.print(this.newline);
     }
@@ -208,6 +208,17 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingLinks());
     }
 
+    private void renderMaturity(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        final ItemStatus status = item.getStatus();
+        if (status != ItemStatus.APPROVED)
+        {
+            report.print("[");
+            report.print(status);
+            report.print("] ");
+        }
+    }
+
     private void renderAll(final PrintStream report)
     {
         this.trace.getItems().stream() //
@@ -218,16 +229,26 @@ public class PlainTextReport implements Reportable
     private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
     {
         renderItemSummary(item, report);
-        report.print("#");
-        report.print(this.newline);
 
-        for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
+        final String description = item.getDescription();
+        if (description != null)
         {
-            report.print("# ");
-            report.print(line);
+            report.print("|");
+            report.print(this.newline);
+            for (final String line : description.split(Newline.anyNewlineReqEx()))
+            {
+                report.print("| ");
+                report.print(line);
+                report.print(this.newline);
+            }
+            report.print("|");
             report.print(this.newline);
         }
-        report.print("#");
-        report.print(this.newline);
+        final List<String> tags = item.getTags();
+        if (!tags.equals(Collections.emptyList()))
+        {
+            report.print("| #: ");
+            report.println(tags.stream().collect(Collectors.joining(", ")));
+        }
     }
 }

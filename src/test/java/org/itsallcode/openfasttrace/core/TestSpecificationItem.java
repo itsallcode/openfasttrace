@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.emptyIterable;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -29,8 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.matcher.SpecificationItemIdMatcher;
 import org.junit.Test;
 
@@ -118,8 +120,7 @@ public class TestSpecificationItem
     @Test
     public void testBuildSpecificationItemFromSeparateIdParts()
     {
-        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
-        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        final SpecificationItem.Builder builder = createTestItemBuilder();
         final SpecificationItem item = builder.build();
         assertThat(item.getId(), SpecificationItemIdMatcher.equalTo(ID));
     }
@@ -127,8 +128,7 @@ public class TestSpecificationItem
     @Test
     public void testNeedsCoverageByArtifactType()
     {
-        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
-        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        final SpecificationItem.Builder builder = createTestItemBuilder();
         builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
         final SpecificationItem item = builder.build();
         assertThat(item.needsCoverageByArtifactType(NEEDED_ARTIFACT_TYPE), equalTo(true));
@@ -138,11 +138,23 @@ public class TestSpecificationItem
     @Test
     public void testNeedsCoverage()
     {
-        final SpecificationItem.Builder builder = new SpecificationItem.Builder();
-        builder.id(ARTIFACT_TYPE, NAME, REVISION);
+        final SpecificationItem.Builder builder = createTestItemBuilder();
         assertThat(builder.build().needsCoverage(), equalTo(false));
         builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
         assertThat(builder.build().needsCoverage(), equalTo(true));
+    }
+
+    @Test
+    public void testLocationIsNullByDefault()
+    {
+        assertThat(createTestItemBuilder().build().getLocation(), equalTo(null));
+    }
+
+    @Test
+    public void testLocationBuilder()
+    {
+        assertThat(createTestItemBuilder().location("here", 42).build().getLocation(),
+                equalTo(Location.create("here", 42)));
     }
 
     @Test
@@ -154,20 +166,55 @@ public class TestSpecificationItem
     @Test
     public void testCoverageBuilderWithIdParts()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
-                .id(ARTIFACT_TYPE, NAME, REVISION) //
+        final SpecificationItem item = createTestItemBuilder() //
                 .addCoveredId("foo", "bar", 3) //
                 .build();
         assertThat(item.getCoveredIds(), equalTo(parseIds("foo~bar~3")));
     }
 
+    private Builder createTestItemBuilder()
+    {
+        return new SpecificationItem.Builder() //
+                .id(ARTIFACT_TYPE, NAME, REVISION);
+    }
+
     @Test
     public void testDependencyBuilderWithIdParts()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
-                .id(ARTIFACT_TYPE, NAME, REVISION) //
-                .addDependOnId("foo", "bar", 3) //
+        final SpecificationItem item = createTestItemBuilder().addDependOnId("foo", "bar", 3) //
                 .build();
         assertThat(item.getDependOnIds(), equalTo(parseIds("foo~bar~3")));
+    }
+
+    @Test
+    public void testDefaultStatusIsApproved()
+    {
+        assertThat(createTestItemBuilder().build().getStatus(), equalTo(ItemStatus.APPROVED));
+    }
+
+    @Test
+    public void testBuildWithStatus()
+    {
+        assertThat(createTestItemBuilder().status(ItemStatus.REJECTED).build().getStatus(),
+                equalTo(ItemStatus.REJECTED));
+    }
+
+    @Test
+    public void testByDefaultTagListIsEmpty()
+    {
+        assertThat(createTestItemBuilder().build().getTags(), emptyIterable());
+    }
+
+    @Test
+    public void testTagBuilder()
+    {
+        assertThat(createTestItemBuilder().addTag("the_tag").build().getTags(),
+                containsInAnyOrder("the_tag"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testBuildingWithOutIdThrowsExepction()
+    {
+        new SpecificationItem.Builder().build();
     }
 }

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Logger;
 
+import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
@@ -51,7 +52,7 @@ class MarkdownImporter implements Importer
         transition(OUTSIDE    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
     
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
-        transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , () -> {}                                   ),
+        transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , this::setStatus                            ),
         transition(SPEC_ITEM  , TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(SPEC_ITEM  , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),
         transition(SPEC_ITEM  , COMMENT    , MdPattern.COMMENT    , this::beginComment                         ),
@@ -135,7 +136,7 @@ class MarkdownImporter implements Importer
         transition(NEEDS      , COVERS     , MdPattern.COVERS     , () -> {}                                   ),
         transition(NEEDS      , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
         
-        transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , () -> {}                                   ),
+        transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , this::addTag                               ),
         transition(TAGS       , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(TAGS       , TITLE      , MdPattern.TITLE      , this::endItem                              ),
         transition(TAGS       , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                       ),
@@ -238,6 +239,11 @@ class MarkdownImporter implements Importer
         this.listener.endSpecificationItem();
     }
     
+    private void setStatus()
+    {
+        this.listener.setStatus(ItemStatus.parseString(this.stateMachine.getLastToken()));
+    }
+    
     private void beginDescription()
     {
         this.lastDescription = new StringBuilder(this.stateMachine.getLastToken());
@@ -322,5 +328,10 @@ class MarkdownImporter implements Importer
     private void addCoverage()
     {
         this.listener.addCoveredId(SpecificationItemId.parseId(this.stateMachine.getLastToken()));
+    }
+    
+    private void addTag()
+    {
+        this.listener.addTag(this.stateMachine.getLastToken());
     }
 }

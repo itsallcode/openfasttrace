@@ -22,13 +22,10 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import java.util.LinkedList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.core.*;
 
 /**
  * The {@link SpecificationListBuilder} consumes import events and generates a
@@ -66,6 +63,13 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    public void setStatus(final ItemStatus status)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void addCoveredId(final SpecificationItemId id)
     {
         this.itemBuilder.addCoveredId(id);
@@ -99,6 +103,13 @@ public class SpecificationListBuilder implements ImportEventListener
     public void addNeededArtifactType(final String artifactType)
     {
         this.itemBuilder.addNeedsArtifactType(artifactType);
+    }
+
+    @Override
+    public void addTag(final String tag)
+    {
+        // TODO Auto-generated method stub
+
     }
 
     /**

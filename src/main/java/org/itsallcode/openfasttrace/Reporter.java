@@ -64,7 +64,7 @@ public interface Reporter
      * @param ignoredArtifactTypes
      *            list of ignored artifact types
      */
-    void ignoreArtifactTypes(List<String> ignoredArtifactTypes);
+    Reporter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
 
     /**
      * Set the representation for new line

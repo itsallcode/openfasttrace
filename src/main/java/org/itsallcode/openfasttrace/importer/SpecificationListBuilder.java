@@ -116,7 +116,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addNeededArtifactType(final String artifactType)
     {
-        if (!this.ignoredArtifactTypes.contains(artifactType))
+        if (!isIgnoredArtifact(artifactType))
         {
             this.itemBuilder.addNeedsArtifactType(artifactType);
         }
@@ -159,15 +159,21 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void endSpecificationItem()
     {
-        if (this.itemBuilder != null && !ignoreThisArtifact())
+        if (this.itemBuilder != null && !ignoreCurrentArtifact())
         {
             createNewSpecificationItem();
         }
     }
 
-    private boolean ignoreThisArtifact()
+    private boolean ignoreCurrentArtifact()
     {
-        return this.ignoredArtifactTypes.contains(this.id.getArtifactType());
+        return isIgnoredArtifact(this.id.getArtifactType());
+    }
+
+    private boolean isIgnoredArtifact(final String artifactType)
+    {
+        return this.ignoredArtifactTypes != null
+                && this.ignoredArtifactTypes.contains(artifactType);
     }
 
     private void createNewSpecificationItem()

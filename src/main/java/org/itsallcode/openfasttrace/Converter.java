@@ -61,7 +61,7 @@ public interface Converter
      * @param ignoredArtifactTypes
      *            list of ignored artifact types
      */
-    void ignoreArtifactTypes(List<String> ignoredArtifactTypes);
+    Converter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
 
     /**
      * Set the representation for new line

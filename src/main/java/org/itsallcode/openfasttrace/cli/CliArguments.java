@@ -24,9 +24,10 @@ package org.itsallcode.openfasttrace.cli;
 
 import static java.util.Arrays.asList;
 
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.Converter;
@@ -49,6 +50,7 @@ public class CliArguments
     private Path outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
+    private List<String> ignoredArtifactTypes = Collections.emptyList();
 
     /**
      * Get the output file path
@@ -117,7 +119,8 @@ public class CliArguments
     }
 
     /**
-     * Set all parameter values that are not led in by a command line parameter name
+     * Set all parameter values that are not led in by a command line parameter
+     * name
      * 
      * @param unnamedValues
      *            list of unnamed values
@@ -236,5 +239,37 @@ public class CliArguments
     public void setN(final Newline newline)
     {
         setNewline(newline);
+    }
+
+    /**
+     * Get a list of artifact types to be ignored during import
+     * 
+     * @return list of artifact types to be ignored
+     */
+    public List<String> getIgnoreArtifactTypes()
+    {
+        return this.ignoredArtifactTypes;
+    }
+
+    /**
+     * Set a list of artifact types to be ignored during import
+     * 
+     * @param ingoredArtifactTypes
+     *            list of artifact types to be ignored
+     */
+    public void setIgnoreArtifactTypes(final String ingoredArtifactTypes)
+    {
+        this.ignoredArtifactTypes = Arrays.asList(ingoredArtifactTypes.split(",\\s*"));
+    }
+
+    /**
+     * Set a list of artifact types to be ignored during import
+     * 
+     * @param ingoredArtifactTypes
+     *            list of artifact types to be ignored
+     */
+    public void setI(final String ingoredArtifactTypes)
+    {
+        setIgnoreArtifactTypes(ingoredArtifactTypes);
     }
 }

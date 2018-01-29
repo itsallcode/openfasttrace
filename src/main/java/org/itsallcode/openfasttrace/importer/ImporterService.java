@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import java.nio.file.Path;
 import java.util.List;
 
@@ -36,6 +35,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 public class ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
+    private List<String> ignoredArtifactTypes;
 
     public ImporterService()
     {
@@ -47,6 +47,19 @@ public class ImporterService
         this.factoryLoader = factoryLoader;
     }
 
+    /**
+     * Set the list of artifact type to be ignored during import
+     * 
+     * @param ignoredArtifactTypes
+     *            list of artifact types to be ignored
+     * @return <code>this</code> for fluent programming style
+     */
+    public ImporterService ignoreArtifactTypes(final List<String> ignoredArtifactTypes)
+    {
+        this.ignoredArtifactTypes = ignoredArtifactTypes;
+        return this;
+    }
+
     public List<SpecificationItem> importFile(final Path file)
     {
         return createImporter() //
@@ -56,6 +69,8 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        return new MultiFileImporter(new SpecificationListBuilder(), this.factoryLoader);
+        final SpecificationListBuilder builder = new SpecificationListBuilder(
+                this.ignoredArtifactTypes);
+        return new MultiFileImporter(builder, this.factoryLoader);
     }
 }

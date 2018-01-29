@@ -90,6 +90,9 @@ For each specification artifact type OFT uses an importer. The importer uses the
 ## Import Event Listeners
 Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
+### Specification List Builder
+The specification list builder is an import event listener that creates a list of specification items from import events.
+
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
 
@@ -110,6 +113,29 @@ The exporter transforms the internal representation of [specification items](#sp
 API users select exporters via their name as strings.
 
 # Runtime View
+
+## Import
+
+Depending on the source format a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an (import event listener)[#import-event-listener] consumes.
+
+Common parts of the import like filtering out unnecessary items or attributes are handled by the listener.
+
+### Selective Artifact Type Import
+
+The most resource-friendly way to enable partial tracing is to ignore unnecessary data during import. This way less memory is used up and all subsequent steps are faster.
+
+#### Ignoring Artifact Types During Import
+`dsn~ignoring-artifact-types-during-import~1`
+
+When OFT is configured to ignore one or more artifact types [specification list builder](#specification-list-builder) skips the following data during import:
+1. "Needs coverage" with this artifact type
+2. Specification items with this artifact type
+
+Covers:
+
+  * `req~ignoring-artifact-types~1`
+
+Needs: impl, utest
 
 ## Tracing
 

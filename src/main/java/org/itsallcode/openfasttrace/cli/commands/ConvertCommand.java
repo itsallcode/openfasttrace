@@ -59,6 +59,7 @@ public class ConvertCommand extends AbstractCommand implements Performable
     {
         final Converter converter = new ConvertMode();
         converter.addInputs(toPaths(this.arguments.getInputs())) //
+                .ignoreArtifactTypes(this.arguments.getIgnoreArtifactTypes()) //
                 .setNewline(this.arguments.getNewline());
         return converter;
     }

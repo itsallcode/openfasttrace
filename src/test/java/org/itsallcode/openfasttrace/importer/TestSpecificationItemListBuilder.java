@@ -78,6 +78,7 @@ public class TestSpecificationItemListBuilder
         assertThat(items.get(0).getTags(), containsInAnyOrder("foo", "bar"));
     }
 
+    // [utest->dsn~ignoring-artifact-types-during-import~1]
     @Test
     public void testIgnoreArtifactType()
     {

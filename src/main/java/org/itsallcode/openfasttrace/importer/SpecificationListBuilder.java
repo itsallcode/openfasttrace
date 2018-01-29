@@ -116,6 +116,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addNeededArtifactType(final String artifactType)
     {
+        // [impl->dsn~ignoring-artifact-types-during-import~1]
         if (!isIgnoredArtifact(artifactType))
         {
             this.itemBuilder.addNeedsArtifactType(artifactType);
@@ -159,6 +160,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void endSpecificationItem()
     {
+        // [impl->dsn~ignoring-artifact-types-during-import~1]
         if (this.itemBuilder != null && !ignoreCurrentArtifact())
         {
             createNewSpecificationItem();

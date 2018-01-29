@@ -231,7 +231,7 @@ public class PlainTextReport implements Reportable
         renderItemSummary(item, report);
 
         final String description = item.getDescription();
-        if (description != null)
+        if (description != null && !description.isEmpty())
         {
             report.print("|");
             report.print(this.newline);
@@ -245,7 +245,7 @@ public class PlainTextReport implements Reportable
             report.print(this.newline);
         }
         final List<String> tags = item.getTags();
-        if (!tags.equals(Collections.emptyList()))
+        if (tags != null && !tags.equals(Collections.emptyList()))
         {
             report.print("| #: ");
             report.println(tags.stream().collect(Collectors.joining(", ")));

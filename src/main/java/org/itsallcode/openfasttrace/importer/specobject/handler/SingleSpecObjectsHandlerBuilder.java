@@ -65,11 +65,16 @@ public class SingleSpecObjectsHandlerBuilder
 
     private void configureDataHandlers()
     {
-        this.handler.addCharacterDataListener("id", this.idBuilder::name)
+        this.handler.addCharacterDataListener("id", this::removeArtifactTypeFromName)
                 .addIntDataListener("version", this.idBuilder::revision)
                 .addCharacterDataListener("description", this.listener::appendDescription)
                 .addCharacterDataListener("rationale", this.listener::appendRationale)
                 .addCharacterDataListener("comment", this.listener::appendComment);
+    }
+
+    private void removeArtifactTypeFromName(final String data)
+    {
+        this.idBuilder.name(data.replaceFirst("\\w+:", ""));
     }
 
     private void ignoreCharacterData(final String... elements)

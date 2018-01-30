@@ -272,16 +272,20 @@ public class LinkedSpecificationItem
     /**
      * Check if the item is defect.
      * 
-     * An item counts a defect if one of the following applies:
-     * <ul>
-     * <li>The item has offending links (broken coverage, duplicates)</li>
-     * <li>The item is not covered deeply
-     * <li>
-     * </ul>
+     * An item counts a defect if the following applies:
+     * 
+     * <pre>
+     * has duplicates
+     * or (not rejected
+     *     and (any outgoing coverage link has a different status than "Covers"
+     *          or not covered deeply
+     *         )
+     *    )
+     * </pre>
      *
      * @return <code>true</code> if the item is defect.
      */
-    // [impl->dsn~tracing.defect-items~1]
+    // [impl->dsn~tracing.defect-items~2]
     public boolean isDefect()
     {
         return hasDuplicates() //

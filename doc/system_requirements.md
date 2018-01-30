@@ -293,13 +293,14 @@ Covers:
 Needs: dsn
 
 ### Defect Items
-`req~tracing.defect-items~1`
+`req~tracing.defect-items~2`
 
-OFT marks a specification item as _defect_ if any of the following criteria apply
+OFT marks a specification item as _defect_ if the following criteria apply
 
-  1. The specification item has duplicates (i.e. another specification item with the same ID exists)
-  2. At least one outgoing coverage link has a different status than "Covers"
-  3. The item is not covered deeply
+  * The specification item has duplicates (i.e. another specification item with the same ID exists) _or_
+  * The item has any other status than "rejected" _and any of_
+      * At least one outgoing coverage link has a different status than "Covers"
+      * The item is not covered deeply
   
 Covers:
 

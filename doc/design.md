@@ -214,21 +214,24 @@ Covers:
 Needs: impl, utest
 
 ### Defect Items
-`dsn~tracing.defect-items~1`
+`dsn~tracing.defect-items~2`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if any of the following criteria apply
-
-  1. The specification item has duplicates
-  2. At least one outgoing coverage link has a different status than "Covers"
-  3. The item is not covered deeply
+The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if the following criteria apply to the item
+  
+    has duplicates
+    or (not rejected
+        and (any outgoing coverage link has a different status than "Covers"
+             or not covered deeply
+            )
+       )
   
 Covers:
 
-  * `req~tracing.defect-items~1`
+  * `req~tracing.defect-items~2`
 
 Needs: impl, utest
 
-#### Link Cycle
+### Link Cycle
 `dsn~tracing.link-cycle~1`
 
 The [tracer](#tracer) detects cycles in links between [Linked Specification Items](#linked-specification-item).

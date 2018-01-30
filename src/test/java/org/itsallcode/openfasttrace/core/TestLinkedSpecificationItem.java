@@ -53,6 +53,7 @@ public class TestLinkedSpecificationItem
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
         this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
         this.otherLinkedItem = new LinkedSpecificationItem(this.otherItemMock);
+        when(this.itemMock.getStatus()).thenReturn(ItemStatus.APPROVED);
         when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
         when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
@@ -153,7 +154,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.UNCOVERED));
     }
 
-    // [utest->dsn~tracing.defect-items~1]
+    // [utest->dsn~tracing.defect-items~2]
     @Test
     public void testIsDefect_False()
     {
@@ -168,7 +169,7 @@ public class TestLinkedSpecificationItem
         this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
     }
 
-    // [utest->dsn~tracing.defect-items~1]
+    // [utest->dsn~tracing.defect-items~2]
     @Test
     public void testIsDefect_TrueBecauseOfDuplicates()
     {
@@ -176,7 +177,7 @@ public class TestLinkedSpecificationItem
         assertThat(this.linkedItem.isDefect(), equalTo(true));
     }
 
-    // [utest->dsn~tracing.defect-items~1]
+    // [utest->dsn~tracing.defect-items~2]
     @Test
     public void testIsDefect_TrueBecauseOfBadLink()
     {
@@ -188,6 +189,16 @@ public class TestLinkedSpecificationItem
                     && (status != LinkStatus.COVERED_SHALLOW);
             assertThat("for " + status, item.isDefect(), equalTo(expected));
         }
+    }
+
+    @Test
+    // [utest->dsn~tracing.defect-items~2]
+    public void testIsDefect_FalseBecauseRejected()
+    {
+        final LinkedSpecificationItem item = new LinkedSpecificationItem(this.itemMock);
+        when(this.itemMock.getStatus()).thenReturn(ItemStatus.REJECTED);
+        item.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERED_OUTDATED);
+        assertThat(item.isDefect(), equalTo(false));
     }
 
     @Test

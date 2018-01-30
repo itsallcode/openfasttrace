@@ -284,6 +284,14 @@ public class LinkedSpecificationItem
     // [impl->dsn~tracing.defect-items~1]
     public boolean isDefect()
     {
+        return hasDuplicates() //
+                || (this.getStatus() != ItemStatus.REJECTED) //
+                        && (hasBadLinks()
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+    }
+
+    private boolean hasBadLinks()
+    {
         for (final LinkStatus status : this.links.keySet())
         {
             if (status.isBad())
@@ -291,7 +299,7 @@ public class LinkedSpecificationItem
                 return true;
             }
         }
-        return getDeepCoverageStatus() != DeepCoverageStatus.COVERED;
+        return false;
     }
 
     /**

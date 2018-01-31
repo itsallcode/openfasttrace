@@ -24,20 +24,12 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
 public class TagsHandlerBuilder
 {
-    private final CallbackContentHandler handler;
-
-    public TagsHandlerBuilder(final ImportEventListener listener)
-    {
-        this.handler = new CallbackContentHandler();
-    }
-
     public TreeContentHandler build()
     {
-        this.handler.addCharacterDataListener("tag", (data) -> {});
-        return this.handler;
+        return new CallbackContentHandler() //
+                .addCharacterDataListener("tag", data -> {});
     }
 }

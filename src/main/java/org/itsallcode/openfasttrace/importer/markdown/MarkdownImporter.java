@@ -71,7 +71,7 @@ class MarkdownImporter implements Importer
         transition(DESCRIPTION, COVERS     , MdPattern.COVERS     , this::endDescription                       ),
         transition(DESCRIPTION, DEPENDS    , MdPattern.DEPENDS    , this::endDescription                       ),
         transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS_INT  , () -> {endDescription(); addNeeds();}      ),
-        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , () -> endDescription()                     ),
+        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , this::endDescription                       ),
         transition(DESCRIPTION, DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription                    ),
         transition(DESCRIPTION, TAGS       , MdPattern.TAGS       , () -> {}                                   ),
 
@@ -82,7 +82,7 @@ class MarkdownImporter implements Importer
         transition(RATIONALE  , COVERS     , MdPattern.COVERS     , this::endRationale                         ),
         transition(RATIONALE  , DEPENDS    , MdPattern.DEPENDS    , this::endRationale                         ),
         transition(RATIONALE  , NEEDS      , MdPattern.NEEDS_INT  , () -> {endRationale(); addNeeds();}        ),
-        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , () -> endRationale()                       ),
+        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , this::endRationale                         ),
         transition(RATIONALE  , RATIONALE  , MdPattern.EVERYTHING , this::appendRationale                      ),
         transition(RATIONALE  , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
     
@@ -91,7 +91,7 @@ class MarkdownImporter implements Importer
         transition(COMMENT    , COVERS     , MdPattern.COVERS     , this::endComment                           ),
         transition(COMMENT    , DEPENDS    , MdPattern.DEPENDS    , this::endComment                           ),
         transition(COMMENT    , NEEDS      , MdPattern.NEEDS_INT  , () -> {endComment(); addNeeds();}          ),
-        transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , () -> endComment()                         ),
+        transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , this::endComment                           ),
         
         transition(COMMENT    , RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(COMMENT    , COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),

@@ -24,13 +24,12 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
 public class FulfilledByHandlerBuilder
 {
     private final CallbackContentHandler handler;
 
-    public FulfilledByHandlerBuilder(final ImportEventListener listener)
+    public FulfilledByHandlerBuilder()
     {
         this.handler = new CallbackContentHandler();
     }
@@ -43,10 +42,9 @@ public class FulfilledByHandlerBuilder
 
     private CallbackContentHandler createFulfillByObjectHandler()
     {
-        final CallbackContentHandler ffbObjHandler = new CallbackContentHandler();
-        ffbObjHandler.addCharacterDataListener("ffbId", (data) -> {})
-                .addCharacterDataListener("ffbType", (data) -> {})
-                .addIntDataListener("ffbVersion", (data) -> {});
-        return ffbObjHandler;
+        return new CallbackContentHandler() //
+                .addCharacterDataListener("ffbId", data -> {})
+                .addCharacterDataListener("ffbType", data -> {})
+                .addIntDataListener("ffbVersion", data -> {});
     }
 }

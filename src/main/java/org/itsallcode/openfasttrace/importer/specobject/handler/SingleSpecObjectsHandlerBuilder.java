@@ -58,9 +58,8 @@ public class SingleSpecObjectsHandlerBuilder
                         new ProvidesCoverageHandlerBuilder(this.listener)::build)
                 .addSubTreeHandler("dependencies",
                         new DependenciesHandlerBuilder(this.listener)::build)
-                .addSubTreeHandler("fulfilledby",
-                        new FulfilledByHandlerBuilder(this.listener)::build)
-                .addSubTreeHandler("tags", new TagsHandlerBuilder(this.listener)::build);
+                .addSubTreeHandler("fulfilledby", new FulfilledByHandlerBuilder()::build)
+                .addSubTreeHandler("tags", new TagsHandlerBuilder()::build);
     }
 
     private void configureDataHandlers()
@@ -81,7 +80,7 @@ public class SingleSpecObjectsHandlerBuilder
     {
         for (final String element : elements)
         {
-            this.handler.addCharacterDataListener(element, (text) -> {});
+            this.handler.addCharacterDataListener(element, text -> {});
         }
     }
 }

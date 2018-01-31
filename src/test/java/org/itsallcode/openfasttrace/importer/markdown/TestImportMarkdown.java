@@ -32,11 +32,10 @@ import static org.mockito.Mockito.verify;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
-import org.itsallcode.openfasttrace.importer.markdown.MdPattern;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -46,6 +45,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TestImportMarkdown
 {
+    private static final String TAG2 = "Tag2";
+    private static final String TAG1 = "Tag1";
     private static final String FILENAME = "file name";
 
     @Mock
@@ -206,6 +207,8 @@ public class TestImportMarkdown
         return "# " + TITLE //
                 + "\n" //
                 + "`" + LEGACY_ID + "`" //
+                + "\n" //
+                + "\nStatus: proposed\n" //
                 + "\nDescription:\n" + DESCRIPTION_LINE1 + "\n" //
                 + DESCRIPTION_LINE2 + "\n" //
                 + DESCRIPTION_LINE3 + "\n" //
@@ -213,17 +216,20 @@ public class TestImportMarkdown
                 + RATIONALE_LINE1 + "\n" //
                 + RATIONALE_LINE2 + "\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + LEGACY_DEPENDS_ON_ID1 + "\n" //
-                + "  - " + LEGACY_DEPENDS_ON_ID2 + "\n" //
+                + "  + `" + LEGACY_DEPENDS_ON_ID1 + "`\n" //
+                + "  - `" + LEGACY_DEPENDS_ON_ID2 + "`\n" //
                 + "\nCovers:\n\n" //
-                + "  * " + LEGACY_COVERED_ID1 + "\n" //
-                + " + " + LEGACY_COVERED_ID2 + "\n" //
+                + "  * `" + LEGACY_COVERED_ID1 + "`\n" //
+                + " + `" + LEGACY_COVERED_ID2 + "`\n" //
                 + "\nComment:\n\n" //
                 + COMMENT_LINE1 + "\n" //
                 + COMMENT_LINE2 + "\n" //
                 + "\nNeeds:\n" //
                 + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
-                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n";
+                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
+                + "\nTags:\n" //
+                + " * " + TAG1 + "\n" //
+                + "   + " + TAG2 + "";
     }
 
     private void assertAllImporterEventsForLegacyItemCalled()
@@ -233,6 +239,7 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).setId(PARSED_LEGACY_ID);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
+        inOrder.verify(this.listenerMock).setStatus(ItemStatus.PROPOSED);
         inOrder.verify(this.listenerMock)
                 .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
                         + System.lineSeparator() + DESCRIPTION_LINE3);
@@ -246,6 +253,8 @@ public class TestImportMarkdown
                 .appendComment(COMMENT_LINE1 + System.lineSeparator() + COMMENT_LINE2);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
+        inOrder.verify(this.listenerMock).addTag(TAG1);
+        inOrder.verify(this.listenerMock).addTag(TAG2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }

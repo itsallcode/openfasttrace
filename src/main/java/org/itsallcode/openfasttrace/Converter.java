@@ -56,6 +56,14 @@ public interface Converter
     Converter addInputs(final List<Path> inputs);
 
     /**
+     * Set the list of artifact type to be ignored during import
+     * 
+     * @param ignoredArtifactTypes
+     *            list of ignored artifact types
+     */
+    Converter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
+
+    /**
      * Set the representation for new line
      * 
      * @param newline

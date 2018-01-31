@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,14 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-enum State
+import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
+import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
+
+public class TagsHandlerBuilder
 {
-    START, OUTSIDE, SPEC_ITEM, DESCRIPTION, COVERS, DEPENDS, RATIONALE, COMMENT, NEEDS, EOF, TITLE, TAGS
+    public TreeContentHandler build()
+    {
+        return new CallbackContentHandler() //
+                .addCharacterDataListener("tag", data -> {});
+    }
 }

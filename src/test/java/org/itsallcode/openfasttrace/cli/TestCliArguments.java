@@ -24,17 +24,13 @@ package org.itsallcode.openfasttrace.cli;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.Converter;
 import org.itsallcode.openfasttrace.Reporter;
-import org.itsallcode.openfasttrace.cli.CliArguments;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.Newline;
@@ -161,5 +157,25 @@ public class TestCliArguments
         final Newline value = Newline.OLDMAC;
         this.arguments.setN(value);
         assertThat(AFTER_SETTER, this.arguments.getNewline(), equalTo(value));
+    }
+
+    @Test
+    public void testSetIngnoreArtifactTypes()
+    {
+        final String value = "impl,utest";
+        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
+        this.arguments.setIgnoreArtifactTypes(value);
+        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+                containsInAnyOrder("impl", "utest"));
+    }
+
+    @Test
+    public void testSetI()
+    {
+        final String value = "impl,utest";
+        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
+        this.arguments.setI(value);
+        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+                containsInAnyOrder("impl", "utest"));
     }
 }

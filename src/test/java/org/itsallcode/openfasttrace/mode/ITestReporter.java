@@ -22,18 +22,18 @@ package org.itsallcode.openfasttrace.mode;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.mode.ReportMode;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
 import org.junit.Test;
@@ -106,5 +106,29 @@ public class ITestReporter extends AbstractOftModeTest
     private void assertStandardReportStdOutResult() throws IOException
     {
         assertStdOutStartsWith("ok - 5 total");
+    }
+
+    @Test
+    public void testIgnoreArtifactTypeDsn()
+    {
+        final String ignoredArtifactType = "dsn";
+        this.reporter.addInputs(this.docDir);
+        final Trace fullTrace = this.reporter.trace();
+        assertThat("Number of items with type " + ignoredArtifactType + " in regular trace",
+                countItemsOfArtifactTypeInTrace(ignoredArtifactType, fullTrace), greaterThan(0L));
+        final Trace trace = this.reporter //
+                .ignoreArtifactTypes(Arrays.asList(ignoredArtifactType))//
+                .trace();
+        assertThat("Number of items with ignored type " + ignoredArtifactType,
+                countItemsOfArtifactTypeInTrace(ignoredArtifactType, trace), equalTo(0L));
+    }
+
+    private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)
+    {
+        return trace.getItems().stream() //
+                .filter(item -> {
+                    return item.getId().getArtifactType().equals(artifactType);
+                }) //
+                .count();
     }
 }

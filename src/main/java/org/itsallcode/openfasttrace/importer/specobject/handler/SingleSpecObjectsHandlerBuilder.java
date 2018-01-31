@@ -42,18 +42,45 @@ public class SingleSpecObjectsHandlerBuilder
 
     public CallbackContentHandler build()
     {
-        this.handler.addCharacterDataListener("id", this.idBuilder::name);
-        this.handler.addIntDataListener("version", this.idBuilder::revision);
-        this.handler.addCharacterDataListener("description", this.listener::appendDescription);
-        this.handler.addCharacterDataListener("rationale", this.listener::appendRationale);
-        this.handler.addCharacterDataListener("comment", this.listener::appendComment);
-
-        this.handler.addSubTreeHandler("needscoverage",
-                new NeedsCoverageHandlerBuilder(this.listener)::build);
-        this.handler.addSubTreeHandler("providescoverage",
-                new ProvidesCoverageHandlerBuilder(this.listener)::build);
-        this.handler.addSubTreeHandler("dependencies",
-                new DependenciesHandlerBuilder(this.listener)::build);
+        configureDataHandlers();
+        configureSubTreeHanlders();
+        ignoreCharacterData("sourcefile", "sourceline", "creationdate", "status", "shortdesc",
+                "source");
         return this.handler;
+    }
+
+    private void configureSubTreeHanlders()
+    {
+        this.handler
+                .addSubTreeHandler("needscoverage",
+                        new NeedsCoverageHandlerBuilder(this.listener)::build)
+                .addSubTreeHandler("providescoverage",
+                        new ProvidesCoverageHandlerBuilder(this.listener)::build)
+                .addSubTreeHandler("dependencies",
+                        new DependenciesHandlerBuilder(this.listener)::build)
+                .addSubTreeHandler("fulfilledby", new FulfilledByHandlerBuilder()::build)
+                .addSubTreeHandler("tags", new TagsHandlerBuilder()::build);
+    }
+
+    private void configureDataHandlers()
+    {
+        this.handler.addCharacterDataListener("id", this::removeArtifactTypeFromName)
+                .addIntDataListener("version", this.idBuilder::revision)
+                .addCharacterDataListener("description", this.listener::appendDescription)
+                .addCharacterDataListener("rationale", this.listener::appendRationale)
+                .addCharacterDataListener("comment", this.listener::appendComment);
+    }
+
+    private void removeArtifactTypeFromName(final String data)
+    {
+        this.idBuilder.name(data.replaceFirst("\\w+:", ""));
+    }
+
+    private void ignoreCharacterData(final String... elements)
+    {
+        for (final String element : elements)
+        {
+            this.handler.addCharacterDataListener(element, text -> {});
+        }
     }
 }

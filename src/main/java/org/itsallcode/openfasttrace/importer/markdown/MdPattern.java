@@ -46,11 +46,17 @@ public enum MdPattern
     ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
     NEEDS_INT("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
     NEEDS("Needs:\\s*"),
-    NEEDS_REF("\\s{0,3}" + MdPattern.PatternConstants.BULLETS
+    NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + MdPattern.PatternConstants.BULLETS
             + "(?:.*\\W)?" //
             + "(\\p{Alpha}+)" //
             + "(?:\\W.*)?"),
+    NOT_EMPTY("([^\n\r]+)"),
     RATIONALE("Rationale:\\s*"),
+    STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
+    TAGS("Tags:\\s*"),
+    TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + MdPattern.PatternConstants.BULLETS
+            + "\\s*" //
+            + "(.*)"),
     TITLE("#+\\s*(.*)");
     // @formatter:on
 
@@ -79,9 +85,10 @@ public enum MdPattern
         }
 
         public static final String BULLETS = "[+*-]";
+        private static final String UP_TO_3_WHITESPACES = "\\s{0,3}";
         // [impl->dsn~md.requirement-references~1]
-        public static final String REFERENCE_AFTER_BULLET = "\\s{0,3}" + PatternConstants.BULLETS
-                + "(?:.*\\W)?" //
+        public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
+                + PatternConstants.BULLETS + "(?:.*\\W)?" //
                 + "((?:" + SpecificationItemId.ID_PATTERN + ")|(?:"
                 + SpecificationItemId.LEGACY_ID_PATTERN + "))" //
                 + "(?:\\W.*)?";

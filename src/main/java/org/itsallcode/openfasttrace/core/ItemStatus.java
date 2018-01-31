@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,26 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-enum State
+public enum ItemStatus
 {
-    START, OUTSIDE, SPEC_ITEM, DESCRIPTION, COVERS, DEPENDS, RATIONALE, COMMENT, NEEDS, EOF, TITLE, TAGS
+    APPROVED, PROPOSED, DRAFT, REJECTED;
+
+    public static ItemStatus parseString(final String text)
+    {
+        for (final ItemStatus value : values())
+        {
+            if (text.equalsIgnoreCase(value.toString()))
+            {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Unrecognized specification item status: \"" + text + "\"");
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.name().toLowerCase();
+    }
 }

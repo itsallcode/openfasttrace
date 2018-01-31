@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import java.util.Collections;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -22,13 +24,10 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import java.util.LinkedList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.core.*;
 
 /**
  * The {@link SpecificationListBuilder} consumes import events and generates a
@@ -37,12 +36,24 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
  */
 public class SpecificationListBuilder implements ImportEventListener
 {
+    private final List<String> ignoredArtifactTypes;
     private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder = null;
+    private SpecificationItemId id = null;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
     private Location location;
+
+    public SpecificationListBuilder()
+    {
+        this.ignoredArtifactTypes = Collections.emptyList();
+    }
+
+    public SpecificationListBuilder(final List<String> ignoredArtifactTypes)
+    {
+        this.ignoredArtifactTypes = ignoredArtifactTypes;
+    }
 
     @Override
     public void beginSpecificationItem()
@@ -57,12 +68,19 @@ public class SpecificationListBuilder implements ImportEventListener
         this.rationale = new StringBuilder();
         this.comment = new StringBuilder();
         this.location = null;
+        this.id = null;
     }
 
     @Override
     public void setId(final SpecificationItemId id)
     {
-        this.itemBuilder.id(id);
+        this.id = id;
+    }
+
+    @Override
+    public void setStatus(final ItemStatus status)
+    {
+        this.itemBuilder.status(status);
     }
 
     @Override
@@ -98,7 +116,17 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addNeededArtifactType(final String artifactType)
     {
-        this.itemBuilder.addNeedsArtifactType(artifactType);
+        // [impl->dsn~ignoring-artifact-types-during-import~1]
+        if (!isIgnoredArtifact(artifactType))
+        {
+            this.itemBuilder.addNeedsArtifactType(artifactType);
+        }
+    }
+
+    @Override
+    public void addTag(final String tag)
+    {
+        this.itemBuilder.addTag(tag);
     }
 
     /**
@@ -132,15 +160,28 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void endSpecificationItem()
     {
-        if (this.itemBuilder != null)
+        // [impl->dsn~ignoring-artifact-types-during-import~1]
+        if (this.itemBuilder != null && !ignoreCurrentArtifact())
         {
             createNewSpecificationItem();
         }
     }
 
+    private boolean ignoreCurrentArtifact()
+    {
+        return isIgnoredArtifact(this.id.getArtifactType());
+    }
+
+    private boolean isIgnoredArtifact(final String artifactType)
+    {
+        return this.ignoredArtifactTypes != null
+                && this.ignoredArtifactTypes.contains(artifactType);
+    }
+
     private void createNewSpecificationItem()
     {
         this.itemBuilder //
+                .id(this.id)//
                 .description(this.description.toString()) //
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString()) //

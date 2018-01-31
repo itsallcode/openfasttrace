@@ -36,13 +36,13 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.xml.SaxParserConfigurator;
 import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -79,6 +79,7 @@ public class TestSpecobjectImporter
                         .name("id") //
                         .revision(42) //
                         .build()) //
+                .title("") //
                 .comment("Comment").rationale("Rationale") //
                 .description("Description") //
                 .addNeedsArtifactType("code").addNeedsArtifactType("test") //
@@ -98,8 +99,13 @@ public class TestSpecobjectImporter
                         .name("id2") //
                         .revision(42 + 1) //
                         .build()) //
-                .comment("Comment2").rationale("Rationale2") //
-                .description("Description2");
+                .title("ShortDesc2") //
+                .status(ItemStatus.DRAFT) //
+                .comment("Comment2") //
+                .rationale("Rationale2") //
+                .description("Description2") //
+                .addTag("first tag") //
+                .addTag("second tag");
     }
 
     @Test

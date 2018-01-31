@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
+import org.itsallcode.openfasttrace.core.ItemStatus;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -44,8 +46,7 @@ public class SingleSpecObjectsHandlerBuilder
     {
         configureDataHandlers();
         configureSubTreeHanlders();
-        ignoreCharacterData("sourcefile", "sourceline", "creationdate", "status", "shortdesc",
-                "source");
+        ignoreCharacterData("sourcefile", "sourceline", "creationdate", "source");
         return this.handler;
     }
 
@@ -59,7 +60,7 @@ public class SingleSpecObjectsHandlerBuilder
                 .addSubTreeHandler("dependencies",
                         new DependenciesHandlerBuilder(this.listener)::build)
                 .addSubTreeHandler("fulfilledby", new FulfilledByHandlerBuilder()::build)
-                .addSubTreeHandler("tags", new TagsHandlerBuilder()::build);
+                .addSubTreeHandler("tags", new TagsHandlerBuilder(this.listener)::build);
     }
 
     private void configureDataHandlers()
@@ -68,7 +69,14 @@ public class SingleSpecObjectsHandlerBuilder
                 .addIntDataListener("version", this.idBuilder::revision)
                 .addCharacterDataListener("description", this.listener::appendDescription)
                 .addCharacterDataListener("rationale", this.listener::appendRationale)
-                .addCharacterDataListener("comment", this.listener::appendComment);
+                .addCharacterDataListener("comment", this.listener::appendComment)
+                .addCharacterDataListener("status", this::setStatus)
+                .addCharacterDataListener("shortdesc", this.listener::setTitle);
+    }
+
+    private void setStatus(final String statusAsText)
+    {
+        this.listener.setStatus(ItemStatus.parseString(statusAsText));
     }
 
     private void removeArtifactTypeFromName(final String data)

@@ -39,7 +39,7 @@ public class NeedsCoverageHandlerBuilder
 
     public TreeContentHandler build()
     {
-        this.handler.addCharacterDataListener("needsobj", this.listener::addNeededArtifactType);
-        return this.handler;
+        return this.handler.addCharacterDataListener("needsobj",
+                this.listener::addNeededArtifactType);
     }
 }

@@ -38,7 +38,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     public static final String UNKONWN_ARTIFACT_TYPE = "unkonwn";
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
-    private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~(\\p{Alpha}+))?:"
+    private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
@@ -55,10 +55,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     private static final int ARTIFACT_TYPE_MATCH = 1;
     private static final int NAME_MATCH = 2;
     private static final int REVISION_MATCH = 3;
-    private static final int LEGACY_ARTIFACT_TYPE_MATCH = 2;
-    private static final int LEGACY_NAME_MATCH = 3;
-    private static final int LEGACY_REVISION_MATCH = 4;
-
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
     public static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
@@ -362,21 +358,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
             if (matcher.matches())
             {
-                if (this.artifactType.equals(matcher.group(ARTIFACT_TYPE_MATCH))
-                        && (matcher.group(LEGACY_ARTIFACT_TYPE_MATCH) == null
-                                || matcher.group(ARTIFACT_TYPE_MATCH)
-                                        .equals(matcher.group(LEGACY_ARTIFACT_TYPE_MATCH))))
-                {
-                    this.name = matcher.group(LEGACY_NAME_MATCH);
-                }
-                else
-                {
-                    final StringBuilder builder = new StringBuilder(
-                            matcher.group(LEGACY_ARTIFACT_TYPE_MATCH));
-                    builder.append(":");
-                    builder.append(matcher.group(LEGACY_NAME_MATCH));
-                    this.name = builder.toString();
-                }
+                this.name = matcher.group(NAME_MATCH);
             }
         }
 
@@ -385,25 +367,14 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
-                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
-                this.name = matcher.group(NAME_MATCH);
-                parseRevision(matcher.group(REVISION_MATCH));
+                setIdPartsFromMatches(matcher);
             }
             else
             {
                 final Matcher legacyMatcher = LEGACY_ID_PATTERN.matcher(this.id);
                 if (legacyMatcher.matches())
                 {
-                    if (matcher.group(ARTIFACT_TYPE_MATCH) != null)
-                    {
-                        this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
-                    }
-                    else if (matcher.group(LEGACY_ARTIFACT_TYPE_MATCH) != null)
-                    {
-                        this.artifactType = matcher.group(LEGACY_ARTIFACT_TYPE_MATCH);
-                    }
-                    this.name = matcher.group(LEGACY_NAME_MATCH);
-                    parseRevision(matcher.group(LEGACY_REVISION_MATCH));
+                    setIdPartsFromMatches(legacyMatcher);
                 }
                 else
                 {
@@ -411,6 +382,13 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
                             + "\" cannot be parsed to a specification item ID");
                 }
             }
+        }
+
+        private void setIdPartsFromMatches(final Matcher matcher)
+        {
+            this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
+            this.name = matcher.group(NAME_MATCH);
+            parseRevision(matcher.group(REVISION_MATCH));
         }
 
         private void parseRevision(final String text)

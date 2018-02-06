@@ -66,14 +66,14 @@ public class TestLegacySpecificationItemId
     {
         final SpecificationItemId id = this.builder.artifactType("baz").name("foo~foo:bar")
                 .revision(1).build();
-        assertIdParts(id, "baz", "foo:bar", 1);
+        assertIdParts(id, "baz", "bar", 1);
     }
 
     @Test
     public void testBuildInferingArtifactTypeAndCleaningUpNameWherePrefixPartsDontMatch()
     {
         final SpecificationItemId id = this.builder.name("baz~foo:bar").revision(1).build();
-        assertIdParts(id, "baz", "foo:bar", 1);
+        assertIdParts(id, "baz", "bar", 1);
     }
 
     @Test

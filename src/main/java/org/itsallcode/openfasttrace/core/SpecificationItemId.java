@@ -35,8 +35,11 @@ import javax.annotation.Generated;
 // [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
+    public static final String UNKONWN_ARTIFACT_TYPE = "unkonwn";
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
+    private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~(\\p{Alpha}+))?:"
+            + ITEM_NAME_PATTERN;
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
@@ -47,20 +50,24 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + REVISION_SEPARATOR //
             + ITEM_REVISION_PATTERN;
     // [impl->dsn~md.eb-markdown-id~1]
-    private static final String LEGACY_ID = "(?:\\p{Alpha}+~)?(\\p{Alpha}+)" //
-            + ":" //
-            + ITEM_NAME_PATTERN //
-            + ", *v" //
+    private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
+    private static final int ARTIFACT_TYPE_MATCH = 1;
+    private static final int NAME_MATCH = 2;
+    private static final int REVISION_MATCH = 3;
+    private static final int LEGACY_ARTIFACT_TYPE_MATCH = 2;
+    private static final int LEGACY_NAME_MATCH = 3;
+    private static final int LEGACY_REVISION_MATCH = 4;
 
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
+    public static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
 
     private final String name;
     private final int revision;
     private final String artifactType;
 
-    private SpecificationItemId(final String name, final String artifactType, final int revision)
+    protected SpecificationItemId(final String name, final String artifactType, final int revision)
     {
         this.name = name;
         this.artifactType = artifactType;
@@ -240,6 +247,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             this.id = id;
         }
 
+        /**
+         * Create a {@link Builder} for a {@link SpecificationItemId}
+         */
         public Builder()
         {
             this(null);
@@ -306,6 +316,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             if (this.id == null)
             {
                 validateFields();
+                cleanUpLegacyIds();
             }
             else
             {
@@ -323,19 +334,76 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
         }
 
+        private void cleanUpLegacyIds()
+        {
+            if (this.artifactType == null || this.artifactType.isEmpty())
+            {
+                inferArtifactType();
+            }
+
+            removeSuperfluousArtifactPrefix();
+        }
+
+        private void inferArtifactType()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
+            }
+            else
+            {
+                this.artifactType = UNKONWN_ARTIFACT_TYPE;
+            }
+        }
+
+        private void removeSuperfluousArtifactPrefix()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                if (this.artifactType.equals(matcher.group(ARTIFACT_TYPE_MATCH))
+                        && (matcher.group(LEGACY_ARTIFACT_TYPE_MATCH) == null
+                                || matcher.group(ARTIFACT_TYPE_MATCH)
+                                        .equals(matcher.group(LEGACY_ARTIFACT_TYPE_MATCH))))
+                {
+                    this.name = matcher.group(LEGACY_NAME_MATCH);
+                }
+                else
+                {
+                    final StringBuilder builder = new StringBuilder(
+                            matcher.group(LEGACY_ARTIFACT_TYPE_MATCH));
+                    builder.append(":");
+                    builder.append(matcher.group(LEGACY_NAME_MATCH));
+                    this.name = builder.toString();
+                }
+            }
+        }
+
         private void parseId()
         {
             final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
-                extractIdPartsFromMatcher(matcher);
+                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
+                this.name = matcher.group(NAME_MATCH);
+                parseRevision(matcher.group(REVISION_MATCH));
             }
             else
             {
                 final Matcher legacyMatcher = LEGACY_ID_PATTERN.matcher(this.id);
                 if (legacyMatcher.matches())
                 {
-                    extractIdPartsFromMatcher(legacyMatcher);
+                    if (matcher.group(ARTIFACT_TYPE_MATCH) != null)
+                    {
+                        this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
+                    }
+                    else if (matcher.group(LEGACY_ARTIFACT_TYPE_MATCH) != null)
+                    {
+                        this.artifactType = matcher.group(LEGACY_ARTIFACT_TYPE_MATCH);
+                    }
+                    this.name = matcher.group(LEGACY_NAME_MATCH);
+                    parseRevision(matcher.group(LEGACY_REVISION_MATCH));
                 }
                 else
                 {
@@ -345,13 +413,11 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
         }
 
-        private void extractIdPartsFromMatcher(final Matcher matcher)
+        private void parseRevision(final String text)
         {
-            this.artifactType = matcher.group(1);
-            this.name = matcher.group(2);
             try
             {
-                this.revision = Integer.parseInt(matcher.group(3));
+                this.revision = Integer.parseInt(text);
             }
             catch (final NumberFormatException exception)
             {

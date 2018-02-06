@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -41,15 +40,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.*;
 
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporter;
+import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.matcher.SpecificationItemMatcher;
@@ -99,9 +92,13 @@ public class TestSpecobjectExporter
                 .build();
         final SpecificationItem item2 = new SpecificationItem.Builder()
                 .id(SpecificationItemId.createId("doctype", "id2", 43)) //
+                .title("ShortDesc2") //
+                .status(ItemStatus.DRAFT) //
                 .description("Description2") //
                 .rationale("Rationale2") //
                 .comment("Comment2") //
+                .addTag("first tag") //
+                .addTag("second tag") //
                 .build();
         assertExportContent(getSpecobjecResourcePath("two-specobjects.xml"), item1, item2);
     }

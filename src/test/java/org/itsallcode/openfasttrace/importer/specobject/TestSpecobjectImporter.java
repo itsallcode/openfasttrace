@@ -1,172 +1,260 @@
 package org.itsallcode.openfasttrace.importer.specobject;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.StringReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.itsallcode.openfasttrace.core.ItemStatus;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.core.xml.SaxParserConfigurator;
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.junit.Before;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.xml.sax.SAXException;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 /**
  * Test for {@link SpecobjectImporter}
  */
 public class TestSpecobjectImporter
 {
-    private static final Path TEST_FILE_PREFIX = Paths.get("src/test/resources/specobject/")
-            .toAbsolutePath();
-    private static final Path SINGLE_SPECOBJECT_FILE = TEST_FILE_PREFIX
-            .resolve("single-specobject.xml");
-    private static final Path TWO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("two-specobjects.xml");
-    private static final Path NO_SPECOBJECT_FILE = TEST_FILE_PREFIX.resolve("no-specobject.xml");
+    private static final String PSEUDO_FILENAME = "pseudo_filename";
+    private static final Location STANDARD_LOCATION = Location.create(PSEUDO_FILENAME, 2);
 
-    @Mock
-    private SAXParserFactory parserFactoryMock;
-
-    private Builder specItem1Builder;
-    private Builder specItem2Builder;
-
-    @Before
-    public void setup()
+    @Test
+    public void testImportOfMinimalSpecObject()
     {
-        MockitoAnnotations.initMocks(this);
-        this.specItem1Builder = new SpecificationItem.Builder() //
-                .id(new SpecificationItemId.Builder() //
-                        .artifactType("doctype") //
-                        .name("id") //
-                        .revision(42) //
-                        .build()) //
-                .title("") //
-                .comment("Comment").rationale("Rationale") //
-                .description("Description") //
-                .addNeedsArtifactType("code").addNeedsArtifactType("test") //
-                .addCoveredId(new SpecificationItemId.Builder() //
-                        .artifactType(null) //
-                        .name("provid") //
-                        .revision(43) //
-                        .build()) //
-                .addDependOnId(new SpecificationItemId.Builder() //
-                        .artifactType("dependsOnDocType") //
-                        .name("dependsOnName") //
-                        .revision(44) //
-                        .build()); //
-        this.specItem2Builder = new SpecificationItem.Builder() //
-                .id(new SpecificationItemId.Builder() //
-                        .artifactType("doctype") //
-                        .name("id2") //
-                        .revision(42 + 1) //
-                        .build()) //
-                .title("ShortDesc2") //
-                .status(ItemStatus.DRAFT) //
-                .comment("Comment2") //
-                .rationale("Rationale2") //
-                .description("Description2") //
-                .addTag("first tag") //
-                .addTag("second tag");
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>minimal</id>\n" //
+                + "    <version>1</version>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~minimal~1"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    private ImportEventListener importFromString(final String text)
+    {
+        final ImportEventListener listenerMock = mock(ImportEventListener.class);
+        final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        final StringReader stringReader = new StringReader(text);
+        final SpecobjectImporter importer = new SpecobjectImporter(PSEUDO_FILENAME,
+                new BufferedReader(stringReader), saxParserFactory, listenerMock);
+        importer.runImport();
+        return listenerMock;
     }
 
     @Test
-    public void testSingleSpecObject() throws FileNotFoundException
+    public void testImportOfComplexSpecObject()
     {
-        final List<SpecificationItem> result = runImporter(SINGLE_SPECOBJECT_FILE);
-        assertThat(result, hasSize(1));
-        final SpecificationItem item1 = this.specItem1Builder
-                .location(SINGLE_SPECOBJECT_FILE.toString(), 4) //
-                .build();
-        assertThat(result, AutoMatcher.contains(item1));
-        assertThat(result, contains(item1));
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>complex</id>\n" //
+                + "    <status>draft</status>" //
+                + "    <version>2</version>\n" //
+                + " <shortdesc>the title</shortdesc>\n" //
+                + "    <description>multiline description\n" //
+                + "one more line</description>\n" //
+                + "    <rationale>multiline rationale\n" //
+                + "and another line</rationale>" //
+                + "    <comment>multiline comment\n" //
+                + "yet another line</comment>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setStatus(ItemStatus.DRAFT);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setTitle("the title");
+        verify(listenerMock).appendDescription("multiline description\none more line");
+        verify(listenerMock).appendRationale("multiline rationale\nand another line");
+        verify(listenerMock).appendComment("multiline comment\nyet another line");
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 
     @Test
-    public void testTwoSpecObjects() throws FileNotFoundException
+    public void testSelectedElementsAreIgnoredDuringImport()
     {
-        final List<SpecificationItem> result = runImporter(TWO_SPECOBJECT_FILE);
-        assertThat(result, hasSize(2));
-
-        final SpecificationItem item1 = this.specItem1Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 4) //
-                .build();
-        final SpecificationItem item2 = this.specItem2Builder
-                .location(TWO_SPECOBJECT_FILE.toString(), 24) //
-                .build();
-        assertThat(result, AutoMatcher.contains(item1, item2));
-        assertThat(result, contains(item1, item2));
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"feat\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>ignore-selected-xml-elements</id>\n" //
+                + "    <version>12345</version>\n" //
+                + "    <creationdate>1970-01-01</creationdate>\n"
+                + "    <source>john doe</source>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock)
+                .setId(SpecificationItemId.parseId("feat~ignore-selected-xml-elements~12345"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 
     @Test
-    public void testEmptySpecObjects() throws FileNotFoundException
+    public void testStripSuperfluousArtifactPrefixFromName()
     {
-        final List<SpecificationItem> result = runImporter(NO_SPECOBJECT_FILE);
-        assertThat(result, hasSize(0));
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"impl\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>impl:strip_duplicate_prefix</id>\n" //
+                + "    <version>0</version>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("impl~strip_duplicate_prefix~0"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 
-    @Test(expected = ImporterException.class)
-    public void testSpecObjectsWithoutDoctype() throws FileNotFoundException
+    @Test
+    public void testTakeOverLocationFromImportedFile()
     {
-        final String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + //
-                "<specdocument>\n" + //
-                "    <specobjects>\n" + //
-                "    </specobjects>\n" + //
-                "</specdocument>";
-        final SAXParserFactory parserFactory = SaxParserConfigurator.createSaxParserFactory();
-        new SpecobjectImporter("testfilename", new StringReader(content), parserFactory, null)
-                .runImport();
+        final String expectedFileName = "/home/johndoe/openfasttrace/examples/specobject.xml";
+        final int expectedLine = 42;
+        final ImportEventListener listenerMock = importFromString(
+                "<specobjects doctype=\"utest\">\n" //
+                        + "  <specobject>\n" //
+                        + "    <id>takeOverLocation</id>\n" //
+                        + "    <version>99999999</version>\n" //
+                        + "    <sourcefile>" + expectedFileName + "</sourcefile>" //
+                        + "    <sourceline>" + expectedLine + "</sourceline>" // "
+                        + "  </specobject>\n" //
+                        + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(Location.create(expectedFileName, expectedLine));
+        verify(listenerMock).setId(SpecificationItemId.parseId("utest~takeOverLocation~99999999"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 
-    @Test(expected = ImporterException.class)
-    public void testSaxExceptionWhenCreatingReaderThrowsImporterException()
-            throws FileNotFoundException, ParserConfigurationException, SAXException
+    @Test
+    public void testImportWithTags()
     {
-        when(this.parserFactoryMock.newSAXParser()).thenThrow(new SAXException("expected"));
-        new SpecobjectImporter("testfilename", new StringReader(""), this.parserFactoryMock, null)
-                .runImport();
+        final ImportEventListener listenerMock = importFromString(
+                "<specobjects doctype=\"itest\">\n" //
+                        + "  <specobject>\n" //
+                        + "    <id>with-tags</id>\n" //
+                        + "    <version>1</version>\n" //
+                        + "    <tags>\n" //
+                        + "      <tag>tag 1</tag>\n" //
+                        + "      <tag>tag 2</tag>\n" //
+                        + "    </tags>\n" //
+                        + "  </specobject>\n" //
+                        + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("itest~with-tags~1"));
+        verify(listenerMock).addTag("tag 1");
+        verify(listenerMock).addTag("tag 2");
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 
-    private List<SpecificationItem> runImporter(final Path path) throws FileNotFoundException
+    @Test
+    public void testImportWithNeedsCoverage()
     {
-        return new ImporterService().importFile(path);
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>with-needs-coverage</id>\n" //
+                + "    <version>1</version>\n" //
+                + "    <needscoverage>\n" //
+                + "      <needsobj>impl</needsobj>\n" //
+                + "      <needsobj>utest</needsobj>\n" //
+                + "    </needscoverage>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-needs-coverage~1"));
+        verify(listenerMock).addNeededArtifactType("impl");
+        verify(listenerMock).addNeededArtifactType("utest");
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    public void testImportWithDependencies()
+    {
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>with-dependencies</id>\n" //
+                + "    <version>1</version>\n" //
+                + "    <dependencies>\n" //
+                + "      <dependson>req:dep-a, v1</dependson>\n" //
+                + "      <dependson>req:dep-b, v2</dependson>\n" //
+                + "    </dependencies>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-dependencies~1"));
+        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-a~1"));
+        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-b~2"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    public void testImportFulfilledByIsIgnored()
+    {
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>with-fulfilled-by</id>\n" //
+                + "    <version>1</version>\n" //
+                + "    <fulfilledby>\n" //
+                + "      <ffbObj>\n" //
+                + "        <ffbType>impl</ffbType>\n" //
+                + "        <ffbId>ffb-a</ffbId>\n" //
+                + "        <ffbVersion>1</ffbVersion>\n" //
+                + "      </ffbObj>\n" //
+                + "      <ffbObj>\n" //
+                + "        <ffbType>utest</ffbType>\n" //
+                + "        <ffbId>ffb-b</ffbId>\n" //
+                + "        <ffbVersion>2</ffbVersion>\n" //
+                + "      </ffbObj>\n" //
+                + "    </fulfilledby>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-fulfilled-by~1"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    public void testImportProvidesCoverage()
+    {
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>with-fulfilled-by</id>\n" //
+                + "    <version>1</version>\n" //
+                + "    <providescoverage>\n" //
+                + "      <provcov>\n" //
+                + "        <linksto>feat:provides-a</linksto>\n" //
+                + "        <dstversion>1</dstversion>\n" //
+                + "      </provcov>\n" //
+                + "      <provcov>\n" //
+                + "        <linksto>feat:provides-b</linksto>\n" //
+                + "        <dstversion>2</dstversion>\n" //
+                + "      </provcov>\n" //
+                + "    </providescoverage>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-fulfilled-by~1"));
+        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-a~1"));
+        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-b~2"));
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
     }
 }

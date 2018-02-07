@@ -51,7 +51,7 @@ public class SpecObjectsHandlerBuilder
     public CallbackContentHandler build()
     {
         this.handler.addElementListener("specobject", this::handleStartElement,
-                this::handleEndElement);
+                endElement -> handleEndElement());
         return this.handler;
     }
 
@@ -67,7 +67,7 @@ public class SpecObjectsHandlerBuilder
                 this.locationBuilder).build());
     }
 
-    private void handleEndElement(final TreeElement elem)
+    private void handleEndElement()
     {
         this.listener.setId(this.idBuilder.build());
         this.listener.endSpecificationItem();

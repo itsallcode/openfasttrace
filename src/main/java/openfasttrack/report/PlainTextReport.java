@@ -31,9 +31,12 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import openfasttrack.core.LinkedSpecificationItem;
-import openfasttrack.core.Newline;
-import openfasttrack.core.Trace;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.ReportException;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 
 /**
  * Renders a coverage report in plain text. This is intended for command line
@@ -219,14 +222,31 @@ public class PlainTextReport implements Reportable
         renderItemSummary(item, report);
         report.print("|");
         report.print(this.newline);
+        renderDescription(item, report);
+        report.print("|");
+        report.print(this.newline);
+        renderLinks(item, report);
+    }
 
+    private void renderLinks(final LinkedSpecificationItem item, final PrintStream report)
+    {
+        if (item.countIncomingLinks() + item.countOutgoingLinks() > 0)
+        {
+            report.print("|");
+            report.print(this.newline);
+            item.getLinks().entrySet().stream().forEach(renderLinkDetails(report));
+            report.print("|");
+            report.print(this.newline);
+        }
+    }
+
+    private void renderDescription(final LinkedSpecificationItem item, final PrintStream report)
+    {
         for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
         {
             report.print("| ");
             report.print(line);
             report.print(this.newline);
         }
-        report.print("|");
-        report.print(this.newline);
     }
 }

@@ -59,13 +59,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.matcher.MultilineTextMatcher;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import openfasttrack.core.*;
-import openfasttrack.matcher.MultilineTextMatcher;
 
 public class TestPlainTextReport
 {

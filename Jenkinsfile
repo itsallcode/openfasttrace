@@ -1,5 +1,5 @@
 node {
-   git url: 'https://github.com/hamstercommunity/openfasttrack.git'
+   git url: 'https://github.com/itsallcode/openfasttrace.git'
    def mvnHome = tool 'M3'
    sh "${mvnHome}/bin/mvn -B verify"
    step([$class: 'ArtifactArchiver', artifacts: '**/target/*.jar', fingerprint: true])

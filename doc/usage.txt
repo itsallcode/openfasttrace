@@ -1,4 +1,4 @@
-OpenFastTrack
+OpenFastTrace
 
 Usage:
   oft trace [option ...] [<input file or directory> ...]

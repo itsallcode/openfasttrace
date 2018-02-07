@@ -1,4 +1,0 @@
-openfasttrack.importer.markdown.MarkdownImporterFactory
-openfasttrack.importer.specobject.SpecobjectImporterFactory
-openfasttrack.importer.tag.TagImporterFactory
-openfasttrack.importer.legacytag.LegacyTagImporterFactory

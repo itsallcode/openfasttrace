@@ -1,11 +1,11 @@
-# openfasttrack
+# OpenFastTrace
 
-[![Build Status](https://travis-ci.org/hamstercommunity/openfasttrack.svg)](https://travis-ci.org/hamstercommunity/openfasttrack)
-[![Circle CI](https://circleci.com/gh/hamstercommunity/openfasttrack.svg?style=svg)](https://circleci.com/gh/hamstercommunity/openfasttrack)
-[![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.kaklakariada%3Aopenfasttrack)](https://sonarcloud.io/dashboard?id=com.github.kaklakariada%3Aopenfasttrack-gradle%3Adevelop)
-[![codecov.io](https://codecov.io/github/hamstercommunity/openfasttrack/coverage.svg?branch=master)](https://codecov.io/github/hamstercommunity/openfasttrack?branch=master)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/7509/badge.svg)](https://scan.coverity.com/projects/hamstercommunity-openfasttrack)
-[![Download](https://api.bintray.com/packages/kaklakariada/maven/openfasttrack/images/download.svg)](https://bintray.com/kaklakariada/maven/openfasttrack/_latestVersion)
+[![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
+[![Circle CI](https://circleci.com/gh/itsallcode/openfasttrace.svg?style=svg)](https://circleci.com/gh/itsallcode/openfasttrace)
+[![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=org.itsallcode%3Aopenfasttrace%3Adevelop)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
+[![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
+[![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
 Requirement tracking suite
 
@@ -13,7 +13,7 @@ Requirement tracking suite
 
 ## Dependencies
 
-OpenFastTrack needs a Java JDK 8 (or later) implementation and Maven as build tool.
+OpenFastTrace needs a Java JDK 8 (or later) implementation and Maven as build tool.
 
 ## On Linux
 
@@ -62,5 +62,5 @@ mvn license:update-project-license license:update-file-header
 	$ mvn deploy
 	```
 
-4. Create a [release](https://github.com/hamstercommunity/openfasttrack/releases) on GitHub.
+4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
 5. Sign in at https://bintray.com/ and publish the uploaded artifacts.

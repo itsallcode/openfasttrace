@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.kaklakariada</groupId>
-    <artifactId>openfasttrack</artifactId>
-    <version>0.3.0</version>
-    <name>OpenFastTrack</name>
+    <groupId>org.itsallcode</groupId>
+    <artifactId>openfasttrace</artifactId>
+    <version>0.4.0</version>
+    <name>OpenFastTrace</name>
     <description>Free requirement tracking suite</description>
 
     <repositories>
@@ -17,7 +17,7 @@
     <distributionManagement>
         <repository>
             <id>bintray-openfasttrack-maven-repo</id>
-            <url>https://api.bintray.com/maven/kaklakariada/maven/openfasttrack/;publish=0</url>
+            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace/;publish=0</url>
         </repository>
     </distributionManagement>
 
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.12.0</version>
+            <version>2.13.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -80,7 +80,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>openfasttrack.cli.CliStarter</mainClass>
+                            <mainClass>org.itsallcode.openfasttrace.cli.CliStarter</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -135,7 +135,7 @@
                     <verbose>false</verbose>
                     <detail>true</detail>
                     <licenseName>gpl_v3</licenseName>
-                    <organizationName>hamstercommunity</organizationName>
+                    <organizationName>itsallcode.org</organizationName>
                     <inceptionYear>2016</inceptionYear>
                     <excludes>
                         <exclude>
@@ -179,7 +179,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>openfasttrack.cli.CliStarter</mainClass>
+                    <mainClass>org.itsallcode.openfasttrace.cli.CliStarter</mainClass>
                     <commandlineArgs>trace doc src/main/java src/test/java</commandlineArgs>
                 </configuration>
             </plugin>

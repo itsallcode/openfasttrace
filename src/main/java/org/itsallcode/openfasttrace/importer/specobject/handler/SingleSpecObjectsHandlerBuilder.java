@@ -87,7 +87,7 @@ public class SingleSpecObjectsHandlerBuilder
 
     private void removeArtifactTypeFromName(final String data)
     {
-        this.idBuilder.name(data.replaceFirst("\\w+:", ""));
+        this.idBuilder.name(data);
     }
 
     private void ignoreCharacterData(final String... elements)

@@ -90,6 +90,7 @@ public class Linker
         }
         else
         {
+            linkOrphanToStaleId(item, id);
             linkIgnoringRevision(item, id);
         }
     }
@@ -115,6 +116,7 @@ public class Linker
         {
             covering.addLinkToItemWithStatus(covered, LinkStatus.UNWANTED);
             covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_UNWANTED);
+            covered.addOverCoveredArtifactType(coveringArtifactType);
         }
     }
 
@@ -123,11 +125,7 @@ public class Linker
     {
         final List<LinkedSpecificationItem> coveredLinkedItems = this.index
                 .getByIdIgnoringVersion(id);
-        if (coveredLinkedItems.isEmpty())
-        {
-            linkOrphanToStaleId(item, id);
-        }
-        else
+        if (!coveredLinkedItems.isEmpty())
         {
             linkToOutdatedOrPredated(item, id, coveredLinkedItems);
         }

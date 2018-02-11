@@ -92,9 +92,7 @@ public class TestLinkedSpecificationItem
     @Test
     public void testGetOverCoveredArtifactTypes()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN));
-        this.linkedItem.addCoveredArtifactType(UMAN);
-        this.linkedItem.addCoveredArtifactType(REQ);
+        this.linkedItem.addOverCoveredArtifactType(REQ);
         assertThat(this.linkedItem.getOverCoveredArtifactTypes(), containsInAnyOrder(REQ));
     }
 

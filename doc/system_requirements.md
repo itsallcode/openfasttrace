@@ -396,7 +396,7 @@ Covers:
 Needs: dsn
 
 #### Plain Text Report Specification Item Overview
-`req~reporting.plain-text.specification-item-overview~1`
+`req~reporting.plain-text.specification-item-overview~2`
 
 An item summary consist in the plain text report includes
 
@@ -407,8 +407,23 @@ An item summary consist in the plain text report includes
   5. Total number of outgoing links
   6. Number of duplicates (not including this item)
   7. ID
-  8. Artifact types indicating coverage
-  9. Source file name and line (optional)
+  8. Status (unless "approved")
+  9. Artifact types indicating coverage
+
+Covers:
+
+  * [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+#### Plain Text Report Link Details
+`req~reporting.plain-text.link-details~1`
+
+The link detail section shows for all links of a specification item:
+
+  1. Incoming / Outgoing
+  2. Link status
+  3. ID of the specification item on the other end of the link
 
 Covers:
 

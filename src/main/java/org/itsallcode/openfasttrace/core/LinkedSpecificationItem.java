@@ -36,6 +36,7 @@ public class LinkedSpecificationItem
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
+    private final Set<String> overCoveredArtifactTypes = new HashSet<>();
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
@@ -191,6 +192,11 @@ public class LinkedSpecificationItem
         this.coveredArtifactTypes.add(artifactType);
     }
 
+    public void addOverCoveredArtifactType(final String artifactType)
+    {
+        this.overCoveredArtifactTypes.add(artifactType);
+    }
+
     /**
      * Get the artifact type which are covered.
      *
@@ -206,11 +212,10 @@ public class LinkedSpecificationItem
      * 
      * @return list of over-covered artifact types.
      */
-    public List<String> getOverCoveredArtifactTypes()
+    public Set<String> getOverCoveredArtifactTypes()
     {
-        final List<String> overCovered = new ArrayList<>(getCoveredArtifactTypes());
-        overCovered.removeAll(getNeedsArtifactTypes());
-        return overCovered;
+
+        return this.overCoveredArtifactTypes;
     }
 
     /**

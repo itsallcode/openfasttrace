@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,22 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
-public class Tracer
+import org.junit.Test;
+
+public class TestTracedLink
 {
-    public Trace trace(final List<LinkedSpecificationItem> items)
+
+    @Test
+    public void testTracedLink()
     {
-        final Trace.Builder builder = new Trace.Builder();
-        builder.items(items);
-        builder.defectItems(items.stream() //
-                .filter(item -> item.isDefect()) //
-                .collect(Collectors.toList()));
-        return builder.build();
+        final LinkedSpecificationItem other = mock(LinkedSpecificationItem.class);
+        final LinkStatus status = LinkStatus.AMBIGUOUS;
+        final TracedLink link = new TracedLink(other, status);
+        assertThat(link.getOther(), equalTo(other));
+        assertThat(link.getStatus(), equalTo(status));
     }
 }

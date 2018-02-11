@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -27,6 +30,7 @@ import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.REQ;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
 import static org.itsallcode.openfasttrace.core.SpecificationItemId.createId;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.*;
@@ -106,7 +110,10 @@ public class TestLinker
                 .addCoveredId(REQ, "this-is-newer-than-link", 1) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
-        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, OUTDATED);
+        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        expectedStatuses.put(LinkStatus.OUTDATED, 1);
+        expectedStatuses.put(LinkStatus.ORPHANED, 1);
+        assertItemHasLinksWithStatus(findLinkedItem(covering, linkedItems).get(), expectedStatuses);
     }
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
@@ -122,7 +129,10 @@ public class TestLinker
                 .addCoveredId(REQ, "this-is-older-than-link", 2) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
-        assertItemUnderTestHasExactlyOneLinkWithStatus(covering, linkedItems, PREDATED);
+        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        expectedStatuses.put(LinkStatus.PREDATED, 1);
+        expectedStatuses.put(LinkStatus.ORPHANED, 1);
+        assertItemHasLinksWithStatus(findLinkedItem(covering, linkedItems).get(), expectedStatuses);
     }
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
@@ -251,6 +261,10 @@ public class TestLinker
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
         assertItemUnderTestHasExactlyOneLinkWithStatus(covered, linkedItems, COVERED_UNWANTED);
+        assertThat(findLinkedItem(covered, linkedItems).get().getOverCoveredArtifactTypes(),
+                equalTo(new HashSet<>(Arrays.asList(IMPL))));
+        assertThat(findLinkedItem(covered, linkedItems).get().getCoveredArtifactTypes(), empty());
+        assertThat(findLinkedItem(covered, linkedItems).get().getUncoveredArtifactTypes(), empty());
     }
 
     // [utest->dsn~tracing.incoming-coverage-link-status~1]

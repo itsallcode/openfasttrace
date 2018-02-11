@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,7 +36,6 @@ public class ReportService
     public void reportTraceToPath(final Trace trace, final Path outputPath,
             final ReportVerbosity verbosity, final Newline newline)
     {
-
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
             reportTraceToStream(trace, verbosity, newline, outputStream);

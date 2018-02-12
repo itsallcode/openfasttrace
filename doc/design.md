@@ -698,7 +698,7 @@ Covers:
 
   * `req~cli.conversion.default-output-format~1`
 
-Needs: impl, itest
+Needs: impl, itest, utest
 
 # Design Decisions
 

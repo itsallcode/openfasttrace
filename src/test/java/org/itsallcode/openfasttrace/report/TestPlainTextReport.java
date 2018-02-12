@@ -124,7 +124,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~1]
+    // [utest->dsn~reporting.plain-text.summary~2]
     public void testReport_LevelSummary_OK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -133,7 +133,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~1]
+    // [utest->dsn~reporting.plain-text.summary~2]
     public void testReport_LevelSummary_NotOK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -163,7 +163,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.specification-item-overview~1]
+    // [utest->dsn~reporting.plain-text.specification-item-overview~2]
     public void testReport_LevelFailureSummaries_NotOK()
     {
         when(this.traceMock.count()).thenReturn(6);

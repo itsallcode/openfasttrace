@@ -380,14 +380,13 @@ The plain text report is the most basic report variant. It serves two main purpo
 2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
 #### Plain Text Report Summary
-`req~reporting.plain-text.summary~1`
+`req~reporting.plain-text.summary~2`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
-  * Total number of specification items that are not covered (if any)
-  * Total number of duplicate specification items (if any)
+  * Total number of defect specification items (if any)
 
 Covers:
 

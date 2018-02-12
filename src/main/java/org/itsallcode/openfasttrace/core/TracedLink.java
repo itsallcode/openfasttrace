@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-public class TracedLink
+public final class TracedLink
 {
     private final LinkedSpecificationItem otherLinkEnd;
     private final LinkStatus status;
@@ -64,7 +64,7 @@ public class TracedLink
         {
             return false;
         }
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof TracedLink))
         {
             return false;
         }

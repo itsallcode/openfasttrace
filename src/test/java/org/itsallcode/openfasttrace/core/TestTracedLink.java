@@ -28,8 +28,26 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 public class TestTracedLink
 {
+    @Test
+    public void equalsContract()
+    {
+        EqualsVerifier.forClass(TracedLink.class) //
+                .withPrefabValues(LinkedSpecificationItem.class,
+                        createPrefabricatedLinkedSpecificationItem("req", "foo", 1),
+                        createPrefabricatedLinkedSpecificationItem("impl", "bar", 2))
+                .verify();
+    }
+
+    private LinkedSpecificationItem createPrefabricatedLinkedSpecificationItem(
+            final String artifactType, final String name, final int revision)
+    {
+        return new LinkedSpecificationItem(
+                new SpecificationItem.Builder().id(artifactType, name, revision).build());
+    }
 
     @Test
     public void testTracedLink()

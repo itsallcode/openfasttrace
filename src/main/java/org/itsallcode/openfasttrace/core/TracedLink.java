@@ -24,18 +24,18 @@ package org.itsallcode.openfasttrace.core;
 
 public class TracedLink
 {
-    private final LinkedSpecificationItem other;
+    private final LinkedSpecificationItem otherLinkEnd;
     private final LinkStatus status;
 
-    public TracedLink(final LinkedSpecificationItem other, final LinkStatus status)
+    public TracedLink(final LinkedSpecificationItem otherLinkEnd, final LinkStatus status)
     {
-        this.other = other;
+        this.otherLinkEnd = otherLinkEnd;
         this.status = status;
     }
 
-    public LinkedSpecificationItem getOther()
+    public LinkedSpecificationItem getOtherLinkEnd()
     {
-        return this.other;
+        return this.otherLinkEnd;
     }
 
     public LinkStatus getStatus()
@@ -48,7 +48,7 @@ public class TracedLink
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.other == null) ? 0 : this.other.hashCode());
+        result = prime * result + ((this.otherLinkEnd == null) ? 0 : this.otherLinkEnd.hashCode());
         result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
         return result;
     }
@@ -69,14 +69,14 @@ public class TracedLink
             return false;
         }
         final TracedLink other = (TracedLink) obj;
-        if (this.other == null)
+        if (this.otherLinkEnd == null)
         {
-            if (other.other != null)
+            if (other.otherLinkEnd != null)
             {
                 return false;
             }
         }
-        else if (!this.other.equals(other.other))
+        else if (!this.otherLinkEnd.equals(other.otherLinkEnd))
         {
             return false;
         }

@@ -32,7 +32,7 @@ public class Tracer
         final Trace.Builder builder = new Trace.Builder();
         builder.items(items);
         builder.defectItems(items.stream() //
-                .filter(item -> item.isDefect()) //
+                .filter(LinkedSpecificationItem::isDefect) //
                 .collect(Collectors.toList()));
         return builder.build();
     }

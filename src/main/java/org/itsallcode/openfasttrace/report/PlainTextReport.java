@@ -176,12 +176,11 @@ public class PlainTextReport implements Reportable
         report.print(item.getId().toString());
         report.print(" ");
         renderMaturity(report, item);
-        report.print(translateArtifactTypeCoverage(report, item));
+        report.print(translateArtifactTypeCoverage(item));
         report.print(this.newline);
     }
 
-    private String translateArtifactTypeCoverage(final PrintStream report,
-            final LinkedSpecificationItem item)
+    private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
     {
         final Comparator<String> byTypeName = (a, b) -> a.replaceFirst("[-+]", "")
                 .compareTo(b.replaceFirst("[-+]", ""));
@@ -286,12 +285,8 @@ public class PlainTextReport implements Reportable
     {
         final List<TracedLink> tracedLinks = flattenTracedLinks(links);
         tracedLinks.stream() //
-                .sorted((a, b) -> {
-                    return a.getOther().getId().compareTo(b.getOther().getId());
-                }) //
-                .forEachOrdered(link -> {
-                    renderLink(report, link);
-                });
+                .sorted((a, b) -> a.getOtherLinkEnd().getId().compareTo(b.getOtherLinkEnd().getId())) //
+                .forEachOrdered(link -> renderLink(report, link));
     }
 
     private List<TracedLink> flattenTracedLinks(
@@ -314,7 +309,7 @@ public class PlainTextReport implements Reportable
         report.print(status.isIncoming() ? "|<-- (" : "|--> (");
         report.print(status.getShortTag());
         report.print(") ");
-        report.print(link.getOther().getId());
+        report.print(link.getOtherLinkEnd().getId());
         report.print(this.newline);
     }
 

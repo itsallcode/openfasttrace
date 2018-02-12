@@ -37,7 +37,7 @@ public class TestTracedLink
         final LinkedSpecificationItem other = mock(LinkedSpecificationItem.class);
         final LinkStatus status = LinkStatus.AMBIGUOUS;
         final TracedLink link = new TracedLink(other, status);
-        assertThat(link.getOther(), equalTo(other));
+        assertThat(link.getOtherLinkEnd(), equalTo(other));
         assertThat(link.getStatus(), equalTo(status));
     }
 }

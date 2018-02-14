@@ -26,6 +26,7 @@ import javax.annotation.Generated;
 
 public final class Location
 {
+    private static final int NO_COLUMN = -1;
     private final String path;
     private final int line;
     private final int column;
@@ -49,24 +50,31 @@ public final class Location
      */
     public static Location create(final String path, final int line)
     {
-        if (line <= 0)
-        {
-            throw new IllegalArgumentException("Illegal value for line: " + line);
-        }
-        return new Location(path, line, -1);
+        validateLine(line);
+        return new Location(path, line, NO_COLUMN);
     }
 
-    public static Location create(final String path, final int line, final int column)
+    private static void validateLine(final int line)
     {
         if (line <= 0)
         {
             throw new IllegalArgumentException("Illegal value for line: " + line);
         }
+    }
+
+    public static Location create(final String path, final int line, final int column)
+    {
+        validateLine(line);
+        validateColumn(column);
+        return new Location(path, line, column);
+    }
+
+    private static void validateColumn(final int column)
+    {
         if (column <= 0)
         {
-            throw new IllegalArgumentException("Illegal value for line: " + line);
+            throw new IllegalArgumentException("Illegal value for column: " + column);
         }
-        return new Location(path, line, column);
     }
 
     public String getPath()
@@ -138,6 +146,6 @@ public final class Location
     @Override
     public String toString()
     {
-        return this.path + ":" + this.line + (this.column != -1 ? ":" + this.column : "");
+        return this.path + ":" + this.line + (this.column != NO_COLUMN ? ":" + this.column : "");
     }
 }

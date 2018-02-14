@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 
 import java.util.List;
@@ -87,7 +86,7 @@ public class ArgumentValidator
 
     private boolean validateTraceCommand()
     {
-        boolean valid = false;
+        boolean ok = false;
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
                 && this.arguments.getOutputPath() != null)
         {
@@ -96,14 +95,14 @@ public class ArgumentValidator
         }
         else
         {
-            valid = true;
+            ok = true;
         }
-        return valid;
+        return ok;
     }
 
     private boolean validateConvertCommand()
     {
-        boolean valid = false;
+        boolean ok = false;
         final String format = this.arguments.getOutputFormat();
         if (format != null && !new ExporterFactoryLoader().isFormatSupported(format))
         {
@@ -111,9 +110,9 @@ public class ArgumentValidator
         }
         else
         {
-            valid = true;
+            ok = true;
         }
-        return valid;
+        return ok;
     }
 
     private String listCommands()

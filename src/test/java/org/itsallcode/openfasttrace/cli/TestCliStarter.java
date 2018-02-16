@@ -40,7 +40,6 @@ import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 
-// FIXME: reduce to unit test. Move integration tests to API level.
 public class TestCliStarter
 {
     private static final String NEWLINE = "\n";
@@ -123,10 +122,20 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
-    // [itest->dsn~cli.conversion.default-format~1]
-    // [itest->dsn~cli.input-file-selection~1]
+    // [itest->dsn~cli.conversion.default-output-format~1]
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
+    {
+        expectCliExitStatusWithAssertions(ExitStatus.OK, () -> {
+            assertOutputFileExists(false);
+            assertStdOutStartsWith(REQM2_PREAMBLE);
+        });
+        runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+    }
+
+    // [itest->dsn~cli.input-file-selection~1]
+    @Test
+    public void testConvertDefaultOutputFormatIntoFile() throws IOException
     {
         expectStandardFileExportResult();
         runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,

@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  * #L%
  */
 
-
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -37,9 +36,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.exporter.Exporter;
 import org.itsallcode.openfasttrace.exporter.ExporterException;
 
@@ -133,11 +130,14 @@ public class SpecobjectExporter implements Exporter
         final String comment = processMultilineText(item.getComment());
         this.writer.writeStartElement("specobject");
         writeElement("id", item.getId().getName());
+        writeElement("status", item.getStatus().toString());
         writeElement("version", item.getId().getRevision());
-        writeElement("description", description);
-        writeElement("rationale", rationale);
-        writeElement("comment", comment);
+        writeLocation(item.getLocation());
+        writeElementIfPresent("description", description);
+        writeElementIfPresent("rationale", rationale);
+        writeElementIfPresent("comment", comment);
 
+        writeTags(item.getTags());
         writeNeedsArtifactTypes(item.getNeedsArtifactTypes());
         writeCoveredIds(item.getCoveredIds());
         writeDependsOnIds(item.getDependOnIds());
@@ -154,6 +154,20 @@ public class SpecobjectExporter implements Exporter
     {
         final Matcher matcher = Newline.anyNewlinePattern().matcher(text);
         return matcher.replaceAll(this.newline.toString());
+    }
+
+    private void writeTags(final List<String> tags) throws XMLStreamException
+    {
+        if (tags.isEmpty())
+        {
+            return;
+        }
+        this.writer.writeStartElement("tags");
+        for (final String tag : tags)
+        {
+            writeElement("tag", tag);
+        }
+        this.writer.writeEndElement();
     }
 
     private void writeDependsOnIds(final List<SpecificationItemId> dependOnIds)
@@ -209,11 +223,29 @@ public class SpecobjectExporter implements Exporter
         writeElement(elementName, String.valueOf(content));
     }
 
+    private void writeElementIfPresent(final String elementName, final String content)
+            throws XMLStreamException
+    {
+        if (content != null && !content.isEmpty())
+        {
+            writeElement(elementName, content);
+        }
+    }
+
     private void writeElement(final String elementName, final String content)
             throws XMLStreamException
     {
         this.writer.writeStartElement(elementName);
         this.writer.writeCharacters(content);
         this.writer.writeEndElement();
+    }
+
+    private void writeLocation(final Location location) throws XMLStreamException
+    {
+        if (location != null && location.getPath() != null && !location.getPath().isEmpty())
+        {
+            writeElement("sourcefile", location.getPath());
+            writeElement("sourceline", location.getLine());
+        }
     }
 }

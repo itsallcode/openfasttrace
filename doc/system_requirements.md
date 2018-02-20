@@ -223,7 +223,7 @@ This allows stepwise migration to the OFT standard format. The Elektrobit format
 
 Covers:
 
-  * [feat~markdown-import~1](#feat~markdown-import~1)
+  * [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
 

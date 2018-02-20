@@ -7,7 +7,7 @@
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
 [![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
-Requirement tracking suite
+![logo](src/main/resources/openfasttrace_logo.svg)
 
 # Installation
 

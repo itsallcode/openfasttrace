@@ -82,3 +82,7 @@ h6 + p > code:first-of-type {
   position: relative;
   top: -2.5em;
 }
+
+img[alt=oft-logo] {
+  width: 250px;
+}

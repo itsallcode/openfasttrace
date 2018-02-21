@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
-import org.itsallcode.openfasttrace.core.Location;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /*-
  * #%L
@@ -54,5 +55,37 @@ public class TestLocation
     public void testCreateLocationWithNegativeColumnFails()
     {
         Location.create(PATH, 1, -1);
+    }
+
+    @Test
+    public void testBuilder()
+    {
+        final String expectedPath = "expected";
+        final int expectedLine = 4007;
+        final int expectedColumn = 10203;
+        final Location location = new Location.Builder().path(expectedPath).line(expectedLine)
+                .column(expectedColumn).build();
+        assertThat(location.getPath(), equalTo(expectedPath));
+        assertThat(location.getLine(), equalTo(expectedLine));
+        assertThat(location.getColumn(), equalTo(expectedColumn));
+    }
+
+    @Test
+    public void testIsComplete()
+    {
+        final Location.Builder builder = new Location.Builder().path("a");
+        assertThat("builder with path set to null is complete", builder.isCompleteEnough(),
+                equalTo(true));
+    }
+
+    @Test
+    public void testIsNotCompleteEnoughWithoutPath()
+    {
+        final Location.Builder builderA = new Location.Builder().path("");
+        final Location.Builder builderB = new Location.Builder();
+        assertThat("builder with empty path is complete", builderA.isCompleteEnough(),
+                equalTo(false));
+        assertThat("builder with path set to null is complete", builderB.isCompleteEnough(),
+                equalTo(false));
     }
 }

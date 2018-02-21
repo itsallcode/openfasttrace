@@ -158,6 +158,12 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    public void setLocation(final Location location)
+    {
+        this.location = location;
+    }
+
+    @Override
     public void endSpecificationItem()
     {
         // [impl->dsn~ignoring-artifact-types-during-import~1]

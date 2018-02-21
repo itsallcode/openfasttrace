@@ -142,13 +142,9 @@ public class Linker
 
     private LinkedSpecificationItem findOrCreateStaleItem(final SpecificationItemId id)
     {
-        LinkedSpecificationItem staleItem = this.staleIndex.get(id);
-        if (staleItem == null)
-        {
-            staleItem = new LinkedSpecificationItem(new SpecificationItem.Builder().id(id).build());
-            this.staleIndex.put(id, staleItem);
-        }
-        return staleItem;
+        this.staleIndex.computeIfAbsent(id,
+                key -> new LinkedSpecificationItem(new SpecificationItem.Builder().id(id).build()));
+        return this.staleIndex.get(id);
     }
 
     private void linkToOutdatedOrPredated(final LinkedSpecificationItem item,

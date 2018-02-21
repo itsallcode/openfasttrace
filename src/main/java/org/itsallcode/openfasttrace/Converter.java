@@ -35,7 +35,7 @@ import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
  */
 public interface Converter
 {
-    String DEFAULT_EXPORT_FORMAT = "specobject";
+    public String DEFAULT_EXPORT_FORMAT = "specobject";
 
     /**
      * Select one or more input files

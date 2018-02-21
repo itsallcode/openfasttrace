@@ -58,11 +58,16 @@ public final class Location
      */
     public static Location create(final String path, final int line)
     {
+        validateLine(line);
+        return new Location(path, line, NO_COLUMN);
+    }
+
+    private static void validateLine(final int line)
+    {
         if (line <= 0)
         {
             throw new IllegalArgumentException("Illegal value for line: " + line);
         }
-        return new Location(path, line, NO_COLUMN);
     }
 
     /**
@@ -80,15 +85,17 @@ public final class Location
      */
     public static Location create(final String path, final int line, final int column)
     {
-        if (line <= 0)
-        {
-            throw new IllegalArgumentException("Illegal value for line: " + line);
-        }
+        validateLine(line);
+        validateColumn(column);
+        return new Location(path, line, column);
+    }
+
+    private static void validateColumn(final int column)
+    {
         if (column <= 0)
         {
             throw new IllegalArgumentException("Illegal value for column: " + column);
         }
-        return new Location(path, line, column);
     }
 
     /**

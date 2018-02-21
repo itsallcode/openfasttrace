@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.mode;
  * #L%
  */
 
-
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.Converter;

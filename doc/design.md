@@ -690,7 +690,7 @@ Covers:
 Needs: impl, itest
 
 #### Default Conversion Output Format
-`dsn~cli.conversion.default-format~1`
+`dsn~cli.conversion.default-output-format~1`
 
 The CLI uses ReqM2 as export format if none is given as a parameter.
 

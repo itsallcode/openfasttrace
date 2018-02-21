@@ -130,13 +130,8 @@ public class LinkedSpecificationItem
      */
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
-        List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
-        if (linksWithStatus == null)
-        {
-            linksWithStatus = new ArrayList<>();
-            this.links.put(status, linksWithStatus);
-        }
-        linksWithStatus.add(item);
+        this.links.computeIfAbsent(status, key -> new ArrayList<>());
+        this.links.get(status).add(item);
     }
 
     /**

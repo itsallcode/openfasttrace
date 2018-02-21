@@ -27,16 +27,12 @@ import java.util.logging.Logger;
 import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.xml.event.EndElementEvent;
 import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController
 {
-    private final static Logger LOG = Logger.getLogger(ContentHandlerAdapter.class.getName());
+    private static final Logger LOG = Logger.getLogger(ContentHandlerAdapter.class.getName());
 
     private final String fileName;
     private final XMLReader xmlReader;

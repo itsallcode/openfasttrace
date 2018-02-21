@@ -136,19 +136,24 @@ public class CliArguments
      * @return the output format
      */
     // [impl->dsn~cli.tracing.default-format~1]
-    // [impl->dsn~cli.conversion.default-format~1]]
+    // [impl->dsn~cli.conversion.default-output-format~1]]
     // [impl->dsn~cli.tracing.output-format~1]
     public String getOutputFormat()
     {
         if (this.outputFormat == null)
         {
-            if (this.getCommand() == TraceCommand.COMMAND_NAME)
+            if (this.getCommand().equals(TraceCommand.COMMAND_NAME))
             {
                 return Reporter.DEFAULT_REPORT_FORMAT;
             }
-            else if (this.getCommand() == ConvertCommand.COMMAND_NAME)
+            else if (this.getCommand().equals(ConvertCommand.COMMAND_NAME))
             {
                 return Converter.DEFAULT_EXPORT_FORMAT;
+            }
+            else
+            {
+                throw new IllegalStateException("Illegal command \"" + this.getCommand()
+                        + "\" encountered trying to set default output format.");
             }
         }
         return this.outputFormat;

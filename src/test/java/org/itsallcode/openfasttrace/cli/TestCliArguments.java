@@ -68,7 +68,6 @@ public class TestCliArguments
     public void testSetOutputFormat()
     {
         final String value = "foobar";
-        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), equalTo(null));
         this.arguments.setOutputFormat(value);
         assertAfterSetter(value, this.arguments.getOutputFormat());
     }
@@ -93,7 +92,6 @@ public class TestCliArguments
     public void testSetO()
     {
         final String value = "foobar";
-        assertThat(BEFORE_SETTER, this.arguments.getOutputFormat(), equalTo(null));
         this.arguments.setO(value);
         assertAfterSetter(value, this.arguments.getOutputFormat());
     }

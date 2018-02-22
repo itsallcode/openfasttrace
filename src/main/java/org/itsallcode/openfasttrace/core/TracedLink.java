@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import javax.annotation.Generated;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -43,6 +45,7 @@ public final class TracedLink
         return this.status;
     }
 
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -53,6 +56,7 @@ public final class TracedLink
         return result;
     }
 
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

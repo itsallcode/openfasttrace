@@ -44,7 +44,6 @@ public class PlainTextReport implements Reportable
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
     private final Newline newline;
-    private ReportVerbosity verbosity;
     private int nonEmptySections = 0;
 
     /**
@@ -66,11 +65,10 @@ public class PlainTextReport implements Reportable
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        this.verbosity = verbosity;
         final Charset charset = StandardCharsets.UTF_8;
         try (final PrintStream report = new PrintStream(outputStream, false, charset.displayName()))
         {
-            renderToStreamWithVerbosityLevel(report);
+            renderToPrintStreamWithVerbosityLevel(report, verbosity);
         }
         catch (final UnsupportedEncodingException e)
         {
@@ -78,9 +76,10 @@ public class PlainTextReport implements Reportable
         }
     }
 
-    private void renderToStreamWithVerbosityLevel(final PrintStream report)
+    private void renderToPrintStreamWithVerbosityLevel(final PrintStream report,
+            final ReportVerbosity verbosity)
     {
-        switch (this.verbosity)
+        switch (verbosity)
         {
         case QUIET:
             break;
@@ -110,7 +109,7 @@ public class PlainTextReport implements Reportable
             break;
         default:
             throw new IllegalStateException(
-                    "Unable to create report for unknown verbosity level " + this.verbosity);
+                    "Unable to create report for unknown verbosity level " + verbosity);
         }
     }
 
@@ -285,7 +284,8 @@ public class PlainTextReport implements Reportable
     {
         final List<TracedLink> tracedLinks = flattenTracedLinks(links);
         tracedLinks.stream() //
-                .sorted((a, b) -> a.getOtherLinkEnd().getId().compareTo(b.getOtherLinkEnd().getId())) //
+                .sorted((a, b) -> a.getOtherLinkEnd().getId()
+                        .compareTo(b.getOtherLinkEnd().getId())) //
                 .forEachOrdered(link -> renderLink(report, link));
     }
 

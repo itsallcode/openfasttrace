@@ -52,9 +52,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     // [impl->dsn~md.eb-markdown-id~1]
     private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
-    private static final int ARTIFACT_TYPE_MATCH = 1;
-    private static final int NAME_MATCH = 2;
-    private static final int REVISION_MATCH = 3;
+    private static final int ARTIFACT_TYPE_MATCHING_GROUP = 1;
+    private static final int NAME_MATCHING_GROUP = 2;
+    private static final int REVISION_MATCHING_GROUP = 3;
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
     public static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
@@ -345,7 +345,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
             if (matcher.matches())
             {
-                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
+                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
             }
             else
             {
@@ -358,7 +358,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
             if (matcher.matches())
             {
-                this.name = matcher.group(NAME_MATCH);
+                this.name = matcher.group(NAME_MATCHING_GROUP);
             }
         }
 
@@ -386,9 +386,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 
         private void setIdPartsFromMatches(final Matcher matcher)
         {
-            this.artifactType = matcher.group(ARTIFACT_TYPE_MATCH);
-            this.name = matcher.group(NAME_MATCH);
-            parseRevision(matcher.group(REVISION_MATCH));
+            this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
+            this.name = matcher.group(NAME_MATCHING_GROUP);
+            parseRevision(matcher.group(REVISION_MATCHING_GROUP));
         }
 
         private void parseRevision(final String text)

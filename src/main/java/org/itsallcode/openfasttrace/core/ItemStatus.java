@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.mode;
+package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,24 +22,26 @@ package org.itsallcode.openfasttrace.mode;
  * #L%
  */
 
-import java.nio.file.Path;
-
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.exporter.ExporterService;
-
-public class ConvertMode extends AbstractMode<ConvertMode> implements Converter
+public enum ItemStatus
 {
-    private final ExporterService exporterService = new ExporterService();
+    APPROVED, PROPOSED, DRAFT, REJECTED;
 
-    @Override
-    public void convertToFileInFormat(final Path output, final String format)
+    public static ItemStatus parseString(final String text)
     {
-        this.exporterService.exportFile(importItems(), format, output, this.newline);
+        for (final ItemStatus value : values())
+        {
+            if (text.equalsIgnoreCase(value.toString()))
+            {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Unrecognized specification item status: \"" + text + "\"");
     }
 
     @Override
-    protected ConvertMode self()
+    public String toString()
     {
-        return this;
+        return this.name().toLowerCase();
     }
 }

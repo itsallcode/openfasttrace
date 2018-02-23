@@ -39,6 +39,7 @@ abstract class AbstractMode<T extends AbstractMode<T>>
     private final ImporterService importerService = new ImporterService();
     protected final List<Path> inputs = new ArrayList<>();
     protected Newline newline = Newline.UNIX;
+    private List<String> ignoredArtifactTypes = new ArrayList<>();
 
     protected abstract T self();
 
@@ -61,6 +62,12 @@ abstract class AbstractMode<T extends AbstractMode<T>>
         return self();
     }
 
+    public T ignoreArtifactTypes(final List<String> ignoredArtifactTypes)
+    {
+        this.ignoredArtifactTypes = ignoredArtifactTypes;
+        return self();
+    }
+
     public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config)
     {
         LegacyTagImporterFactory.setPathConfig(config);
@@ -78,7 +85,9 @@ abstract class AbstractMode<T extends AbstractMode<T>>
 
     protected Stream<SpecificationItem> importItems()
     {
-        return this.importerService.createImporter() //
+        return this.importerService //
+                .ignoreArtifactTypes(this.ignoredArtifactTypes) //
+                .createImporter() //
                 .importAny(this.inputs) //
                 .getImportedItems() //
                 .stream();

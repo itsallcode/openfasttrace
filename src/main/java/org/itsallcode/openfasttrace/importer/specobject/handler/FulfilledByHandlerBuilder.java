@@ -24,22 +24,27 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
-public class NeedsCoverageHandlerBuilder
+public class FulfilledByHandlerBuilder
 {
-    private final ImportEventListener listener;
     private final CallbackContentHandler handler;
 
-    public NeedsCoverageHandlerBuilder(final ImportEventListener listener)
+    public FulfilledByHandlerBuilder()
     {
-        this.listener = listener;
         this.handler = new CallbackContentHandler();
     }
 
     public TreeContentHandler build()
     {
-        return this.handler.addCharacterDataListener("needsobj",
-                this.listener::addNeededArtifactType);
+        this.handler.addSubTreeHandler("ffbObj", this::createFulfillByObjectHandler);
+        return this.handler;
+    }
+
+    private CallbackContentHandler createFulfillByObjectHandler()
+    {
+        return new CallbackContentHandler() //
+                .addCharacterDataListener("ffbId", data -> {})
+                .addCharacterDataListener("ffbType", data -> {})
+                .addIntDataListener("ffbVersion", data -> {});
     }
 }

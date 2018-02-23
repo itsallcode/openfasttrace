@@ -35,8 +35,11 @@ import javax.annotation.Generated;
 // [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
+    public static final String UNKONWN_ARTIFACT_TYPE = "unkonwn";
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
+    private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
+            + ITEM_NAME_PATTERN;
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     public static final String REVISION_SEPARATOR = "~";
     public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
@@ -47,20 +50,20 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + REVISION_SEPARATOR //
             + ITEM_REVISION_PATTERN;
     // [impl->dsn~md.eb-markdown-id~1]
-    private static final String LEGACY_ID = "(\\p{Alpha}+)" //
-            + ":" //
-            + ITEM_NAME_PATTERN //
-            + ", *v" //
+    private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
-
+    private static final int ARTIFACT_TYPE_MATCHING_GROUP = 1;
+    private static final int NAME_MATCHING_GROUP = 2;
+    private static final int REVISION_MATCHING_GROUP = 3;
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
+    public static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
 
     private final String name;
     private final int revision;
     private final String artifactType;
 
-    private SpecificationItemId(final String name, final String artifactType, final int revision)
+    protected SpecificationItemId(final String name, final String artifactType, final int revision)
     {
         this.name = name;
         this.artifactType = artifactType;
@@ -240,6 +243,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             this.id = id;
         }
 
+        /**
+         * Create a {@link Builder} for a {@link SpecificationItemId}
+         */
         public Builder()
         {
             this(null);
@@ -306,6 +312,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             if (this.id == null)
             {
                 validateFields();
+                cleanUpLegacyIds();
             }
             else
             {
@@ -323,19 +330,51 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
         }
 
+        private void cleanUpLegacyIds()
+        {
+            if (this.artifactType == null || this.artifactType.isEmpty())
+            {
+                inferArtifactType();
+            }
+
+            removeSuperfluousArtifactPrefix();
+        }
+
+        private void inferArtifactType()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
+            }
+            else
+            {
+                this.artifactType = UNKONWN_ARTIFACT_TYPE;
+            }
+        }
+
+        private void removeSuperfluousArtifactPrefix()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                this.name = matcher.group(NAME_MATCHING_GROUP);
+            }
+        }
+
         private void parseId()
         {
             final Matcher matcher = ID_PATTERN.matcher(this.id);
             if (matcher.matches())
             {
-                extractIdPartsFromMatcher(matcher);
+                setIdPartsFromMatches(matcher);
             }
             else
             {
                 final Matcher legacyMatcher = LEGACY_ID_PATTERN.matcher(this.id);
                 if (legacyMatcher.matches())
                 {
-                    extractIdPartsFromMatcher(legacyMatcher);
+                    setIdPartsFromMatches(legacyMatcher);
                 }
                 else
                 {
@@ -345,13 +384,18 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
         }
 
-        private void extractIdPartsFromMatcher(final Matcher matcher)
+        private void setIdPartsFromMatches(final Matcher matcher)
         {
-            this.artifactType = matcher.group(1);
-            this.name = matcher.group(2);
+            this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
+            this.name = matcher.group(NAME_MATCHING_GROUP);
+            parseRevision(matcher.group(REVISION_MATCHING_GROUP));
+        }
+
+        private void parseRevision(final String text)
+        {
             try
             {
-                this.revision = Integer.parseInt(matcher.group(3));
+                this.revision = Integer.parseInt(text);
             }
             catch (final NumberFormatException exception)
             {

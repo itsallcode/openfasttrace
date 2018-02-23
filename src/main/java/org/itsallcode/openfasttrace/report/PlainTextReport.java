@@ -22,19 +22,17 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.core.*;
 
 /**
  * Renders a coverage report in plain text. This is intended for command line
@@ -46,6 +44,7 @@ public class PlainTextReport implements Reportable
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
     private final Newline newline;
+    private int nonEmptySections = 0;
 
     /**
      * Create a new instance of {@link PlainTextReport}
@@ -66,13 +65,18 @@ public class PlainTextReport implements Reportable
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        try (final PrintStream report = createPrintStream(outputStream, StandardCharsets.UTF_8))
+        final Charset charset = StandardCharsets.UTF_8;
+        try (final PrintStream report = new PrintStream(outputStream, false, charset.displayName()))
         {
-            renderToStreamWithVerbosityLevel(report, verbosity);
+            renderToPrintStreamWithVerbosityLevel(report, verbosity);
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new ReportException("Encoding charset '" + charset + "' not supported", e);
         }
     }
 
-    private void renderToStreamWithVerbosityLevel(final PrintStream report,
+    private void renderToPrintStreamWithVerbosityLevel(final PrintStream report,
             final ReportVerbosity verbosity)
     {
         switch (verbosity)
@@ -88,12 +92,14 @@ public class PlainTextReport implements Reportable
         case FAILURES:
             renderFailureIds(report);
             break;
+        case FAILURE_SUMMARIES:
+            renderFailureSummaries(report);
+            separateItemsFromSummary(report);
+            renderSummary(report);
+            break;
         case FAILURE_DETAILS:
             renderFailureDetails(report);
-            if (this.trace.countUncovered() > 0)
-            {
-                report.print(this.newline);
-            }
+            separateItemsFromSummary(report);
             renderSummary(report);
             break;
         case ALL:
@@ -107,22 +113,17 @@ public class PlainTextReport implements Reportable
         }
     }
 
-    private static PrintStream createPrintStream(final OutputStream outputStream,
-            final Charset charset)
+    private void separateItemsFromSummary(final PrintStream report)
     {
-        try
+        if (this.trace.countDefects() > 0)
         {
-            return new PrintStream(outputStream, false, charset.displayName());
-        }
-        catch (final UnsupportedEncodingException e)
-        {
-            throw new ReportException("Encoding charset '" + charset + "' not supported", e);
+            report.print(this.newline);
         }
     }
 
     private void renderResultStatus(final PrintStream report)
     {
-        report.print(translateStatus(this.trace.isAllCovered()));
+        report.print(translateStatus(this.trace.hasNoDefects()));
         report.print(this.newline.toString());
     }
 
@@ -131,25 +132,25 @@ public class PlainTextReport implements Reportable
         return ok ? "ok" : "not ok";
     }
 
-    // [impl->dsn~reporting.plain-text.summary~1]
+    // [impl->dsn~reporting.plain-text.summary~2]
     private void renderSummary(final PrintStream report)
     {
-        report.print(translateStatus(this.trace.isAllCovered()));
+        report.print(translateStatus(this.trace.hasNoDefects()));
         report.print(" - ");
         report.print(this.trace.count());
         report.print(" total");
-        if (this.trace.countUncovered() != 0)
+        if (this.trace.countDefects() != 0)
         {
             report.print(", ");
-            report.print(this.trace.countUncovered());
-            report.print(" not covered");
+            report.print(this.trace.countDefects());
+            report.print(" defect");
         }
         report.print(this.newline);
     }
 
     private void renderFailureIds(final PrintStream report)
     {
-        this.trace.getUncoveredIds().stream() //
+        this.trace.getDefectIds().stream() //
                 .sorted()//
                 .forEachOrdered(id -> {
                     report.print(id);
@@ -157,22 +158,23 @@ public class PlainTextReport implements Reportable
                 });
     }
 
-    private void renderFailureDetails(final PrintStream report)
+    private void renderFailureSummaries(final PrintStream report)
     {
-        this.trace.getUncoveredItems().stream() //
+        this.trace.getDefectItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemSummary(item, report));
+                .forEachOrdered(item -> renderItemSummary(report, item));
     }
 
-    // [impl->dsn~reporting.plain-text.specification-item-overview~1]
-    private void renderItemSummary(final LinkedSpecificationItem item, final PrintStream report)
+    // [impl->dsn~reporting.plain-text.specification-item-overview~2]
+    private void renderItemSummary(final PrintStream report, final LinkedSpecificationItem item)
     {
         report.print(translateStatus(!item.isDefect()));
         report.print(" - ");
-        renderItemLinkCounts(item, report);
+        renderItemLinkCounts(report, item);
         report.print(" - ");
         report.print(item.getId().toString());
         report.print(" ");
+        renderMaturity(report, item);
         report.print(translateArtifactTypeCoverage(item));
         report.print(this.newline);
     }
@@ -195,7 +197,7 @@ public class PlainTextReport implements Reportable
                 .collect(Collectors.joining(", ")) + ")";
     }
 
-    private void renderItemLinkCounts(final LinkedSpecificationItem item, final PrintStream report)
+    private void renderItemLinkCounts(final PrintStream report, final LinkedSpecificationItem item)
     {
         report.print(item.countIncomingBadLinks());
         report.print("/");
@@ -208,26 +210,127 @@ public class PlainTextReport implements Reportable
         report.print(item.countOutgoingLinks());
     }
 
+    private void renderMaturity(final PrintStream report, final LinkedSpecificationItem item)
+    {
+        final ItemStatus status = item.getStatus();
+        if (status != ItemStatus.APPROVED)
+        {
+            report.print("[");
+            report.print(status);
+            report.print("] ");
+        }
+    }
+
+    private void renderFailureDetails(final PrintStream report)
+    {
+        this.trace.getDefectItems().stream() //
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemDetails(report, item));
+    }
+
     private void renderAll(final PrintStream report)
     {
         this.trace.getItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(item, report));
+                .forEachOrdered(item -> renderItemDetails(report, item));
     }
 
-    private void renderItemDetails(final LinkedSpecificationItem item, final PrintStream report)
+    private void renderItemDetails(final PrintStream report, final LinkedSpecificationItem item)
     {
-        renderItemSummary(item, report);
-        report.print("#");
-        report.print(this.newline);
+        renderItemSummary(report, item);
+        renderDescription(report, item);
+        renderLinks(report, item);
+        renderTags(report, item);
+        renderItemDetailsEnd(report);
+    }
 
-        for (final String line : item.getDescription().split(Newline.anyNewlineReqEx()))
-        {
-            report.print("# ");
-            report.print(line);
-            report.print(this.newline);
-        }
-        report.print("#");
+    private void renderEmptyItemDetailsLine(final PrintStream report)
+    {
+        report.print("|");
         report.print(this.newline);
+    }
+
+    private void renderDescription(final PrintStream report, final LinkedSpecificationItem item)
+    {
+        final String description = item.getDescription();
+        if (description != null && !description.isEmpty())
+        {
+            renderEmptyItemDetailsLine(report);
+            for (final String line : description.split(Newline.anyNewlineReqEx()))
+            {
+                report.print("| ");
+                report.print(line);
+                report.print(this.newline);
+            }
+            ++this.nonEmptySections;
+        }
+    }
+
+    // [impl->dsn~reporting.plain-text.link-details~1]
+    private void renderLinks(final PrintStream report, final LinkedSpecificationItem item)
+    {
+
+        final Map<LinkStatus, List<LinkedSpecificationItem>> links = item.getLinks();
+        if (!links.isEmpty())
+        {
+            renderEmptyItemDetailsLine(report);
+            renderOrderedLinks(report, links);
+            ++this.nonEmptySections;
+        }
+    }
+
+    private void renderOrderedLinks(final PrintStream report,
+            final Map<LinkStatus, List<LinkedSpecificationItem>> links)
+    {
+        final List<TracedLink> tracedLinks = flattenTracedLinks(links);
+        tracedLinks.stream() //
+                .sorted((a, b) -> a.getOtherLinkEnd().getId()
+                        .compareTo(b.getOtherLinkEnd().getId())) //
+                .forEachOrdered(link -> renderLink(report, link));
+    }
+
+    private List<TracedLink> flattenTracedLinks(
+            final Map<LinkStatus, List<LinkedSpecificationItem>> links)
+    {
+        final List<TracedLink> tracedLinks = new ArrayList<>();
+        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : links.entrySet())
+        {
+            for (final LinkedSpecificationItem other : entry.getValue())
+            {
+                tracedLinks.add(new TracedLink(other, entry.getKey()));
+            }
+        }
+        return tracedLinks;
+    }
+
+    private void renderLink(final PrintStream report, final TracedLink link)
+    {
+        final LinkStatus status = link.getStatus();
+        report.print(status.isIncoming() ? "|<-- (" : "|--> (");
+        report.print(status.getShortTag());
+        report.print(") ");
+        report.print(link.getOtherLinkEnd().getId());
+        report.print(this.newline);
+    }
+
+    private void renderTags(final PrintStream report, final LinkedSpecificationItem item)
+    {
+        final List<String> tags = item.getTags();
+        if (tags != null && !tags.equals(Collections.emptyList()))
+        {
+            renderEmptyItemDetailsLine(report);
+            report.print("| #: ");
+            report.print(tags.stream().collect(Collectors.joining(", ")));
+            report.print(this.newline);
+            ++this.nonEmptySections;
+        }
+    }
+
+    private void renderItemDetailsEnd(final PrintStream report)
+    {
+        if (this.nonEmptySections > 0)
+        {
+            renderEmptyItemDetailsLine(report);
+        }
     }
 }

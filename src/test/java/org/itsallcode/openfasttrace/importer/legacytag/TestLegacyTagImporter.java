@@ -33,8 +33,6 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.LineReader;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporter;
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -85,7 +83,10 @@ public class TestLegacyTagImporter
     @Test
     public void testFileWithNewTagFormat()
     {
-        runImport("[type->coveredtype~coveredname~1]");
+        final String itemName = "coveredtype~coveredname~1"; // do not inline to
+                                                             // avoid error in
+                                                             // self-trace
+        runImport("[type->" + itemName + "]");
         verifyZeroInteractions(this.listenerMock);
     }
 

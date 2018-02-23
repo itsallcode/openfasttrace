@@ -43,4 +43,3 @@ addons:
     branches:
       - master
       - develop
-      - task/82-Rename_project_to_openfastrace

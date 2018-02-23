@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.importer;
 
+import org.itsallcode.openfasttrace.core.ItemStatus;
+import org.itsallcode.openfasttrace.core.Location;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -56,6 +59,14 @@ public interface ImportEventListener
     public void setTitle(String title);
 
     /**
+     * The importer found the status of the specification item
+     * 
+     * @param status
+     *            the status
+     */
+    public void setStatus(ItemStatus status);
+
+    /**
      * Append a text block to an item description
      *
      * @param fragment
@@ -107,7 +118,15 @@ public interface ImportEventListener
     public void addNeededArtifactType(final String artifactType);
 
     /**
-     * Set the location of the imported file.
+     * Add a tag
+     * 
+     * @param tag
+     *            the tag
+     */
+    public void addTag(String tag);
+
+    /**
+     * Set the location of the specification item in the imported file
      * 
      * @param path
      *            the path of the imported file
@@ -120,4 +139,12 @@ public interface ImportEventListener
      * The importer detected the end of a specification item
      */
     public void endSpecificationItem();
+
+    /**
+     * Set the location of the specification item in the imported file
+     * 
+     * @param location
+     *            the location
+     */
+    public void setLocation(Location location);
 }

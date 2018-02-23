@@ -35,8 +35,7 @@ import org.itsallcode.openfasttrace.importer.*;
 
 public class LegacyTagImporterFactory extends ImporterFactory
 {
-    private static final Logger LOG = Logger
-            .getLogger(LegacyTagImporterFactory.class.getName());
+    private static final Logger LOG = Logger.getLogger(LegacyTagImporterFactory.class.getName());
 
     private static LegacyTagImporterConfig defaultConfig = new LegacyTagImporterConfig();
 
@@ -60,9 +59,7 @@ public class LegacyTagImporterFactory extends ImporterFactory
 
     private Optional<PathConfig> findConfig(final Path file)
     {
-        return this.pathConfigs.stream()
-                .filter(config -> config.matches(file))
-                .findFirst();
+        return this.pathConfigs.stream().filter(config -> config.matches(file)).findFirst();
     }
 
     @Override
@@ -72,12 +69,11 @@ public class LegacyTagImporterFactory extends ImporterFactory
         final Optional<PathConfig> config = findConfig(file);
         if (!config.isPresent())
         {
-            final List<String> patterns = this.pathConfigs.stream()
-                    .map(pathConfig -> pathConfig.getPattern())
+            final List<String> patterns = this.pathConfigs.stream() //
+                    .map(PathConfig::getPattern) //
                     .collect(toList());
-            throw new ImporterException(
-                    "File '" + file + "' not supported for import, supported patterns: "
-                            + patterns);
+            throw new ImporterException("File '" + file
+                    + "' not supported for import, supported patterns: " + patterns);
         }
         return () -> runImporter(file, charset, config.get(), listener);
     }
@@ -94,8 +90,8 @@ public class LegacyTagImporterFactory extends ImporterFactory
         }
         catch (final IOException e)
         {
-            throw new ImporterException(
-                    "Error importing file '" + file + "': " + e.getMessage(), e);
+            throw new ImporterException("Error importing file '" + file + "': " + e.getMessage(),
+                    e);
         }
     }
 

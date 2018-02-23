@@ -37,8 +37,8 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
  */
 public interface Reporter
 {
-    String DEFAULT_REPORT_FORMAT = "plain";
-    ReportVerbosity DEFAULT_VERBOSITY = ReportVerbosity.FAILURE_DETAILS;
+    public String DEFAULT_REPORT_FORMAT = "plain";
+    public ReportVerbosity DEFAULT_VERBOSITY = ReportVerbosity.FAILURE_DETAILS;
 
     /**
      * Select one or more input files
@@ -57,6 +57,14 @@ public interface Reporter
      * @return a <code>Reporter</code> instance for fluent programming
      */
     Reporter addInputs(final List<Path> inputs);
+
+    /**
+     * Set the list of artifact type to be ignored during import
+     * 
+     * @param ignoredArtifactTypes
+     *            list of ignored artifact types
+     */
+    Reporter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
 
     /**
      * Set the representation for new line

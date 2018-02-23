@@ -26,12 +26,12 @@ import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
-public class NeedsCoverageHandlerBuilder
+public class TagsHandlerBuilder
 {
     private final ImportEventListener listener;
     private final CallbackContentHandler handler;
 
-    public NeedsCoverageHandlerBuilder(final ImportEventListener listener)
+    public TagsHandlerBuilder(final ImportEventListener listener)
     {
         this.listener = listener;
         this.handler = new CallbackContentHandler();
@@ -39,7 +39,6 @@ public class NeedsCoverageHandlerBuilder
 
     public TreeContentHandler build()
     {
-        return this.handler.addCharacterDataListener("needsobj",
-                this.listener::addNeededArtifactType);
+        return this.handler.addCharacterDataListener("tag", this.listener::addTag);
     }
 }

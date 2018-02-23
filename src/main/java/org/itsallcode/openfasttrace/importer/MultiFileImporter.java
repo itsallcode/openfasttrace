@@ -23,15 +23,10 @@ package org.itsallcode.openfasttrace.importer;
  */
 
 import java.io.File;
-
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import java.nio.file.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -71,11 +66,11 @@ public class MultiFileImporter
      */
     public MultiFileImporter importFile(final Path file)
     {
-        LOG.info(() -> "Importing file '" + file + "'...");
+        LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         createImporter(file, DEFAULT_CHARSET, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
-        LOG.info(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
+        LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
     }
 

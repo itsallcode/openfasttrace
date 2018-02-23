@@ -53,13 +53,14 @@ public class TraceCommand extends AbstractCommand
     {
         final Reporter reporter = createReporter();
         final Trace trace = report(reporter);
-        return trace.isAllCovered();
+        return trace.hasNoDefects();
     }
 
     private Reporter createReporter()
     {
         final Reporter reporter = new ReportMode();
         reporter.addInputs(toPaths(this.arguments.getInputs())) //
+                .ignoreArtifactTypes(this.arguments.getIgnoreArtifactTypes()) //
                 .setNewline(this.arguments.getNewline())
                 .setReportVerbosity(this.arguments.getReportVerbosity());
         return reporter;

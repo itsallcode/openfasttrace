@@ -35,7 +35,7 @@ import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
  */
 public interface Converter
 {
-    String DEFAULT_EXPORT_FORMAT = "specobject";
+    public String DEFAULT_EXPORT_FORMAT = "specobject";
 
     /**
      * Select one or more input files
@@ -54,6 +54,14 @@ public interface Converter
      * @return a <code>Converter</code> instance for fluent programming
      */
     Converter addInputs(final List<Path> inputs);
+
+    /**
+     * Set the list of artifact type to be ignored during import
+     * 
+     * @param ignoredArtifactTypes
+     *            list of ignored artifact types
+     */
+    Converter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
 
     /**
      * Set the representation for new line

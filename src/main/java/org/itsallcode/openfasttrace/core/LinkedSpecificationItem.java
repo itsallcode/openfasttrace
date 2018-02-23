@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import static java.util.Collections.emptyList;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -21,14 +23,7 @@ package org.itsallcode.openfasttrace.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -41,12 +36,14 @@ public class LinkedSpecificationItem
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
+    private final Set<String> overCoveredArtifactTypes = new HashSet<>();
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
      *
      * @param item
-     *            the actual specification item that is at the center of the links
+     *            the actual specification item that is at the center of the
+     *            links
      */
     public LinkedSpecificationItem(final SpecificationItem item)
     {
@@ -61,6 +58,26 @@ public class LinkedSpecificationItem
     public SpecificationItemId getId()
     {
         return this.item.getId();
+    }
+
+    /**
+     * Get the title of the specification item.
+     *
+     * @return title of the specification item
+     */
+    public String getTitle()
+    {
+        return this.item.getTitle();
+    }
+
+    /**
+     * Get the maturity status of the specification item.
+     *
+     * @return maturity status of the specification item
+     */
+    public ItemStatus getStatus()
+    {
+        return this.item.getStatus();
     }
 
     /**
@@ -84,6 +101,16 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get the tags associated with this item.
+     * 
+     * @return list of tags
+     */
+    public List<String> getTags()
+    {
+        return emptyList();
+    }
+
+    /**
      * Get the specification item.
      *
      * @return the specification item
@@ -103,13 +130,8 @@ public class LinkedSpecificationItem
      */
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
-        List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
-        if (linksWithStatus == null)
-        {
-            linksWithStatus = new ArrayList<>();
-            this.links.put(status, linksWithStatus);
-        }
-        linksWithStatus.add(item);
+        this.links.computeIfAbsent(status, key -> new ArrayList<>());
+        this.links.get(status).add(item);
     }
 
     /**
@@ -165,6 +187,11 @@ public class LinkedSpecificationItem
         this.coveredArtifactTypes.add(artifactType);
     }
 
+    public void addOverCoveredArtifactType(final String artifactType)
+    {
+        this.overCoveredArtifactTypes.add(artifactType);
+    }
+
     /**
      * Get the artifact type which are covered.
      *
@@ -180,11 +207,10 @@ public class LinkedSpecificationItem
      * 
      * @return list of over-covered artifact types.
      */
-    public List<String> getOverCoveredArtifactTypes()
+    public Set<String> getOverCoveredArtifactTypes()
     {
-        final List<String> overCovered = new ArrayList<>(getCoveredArtifactTypes());
-        overCovered.removeAll(getNeedsArtifactTypes());
-        return overCovered;
+
+        return this.overCoveredArtifactTypes;
     }
 
     /**
@@ -200,8 +226,8 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Check if the item is covered shallow (i.e. if for all needed artifact types
-     * coverage exists without recursive search).
+     * Check if the item is covered shallow (i.e. if for all needed artifact
+     * types coverage exists without recursive search).
      *
      * @return <code>true</code> if the item is covered
      */
@@ -248,17 +274,29 @@ public class LinkedSpecificationItem
     /**
      * Check if the item is defect.
      * 
-     * An item counts a defect if one of the following applies:
-     * <ul>
-     * <li>The item has offending links (broken coverage, duplicates)</li>
-     * <li>The item is not covered deeply
-     * <li>
-     * </ul>
+     * An item counts a defect if the following applies:
+     * 
+     * <pre>
+     * has duplicates
+     * or (not rejected
+     *     and (any outgoing coverage link has a different status than "Covers"
+     *          or not covered deeply
+     *         )
+     *    )
+     * </pre>
      *
      * @return <code>true</code> if the item is defect.
      */
-    // [impl->dsn~tracing.defect-items~1]
+    // [impl->dsn~tracing.defect-items~2]
     public boolean isDefect()
+    {
+        return hasDuplicates() //
+                || (this.getStatus() != ItemStatus.REJECTED) //
+                        && (hasBadLinks()
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+    }
+
+    private boolean hasBadLinks()
     {
         for (final LinkStatus status : this.links.keySet())
         {
@@ -267,7 +305,7 @@ public class LinkedSpecificationItem
                 return true;
             }
         }
-        return getDeepCoverageStatus() != DeepCoverageStatus.COVERED;
+        return false;
     }
 
     /**

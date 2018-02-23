@@ -45,19 +45,21 @@ public class CallbackContentHandler implements TreeContentHandler
         this.defaultStartElementListener = defaultSTartElementListener;
     }
 
-    public void addSubTreeHandler(final String elementName,
+    public CallbackContentHandler addSubTreeHandler(final String elementName,
             final Supplier<TreeContentHandler> supplier)
     {
         addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
+        return this;
     }
 
-    public void addElementListener(final String elementName,
+    public CallbackContentHandler addElementListener(final String elementName,
             final Consumer<TreeElement> startElementConsumer)
     {
         this.addElementListener(elementName, startElementConsumer, null);
+        return this;
     }
 
-    public void addElementListener(final String elementName,
+    public CallbackContentHandler addElementListener(final String elementName,
             final Consumer<TreeElement> startElementConsumer,
             final Consumer<TreeElement> endElementConsumer)
     {
@@ -73,6 +75,7 @@ public class CallbackContentHandler implements TreeContentHandler
             }
             startElementConsumer.accept(startElement);
         });
+        return this;
     }
 
     @Override
@@ -118,12 +121,12 @@ public class CallbackContentHandler implements TreeContentHandler
     public void pushDelegate(final TreeContentHandler delegate)
     {
         this.treeParsingController.setDelegate(delegate);
-        this.treeParsingController.getCurrentElement().setEndElementListener(endElement -> {
-            this.treeParsingController.setDelegate(this);
-        });
+        this.treeParsingController.getCurrentElement()
+                .setEndElementListener(endElement -> this.treeParsingController.setDelegate(this));
     }
 
-    public void addIntDataListener(final String elementName, final Consumer<Integer> listener)
+    public CallbackContentHandler addIntDataListener(final String elementName,
+            final Consumer<Integer> listener)
     {
         addCharacterDataListener(elementName, data -> {
             if (data == null || data.isEmpty())
@@ -133,12 +136,14 @@ public class CallbackContentHandler implements TreeContentHandler
             final int parsedInt = Integer.parseInt(data);
             listener.accept(parsedInt);
         });
+        return this;
     }
 
-    public void addCharacterDataListener(final String elementName, final Consumer<String> listener)
+    public CallbackContentHandler addCharacterDataListener(final String elementName,
+            final Consumer<String> listener)
     {
-        addElementListener(elementName, startElement -> {}, endElement -> {
-            listener.accept(endElement.getCharacterData());
-        });
+        addElementListener(elementName, startElement -> {},
+                endElement -> listener.accept(endElement.getCharacterData()));
+        return this;
     }
 }

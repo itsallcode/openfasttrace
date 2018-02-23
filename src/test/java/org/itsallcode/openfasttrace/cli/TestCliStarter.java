@@ -22,23 +22,17 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.cli.CliStarter;
-import org.itsallcode.openfasttrace.cli.ExitStatus;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +40,6 @@ import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 
-// FIXME: reduce to unit test. Move integration tests to API level.
 public class TestCliStarter
 {
     private static final String NEWLINE = "\n";
@@ -59,6 +52,7 @@ public class TestCliStarter
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
+    private static final String IGNORE_ARTIFACT_TYPES_PARAMETER = "--ignore-artifact-types";
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -118,8 +112,8 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
-    @Test
     // [itest->dsn~cli.conversion.output-format~1]
+    @Test
     public void testConvertToSpecobjectFile() throws IOException
     {
         expectStandardFileExportResult();
@@ -128,18 +122,28 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
-    // [itest->dsn~cli.conversion.default-format~1]
-    // [itest->dsn~cli.input-file-selection~1]
+    // [itest->dsn~cli.conversion.default-output-format~1]
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
+    {
+        expectCliExitStatusWithAssertions(ExitStatus.OK, () -> {
+            assertOutputFileExists(false);
+            assertStdOutStartsWith(REQM2_PREAMBLE);
+        });
+        runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+    }
+
+    // [itest->dsn~cli.input-file-selection~1]
+    @Test
+    public void testConvertDefaultOutputFormatIntoFile() throws IOException
     {
         expectStandardFileExportResult();
         runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
                 this.outputFile.toString());
     }
 
-    @Test
     // [itest->dsn~cli.default-input~1]
+    @Test
     public void testConvertDefaultInputDir() throws IOException
     {
         expectCliExitOkWithAssertions(() -> {
@@ -273,11 +277,32 @@ public class TestCliStarter
                 this.docDir.toString());
     }
 
+    @Test
+    public void testTraceWithIgnoredArtifactType() throws IOException
+    {
+        expectReducedReportFileResult();
+        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), IGNORE_ARTIFACT_TYPES_PARAMETER,
+                "dsn");
+    }
+
+    private void expectReducedReportFileResult()
+    {
+        final int expectedNumber = 3;
+        expectCliExitOkWithNumberOfItems(expectedNumber);
+    }
+
     private void expectStandardReportFileResult()
+    {
+        final int expectedNumber = 5;
+        expectCliExitOkWithNumberOfItems(expectedNumber);
+    }
+
+    private void expectCliExitOkWithNumberOfItems(final int expectedNumber)
     {
         expectCliExitOkWithAssertions(() -> {
             assertOutputFileExists(true);
-            assertOutputFileContentStartsWith("ok - 5 total");
+            assertOutputFileContentStartsWith("ok - " + expectedNumber + " total");
         });
     }
 

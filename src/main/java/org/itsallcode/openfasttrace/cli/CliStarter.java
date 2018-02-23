@@ -64,6 +64,8 @@ public class CliStarter
         case TraceCommand.COMMAND_NAME:
             performable = new TraceCommand(this.arguments);
             break;
+        default:
+            throw new IllegalStateException("Command missing trying to execute OFT mode.");
         }
         final ExitStatus status = ExitStatus.fromBoolean(performable.run());
         exit(status);

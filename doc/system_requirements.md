@@ -31,7 +31,7 @@ The following list gives you an overview of terms and abbreviations commonly use
   * Artifact type: the role of an artifact in a specification hierarchy
   * Coverage: Specification items covering other specification items
   * Coverage provider: a specification item that provides coverage
-  * Coverage requester: a specification item that need coverage
+  * Coverage requester: a specification item that needs coverage
   * OFT: OpenFastTrace (this project)
   * ReqM2: A requirement tracing suite
   * Specification item: holds either a requirement or coverage
@@ -137,22 +137,26 @@ Needs: req
 ## Anatomy of Specification Items
 
 ### Specification Item
-`req~specification-item~1`
+`req~specification-item~2`
 
 A specification item consists of the following parts:
 
   * ID
   * Title (optional)
+  * Status (optional)
   * Description (optional)
   * Rationale (optional)
   * Comment (optional)
   * Covers (optional)
   * Depends (optional)
   * Needs (optional)
+  * Tags (optional)
 
 The ID is a unique key through which the specification item can be referenced. It also contains the specification item type and revision number.
 
 The title is a short summary of the specification item, mostly intended to appear in overview lists.
+
+The status of the item is one of "approved", "proposed", "draft" and "rejected".
 
 The description contains the normative part of the specification.
 
@@ -163,6 +167,8 @@ The "Covers" section contains a list of all specification item IDs that are cove
 The "Depends" section contains a list of all specification item IDs that must be implemented in order for this item to be complete.
 
 The "Needs" section list all artifact item types in which coverage for this item must be provided.
+
+Tags are a way to label an artifact intended for grouping.
 
 Needs: dsn
 
@@ -287,13 +293,14 @@ Covers:
 Needs: dsn
 
 ### Defect Items
-`req~tracing.defect-items~1`
+`req~tracing.defect-items~2`
 
-OFT marks a specification item as _defect_ if any of the following criteria apply
+OFT marks a specification item as _defect_ if the following criteria apply
 
-  1. The specification item has duplicates (i.e. another specification item with the same ID exists)
-  2. At least one outgoing coverage link has a different status than "Covers"
-  3. The item is not covered deeply
+  * The specification item has duplicates (i.e. another specification item with the same ID exists) _or_
+  * The item has any other status than "rejected" _and any of_
+      * At least one outgoing coverage link has a different status than "Covers"
+      * The item is not covered deeply
   
 Covers:
 
@@ -301,7 +308,7 @@ Covers:
 
 Needs: dsn
 
-#### Link Cycle
+### Link Cycle
 `req~tracing.link-cycle~1`
 
 OFT detects if specification items are linked in a cycle.
@@ -315,6 +322,52 @@ Covers:
 
 Needs: dsn
 
+## Strict and Relaxed Coverage
+
+Users can choose between two modes of coverage determination: strict and relaxed.
+
+Strict coverage means that the covering item must have a status of `Approved` in addition to the other criteria discussed in [section "Tracing"](#tracing). This is the mode users need for a final assessment of coverage ahead of a project release.
+
+In Relaxed coverage mode OFT accepts any status but `Rejected` of the covering item. The reason why this mode is necessary is that if the team is using requirement states, then they will often have the situation that not all requirements in the document that needs to be covered are already approved. On the other hand the document that is supposed to provide the coverage can usually not wait to start covering until the input document is finalized. This would cause too much project delay. Relaxed mode allows the covering document to check whether all requirements are covered _before_ the input document is finally approved.
+
+### Strict and Relaxed Coverage Mode
+`req~strict_and_relaxed_coverage_mode~1`
+
+OFT allows users to choose between the following coverage evaluation modes:
+1. Strict mode: covering items must be in status `Approved`
+2. Relaxed mode: covering items must be in any other status than `Rejected`
+
+Covers:
+
+  * [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn 
+
+## Partial Tracing
+Usually the responsibility of document authors or coders when it comes to tracing is to make sure that they cover the input documents above. Only integrators or quality engineers are concerned with full chain coverage.
+
+If the users try to run a regular trace without feeding in the artifacts all the way to the bottom level of the tracing chain, the coverage check will always report errors because of missing lower level coverage.
+
+To mitigate the situation OFT allows users to ignore required coverage for selected artifact types.
+
+Example:
+
+Kim is a software architect and it is her job to cover the system requirements coming from Steve in her software architecture. Kim wants to make sure she did not forget to cover a system requirement and uses OFT to trace the two documents. The system requirement specification uses the artifact types `feat` and `req` where `req` covers the `feat` artifacts in the same document. Kim's architecture uses the artifact type `sysarch` which covers `req` and requires a detailed design `dsn`.
+
+Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
+
+#### Ignoring Artifact Types
+`req~ignoring-artifact-types~1`
+
+OFT allows users to ignore artifact types. This ignores "needs coverage" markers and suppresses import of items matching this artifact type.
+
+Covers:
+
+  * [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+
 ## Reports
 Reports are the main way to find out if a projects requirements are covered properly.
 
@@ -327,14 +380,13 @@ The plain text report is the most basic report variant. It serves two main purpo
 2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
 #### Plain Text Report Summary
-`req~reporting.plain-text.summary~1`
+`req~reporting.plain-text.summary~2`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
-  * Total number of specification items that are not covered (if any)
-  * Total number of duplicate specification items (if any)
+  * Total number of defect specification items (if any)
 
 Covers:
 
@@ -343,7 +395,7 @@ Covers:
 Needs: dsn
 
 #### Plain Text Report Specification Item Overview
-`req~reporting.plain-text.specification-item-overview~1`
+`req~reporting.plain-text.specification-item-overview~2`
 
 An item summary consist in the plain text report includes
 
@@ -354,8 +406,23 @@ An item summary consist in the plain text report includes
   5. Total number of outgoing links
   6. Number of duplicates (not including this item)
   7. ID
-  8. Artifact types indicating coverage
-  9. Source file name and line (optional)
+  8. Status (unless "approved")
+  9. Artifact types indicating coverage
+
+Covers:
+
+  * [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+#### Plain Text Report Link Details
+`req~reporting.plain-text.link-details~1`
+
+The link detail section shows for all links of a specification item:
+
+  1. Incoming / Outgoing
+  2. Link status
+  3. ID of the specification item on the other end of the link
 
 Covers:
 

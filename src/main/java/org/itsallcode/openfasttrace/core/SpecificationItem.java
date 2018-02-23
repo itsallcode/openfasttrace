@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// [impl->dsn~specification-item~1]
+import javax.annotation.Generated;
+
+// [impl->dsn~specification-item~2]
 public class SpecificationItem
 {
     private final SpecificationItemId id;
@@ -34,22 +36,27 @@ public class SpecificationItem
     private final String description;
     private final String rationale;
     private final String comment;
+    private final Location location;
+    private final ItemStatus status;
     private final List<SpecificationItemId> coveredIds;
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> needsArtifactTypes;
-    private final Location location;
+    private final List<String> tags;
 
     private SpecificationItem(final Builder builder)
     {
+        super();
         this.id = builder.id;
         this.title = builder.title;
         this.description = builder.description;
         this.rationale = builder.rationale;
         this.comment = builder.comment;
+        this.location = builder.location;
+        this.status = builder.status;
         this.coveredIds = builder.coveredIds;
         this.dependOnIds = builder.dependOnIds;
         this.needsArtifactTypes = builder.neededArtifactTypes;
-        this.location = builder.location;
+        this.tags = builder.tags;
     }
 
     /**
@@ -123,7 +130,8 @@ public class SpecificationItem
     }
 
     /**
-     * Get the list of artifact types this specification item need to be covered in
+     * Get the list of artifact types this specification item need to be covered
+     * in
      *
      * @return the list of artifact types
      */
@@ -133,8 +141,8 @@ public class SpecificationItem
     }
 
     /**
-     * Check if this specification item needs to be covered by the given artifact
-     * type.
+     * Check if this specification item needs to be covered by the given
+     * artifact type.
      *
      * @param artifactType
      *            the artifact type for which needed coverage is evaluated.
@@ -166,6 +174,27 @@ public class SpecificationItem
         return this.location;
     }
 
+    /**
+     * Get the maturity status of the specification item
+     * 
+     * @return the maturity status
+     */
+    public ItemStatus getStatus()
+    {
+        return this.status;
+    }
+
+    /**
+     * Get the list of associated tags
+     * 
+     * @return tags
+     */
+    public List<String> getTags()
+    {
+        return this.tags;
+    }
+
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final int hashCode()
     {
@@ -179,11 +208,14 @@ public class SpecificationItem
         result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
         result = prime * result
                 + ((this.needsArtifactTypes == null) ? 0 : this.needsArtifactTypes.hashCode());
+        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
         result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
         result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
+        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
         return result;
     }
 
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final boolean equals(final Object obj)
     {
@@ -277,6 +309,17 @@ public class SpecificationItem
         {
             return false;
         }
+        if (this.tags == null)
+        {
+            if (other.tags != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.tags.equals(other.tags))
+        {
+            return false;
+        }
         if (this.rationale == null)
         {
             if (other.rationale != null)
@@ -299,6 +342,17 @@ public class SpecificationItem
         {
             return false;
         }
+        if (this.status == null)
+        {
+            if (other.status != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.status.equals(other.status))
+        {
+            return false;
+        }
         return true;
     }
 
@@ -312,10 +366,12 @@ public class SpecificationItem
         private String description;
         private String rationale;
         private String comment;
+        private ItemStatus status;
+        private Location location;
         private final List<SpecificationItemId> coveredIds;
         private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
-        private Location location;
+        private final List<String> tags;
 
         /**
          * Create a new instance of type {@link SpecificationItem.Builder}
@@ -327,10 +383,12 @@ public class SpecificationItem
             this.description = "";
             this.rationale = "";
             this.comment = "";
+            this.location = null;
+            this.status = ItemStatus.APPROVED;
             this.coveredIds = new ArrayList<>();
             this.dependOnIds = new ArrayList<>();
             this.neededArtifactTypes = new ArrayList<>();
-            this.location = null;
+            this.tags = new ArrayList<>();
         }
 
         /**
@@ -417,6 +475,12 @@ public class SpecificationItem
             return this;
         }
 
+        public Builder status(final ItemStatus status)
+        {
+            this.status = status;
+            return this;
+        }
+
         /**
          * Add the ID of a specification item covered by the item to build
          *
@@ -484,8 +548,8 @@ public class SpecificationItem
         }
 
         /**
-         * Add an artifact type where the specification item to be build requires to be
-         * covered
+         * Add an artifact type where the specification item to be build
+         * requires to be covered
          *
          * @param neededArtifactType
          *            the artifact type
@@ -494,6 +558,19 @@ public class SpecificationItem
         public Builder addNeedsArtifactType(final String neededArtifactType)
         {
             this.neededArtifactTypes.add(neededArtifactType);
+            return this;
+        }
+
+        /**
+         * Add a tag
+         *
+         * @param tag
+         *            the tag
+         * @return this builder instance
+         */
+        public Builder addTag(final String tag)
+        {
+            this.tags.add(tag);
             return this;
         }
 

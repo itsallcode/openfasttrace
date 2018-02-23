@@ -38,7 +38,7 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
 
     public SpecobjectImporterFactory()
     {
-        super("(?i).*\\.xml");
+        super("(?i).*\\.(xml|oreqm)");
         this.saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
     }
 

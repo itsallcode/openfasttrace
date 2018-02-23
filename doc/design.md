@@ -90,6 +90,9 @@ For each specification artifact type OFT uses an importer. The importer uses the
 ## Import Event Listeners
 Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
+### Specification List Builder
+The specification list builder is an import event listener that creates a list of specification items from import events.
+
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
 
@@ -110,6 +113,29 @@ The exporter transforms the internal representation of [specification items](#sp
 API users select exporters via their name as strings.
 
 # Runtime View
+
+## Import
+
+Depending on the source format a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an (import event listener)[#import-event-listener] consumes.
+
+Common parts of the import like filtering out unnecessary items or attributes are handled by the listener.
+
+### Selective Artifact Type Import
+
+The most resource-friendly way to enable partial tracing is to ignore unnecessary data during import. This way less memory is used up and all subsequent steps are faster.
+
+#### Ignoring Artifact Types During Import
+`dsn~ignoring-artifact-types-during-import~1`
+
+When OFT is configured to ignore one or more artifact types [specification list builder](#specification-list-builder) skips the following data during import:
+1. "Needs coverage" with this artifact type
+2. Specification items with this artifact type
+
+Covers:
+
+  * `req~ignoring-artifact-types~1`
+
+Needs: impl, utest
 
 ## Tracing
 
@@ -188,21 +214,24 @@ Covers:
 Needs: impl, utest
 
 ### Defect Items
-`dsn~tracing.defect-items~1`
+`dsn~tracing.defect-items~2`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if any of the following criteria apply
-
-  1. The specification item has duplicates
-  2. At least one outgoing coverage link has a different status than "Covers"
-  3. The item is not covered deeply
+The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if the following criteria apply to the item
+  
+    has duplicates
+    or (not rejected
+        and (any outgoing coverage link has a different status than "Covers"
+             or not covered deeply
+            )
+       )
   
 Covers:
 
-  * `req~tracing.defect-items~1`
+  * `req~tracing.defect-items~2`
 
 Needs: impl, utest
 
-#### Link Cycle
+### Link Cycle
 `dsn~tracing.link-cycle~1`
 
 The [tracer](#tracer) detects cycles in links between [Linked Specification Items](#linked-specification-item).
@@ -218,22 +247,22 @@ Needs: impl, utest
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text.summary~1`
+`dsn~reporting.plain-text.summary~2`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
-  * Total number of specification items that are not covered (if any)
+  * Total number of specification items that are defect (if any)
 
 Covers:
 
-  * `req~reporting.plain-text.summary~1`
+  * `req~reporting.plain-text.summary~2`
 
 Needs: impl, utest
 
 #### Plain Text Report Specification Item Overview
-`dsn~reporting.plain-text.specification-item-overview~1`
+`dsn~reporting.plain-text.specification-item-overview~2`
 
 An item summary consist in the plain text report includes
 
@@ -244,11 +273,27 @@ An item summary consist in the plain text report includes
   5. Total number of outgoing links
   6. Number of duplicates (not including this item)
   7. ID
-  8. Artifact types indicating coverage
+  8. Status (unless "approved")
+  9. Artifact types indicating coverage
 
 Covers:
 
-  * `req~reporting.plain-text.specification-item-overview~1`
+  * `req~reporting.plain-text.specification-item-overview~2`
+
+Needs: impl, utest
+
+#### Plain Text Report Link Details
+`dsn~reporting.plain-text.link-details~1`
+
+The link detail section shows for all links of a specification item:
+
+  1. Incoming / Outgoing as arrow
+  2. Link status as symbol
+  3. ID of the specification item on the other end of the link
+
+Covers:
+
+  * `req~reporting.plain-text.link-details~1`
 
 Needs: impl, utest
 
@@ -277,12 +322,13 @@ Needs: impl, itest
 ### Internal Data Structures
 
 #### Specification Item
-`dsn~specification-item~1`
+`dsn~specification-item~2`
 
 A `SpecificationItem` consists of the following parts:
 
   * ID (`SpecificationItemId`)
   * Title (`String`, optional)
+  * Status (`Enum`, optional)
   * Description (`String`, optional)
   * Rationale (`String`, optional)
   * Comment (`String`, optional)
@@ -290,24 +336,25 @@ A `SpecificationItem` consists of the following parts:
   * Covers (List of `SpecificationItemId`, optional)
   * Depends (List of `SpecificationItemId`, optional)
   * Needs (List of `String`, optional)
+  * Tags (List of `String`, optional)
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 
 #### Linked Specification Item
 `dsn~linked-specification-item~1`
 
-A `LinkedSpecificationItem` is a subclass of the [SpecificationItem](#specification-item) that is enriched with references to other LinkedSpecificationItems.
+A `LinkedSpecificationItem` is a container for a [SpecificationItem](#specification-item) that is enriched with references to other `LinkedSpecificationItem`s.
 
 Rationale:
 This allows navigating between specification items.
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -322,7 +369,7 @@ A `SpecificationItemId` consists of:
 
 Covers:
 
-  * `req~specification-item~1`
+  * `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -643,7 +690,7 @@ Covers:
 Needs: impl, itest
 
 #### Default Conversion Output Format
-`dsn~cli.conversion.default-format~1`
+`dsn~cli.conversion.default-output-format~1`
 
 The CLI uses ReqM2 as export format if none is given as a parameter.
 
@@ -651,7 +698,7 @@ Covers:
 
   * `req~cli.conversion.default-output-format~1`
 
-Needs: impl, itest
+Needs: impl, itest, utest
 
 # Design Decisions
 

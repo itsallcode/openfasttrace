@@ -247,22 +247,22 @@ Needs: impl, utest
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text.summary~1`
+`dsn~reporting.plain-text.summary~2`
 
 The summary in the plain text report includes:
 
   * Result status
   * Total number of specification items
-  * Total number of specification items that are not covered (if any)
+  * Total number of specification items that are defect (if any)
 
 Covers:
 
-  * `req~reporting.plain-text.summary~1`
+  * `req~reporting.plain-text.summary~2`
 
 Needs: impl, utest
 
 #### Plain Text Report Specification Item Overview
-`dsn~reporting.plain-text.specification-item-overview~1`
+`dsn~reporting.plain-text.specification-item-overview~2`
 
 An item summary consist in the plain text report includes
 
@@ -273,11 +273,27 @@ An item summary consist in the plain text report includes
   5. Total number of outgoing links
   6. Number of duplicates (not including this item)
   7. ID
-  8. Artifact types indicating coverage
+  8. Status (unless "approved")
+  9. Artifact types indicating coverage
 
 Covers:
 
-  * `req~reporting.plain-text.specification-item-overview~1`
+  * `req~reporting.plain-text.specification-item-overview~2`
+
+Needs: impl, utest
+
+#### Plain Text Report Link Details
+`dsn~reporting.plain-text.link-details~1`
+
+The link detail section shows for all links of a specification item:
+
+  1. Incoming / Outgoing as arrow
+  2. Link status as symbol
+  3. ID of the specification item on the other end of the link
+
+Covers:
+
+  * `req~reporting.plain-text.link-details~1`
 
 Needs: impl, utest
 
@@ -682,7 +698,7 @@ Covers:
 
   * `req~cli.conversion.default-output-format~1`
 
-Needs: impl, itest
+Needs: impl, itest, utest
 
 # Design Decisions
 

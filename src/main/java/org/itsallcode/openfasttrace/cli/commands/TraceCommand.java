@@ -53,7 +53,7 @@ public class TraceCommand extends AbstractCommand
     {
         final Reporter reporter = createReporter();
         final Trace trace = report(reporter);
-        return trace.isAllCovered();
+        return trace.hasNoDefects();
     }
 
     private Reporter createReporter()

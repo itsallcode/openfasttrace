@@ -53,17 +53,17 @@ public class TestTracer
     }
 
     @Test
-    public void testAllCovered_Ok()
+    public void testNoneDefect_Ok()
     {
-        when(this.aMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
-        when(this.bMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
+        when(this.aMock.isDefect()).thenReturn(false);
+        when(this.bMock.isDefect()).thenReturn(false);
         final Trace trace = traceItems(this.aMock, this.bMock);
-        assertThat(trace.isAllCovered(), equalTo(true));
-        assertThat(trace.getUncoveredItems(), empty());
+        assertThat(trace.hasNoDefects(), equalTo(true));
+        assertThat(trace.getDefectItems(), empty());
         assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
-        assertThat(trace.countUncovered(), equalTo(0));
+        assertThat(trace.countDefects(), equalTo(0));
         assertThat(trace.count(), equalTo(2));
-        assertThat(trace.getUncoveredIds(), empty());
+        assertThat(trace.getDefectIds(), empty());
     }
 
     private Trace traceItems(final LinkedSpecificationItem... items)
@@ -73,16 +73,16 @@ public class TestTracer
     }
 
     @Test
-    public void testAllCovered_NotOk()
+    public void testNoneDefect_NotOk()
     {
-        when(this.aMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.COVERED);
-        when(this.bMock.getDeepCoverageStatus()).thenReturn(DeepCoverageStatus.UNCOVERED);
+        when(this.aMock.isDefect()).thenReturn(false);
+        when(this.bMock.isDefect()).thenReturn(true);
         final Trace trace = traceItems(this.aMock, this.bMock);
-        assertThat(trace.isAllCovered(), equalTo(false));
-        assertThat(trace.getUncoveredItems(), containsInAnyOrder(this.bMock));
+        assertThat(trace.hasNoDefects(), equalTo(false));
+        assertThat(trace.getDefectItems(), containsInAnyOrder(this.bMock));
         assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
-        assertThat(trace.countUncovered(), equalTo(1));
+        assertThat(trace.countDefects(), equalTo(1));
         assertThat(trace.count(), equalTo(2));
-        assertThat(trace.getUncoveredIds(), containsInAnyOrder(ID_B));
+        assertThat(trace.getDefectIds(), containsInAnyOrder(ID_B));
     }
 }

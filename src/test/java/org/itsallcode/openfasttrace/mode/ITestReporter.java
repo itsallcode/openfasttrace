@@ -34,6 +34,7 @@ import java.util.Arrays;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +62,7 @@ public class ITestReporter extends AbstractOftModeTest
     private void writePlainTextReportFromTrace(final Trace trace)
     {
         this.reporter.reportToFileInFormat(trace, this.outputFile,
-                Reporter.getDefaultReportFormat());
+                ReportConstants.DEFAULT_REPORT_FORMAT);
     }
 
     private void assertStandardReportFileResult() throws IOException
@@ -100,7 +101,7 @@ public class ITestReporter extends AbstractOftModeTest
     {
         final Trace trace = this.reporter.addInputs(this.docDir) //
                 .trace();
-        this.reporter.reportToStdOutInFormat(trace, Reporter.getDefaultReportFormat());
+        this.reporter.reportToStdOutInFormat(trace, ReportConstants.DEFAULT_REPORT_FORMAT);
         assertStandardReportStdOutResult();
     }
 

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.itsallcode.openfasttrace.Converter;
+import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +47,8 @@ public class ITestConverter extends AbstractOftModeTest
     public void testConvertToSpecobjectFile() throws IOException
     {
         this.converter.addInputs(this.docDir);
-        this.converter.convertToFileInFormat(this.outputFile, Converter.getDefaultOutputFormat());
+        this.converter.convertToFileInFormat(this.outputFile,
+                ExporterConstants.DEFAULT_OUTPUT_FORMAT);
         assertStandardFileExportResult();
     }
 

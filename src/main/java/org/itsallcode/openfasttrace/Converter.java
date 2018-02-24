@@ -91,14 +91,4 @@ public interface Converter
      *            exporter plug-in)
      */
     void convertToFileInFormat(final Path output, final String format);
-
-    /**
-     * Get the default export output format
-     * 
-     * @return the default output format
-     */
-    public static String getDefaultOutputFormat()
-    {
-        return "specobject";
-    }
 }

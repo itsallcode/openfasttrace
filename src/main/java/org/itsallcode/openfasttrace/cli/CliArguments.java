@@ -30,11 +30,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.exporter.ExporterConstants;
+import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
@@ -144,11 +144,11 @@ public class CliArguments
         {
             if (this.getCommand().equals(TraceCommand.COMMAND_NAME))
             {
-                return Reporter.getDefaultReportFormat();
+                return ReportConstants.DEFAULT_REPORT_FORMAT;
             }
             else if (this.getCommand().equals(ConvertCommand.COMMAND_NAME))
             {
-                return Converter.getDefaultOutputFormat();
+                return ExporterConstants.DEFAULT_OUTPUT_FORMAT;
             }
             else
             {
@@ -189,7 +189,7 @@ public class CliArguments
      */
     public ReportVerbosity getReportVerbosity()
     {
-        return (null == this.reportVerbosity) ? Reporter.getDefaultVerbosity()
+        return (null == this.reportVerbosity) ? ReportConstants.DEFAULT_REPORT_VERBOSITY
                 : this.reportVerbosity;
     }
 

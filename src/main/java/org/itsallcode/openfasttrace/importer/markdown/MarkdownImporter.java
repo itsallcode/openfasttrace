@@ -37,7 +37,7 @@ import org.itsallcode.openfasttrace.importer.ImporterException;
 
 class MarkdownImporter implements Importer
 {
-    private final static Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
 
     // @formatter:off
     private final  Transition[] transitions = {

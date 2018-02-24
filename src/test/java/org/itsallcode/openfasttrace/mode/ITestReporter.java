@@ -60,7 +60,8 @@ public class ITestReporter extends AbstractOftModeTest
 
     private void writePlainTextReportFromTrace(final Trace trace)
     {
-        this.reporter.reportToFileInFormat(trace, this.outputFile, Reporter.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToFileInFormat(trace, this.outputFile,
+                Reporter.getDefaultReportFormat());
     }
 
     private void assertStandardReportFileResult() throws IOException
@@ -99,7 +100,7 @@ public class ITestReporter extends AbstractOftModeTest
     {
         final Trace trace = this.reporter.addInputs(this.docDir) //
                 .trace();
-        this.reporter.reportToStdOutInFormat(trace, Reporter.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToStdOutInFormat(trace, Reporter.getDefaultReportFormat());
         assertStandardReportStdOutResult();
     }
 

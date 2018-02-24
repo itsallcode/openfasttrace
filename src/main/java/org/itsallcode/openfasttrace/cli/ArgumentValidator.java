@@ -61,7 +61,7 @@ public class ArgumentValidator
     private boolean validate()
     {
         final String command = this.arguments.getCommand();
-        boolean valid = false;
+        boolean ok = false;
         if (command == null)
         {
             this.error = "Missing command";
@@ -69,11 +69,11 @@ public class ArgumentValidator
         }
         else if (TraceCommand.COMMAND_NAME.equals(command))
         {
-            valid = validateTraceCommand();
+            ok = validateTraceCommand();
         }
         else if (ConvertCommand.COMMAND_NAME.equals(command))
         {
-            valid = validateConvertCommand();
+            ok = validateConvertCommand();
         }
         else
         {
@@ -81,7 +81,7 @@ public class ArgumentValidator
             this.suggestion = "Choose one of " + listCommands() + ".";
         }
 
-        return valid;
+        return ok;
     }
 
     private boolean validateTraceCommand()

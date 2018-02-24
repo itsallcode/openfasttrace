@@ -35,8 +35,6 @@ import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
  */
 public interface Converter
 {
-    public String DEFAULT_EXPORT_FORMAT = "specobject";
-
     /**
      * Select one or more input files
      * 
@@ -93,4 +91,14 @@ public interface Converter
      *            exporter plug-in)
      */
     void convertToFileInFormat(final Path output, final String format);
+
+    /**
+     * Get the default export output format
+     * 
+     * @return the default output format
+     */
+    public static String getDefaultOutputFormat()
+    {
+        return "specobject";
+    }
 }

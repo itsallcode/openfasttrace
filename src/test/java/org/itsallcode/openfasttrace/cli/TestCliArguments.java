@@ -77,7 +77,7 @@ public class TestCliArguments
     public void getStandardOutputFormatForExport()
     {
         this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(Converter.DEFAULT_EXPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(), equalTo(Converter.getDefaultOutputFormat()));
     }
 
     // [utest->dsn~cli.tracing.default-format~1]
@@ -85,7 +85,7 @@ public class TestCliArguments
     public void getStandardOutputFormatForReport()
     {
         this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(Reporter.DEFAULT_REPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(), equalTo(Reporter.getDefaultReportFormat()));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class TestCliArguments
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
-                equalTo(Reporter.DEFAULT_VERBOSITY));
+                equalTo(Reporter.getDefaultVerbosity()));
         this.arguments.setReportVerbosity(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }
@@ -136,7 +136,7 @@ public class TestCliArguments
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
-                equalTo(Reporter.DEFAULT_VERBOSITY));
+                equalTo(Reporter.getDefaultVerbosity()));
         this.arguments.setV(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }

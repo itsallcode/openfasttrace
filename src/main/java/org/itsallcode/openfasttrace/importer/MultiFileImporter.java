@@ -127,7 +127,7 @@ public class MultiFileImporter
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         try (Stream<Path> fileStream = Files.walk(dir))
         {
-            fileStream.filter(path -> !Files.isDirectory(path)) //
+            fileStream.filter(path -> !path.toFile().isDirectory()) //
                     .filter(matcher::matches) //
                     .filter(this.factoryLoader::supportsFile)
                     .map(file -> createImporter(file, DEFAULT_CHARSET, this.specItemBuilder))

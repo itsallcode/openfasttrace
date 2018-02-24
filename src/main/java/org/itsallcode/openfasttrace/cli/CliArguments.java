@@ -144,11 +144,11 @@ public class CliArguments
         {
             if (this.getCommand().equals(TraceCommand.COMMAND_NAME))
             {
-                return Reporter.DEFAULT_REPORT_FORMAT;
+                return Reporter.getDefaultReportFormat();
             }
             else if (this.getCommand().equals(ConvertCommand.COMMAND_NAME))
             {
-                return Converter.DEFAULT_EXPORT_FORMAT;
+                return Converter.getDefaultOutputFormat();
             }
             else
             {
@@ -189,7 +189,8 @@ public class CliArguments
      */
     public ReportVerbosity getReportVerbosity()
     {
-        return (null == this.reportVerbosity) ? Reporter.DEFAULT_VERBOSITY : this.reportVerbosity;
+        return (null == this.reportVerbosity) ? Reporter.getDefaultVerbosity()
+                : this.reportVerbosity;
     }
 
     /**

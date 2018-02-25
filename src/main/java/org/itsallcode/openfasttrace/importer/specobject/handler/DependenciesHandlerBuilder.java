@@ -40,9 +40,8 @@ public class DependenciesHandlerBuilder
 
     public TreeContentHandler build()
     {
-        this.handler.addCharacterDataListener("dependson", (data) -> {
-            this.listener.addDependsOnId(SpecificationItemId.parseId(data));
-        });
+        this.handler.addCharacterDataListener("dependson",
+                data -> this.listener.addDependsOnId(SpecificationItemId.parseId(data)));
         return this.handler;
     }
 }

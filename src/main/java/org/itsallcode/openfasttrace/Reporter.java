@@ -37,9 +37,6 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
  */
 public interface Reporter
 {
-    public String DEFAULT_REPORT_FORMAT = "plain";
-    public ReportVerbosity DEFAULT_VERBOSITY = ReportVerbosity.FAILURE_DETAILS;
-
     /**
      * Select one or more input files
      * 

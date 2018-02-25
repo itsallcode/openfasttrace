@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.report;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,9 +21,16 @@ package org.itsallcode.openfasttrace.report;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-public class ReportOptions
+/**
+ * Common constants for reports.
+ */
+public final class ReportConstants
 {
+    public static final String DEFAULT_REPORT_FORMAT = "plain";
+    public static final ReportVerbosity DEFAULT_REPORT_VERBOSITY = ReportVerbosity.FAILURE_DETAILS;
 
+    // Prevent class from being instantiated.
+    private ReportConstants()
+    {
+    }
 }

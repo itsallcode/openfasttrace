@@ -125,15 +125,17 @@ Common parts of the import like filtering out unnecessary items or attributes ar
 The most resource-friendly way to enable partial tracing is to ignore unnecessary data during import. This way less memory is used up and all subsequent steps are faster.
 
 #### Ignoring Artifact Types During Import
-`dsn~ignoring-artifact-types-during-import~1`
+`dsn~ignoring-artifact-types-during-import~2`
 
 When OFT is configured to ignore one or more artifact types [specification list builder](#specification-list-builder) skips the following data during import:
 1. "Needs coverage" with this artifact type
 2. Specification items with this artifact type
+3. Links covering items with this artifact type
+4. Dependencies to item with this artifact type
 
 Covers:
 
-  * `req~ignoring-artifact-types~1`
+  * `req~ignoring-artifact-types~2`
 
 Needs: impl, utest
 

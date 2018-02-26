@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -35,8 +34,6 @@ import java.util.zip.CRC32;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
-import org.itsallcode.openfasttrace.importer.tag.TagImporter;
-import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
 import org.junit.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
@@ -283,7 +280,7 @@ public class TestTagImporter
 
     private List<SpecificationItem> runImporter(final String content)
     {
-        final SpecificationListBuilder builder = new SpecificationListBuilder();
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
         new TagImporterFactory().createImporter(FILENAME, new StringReader(content), builder)
                 .runImport();
         return builder.build();

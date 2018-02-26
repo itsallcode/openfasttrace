@@ -357,9 +357,9 @@ Kim is a software architect and it is her job to cover the system requirements c
 Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
 
 #### Ignoring Artifact Types
-`req~ignoring-artifact-types~1`
+`req~ignoring-artifact-types~2`
 
-OFT allows users to ignore artifact types. This ignores "needs coverage" markers and suppresses import of items matching this artifact type.
+OFT allows users to ignore artifact types. This ignores "needs coverage" markers and suppresses import of items and links to items matching this artifact type.
 
 Covers:
 

@@ -45,14 +45,20 @@ public class SpecificationListBuilder implements ImportEventListener
     private StringBuilder comment = new StringBuilder();
     private Location location;
 
-    public SpecificationListBuilder()
-    {
-        this.ignoredArtifactTypes = Collections.emptyList();
-    }
-
-    public SpecificationListBuilder(final List<String> ignoredArtifactTypes)
+    private SpecificationListBuilder(final List<String> ignoredArtifactTypes)
     {
         this.ignoredArtifactTypes = ignoredArtifactTypes;
+    }
+
+    public static SpecificationListBuilder create()
+    {
+        return new SpecificationListBuilder(Collections.emptyList());
+    }
+
+    public static SpecificationListBuilder createIgnoringArtifactTypes(
+            final List<String> ignoredArtifactTypes)
+    {
+        return new SpecificationListBuilder(ignoredArtifactTypes);
     }
 
     @Override
@@ -86,7 +92,10 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addCoveredId(final SpecificationItemId id)
     {
-        this.itemBuilder.addCoveredId(id);
+        if (!isIgnoredArtifact(id.getArtifactType()))
+        {
+            this.itemBuilder.addCoveredId(id);
+        }
     }
 
     @Override
@@ -110,7 +119,10 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addDependsOnId(final SpecificationItemId id)
     {
-        this.itemBuilder.addDependOnId(id);
+        if (!isIgnoredArtifact(id.getArtifactType()))
+        {
+            this.itemBuilder.addDependOnId(id);
+        }
     }
 
     @Override

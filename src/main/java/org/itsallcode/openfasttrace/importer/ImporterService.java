@@ -69,8 +69,8 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        final SpecificationListBuilder builder = new SpecificationListBuilder(
-                this.ignoredArtifactTypes);
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createIgnoringArtifactTypes(this.ignoredArtifactTypes);
         return new MultiFileImporter(builder, this.factoryLoader);
     }
 }

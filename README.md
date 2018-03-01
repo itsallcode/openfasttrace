@@ -9,17 +9,21 @@
 
 Requirement tracking suite
 
-# Installation
+## Installation
 
-## Dependencies
+### Dependencies
 
 OpenFastTrace needs a Java JDK 8 (or later) implementation and Maven as build tool.
 
-## On Linux
+### On Linux
 
-### Ubuntu or Debian
+#### Ubuntu or Debian
 
     apt-get install openjdk-8-jre
+
+## Using OpenFastTrace
+
+Check the [user guide](doc/user_guide.md) for information on how to use OpenFastTrack.
 
 ## Development
 

@@ -1,9 +1,9 @@
 OpenFastTrace
 
 Usage:
-  oft trace [option ...] [<input file or directory> ...]
+  oft command [option ...] [<input file or directory> ...]
 
-Commands
+Commands:
   trace                        Create a trace document
   convert                      Convert to a different requirements format
 
@@ -18,10 +18,10 @@ Converting options:
                                Defaults to "specobject"
 
 Common options: 
-  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
   -f, --file path              The output file. Defaults to STDOUT.
   -i, --ignore-artifact-types  Define a comma-separated list of artifact types
                                to be ignored during import.
+  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
 
 Returns:
   0   on success

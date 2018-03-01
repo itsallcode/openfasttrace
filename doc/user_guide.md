@@ -124,7 +124,7 @@ import org.itsallcode.openfasttrace.Converter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.mode.ConvertMode;
 
-final List<String> inputs = Arrays.asList("doc");
+final List<String> inputs = Arrays.asList("doc", "src/main/java", "src/main/test");
 final Converter converter = new ConvertMode();
 
 converter.addInputs(inputs)

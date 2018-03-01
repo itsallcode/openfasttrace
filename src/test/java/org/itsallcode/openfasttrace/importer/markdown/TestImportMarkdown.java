@@ -43,7 +43,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TestMarkdownImporter
+public class TestImportMarkdown
 {
     private static final String TAG2 = "Tag2";
     private static final String TAG1 = "Tag1";

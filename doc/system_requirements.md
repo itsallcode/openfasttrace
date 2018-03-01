@@ -172,17 +172,6 @@ Tags are a way to label an artifact intended for grouping.
 
 Needs: dsn
 
-### Forward Item
-`req~foward-item~1`
-
-A forward item is a special form of specification item that forwards the request for coverage to one or more new artifact types.
-
-Rationale:
-
-Forward items are used by authors of responsible for a requested artifact type as a means of expressing that they have nothing to add to the requesting specification item and leave detailing or implementing the requirement to other artifact types. A typical example would be a software architect deciding that a system requirement impacts only a single component and the design can therefore be done directly in the detailed design of that component - effectively skipping the software architecture.
-
-Needs: dsn
-
 ## Supported Formats
 
 ### Markdown

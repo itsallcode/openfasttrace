@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,8 +29,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.itsallcode.openfasttrace.cli.CliException;
-import org.itsallcode.openfasttrace.cli.CommandLineInterpreter;
 import org.itsallcode.openfasttrace.cli.CommandLineArgumentsStub.StubEnum;
 import org.junit.Rule;
 import org.junit.Test;
@@ -105,6 +102,13 @@ public class TestCommandLineInterpreter
     public void testGetNamedEnumParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "VALUE1");
+        assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
+    }
+
+    @Test
+    public void testGetNamedEnumParamterLowercase()
+    {
+        final CommandLineArgumentsStub stub = parseArguments("-c", "value1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
     }
 

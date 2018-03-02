@@ -6,7 +6,6 @@
 
 ## In a Nutshell
 
-
 ## What is Requirement Tracing?
 
 OpenFastTrace is a requirement tracing suite. Requirement tracing helps you keeping track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you getting rid of them.
@@ -31,6 +30,55 @@ Requirement tracing is a safety net for non-trivial software projects:
 * finds orphaned code, documents and resources
 * helps you track progress towards milestones
 * allows you to prove due diligence during quality audits and customer reviews
+
+## Use Cases
+
+### Tracing the Whole Chain
+
+If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifact.
+
+### Tracing the Whole Chain in the Same File System
+
+Preconditions:
+
+* All artifacts are readable for the user executing OFT
+
+Description:
+
+In a small project you probably have all artifacts in the same file system - most likely under a common root directory.
+In this case the easiest way to get a full trace is to list all the directories that OFT should search for artifacts to import.
+
+Let's assume a typical Java project with the following directory layout:
+
+    /home/git/my-project
+      |-- doc (dir)                manuals, requirement specification and design
+      |-- src
+      |    |-- main
+      |    |     '-- java          implementation
+      |    '-- test
+     ...         '-- java          unit and integration tests
+     
+
+In this case the minimal OFT command line looks like this:
+
+```sh
+PROJECT_ROOT='/home/git/my-project/'
+oft trace "$PROJECT_ROOT"/doc "$PROJECT_ROOT"/src/main/java "$PROJECT_ROOT"/src/test/java
+```
+
+Or if you prefer it shorter:
+
+```sh
+cd /home/git/my-project/
+oft trace doc src/main/java src/test/java
+```
+
+The first variant is better suited for integration into scripts where you usually want to avoid changing the directory.
+
+By default this will produce a plain text trace that displays a details of all defect specification items and a summary.
+
+See also:
+* [Tracing Options](#tracing-options) for controlling the tracing output
 
 ## Reference
 

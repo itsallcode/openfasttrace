@@ -2,4 +2,4 @@
 /cov-int/
 /.classpath
 /bin
-.README.md.html
+**/*.md.html

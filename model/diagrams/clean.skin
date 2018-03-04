@@ -1,4 +1,6 @@
 @startuml
 skinparam monochrome true
 skinparam style strictuml
+hide empty methods
+hide empty members
 @enduml

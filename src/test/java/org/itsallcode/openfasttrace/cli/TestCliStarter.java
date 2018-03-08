@@ -52,7 +52,7 @@ public class TestCliStarter
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
-    private static final String IGNORE_ARTIFACT_TYPES_PARAMETER = "--ignore-artifact-types";
+    private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -278,12 +278,12 @@ public class TestCliStarter
     }
 
     @Test
-    public void testTraceWithIgnoredArtifactType() throws IOException
+    public void testTraceWithFilteredArtifactType() throws IOException
     {
         expectReducedReportFileResult();
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), IGNORE_ARTIFACT_TYPES_PARAMETER,
-                "dsn");
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), WANTED_ARTIFACT_TYPES_PARAMETER,
+                "feat,req");
     }
 
     private void expectReducedReportFileResult()

@@ -50,7 +50,7 @@ public class CliArguments
     private Path outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
-    private List<String> ignoredArtifactTypes = Collections.emptyList();
+    private List<String> wantedArtifactTypes = Collections.emptyList();
 
     /**
      * Get the output file path
@@ -248,34 +248,34 @@ public class CliArguments
     }
 
     /**
-     * Get a list of artifact types to be ignored during import
+     * Get a list of artifact types to be applied as filter during import
      * 
-     * @return list of artifact types to be ignored
+     * @return list of wanted artifact types
      */
-    public List<String> getIgnoreArtifactTypes()
+    public List<String> getWantedArtifactTypes()
     {
-        return this.ignoredArtifactTypes;
+        return this.wantedArtifactTypes;
     }
 
     /**
-     * Set a list of artifact types to be ignored during import
+     * Set a list of artifact types to be applied as filter during import
      * 
-     * @param ingoredArtifactTypes
-     *            list of artifact types to be ignored
+     * @param artifactTypes
+     *            list of wanted artifact types
      */
-    public void setIgnoreArtifactTypes(final String ingoredArtifactTypes)
+    public void setWantedArtifactTypes(final String artifactTypes)
     {
-        this.ignoredArtifactTypes = Arrays.asList(ingoredArtifactTypes.split(",\\s*"));
+        this.wantedArtifactTypes = Arrays.asList(artifactTypes.split(",\\s*"));
     }
 
     /**
-     * Set a list of artifact types to be ignored during import
+     * Set a list of artifact types to be applied as filter during import
      * 
-     * @param ingoredArtifactTypes
-     *            list of artifact types to be ignored
+     * @param artifactTypes
+     *            list of wanted artifact types
      */
-    public void setI(final String ingoredArtifactTypes)
+    public void setA(final String artifactTypes)
     {
-        setIgnoreArtifactTypes(ingoredArtifactTypes);
+        setWantedArtifactTypes(artifactTypes);
     }
 }

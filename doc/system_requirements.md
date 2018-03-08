@@ -8,7 +8,7 @@ OpenFastTrace (OFT) is a requirement tracing suite written in Java.
 
 ## Goals
 
-The OFT's goals are to be
+The OFT's goals are
 
   * Fast
   * Automation friendly
@@ -19,7 +19,7 @@ A requirement tracing suite must be fast in order to be used. Development time i
 
 Requirement tracing is a recurring and frankly quite boring task best performed by a machine instead of a person. Again the chances of getting accepted depend on getting this job "out of the way" and this means automating it. OFT therefore aims to offer easy integration into existing build processes, independently of the tool chains used.
 
-It looks strange first that "useful" needs to be spelled out as a goal. The reason is that the authors felt that existing tracing tools are mostly optimized for producing proof that you worked according to process - i.e. reports that you can shelve until an quality auditor wants to see them. While OFT can do this to, it is not a main goal. Instead OFT wants to help developers and technical writers to find gaps and mismatches in their requirement coverage fast and with as little effort as possible.
+It looks strange first that "useful" needs to be spelled out as a goal. The reason is that the authors felt that existing tracing tools are mostly optimized for producing proof that you worked according to process - i.e. reports that you can shelve until an quality auditor wants to see them. While OFT can do this too, it is not a main goal. Instead OFT wants to help developers and technical writers to find gaps and mismatches in their requirement coverage fast and with as little effort as possible.
 
 OFT aims to help developers independently of their platform. I should not matter if you are developing on Linux, a Mac, BSD, Windows. Also it should not matter which programming language or development environment you are using. OFT aims to be portable and provide interfaces that allow integration into your existing toolchain.
 
@@ -356,10 +356,10 @@ Kim is a software architect and it is her job to cover the system requirements c
 
 Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
 
-#### Ignoring Artifact Types
-`req~ignoring-artifact-types~2`
+#### Include Only Artifact Types
+`req~include-only-artifact-types~1`
 
-OFT allows users to ignore artifact types. This ignores "needs coverage" markers and suppresses import of items and links to items matching this artifact type.
+OFT give users the option to include only a configurable set of artifact types during processing.
 
 Covers:
 

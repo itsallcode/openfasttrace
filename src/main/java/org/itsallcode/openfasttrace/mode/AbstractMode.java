@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.importer.ImporterService;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterConfig;
@@ -39,7 +40,7 @@ abstract class AbstractMode<T extends AbstractMode<T>>
     private final ImporterService importerService = new ImporterService();
     protected final List<Path> inputs = new ArrayList<>();
     protected Newline newline = Newline.UNIX;
-    private List<String> ignoredArtifactTypes = new ArrayList<>();
+    private FilterSettings filterSettings = FilterSettings.createAllowingEverything();
 
     protected abstract T self();
 
@@ -62,9 +63,9 @@ abstract class AbstractMode<T extends AbstractMode<T>>
         return self();
     }
 
-    public T ignoreArtifactTypes(final List<String> ignoredArtifactTypes)
+    public T setFilters(final FilterSettings filterSettings)
     {
-        this.ignoredArtifactTypes = ignoredArtifactTypes;
+        this.filterSettings = filterSettings;
         return self();
     }
 
@@ -86,7 +87,7 @@ abstract class AbstractMode<T extends AbstractMode<T>>
     protected Stream<SpecificationItem> importItems()
     {
         return this.importerService //
-                .ignoreArtifactTypes(this.ignoredArtifactTypes) //
+                .setFilters(this.filterSettings) //
                 .createImporter() //
                 .importAny(this.inputs) //
                 .getImportedItems() //

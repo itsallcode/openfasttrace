@@ -152,7 +152,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testEqualsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItemId.class).verify();
     }

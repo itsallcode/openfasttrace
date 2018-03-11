@@ -26,9 +26,7 @@ import static java.util.Arrays.asList;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
@@ -50,7 +48,7 @@ public class CliArguments
     private Path outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
-    private List<String> wantedArtifactTypes = Collections.emptyList();
+    private Set<String> wantedArtifactTypes = Collections.emptySet();
 
     /**
      * Get the output file path
@@ -252,7 +250,7 @@ public class CliArguments
      * 
      * @return list of wanted artifact types
      */
-    public List<String> getWantedArtifactTypes()
+    public Set<String> getWantedArtifactTypes()
     {
         return this.wantedArtifactTypes;
     }
@@ -265,7 +263,7 @@ public class CliArguments
      */
     public void setWantedArtifactTypes(final String artifactTypes)
     {
-        this.wantedArtifactTypes = Arrays.asList(artifactTypes.split(",\\s*"));
+        this.wantedArtifactTypes = new HashSet<>(Arrays.asList(artifactTypes.split(",\\s*")));
     }
 
     /**

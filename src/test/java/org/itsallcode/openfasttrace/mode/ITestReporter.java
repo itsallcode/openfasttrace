@@ -30,12 +30,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
@@ -115,7 +116,7 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testFilterAllowsAllButDsn()
     {
-        final List<String> artifactTypes = Arrays.asList("feat", "req");
+        final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         this.reporter.addInputs(this.docDir);
         final Trace fullTrace = this.reporter.trace();
         assertThat("Number of items with type " + artifactTypes + " in regular trace",

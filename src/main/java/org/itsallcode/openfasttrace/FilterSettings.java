@@ -21,33 +21,21 @@ package org.itsallcode.openfasttrace;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
 /**
  * Settings for import filtering
- * 
- * This class is final and immutable because it contains performance
- * optimizations that should not be circumvented. Since the calling code needs
- * to use checks if criteria are set very regularly, those checks are cached.
  */
 public final class FilterSettings
 {
-    private final List<String> artifactTypes;
-    private final boolean artifactTypeCriteriaSet;
-    private final boolean anyCriteriaSet;
+    private final Set<String> artifactTypes;
 
     private FilterSettings(final Builder builder)
     {
         this.artifactTypes = builder.artifactTypes;
-
-        // Cache filter criteria checks.
-        this.artifactTypeCriteriaSet = (this.artifactTypes != null
-                && !this.artifactTypes.isEmpty());
-        this.anyCriteriaSet = this.artifactTypeCriteriaSet;
     }
 
     /**
@@ -55,7 +43,7 @@ public final class FilterSettings
      * 
      * @return artifact types
      */
-    public List<String> getArtifactTypes()
+    public Set<String> getArtifactTypes()
     {
         return this.artifactTypes;
     }
@@ -67,7 +55,7 @@ public final class FilterSettings
      */
     public boolean isArtifactTypeCriteriaSet()
     {
-        return this.artifactTypeCriteriaSet;
+        return this.artifactTypes != null && !this.artifactTypes.isEmpty();
     }
 
     /**
@@ -77,7 +65,7 @@ public final class FilterSettings
      */
     public boolean isAnyCriteriaSet()
     {
-        return this.anyCriteriaSet;
+        return isArtifactTypeCriteriaSet();
     }
 
     @Generated("org.eclipse.Eclipse")
@@ -86,8 +74,6 @@ public final class FilterSettings
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (this.anyCriteriaSet ? 1231 : 1237);
-        result = prime * result + (this.artifactTypeCriteriaSet ? 1231 : 1237);
         result = prime * result
                 + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
         return result;
@@ -110,14 +96,6 @@ public final class FilterSettings
             return false;
         }
         final FilterSettings other = (FilterSettings) obj;
-        if (this.anyCriteriaSet != other.anyCriteriaSet)
-        {
-            return false;
-        }
-        if (this.artifactTypeCriteriaSet != other.artifactTypeCriteriaSet)
-        {
-            return false;
-        }
         if (this.artifactTypes == null)
         {
             if (other.artifactTypes != null)
@@ -148,7 +126,7 @@ public final class FilterSettings
      */
     public static class Builder
     {
-        private List<String> artifactTypes = Collections.emptyList();
+        private Set<String> artifactTypes = Collections.emptySet();
 
         /**
          * Set the list of artifact types that the filter matches.
@@ -157,7 +135,7 @@ public final class FilterSettings
          *            artifact types
          * @return <code>this</code> for fluent programming
          */
-        public Builder artifactTypes(final List<String> artifactTypes)
+        public Builder artifactTypes(final Set<String> artifactTypes)
         {
             this.artifactTypes = artifactTypes;
             return this;

@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class TestImportFilterSettings
     {
         final String[] expectedArtifactTypes = { "foo", "bar" };
         final FilterSettings filterSettings = new FilterSettings.Builder() //
-                .artifactTypes(Arrays.asList(expectedArtifactTypes)) //
+                .artifactTypes(new HashSet<>(Arrays.asList(expectedArtifactTypes))) //
                 .build();
         assertThat(filterSettings.getArtifactTypes(), containsInAnyOrder(expectedArtifactTypes));
         assertFilterSet(filterSettings, true);
@@ -58,7 +59,7 @@ public class TestImportFilterSettings
     }
 
     @Test
-    public void testEqualsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(FilterSettings.class).verify();
     }

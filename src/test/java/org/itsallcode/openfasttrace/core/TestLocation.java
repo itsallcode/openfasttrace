@@ -34,7 +34,7 @@ public class TestLocation
     private static final String PATH = "path";
 
     @Test
-    public void testEqualsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(Location.class).verify();
     }

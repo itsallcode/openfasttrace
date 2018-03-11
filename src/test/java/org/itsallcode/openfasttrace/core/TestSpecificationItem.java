@@ -167,7 +167,7 @@ public class TestSpecificationItem
     }
 
     @Test
-    public void testEqualsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItem.class).verify();
     }

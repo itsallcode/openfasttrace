@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.FilterSettings;
@@ -39,21 +40,21 @@ import org.junit.Test;;
 public class TestSpecificationListBuilder
 {
 
+    private static final String DESCRIPTION = "description";
+    private static final String TITLE = "title";
     private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
     @Test
     public void testBuildBasicItem()
     {
-        final String expectedTitle = "title";
-        final String expectedDescription = "description";
         final SpecificationListBuilder builder = createBasicListBuilder();
-        builder.appendDescription(expectedDescription);
-        builder.setTitle(expectedTitle);
+        builder.appendDescription(DESCRIPTION);
+        builder.setTitle(TITLE);
         final List<SpecificationItem> items = builder.build();
         assertThat(items.size(), equalTo(1));
         assertThat(items.get(0).getId(), equalTo(ID));
-        assertThat(items.get(0).getDescription(), equalTo("description"));
-        assertThat(items.get(0).getTitle(), equalTo("title"));
+        assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
+        assertThat(items.get(0).getTitle(), equalTo(TITLE));
     }
 
     private SpecificationListBuilder createBasicListBuilder()
@@ -102,9 +103,10 @@ public class TestSpecificationListBuilder
 
     private SpecificationListBuilder createListBuilderFilteringBy(final String... artifactTypes)
     {
-        final SpecificationListBuilder builder = SpecificationListBuilder.createWithFilter(
-                new FilterSettings.Builder().artifactTypes(Arrays.asList(artifactTypes)).build());
-        return builder;
+        final FilterSettings filterSettings = new FilterSettings.Builder() //
+                .artifactTypes(new HashSet<>(Arrays.asList(artifactTypes))) //
+                .build();
+        return SpecificationListBuilder.createWithFilter(filterSettings);
     }
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
@@ -147,15 +149,14 @@ public class TestSpecificationListBuilder
     {
         final SpecificationItemId acceptedId = SpecificationItemId.createId("utest", "accept", 2);
         final SpecificationItemId rejectedId = SpecificationItemId.createId("impl", "reject", 3);
-        final SpecificationListBuilder ignoringBuilder = createListBuilderFilteringBy("utest",
-                "dsn");
-        ignoringBuilder.beginSpecificationItem();
+        final SpecificationListBuilder builder = createListBuilderFilteringBy("utest", "dsn");
+        builder.beginSpecificationItem();
         final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
-        ignoringBuilder.setId(importedId);
-        ignoringBuilder.addDependsOnId(acceptedId);
-        ignoringBuilder.addDependsOnId(rejectedId);
-        ignoringBuilder.endSpecificationItem();
-        final List<SpecificationItem> items = ignoringBuilder.build();
+        builder.setId(importedId);
+        builder.addDependsOnId(acceptedId);
+        builder.addDependsOnId(rejectedId);
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
         assertThat(items.get(0).getDependOnIds(), containsInAnyOrder(acceptedId));
     }
 

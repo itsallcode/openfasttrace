@@ -33,7 +33,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 public class TestTracedLink
 {
     @Test
-    public void testEqualsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(TracedLink.class) //
                 .withPrefabValues(LinkedSpecificationItem.class,

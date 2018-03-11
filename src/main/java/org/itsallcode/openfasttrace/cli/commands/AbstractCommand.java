@@ -56,7 +56,8 @@ public abstract class AbstractCommand implements Performable
 
     protected FilterSettings createFilterSettingsFromArguments()
     {
-        return new FilterSettings.Builder().artifactTypes(this.arguments.getWantedArtifactTypes())
+        return new FilterSettings.Builder() //
+                .artifactTypes(this.arguments.getWantedArtifactTypes()) //
                 .build();
     }
 }

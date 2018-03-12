@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.importer;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
@@ -35,7 +36,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 public class ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
-    private List<String> ignoredArtifactTypes;
+    private FilterSettings filterSettings;
 
     public ImporterService()
     {
@@ -48,15 +49,15 @@ public class ImporterService
     }
 
     /**
-     * Set the list of artifact type to be ignored during import
+     * Set the filters to be applied
      * 
-     * @param ignoredArtifactTypes
-     *            list of artifact types to be ignored
+     * @param filterSettings
+     *            filter settings
      * @return <code>this</code> for fluent programming style
      */
-    public ImporterService ignoreArtifactTypes(final List<String> ignoredArtifactTypes)
+    public ImporterService setFilters(final FilterSettings filterSettings)
     {
-        this.ignoredArtifactTypes = ignoredArtifactTypes;
+        this.filterSettings = filterSettings;
         return this;
     }
 
@@ -69,8 +70,8 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        final SpecificationListBuilder builder = new SpecificationListBuilder(
-                this.ignoredArtifactTypes);
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createWithFilter(this.filterSettings);
         return new MultiFileImporter(builder, this.factoryLoader);
     }
 }

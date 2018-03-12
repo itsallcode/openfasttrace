@@ -163,9 +163,9 @@ public class TestCliArguments
     public void testSetIngnoreArtifactTypes()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
-        this.arguments.setIgnoreArtifactTypes(value);
-        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
+        this.arguments.setWantedArtifactTypes(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
     }
 
@@ -173,9 +173,9 @@ public class TestCliArguments
     public void testSetI()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
-        this.arguments.setI(value);
-        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
+        this.arguments.setA(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
     }
 }

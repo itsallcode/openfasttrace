@@ -30,7 +30,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
@@ -111,18 +114,18 @@ public class ITestReporter extends AbstractOftModeTest
     }
 
     @Test
-    public void testIgnoreArtifactTypeDsn()
+    public void testFilterAllowsAllButDsn()
     {
-        final String ignoredArtifactType = "dsn";
+        final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         this.reporter.addInputs(this.docDir);
         final Trace fullTrace = this.reporter.trace();
-        assertThat("Number of items with type " + ignoredArtifactType + " in regular trace",
-                countItemsOfArtifactTypeInTrace(ignoredArtifactType, fullTrace), greaterThan(0L));
+        assertThat("Number of items with type " + artifactTypes + " in regular trace",
+                countItemsOfArtifactTypeInTrace("dsn", fullTrace), greaterThan(0L));
         final Trace trace = this.reporter //
-                .ignoreArtifactTypes(Arrays.asList(ignoredArtifactType))//
+                .setFilters(new FilterSettings.Builder().artifactTypes(artifactTypes).build())//
                 .trace();
-        assertThat("Number of items with ignored type " + ignoredArtifactType,
-                countItemsOfArtifactTypeInTrace(ignoredArtifactType, trace), equalTo(0L));
+        assertThat("Number of items with ignored type " + artifactTypes,
+                countItemsOfArtifactTypeInTrace("dsn", trace), equalTo(0L));
     }
 
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)

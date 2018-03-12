@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
 
@@ -42,7 +43,7 @@ public interface Converter
      *            input files
      * @return a <code>Converter</code> instance for fluent programming
      */
-    Converter addInputs(final Path... inputs);
+    public Converter addInputs(final Path... inputs);
 
     /**
      * Select one or more input files
@@ -51,15 +52,15 @@ public interface Converter
      *            input files
      * @return a <code>Converter</code> instance for fluent programming
      */
-    Converter addInputs(final List<Path> inputs);
+    public Converter addInputs(final List<Path> inputs);
 
     /**
-     * Set the list of artifact type to be ignored during import
+     * Set the filters to be applied during conversion
      * 
-     * @param ignoredArtifactTypes
-     *            list of ignored artifact types
+     * @param filterSettings
+     *            the filter settings
      */
-    Converter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
+    public Converter setFilters(FilterSettings filterSettings);
 
     /**
      * Set the representation for new line
@@ -68,7 +69,7 @@ public interface Converter
      *            type of newline
      * @return a <code>Converter</code> instance for fluent programming
      */
-    Converter setNewline(Newline newline);
+    public Converter setNewline(Newline newline);
 
     /**
      * Set the {@link LegacyTagImporterConfig} for the
@@ -78,7 +79,7 @@ public interface Converter
      *            the {@link LegacyTagImporterConfig} to set.
      * @return a <code>Converter</code> instance for fluent programming
      */
-    Converter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+    public Converter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
 
     /**
      * Convert the collected requirements into target requirement format
@@ -90,5 +91,5 @@ public interface Converter
      *            target format (this is a name defined in the respective
      *            exporter plug-in)
      */
-    void convertToFileInFormat(final Path output, final String format);
+    public void convertToFileInFormat(final Path output, final String format);
 }

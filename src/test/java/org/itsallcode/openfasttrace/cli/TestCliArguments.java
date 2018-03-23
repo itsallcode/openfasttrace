@@ -72,7 +72,7 @@ public class TestCliArguments
         assertAfterSetter(value, this.arguments.getOutputFormat());
     }
 
-    // [utest->dsn~cli.conversion.default-format~1]
+    // [utest->dsn~cli.conversion.default-output-format~1]
     @Test
     public void getStandardOutputFormatForExport()
     {

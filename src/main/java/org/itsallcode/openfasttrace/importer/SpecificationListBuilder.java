@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import java.util.Collections;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -91,7 +93,7 @@ public class SpecificationListBuilder implements ImportEventListener
     public void addCoveredId(final SpecificationItemId id)
     {
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAccepted(id.getArtifactType()))
+        if (isAcceptedArtifactType(id.getArtifactType()))
         {
             this.itemBuilder.addCoveredId(id);
         }
@@ -119,7 +121,7 @@ public class SpecificationListBuilder implements ImportEventListener
     public void addDependsOnId(final SpecificationItemId id)
     {
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAccepted(id.getArtifactType()))
+        if (isAcceptedArtifactType(id.getArtifactType()))
         {
             this.itemBuilder.addDependOnId(id);
         }
@@ -129,7 +131,7 @@ public class SpecificationListBuilder implements ImportEventListener
     public void addNeededArtifactType(final String artifactType)
     {
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAccepted(artifactType))
+        if (isAcceptedArtifactType(artifactType))
         {
             this.itemBuilder.addNeedsArtifactType(artifactType);
         }
@@ -178,29 +180,50 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void endSpecificationItem()
     {
-        // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (this.itemBuilder != null && isAccepted(this.id.getArtifactType()))
+        if (this.itemBuilder != null)
         {
-            createNewSpecificationItem();
+            final SpecificationItem item = createNewSpecificationItem();
+            // [impl->dsn~filtering-by-artifact-types-during-import~1]
+            if (isAccepted(item))
+            {
+                addNewItemToList(item);
+            }
         }
+        resetState();
     }
 
-    private boolean isAccepted(final String artifactType)
+    private SpecificationItem createNewSpecificationItem()
+    {
+        return this.itemBuilder //
+                .id(this.id)//
+                .description(this.description.toString()) //
+                .rationale(this.rationale.toString()) //
+                .comment(this.comment.toString()) //
+                .location(this.location) //
+                .build();
+    }
+
+    private boolean isAccepted(final SpecificationItem item)
+    {
+        return isAcceptedArtifactType(item.getId().getArtifactType())
+                && containsAtLeastOneAcceptedTag(item.getTags());
+    }
+
+    // [impl->dsn~filtering-by-tags-during-import~1]
+    private boolean containsAtLeastOneAcceptedTag(final List<String> tags)
+    {
+        return !this.filterSettings.isTagCriteriaSet()
+                || !Collections.disjoint(this.filterSettings.getTags(), tags);
+    }
+
+    private boolean isAcceptedArtifactType(final String artifactType)
     {
         return !this.filterSettings.isArtifactTypeCriteriaSet()
                 || this.filterSettings.getArtifactTypes().contains(artifactType);
     }
 
-    private void createNewSpecificationItem()
+    private void addNewItemToList(final SpecificationItem item)
     {
-        this.itemBuilder //
-                .id(this.id)//
-                .description(this.description.toString()) //
-                .rationale(this.rationale.toString()) //
-                .comment(this.comment.toString()) //
-                .location(this.location);
-        final SpecificationItem item = this.itemBuilder.build();
         this.items.add(item);
-        resetState();
     }
 }

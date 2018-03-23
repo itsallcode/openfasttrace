@@ -359,7 +359,7 @@ Obviously the detailed design is missing at the point when Kim runs the trace. T
 #### Include Only Artifact Types
 `req~include-only-artifact-types~1`
 
-OFT give users the option to include only a configurable set of artifact types during processing.
+OFT gives users the option to include only a configurable set of artifact types during processing.
 
 Covers:
 
@@ -367,6 +367,16 @@ Covers:
 
 Needs: dsn
 
+#### Include Only Tags
+`req~include-only-tags~1`
+
+OFT gives users the option to include only a specification items contained in configurable set of tags during processing.
+
+Covers:
+
+  * [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
 
 ## Reports
 Reports are the main way to find out if a projects requirements are covered properly.

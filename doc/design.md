@@ -139,6 +139,17 @@ Covers:
 
 Needs: impl, utest
 
+#### Filtering by Tags Import
+`dsn~filtering-by-tags-during-import~1`
+
+When OFT is configured to restrict inclusion to tags the [specification list builder](#specification-list-builder) imports a specification item only at least one of it tags is contained in the configured set of tags. 
+
+Covers:
+
+  * `req~include-only-tags~1`
+
+Needs: impl, utest
+
 ## Tracing
 
 ### Tracing Needed Coverage

@@ -32,16 +32,18 @@ import javax.annotation.Generated;
 public final class FilterSettings
 {
     private final Set<String> artifactTypes;
+    private final Set<String> tags;
 
     private FilterSettings(final Builder builder)
     {
         this.artifactTypes = builder.artifactTypes;
+        this.tags = builder.tags;
     }
 
     /**
      * Get the artifact types the filter must match.
      * 
-     * @return artifact types
+     * @return artifact types that must be matched
      */
     public Set<String> getArtifactTypes()
     {
@@ -49,13 +51,33 @@ public final class FilterSettings
     }
 
     /**
-     * Check if one or more filters are set.
+     * Get the tags the filter must match.
      * 
-     * @return <code>true</code> if and filter criteria is set
+     * @return artifact types that must be matched
+     */
+    public Set<String> getTags()
+    {
+        return this.tags;
+    }
+
+    /**
+     * Check if the artifact type filter is set.
+     * 
+     * @return <code>true</code> if the artifact type filter is set
      */
     public boolean isArtifactTypeCriteriaSet()
     {
         return this.artifactTypes != null && !this.artifactTypes.isEmpty();
+    }
+
+    /**
+     * Check if the tag filter is set.
+     * 
+     * @return <code>true</code> if the tag filter is set
+     */
+    public boolean isTagCriteriaSet()
+    {
+        return this.tags != null && !this.tags.isEmpty();
     }
 
     /**
@@ -65,7 +87,7 @@ public final class FilterSettings
      */
     public boolean isAnyCriteriaSet()
     {
-        return isArtifactTypeCriteriaSet();
+        return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
     }
 
     @Generated("org.eclipse.Eclipse")
@@ -76,6 +98,7 @@ public final class FilterSettings
         int result = 1;
         result = prime * result
                 + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
+        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
         return result;
     }
 
@@ -107,6 +130,17 @@ public final class FilterSettings
         {
             return false;
         }
+        if (this.tags == null)
+        {
+            if (other.tags != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.tags.equals(other.tags))
+        {
+            return false;
+        }
         return true;
     }
 
@@ -127,17 +161,31 @@ public final class FilterSettings
     public static class Builder
     {
         private Set<String> artifactTypes = Collections.emptySet();
+        private Set<String> tags = Collections.emptySet();
 
         /**
          * Set the list of artifact types that the filter matches.
          * 
          * @param artifactTypes
-         *            artifact types
+         *            artifact types that must be matched
          * @return <code>this</code> for fluent programming
          */
         public Builder artifactTypes(final Set<String> artifactTypes)
         {
             this.artifactTypes = artifactTypes;
+            return this;
+        }
+
+        /**
+         * Set the list of tags that the filter matches.
+         * 
+         * @param tags
+         *            tags that must be matched
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder tags(final Set<String> tags)
+        {
+            this.tags = tags;
             return this;
         }
 

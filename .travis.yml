@@ -24,22 +24,22 @@ script:
 after_success:
   - codecov
 
-addons:
-  coverity_scan:
-    project:
-      name: itsallcode/openfasttrace
-      version: 0.3.0
-      description: OpenFastTrace requirement tracing
-    notification_email: christoph@users.sourceforge.net
-    build_command_prepend: mvn clean
-    build_command: mvn -DskipTests=true compile
-    branch_pattern: coverity_scan
-  sonarcloud:
-    organization: "itsallcode"
-    token:
-      secure: "stET2mlxtWuTjhrgBC1xO77FHuyF7E7tf+9CY9W9TEUS5UlTNVr9/gzu3p4VeWU7knpiq4PuPabPCAFfbZaPF9vMP0lO6qKvsrd0RBnCIYn2l6AEMKzd0M1yksSBvUnS+7LoT8+qkJ7hPxzSkgM7oWCsHzp//gFvr7r1+n2B9QxrsjpAPqmZlU+0cthX4cy6yIVgMG6T1TlBORcNx9TTZ+ppGLoBJ7PTL04R1GNbNy0IExlegO6JRGo6T2uURr5UkrWeKVlRZY0u3VDs6OUahE3g2srJZPruedX9KRa4XLztTLXYmOUO/6XFxxfx/eqpWqD68Eal/IguTVibPiU0dCpXsTvWE/bO1dDolBxu9afKI7ntNWmIbfKpIT0bRypz+Ss12A9cw3bNJYRXkbA4sfsMmI4kcAhdl+P0bgfyWlmwXE8z+akOOEzkHZ2vT28WVZ27KkByTtl64uWqweeAwPLQN3ORcilyt9Ip+u1Z/sZUaRuXFMi5pciB3lfLq5Bm1bu2VDep2XLQnZD+KPp5+YHCxVrXBy0quDMNYU18R/OSWfqkCOPkklopG02ngvQAYHeezJILqnlS7bD6ujdthv/97LM39W8heFxxUOQiXKw+zWccFTS+lMChX+8n5+xFoJV1NjlGv1rz5PAcUCudCTHu5Pk/2H6XFcTq9/6Ysds="
-    github_token:
-      secure: "cUCJxSEGDzKEpG54RJFkDBEJeYMjgb+KEmKi6wuNjN5nQ8Sy86M4VHXedOaAdj3ZnJmmsoTdhND7Ot+GhHknBF/XMnCrZ05Iw0tE8rtSK2ae/v1UvmDMyTfMxwHMqebYEqkS9VXU7lUIbiq2ek57C7/tq9SJKO+rwlQamzlweS41tpTfubeQf3B0XKchqxpfT7f7f0Kit2sSDFbj+IHv/dhmFoFat7ffnTmnBaQscDlf6jANqCWSdfE2AuOV+l8L7TKOkHlYZV6Pu50RTyVs+Pts2EPHodl5Lxmrzlp1lECtGaJJ+O21HQQ6sUdmHUHmA7boSoLYbQetjOuateuQNa+JkHb2kgnirqOIUFuAt4I9QIxyKvek6NlvUUNipaGMPHWudOhGGAe8FgV0Ohp7sUaKejrYQTFG5EPYvO0GSlYuFcEhwEiNTHsdMJzmULkGGxix+Xf72+4RCrD0ZWIFE8O4ilGRIVd1SltS7c+3803t2eZIX+sZa/YvHWk/rNttoTuknPBYwGk+uIswbURw4c7gVeQ3IVoVLkHp/foK0a22vwKsMxyCZalr54FmST1Qcwl+9qFvYtrI9KCFmo7nF5rHGcgNt3QG/TGnc4Zv2u6BpMV8zVpr9mpTQ6+zki/ElA343gCWoJZaJrXiEi/1dxTi3xm88F7xH/B/yrYGA3I="
-    branches:
-      - master
-      - develop
+#addons:
+#  coverity_scan:
+#    project:
+#      name: itsallcode/openfasttrace
+#      version: 0.3.0
+#      description: OpenFastTrace requirement tracing
+#    notification_email: christoph@users.sourceforge.net
+#    build_command_prepend: mvn clean
+#    build_command: mvn -DskipTests=true compile
+#    branch_pattern: coverity_scan
+#  sonarcloud:
+#    organization: "itsallcode"
+#    token:
+#      secure: "stET2mlxtWuTjhrgBC1xO77FHuyF7E7tf+9CY9W9TEUS5UlTNVr9/gzu3p4VeWU7knpiq4PuPabPCAFfbZaPF9vMP0lO6qKvsrd0RBnCIYn2l6AEMKzd0M1yksSBvUnS+7LoT8+qkJ7hPxzSkgM7oWCsHzp//gFvr7r1+n2B9QxrsjpAPqmZlU+0cthX4cy6yIVgMG6T1TlBORcNx9TTZ+ppGLoBJ7PTL04R1GNbNy0IExlegO6JRGo6T2uURr5UkrWeKVlRZY0u3VDs6OUahE3g2srJZPruedX9KRa4XLztTLXYmOUO/6XFxxfx/eqpWqD68Eal/IguTVibPiU0dCpXsTvWE/bO1dDolBxu9afKI7ntNWmIbfKpIT0bRypz+Ss12A9cw3bNJYRXkbA4sfsMmI4kcAhdl+P0bgfyWlmwXE8z+akOOEzkHZ2vT28WVZ27KkByTtl64uWqweeAwPLQN3ORcilyt9Ip+u1Z/sZUaRuXFMi5pciB3lfLq5Bm1bu2VDep2XLQnZD+KPp5+YHCxVrXBy0quDMNYU18R/OSWfqkCOPkklopG02ngvQAYHeezJILqnlS7bD6ujdthv/97LM39W8heFxxUOQiXKw+zWccFTS+lMChX+8n5+xFoJV1NjlGv1rz5PAcUCudCTHu5Pk/2H6XFcTq9/6Ysds="
+#    github_token:
+#      secure: "cUCJxSEGDzKEpG54RJFkDBEJeYMjgb+KEmKi6wuNjN5nQ8Sy86M4VHXedOaAdj3ZnJmmsoTdhND7Ot+GhHknBF/XMnCrZ05Iw0tE8rtSK2ae/v1UvmDMyTfMxwHMqebYEqkS9VXU7lUIbiq2ek57C7/tq9SJKO+rwlQamzlweS41tpTfubeQf3B0XKchqxpfT7f7f0Kit2sSDFbj+IHv/dhmFoFat7ffnTmnBaQscDlf6jANqCWSdfE2AuOV+l8L7TKOkHlYZV6Pu50RTyVs+Pts2EPHodl5Lxmrzlp1lECtGaJJ+O21HQQ6sUdmHUHmA7boSoLYbQetjOuateuQNa+JkHb2kgnirqOIUFuAt4I9QIxyKvek6NlvUUNipaGMPHWudOhGGAe8FgV0Ohp7sUaKejrYQTFG5EPYvO0GSlYuFcEhwEiNTHsdMJzmULkGGxix+Xf72+4RCrD0ZWIFE8O4ilGRIVd1SltS7c+3803t2eZIX+sZa/YvHWk/rNttoTuknPBYwGk+uIswbURw4c7gVeQ3IVoVLkHp/foK0a22vwKsMxyCZalr54FmST1Qcwl+9qFvYtrI9KCFmo7nF5rHGcgNt3QG/TGnc4Zv2u6BpMV8zVpr9mpTQ6+zki/ElA343gCWoJZaJrXiEi/1dxTi3xm88F7xH/B/yrYGA3I="
+#    branches:
+#      - master
+#      - develop

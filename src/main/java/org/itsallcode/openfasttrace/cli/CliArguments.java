@@ -49,6 +49,7 @@ public class CliArguments
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
     private Set<String> wantedArtifactTypes = Collections.emptySet();
+    private Set<String> wantedTags = Collections.emptySet();
 
     /**
      * Get the output file path
@@ -263,7 +264,12 @@ public class CliArguments
      */
     public void setWantedArtifactTypes(final String artifactTypes)
     {
-        this.wantedArtifactTypes = new HashSet<>(Arrays.asList(artifactTypes.split(",\\s*")));
+        this.wantedArtifactTypes = createSetFromCommaSeparatedString(artifactTypes);
+    }
+
+    private HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
+    {
+        return new HashSet<>(Arrays.asList(commaSeparatedString.split(",\\s*")));
     }
 
     /**
@@ -275,5 +281,37 @@ public class CliArguments
     public void setA(final String artifactTypes)
     {
         setWantedArtifactTypes(artifactTypes);
+    }
+
+    /**
+     * Get a list of tags to be applied as filter during import
+     * 
+     * @return list of wanted tags
+     */
+    public Set<String> getWantedTags()
+    {
+        return this.wantedTags;
+    }
+
+    /**
+     * Set a list of tags to be applied as filter during import
+     * 
+     * @param tags
+     *            list of wanted tags
+     */
+    public void setWantedTags(final String tags)
+    {
+        this.wantedTags = createSetFromCommaSeparatedString(tags);
+    }
+
+    /**
+     * Set a list of tags to be applied as filter during import
+     * 
+     * @param tags
+     *            list of wanted tags
+     */
+    public void setT(final String tags)
+    {
+        setWantedTags(tags);
     }
 }

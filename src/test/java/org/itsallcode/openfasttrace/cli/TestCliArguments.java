@@ -159,6 +159,7 @@ public class TestCliArguments
         assertThat(AFTER_SETTER, this.arguments.getNewline(), equalTo(value));
     }
 
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
     public void testSetIngnoreArtifactTypes()
     {
@@ -177,5 +178,16 @@ public class TestCliArguments
         this.arguments.setA(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
+    }
+
+    // [utest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testSetIngnoreTags()
+    {
+        final String value = "client,server";
+        assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
+        this.arguments.setWantedTags(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
+                containsInAnyOrder("client", "server"));
     }
 }

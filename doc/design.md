@@ -137,7 +137,7 @@ Covers:
 
   * `req~include-only-artifact-types~1`
 
-Needs: impl, utest
+Needs: impl, utest, itest
 
 #### Filtering by Tags Import
 `dsn~filtering-by-tags-during-import~1`
@@ -148,7 +148,7 @@ Covers:
 
   * `req~include-only-tags~1`
 
-Needs: impl, utest
+Needs: impl, utest, itest
 
 ## Tracing
 

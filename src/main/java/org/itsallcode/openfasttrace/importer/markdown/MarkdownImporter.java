@@ -62,6 +62,7 @@ class MarkdownImporter implements Importer
         transition(SPEC_ITEM  , NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(SPEC_ITEM  , DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                     ),
         transition(SPEC_ITEM  , DESCRIPTION, MdPattern.NOT_EMPTY  , this::beginDescription                     ),
+        transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
     
         transition(DESCRIPTION, SPEC_ITEM  , MdPattern.ID         , () -> {endDescription(); beginItem();}     ),
@@ -73,6 +74,7 @@ class MarkdownImporter implements Importer
         transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS_INT  , () -> {endDescription(); addNeeds();}      ),
         transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , this::endDescription                       ),
         transition(DESCRIPTION, DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription                    ),
+        transition(DESCRIPTION, TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(DESCRIPTION, TAGS       , MdPattern.TAGS       , () -> {}                                   ),
 
     
@@ -84,6 +86,7 @@ class MarkdownImporter implements Importer
         transition(RATIONALE  , NEEDS      , MdPattern.NEEDS_INT  , () -> {endRationale(); addNeeds();}        ),
         transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , this::endRationale                         ),
         transition(RATIONALE  , RATIONALE  , MdPattern.EVERYTHING , this::appendRationale                      ),
+        transition(RATIONALE  , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(RATIONALE  , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
     
         transition(COMMENT    , SPEC_ITEM  , MdPattern.ID         , () -> {endComment(); beginItem();}         ),
@@ -92,9 +95,9 @@ class MarkdownImporter implements Importer
         transition(COMMENT    , DEPENDS    , MdPattern.DEPENDS    , this::endComment                           ),
         transition(COMMENT    , NEEDS      , MdPattern.NEEDS_INT  , () -> {endComment(); addNeeds();}          ),
         transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , this::endComment                           ),
-        
         transition(COMMENT    , RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}    ),
         transition(COMMENT    , COMMENT    , MdPattern.EVERYTHING , this::appendComment                        ),
+        transition(COMMENT    , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(COMMENT    , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
 
         
@@ -108,6 +111,7 @@ class MarkdownImporter implements Importer
         transition(COVERS     , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                             ),
         transition(COVERS     , NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(COVERS     , COVERS     , MdPattern.EMPTY      , () -> {}                                   ),
+        transition(COVERS     , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(COVERS     , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
 
         // [impl->dsn~md.depends-list~1]
@@ -121,6 +125,7 @@ class MarkdownImporter implements Importer
         transition(DEPENDS    , NEEDS      , MdPattern.NEEDS      , () -> {}                                   ),
         transition(DEPENDS    , DEPENDS    , MdPattern.EMPTY      , () -> {}                                   ),
         transition(DEPENDS    , COVERS     , MdPattern.COVERS     , () -> {}                                   ),
+        transition(DEPENDS    , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(DEPENDS    , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
 
         // [impl->dsn~md.needs-coverage-list~2]
@@ -134,6 +139,7 @@ class MarkdownImporter implements Importer
         transition(NEEDS      , NEEDS      , MdPattern.NEEDS_REF  , this::addNeeds                             ),
         transition(NEEDS      , NEEDS      , MdPattern.EMPTY      , () -> {}                                   ),
         transition(NEEDS      , COVERS     , MdPattern.COVERS     , () -> {}                                   ),
+        transition(NEEDS      , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
         transition(NEEDS      , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
         
         transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , this::addTag                               ),
@@ -147,6 +153,7 @@ class MarkdownImporter implements Importer
         transition(TAGS       , NEEDS      , MdPattern.EMPTY      , () -> {}                                   ),
         transition(TAGS       , COVERS     , MdPattern.COVERS     , () -> {}                                   ),
         transition(TAGS       , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
+        transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
     };
 
     private final String fileName;
@@ -332,6 +339,10 @@ class MarkdownImporter implements Importer
     
     private void addTag()
     {
-        this.listener.addTag(this.stateMachine.getLastToken());
+        final String tags = this.stateMachine.getLastToken();
+        for(final String tag : tags.split(",\\s*"))
+        {
+            this.listener.addTag(tag);
+        }
     }
 }

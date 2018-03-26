@@ -113,18 +113,19 @@ public class ITestReporter extends AbstractOftModeTest
         assertStdOutStartsWith("ok - 5 total");
     }
 
+    // [itest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterAllowsAllButDsn()
+    public void testFilterAllowsAllAtrifactsButDsn()
     {
         final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         this.reporter.addInputs(this.docDir);
         final Trace fullTrace = this.reporter.trace();
-        assertThat("Number of items with type " + artifactTypes + " in regular trace",
+        assertThat("Number of items with type \"dsn\" in regular trace",
                 countItemsOfArtifactTypeInTrace("dsn", fullTrace), greaterThan(0L));
         final Trace trace = this.reporter //
                 .setFilters(new FilterSettings.Builder().artifactTypes(artifactTypes).build())//
                 .trace();
-        assertThat("Number of items with ignored type " + artifactTypes,
+        assertThat("Number of items with ignored type \"dsn\" in filtered trace",
                 countItemsOfArtifactTypeInTrace("dsn", trace), equalTo(0L));
     }
 
@@ -133,6 +134,32 @@ public class ITestReporter extends AbstractOftModeTest
         return trace.getItems().stream() //
                 .filter(item -> {
                     return item.getId().getArtifactType().equals(artifactType);
+                }) //
+                .count();
+    }
+
+    // [itest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testFilterAllowsTagsClientAndServer()
+    {
+        final Set<String> tags = new HashSet<>(Arrays.asList("client", "server"));
+        this.reporter.addInputs(this.docDir);
+        final Trace fullTrace = this.reporter.trace();
+        final String filteredOutTag = "database";
+        assertThat("Number of items with tag \"" + filteredOutTag + "\" in regular trace",
+                countItemsWithTagInTrace(filteredOutTag, fullTrace), greaterThan(0L));
+        final Trace trace = this.reporter //
+                .setFilters(new FilterSettings.Builder().tags(tags).build())//
+                .trace();
+        assertThat("Number of items with tag \"" + filteredOutTag + "\" in filted trace",
+                countItemsWithTagInTrace(filteredOutTag, trace), equalTo(0L));
+    }
+
+    private long countItemsWithTagInTrace(final String tag, final Trace trace)
+    {
+        return trace.getItems().stream() //
+                .filter(item -> {
+                    return item.getTags().contains(tag);
                 }) //
                 .count();
     }

@@ -137,7 +137,18 @@ Covers:
 
   * `req~include-only-artifact-types~1`
 
-Needs: impl, utest
+Needs: impl, utest, itest
+
+#### Filtering by Tags Import
+`dsn~filtering-by-tags-during-import~1`
+
+When OFT is configured to restrict inclusion to tags the [specification list builder](#specification-list-builder) imports a specification item only if at least one of it tags is contained in the configured set of tags. 
+
+Covers:
+
+  * `req~include-only-tags~1`
+
+Needs: impl, utest, itest
 
 ## Tracing
 
@@ -360,7 +371,7 @@ Covers:
 
 Needs: impl, utest
 
-#### Specification Item Id
+#### Specification Item ID
 `dsn~specification-item-id~1`
 
 A `SpecificationItemId` consists of:

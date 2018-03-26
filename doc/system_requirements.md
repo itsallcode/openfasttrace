@@ -370,7 +370,7 @@ Needs: dsn
 #### Include Only Tags
 `req~include-only-tags~1`
 
-OFT gives users the option to include only a specification items contained in configurable set of tags during processing.
+OFT gives users the option to include only specification items contained in configurable set of tags during processing.
 
 Covers:
 

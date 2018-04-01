@@ -23,7 +23,6 @@ package org.itsallcode.openfasttrace.importer.legacytag;
  */
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -33,13 +32,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,32 +63,50 @@ public class TestLegacyTagImporterFactory
     @Test
     public void testFactoryWithEmptyPathConfigListSupportsNothing()
     {
-        assertSupportsFile(emptyList(), PATH1, false);
+        assertSupportsFile(config(), PATH1, false);
     }
 
     @Test
     public void testFactorySupportsFile()
     {
-        assertSupportsFile(asList(createConfig(PATH1)), PATH1, true);
+        assertSupportsFile(config(glob(PATH1)), PATH1, true);
+    }
+
+    @Test
+    public void testFactorySupportsFileWithBasePath()
+    {
+        assertSupportsFile(config("base", glob("path")), "base/path", true);
+    }
+
+    @Test
+    public void testFactoryDoesNotSupportFileWithWrongBasePath()
+    {
+        assertSupportsFile(config("base", glob("path")), "base1/path", false);
+    }
+
+    @Test
+    public void testFactoryDoesNotSupportFileWithWrongPath()
+    {
+        assertSupportsFile(config("base", glob("path")), "base/path1", false);
     }
 
     @Test
     public void testFactoryDoesNotSupportsFile()
     {
-        assertSupportsFile(asList(createConfig(PATH1)), PATH2, false);
+        assertSupportsFile(config(glob(PATH1)), PATH2, false);
     }
 
     @Test(expected = ImporterException.class)
     public void testFactoryThrowsExceptionForUnsupportedFile()
     {
-        createImporter(asList(createConfig(PATH1)), Paths.get(PATH2));
+        createImporter(config(glob(PATH1)), Paths.get(PATH2));
     }
 
     @Test
     public void testFactoryCreatesImporterForSupportedFile() throws IOException
     {
         final File tempFile = this.temp.newFile();
-        final Importer importer = createImporter(asList(createConfig(tempFile.getAbsolutePath())),
+        final Importer importer = createImporter(config(glob(tempFile.getAbsolutePath())),
                 tempFile.toPath());
         assertThat(importer, notNullValue());
     }
@@ -100,28 +114,38 @@ public class TestLegacyTagImporterFactory
     @Test(expected = ImporterException.class)
     public void testFactoryThrowsExceptionForMissingFile() throws IOException
     {
-        final Importer importer = createImporter(asList(createConfig(PATH1)), Paths.get(PATH1));
+        final Importer importer = createImporter(config(glob(PATH1)), Paths.get(PATH1));
         importer.runImport();
     }
 
-    private void assertSupportsFile(final List<PathConfig> pathConfigs, final String path,
+    private void assertSupportsFile(final LegacyTagImporterConfig config, final String path,
             final boolean expected)
     {
-        assertThat(create(pathConfigs).supportsFile(Paths.get(path)), equalTo(expected));
+        assertThat(create(config).supportsFile(Paths.get(path)), equalTo(expected));
     }
 
-    private Importer createImporter(final List<PathConfig> pathConfigs, final Path path)
+    private Importer createImporter(final LegacyTagImporterConfig config, final Path path)
     {
-        return create(pathConfigs).createImporter(path, StandardCharsets.UTF_8,
-                this.listenerMock);
+        return create(config).createImporter(path, StandardCharsets.UTF_8, this.listenerMock);
     }
 
-    private LegacyTagImporterFactory create(final List<PathConfig> pathConfigs)
+    private LegacyTagImporterConfig config(final String basePath, final PathConfig... pathConfigs)
     {
-        return new LegacyTagImporterFactory(pathConfigs);
+        return new LegacyTagImporterConfig(basePath == null ? null : Paths.get(basePath),
+                asList(pathConfigs));
     }
 
-    private PathConfig createConfig(final String globPattern)
+    private LegacyTagImporterConfig config(final PathConfig... pathConfigs)
+    {
+        return config(null, pathConfigs);
+    }
+
+    private LegacyTagImporterFactory create(final LegacyTagImporterConfig config)
+    {
+        return new LegacyTagImporterFactory(config);
+    }
+
+    private PathConfig glob(final String globPattern)
     {
         return new PathConfig("glob:" + globPattern, null, null, null);
     }

@@ -24,24 +24,32 @@ package org.itsallcode.openfasttrace.importer.legacytag;
 
 import static java.util.Collections.emptyList;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class LegacyTagImporterConfig
 {
     private final List<PathConfig> pathConfigs;
+    private final Path basePath;
 
     public LegacyTagImporterConfig()
     {
-        this(emptyList());
+        this(null, emptyList());
     }
 
-    public LegacyTagImporterConfig(final List<PathConfig> pathConfigs)
+    public LegacyTagImporterConfig(final Path basePath, final List<PathConfig> pathConfigs)
     {
+        this.basePath = basePath;
         this.pathConfigs = pathConfigs;
     }
 
     public List<PathConfig> getPathConfigs()
     {
         return this.pathConfigs;
+    }
+
+    public Path getBasePath()
+    {
+        return this.basePath;
     }
 }

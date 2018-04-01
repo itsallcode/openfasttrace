@@ -29,6 +29,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.importer.*;
@@ -39,43 +40,61 @@ public class LegacyTagImporterFactory extends ImporterFactory
 
     private static LegacyTagImporterConfig defaultConfig = new LegacyTagImporterConfig();
 
-    private final List<PathConfig> pathConfigs;
+    private final Supplier<LegacyTagImporterConfig> config;
 
     public LegacyTagImporterFactory()
     {
-        this(defaultConfig.getPathConfigs());
+        this(() -> defaultConfig);
     }
 
-    public LegacyTagImporterFactory(final List<PathConfig> pathConfigs)
+    public LegacyTagImporterFactory(final LegacyTagImporterConfig config)
     {
-        this.pathConfigs = pathConfigs;
+        this(() -> config);
+    }
+
+    public LegacyTagImporterFactory(final Supplier<LegacyTagImporterConfig> config)
+    {
+        this.config = config;
     }
 
     @Override
-    public boolean supportsFile(final Path file)
+    public boolean supportsFile(final Path path)
     {
-        return findConfig(file).isPresent();
+        return findConfig(path).isPresent();
     }
 
     private Optional<PathConfig> findConfig(final Path file)
     {
-        return this.pathConfigs.stream().filter(config -> config.matches(file)).findFirst();
+        final Path relativePath = makeRelative(file);
+        return this.config.get().getPathConfigs().stream() //
+                .filter(config -> config.matches(relativePath)) //
+                .findFirst();
+    }
+
+    private Path makeRelative(final Path path)
+    {
+        final Path basePath = this.config.get().getBasePath();
+        if (basePath == null)
+        {
+            return path;
+        }
+        return basePath.relativize(path);
     }
 
     @Override
-    public Importer createImporter(final Path file, final Charset charset,
+    public Importer createImporter(final Path path, final Charset charset,
             final ImportEventListener listener)
     {
-        final Optional<PathConfig> config = findConfig(file);
+        final Optional<PathConfig> config = findConfig(path);
         if (!config.isPresent())
         {
-            final List<String> patterns = this.pathConfigs.stream() //
+            final List<String> patterns = this.config.get().getPathConfigs().stream() //
                     .map(PathConfig::getPattern) //
                     .collect(toList());
-            throw new ImporterException("File '" + file
+            throw new ImporterException("File '" + path
                     + "' not supported for import, supported patterns: " + patterns);
         }
-        return () -> runImporter(file, charset, config.get(), listener);
+        return () -> runImporter(path, charset, config.get(), listener);
     }
 
     private void runImporter(final Path file, final Charset charset, final PathConfig config,

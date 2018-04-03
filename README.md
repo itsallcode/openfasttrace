@@ -13,7 +13,22 @@
 
 ## Dependencies
 
-OpenFastTrace needs a Java JDK 8 (or later) implementation and Maven as build tool.
+### Runtime Dependencies
+
+OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
+
+### Build time Dependencies
+
+At build time the following dependencies are additionally required.
+
+| Dependency                                                                   | Purpose                                                | License                       |
+-------------------------------------------------------------------------------|--------------------------------------------------------|--------------------------------
+| [Apache Maven](https://maven.apache.org/)                                    | Build tool                                             | Apache License 2.0            |
+| [Equals Verifier](https://github.com/jqno/equalsverifier)                    | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
+| [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher) | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
+| [JUnit](https://junit.org/junit4/index.html)                                 | Unit testing framework                                 | Eclipse Public License 1.0    |
+| [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
+| [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
 
 ## On Linux
 

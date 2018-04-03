@@ -106,8 +106,8 @@ public class TestLegacyTagImporterFactory
     public void testFactoryCreatesImporterForSupportedFile() throws IOException
     {
         final File tempFile = this.temp.newFile();
-        final Importer importer = createImporter(config(glob(tempFile.getAbsolutePath())),
-                tempFile.toPath());
+        final String glob = tempFile.getAbsolutePath().replace('\\', '/');
+        final Importer importer = createImporter(config(glob(glob)), tempFile.toPath());
         assertThat(importer, notNullValue());
     }
 

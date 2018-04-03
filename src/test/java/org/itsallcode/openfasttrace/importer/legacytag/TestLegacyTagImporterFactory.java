@@ -38,8 +38,6 @@ import java.util.List;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -92,8 +90,8 @@ public class TestLegacyTagImporterFactory
     public void testFactoryCreatesImporterForSupportedFile() throws IOException
     {
         final File tempFile = this.temp.newFile();
-        final Importer importer = createImporter(asList(createConfig(tempFile.getAbsolutePath())),
-                tempFile.toPath());
+        final String glob = tempFile.getAbsolutePath().replace('\\', '/');
+        final Importer importer = createImporter(asList(createConfig(glob)), tempFile.toPath());
         assertThat(importer, notNullValue());
     }
 
@@ -112,8 +110,7 @@ public class TestLegacyTagImporterFactory
 
     private Importer createImporter(final List<PathConfig> pathConfigs, final Path path)
     {
-        return create(pathConfigs).createImporter(path, StandardCharsets.UTF_8,
-                this.listenerMock);
+        return create(pathConfigs).createImporter(path, StandardCharsets.UTF_8, this.listenerMock);
     }
 
     private LegacyTagImporterFactory create(final List<PathConfig> pathConfigs)

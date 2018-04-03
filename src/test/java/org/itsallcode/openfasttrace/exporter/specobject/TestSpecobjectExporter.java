@@ -163,7 +163,8 @@ public class TestSpecobjectExporter
         try (final ByteArrayOutputStream stream = new ByteArrayOutputStream())
         {
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-            final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream);
+            final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream,
+                    StandardCharsets.UTF_8.name());
             new SpecobjectExporter(asList(items).stream(),
                     new IndentingXMLStreamWriter(xmlWriter, " ", Newline.UNIX.toString()),
                     Newline.UNIX).runExport();

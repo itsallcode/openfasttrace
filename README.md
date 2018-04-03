@@ -7,15 +7,15 @@
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
 [![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
-# Installation
+## Installation
 
-## Dependencies
+### Dependencies
 
-### Runtime Dependencies
+#### Runtime Dependencies
 
 OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
 
-### Build time Dependencies
+#### Build time Dependencies
 
 At build time the following dependencies are additionally required.
 
@@ -28,11 +28,19 @@ At build time the following dependencies are additionally required.
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
 | [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
 
-## On Linux
+### On Linux
 
-### Ubuntu or Debian
+#### Ubuntu or Debian
+
+If you just want to run OFT:
 
     apt-get install openjdk-8-jre
+
+If you want to build OFT:
+
+    apt-get install openjdk-8-jdk maven
+
+All other build time dependencies are automatically downloaded by Maven.
 
 ## Development
 

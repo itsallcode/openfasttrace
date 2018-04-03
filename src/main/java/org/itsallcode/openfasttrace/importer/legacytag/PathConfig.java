@@ -21,11 +21,14 @@ package org.itsallcode.openfasttrace.importer.legacytag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.nio.file.*;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 
+/**
+ * The configuration of a single path that is imported by
+ * {@link LegacyTagImporter}.
+ */
 public class PathConfig
 {
     private static final String REGEX_PREFIX = "regex:";
@@ -37,6 +40,22 @@ public class PathConfig
     private final String coveredItemArtifactType;
     private final String tagArtifactType;
 
+    /**
+     * Create a new path configuration.
+     * 
+     * @param pattern
+     *            the pattern for the path, see
+     *            {@link FileSystem#getPathMatcher(String)} for supported
+     *            syntax.
+     * @param coveredItemArtifactType
+     *            the artifact type covered by the imported
+     *            {@link SpecificationItem}s.
+     * @param coveredItemNamePrefix
+     *            the common name prefix for the item covered by the imported
+     *            {@link SpecificationItem}.
+     * @param tagArtifactType
+     *            the artifact type of the imported {@link SpecificationItem}s.
+     */
     public PathConfig(final String pattern, final String coveredItemArtifactType,
             final String coveredItemNamePrefix, final String tagArtifactType)
     {
@@ -99,7 +118,7 @@ public class PathConfig
     {
         return "PathConfig [pattern=" + this.pattern + ", pathMatcher=" + this.pathMatcher
                 + ", coveredItemNamePrefix=" + this.coveredItemNamePrefix
-                + ", coveredItemArtifactType="
-                + this.coveredItemArtifactType + ", tagArtifactType=" + this.tagArtifactType + "]";
+                + ", coveredItemArtifactType=" + this.coveredItemArtifactType + ", tagArtifactType="
+                + this.tagArtifactType + "]";
     }
 }

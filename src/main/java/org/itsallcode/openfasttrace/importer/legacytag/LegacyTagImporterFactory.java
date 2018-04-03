@@ -38,18 +38,13 @@ public class LegacyTagImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(LegacyTagImporterFactory.class.getName());
 
-    private static LegacyTagImporterConfig defaultConfig = new LegacyTagImporterConfig();
+    private static LegacyTagImporterConfig defaultConfig = LegacyTagImporterConfig.empty();;
 
     private final Supplier<LegacyTagImporterConfig> config;
 
     public LegacyTagImporterFactory()
     {
         this(() -> defaultConfig);
-    }
-
-    public LegacyTagImporterFactory(final LegacyTagImporterConfig config)
-    {
-        this(() -> config);
     }
 
     public LegacyTagImporterFactory(final Supplier<LegacyTagImporterConfig> config)
@@ -63,9 +58,9 @@ public class LegacyTagImporterFactory extends ImporterFactory
         return findConfig(path).isPresent();
     }
 
-    private Optional<PathConfig> findConfig(final Path file)
+    private Optional<PathConfig> findConfig(final Path path)
     {
-        final Path relativePath = makeRelative(file);
+        final Path relativePath = makeRelative(path);
         return this.config.get().getPathConfigs().stream() //
                 .filter(config -> config.matches(relativePath)) //
                 .findFirst();
@@ -73,12 +68,9 @@ public class LegacyTagImporterFactory extends ImporterFactory
 
     private Path makeRelative(final Path path)
     {
-        final Path basePath = this.config.get().getBasePath();
-        if (basePath == null)
-        {
-            return path;
-        }
-        return basePath.relativize(path);
+        return this.config.get().getBasePath() //
+                .map(basePath -> basePath.relativize(path)) //
+                .orElse(path);
     }
 
     @Override
@@ -97,19 +89,19 @@ public class LegacyTagImporterFactory extends ImporterFactory
         return () -> runImporter(path, charset, config.get(), listener);
     }
 
-    private void runImporter(final Path file, final Charset charset, final PathConfig config,
+    private void runImporter(final Path path, final Charset charset, final PathConfig config,
             final ImportEventListener listener)
     {
-        LOG.finest(() -> "Creating importer for file " + file);
-        try (final LineReader reader = LineReader.create(file, charset))
+        LOG.finest(() -> "Creating importer for file " + path);
+        try (final LineReader reader = LineReader.create(path, charset))
         {
-            final LegacyTagImporter importer = new LegacyTagImporter(config, file, reader,
+            final LegacyTagImporter importer = new LegacyTagImporter(config, path, reader,
                     listener);
             importer.runImport();
         }
         catch (final IOException e)
         {
-            throw new ImporterException("Error importing file '" + file + "': " + e.getMessage(),
+            throw new ImporterException("Error importing file '" + path + "': " + e.getMessage(),
                     e);
         }
     }

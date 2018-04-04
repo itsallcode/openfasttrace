@@ -78,7 +78,7 @@ mvn license:update-project-license license:update-file-header
 3. Run command
 
 	```bash
-	$ mvn deploy
+	mvn deploy
 	```
 
 4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.

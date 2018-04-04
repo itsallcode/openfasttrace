@@ -82,4 +82,6 @@ mvn license:update-project-license license:update-file-header
 	```
 
 4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
-5. Sign in at https://bintray.com/ and publish the uploaded artifacts.
+5. Sign in at https://bintray.com
+6. Go to https://bintray.com/itsallcode/itsallcode/openfasttrace
+7. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link.

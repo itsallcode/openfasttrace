@@ -149,6 +149,6 @@ public class TestLegacyTagImporterFactory
 
     private PathConfig glob(final String globPattern)
     {
-        return new PathConfig("glob:" + globPattern, null, null, null);
+        return PathConfig.createPatternConfig("glob:" + globPattern, null, null, null);
     }
 }

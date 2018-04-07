@@ -41,7 +41,7 @@ public class PathConfig
     private final String tagArtifactType;
 
     /**
-     * Create a new path configuration.
+     * Create a new pattern based path configuration.
      * 
      * @param pattern
      *            the pattern for the path, see
@@ -56,11 +56,12 @@ public class PathConfig
      * @param tagArtifactType
      *            the artifact type of the imported {@link SpecificationItem}s.
      */
-    public PathConfig(final String pattern, final String coveredItemArtifactType,
-            final String coveredItemNamePrefix, final String tagArtifactType)
+    public static PathConfig createPatternConfig(final String pattern,
+            final String coveredItemArtifactType, final String coveredItemNamePrefix,
+            final String tagArtifactType)
     {
-        this(pattern, createMatcher(pattern), coveredItemArtifactType, coveredItemNamePrefix,
-                tagArtifactType);
+        return new PathConfig(pattern, createMatcher(pattern), coveredItemArtifactType,
+                coveredItemNamePrefix, tagArtifactType);
     }
 
     private PathConfig(final String pattern, final PathMatcher pathMatcher,

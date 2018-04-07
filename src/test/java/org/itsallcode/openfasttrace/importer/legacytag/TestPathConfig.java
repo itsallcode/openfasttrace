@@ -27,7 +27,6 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
 import org.junit.Test;
 
 public class TestPathConfig
@@ -103,6 +102,6 @@ public class TestPathConfig
 
     private PathConfig create(final String pattern)
     {
-        return new PathConfig(pattern, null, null, null);
+        return PathConfig.createPatternConfig(pattern, null, null, null);
     }
 }

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
 class LegacyTagImporter implements Importer
 {

@@ -27,6 +27,7 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Test;
 
 public class TestPathConfig

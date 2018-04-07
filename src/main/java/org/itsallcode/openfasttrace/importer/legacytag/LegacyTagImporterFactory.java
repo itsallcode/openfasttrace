@@ -33,6 +33,8 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
 public class LegacyTagImporterFactory extends ImporterFactory
 {

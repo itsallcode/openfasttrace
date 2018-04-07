@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.legacytag.config;
 
 /*-
  * #%L
@@ -94,7 +94,7 @@ public class PathConfig
         return this.pattern;
     }
 
-    boolean matches(final Path file)
+    public boolean matches(final Path file)
     {
         return this.pathMatcher.matches(file);
     }

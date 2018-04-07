@@ -81,7 +81,7 @@ public class TestPathConfig
     @Test
     public void testGetPatternWithoutPrefix()
     {
-        assertThat(create("pattern").getDescription(), equalTo("pattern"));
+        assertThat(create("pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test

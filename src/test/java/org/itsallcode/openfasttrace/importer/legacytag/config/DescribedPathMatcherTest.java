@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.Test;
 
 public class DescribedPathMatcherTest
@@ -52,11 +53,27 @@ public class DescribedPathMatcherTest
         assertMatches("/rel/path", false);
         assertMatches("rel/path/", true);
         assertMatches("rel/path1", false);
-        assertMatches("REL/path", true);
-        assertMatches("rel/PATH", true);
         assertMatches("rel/path.txt", false);
         assertMatches("path", false);
         assertMatches("rel", false);
+    }
+
+    @Test
+    public void testListBasedMatcherIsCaseInsensitiveUnderWindows()
+    {
+        OsDetector.assumeRunningOnWindows();
+        createListMatcher("rel/path");
+        assertMatches("REL/path", true);
+        assertMatches("rel/PATH", true);
+    }
+
+    @Test
+    public void testListBasedMatcherIsCaseSensitiveUnderUnix()
+    {
+        OsDetector.assumeRunningOnUnix();
+        createListMatcher("rel/path");
+        assertMatches("REL/path", false);
+        assertMatches("rel/PATH", false);
     }
 
     @Test
@@ -100,6 +117,7 @@ public class DescribedPathMatcherTest
         assertMatches("path", false);
         assertMatches("path/", false);
         assertMatches("path/file", true);
+        assertMatches("path/FILE", true);
         assertMatches("path/dir/", true);
         assertMatches("path/dir/file", true);
     }

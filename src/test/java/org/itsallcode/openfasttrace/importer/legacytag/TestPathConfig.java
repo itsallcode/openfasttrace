@@ -81,19 +81,19 @@ public class TestPathConfig
     @Test
     public void testGetPatternWithoutPrefix()
     {
-        assertThat(create("pattern").getPattern(), equalTo("pattern"));
+        assertThat(create("pattern").getDescription(), equalTo("pattern"));
     }
 
     @Test
     public void testGetPatternWithGlobPrefix()
     {
-        assertThat(create("glob:pattern").getPattern(), equalTo("glob:pattern"));
+        assertThat(create("glob:pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test
     public void testGetPatternWithRegexPrefix()
     {
-        assertThat(create("regex:pattern").getPattern(), equalTo("regex:pattern"));
+        assertThat(create("regex:pattern").getDescription(), equalTo("regex:pattern"));
     }
 
     private void assertMatches(final String pattern, final String path, final boolean expected)

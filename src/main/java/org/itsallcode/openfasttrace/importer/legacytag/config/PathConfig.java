@@ -21,7 +21,8 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 
@@ -31,11 +32,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
  */
 public class PathConfig
 {
-    private static final String REGEX_PREFIX = "regex:";
-    private static final String GLOB_PREFIX = "glob:";
-
-    private final String pattern;
-    private final PathMatcher pathMatcher;
+    private final DescribedPathMatcher pathMatcher;
     private final String coveredItemNamePrefix;
     private final String coveredItemArtifactType;
     private final String tagArtifactType;
@@ -60,38 +57,22 @@ public class PathConfig
             final String coveredItemArtifactType, final String coveredItemNamePrefix,
             final String tagArtifactType)
     {
-        return new PathConfig(pattern, createMatcher(pattern), coveredItemArtifactType,
-                coveredItemNamePrefix, tagArtifactType);
+        return new PathConfig(DescribedPathMatcher.createPatternMatcher(pattern),
+                coveredItemArtifactType, coveredItemNamePrefix, tagArtifactType);
     }
 
-    private PathConfig(final String pattern, final PathMatcher pathMatcher,
-            final String coveredItemArtifactType, final String coveredItemNamePrefix,
-            final String tagArtifactType)
+    private PathConfig(final DescribedPathMatcher pathMatcher, final String coveredItemArtifactType,
+            final String coveredItemNamePrefix, final String tagArtifactType)
     {
-        this.pattern = pattern;
         this.pathMatcher = pathMatcher;
         this.coveredItemNamePrefix = coveredItemNamePrefix;
         this.coveredItemArtifactType = coveredItemArtifactType;
         this.tagArtifactType = tagArtifactType;
     }
 
-    private static PathMatcher createMatcher(final String pattern)
+    public String getDescription()
     {
-        return FileSystems.getDefault().getPathMatcher(addMissingPatternPrefix(pattern));
-    }
-
-    private static String addMissingPatternPrefix(final String pattern)
-    {
-        if (pattern.startsWith(GLOB_PREFIX) || pattern.startsWith(REGEX_PREFIX))
-        {
-            return pattern;
-        }
-        return GLOB_PREFIX + pattern;
-    }
-
-    public String getPattern()
-    {
-        return this.pattern;
+        return this.pathMatcher.getDescription();
     }
 
     public boolean matches(final Path file)
@@ -117,9 +98,8 @@ public class PathConfig
     @Override
     public String toString()
     {
-        return "PathConfig [pattern=" + this.pattern + ", pathMatcher=" + this.pathMatcher
-                + ", coveredItemNamePrefix=" + this.coveredItemNamePrefix
-                + ", coveredItemArtifactType=" + this.coveredItemArtifactType + ", tagArtifactType="
-                + this.tagArtifactType + "]";
+        return "PathConfig [pathMatcher=" + this.pathMatcher.toString() + ", coveredItemNamePrefix="
+                + this.coveredItemNamePrefix + ", coveredItemArtifactType="
+                + this.coveredItemArtifactType + ", tagArtifactType=" + this.tagArtifactType + "]";
     }
 }

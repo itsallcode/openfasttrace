@@ -1,19 +1,19 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
-System Requirement Specification OpenFastTrace
+# System Requirement Specification OpenFastTrace
 
-# Introduction
+## Introduction
 
 OpenFastTrace (OFT) is a requirement tracing suite written in Java.
 
-## Goals
+### Goals
 
 The OFT's goals are
 
-  * Fast
-  * Automation friendly
-  * Useful
-  * Platform independent
+* Fast
+* Automation friendly
+* Useful
+* Platform independent
 
 A requirement tracing suite must be fast in order to be used. Development time is precious and requirement tracing does not have a high priority compared to building and testing the software regularly. This means that tracing will only be accepted by the users if it does not eat away their development time.
 
@@ -23,7 +23,7 @@ It looks strange first that "useful" needs to be spelled out as a goal. The reas
 
 OFT aims to help developers independently of their platform. I should not matter if you are developing on Linux, a Mac, BSD, Windows. Also it should not matter which programming language or development environment you are using. OFT aims to be portable and provide interfaces that allow integration into your existing toolchain.
 
-## Terms and Abbreviations
+### Terms and Abbreviations
 
 The following list gives you an overview of terms and abbreviations commonly used in OFT documents.
 
@@ -40,13 +40,13 @@ The following list gives you an overview of terms and abbreviations commonly use
 
 In the following subsections central terms are explained in more detail.
 
-### Specification Items
+#### Specification Items
 
 In OFT requirements and artifacts covering them are represented by [specification items](#specification-item). Each item is a container for attributes of requirements and covering artifacts like the name, artifact type and the location where OFT found them.
 
 A specification item can also contain information about its relationships to other specification items. For more details about those relationships check [section "tracing"](#tracing). 
 
-### Coverage
+#### Coverage
 
 Coverage is a measure of how well the tracing result matches the required relations between specification items.
 
@@ -54,16 +54,16 @@ Full coverage is what a project aims to achieve: all required relations between 
 
 An item is undercovered if at least one of the required relations is missing. It is overcovered if at least one relation exists that is not required.
 
-# Features
+## Features
 
-## Requirement Tracing
+### Requirement Tracing
 `feat~requirement-tracing~1`
 
 OFT traces requirements from specification to any kind of coverage (document, implementation, test, etc.).
 
 Needs: req
 
-## Markdown Import
+### Markdown Import
 `feat~markdown-import~1`
 
 OFT imports specification items from Markdown files.
@@ -82,7 +82,7 @@ maintained over a long time.
 
 Needs: req
 
-## ReqM2 Import
+### ReqM2 Import
 `feat~reqm2-import~1`
 
 OFT imports specification items from ReqM2 files.
@@ -93,7 +93,7 @@ One of the OpenFastTrace design goals is to provide a Java-based drop-in replace
 
 Needs: req
 
-## ReqM2 Export
+### ReqM2 Export
 `feat~reqm2-export~1`
 
 OFT exports specification items to ReqM2 files.
@@ -104,11 +104,11 @@ One of the OpenFastTrace design goals is to provide a Java-based drop-in replace
 
 Needs: req
 
-## Tracing Reports
+### Tracing Reports
 
 A tracing report is a representation of the results of the requirement tracing OFT performs. Depending on their use, reports can be designed to be human readable, machine readable or both.
 
-### Plain Text Report
+#### Plain Text Report
 `feat~plain-text-report~1`
 
 OFT produces a tracing report in plain text.
@@ -119,9 +119,9 @@ This can be read directly as console output or with any text editor.
 
 Needs: req
 
-## User Interface
+### User Interface
 
-### Command Line Interface
+#### Command Line Interface
 `feat~command-line-interface~1`
 
 OFT offers a command line interface.
@@ -132,11 +132,11 @@ Running traces automatically in a scripted environment is the most important use
 
 Needs: req
 
-# Functional Requirements
+## Functional Requirements
 
-## Anatomy of Specification Items
+### Anatomy of Specification Items
 
-### Specification Item
+#### Specification Item
 `req~specification-item~2`
 
 A specification item consists of the following parts:
@@ -172,9 +172,9 @@ Tags are a way to label an artifact intended for grouping.
 
 Needs: dsn
 
-## Supported Formats
+### Supported Formats
 
-### Markdown
+#### Markdown
 
 Markdown is a simple ASCII-based markup format that is designed to be human readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.
 
@@ -184,7 +184,7 @@ OFT defines a Markdown format that we call "Requirement-Enhanced Markdown" which
 
 For backward compatibility OFT supports a variant of this format that was introduced at Elektrobit. This format is a little bit closer to ReqM2, the predecessor that sparked the OFT idea. We recommend using standard OFT Markdown format in new documents though since this format is cleaner.
 
-#### Markdown Standard Syntax
+##### Markdown Standard Syntax
 `req~markdown-standard-syntax~1`
 
 The OFT Markdown specification artifact format uses the standard markdown syntax without proprietary extensions.
@@ -199,7 +199,7 @@ Covers:
 
 Needs: dsn
 
-#### Markdown Outline Readable
+##### Markdown Outline Readable
 The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
 
 Rationale:
@@ -212,7 +212,7 @@ Covers:
 
 Needs: dsn
 
-#### Support for EB Markdown Requirements
+##### Support for EB Markdown Requirements
 `req~eb-markdown~1`
 
 In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elektrobit's variant.
@@ -227,9 +227,9 @@ Covers:
 
 Needs: dsn
 
-## Tracing
+### Tracing
 
-### Outgoing Coverage Link Status
+#### Outgoing Coverage Link Status
 `req~tracing.outgoing-coverage-link-status~1`
 
 _Outgoing coverage link_ means links that originate from a specification item and end at another specification item. 
@@ -250,7 +250,7 @@ Covers:
 
 Needs: dsn
 
-### Incoming Coverage Link Status
+#### Incoming Coverage Link Status
 `req~tracing.incoming-coverage-link-status~1`
 
 _Incoming coverage link_ means links that end at a specification item and originate at another specification item
@@ -269,7 +269,7 @@ Covers:
 
 Needs: dsn
 
-### Deep Coverage
+#### Deep Coverage
 `req~tracing.deep-coverage~1`
 
 OFT marks a specification item as _covered deeply_ if this item - and all items it needs coverage from - are covered recursively.
@@ -281,7 +281,7 @@ Covers:
 
 Needs: dsn
 
-### Duplicate Items
+#### Duplicate Items
 `req~tracing.duplicate-items~1`
 
 OFT marks a specification item as _duplicate_ if other items with the same ID exist.
@@ -292,7 +292,7 @@ Covers:
 
 Needs: dsn
 
-### Defect Items
+#### Defect Items
 `req~tracing.defect-items~2`
 
 OFT marks a specification item as _defect_ if the following criteria apply
@@ -308,7 +308,7 @@ Covers:
 
 Needs: dsn
 
-### Link Cycle
+#### Link Cycle
 `req~tracing.link-cycle~1`
 
 OFT detects if specification items are linked in a cycle.
@@ -322,7 +322,7 @@ Covers:
 
 Needs: dsn
 
-## Strict and Relaxed Coverage
+### Strict and Relaxed Coverage
 
 Users can choose between two modes of coverage determination: strict and relaxed.
 
@@ -330,7 +330,7 @@ Strict coverage means that the covering item must have a status of `Approved` in
 
 In Relaxed coverage mode OFT accepts any status but `Rejected` of the covering item. The reason why this mode is necessary is that if the team is using requirement states, then they will often have the situation that not all requirements in the document that needs to be covered are already approved. On the other hand the document that is supposed to provide the coverage can usually not wait to start covering until the input document is finalized. This would cause too much project delay. Relaxed mode allows the covering document to check whether all requirements are covered _before_ the input document is finally approved.
 
-### Strict and Relaxed Coverage Mode
+#### Strict and Relaxed Coverage Mode
 `req~strict_and_relaxed_coverage_mode~1`
 
 OFT allows users to choose between the following coverage evaluation modes:
@@ -343,7 +343,7 @@ Covers:
 
 Needs: dsn 
 
-## Partial Tracing
+### Partial Tracing
 Usually the responsibility of document authors or coders when it comes to tracing is to make sure that they cover the input documents above. Only integrators or quality engineers are concerned with full chain coverage.
 
 If the users try to run a regular trace without feeding in the artifacts all the way to the bottom level of the tracing chain, the coverage check will always report errors because of missing lower level coverage.
@@ -356,7 +356,7 @@ Kim is a software architect and it is her job to cover the system requirements c
 
 Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
 
-#### Include Only Artifact Types
+##### Include Only Artifact Types
 `req~include-only-artifact-types~1`
 
 OFT gives users the option to include only a configurable set of artifact types during processing.
@@ -367,7 +367,7 @@ Covers:
 
 Needs: dsn
 
-#### Include Only Tags
+##### Include Only Tags
 `req~include-only-tags~1`
 
 OFT gives users the option to include only specification items contained in configurable set of tags during processing.
@@ -378,18 +378,18 @@ Covers:
 
 Needs: dsn
 
-## Reports
+### Reports
 Reports are the main way to find out if a projects requirements are covered properly.
 
-### Common Report Functions
+#### Common Report Functions
 
-### Plain Text Report
+#### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
 
 1. Input in build chains
 2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
 
-#### Plain Text Report Summary
+##### Plain Text Report Summary
 `req~reporting.plain-text.summary~2`
 
 The summary in the plain text report includes:
@@ -404,7 +404,7 @@ Covers:
 
 Needs: dsn
 
-#### Plain Text Report Specification Item Overview
+##### Plain Text Report Specification Item Overview
 `req~reporting.plain-text.specification-item-overview~2`
 
 An item summary consist in the plain text report includes
@@ -425,7 +425,7 @@ Covers:
 
 Needs: dsn
 
-#### Plain Text Report Link Details
+##### Plain Text Report Link Details
 `req~reporting.plain-text.link-details~1`
 
 The link detail section shows for all links of a specification item:
@@ -440,12 +440,12 @@ Covers:
 
 Needs: dsn
 
-## Requirement Format Conversion
+### Requirement Format Conversion
 OFT supports conversion from one requirement format into another for example from Markdown to ReqM2.
 
 Requirement conversion allows using the input formats OFT support in combination with external tracing tool chains by converting the inputs into the format the toolchain expects.
 
-### ReqM2 Export
+#### ReqM2 Export
 `req~conversion.reqm2-export~1`
 
 OFT exports to ReqM2's "SpecObject" format.
@@ -456,11 +456,11 @@ Covers:
 
 Needs: dsn
 
-## User Interface
+### User Interface
 
-### Requirement Tracing
+#### Requirement Tracing
 
-#### Requirement Tracing Command
+##### Requirement Tracing Command
 `req~cli.tracing.command~1`
 
 OFT allows requirement tracing via the command line.
@@ -472,7 +472,7 @@ Covers:
   
 Needs: dsn
 
-#### Tracing Output Format
+##### Tracing Output Format
 `req~cli.tracing.output-format~1`
 
 Users can select one of the following requirement tracing output formats (aka. "report formats"):
@@ -486,7 +486,7 @@ Covers:
 
 Needs: dsn
 
-#### Default Tracing Output Format
+##### Default Tracing Output Format
 `req~cli.tracing.default-output-format~1`
 
 OFT uses plain text as requirement tracing output format if the user does not select one. 
@@ -498,7 +498,7 @@ Covers:
 
 Needs: dsn
 
-#### Tracing Exit Status
+##### Tracing Exit Status
 
 `req~cli.tracing.exit-status~1`
 
@@ -510,9 +510,9 @@ Covers:
   
 Needs: dsn
 
-### Requirement Format Conversion
+#### Requirement Format Conversion
 
-#### Requirement Conversion Command
+##### Requirement Conversion Command
 `req~cli.conversion.command~1`
 
 OFT allows requirement tracing via the command line.
@@ -524,7 +524,7 @@ Covers:
   
 Needs: dsn
 
-#### Conversion Output Format
+##### Conversion Output Format
 `req~cli.conversion.output-format~1`
 
 Users can select one of the following conversion output formats (aka. "export formats"):
@@ -538,7 +538,7 @@ Covers:
 
 Needs: dsn
 
-#### Default Conversion Output Format
+##### Default Conversion Output Format
 `req~cli.conversion.default-output-format~1`
 
 OFT uses ReqM2 as default conversion format if the user does not select one.
@@ -550,9 +550,9 @@ Covers:
 
 Needs: dsn
 
-### Common
+#### Common
 
-#### Input Selection
+##### Input Selection
 `req~cli.input-selection~1`
 
 Users can select requirement sources as combinations of files and directories.
@@ -564,7 +564,7 @@ Covers:
 
 Needs: dsn
 
-#### Input Directory Selection
+##### Input Directory Selection
 `req~cli.input-directory-selection~1`
 
 Users can select zero or more directories below which files and sub-directories are imported recursively.
@@ -577,7 +577,7 @@ Covers:
 
 Needs: dsn
 
-#### Default Input
+##### Default Input
 `req~cli.default-input~1`
 
 If users select neither files nor directories for input, OFT imports from the current working directory recursively.
@@ -590,7 +590,7 @@ Covers:
 
 Needs: dsn
 
-#### Newline Format
+##### Newline Format
 `req~cli.newline-format~1`
 
 Users can choose between Unix-style and Windows-style newline encoding for outputs.
@@ -607,7 +607,7 @@ Covers:
 
 Needs: dsn
 
-#### Default Newline Format
+##### Default Newline Format
 `req~cli.default-newline-format~1`
 
 Unless selected by the user, OFT uses the native newline format of the platform it runs on for outputs.

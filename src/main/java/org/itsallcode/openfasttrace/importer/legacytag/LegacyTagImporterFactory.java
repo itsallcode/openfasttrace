@@ -82,11 +82,11 @@ public class LegacyTagImporterFactory extends ImporterFactory
         final Optional<PathConfig> config = findConfig(path);
         if (!config.isPresent())
         {
-            final List<String> patterns = this.config.get().getPathConfigs().stream() //
+            final List<String> descriptions = this.config.get().getPathConfigs().stream() //
                     .map(PathConfig::getDescription) //
                     .collect(toList());
             throw new ImporterException("File '" + path
-                    + "' not supported for import, supported patterns: " + patterns);
+                    + "' not supported for import, supported paths: " + descriptions);
         }
         return () -> runImporter(path, charset, config.get(), listener);
     }

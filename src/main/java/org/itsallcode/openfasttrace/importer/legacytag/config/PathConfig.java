@@ -38,7 +38,7 @@ public class PathConfig
     private final String tagArtifactType;
 
     /**
-     * Create a new pattern based path configuration.
+     * Create a new pattern-based path configuration.
      * 
      * @param pattern
      *            the pattern for the path, see
@@ -98,8 +98,9 @@ public class PathConfig
     @Override
     public String toString()
     {
-        return "PathConfig [pathMatcher=" + this.pathMatcher.toString() + ", coveredItemNamePrefix="
-                + this.coveredItemNamePrefix + ", coveredItemArtifactType="
-                + this.coveredItemArtifactType + ", tagArtifactType=" + this.tagArtifactType + "]";
+        return "PathConfig [pathMatcher='" + this.pathMatcher.getDescription()
+                + "', coveredItemNamePrefix=" + this.coveredItemNamePrefix
+                + ", coveredItemArtifactType=" + this.coveredItemArtifactType + ", tagArtifactType="
+                + this.tagArtifactType + "]";
     }
 }

@@ -86,6 +86,26 @@ public class DescribedPathMatcherTest
     }
 
     @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlash()
+    {
+        createListMatcher("C:/abs/path");
+        assertMatches("C:/abs/path", true);
+        assertMatches("C:\\abs\\path", false);
+        assertMatches("abs/path", false);
+        assertMatches("C:/abs/path/", true);
+    }
+
+    @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslash()
+    {
+        createListMatcher("C:\\abs\\path");
+        assertMatches("C:/abs/path", false);
+        assertMatches("C:\\abs\\path", true);
+        assertMatches("abs/path", false);
+        assertMatches("C:\\abs\\path\\", false);
+    }
+
+    @Test
     public void testListBasedMatcherMatchesMultiplePaths()
     {
         createListMatcher("path1", "path2");

@@ -13,8 +13,8 @@ Syntax definitions in this document use the [Augmented Backus-Naur Form][bib.abn
 
 The following definitions are used frequently throughout the document:
 
-   * ANY - any valid character
-   * LINEBREAK = the line break character of the platform
+* ANY - any valid character
+* LINEBREAK = the line break character of the platform
 
 # Constraints
 
@@ -29,9 +29,9 @@ Given:
   r<sub>n</sub>, n ∊ {1..N}
 
   p<sub>m</sub>, m ∊ {1..M}
-  
+
   a<sub>n,l</sub>, l ∊ {1..L<sub>n</sub>}
-  
+
   c<sub>m,k</sub>, k ∊ {1..M<sub>m</sub>}
 
 Where _r_ are the requesters, _p_ the providers, _a_ artifacts required by providers and _c_ the coverage provided.
@@ -97,7 +97,7 @@ The specification list builder is an import event listener that creates a list o
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
 
 ## Linker
-The linker is responsible for turning the imported [specification items](#specification-item) collected by the [importers](#importers) into [linked specification items](#linked-specification-item). 
+The linker is responsible for turning the imported [specification items](#specification-item) collected by the [importers](#importers) into [linked specification items](#linked-specification-item).
 
 ## Tracer
 The tracer consumes the list of [linked specification items](#linked-specification-item) and evaluates the link status for each link.
@@ -116,7 +116,7 @@ API users select exporters via their name as strings.
 
 ## Import
 
-Depending on the source format a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an (import event listener)[#import-event-listener] consumes.
+Depending on the source format a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an [import event listener](#import-event-listener) consumes.
 
 Common parts of the import like filtering out unnecessary items or attributes are handled by the listener.
 
@@ -128,6 +128,7 @@ The most resource-friendly way to enable partial tracing is to ignore unnecessar
 `dsn~filtering-by-artifact-types-during-import~1`
 
 When OFT is configured to restrict inclusion to one or more artifact types the [specification list builder](#specification-list-builder) imports the following elements only if they match at least one of the configured types:
+
 1. "Needs coverage" markers
 2. Specification items as a whole
 3. Links covering items with this artifact type
@@ -135,18 +136,18 @@ When OFT is configured to restrict inclusion to one or more artifact types the [
 
 Covers:
 
-  * `req~include-only-artifact-types~1`
+* `req~include-only-artifact-types~1`
 
 Needs: impl, utest, itest
 
 #### Filtering by Tags Import
 `dsn~filtering-by-tags-during-import~1`
 
-When OFT is configured to restrict inclusion to tags the [specification list builder](#specification-list-builder) imports a specification item only if at least one of it tags is contained in the configured set of tags. 
+When OFT is configured to restrict inclusion to tags the [specification list builder](#specification-list-builder) imports a specification item only if at least one of it tags is contained in the configured set of tags.
 
 Covers:
 
-  * `req~include-only-tags~1`
+* `req~include-only-tags~1`
 
 Needs: impl, utest, itest
 
@@ -158,11 +159,11 @@ Needs: impl, utest, itest
 The [linker](#linker) component iterates over all needed artifact types of all specification items and determines if and which coverage exists for each.
 
 Comment:
-Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component. 
+Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component.
 
 Covers:
 
-  * `req~tracing.outgoing-coverage-link-status~1`
+* `req~tracing.outgoing-coverage-link-status~1`
 
 Needs: utest, impl
 
@@ -182,7 +183,7 @@ The possible results are:
 
 Covers:
 
-  * `req~tracing.outgoing-coverage-link-status~1`
+* `req~tracing.outgoing-coverage-link-status~1`
 
 Needs: utest, impl
 
@@ -200,7 +201,7 @@ The possible results are:
 
 Covers:
 
-  * `req~tracing.incoming-coverage-link-status~1`
+* `req~tracing.incoming-coverage-link-status~1`
 
 Needs: impl, utest
 
@@ -211,7 +212,7 @@ The [Linked Specification Item](#linked-specification-item) declares itself _cov
 
 Covers:
 
-  * `req~tracing.deep-coverage~1`
+* `req~tracing.deep-coverage~1`
 
 Needs: impl, utest
 
@@ -222,7 +223,7 @@ The [tracer](#tracer) marks a [specification item](#specification-item) as a _du
 
 Covers:
 
-  * `req~tracing.duplicate-items~1`
+* `req~tracing.duplicate-items~1`
 
 Needs: impl, utest
 
@@ -230,17 +231,17 @@ Needs: impl, utest
 `dsn~tracing.defect-items~2`
 
 The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if the following criteria apply to the item
-  
+
     has duplicates
     or (not rejected
         and (any outgoing coverage link has a different status than "Covers"
              or not covered deeply
             )
        )
-  
+
 Covers:
 
-  * `req~tracing.defect-items~2`
+* `req~tracing.defect-items~2`
 
 Needs: impl, utest
 
@@ -251,7 +252,7 @@ The [tracer](#tracer) detects cycles in links between [Linked Specification Item
 
 Covers:
 
-  * `req~tracing.link-cycle~1`
+* `req~tracing.link-cycle~1`
 
 Needs: impl, utest
 
@@ -264,13 +265,13 @@ Needs: impl, utest
 
 The summary in the plain text report includes:
 
-  * Result status
-  * Total number of specification items
-  * Total number of specification items that are defect (if any)
+* Result status
+* Total number of specification items
+* Total number of specification items that are defect (if any)
 
 Covers:
 
-  * `req~reporting.plain-text.summary~2`
+* `req~reporting.plain-text.summary~2`
 
 Needs: impl, utest
 
@@ -280,7 +281,7 @@ Needs: impl, utest
 An item summary consist in the plain text report includes
 
   1. Status
-  2. Number of broken incoming links 
+  2. Number of broken incoming links
   3. Total number of incoming links
   4. Number of broken outgoing links
   5. Total number of outgoing links
@@ -291,7 +292,7 @@ An item summary consist in the plain text report includes
 
 Covers:
 
-  * `req~reporting.plain-text.specification-item-overview~2`
+* `req~reporting.plain-text.specification-item-overview~2`
 
 Needs: impl, utest
 
@@ -306,13 +307,13 @@ The link detail section shows for all links of a specification item:
 
 Covers:
 
-  * `req~reporting.plain-text.link-details~1`
+* `req~reporting.plain-text.link-details~1`
 
 Needs: impl, utest
 
 ## Requirement Format Conversion
 
-#### ReqM2 Export
+### ReqM2 Export
 `dsn~conversion.reqm2-export~1`
 
 OFT exports to ReqM2's "SpecObject" format.
@@ -322,7 +323,7 @@ The ReqM2 format is specified in the ReqM2 handbook by Elektrobit.
 
 Covers:
 
-  * `req~conversion.reqm2-export~1`
+* `req~conversion.reqm2-export~1`
 
 Needs: impl, itest
 
@@ -339,21 +340,21 @@ Needs: impl, itest
 
 A `SpecificationItem` consists of the following parts:
 
-  * ID (`SpecificationItemId`)
-  * Title (`String`, optional)
-  * Status (`Enum`, optional)
-  * Description (`String`, optional)
-  * Rationale (`String`, optional)
-  * Comment (`String`, optional)
-  * Source file + line (`String`, `int`, optional)
-  * Covers (List of `SpecificationItemId`, optional)
-  * Depends (List of `SpecificationItemId`, optional)
-  * Needs (List of `String`, optional)
-  * Tags (List of `String`, optional)
+* ID (`SpecificationItemId`)
+* Title (`String`, optional)
+* Status (`Enum`, optional)
+* Description (`String`, optional)
+* Rationale (`String`, optional)
+* Comment (`String`, optional)
+* Source file + line (`String`, `int`, optional)
+* Covers (List of `SpecificationItemId`, optional)
+* Depends (List of `SpecificationItemId`, optional)
+* Needs (List of `String`, optional)
+* Tags (List of `String`, optional)
 
 Covers:
 
-  * `req~specification-item~2`
+* `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -367,7 +368,7 @@ This allows navigating between specification items.
 
 Covers:
 
-  * `req~specification-item~2`
+* `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -376,13 +377,13 @@ Needs: impl, utest
 
 A `SpecificationItemId` consists of:
 
-  * Artifact type (String)
-  * name (String)
-  * revision (number)
+* Artifact type (String)
+* name (String)
+* revision (number)
 
 Covers:
 
-  * `req~specification-item~2`
+* `req~specification-item~2`
 
 Needs: impl, utest
 
@@ -394,18 +395,18 @@ Needs: impl, utest
 A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
-    
+
     type = 1*ALPHA
-    
+
     id = id-fragment *("." id-fragment)
-    
+
     id-fragment = ALPHA *(ALPHA / DIGIT / "_" / "-")
 
     revision = 1*DIGIT
 
 Rationale:
 
-The ID must only contain characters that can be used in URIs without quoting. This makes linking in formats like Markdown or HTML clean and easy. 
+The ID must only contain characters that can be used in URIs without quoting. This makes linking in formats like Markdown or HTML clean and easy.
 Requirement type and revision must be immediately recognizable from the requirement ID. The built-in revision number makes links break if a requirement is updated - a desired behavior.
 
 Comment:
@@ -418,7 +419,7 @@ Otherwise users would be forced to invent different names for each link in the c
 
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -433,9 +434,9 @@ Markdown titles show up in the outline and are a natural way of defining a requi
 
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
-Needs: impl, utest 
+Needs: impl, utest
 
 #### Markdown Requirement References
 `dsn~md.requirement-references~1`
@@ -443,14 +444,14 @@ Needs: impl, utest
 In Markdown specification item references have the following format:
 
     reference = (plain-reference / url-style-link)
-    
+
     plain-reference = requirement-id
-    
+
     url-style-link = "[" link-text "]" "(" "#" requirement-id ")"
-    
+
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -460,9 +461,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links that cover a different specification item.
 
     covers-list = covers-header 1*(LINEBREAK covers-line)
-    
+
     covers-header = "Covers:" *WSP
-    
+
     covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -473,7 +474,7 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -483,9 +484,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
-    
+
     depends-header = "Depends:" *WSP
-    
+
     depends-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -496,7 +497,7 @@ Defining a link should be as natural and simple as possible in Markdown. It must
 
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -506,9 +507,9 @@ Needs: impl, utest
 The Markdown Importer supports the following compact format for defining the list of artifact types that are needed to fully cover the current specification item.
 
     needs-list = needs-header 1*(LINEBREAK depends-line)
-    
+
     needs-header = "Needs:" *WSP
-    
+
     needs-line = *WSP "*" *WSP reference
 
 Rationale:
@@ -517,7 +518,7 @@ This alternative style of the "needs" list provides backward compatibility to El
 
 Covers:
 
-  * `req~markdown-standard-syntax~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 
@@ -536,10 +537,10 @@ Unlike the the references to other requirements, tags are usually very short, so
 
 Covers:
 
-  * `req~eb-markdown~1`
+* `req~eb-markdown~1`
 
 Needs: impl, utest
-  
+
 #### Legacy Markdown Specification Item ID Format
 `dsn~md.eb-markdown-id~1`
 
@@ -547,7 +548,7 @@ Alternatively a Markdown requirement ID can have the following format
 
     requirement-id = *1(type~)type ":" id "," *WSP "v" revision
 
-See `dsn~md.specification-item-id-format~2` for definitions of the ABNF sub-rules referred to here. 
+See `dsn~md.specification-item-id-format~2` for definitions of the ABNF sub-rules referred to here.
 
 Rationale:
 
@@ -559,7 +560,7 @@ This format is deprecated. Please use the one specified in `dsn~md.specification
 
 Covers:
 
-  * `req~eb-markdown~1`
+* `req~eb-markdown~1`
 
 Needs: impl, utest
 
@@ -574,8 +575,8 @@ The CLI expects one of the following commands as first unnamed command line para
 
 Covers:
 
-  * `req~cli.tracing.command~1`
-  * `req~cli.conversion.command~1`
+* `req~cli.tracing.command~1`
+* `req~cli.conversion.command~1`
 
 Needs: impl, itest
 
@@ -586,15 +587,15 @@ Needs: impl, itest
 
 The CLI accepts the following two variants for defining input files:
 
-  * A list of files
-  * A list of directories
+* A list of files
+* A list of directories
 
 In both cases relative and absolute paths are accepted. "Relative" means in relation to the current working directory.
 
 Covers:
 
-  * `req~cli.input-selection~1`
-  
+* `req~cli.input-selection~1`
+
 Needs: impl, itest
 
 #### Input Directory Recursive Traversal
@@ -604,7 +605,7 @@ The Importer reads all requirement input files from all input directories recurs
 
 Covers:
 
-  * `req~cli.input-directory-selection~1`
+* `req~cli.input-directory-selection~1`
 
 Needs: impl, itest
 
@@ -615,7 +616,7 @@ If the user does not specify any inputs as CLI parameters, the CLI uses the curr
 
 Covers:
 
-  * `req~cli.default-input~1`
+* `req~cli.default-input~1`
 
 Needs: impl, itest
 
@@ -632,7 +633,7 @@ When users work together in teams where the team members use different platforms
 
 Covers:
 
-  * `req~cli.newline-format~1`
+* `req~cli.newline-format~1`
 
 Needs: impl, itest
 
@@ -643,7 +644,7 @@ If the user does not specify the newline format as parameter, the exporter uses 
 
 Covers:
 
-  * `req~cli.default-newline-format~1`
+* `req~cli.default-newline-format~1`
 
 Needs: impl, itest
 
@@ -658,7 +659,7 @@ The CLI accepts one of the following requirement tracing report formats as param
 
 Covers:
 
-  * `req~cli.tracing.output-format~1`
+* `req~cli.tracing.output-format~1`
 
 Needs: impl, itest
 
@@ -669,7 +670,7 @@ The CLI uses plain text as requirement tracing report format if none is given as
 
 Covers:
 
-  * `req~cli.tracing.default-output-format~1`
+* `req~cli.tracing.default-output-format~1`
 
 Needs: impl, utest
 
@@ -683,7 +684,7 @@ The return value of the OFT executable is:
 
 Covers:
 
-  * `req~cli.tracing.exit-status~1`
+* `req~cli.tracing.exit-status~1`
 
 Needs: impl, itest
 
@@ -698,7 +699,7 @@ The CLI accepts one of the following export formats as parameter:
 
 Covers:
 
-  * `req~cli.conversion.output-format~1`
+* `req~cli.conversion.output-format~1`
 
 Needs: impl, itest
 
@@ -709,7 +710,7 @@ The CLI uses ReqM2 as export format if none is given as a parameter.
 
 Covers:
 
-  * `req~cli.conversion.default-output-format~1`
+* `req~cli.conversion.default-output-format~1`
 
 Needs: impl, itest, utest
 
@@ -727,8 +728,8 @@ Using reflection allows the CLI user to implement the receiver as a POJO. No ann
 
 Covers:
 
-  * `req~cli.tracing.command~1`
-  * `req~cli.conversion.command~1`
+* `req~cli.tracing.command~1`
+* `req~cli.conversion.command~1`
 
 ### Why is This Architecture Relevant?
 
@@ -736,8 +737,8 @@ Exchanging the CLI later takes considerable effort.
 
 ### Alternatives Considered
 
-  * No CLI (plain argument list) - not flexible enough
-  * External CLI - breaks design goal
+* No CLI (plain argument list) - not flexible enough
+* External CLI - breaks design goal
 
 # Bibliography
 
@@ -749,9 +750,9 @@ The following documents or are referenced in this specification.
 
 ## Specifications
 
-  * [System Requirement Specification OpenFastTrace][bib.srs], Sebastian Bär
-  * [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
+* [System Requirement Specification OpenFastTrace][bib.srs], Sebastian Bär
+* [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
 
 ## Web Sites
 
-  * [arc42 - Ressources for software architects][bib.arc42], Dr. Gernot Starke, Dr. Peter Hruschka
+* [arc42 - Ressources for software architects][bib.arc42], Dr. Gernot Starke, Dr. Peter Hruschka

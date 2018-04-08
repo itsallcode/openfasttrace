@@ -5,7 +5,7 @@
 [![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=org.itsallcode%3Aopenfasttrace%3Adevelop)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
-[![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg) ](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
+[![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg)](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
 ## Installation
 
@@ -29,7 +29,7 @@ If you want to build OFT:
 
 ### Build Time Dependencies
 
-The list below show all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven. 
+The list below show all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven.
 
 | Dependency                                                                   | Purpose                                                | License                       |
 -------------------------------------------------------------------------------|--------------------------------------------------------|--------------------------------
@@ -48,7 +48,8 @@ The list below show all build time dependencies in alphabetical order. Note that
 ### Configure Logging
 
 We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:
-```
+
+```bash
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
@@ -56,6 +57,7 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 * We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
 * To update files with correct license headers and generate file `LICENSE.txt`, run command
+
 ```bash
 mvn license:update-project-license license:update-file-header
 ```
@@ -64,24 +66,24 @@ mvn license:update-project-license license:update-file-header
 
 1. Add the following to your `~/.m2/settings.xml`:
 
-	```xml
-	<servers>
-		<server>
-			<id>bintray-openfasttrack-maven-repo</id>
-			<username>[bintray-username]</username>
-			<password>[bintray-api-key]</password>
-		</server>
-	</servers>
-	```
+    ```xml
+    <servers>
+        <server>
+            <id>bintray-openfasttrack-maven-repo</id>
+            <username>[bintray-username]</username>
+            <password>[bintray-api-key]</password>
+        </server>
+    </servers>
+    ```
 
 2. Update version in `pom.xml`, commit and push.
 3. Run command
 
-	```bash
-	mvn deploy
-	```
+    ```bash
+    mvn deploy
+    ```
 
 4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
-5. Sign in at https://bintray.com
-6. Go to https://bintray.com/itsallcode/itsallcode/openfasttrace
+5. Sign in at [bintray.com](https://bintray.com)
+6. Go to the [bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
 7. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link.

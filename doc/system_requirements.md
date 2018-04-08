@@ -27,15 +27,15 @@ OFT aims to help developers independently of their platform. I should not matter
 
 The following list gives you an overview of terms and abbreviations commonly used in OFT documents.
 
-  * Artifact: a container for specification items
-  * Artifact type: the role of an artifact in a specification hierarchy
-  * Coverage: Specification items covering other specification items
-  * Coverage provider: a specification item that provides coverage
-  * Coverage requester: a specification item that needs coverage
-  * OFT: OpenFastTrace (this project)
-  * ReqM2: A requirement tracing suite
-  * Specification item: holds either a requirement or coverage
-  * Specification artifact: a data source containing specification items (e.g. file, ticket system,
+* Artifact: a container for specification items
+* Artifact type: the role of an artifact in a specification hierarchy
+* Coverage: Specification items covering other specification items
+* Coverage provider: a specification item that provides coverage
+* Coverage requester: a specification item that needs coverage
+* OFT: OpenFastTrace (this project)
+* ReqM2: A requirement tracing suite
+* Specification item: holds either a requirement or coverage
+* Specification artifact: a data source containing specification items (e.g. file, ticket system,
     database)
 
 In the following subsections central terms are explained in more detail.
@@ -44,7 +44,7 @@ In the following subsections central terms are explained in more detail.
 
 In OFT requirements and artifacts covering them are represented by [specification items](#specification-item). Each item is a container for attributes of requirements and covering artifacts like the name, artifact type and the location where OFT found them.
 
-A specification item can also contain information about its relationships to other specification items. For more details about those relationships check [section "tracing"](#tracing). 
+A specification item can also contain information about its relationships to other specification items. For more details about those relationships check [section "tracing"](#tracing).
 
 #### Coverage
 
@@ -72,11 +72,11 @@ Rationale:
 
 Markdown is a clean an simple format that:
 
-  * is viewable with any text editor
-  * focuses on content instead of layout
-  * is portable across platforms
-  * easy to process with text manipulation tools
-  
+* is viewable with any text editor
+* focuses on content instead of layout
+* is portable across platforms
+* easy to process with text manipulation tools
+
 For those reasons Markdown is a suitable candidate for writing specification that can be read and
 maintained over a long time.
 
@@ -114,7 +114,7 @@ A tracing report is a representation of the results of the requirement tracing O
 OFT produces a tracing report in plain text.
 
 Rationale:
- 
+
 This can be read directly as console output or with any text editor.
 
 Needs: req
@@ -141,16 +141,16 @@ Needs: req
 
 A specification item consists of the following parts:
 
-  * ID
-  * Title (optional)
-  * Status (optional)
-  * Description (optional)
-  * Rationale (optional)
-  * Comment (optional)
-  * Covers (optional)
-  * Depends (optional)
-  * Needs (optional)
-  * Tags (optional)
+* ID
+* Title (optional)
+* Status (optional)
+* Description (optional)
+* Rationale (optional)
+* Comment (optional)
+* Covers (optional)
+* Depends (optional)
+* Needs (optional)
+* Tags (optional)
 
 The ID is a unique key through which the specification item can be referenced. It also contains the specification item type and revision number.
 
@@ -195,7 +195,7 @@ The specification documents that the OFT Markdown importer reads must be viewabl
 
 Covers:
 
-  * [feat~markdown-import~1](#markdown-import)
+* [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
 
@@ -208,7 +208,7 @@ In long specification document the outline is the primary means of navigating th
 
 Covers:
 
-  * [feat~markdown-import~1](#markdown-import)
+* [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
 
@@ -223,7 +223,7 @@ This allows stepwise migration to the OFT standard format. The Elektrobit format
 
 Covers:
 
-  * [feat~markdown-import~1](#markdown-import)
+* [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
 
@@ -232,7 +232,7 @@ Needs: dsn
 #### Outgoing Coverage Link Status
 `req~tracing.outgoing-coverage-link-status~1`
 
-_Outgoing coverage link_ means links that originate from a specification item and end at another specification item. 
+_Outgoing coverage link_ means links that originate from a specification item and end at another specification item.
 OFT determines the status of an outgoing coverage link of a specification item.
 
 The possible results are:
@@ -246,7 +246,7 @@ The possible results are:
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -265,7 +265,7 @@ The possible results are:
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -276,8 +276,7 @@ OFT marks a specification item as _covered deeply_ if this item - and all items 
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
-
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -288,7 +287,7 @@ OFT marks a specification item as _duplicate_ if other items with the same ID ex
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -297,14 +296,14 @@ Needs: dsn
 
 OFT marks a specification item as _defect_ if the following criteria apply
 
-  * The specification item has duplicates (i.e. another specification item with the same ID exists) _or_
-  * The item has any other status than "rejected" _and any of_
-      * At least one outgoing coverage link has a different status than "Covers"
-      * The item is not covered deeply
-  
+* The specification item has duplicates (i.e. another specification item with the same ID exists) _or_
+* The item has any other status than "rejected" _and any of_
+  * At least one outgoing coverage link has a different status than "Covers"
+  * The item is not covered deeply
+
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -318,7 +317,7 @@ Link cycles are never intended and hard to find by hand in large collections of 
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -334,14 +333,15 @@ In Relaxed coverage mode OFT accepts any status but `Rejected` of the covering i
 `req~strict_and_relaxed_coverage_mode~1`
 
 OFT allows users to choose between the following coverage evaluation modes:
+
 1. Strict mode: covering items must be in status `Approved`
 2. Relaxed mode: covering items must be in any other status than `Rejected`
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
-Needs: dsn 
+Needs: dsn
 
 ### Partial Tracing
 Usually the responsibility of document authors or coders when it comes to tracing is to make sure that they cover the input documents above. Only integrators or quality engineers are concerned with full chain coverage.
@@ -356,25 +356,25 @@ Kim is a software architect and it is her job to cover the system requirements c
 
 Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
 
-##### Include Only Artifact Types
+#### Include Only Artifact Types
 `req~include-only-artifact-types~1`
 
 OFT gives users the option to include only a configurable set of artifact types during processing.
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
-##### Include Only Tags
+#### Include Only Tags
 `req~include-only-tags~1`
 
 OFT gives users the option to include only specification items contained in configurable set of tags during processing.
 
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -394,13 +394,13 @@ The plain text report is the most basic report variant. It serves two main purpo
 
 The summary in the plain text report includes:
 
-  * Result status
-  * Total number of specification items
-  * Total number of defect specification items (if any)
+* Result status
+* Total number of specification items
+* Total number of defect specification items (if any)
 
 Covers:
 
-  * [feat~plain-text-report~1](#plain-text-report)
+* [feat~plain-text-report~1](#plain-text-report)
 
 Needs: dsn
 
@@ -410,7 +410,7 @@ Needs: dsn
 An item summary consist in the plain text report includes
 
   1. Status
-  2. Number of broken incoming links 
+  2. Number of broken incoming links
   3. Total number of incoming links
   4. Number of broken outgoing links
   5. Total number of outgoing links
@@ -421,7 +421,7 @@ An item summary consist in the plain text report includes
 
 Covers:
 
-  * [feat~plain-text-report~1](#plain-text-report)
+* [feat~plain-text-report~1](#plain-text-report)
 
 Needs: dsn
 
@@ -436,7 +436,7 @@ The link detail section shows for all links of a specification item:
 
 Covers:
 
-  * [feat~plain-text-report~1](#plain-text-report)
+* [feat~plain-text-report~1](#plain-text-report)
 
 Needs: dsn
 
@@ -452,7 +452,7 @@ OFT exports to ReqM2's "SpecObject" format.
 
 Covers:
 
-  * [feat~reqm2-export~1](#reqm2-export)
+* [feat~reqm2-export~1](#reqm2-export)
 
 Needs: dsn
 
@@ -467,9 +467,9 @@ OFT allows requirement tracing via the command line.
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~requirement-tracing~1](#requirement-tracing)
-  
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
+
 Needs: dsn
 
 ##### Tracing Output Format
@@ -477,24 +477,24 @@ Needs: dsn
 
 Users can select one of the following requirement tracing output formats (aka. "report formats"):
 
-  * Plain text
+* Plain text
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
 ##### Default Tracing Output Format
 `req~cli.tracing.default-output-format~1`
 
-OFT uses plain text as requirement tracing output format if the user does not select one. 
+OFT uses plain text as requirement tracing output format if the user does not select one.
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~requirement-tracing~1](#requirement-tracing)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -503,11 +503,11 @@ Needs: dsn
 `req~cli.tracing.exit-status~1`
 
 The return value of the OFT executable reflects the overall tracing result.
- 
+
 Covers:
 
-  * [feat~requirement-tracing~1](#requirement-tracing~1
-  
+* [feat~requirement-tracing~1](#requirement-tracing~1
+
 Needs: dsn
 
 #### Requirement Format Conversion
@@ -519,9 +519,9 @@ OFT allows requirement tracing via the command line.
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~reqm2-export~1](#reqm2-export)
-  
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~reqm2-export~1](#reqm2-export)
+
 Needs: dsn
 
 ##### Conversion Output Format
@@ -529,12 +529,12 @@ Needs: dsn
 
 Users can select one of the following conversion output formats (aka. "export formats"):
 
-  * ReqM2
+* ReqM2
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~reqm2-export~1](#reqm2-export)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~reqm2-export~1](#reqm2-export)
 
 Needs: dsn
 
@@ -545,8 +545,8 @@ OFT uses ReqM2 as default conversion format if the user does not select one.
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~reqm2-export~1](#reqm2-export)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~reqm2-export~1](#reqm2-export)
 
 Needs: dsn
 
@@ -559,8 +559,8 @@ Users can select requirement sources as combinations of files and directories.
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~requirement-tracing](#requirement-tracing)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing](#requirement-tracing)
 
 Needs: dsn
 
@@ -571,9 +571,9 @@ Users can select zero or more directories below which files and sub-directories 
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~markdown-import~1](#markdown-import)
-  * [feat~reqm2-import~1](#reqm2-import)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~markdown-import~1](#markdown-import)
+* [feat~reqm2-import~1](#reqm2-import)
 
 Needs: dsn
 
@@ -584,9 +584,9 @@ If users select neither files nor directories for input, OFT imports from the cu
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~markdown-import~1](#markdown-import)
-  * [feat~reqm2-import~1](#reqm2-import)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~markdown-import~1](#markdown-import)
+* [feat~reqm2-import~1](#reqm2-import)
 
 Needs: dsn
 
@@ -601,9 +601,9 @@ When users work together in teams where the team members use different platforms
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~reqm2-export~1](#reqm2-export)
-  * [feat~plain-text-report](#plain-text-report)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~reqm2-export~1](#reqm2-export)
+* [feat~plain-text-report](#plain-text-report)
 
 Needs: dsn
 
@@ -614,8 +614,8 @@ Unless selected by the user, OFT uses the native newline format of the platform 
 
 Covers:
 
-  * [feat~command-line-interface~1](#command-line-interface)
-  * [feat~reqm2-export~1](#reqm2-export)
-  * [feat~plain-text-report](#plain-text-report)
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~reqm2-export~1](#reqm2-export)
+* [feat~plain-text-report](#plain-text-report)
 
 Needs: dsn

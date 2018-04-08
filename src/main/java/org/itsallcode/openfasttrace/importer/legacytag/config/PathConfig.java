@@ -23,12 +23,14 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
  */
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Objects;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
  * The configuration of a single path that is imported by
- * {@link LegacyTagImporter}.
+ * {@link LegacyTagImporter}. Use {@link #builder()} to create a new instance.
  */
 public class PathConfig
 {
@@ -37,37 +39,13 @@ public class PathConfig
     private final String coveredItemArtifactType;
     private final String tagArtifactType;
 
-    /**
-     * Create a new pattern-based path configuration.
-     * 
-     * @param pattern
-     *            the pattern for the path, see
-     *            {@link FileSystem#getPathMatcher(String)} for supported
-     *            syntax.
-     * @param coveredItemArtifactType
-     *            the artifact type covered by the imported
-     *            {@link SpecificationItem}s.
-     * @param coveredItemNamePrefix
-     *            the common name prefix for the item covered by the imported
-     *            {@link SpecificationItem}.
-     * @param tagArtifactType
-     *            the artifact type of the imported {@link SpecificationItem}s.
-     */
-    public static PathConfig createPatternConfig(final String pattern,
-            final String coveredItemArtifactType, final String coveredItemNamePrefix,
-            final String tagArtifactType)
+    private PathConfig(final Builder builder)
     {
-        return new PathConfig(DescribedPathMatcher.createPatternMatcher(pattern),
-                coveredItemArtifactType, coveredItemNamePrefix, tagArtifactType);
-    }
-
-    private PathConfig(final DescribedPathMatcher pathMatcher, final String coveredItemArtifactType,
-            final String coveredItemNamePrefix, final String tagArtifactType)
-    {
-        this.pathMatcher = pathMatcher;
-        this.coveredItemNamePrefix = coveredItemNamePrefix;
-        this.coveredItemArtifactType = coveredItemArtifactType;
-        this.tagArtifactType = tagArtifactType;
+        this.pathMatcher = Objects.requireNonNull(builder.pathMatcher, "pathMatcher");
+        this.coveredItemNamePrefix = builder.coveredItemNamePrefix;
+        this.coveredItemArtifactType = Objects.requireNonNull(builder.coveredItemArtifactType,
+                "coveredItemArtifactType");
+        this.tagArtifactType = Objects.requireNonNull(builder.tagArtifactType, "tagArtifactType");
     }
 
     public String getDescription()
@@ -102,5 +80,98 @@ public class PathConfig
                 + "', coveredItemNamePrefix=" + this.coveredItemNamePrefix
                 + ", coveredItemArtifactType=" + this.coveredItemArtifactType + ", tagArtifactType="
                 + this.tagArtifactType + "]";
+    }
+
+    /**
+     * @return a new {@link Builder} that allows creating a {@link PathConfig}
+     *         object.
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    /**
+     * Builder for {@link PathConfig} objects.
+     */
+    public static class Builder
+    {
+        private DescribedPathMatcher pathMatcher;
+        private String coveredItemNamePrefix;
+        private String coveredItemArtifactType;
+        private String tagArtifactType;
+
+        private Builder()
+        {
+        }
+
+        /**
+         * @param pattern
+         *            the pattern for the path, see
+         *            {@link FileSystem#getPathMatcher(String)} for supported
+         *            syntax.
+         * @return this builder instance.
+         */
+        public Builder patternPathMatcher(final String pattern)
+        {
+            this.pathMatcher = DescribedPathMatcher.createPatternMatcher(pattern);
+            return this;
+        }
+
+        /**
+         * @param paths
+         *            a {@link List} of {@link Path}s that match should be
+         *            matched for the {@link PathConfig}.
+         * @return this builder instance.
+         */
+        public Builder pathListMatcher(final List<Path> paths)
+        {
+            this.pathMatcher = DescribedPathMatcher.createPathListMatcher(paths);
+            return this;
+        }
+
+        /**
+         * @param coveredItemNamePrefix
+         *            the common name prefix for the item covered by the
+         *            imported {@link SpecificationItem}.
+         * @return this builder instance.
+         */
+        public Builder coveredItemNamePrefix(final String coveredItemNamePrefix)
+        {
+            this.coveredItemNamePrefix = coveredItemNamePrefix;
+            return this;
+        }
+
+        /**
+         * @param coveredItemArtifactType
+         *            the artifact type covered by the imported
+         *            {@link SpecificationItem}s.
+         * @return this builder instance.
+         */
+        public Builder coveredItemArtifactType(final String coveredItemArtifactType)
+        {
+            this.coveredItemArtifactType = coveredItemArtifactType;
+            return this;
+        }
+
+        /**
+         * tagArtifactType the artifact type of the imported
+         * {@link SpecificationItem}s.
+         * 
+         * @return this builder instance.
+         */
+        public Builder tagArtifactType(final String tagArtifactType)
+        {
+            this.tagArtifactType = tagArtifactType;
+            return this;
+        }
+
+        /**
+         * @return the new {@link PathConfig}.
+         */
+        public PathConfig build()
+        {
+            return new PathConfig(this);
+        }
     }
 }

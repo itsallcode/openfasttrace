@@ -103,6 +103,10 @@ public class TestPathConfig
 
     private PathConfig create(final String pattern)
     {
-        return PathConfig.createPatternConfig(pattern, null, null, null);
+        return PathConfig.builder() //
+                .patternPathMatcher(pattern) //
+                .coveredItemArtifactType("") //
+                .tagArtifactType("") //
+                .build();
     }
 }

@@ -151,6 +151,10 @@ public class TestLegacyTagImporterFactory
 
     private PathConfig glob(final String globPattern)
     {
-        return PathConfig.createPatternConfig("glob:" + globPattern, null, null, null);
+        return PathConfig.builder() //
+                .patternPathMatcher("glob:" + globPattern) //
+                .coveredItemArtifactType("") //
+                .tagArtifactType("") //
+                .build();
     }
 }

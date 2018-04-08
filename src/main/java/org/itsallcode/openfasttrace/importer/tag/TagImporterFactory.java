@@ -29,6 +29,7 @@ import org.itsallcode.openfasttrace.importer.*;
 /**
  * {@link ImporterFactory} for tags in source code files.
  */
+// [impl->dsn~import.full-coverage-tag~1]
 public class TagImporterFactory extends RegexMatchingImporterFactory
 {
     public TagImporterFactory()

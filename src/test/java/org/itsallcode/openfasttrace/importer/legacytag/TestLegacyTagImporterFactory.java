@@ -46,6 +46,7 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~import.short-coverage-tag~1]
 public class TestLegacyTagImporterFactory
 {
     private static final String PATH1 = "path1";

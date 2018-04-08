@@ -22,17 +22,16 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
-import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
 
 /**
  * Tests for {@link TagImporterFactory}
  */
+// [utest->dsn~import.full-coverage-tag~1]
 public class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
 {
     @Override

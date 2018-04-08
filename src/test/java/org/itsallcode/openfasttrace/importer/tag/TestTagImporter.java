@@ -41,6 +41,7 @@ import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 /**
  * Test for {@link TagImporter}
  */
+// [utest->dsn~import.full-coverage-tag~1]
 public class TestTagImporter
 {
     private static final String FILENAME = "testfilename";

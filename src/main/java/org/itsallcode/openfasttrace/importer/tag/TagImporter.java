@@ -35,6 +35,7 @@ import org.itsallcode.openfasttrace.importer.*;
 /**
  * {@link Importer} for tags in source code files.
  */
+// [impl->dsn~import.full-coverage-tag~1]
 class TagImporter implements Importer
 {
     private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());

@@ -564,6 +564,41 @@ Covers:
 
 Needs: impl, utest
 
+### Coverage Tag Format
+
+#### Full Coverage Tag Format
+`dsn~import.full-coverage-tag~1`
+
+OFT imports coverage tags in the full tag format:
+
+    full-tag = "[" *WSP reference "->" requirement-id "]"
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
+#### Short Coverage Tag Format
+`dsn~import.short-coverage-tag~1`
+
+OFT imports coverage tags in the short tag format:
+
+    short-tag = "[" "[" *WSP reference ":" *revision "]" "]"
+
+During import of short tags OFT requires the following configuration:
+
+* Path from which to import the tags
+* Artifact type of the tags
+* Artifact type of the covered specification item
+* Name prefix of the covered specification item. The prefix is optional, default value: `project name "."`
+
+Covers:
+
+* `req~import.short-coverage-tag-format~1`
+
+Needs: impl, utest
+
 ## User Interface
 
 ### CLI Command Selection

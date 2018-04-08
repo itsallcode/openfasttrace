@@ -40,6 +40,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~import.short-coverage-tag~1]
 public class TestLegacyTagImporter
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";

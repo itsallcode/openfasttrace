@@ -93,6 +93,17 @@ One of the OpenFastTrace design goals is to provide a Java-based drop-in replace
 
 Needs: req
 
+### Coverage Tag Import
+`feat~coverage-tag-import~1`
+
+OFT imports coverage tags from source code files.
+
+Rationale:
+
+Coverage tags indicate parts of the source code that implements a certain requirement.
+
+Needs: req
+
 ### ReqM2 Export
 `feat~reqm2-export~1`
 
@@ -224,6 +235,32 @@ This allows stepwise migration to the OFT standard format. The Elektrobit format
 Covers:
 
 * [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
+#### Coverage Tags
+
+Developers add coverage tags as comments to the source code to indicate where certain specification items are covered.
+
+##### Import Full Coverage Tag Format
+`req~import.full-coverage-tag-format~1`
+
+OFT imports coverage tags from source files in a full format that contains all necessary information for tracing.
+
+Covers:
+
+* [feat~coverage-tag-import~1](#coverage-tag-import)
+
+Needs: dsn
+
+##### Import Short Coverage Tag Format
+`req~import.short-coverage-tag-format~1`
+
+OFT imports coverage tags from source files in a short format that requires additional configuration during import.
+
+Covers:
+
+* [feat~coverage-tag-import~1](#coverage-tag-import)
 
 Needs: dsn
 

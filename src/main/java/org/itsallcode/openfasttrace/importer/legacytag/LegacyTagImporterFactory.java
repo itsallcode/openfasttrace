@@ -36,6 +36,7 @@ import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
+// [impl->dsn~import.short-coverage-tag~1]
 public class LegacyTagImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(LegacyTagImporterFactory.class.getName());

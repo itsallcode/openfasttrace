@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+* {
+  font-family: helvetica, arial
+}
+
+del, ins {
+  color: red;
+}
+
+.red {
+  color: red;
+}
+
+span.ok {
+  display: none;
+}
+
+
+span.nok {
+  display: none
+}
+
+.part {
+  color: darkorange;
+}
+
+ul.in {
+  list-style: none;
+}
+
+ul.in li:before {
+  content: "\2192";
+  margin: 0 1em;
+}
+
+ul.out {
+  list-style: none;
+}
+
+ul.out li:before {
+  content: "\2190";
+  margin: 0 1em;
+}
+
+.sitem {
+  border-left: 2px solid dimgrey;
+  margin-left: 4em;
+  padding-left: 1em;
+}
+
+.artifact {
+  border-radius: 1em;
+  background: dimgrey;
+  color: white;
+  padding: 0em 0.5em 0.25em 0.5em;
+  font-size: 65%;
+  vertical-align: middle;
+}
+
+.desc, .rationale, .comment {
+    padding-left: 2em;
+}
+
+.tag {
+  border-radius: 1em;
+  padding: 0.125em 0.5em 0.125em 0.5em;
+  border: 1px solid black;
+  font-size: 75%
+}
+
+.sitem .details {
+  display: none;
+}
+
+.sitem:hover .details {
+  display: block;
+}
+
+summary {
+  color: dimgrey;
+}
+
+summary .title {
+  font-weight: bold;
+  color: black;
+}
+
+</style>
+<meta charset="UTF-8">
+<title>Specification Item list - OFT 0.5.1</title>
+</head>
+<body>
+  <nav>A - B - C - D - E - F - G - H - I - J - K - L - M - N - O - P - Q - R - S - <a href="#T">T</a> - U - V -
+    W - X - Y - Z</nav>
+
+  <main>
+  <section id="T">
+    <h2>T</h2>
+    <section class="sitem" id="dsn~design-item-a~1">
+      <details>
+        <summary title="dsn~design-item-a~1">
+          <span class="ok">ok -</span>&#x2705; <span class="title">Title of a design item A</span>, rev. 1 <span class="artifact">dsn</span>
+        </summary>
+        <p class="desc">This is the description of the design item A</p>
+        <p class="needs">Needs: impl, itest, utest</p>
+        <p>Out: 1 total</p>
+        <ul class="out">
+          <li><a href="#arch~design-item-a~1">arch~design-item-a~1</a></li>
+        </ul>
+        <p>In: 3 total</p>
+        <ul class="in">
+          <li><a href="#impl~design-item-a~1">impl~design-item-a~1</a></li>
+          <li><a href="#itest~design-item-a~1">itest~design-item-a~1</a></li>
+          <li><a href="#utest~design-item-a~1">utest~design-item-a~1</a></li>
+        </ul>
+      </details>
+    </section>
+    <section class="sitem" id="dsn~design-item-b~2">
+      <details>
+        <summary title="dsn~design-item-b~2">
+          <span class="nok">not ok -</span>&#x274E; <span class="title">Title of a design item B</span>, rev. 2 <span class="artifact">dsn</span> <span class="red">(covered partially, 3 duplicates, 2 defect links)</span>
+        </summary>
+        <p class="desc">This is the description of the design item B</p>
+        <p>Rationale:</p>
+        <p class="rationale">Here we have the rationale, that explains why the requirement is needed.</p>
+        <p>Comment:</p>
+        <p class="comment">A comment further explaining the requirement without being normative.</p>
+        <p class="needs">
+          Needs: impl,
+          <ins>itest</ins>
+          ,
+          <del>uman</del>
+          , utest
+        </p>
+        <p>Out: 1 total</p>
+        <ul class="out">
+          <li><a href="#arch~design-item-b~1">arch~design-item-b~1</a></li>
+        </ul>
+        <p>In: 4 total, <span class="red">2 defect</span></p>
+        <ul class="in">
+          <li><a href="#impl~design-item-b~1">impl~design-item-b~1</a></li>
+          <li><a href="#itest~design-item-b~1">itest~design-item-b~1</a> <span class="red">(missing)</span></li>
+          <li><a href="#utest~design-item-b~1">uman~design-item-b~1</a> <span class="red">(extra)</span></li>
+          <li><a href="#utest~design-item-b~1">utest~design-item-b~1</a></li>
+        </ul>
+        <p>Tags: <span class="tag">Tag A</span> <span class="tag">Tag B</span>
+      </details>
+    </section>
+  </section>
+  </main>
+</body>
+</html>

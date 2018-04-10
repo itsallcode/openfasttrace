@@ -37,6 +37,8 @@ import java.util.Optional;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,6 +46,7 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~import.short-coverage-tag~1]
 public class TestLegacyTagImporterFactory
 {
     private static final String PATH1 = "path1";
@@ -149,6 +152,10 @@ public class TestLegacyTagImporterFactory
 
     private PathConfig glob(final String globPattern)
     {
-        return new PathConfig("glob:" + globPattern, null, null, null);
+        return PathConfig.builder() //
+                .patternPathMatcher("glob:" + globPattern) //
+                .coveredItemArtifactType("") //
+                .tagArtifactType("") //
+                .build();
     }
 }

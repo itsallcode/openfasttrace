@@ -28,8 +28,8 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
+import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
 /**
  * Convert between different requirements formats (e.g. from ReqM2 to Markdown)

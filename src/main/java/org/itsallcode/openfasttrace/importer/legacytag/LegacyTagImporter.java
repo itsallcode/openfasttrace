@@ -29,7 +29,9 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
+// [impl->dsn~import.short-coverage-tag~1]
 class LegacyTagImporter implements Importer
 {
     private static final Logger LOG = Logger.getLogger(LegacyTagImporter.class.getName());

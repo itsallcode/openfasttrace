@@ -1,4 +1,26 @@
 <!DOCTYPE html>
+<!--
+  #%L
+  OpenFastTrace
+  %%
+  Copyright (C) 2016 - 2018 itsallcode.org
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="oft_tracing_report.css">
@@ -15,8 +37,9 @@
     <section class="sitem" id="dsn~design-item-a~1">
       <details>
         <summary title="dsn~design-item-a~1">
-          <span class="ok">ok -</span>&#x2705; <span class="title">Title of a design item A</span>, rev. 1 <span class="artifact">dsn</span>
+          &#x2705; <b>Title of a design item A</b><small>, rev. 1, dsn</small>
         </summary>
+        <p class="id">dsn~design-item-a~1<p>
         <p class="desc">This is the description of the design item A</p>
         <p class="needs">Needs: impl, itest, utest</p>
         <p>Out: 1 total</p>
@@ -34,7 +57,7 @@
     <section class="sitem" id="dsn~design-item-b~2">
       <details>
         <summary title="dsn~design-item-b~2">
-          <span class="nok">not ok -</span>&#x274E; <span class="title">Title of a design item B</span>, rev. 2 <span class="artifact">dsn</span> <span class="red">(covered partially, 3 duplicates, 2 defect links)</span>
+         &#x274E; <b>Title of a design item B</b><small>, rev. 2, dsn (covered partially, 3 duplicates, 2 defect links)</small>
         </summary>
         <p class="desc">This is the description of the design item B</p>
         <p>Rationale:</p>

@@ -74,10 +74,10 @@ public interface Reporter
     public Reporter setNewline(Newline newline);
 
     /**
-     * Select how verbose the tracing report should be
+     * Select how verbose the tracing stream should be
      * 
      * @param verbosity
-     *            report verbosity
+     *            stream verbosity
      * @return a <code>Reporter</code> instance for fluent programming
      */
     public Reporter setReportVerbosity(final ReportVerbosity verbosity);
@@ -98,7 +98,7 @@ public interface Reporter
     public Trace trace();
 
     /**
-     * Write the tracing report to a file
+     * Write the tracing stream to a file
      * 
      * @param trace
      *            trace result to be written
@@ -107,19 +107,19 @@ public interface Reporter
      *            output file or directory
      * 
      * @param format
-     *            report format (this is a name defined in the respective
+     *            stream format (this is a name defined in the respective
      *            reporter plug-in)
      */
     public void reportToFileInFormat(final Trace trace, final Path output, final String format);
 
     /**
-     * Write the tracing report to standard out
+     * Write the tracing stream to standard out
      * 
      * @param trace
      *            trace result to be written
      * 
      * @param format
-     *            report format (this is a name defined in the respective
+     *            stream format (this is a name defined in the respective
      *            reporter plug-in)
      */
     public void reportToStdOutInFormat(final Trace trace, final String format);

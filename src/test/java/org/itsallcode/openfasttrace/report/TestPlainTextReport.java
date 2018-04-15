@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.report;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -36,7 +37,6 @@ import java.io.OutputStream;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.matcher.MultilineTextMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -86,8 +86,7 @@ public class TestPlainTextReport
             final String... expectedReportLines)
     {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
-        assertThat(getReportOutput(verbosity),
-                MultilineTextMatcher.matchesAllLines(expectedReportText));
+        assertThat(getReportOutput(verbosity), matchesAllLines(expectedReportText));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)

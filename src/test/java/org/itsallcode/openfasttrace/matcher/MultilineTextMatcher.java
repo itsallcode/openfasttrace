@@ -112,13 +112,13 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
     /**
      * Factory method for multiline text matcher
      * 
-     * @param text
-     *            the text to be matched against the original
+     * @param line
+     *            a line of text
      * @return the matcher
      */
-    public static MultilineTextMatcher matchesAllLines(final String text)
+    public static MultilineTextMatcher matchesAllLines(final String... lines)
     {
-        return new MultilineTextMatcher(text);
+        return new MultilineTextMatcher(String.join(System.lineSeparator(), lines));
     }
 
     private List<String> splitPreservingNewLines(final String text)

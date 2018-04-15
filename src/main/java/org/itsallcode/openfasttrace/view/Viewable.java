@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.view;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,21 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
-import java.io.OutputStream;
-
 /**
- * Interface for coverage reports.
+ * Interface for all view elements which know how to render themselves
  */
-@FunctionalInterface
-public interface Reportable
+public interface Viewable
 {
     /**
-     * Render the plain text coverage stream.
-     *
-     * @param outputStream
-     *            the output stream to which the stream is rendered.
-     * @param verbosity
-     *            the level of detail that is reported.
+     * Render the viewable element.
      */
-    void renderToStreamWithVerbosityLevel(OutputStream outputStream, ReportVerbosity verbosity);
+    public default void render()
+    {
+        render(0);
+    }
+
+    /**
+     * Render the viewable element on given indentation level.
+     */
+    public void render(int level);
 }

@@ -42,7 +42,7 @@ public class ReportService
         }
         catch (final IOException e)
         {
-            throw new ReportException("Error generating report to output path " + outputPath, e);
+            throw new ReportException("Error generating stream to output path " + outputPath, e);
         }
     }
 

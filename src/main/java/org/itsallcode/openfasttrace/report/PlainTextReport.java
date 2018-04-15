@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import org.itsallcode.openfasttrace.core.*;
 
 /**
- * Renders a coverage report in plain text. This is intended for command line
+ * Renders a coverage stream in plain text. This is intended for command line
  * application output.
  */
 public class PlainTextReport implements Reportable
@@ -109,7 +109,7 @@ public class PlainTextReport implements Reportable
             break;
         default:
             throw new IllegalStateException(
-                    "Unable to create report for unknown verbosity level " + verbosity);
+                    "Unable to create stream for unknown verbosity level " + verbosity);
         }
     }
 

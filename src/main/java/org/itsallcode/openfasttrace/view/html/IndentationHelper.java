@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.view.html;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,20 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
-import java.io.OutputStream;
-
 /**
- * Interface for coverage reports.
+ * Contains static helper methods for indentation.
  */
-@FunctionalInterface
-public interface Reportable
+public final class IndentationHelper
 {
-    /**
-     * Render the plain text coverage stream.
-     *
-     * @param outputStream
-     *            the output stream to which the stream is rendered.
-     * @param verbosity
-     *            the level of detail that is reported.
-     */
-    void renderToStreamWithVerbosityLevel(OutputStream outputStream, ReportVerbosity verbosity);
+    private static final int INDENT_SPACES_PER_LEVEL = 2;
+
+    private IndentationHelper()
+    {
+        // prevent instantiation.
+    }
+
+    public static String createIndentationPrefix(final int level)
+    {
+        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
+    }
 }

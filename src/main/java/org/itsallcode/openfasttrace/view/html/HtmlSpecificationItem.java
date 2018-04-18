@@ -58,7 +58,7 @@ public class HtmlSpecificationItem implements Viewable
         this.stream.print("\">");
         this.stream.print(CHECKMARK);
         this.stream.print("<b>");
-        this.stream.print(this.item.getTitle());
+        this.stream.print(this.item.getTitleWithFallback());
         this.stream.print("</b><small>, rev. ");
         this.stream.print(id.getRevision());
         this.stream.print(", ");
@@ -71,6 +71,6 @@ public class HtmlSpecificationItem implements Viewable
         this.stream.print(indentation);
         this.stream.println("  </details>");
         this.stream.print(indentation);
-        this.stream.print("</section>");
+        this.stream.println("</section>");
     }
 }

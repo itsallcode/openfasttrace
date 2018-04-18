@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report;
 
 /*-
  * #%L
@@ -22,32 +22,39 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.view.Viewable;
-import org.junit.Before;
-import org.junit.Test;
-
-public class TestHtmlSection extends AbstractTestHtmlRenderer
+public enum ReportFormat
 {
-    private static final String ID = "section ID";
-    private static final String TITLE = "section title";
-    private static final int LEVEL = 1;
+    PLAIN_TEXT("plain"), HTML("html");
 
-    @Override
-    @Before
-    public void prepareEachTest()
+    private final String format;
+
+    private ReportFormat(final String format)
     {
-        super.prepareEachTest();
+        this.format = format;
     }
 
-    @Test
-    public void testRender()
+    @Override
+    public String toString()
     {
-        final Viewable view = this.factory.createSection(ID, TITLE);
-        view.render(LEVEL);
-        assertOutputLines(//
-                "  <section id=\"" + ID + "\">", //
-                "    <h2>" + TITLE + "</h2>", //
-                "  </section>", //
-                "");
+        return this.format;
+    }
+
+    /**
+     * Find the {@link ReportFormat} for a given name.
+     * 
+     * @param format
+     *            name of the report format
+     * @return matching enum value
+     */
+    public static ReportFormat parse(final String format)
+    {
+        for (final ReportFormat value : ReportFormat.values())
+        {
+            if (value.toString().equals(format))
+            {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Unknown report format \"" + format + "\"");
     }
 }

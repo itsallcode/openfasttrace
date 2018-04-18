@@ -258,4 +258,37 @@ public class TestLinkedSpecificationItem
         this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
+
+    @Test
+    public void testGetTitleWithFallback_HasTitle()
+    {
+        final String expectedReturn = "title";
+        when(this.itemMock.getTitle()).thenReturn(expectedReturn);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~wrong-return~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo(expectedReturn));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasNoTitle()
+    {
+        when(this.itemMock.getTitle()).thenReturn(null);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~id-name~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("id-name"));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasEmptyTitle()
+    {
+        when(this.itemMock.getTitle()).thenReturn("");
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~id-name~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("id-name"));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasNothing()
+    {
+        when(this.itemMock.getTitle()).thenReturn("");
+        when(this.itemMock.getId()).thenReturn(null);
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("???"));
+    }
 }

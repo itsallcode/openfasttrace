@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.plaintext;
 
 /*-
  * #%L
@@ -33,6 +33,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.report.ReportException;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 
 /**
  * Renders a coverage stream in plain text. This is intended for command line

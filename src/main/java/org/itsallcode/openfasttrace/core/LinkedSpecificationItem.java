@@ -69,6 +69,30 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get the title or a fallback if the optional title is not specified
+     * 
+     * @return title if exists, otherwise name part of the ID
+     */
+    public String getTitleWithFallback()
+    {
+        final String title = this.getTitle();
+        if (title != null && !title.isEmpty())
+        {
+            return title;
+        }
+        final SpecificationItemId id = this.getId();
+        if (id != null)
+        {
+            final String name = id.getName();
+            if (name != null && !name.isEmpty())
+            {
+                return name;
+            }
+        }
+        return "???";
+    }
+
+    /**
      * Get the maturity status of the specification item.
      *
      * @return maturity status of the specification item

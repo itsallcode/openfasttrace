@@ -65,6 +65,6 @@ public class HtmlSection extends AbstractViewContainer implements Viewable
     {
         final String indentation = IndentationHelper.createIndentationPrefix(level);
         this.stream.print(indentation);
-        this.stream.print("</section>");
+        this.stream.println("</section>");
     }
 }

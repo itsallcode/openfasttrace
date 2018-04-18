@@ -61,10 +61,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * @param level
      *            indentation level
      */
-    protected void renderBeforeChildren(final int level)
-    {
-        // Default implementation left empty on purpose.
-    }
+    abstract protected void renderBeforeChildren(final int level);
 
     /**
      * Render a the children of this sub(view).
@@ -86,10 +83,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * @param level
      *            indentation level
      */
-    protected void renderAfterChildren(final int level)
-    {
-        // Default implementation left empty on purpose.
-    }
+    abstract protected void renderAfterChildren(final int level);
 
     /*
      * (non-Javadoc)

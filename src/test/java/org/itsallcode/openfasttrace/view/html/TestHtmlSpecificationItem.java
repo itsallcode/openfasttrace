@@ -61,6 +61,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                         + "<b>Item A title</b><small>, rev. 1, dsn</small></summary>", //
                 "      <p class=\"desc\">Single line description</p>", //
                 "    </details>", //
-                "  </section>");
+                "  </section>", //
+                "");
     }
 }

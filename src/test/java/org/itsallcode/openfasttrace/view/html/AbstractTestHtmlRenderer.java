@@ -28,14 +28,14 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-import org.itsallcode.openfasttrace.view.AbstractViewFactory;
+import org.itsallcode.openfasttrace.view.ViewFactory;
 import org.itsallcode.openfasttrace.view.html.HtmlViewFactory;
 import org.junit.Before;
 
 public class AbstractTestHtmlRenderer
 {
     protected OutputStream outputStream;
-    protected AbstractViewFactory factory;
+    protected ViewFactory factory;
 
     @Before
     public void prepareEachTest()

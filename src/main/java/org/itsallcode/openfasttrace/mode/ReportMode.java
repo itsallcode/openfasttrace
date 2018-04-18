@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.mode;
  * #L%
  */
 
-
 import java.nio.file.Path;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     @Override
     public void reportToFileInFormat(final Trace trace, final Path output, final String format)
     {
-        this.reportService.reportTraceToPath(trace, output, this.verbosity, this.newline);
+        this.reportService.reportTraceToPath(trace, output, format, this.verbosity, this.newline);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     @Override
     public void reportToStdOutInFormat(final Trace trace, final String format)
     {
-        this.reportService.reportTraceToStdOut(trace, this.verbosity, this.newline);
+        this.reportService.reportTraceToStdOut(trace, format, this.verbosity, this.newline);
     }
 
     @Override

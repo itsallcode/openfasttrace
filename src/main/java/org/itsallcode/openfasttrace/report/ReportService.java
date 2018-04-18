@@ -30,15 +30,17 @@ import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
+import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 
 public class ReportService
 {
-    public void reportTraceToPath(final Trace trace, final Path outputPath,
+    public void reportTraceToPath(final Trace trace, final Path outputPath, final String format,
             final ReportVerbosity verbosity, final Newline newline)
     {
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, verbosity, newline, outputStream);
+            reportTraceToStream(trace, format, verbosity, newline, outputStream);
         }
         catch (final IOException e)
         {
@@ -46,19 +48,39 @@ public class ReportService
         }
     }
 
-    public void reportTraceToStdOut(final Trace trace, final ReportVerbosity verbosity,
-            final Newline newline)
+    public void reportTraceToStdOut(final Trace trace, final String format,
+            final ReportVerbosity verbosity, final Newline newline)
     {
 
-        reportTraceToStream(trace, verbosity, newline, System.out);
+        reportTraceToStream(trace, format, verbosity, newline, System.out);
     }
 
-    private void reportTraceToStream(final Trace trace, final ReportVerbosity verbosity,
-            final Newline newline, final OutputStream outputStream)
+    private void reportTraceToStream(final Trace trace, final String format,
+            final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream)
     {
         final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        new PlainTextReport(trace, newline).renderToStreamWithVerbosityLevel(bufferedOutputStream,
-                verbosity);
+        switch (ReportFormat.parse(format))
+        {
+        case PLAIN_TEXT:
+            new PlainTextReport(trace, newline)
+                    .renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
+            break;
+        case HTML:
+            new HtmlReport(trace, newline).renderToStreamWithVerbosityLevel(bufferedOutputStream,
+                    verbosity);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Unable to create report with format \"" + format + "\"");
+        }
+        try
+        {
+            bufferedOutputStream.flush();
+        }
+        catch (final IOException exception)
+        {
+            throw new ReportException(exception.getMessage());
+        }
     }
 
 }

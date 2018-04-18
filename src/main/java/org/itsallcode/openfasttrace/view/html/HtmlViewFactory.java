@@ -28,6 +28,7 @@ import java.io.PrintStream;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.view.AbstractViewFactory;
 import org.itsallcode.openfasttrace.view.Viewable;
+import org.itsallcode.openfasttrace.view.ViewableContainer;
 
 public class HtmlViewFactory extends AbstractViewFactory
 {
@@ -40,13 +41,13 @@ public class HtmlViewFactory extends AbstractViewFactory
     }
 
     @Override
-    public Viewable createView(final String id, final String title)
+    public ViewableContainer createView(final String id, final String title)
     {
         return new HtmlView(this.stream, id, title);
     }
 
     @Override
-    public Viewable createSection(final String id, final String title)
+    public ViewableContainer createSection(final String id, final String title)
     {
         return new HtmlSection(this.stream, id, title);
     }

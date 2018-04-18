@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import java.io.OutputStream;
 
 /**
@@ -39,5 +38,6 @@ public interface Reportable
      * @param verbosity
      *            the level of detail that is reported.
      */
-    void renderToStreamWithVerbosityLevel(OutputStream outputStream, ReportVerbosity verbosity);
+    public void renderToStreamWithVerbosityLevel(OutputStream outputStream,
+            ReportVerbosity verbosity);
 }

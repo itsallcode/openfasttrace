@@ -90,19 +90,50 @@ public class DescribedPathMatcherTest
     {
         createListMatcher("C:/abs/path");
         assertMatches("C:/abs/path", true);
-        assertMatches("C:\\abs\\path", false);
         assertMatches("abs/path", false);
         assertMatches("C:/abs/path/", true);
+    }
+
+    @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashWindows()
+    {
+        OsDetector.assumeRunningOnWindows();
+        createListMatcher("C:/abs/path");
+        assertMatches("C:\\abs\\path", true);
+    }
+
+    @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashUnix()
+    {
+        OsDetector.assumeRunningOnUnix();
+        createListMatcher("C:/abs/path");
+        assertMatches("C:\\abs\\path", false);
     }
 
     @Test
     public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslash()
     {
         createListMatcher("C:\\abs\\path");
-        assertMatches("C:/abs/path", false);
         assertMatches("C:\\abs\\path", true);
         assertMatches("abs/path", false);
+    }
+
+    @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashUnix()
+    {
+        OsDetector.assumeRunningOnUnix();
+        createListMatcher("C:\\abs\\path");
+        assertMatches("C:/abs/path", false);
         assertMatches("C:\\abs\\path\\", false);
+    }
+
+    @Test
+    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashWindows()
+    {
+        OsDetector.assumeRunningOnWindows();
+        createListMatcher("C:\\abs\\path");
+        assertMatches("C:/abs/path", true);
+        assertMatches("C:\\abs\\path\\", true);
     }
 
     @Test

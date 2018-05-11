@@ -19,12 +19,21 @@ For code contributions we kindly ask you to either pick or create a GitHub [issu
 ## Testing
 We are happy if you test OFT! While we do a great deal of testing ourselves, we want OFT to be as portable as possible. So it is especially helpful for us if you test on a platform that we don't have.
 
-If you find a bug, please let us know by writing an [issue ticket](https://github.com/itsallcode/openfasttrace/issues). There is a template for bug tickets that helps you provide all the information that we need to reproduce and tackle the bug you found.
+If you find a bug, please let us know by writing an [issue ticket](https://github.com/itsallcode/openfasttrace/issues/new?template=Bug_report.md). There is a template for bug tickets that helps you provide all the information that we need to reproduce and tackle the bug you found.
 
 If you are a programmer, a code contribution in form of an automatic unit test case would be most appreciated, since this will make reproduction of the issue easier and prevent future regressions.
 
+## Contributing to the User Guide
+Maybe you are good at explaining how to use OFT to end users? Help us improve the [user guide](doc/user_guide.md)!
+
 ## Translations
 We plan to make OFT multilingual. If you want to provide a translation, feel free to contact us. Messages in OFT and the user guide are prime candidates for translation.
+
+## Fields of Application
+Found a clever way to apply OFT in a new field of application? Share your story with the OFT community!
+
+## Ideas
+Last but not least if you have ideas for ways to improve or extend OFT, feel free to write a [feature request](https://github.com/itsallcode/openfasttrace/issues/new?template=Feature_request.md).
 
 # Style Guides
 We want OFT to have a professional and uniform coding style. Formatter rules for Eclipse are part of the project. If you use a different editor, please make sure to match the current code formatting.

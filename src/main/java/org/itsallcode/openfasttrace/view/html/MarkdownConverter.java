@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.core;
+package org.itsallcode.openfasttrace.view.html;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,13 +22,15 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-public class SampleArtifactTypes
+public class MarkdownConverter
 {
-    public static String DSN = "dsn";
-    public static String IMPL = "impl";
-    public static String ITEST = "itest";
-    public static String OMAN = "oman";
-    public static String REQ = "req";
-    public static String UTEST = "utest";
-    public static String UMAN = "uman";
+    public String convert(final String input)
+    {
+        String text = input;
+        text = text.replaceAll("`(.*)`", "<code>$1</code>");
+        text = text.replaceAll("\\[(.*)\\]\\((.*)\\)", "<a href=\"$2\">$1</a>");
+        text = text.replaceAll("(__|\\*\\*)(\\p{L}(?:.*\\p{L}))\\1", "<strong>$2</strong>");
+        text = text.replaceAll("([_*])(\\p{L}(?:.*\\p{L}))\\1", "<em>$2</em>");
+        return text;
+    }
 }

@@ -153,7 +153,7 @@ public class TestImportMarkdown
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "## " + TITLE //
                 + "\n" //
                 + ID1 + "\n" //
                 + "\n" + ID2 + "\n" //
@@ -204,7 +204,7 @@ public class TestImportMarkdown
     // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "##### " + TITLE //
                 + "\n" //
                 + "`" + LEGACY_ID + "`" //
                 + "\n" //
@@ -258,4 +258,5 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }
+
 }

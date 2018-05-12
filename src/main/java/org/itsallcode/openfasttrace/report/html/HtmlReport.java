@@ -40,12 +40,10 @@ public class HtmlReport implements Reportable
 {
 
     private final Trace trace;
-    private final Newline newline;
 
     public HtmlReport(final Trace trace, final Newline newline)
     {
         this.trace = trace;
-        this.newline = newline;
     }
 
     @Override

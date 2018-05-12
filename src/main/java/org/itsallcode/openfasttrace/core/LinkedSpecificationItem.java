@@ -22,6 +22,7 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 /**
@@ -179,6 +180,24 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get a list of traced links (i.e. links including the tracing status)
+     * 
+     * @return list of traced links
+     */
+    public List<TracedLink> getTracedLinks()
+    {
+        final List<TracedLink> tracedLinks = new ArrayList<>();
+        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet())
+        {
+            for (final LinkedSpecificationItem other : entry.getValue())
+            {
+                tracedLinks.add(new TracedLink(other, entry.getKey()));
+            }
+        }
+        return tracedLinks;
+    }
+
+    /**
      * Get the ID of the items this {@link LinkedSpecificationItem} covers.
      *
      * @return the list of IDs
@@ -318,6 +337,14 @@ public class LinkedSpecificationItem
                                 || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }
 
+    /**
+     * @return <code>true</code> if the item has one or more links
+     */
+    public boolean hasLinks()
+    {
+        return !this.links.isEmpty();
+    }
+
     private boolean hasBadLinks()
     {
         for (final LinkStatus status : this.links.keySet())
@@ -387,6 +414,9 @@ public class LinkedSpecificationItem
         return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
     }
 
+    /**
+     * @return <code>true</code> if this item has one ore more duplicates.
+     */
     public boolean hasDuplicates()
     {
         return countDuplicateLinks() != 0;

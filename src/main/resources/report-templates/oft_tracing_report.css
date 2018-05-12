@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+ 
 * {
   font-family: helvetica, arial
 }
@@ -39,27 +40,11 @@ main {
   margin-top: 2em;
 }
 
-del, ins {
+del, ins, .red {
   color: red;
 }
 
-.red {
-  color: red;
-}
-
-span.ok {
-  display: none;
-}
-
-span.nok {
-  display: none
-}
-
-.part {
-  color: darkorange;
-}
-
-ul.in {
+ul.in, ul.out {
   list-style: none;
   padding-left: 1em;
 }
@@ -67,11 +52,6 @@ ul.in {
 ul.in li:before {
   content: "\2192";
   margin: 0 1em;
-}
-
-ul.out {
-  list-style: none;
-  padding-left: 1em;
 }
 
 ul.out li:before {
@@ -85,6 +65,16 @@ ul.out li:before {
   padding-left: 1em;
 }
 
+.sitem h6 {
+  padding-left: 1em;
+  font-size: inherit;
+  font-weight: normal;
+}
+
+.sitem p {
+  padding-left: 2em;
+}
+
 .artifact {
   border-radius: 1em;
   background: dimgrey;
@@ -92,10 +82,6 @@ ul.out li:before {
   padding: 0em 0.5em 0.25em 0.5em;
   font-size: 65%;
   vertical-align: middle;
-}
-
-.desc, .rationale, .comment {
-  padding-left: 2em;
 }
 
 .tag {

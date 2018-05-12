@@ -287,13 +287,15 @@ public class TestPlainTextReport
         final LinkedSpecificationItem otherD = createOtherItemMock("req~foo~1");
         final LinkedSpecificationItem otherE = createOtherItemMock("req~zoo~1");
         final LinkedSpecificationItem otherF = createOtherItemMock("req~zoo~2");
-        final Map<LinkStatus, List<LinkedSpecificationItem>> links = new HashMap<>();
-        links.put(LinkStatus.COVERED_SHALLOW, Arrays.asList(otherA));
-        links.put(LinkStatus.COVERS, Arrays.asList(otherB, otherD));
-        links.put(LinkStatus.UNWANTED, Arrays.asList(otherC));
-        links.put(LinkStatus.OUTDATED, Arrays.asList(otherE));
-        links.put(LinkStatus.ORPHANED, Arrays.asList(otherF));
-        when(itemMock.getLinks()).thenReturn(links);
+        final List<TracedLink> links = new ArrayList<>();
+        links.add(new TracedLink(otherA, LinkStatus.COVERED_SHALLOW));
+        links.add(new TracedLink(otherB, LinkStatus.COVERS));
+        links.add(new TracedLink(otherD, LinkStatus.COVERS));
+        links.add(new TracedLink(otherC, LinkStatus.UNWANTED));
+        links.add(new TracedLink(otherE, LinkStatus.OUTDATED));
+        links.add(new TracedLink(otherF, LinkStatus.ORPHANED));
+        when(itemMock.getTracedLinks()).thenReturn(links);
+        when(itemMock.hasLinks()).thenReturn(true);
     }
 
     private LinkedSpecificationItem createOtherItemMock(final String idAsText)

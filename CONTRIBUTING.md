@@ -1,7 +1,7 @@
 Thank you for your interest in helping us to make OpenFastTrace (OFT) better!
 
 # Goal of This Document
-This document aims at answering all the questions potential contributers to OFT might have before feeling ready to get startet.
+This document aims at answering all the questions potential contributers to OFT might have before feeling ready to get started.
 
 # What This Document is not
 If you are looking for general information about what OpenFastTrace is, please make sure to check out the [ReadMe](./README.md) that comes with the project.
@@ -13,8 +13,6 @@ If you are a programmer and want to help us improve the implementation, test cas
 
 Then please create a pull request and ask for a review by one of the core team members (e.g. `redcatbear` or `kaklakariada`).
 The reviewers will either ask you to work in review findings or if there are none, merge your branch.
-
-For code contributions we kindly ask you to either pick or create a GitHub [issue in the OFT project](https://github.com/itsallcode/openfasttrace/issues) first which serves context in which the code commit lives.
 
 ## Testing
 We are happy if you test OFT! While we do a great deal of testing ourselves, we want OFT to be as portable as possible. So it is especially helpful for us if you test on a platform that we don't have.
@@ -30,7 +28,7 @@ Maybe you are good at explaining how to use OFT to end users? Help us improve th
 We plan to make OFT multilingual. If you want to provide a translation, feel free to contact us. Messages in OFT and the user guide are prime candidates for translation.
 
 ## Fields of Application
-Found a clever way to apply OFT in a new field of application? Share your story with the OFT community!
+Found a clever way to apply OFT in a new field of application? [Share your story with the OFT community](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)!
 
 ## Ideas
 Last but not least if you have ideas for ways to improve or extend OFT, feel free to write a [feature request](https://github.com/itsallcode/openfasttrace/issues/new?template=Feature_request.md).

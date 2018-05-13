@@ -19,7 +19,7 @@ before_install:
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 
 after_success:
   - codecov
@@ -38,6 +38,3 @@ addons:
     organization: "itsallcode"
     token:
       secure: "stET2mlxtWuTjhrgBC1xO77FHuyF7E7tf+9CY9W9TEUS5UlTNVr9/gzu3p4VeWU7knpiq4PuPabPCAFfbZaPF9vMP0lO6qKvsrd0RBnCIYn2l6AEMKzd0M1yksSBvUnS+7LoT8+qkJ7hPxzSkgM7oWCsHzp//gFvr7r1+n2B9QxrsjpAPqmZlU+0cthX4cy6yIVgMG6T1TlBORcNx9TTZ+ppGLoBJ7PTL04R1GNbNy0IExlegO6JRGo6T2uURr5UkrWeKVlRZY0u3VDs6OUahE3g2srJZPruedX9KRa4XLztTLXYmOUO/6XFxxfx/eqpWqD68Eal/IguTVibPiU0dCpXsTvWE/bO1dDolBxu9afKI7ntNWmIbfKpIT0bRypz+Ss12A9cw3bNJYRXkbA4sfsMmI4kcAhdl+P0bgfyWlmwXE8z+akOOEzkHZ2vT28WVZ27KkByTtl64uWqweeAwPLQN3ORcilyt9Ip+u1Z/sZUaRuXFMi5pciB3lfLq5Bm1bu2VDep2XLQnZD+KPp5+YHCxVrXBy0quDMNYU18R/OSWfqkCOPkklopG02ngvQAYHeezJILqnlS7bD6ujdthv/97LM39W8heFxxUOQiXKw+zWccFTS+lMChX+8n5+xFoJV1NjlGv1rz5PAcUCudCTHu5Pk/2H6XFcTq9/6Ysds="
-    branches:
-      - master
-      - develop

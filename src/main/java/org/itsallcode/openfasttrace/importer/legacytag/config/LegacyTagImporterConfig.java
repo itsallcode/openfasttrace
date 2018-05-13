@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.legacytag.config;
 
 /*-
  * #%L

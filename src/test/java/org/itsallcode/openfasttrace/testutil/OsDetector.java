@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.testutil;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,25 +22,30 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-import java.io.Reader;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
-import org.itsallcode.openfasttrace.importer.*;
-
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-// [impl->dsn~import.full-coverage-tag~1]
-public class TagImporterFactory extends RegexMatchingImporterFactory
+public class OsDetector
 {
-    public TagImporterFactory()
+    private static String OS = System.getProperty("os.name").toLowerCase();
+
+    private OsDetector()
     {
-        super("(?i).*\\.java");
+        // not instantiable
     }
 
-    @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public static void assumeRunningOnWindows()
     {
-        return new TagImporter(fileName, reader, listener);
+        assumeTrue("not running on windows", runningOnWindows());
+    }
+
+    public static void assumeRunningOnUnix()
+    {
+        assumeFalse("not running on unix", runningOnWindows());
+    }
+
+    private static boolean runningOnWindows()
+    {
+        return OS.indexOf("win") >= 0;
     }
 }

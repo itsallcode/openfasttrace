@@ -33,12 +33,14 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.LineReader;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~import.short-coverage-tag~1]
 public class TestLegacyTagImporter
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";

@@ -32,8 +32,8 @@ import java.util.stream.Stream;
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
+import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
 {

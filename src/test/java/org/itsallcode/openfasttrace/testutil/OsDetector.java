@@ -34,18 +34,18 @@ public class OsDetector
         // not instantiable
     }
 
-    public static boolean runningOnWindows()
-    {
-        return OS.indexOf("win") >= 0;
-    }
-
     public static void assumeRunningOnWindows()
     {
-        assumeTrue(runningOnWindows());
+        assumeTrue("not running on windows", runningOnWindows());
     }
 
     public static void assumeRunningOnUnix()
     {
-        assumeFalse(runningOnWindows());
+        assumeFalse("not running on unix", runningOnWindows());
+    }
+
+    private static boolean runningOnWindows()
+    {
+        return OS.indexOf("win") >= 0;
     }
 }

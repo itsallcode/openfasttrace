@@ -173,33 +173,35 @@ public class HtmlSpecificationItem implements Viewable
 
     private void renderLinks(final String indentation)
     {
-        final int totalOut = this.item.countOutgoingLinks();
-        if (totalOut > 0)
+        renderLinkForDirection(indentation, true);
+        renderLinkForDirection(indentation, false);
+    }
+
+    protected void renderLinkForDirection(final String indentation, final boolean in)
+    {
+        final int total = in ? this.item.countIncomingLinks() : this.item.countOutgoingLinks();
+        if (total > 0)
         {
             this.stream.print(indentation);
-            this.stream.print("    <h6>Out: ");
-            this.stream.print(totalOut);
-            this.stream.println(" total</h6>");
-            this.stream.println("    <ul class=\"out\">");
-            final Stream<TracedLink> outLinks = this.item.getTracedLinks().stream()
-                    .filter(TracedLink::isOutgoing);
-            final List<TracedLink> sortedLinks = sortLinkStreamById(outLinks);
-            renderLinkEntry(sortedLinks);
-            this.stream.println("    </ul>");
-        }
-        final int totalIn = this.item.countIncomingLinks();
-        if (totalIn > 0)
-        {
+            this.stream.print("    <div class=\"");
+            this.stream.print(in ? "in" : "out");
+            this.stream.println("\">");
             this.stream.print(indentation);
-            this.stream.print("    <h6>In: ");
-            this.stream.print(totalIn);
-            this.stream.println(" total</h6>");
-            this.stream.println("    <ul class=\"in\">");
-            final Stream<TracedLink> inLinks = this.item.getTracedLinks().stream()
-                    .filter(TracedLink::isIncoming);
-            final List<TracedLink> sortedLinks = sortLinkStreamById(inLinks);
-            renderLinkEntry(sortedLinks);
-            this.stream.println("    </ul>");
+            this.stream.print("      <h6>");
+            this.stream.print(in ? "In" : "Out");
+            this.stream.print(": ");
+            this.stream.print(total);
+            this.stream.println("</h6>");
+            this.stream.print(indentation);
+            this.stream.println("      <ul>");
+            final Stream<TracedLink> links = this.item.getTracedLinks().stream()
+                    .filter(in ? TracedLink::isIncoming : TracedLink::isOutgoing);
+            final List<TracedLink> sortedLinks = sortLinkStreamById(links);
+            renderLinkEntry(sortedLinks, indentation);
+            this.stream.print(indentation);
+            this.stream.println("      </ul>");
+            this.stream.print(indentation);
+            this.stream.println("    </div>");
         }
     }
 
@@ -211,12 +213,13 @@ public class HtmlSpecificationItem implements Viewable
                 .collect(Collectors.toList());
     }
 
-    protected void renderLinkEntry(final List<TracedLink> outLinks)
+    protected void renderLinkEntry(final List<TracedLink> outLinks, final String indentation)
     {
         for (final TracedLink link : outLinks)
         {
             final SpecificationItemId otherId = link.getOtherLinkEnd().getId();
-            this.stream.print("      <li><a href=\"#");
+            this.stream.print(indentation);
+            this.stream.print("        <li><a href=\"#");
             this.stream.print(otherId);
             this.stream.print("\">");
             this.stream.print(otherId);

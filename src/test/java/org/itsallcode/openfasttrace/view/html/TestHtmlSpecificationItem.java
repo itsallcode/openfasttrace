@@ -160,12 +160,14 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
-                "    <h6>In: 2 total</h6>", //
-                "    <ul class=\"in\">", //
-                "      <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID + "</a></li>", //
-                "      <li><a href=\"#" + ITEM_C_ID + "\">" + ITEM_C_ID
+                "    <div class=\"in\">", //
+                "      <h6>In: 2</h6>", //
+                "      <ul>", //
+                "        <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID + "</a></li>", //
+                "        <li><a href=\"#" + ITEM_C_ID + "\">" + ITEM_C_ID
                         + "</a> <em>(unwanted coverage)</em></li>", //
-                "    </ul>", //
+                "      </ul>", //
+                "    </div>", //
                 "  </details>", //
                 "</section>", //
                 "");

@@ -44,17 +44,31 @@ del, ins, .red {
   color: red;
 }
 
-ul.in, ul.out {
-  list-style: none;
-  padding-left: 1em;
+p, h6 {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
-ul.in li:before {
+.in, .out {
+  display: flex;
+}
+
+.in ul, .out ul {
+  list-style: none;
+  padding-left: 1em;
+  flex: auto;
+}
+
+.in h6, .out h6 {
+  width: 4em;
+}
+
+.in li:before {
   content: "\2192";
   margin: 0 1em;
 }
 
-ul.out li:before {
+.out li:before {
   content: "\2190";
   margin: 0 1em;
 }

@@ -23,8 +23,7 @@ public class RifImporterFactory extends RegexMatchingImporterFactory
     public Importer createImporter(final String fileName, final Reader reader,
             final ImportEventListener listener)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new RifImporter(fileName, reader, this.saxParserFactory, listener);
     }
 
 }

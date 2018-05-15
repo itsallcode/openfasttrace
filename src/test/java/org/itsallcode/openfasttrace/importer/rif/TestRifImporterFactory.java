@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.rif;
 
+import static java.util.Arrays.asList;
+
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
@@ -17,15 +19,14 @@ public class TestRifImporterFactory extends ImporterFactoryTestBase<RifImporterF
     @Override
     protected List<String> getSupportedFilenames()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return asList("file.rif", "file.RIF", "FILE.rif", "FILE.RIF", "file.md.rif");
     }
 
     @Override
     protected List<String> getUnsupportedFilenames()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return asList("file.md", "file.ri", "file.if", "file.1rif", "file.rif1", "file.rif.md",
+                "file_rif", "filerif");
     }
 
 }

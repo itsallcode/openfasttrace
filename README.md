@@ -2,10 +2,22 @@
 
 [![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
 [![Circle CI](https://circleci.com/gh/itsallcode/openfasttrace.svg?style=svg)](https://circleci.com/gh/itsallcode/openfasttrace)
-[![Sonarcloud Quality Gate](https://sonarcloud.io/api/badges/gate?key=org.itsallcode%3Aopenfasttrace%3Adevelop)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
 [![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg)](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
+
+[Sonarcloud status](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop):
+![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=alert_status)
+![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=bugs)
+![Code smells](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=code_smells)
+![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=coverage)
+![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=duplicated_lines_density)
+![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=ncloc)
+![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=sqale_rating)
+![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=reliability_rating)
+![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=security_rating)
+![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=sqale_index)
+![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=vulnerabilities)
 
 ## Installation
 

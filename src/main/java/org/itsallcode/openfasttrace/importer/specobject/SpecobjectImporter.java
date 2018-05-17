@@ -75,7 +75,7 @@ class SpecobjectImporter implements Importer
         }
         catch (SAXException | ParserConfigurationException | IOException e)
         {
-            throw new ImporterException("Error importing specobjects document " + this.file, e);
+            throw new ImporterException("Error reading file " + this.file, e);
         }
     }
 }

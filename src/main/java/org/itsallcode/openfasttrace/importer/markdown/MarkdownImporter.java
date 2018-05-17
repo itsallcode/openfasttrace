@@ -189,8 +189,7 @@ class MarkdownImporter implements Importer
         }
         catch (final IOException exception)
         {
-            throw new ImporterException("IO exception after " + this.file + ":" + this.lineNumber,
-                    exception);
+            throw new ImporterException("Error reading file " + this.file, exception);
         }
         finishImport();
     }

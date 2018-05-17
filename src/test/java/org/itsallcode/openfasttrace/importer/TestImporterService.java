@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -25,21 +27,18 @@ package org.itsallcode.openfasttrace.importer;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 /**
  * Test for {@link ImporterService}
@@ -53,6 +52,12 @@ public class TestImporterService
     @Mock
     private Importer importerMock;
 
+    @Captor
+    private ArgumentCaptor<SpecificationListBuilder> builderArg;
+
+    @Captor
+    private ArgumentCaptor<InputFile> fileArg;
+
     private Path file;
     private ImporterService importerService;
 
@@ -63,10 +68,9 @@ public class TestImporterService
         this.importerService = new ImporterService(this.factoryLoaderMock);
         this.file = Paths.get("dir", "file");
 
-        when(this.factoryLoaderMock.getImporterFactory(same(this.file)))
+        when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
                 .thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(same(this.file), same(StandardCharsets.UTF_8),
-                any())).thenReturn(this.importerMock);
+        when(this.importerFactoryMock.createImporter(any(), any())).thenReturn(this.importerMock);
     }
 
     @Test
@@ -75,17 +79,12 @@ public class TestImporterService
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
 
         verify(this.importerMock).runImport();
+        verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
+                this.builderArg.capture());
 
-        final SpecificationListBuilder builder = getBuilder();
+        final SpecificationListBuilder builder = this.builderArg.getValue();
         assertThat(result, sameInstance(builder.build()));
-    }
 
-    private SpecificationListBuilder getBuilder()
-    {
-        final ArgumentCaptor<SpecificationListBuilder> arg = ArgumentCaptor
-                .forClass(SpecificationListBuilder.class);
-        verify(this.importerFactoryMock).createImporter(same(this.file),
-                same(StandardCharsets.UTF_8), arg.capture());
-        return arg.getValue();
+        assertThat(this.fileArg.getValue().getPath(), equalTo("dir/file"));
     }
 }

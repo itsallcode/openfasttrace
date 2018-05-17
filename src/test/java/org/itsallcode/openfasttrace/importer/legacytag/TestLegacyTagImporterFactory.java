@@ -37,6 +37,7 @@ import java.util.Optional;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
@@ -125,12 +126,14 @@ public class TestLegacyTagImporterFactory
     private void assertSupportsFile(final LegacyTagImporterConfig config, final String path,
             final boolean expected)
     {
-        assertThat(create(config).supportsFile(Paths.get(path)), equalTo(expected));
+        final InputFile file = InputFile.createForPath(Paths.get(path));
+        assertThat(create(config).supportsFile(file), equalTo(expected));
     }
 
     private Importer createImporter(final LegacyTagImporterConfig config, final Path path)
     {
-        return create(config).createImporter(path, StandardCharsets.UTF_8, this.listenerMock);
+        final InputFile file = InputFile.createForPath(path, StandardCharsets.UTF_8);
+        return create(config).createImporter(file, this.listenerMock);
     }
 
     private LegacyTagImporterConfig configure(final String basePath,

@@ -21,12 +21,11 @@ package org.itsallcode.openfasttrace.importer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,7 +50,7 @@ public class TestLineReader
     @Mock
     private LineConsumer consumerMock;
     @Mock
-    private LineNumberReader readerMock;
+    private BufferedReader readerMock;
 
     @Before
     public void setUp()
@@ -129,16 +128,6 @@ public class TestLineReader
         final InputFile file = InputFile.createForReader(DUMMY_FILE,
                 new BufferedReader(new StringReader(content)));
         LineReader.create(file).readLines(this.consumerMock);
-    }
-
-    @Test
-    public void testClose() throws IOException
-    {
-        when(this.readerMock.readLine()).thenReturn(null);
-        final LineReader lineReader = new LineReader(
-                InputFile.createForReader(DUMMY_FILE, this.readerMock));
-        lineReader.readLines(this.consumerMock);
-        verify(this.readerMock).close();
     }
 
     private void assertLinesRead(final String... expectedLines)

@@ -30,8 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.ImporterFactory;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -73,7 +71,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("Error reading file '" + supportedPath + "'");
+        this.thrown.expectMessage("Error reading file " + supportedPath);
         createFactory().createImporter(supportedPath, StandardCharsets.UTF_8, null).runImport();
     }
 

@@ -30,11 +30,10 @@ import java.nio.file.Path;
 
 class RealFileInput implements InputFile
 {
-
     private final Path path;
     private final Charset charset;
 
-    public RealFileInput(final Path path, final Charset charset)
+    RealFileInput(final Path path, final Charset charset)
     {
         this.path = path;
         this.charset = charset;
@@ -50,5 +49,11 @@ class RealFileInput implements InputFile
     public String getPath()
     {
         return this.path.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPath();
     }
 }

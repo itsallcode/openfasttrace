@@ -27,11 +27,10 @@ import java.nio.file.Path;
 
 class StreamInput implements InputFile
 {
-
     private final Path path;
     private final BufferedReader reader;
 
-    public StreamInput(final Path path, final BufferedReader reader)
+    StreamInput(final Path path, final BufferedReader reader)
     {
         this.path = path;
         this.reader = reader;
@@ -47,5 +46,11 @@ class StreamInput implements InputFile
     public String getPath()
     {
         return this.path.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPath();
     }
 }

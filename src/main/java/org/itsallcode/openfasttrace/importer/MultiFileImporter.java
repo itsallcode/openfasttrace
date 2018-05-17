@@ -69,8 +69,8 @@ public class MultiFileImporter
     {
         LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
-        createImporter(InputFile.createForPath(file, DEFAULT_CHARSET), this.specItemBuilder)
-                .runImport();
+        final InputFile inputFile = InputFile.createForPath(file, DEFAULT_CHARSET);
+        createImporter(inputFile, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;

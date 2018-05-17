@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
@@ -68,7 +69,8 @@ public class MultiFileImporter
     {
         LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
-        createImporter(file, DEFAULT_CHARSET, this.specItemBuilder).runImport();
+        createImporter(InputFile.createForPath(file, DEFAULT_CHARSET), this.specItemBuilder)
+                .runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
@@ -129,9 +131,9 @@ public class MultiFileImporter
         {
             fileStream.filter(path -> !path.toFile().isDirectory()) //
                     .filter(matcher::matches) //
+                    .map(path -> InputFile.createForPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
-                    .map(file -> createImporter(file, DEFAULT_CHARSET, this.specItemBuilder))
-                    .forEach(importer -> {
+                    .map(file -> createImporter(file, this.specItemBuilder)).forEach(importer -> {
                         importer.runImport();
                         fileCount.incrementAndGet();
                     });
@@ -156,11 +158,10 @@ public class MultiFileImporter
         return this.specItemBuilder.build();
     }
 
-    private Importer createImporter(final Path file, final Charset charset,
-            final SpecificationListBuilder builder)
+    private Importer createImporter(final InputFile file, final SpecificationListBuilder builder)
     {
         final ImporterFactory importerFactory = this.factoryLoader.getImporterFactory(file);
-        final Importer importer = importerFactory.createImporter(file, charset, builder);
+        final Importer importer = importerFactory.createImporter(file, builder);
         LOG.fine(() -> "Created importer of type '" + importer.getClass().getSimpleName()
                 + "' for file '" + file + "'");
         return importer;

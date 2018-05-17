@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * The configuration of a single path that is imported by
@@ -53,7 +54,7 @@ public class PathConfig
         return this.pathMatcher.getDescription();
     }
 
-    public boolean matches(final Path file)
+    public boolean matches(final InputFile file)
     {
         return this.pathMatcher.matches(file);
     }

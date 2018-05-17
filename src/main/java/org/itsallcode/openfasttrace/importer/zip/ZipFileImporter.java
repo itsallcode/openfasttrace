@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.importer.zip;
 
 /*-
  * #%L
@@ -22,23 +22,24 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-// [impl->dsn~import.full-coverage-tag~1]
-public class TagImporterFactory extends RegexMatchingImporterFactory
+public class ZipFileImporter implements Importer
 {
-    public TagImporterFactory()
+    private final InputFile file;
+    private final ImportEventListener listener;
+
+    public ZipFileImporter(final InputFile file, final ImportEventListener listener)
     {
-        super("(?i).*\\.java");
+        this.file = file;
+        this.listener = listener;
     }
 
     @Override
-    public Importer createImporter(final InputFile file, final ImportEventListener listener)
+    public void runImport()
     {
-        return new TagImporter(file, listener);
+
     }
 }

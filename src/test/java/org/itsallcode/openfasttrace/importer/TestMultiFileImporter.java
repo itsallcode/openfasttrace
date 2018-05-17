@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -125,7 +126,7 @@ public class TestMultiFileImporter
 
     private void expectFileImported(final Path file)
     {
-        when(this.factoryLoaderMock.supportsFile(file)).thenReturn(true);
+        when(this.factoryLoaderMock.supportsFile(InputFile.createForPath(file))).thenReturn(true);
         when(this.factoryLoaderMock.getImporterFactory(file)).thenReturn(this.importerFactoryMock);
         when(this.importerFactoryMock.createImporter(eq(file), eq(DEFAULT_CHARSET),
                 same(this.specItemBuilderMock))).thenReturn(this.importerMock);

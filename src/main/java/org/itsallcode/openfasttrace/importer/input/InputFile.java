@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.importer.input;
 
 /*-
  * #%L
@@ -22,23 +22,30 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
-/**
- * {@link ImporterFactory} for tags in source code files.
- */
-// [impl->dsn~import.full-coverage-tag~1]
-public class TagImporterFactory extends RegexMatchingImporterFactory
+public interface InputFile
 {
-    public TagImporterFactory()
+    public static InputFile createForPath(final Path file)
     {
-        super("(?i).*\\.java");
+        return createForPath(file, StandardCharsets.UTF_8);
     }
 
-    @Override
-    public Importer createImporter(final InputFile file, final ImportEventListener listener)
+    public static InputFile createForPath(final Path path, final Charset charset)
     {
-        return new TagImporter(file, listener);
+        return new RealFileInput(path, charset);
     }
+
+    public static InputFile createForReader(final Path path, final BufferedReader reader)
+    {
+        return new StreamInput(path, reader);
+    }
+
+    BufferedReader createReader() throws IOException;
+
+    String getPath();
 }

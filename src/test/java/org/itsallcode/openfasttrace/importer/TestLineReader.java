@@ -26,16 +26,14 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.LineReader;
 import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,7 +65,7 @@ public class TestLineReader
         final Path tempFile = this.tempFolder.newFile().toPath();
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
 
-        LineReader.create(tempFile, StandardCharsets.UTF_8).readLines(this.consumerMock);
+        LineReader.create(InputFile.createForPath(tempFile)).readLines(this.consumerMock);
 
         assertLinesRead(TEST_CONTENT_LINE_1);
     }
@@ -78,7 +76,7 @@ public class TestLineReader
         final Path tempFile = this.tempFolder.newFile().toPath();
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
 
-        LineReader.create(DUMMY_FILE, Files.newBufferedReader(tempFile))
+        LineReader.create(InputFile.createForReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
                 .readLines(this.consumerMock);
 
         assertLinesRead(TEST_CONTENT_LINE_1);
@@ -128,20 +126,19 @@ public class TestLineReader
 
     private void readContent(final String content)
     {
-        LineReader.create(DUMMY_FILE, new StringReader(content))
-                .readLines(this.consumerMock);
+        final InputFile file = InputFile.createForReader(DUMMY_FILE,
+                new BufferedReader(new StringReader(content)));
+        LineReader.create(file).readLines(this.consumerMock);
     }
 
     @Test
     public void testClose() throws IOException
     {
         when(this.readerMock.readLine()).thenReturn(null);
-        try (LineReader lineReader = new LineReader(DUMMY_FILE, this.readerMock))
-        {
-            lineReader.readLines(this.consumerMock);
-        }
+        final LineReader lineReader = new LineReader(
+                InputFile.createForReader(DUMMY_FILE, this.readerMock));
+        lineReader.readLines(this.consumerMock);
         verify(this.readerMock).close();
-
     }
 
     private void assertLinesRead(final String... expectedLines)

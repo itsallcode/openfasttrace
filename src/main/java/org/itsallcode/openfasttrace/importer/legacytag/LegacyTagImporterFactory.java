@@ -24,15 +24,13 @@ package org.itsallcode.openfasttrace.importer.legacytag;
 
 import static java.util.stream.Collectors.toList;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
@@ -56,29 +54,20 @@ public class LegacyTagImporterFactory extends ImporterFactory
     }
 
     @Override
-    public boolean supportsFile(final Path path)
+    public boolean supportsFile(final InputFile path)
     {
         return findConfig(path).isPresent();
     }
 
-    private Optional<PathConfig> findConfig(final Path path)
+    private Optional<PathConfig> findConfig(final InputFile file)
     {
-        final Path relativePath = makeRelative(path);
         return this.config.get().getPathConfigs().stream() //
-                .filter(config -> config.matches(relativePath)) //
+                .filter(config -> config.matches(file)) //
                 .findFirst();
     }
 
-    private Path makeRelative(final Path path)
-    {
-        return this.config.get().getBasePath() //
-                .map(basePath -> basePath.relativize(path)) //
-                .orElse(path);
-    }
-
     @Override
-    public Importer createImporter(final Path path, final Charset charset,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile path, final ImportEventListener listener)
     {
         final Optional<PathConfig> config = findConfig(path);
         if (!config.isPresent())
@@ -89,24 +78,15 @@ public class LegacyTagImporterFactory extends ImporterFactory
             throw new ImporterException("File '" + path
                     + "' not supported for import, supported paths: " + descriptions);
         }
-        return () -> runImporter(path, charset, config.get(), listener);
+        return () -> runImporter(path, config.get(), listener);
     }
 
-    private void runImporter(final Path path, final Charset charset, final PathConfig config,
+    private void runImporter(final InputFile file, final PathConfig config,
             final ImportEventListener listener)
     {
-        LOG.finest(() -> "Creating importer for file " + path);
-        try (final LineReader reader = LineReader.create(path, charset))
-        {
-            final LegacyTagImporter importer = new LegacyTagImporter(config, path, reader,
-                    listener);
-            importer.runImport();
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException("Error importing file '" + path + "': " + e.getMessage(),
-                    e);
-        }
+        LOG.finest(() -> "Creating importer for file " + file);
+        final LegacyTagImporter importer = new LegacyTagImporter(config, file, listener);
+        importer.runImport();
     }
 
     public static void setPathConfig(final LegacyTagImporterConfig config)

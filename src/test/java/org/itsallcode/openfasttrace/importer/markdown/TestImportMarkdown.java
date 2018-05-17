@@ -29,13 +29,16 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -109,8 +112,9 @@ public class TestImportMarkdown
 
     private void runImporterOnText(final String text)
     {
-        final StringReader reader = new StringReader(text);
-        final Importer importer = new MarkdownImporterFactory().createImporter(FILENAME, reader,
+        final BufferedReader reader = new BufferedReader(new StringReader(text));
+        final InputFile file = InputFile.createForReader(Paths.get(FILENAME), reader);
+        final Importer importer = new MarkdownImporterFactory().createImporter(file,
                 this.listenerMock);
         importer.runImport();
     }

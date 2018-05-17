@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
@@ -31,6 +30,7 @@ import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This class is responsible for finding the matching {@link ImporterFactory}
@@ -54,8 +54,8 @@ public class ImporterFactoryLoader
 
     /**
      * Finds a matching {@link ImporterFactory} that can handle the given
-     * {@link Path}. If no or more than one {@link ImporterFactory} is found, this
-     * throws an {@link ImporterException}.
+     * {@link Path}. If no or more than one {@link ImporterFactory} is found,
+     * this throws an {@link ImporterException}.
      *
      * @param file
      *            the file for which to get a {@link ImporterFactory}.
@@ -64,7 +64,7 @@ public class ImporterFactoryLoader
      * @throws ImporterException
      *             when no or more than one {@link ImporterFactory} is found.
      */
-    public ImporterFactory getImporterFactory(final Path file)
+    public ImporterFactory getImporterFactory(final InputFile file)
     {
         final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
         switch (matchingImporters.size())
@@ -79,14 +79,23 @@ public class ImporterFactoryLoader
         }
     }
 
-    public boolean supportsFile(final Path file)
+    /**
+     * @deprecated use {@link #getImporterFactory(InputFile)}
+     */
+    @Deprecated
+    public ImporterFactory getImporterFactory(final Path file)
+    {
+        return getImporterFactory(InputFile.createForPath(file));
+    }
+
+    public boolean supportsFile(final InputFile file)
     {
         final boolean supported = !getMatchingFactories(file).isEmpty();
         LOG.finest(() -> "File " + file + " is supported = " + supported);
         return supported;
     }
 
-    private List<ImporterFactory> getMatchingFactories(final Path file)
+    private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
                 .filter(f -> f.supportsFile(file)) //

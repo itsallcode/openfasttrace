@@ -21,11 +21,7 @@ package org.itsallcode.openfasttrace.exporter;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,8 +46,8 @@ public abstract class ExporterFactory
     }
 
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory} supports exporting
-     * the given output format.
+     * Returns <code>true</code> if this {@link ExporterFactory} supports
+     * exporting the given output format.
      *
      * @param format
      *            the output type to check.
@@ -93,10 +89,17 @@ public abstract class ExporterFactory
         if (file == null)
         {
             LOG.finest(() -> "Creating exporter for stdout using charset " + charset);
-            return new OutputStreamWriter(System.out, charset);
+            return new OutputStreamWriter(getStdOutStream(), charset);
         }
         LOG.finest(() -> "Creating exporter for file " + file + " using charset " + charset);
         return createFileWriter(file, charset);
+    }
+
+    // Using System.out by intention
+    @SuppressWarnings("squid:S106")
+    private PrintStream getStdOutStream()
+    {
+        return System.out;
     }
 
     private Writer createFileWriter(final Path file, final Charset charset)

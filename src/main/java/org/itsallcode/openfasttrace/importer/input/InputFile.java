@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public interface InputFile
 {
@@ -45,7 +47,20 @@ public interface InputFile
         return new StreamInput(path, reader);
     }
 
+    public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry)
+    {
+        if (entry.isDirectory())
+        {
+            throw new IllegalArgumentException("ZIP entry " + entry + " must not be a directory");
+        }
+        return new ZipEntryInput(zip, entry, StandardCharsets.UTF_8);
+    }
+
     BufferedReader createReader() throws IOException;
 
     String getPath();
+
+    boolean isRealFile();
+
+    Path toPath();
 }

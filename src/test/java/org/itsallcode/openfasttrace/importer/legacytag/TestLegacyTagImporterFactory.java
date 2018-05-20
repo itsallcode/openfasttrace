@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
@@ -54,6 +53,8 @@ public class TestLegacyTagImporterFactory
 
     @Mock
     private ImportEventListener listenerMock;
+    @Mock
+    private ImporterContext contextMock;
 
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
@@ -136,7 +137,10 @@ public class TestLegacyTagImporterFactory
 
     private LegacyTagImporterFactory create(final LegacyTagImporterConfig config)
     {
-        return new LegacyTagImporterFactory(() -> config);
+        final LegacyTagImporterFactory factory = new LegacyTagImporterFactory();
+        factory.init(this.contextMock);
+        when(this.contextMock.getTagImporterConfig()).thenReturn(config);
+        return factory;
     }
 
     private PathConfig glob(final String globPattern)

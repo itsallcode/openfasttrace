@@ -1,5 +1,10 @@
 package org.itsallcode.openfasttrace.importer.zip;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,6 +29,7 @@ package org.itsallcode.openfasttrace.importer.zip;
 
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class ZipFileImporter implements Importer
@@ -40,6 +46,27 @@ public class ZipFileImporter implements Importer
     @Override
     public void runImport()
     {
+        if (!this.file.isRealFile())
+        {
+            throw new UnsupportedOperationException(
+                    "Importing a zip file from a strem is not supported");
+        }
+        try (ZipFile zip = new ZipFile(this.file.toPath().toFile(), StandardCharsets.UTF_8))
+        {
+            zip.stream() //
+                    .filter(entry -> !entry.isDirectory()) //
+                    .map(entry -> createInput(zip, entry))
 
+            ;
+        }
+        catch (final IOException e)
+        {
+            throw new ImporterException("Error importing ZIP " + this.file, e);
+        }
+    }
+
+    private InputFile createInput(final ZipFile zip, final ZipEntry entry)
+    {
+        return InputFile.forZipEntry(zip, entry);
     }
 }

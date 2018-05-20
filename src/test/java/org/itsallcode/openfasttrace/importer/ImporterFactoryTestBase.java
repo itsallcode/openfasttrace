@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.importer;
  */
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.nio.file.Path;
@@ -30,9 +31,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Base class for {@link ImporterFactory} tests.
@@ -44,6 +48,14 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private ImporterContext contextMock;
+
+    @Before
+    public void initMocks()
+    {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void testSupportedFileNames()
@@ -64,6 +76,23 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         this.thrown.expect(ImporterException.class);
         this.thrown.expectMessage("Error reading file " + supportedPath);
         createFactory().createImporter(InputFile.forPath(supportedPath), null).runImport();
+    }
+
+    @Test
+    public void testInit()
+    {
+        final T factory = createFactory();
+        factory.init(this.contextMock);
+        assertThat(factory.getContext(), sameInstance(this.contextMock));
+    }
+
+    @Test
+    public void testMissingContextThrowsException()
+    {
+        final T factory = createFactory();
+        this.thrown.expect(NullPointerException.class);
+        this.thrown.expectMessage(equalTo("Context was not initialized"));
+        factory.getContext();
     }
 
     private void assertSupported(final List<String> filenames, final boolean expectedResult)

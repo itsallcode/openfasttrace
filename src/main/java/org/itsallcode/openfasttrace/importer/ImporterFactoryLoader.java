@@ -41,15 +41,18 @@ public class ImporterFactoryLoader
     private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
 
     private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
+    private final ImporterContext context;
 
-    public ImporterFactoryLoader()
+    public ImporterFactoryLoader(final ImporterContext context)
     {
-        this(ServiceLoaderWrapper.load(ImporterFactory.class));
+        this(ServiceLoaderWrapper.load(ImporterFactory.class), context);
     }
 
-    ImporterFactoryLoader(final ServiceLoaderWrapper<ImporterFactory> serviceLoader)
+    ImporterFactoryLoader(final ServiceLoaderWrapper<ImporterFactory> serviceLoader,
+            final ImporterContext context)
     {
         this.serviceLoader = serviceLoader;
+        this.context = context;
     }
 
     /**
@@ -89,7 +92,7 @@ public class ImporterFactoryLoader
     private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter(f -> f.supportsFile(file)) //
+                .peek(service -> service.init(this.context)).filter(f -> f.supportsFile(file)) //
                 .collect(toList());
     }
 }

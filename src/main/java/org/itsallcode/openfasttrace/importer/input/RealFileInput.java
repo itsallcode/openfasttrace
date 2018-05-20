@@ -56,4 +56,16 @@ class RealFileInput implements InputFile
     {
         return getPath();
     }
+
+    @Override
+    public boolean isRealFile()
+    {
+        return true;
+    }
+
+    @Override
+    public Path toPath()
+    {
+        return this.path;
+    }
 }

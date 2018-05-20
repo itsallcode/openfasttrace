@@ -31,16 +31,16 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.importer.ImporterContext;
 import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
 {
-    private final ImporterService importerService = new ImporterService();
     protected final List<Path> inputs = new ArrayList<>();
     protected Newline newline = Newline.UNIX;
     private FilterSettings filterSettings = FilterSettings.createAllowingEverything();
+    private LegacyTagImporterConfig tagImporterConfig = LegacyTagImporterConfig.empty();
 
     protected abstract T self();
 
@@ -69,9 +69,9 @@ abstract class AbstractMode<T extends AbstractMode<T>>
         return self();
     }
 
-    public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config)
+    public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig tagImporterConfig)
     {
-        LegacyTagImporterFactory.setPathConfig(config);
+        this.tagImporterConfig = tagImporterConfig;
         return self();
     }
 
@@ -86,11 +86,16 @@ abstract class AbstractMode<T extends AbstractMode<T>>
 
     protected Stream<SpecificationItem> importItems()
     {
-        return this.importerService //
+        return createImporterService() //
                 .setFilters(this.filterSettings) //
                 .createImporter() //
                 .importAny(this.inputs) //
                 .getImportedItems() //
                 .stream();
+    }
+
+    private ImporterService createImporterService()
+    {
+        return new ImporterService(new ImporterContext(this.tagImporterConfig));
     }
 }

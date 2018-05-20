@@ -36,15 +36,18 @@ public class ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
     private FilterSettings filterSettings;
+    private final ImporterContext context;
 
-    public ImporterService()
+    public ImporterService(final ImporterContext context)
     {
-        this(new ImporterFactoryLoader());
+        this(new ImporterFactoryLoader(context), context);
     }
 
-    ImporterService(final ImporterFactoryLoader factoryLoader)
+    ImporterService(final ImporterFactoryLoader factoryLoader, final ImporterContext context)
     {
         this.factoryLoader = factoryLoader;
+        this.context = context;
+        this.context.setImporterService(this);
     }
 
     /**
@@ -67,10 +70,13 @@ public class ImporterService
                 .getImportedItems();
     }
 
+    public MultiFileImporter createImporter(final SpecificationListBuilder builder)
+    {
+        return new MultiFileImporter(builder, this.factoryLoader);
+    }
+
     public MultiFileImporter createImporter()
     {
-        final SpecificationListBuilder builder = SpecificationListBuilder
-                .createWithFilter(this.filterSettings);
-        return new MultiFileImporter(builder, this.factoryLoader);
+        return createImporter(SpecificationListBuilder.createWithFilter(this.filterSettings));
     }
 }

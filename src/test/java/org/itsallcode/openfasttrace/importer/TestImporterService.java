@@ -51,6 +51,8 @@ public class TestImporterService
     private ImporterFactory importerFactoryMock;
     @Mock
     private Importer importerMock;
+    @Mock
+    private ImporterContext contextMock;
 
     @Captor
     private ArgumentCaptor<SpecificationListBuilder> builderArg;
@@ -65,7 +67,7 @@ public class TestImporterService
     public void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        this.importerService = new ImporterService(this.factoryLoaderMock);
+        this.importerService = new ImporterService(this.factoryLoaderMock, this.contextMock);
         this.file = InputFile.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
@@ -77,15 +79,7 @@ public class TestImporterService
     public void testImportWindows()
     {
         OsDetector.assumeRunningOnWindows();
-        final List<SpecificationItem> result = this.importerService.importFile(this.file);
-
-        verify(this.importerMock).runImport();
-        verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
-                this.builderArg.capture());
-
-        final SpecificationListBuilder builder = this.builderArg.getValue();
-        assertThat(result, sameInstance(builder.build()));
-
+        runImporter();
         assertThat(this.fileArg.getValue().getPath(), equalTo("dir\\file"));
     }
 
@@ -93,6 +87,19 @@ public class TestImporterService
     public void testImportUnix()
     {
         OsDetector.assumeRunningOnUnix();
+        runImporter();
+        assertThat(this.fileArg.getValue().getPath(), equalTo("dir/file"));
+    }
+
+    @Test
+    public void testContextInitialized()
+    {
+        final ImporterService newService = new ImporterService(this.contextMock);
+        verify(this.contextMock).setImporterService(newService);
+    }
+
+    private void runImporter()
+    {
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
 
         verify(this.importerMock).runImport();
@@ -101,7 +108,5 @@ public class TestImporterService
 
         final SpecificationListBuilder builder = this.builderArg.getValue();
         assertThat(result, sameInstance(builder.build()));
-
-        assertThat(this.fileArg.getValue().getPath(), equalTo("dir/file"));
     }
 }

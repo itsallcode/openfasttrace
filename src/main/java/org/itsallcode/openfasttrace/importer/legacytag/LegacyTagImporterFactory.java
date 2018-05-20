@@ -26,32 +26,17 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
 public class LegacyTagImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(LegacyTagImporterFactory.class.getName());
-
-    private static LegacyTagImporterConfig defaultConfig = LegacyTagImporterConfig.empty();;
-
-    private final Supplier<LegacyTagImporterConfig> config;
-
-    public LegacyTagImporterFactory()
-    {
-        this(() -> defaultConfig);
-    }
-
-    public LegacyTagImporterFactory(final Supplier<LegacyTagImporterConfig> config)
-    {
-        this.config = config;
-    }
 
     @Override
     public boolean supportsFile(final InputFile path)
@@ -61,7 +46,7 @@ public class LegacyTagImporterFactory extends ImporterFactory
 
     private Optional<PathConfig> findConfig(final InputFile file)
     {
-        return this.config.get().getPathConfigs().stream() //
+        return getPathConfigs()//
                 .peek(c -> LOG.finest(() -> "Checking config " + c + " with file " + file))
                 .filter(config -> config.matches(file)) //
                 .peek(c -> LOG.finest(() -> "Config " + c + " matches file " + file)) //
@@ -74,7 +59,7 @@ public class LegacyTagImporterFactory extends ImporterFactory
         final Optional<PathConfig> config = findConfig(path);
         if (!config.isPresent())
         {
-            final List<String> descriptions = this.config.get().getPathConfigs().stream() //
+            final List<String> descriptions = this.getPathConfigs() //
                     .map(PathConfig::getDescription) //
                     .collect(toList());
             throw new ImporterException("File '" + path
@@ -83,16 +68,16 @@ public class LegacyTagImporterFactory extends ImporterFactory
         return () -> runImporter(path, config.get(), listener);
     }
 
+    private Stream<PathConfig> getPathConfigs()
+    {
+        return getContext().getTagImporterConfig().getPathConfigs().stream();
+    }
+
     private void runImporter(final InputFile file, final PathConfig config,
             final ImportEventListener listener)
     {
         LOG.finest(() -> "Creating importer for file " + file);
         final LegacyTagImporter importer = new LegacyTagImporter(config, file, listener);
         importer.runImport();
-    }
-
-    public static void setPathConfig(final LegacyTagImporterConfig config)
-    {
-        defaultConfig = config;
     }
 }

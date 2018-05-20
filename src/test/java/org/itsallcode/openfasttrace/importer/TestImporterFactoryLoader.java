@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
@@ -50,6 +51,8 @@ public class TestImporterFactoryLoader
     private ImporterFactory supportedFactory2;
     @Mock
     private ImporterFactory unsupportedFactory;
+    @Mock
+    private ImporterContext contextMock;
 
     private ImporterFactoryLoader loader;
     private InputFile file;
@@ -59,7 +62,7 @@ public class TestImporterFactoryLoader
     {
         MockitoAnnotations.initMocks(this);
 
-        this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
+        this.loader = new ImporterFactoryLoader(this.serviceLoaderMock, this.contextMock);
         this.file = InputFile.forPath(Paths.get("dir", "name"));
 
         when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
@@ -79,6 +82,14 @@ public class TestImporterFactoryLoader
     {
         simulateFactories(this.supportedFactory1);
         assertFactoryFound(this.supportedFactory1);
+    }
+
+    @Test
+    public void testMatchingFactoryInitialized()
+    {
+        simulateFactories(this.supportedFactory1);
+        this.loader.getImporterFactory(this.file);
+        verify(this.supportedFactory1).init(same(this.contextMock));
     }
 
     @Test

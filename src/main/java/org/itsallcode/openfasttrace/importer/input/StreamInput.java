@@ -53,4 +53,16 @@ class StreamInput implements InputFile
     {
         return getPath();
     }
+
+    @Override
+    public boolean isRealFile()
+    {
+        return false;
+    }
+
+    @Override
+    public Path toPath()
+    {
+        throw new UnsupportedOperationException("toPath() not supported for StreamInput");
+    }
 }

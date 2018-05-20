@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import java.util.Objects;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -28,6 +30,8 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
  */
 public abstract class ImporterFactory
 {
+    private ImporterContext context;
+
     /**
      * Returns <code>true</code> if this {@link ImporterFactory} supports
      * importing the given file based on its file extension.
@@ -50,4 +54,20 @@ public abstract class ImporterFactory
      */
     public abstract Importer createImporter(final InputFile file,
             final ImportEventListener listener);
+
+    /**
+     * Initialize the factory with the given context.
+     * 
+     * @param context
+     *            the context used to initialize this factory.
+     */
+    public void init(final ImporterContext context)
+    {
+        this.context = context;
+    }
+
+    protected ImporterContext getContext()
+    {
+        return Objects.requireNonNull(this.context, "Context was not initialized");
+    }
 }

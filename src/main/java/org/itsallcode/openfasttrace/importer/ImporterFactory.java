@@ -48,7 +48,7 @@ public abstract class ImporterFactory
     @Deprecated
     public boolean supportsFile(final Path file)
     {
-        return supportsFile(InputFile.createForPath(file));
+        return supportsFile(InputFile.forPath(file));
     }
 
     /**
@@ -71,6 +71,6 @@ public abstract class ImporterFactory
     public Importer createImporter(final Path file, final Charset charset,
             final ImportEventListener listener)
     {
-        return createImporter(InputFile.createForPath(file, charset), listener);
+        return createImporter(InputFile.forPath(file, charset), listener);
     }
 }

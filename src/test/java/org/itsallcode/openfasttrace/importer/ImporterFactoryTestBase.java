@@ -25,11 +25,11 @@ package org.itsallcode.openfasttrace.importer;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -58,21 +58,12 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @Test
-    public void testCreateImporterThrowsExceptionForUnsupportedFilenames()
-    {
-        final Path unsupportedPath = Paths.get("dir", getUnsupportedFilenames().get(0));
-        this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("File '" + unsupportedPath + "' not supported for import");
-        createFactory().createImporter(unsupportedPath, null, null);
-    }
-
-    @Test
     public void testCreateImporterThrowsExceptionForMissingFile()
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
         this.thrown.expectMessage("Error reading file " + supportedPath);
-        createFactory().createImporter(supportedPath, StandardCharsets.UTF_8, null).runImport();
+        createFactory().createImporter(InputFile.forPath(supportedPath), null).runImport();
     }
 
     private void assertSupported(final List<String> filenames, final boolean expectedResult)

@@ -30,12 +30,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -58,7 +58,7 @@ public class TestImporterService
     @Captor
     private ArgumentCaptor<InputFile> fileArg;
 
-    private Path file;
+    private InputFile file;
     private ImporterService importerService;
 
     @Before
@@ -66,7 +66,7 @@ public class TestImporterService
     {
         MockitoAnnotations.initMocks(this);
         this.importerService = new ImporterService(this.factoryLoaderMock);
-        this.file = Paths.get("dir", "file");
+        this.file = InputFile.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
                 .thenReturn(this.importerFactoryMock);
@@ -74,8 +74,25 @@ public class TestImporterService
     }
 
     @Test
-    public void testImport()
+    public void testImportWindows()
     {
+        OsDetector.assumeRunningOnWindows();
+        final List<SpecificationItem> result = this.importerService.importFile(this.file);
+
+        verify(this.importerMock).runImport();
+        verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
+                this.builderArg.capture());
+
+        final SpecificationListBuilder builder = this.builderArg.getValue();
+        assertThat(result, sameInstance(builder.build()));
+
+        assertThat(this.fileArg.getValue().getPath(), equalTo("dir\\file"));
+    }
+
+    @Test
+    public void testImportUnix()
+    {
+        OsDetector.assumeRunningOnUnix();
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
 
         verify(this.importerMock).runImport();

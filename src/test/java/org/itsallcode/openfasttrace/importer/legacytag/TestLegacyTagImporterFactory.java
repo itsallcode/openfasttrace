@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
@@ -78,21 +77,15 @@ public class TestLegacyTagImporterFactory
     }
 
     @Test
-    public void testFactorySupportsFileWithBasePath()
-    {
-        assertSupportsFile(configure("base", glob("path")), "base/path", true);
-    }
-
-    @Test
     public void testFactoryDoesNotSupportFileWithWrongBasePath()
     {
-        assertSupportsFile(configure("base", glob("path")), "base1/path", false);
+        assertSupportsFile(configure(glob("path")), "base1/path", false);
     }
 
     @Test
     public void testFactoryDoesNotSupportFileWithWrongPath()
     {
-        assertSupportsFile(configure("base", glob("path")), "base/path1", false);
+        assertSupportsFile(configure(glob("path")), "base/path1", false);
     }
 
     @Test
@@ -126,26 +119,19 @@ public class TestLegacyTagImporterFactory
     private void assertSupportsFile(final LegacyTagImporterConfig config, final String path,
             final boolean expected)
     {
-        final InputFile file = InputFile.createForPath(Paths.get(path));
+        final InputFile file = InputFile.forPath(Paths.get(path));
         assertThat(create(config).supportsFile(file), equalTo(expected));
     }
 
     private Importer createImporter(final LegacyTagImporterConfig config, final Path path)
     {
-        final InputFile file = InputFile.createForPath(path, StandardCharsets.UTF_8);
+        final InputFile file = InputFile.forPath(path, StandardCharsets.UTF_8);
         return create(config).createImporter(file, this.listenerMock);
-    }
-
-    private LegacyTagImporterConfig configure(final String basePath,
-            final PathConfig... pathConfigs)
-    {
-        final Optional<Path> optionalBasePath = Optional.ofNullable(basePath).map(Paths::get);
-        return new LegacyTagImporterConfig(optionalBasePath, asList(pathConfigs));
     }
 
     private LegacyTagImporterConfig configure(final PathConfig... pathConfigs)
     {
-        return configure(null, pathConfigs);
+        return new LegacyTagImporterConfig(asList(pathConfigs));
     }
 
     private LegacyTagImporterFactory create(final LegacyTagImporterConfig config)

@@ -62,7 +62,9 @@ public class LegacyTagImporterFactory extends ImporterFactory
     private Optional<PathConfig> findConfig(final InputFile file)
     {
         return this.config.get().getPathConfigs().stream() //
+                .peek(c -> LOG.finest(() -> "Checking config " + c + " with file " + file))
                 .filter(config -> config.matches(file)) //
+                .peek(c -> LOG.finest(() -> "Config " + c + " matches file " + file)) //
                 .findFirst();
     }
 

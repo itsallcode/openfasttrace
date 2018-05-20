@@ -98,7 +98,7 @@ public class TestPathConfig
 
     private void assertMatches(final String pattern, final String path, final boolean expected)
     {
-        final InputFile file = InputFile.createForPath(Paths.get(path));
+        final InputFile file = InputFile.forPath(Paths.get(path));
         assertThat(create(pattern).matches(file), equalTo(expected));
     }
 

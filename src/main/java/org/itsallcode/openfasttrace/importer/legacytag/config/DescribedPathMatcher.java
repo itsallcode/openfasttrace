@@ -74,6 +74,12 @@ class DescribedPathMatcher
         return this.matcher.matches(Paths.get(path.getPath()));
     }
 
+    @Override
+    public String toString()
+    {
+        return getDescription();
+    }
+
     private static class ListBasedPathMatcher implements PathMatcher
     {
         private final Set<Path> paths;

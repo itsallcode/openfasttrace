@@ -30,17 +30,17 @@ import java.nio.file.Path;
 
 public interface InputFile
 {
-    public static InputFile createForPath(final Path file)
+    public static InputFile forPath(final Path file)
     {
-        return createForPath(file, StandardCharsets.UTF_8);
+        return forPath(file, StandardCharsets.UTF_8);
     }
 
-    public static InputFile createForPath(final Path path, final Charset charset)
+    public static InputFile forPath(final Path path, final Charset charset)
     {
         return new RealFileInput(path, charset);
     }
 
-    public static InputFile createForReader(final Path path, final BufferedReader reader)
+    public static InputFile forReader(final Path path, final BufferedReader reader)
     {
         return new StreamInput(path, reader);
     }

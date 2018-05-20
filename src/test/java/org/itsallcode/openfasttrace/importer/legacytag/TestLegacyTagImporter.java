@@ -156,7 +156,7 @@ public class TestLegacyTagImporter
 
     private void runImport(final String content)
     {
-        final InputFile file = InputFile.createForReader(FILE,
+        final InputFile file = InputFile.forReader(FILE,
                 new BufferedReader(new StringReader(content)));
 
         new LegacyTagImporter(this.configMock, file, this.listenerMock).runImport();

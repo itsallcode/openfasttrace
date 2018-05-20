@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,12 +21,11 @@ package org.itsallcode.openfasttrace.importer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This service provides convenient methods for importing
@@ -61,7 +60,7 @@ public class ImporterService
         return this;
     }
 
-    public List<SpecificationItem> importFile(final Path file)
+    public List<SpecificationItem> importFile(final InputFile file)
     {
         return createImporter() //
                 .importFile(file) //

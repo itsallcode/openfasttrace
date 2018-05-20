@@ -285,7 +285,7 @@ public class TestTagImporter
     private List<SpecificationItem> runImporter(final String content)
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
-        final InputFile file = InputFile.createForReader(Paths.get(FILENAME),
+        final InputFile file = InputFile.forReader(Paths.get(FILENAME),
                 new BufferedReader(new StringReader(content)));
         new TagImporterFactory().createImporter(file, builder).runImport();
         return builder.build();

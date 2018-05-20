@@ -85,7 +85,7 @@ public class ImporterFactoryLoader
     @Deprecated
     public ImporterFactory getImporterFactory(final Path file)
     {
-        return getImporterFactory(InputFile.createForPath(file));
+        return getImporterFactory(InputFile.forPath(file));
     }
 
     public boolean supportsFile(final InputFile file)

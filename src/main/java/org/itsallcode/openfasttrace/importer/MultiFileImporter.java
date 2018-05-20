@@ -65,12 +65,11 @@ public class MultiFileImporter
      *            the file to import.
      * @return <code>this</code> for fluent programming style.
      */
-    public MultiFileImporter importFile(final Path file)
+    public MultiFileImporter importFile(final InputFile file)
     {
         LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
-        final InputFile inputFile = InputFile.createForPath(file, DEFAULT_CHARSET);
-        createImporter(inputFile, this.specItemBuilder).runImport();
+        createImporter(file, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
@@ -97,7 +96,7 @@ public class MultiFileImporter
                 }
                 else if (file.isFile())
                 {
-                    importFile(path);
+                    importFile(InputFile.forPath(path));
                 }
             }
             else
@@ -131,7 +130,7 @@ public class MultiFileImporter
         {
             fileStream.filter(path -> !path.toFile().isDirectory()) //
                     .filter(matcher::matches) //
-                    .map(path -> InputFile.createForPath(path, DEFAULT_CHARSET))
+                    .map(path -> InputFile.forPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
                     .map(file -> createImporter(file, this.specItemBuilder)).forEach(importer -> {
                         importer.runImport();

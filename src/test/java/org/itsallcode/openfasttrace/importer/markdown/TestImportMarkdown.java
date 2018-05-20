@@ -113,7 +113,7 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final BufferedReader reader = new BufferedReader(new StringReader(text));
-        final InputFile file = InputFile.createForReader(Paths.get(FILENAME), reader);
+        final InputFile file = InputFile.forReader(Paths.get(FILENAME), reader);
         final Importer importer = new MarkdownImporterFactory().createImporter(file,
                 this.listenerMock);
         importer.runImport();

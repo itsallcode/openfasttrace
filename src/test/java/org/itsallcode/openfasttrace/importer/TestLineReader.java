@@ -64,7 +64,7 @@ public class TestLineReader
         final Path tempFile = this.tempFolder.newFile().toPath();
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
 
-        LineReader.create(InputFile.createForPath(tempFile)).readLines(this.consumerMock);
+        LineReader.create(InputFile.forPath(tempFile)).readLines(this.consumerMock);
 
         assertLinesRead(TEST_CONTENT_LINE_1);
     }
@@ -75,7 +75,7 @@ public class TestLineReader
         final Path tempFile = this.tempFolder.newFile().toPath();
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
 
-        LineReader.create(InputFile.createForReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
+        LineReader.create(InputFile.forReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
                 .readLines(this.consumerMock);
 
         assertLinesRead(TEST_CONTENT_LINE_1);
@@ -125,7 +125,7 @@ public class TestLineReader
 
     private void readContent(final String content)
     {
-        final InputFile file = InputFile.createForReader(DUMMY_FILE,
+        final InputFile file = InputFile.forReader(DUMMY_FILE,
                 new BufferedReader(new StringReader(content)));
         LineReader.create(file).readLines(this.consumerMock);
     }

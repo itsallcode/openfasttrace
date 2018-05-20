@@ -198,7 +198,7 @@ public class DescribedPathMatcherTest
     private void assertMatches(final String path, final boolean expected)
     {
         assertThat("Initialize matcher before assertions", this.matcher, notNullValue());
-        final InputFile file = InputFile.createForPath(Paths.get(path));
+        final InputFile file = InputFile.forPath(Paths.get(path));
         assertThat("path " + path, this.matcher.matches(file), equalTo(expected));
     }
 

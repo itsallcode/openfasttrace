@@ -72,7 +72,8 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         for (final String filename : filenames)
         {
             final Path path = Paths.get("dir", filename);
-            assertThat(path.toString(), factory.supportsFile(path), equalTo(expectedResult));
+            assertThat(path.toString(), factory.supportsFile(InputFile.forPath(path)),
+                    equalTo(expectedResult));
         }
     }
 

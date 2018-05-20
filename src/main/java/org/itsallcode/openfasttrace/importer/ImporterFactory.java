@@ -21,10 +21,6 @@ package org.itsallcode.openfasttrace.importer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
@@ -43,15 +39,6 @@ public abstract class ImporterFactory
     public abstract boolean supportsFile(final InputFile file);
 
     /**
-     * @deprecated use {@link #supportsFile(InputFile)}
-     */
-    @Deprecated
-    public boolean supportsFile(final Path file)
-    {
-        return supportsFile(InputFile.forPath(file));
-    }
-
-    /**
      * Create an importer that is able to read the given file.
      *
      * @param file
@@ -63,14 +50,4 @@ public abstract class ImporterFactory
      */
     public abstract Importer createImporter(final InputFile file,
             final ImportEventListener listener);
-
-    /**
-     * @deprecated use {@link #createImporter(InputFile, ImportEventListener)}
-     */
-    @Deprecated
-    public Importer createImporter(final Path file, final Charset charset,
-            final ImportEventListener listener)
-    {
-        return createImporter(InputFile.forPath(file, charset), listener);
-    }
 }

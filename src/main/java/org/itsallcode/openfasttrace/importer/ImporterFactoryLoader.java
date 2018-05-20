@@ -79,15 +79,6 @@ public class ImporterFactoryLoader
         }
     }
 
-    /**
-     * @deprecated use {@link #getImporterFactory(InputFile)}
-     */
-    @Deprecated
-    public ImporterFactory getImporterFactory(final Path file)
-    {
-        return getImporterFactory(InputFile.forPath(file));
-    }
-
     public boolean supportsFile(final InputFile file)
     {
         final boolean supported = !getMatchingFactories(file).isEmpty();

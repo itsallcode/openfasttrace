@@ -38,6 +38,6 @@ public class ZipFileImporterFactory extends RegexMatchingImporterFactory
     @Override
     public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
-        return new ZipFileImporter(file, listener);
+        return new ZipFileImporter(getContext().getImporterService(), file, listener);
     }
 }

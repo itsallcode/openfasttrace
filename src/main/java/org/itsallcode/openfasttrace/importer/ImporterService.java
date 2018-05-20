@@ -70,9 +70,9 @@ public class ImporterService
                 .getImportedItems();
     }
 
-    public MultiFileImporter createImporter(final SpecificationListBuilder builder)
+    public MultiFileImporter createImporter(final ImportEventListener builder)
     {
-        return new MultiFileImporter(builder, this.factoryLoader);
+        return new MultiFileImporter((SpecificationListBuilder) builder, this.factoryLoader);
     }
 
     public MultiFileImporter createImporter()

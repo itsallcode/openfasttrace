@@ -26,21 +26,24 @@ import java.util.zip.ZipFile;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class ZipFileImporter implements Importer
 {
     private final InputFile file;
-    private final ImportEventListener listener;
+    private final MultiFileImporter delegateImporter;
 
-    public ZipFileImporter(final InputFile file, final ImportEventListener listener)
+    public ZipFileImporter(final ImporterService importerService, final InputFile file,
+            final ImportEventListener listener)
+    {
+        this(file, importerService.createImporter(listener));
+    }
+
+    public ZipFileImporter(final InputFile file, final MultiFileImporter delegateImporter)
     {
         this.file = file;
-        this.listener = listener;
+        this.delegateImporter = delegateImporter;
     }
 
     @Override
@@ -55,9 +58,8 @@ public class ZipFileImporter implements Importer
         {
             zip.stream() //
                     .filter(entry -> !entry.isDirectory()) //
-                    .map(entry -> createInput(zip, entry))
-
-            ;
+                    .map(entry -> createInput(zip, entry)) //
+                    .forEach(this.delegateImporter::importFile);
         }
         catch (final IOException e)
         {

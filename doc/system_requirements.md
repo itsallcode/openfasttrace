@@ -358,28 +358,6 @@ Covers:
 
 Needs: dsn
 
-### Strict and Relaxed Coverage
-
-Users can choose between two modes of coverage determination: strict and relaxed.
-
-Strict coverage means that the covering item must have a status of `Approved` in addition to the other criteria discussed in [section "Tracing"](#tracing). This is the mode users need for a final assessment of coverage ahead of a project release.
-
-In Relaxed coverage mode OFT accepts any status but `Rejected` of the covering item. The reason why this mode is necessary is that if the team is using requirement states, then they will often have the situation that not all requirements in the document that needs to be covered are already approved. On the other hand the document that is supposed to provide the coverage can usually not wait to start covering until the input document is finalized. This would cause too much project delay. Relaxed mode allows the covering document to check whether all requirements are covered _before_ the input document is finally approved.
-
-#### Strict and Relaxed Coverage Mode
-`req~strict_and_relaxed_coverage_mode~1`
-
-OFT allows users to choose between the following coverage evaluation modes:
-
-1. Strict mode: covering items must be in status `Approved`
-2. Relaxed mode: covering items must be in any other status than `Rejected`
-
-Covers:
-
-* [feat~requirement-tracing~1](#requirement-tracing)
-
-Needs: dsn
-
 ### Partial Tracing
 Usually the responsibility of document authors or coders when it comes to tracing is to make sure that they cover the input documents above. Only integrators or quality engineers are concerned with full chain coverage.
 

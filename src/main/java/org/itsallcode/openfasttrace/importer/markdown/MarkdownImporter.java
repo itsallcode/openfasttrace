@@ -322,6 +322,7 @@ class MarkdownImporter implements Importer
         }
     }
 
+    // [impl->dsn~md.specification-item-title~1]
     private void rememberTitle()
     {
         this.lastTitle = this.stateMachine.getLastToken();

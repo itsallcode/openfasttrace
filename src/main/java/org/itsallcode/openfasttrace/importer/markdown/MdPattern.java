@@ -32,7 +32,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
  */
 public enum MdPattern
 {
-    // [impl~md.specification_item_title~1]
+    // [impl->dsn~md.specification-item-title~1]
 
     // @formatter:off
     COMMENT("Comment:\\s*"),

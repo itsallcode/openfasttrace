@@ -65,7 +65,7 @@ public class TestImportMarkdown
         assertMismatch(MdPattern.ID, "test~1", "req-test~1", "req~4test~1");
     }
 
-    // [utest~md.specification_item_title~1]
+    // [utest->dsn~md.specification-item-title~1]
     @Test
     public void testIdentifyTitle()
     {

@@ -67,7 +67,6 @@ public class MultiFileImporter
      */
     public MultiFileImporter importFile(final InputFile file)
     {
-        LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         createImporter(file, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
@@ -94,7 +93,7 @@ public class MultiFileImporter
                 {
                     importRecursiveDir(path, ALL_RECURSIVE_GLOB);
                 }
-                else if (file.isFile())
+                else
                 {
                     importFile(InputFile.forPath(path));
                 }
@@ -122,7 +121,6 @@ public class MultiFileImporter
     // [impl->dsn~input-directory-recursive-traversal~1]
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
-        LOG.fine(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
         final int itemCountBefore = this.specItemBuilder.getItemCount();

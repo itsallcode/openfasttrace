@@ -49,11 +49,17 @@ public interface InputFile
 
     public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry)
     {
+        return forZipEntry(zip, entry, StandardCharsets.UTF_8);
+    }
+
+    public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry,
+            final Charset charset)
+    {
         if (entry.isDirectory())
         {
             throw new IllegalArgumentException("ZIP entry " + entry + " must not be a directory");
         }
-        return new ZipEntryInput(zip, entry, StandardCharsets.UTF_8);
+        return new ZipEntryInput(zip, entry, charset);
     }
 
     BufferedReader createReader() throws IOException;

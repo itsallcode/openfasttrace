@@ -27,6 +27,8 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.itsallcode.openfasttrace.importer.ImporterException;
+
 public class ZipEntryInput implements InputFile
 {
     private final ZipFile zip;
@@ -44,6 +46,11 @@ public class ZipEntryInput implements InputFile
     public BufferedReader createReader() throws IOException
     {
         final InputStream inputStream = this.zip.getInputStream(this.entry);
+        if (inputStream == null)
+        {
+            throw new ImporterException(
+                    "Entry '" + this.entry + "' does not exist in zip file " + this.zip.getName());
+        }
         return new BufferedReader(new InputStreamReader(inputStream, this.charset));
     }
 
@@ -63,5 +70,11 @@ public class ZipEntryInput implements InputFile
     public Path toPath()
     {
         throw new UnsupportedOperationException("toPath() not supported for StreamInput");
+    }
+
+    @Override
+    public String toString()
+    {
+        return getPath();
     }
 }

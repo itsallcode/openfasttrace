@@ -49,7 +49,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     @Mock
-    private ImporterContext contextMock;
+    protected ImporterContext contextMock;
 
     @Before
     public void initMocks()
@@ -75,7 +75,14 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
         this.thrown.expectMessage("Error reading file " + supportedPath);
-        createFactory().createImporter(InputFile.forPath(supportedPath), null).runImport();
+        createAndInitialize().createImporter(InputFile.forPath(supportedPath), null).runImport();
+    }
+
+    private T createAndInitialize()
+    {
+        final T factory = createFactory();
+        factory.init(this.contextMock);
+        return factory;
     }
 
     @Test

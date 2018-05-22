@@ -77,11 +77,9 @@ abstract class AbstractMode<T extends AbstractMode<T>>
 
     protected List<LinkedSpecificationItem> importLinkedSpecificationItems()
     {
-        final List<LinkedSpecificationItem> linkedItems;
         final Stream<SpecificationItem> items = importItems();
         final Linker linker = new Linker(items.collect(Collectors.toList()));
-        linkedItems = linker.link();
-        return linkedItems;
+        return linker.link();
     }
 
     protected Stream<SpecificationItem> importItems()

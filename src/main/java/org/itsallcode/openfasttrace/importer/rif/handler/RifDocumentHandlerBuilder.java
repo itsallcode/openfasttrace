@@ -23,9 +23,11 @@ package org.itsallcode.openfasttrace.importer.rif.handler;
  */
 import java.util.logging.Logger;
 
+import org.itsallcode.openfasttrace.core.xml.event.Attribute;
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 
 public class RifDocumentHandlerBuilder
 {
@@ -47,6 +49,39 @@ public class RifDocumentHandlerBuilder
 
     public TreeContentHandler build()
     {
+
+        this.handler.setDefaultStartElementListener(startElement -> {
+            if (startElement.isRootElement())
+            {
+                LOG.info(() -> "Found unknown root element " + startElement + ": skip file");
+                this.handler.stopParsing();
+            }
+            LOG.warning(() -> "Found unknown element " + startElement);
+            return;
+        });
+
+        this.handler.addElementListener("rifdocument", elem -> {
+            LOG.finest(() -> "Found rifdocument element " + elem);
+            if (!elem.isRootElement())
+            {
+                throw new IllegalStateException("Element rifdocument must be root element");
+            }
+        });
+
+        this.handler.addElementListener("rifobjects", elem -> {
+            final Attribute doctypeAttribute = elem.getAttributeValueByName(DOCTYPE_ATTRIBUTE_NAME);
+            if (doctypeAttribute == null)
+            {
+                throw new ImporterException("Element " + elem + " does not have an attribute '"
+                        + DOCTYPE_ATTRIBUTE_NAME + "' at " + elem.getLocation());
+            }
+
+            final String defaultDoctype = doctypeAttribute.getValue();
+            this.handler.pushDelegate(
+                    new RifObjectsHandlerBuilder(this.fileName, defaultDoctype, this.listener)
+                            .build());
+        });
+
         return this.handler;
 
     }

@@ -88,7 +88,7 @@ public abstract class ExporterFactory
     {
         if (file == null)
         {
-            LOG.finest(() -> "Creating exporter for stdout using charset " + charset);
+            LOG.finest(() -> "Creating exporter for STDOUT using charset " + charset);
             return new OutputStreamWriter(getStdOutStream(), charset);
         }
         LOG.finest(() -> "Creating exporter for file " + file + " using charset " + charset);

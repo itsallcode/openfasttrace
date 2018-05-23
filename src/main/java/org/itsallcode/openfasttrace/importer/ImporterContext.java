@@ -25,26 +25,53 @@ import java.util.Objects;
 
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
+/**
+ * Common context shared by all {@link ImporterFactory}s. This allows importers
+ * to access common infrastructure, e.g. the {@link ImporterService}.
+ */
 public class ImporterContext
 {
     private final LegacyTagImporterConfig tagImporterConfig;
     private ImporterService importerService;
 
+    /**
+     * Creates a new {@link ImporterContext}.
+     * 
+     * @param tagImporterConfig
+     *            importer specific configuration.
+     */
     public ImporterContext(final LegacyTagImporterConfig tagImporterConfig)
     {
         this.tagImporterConfig = tagImporterConfig;
     }
 
-    public void setImporterService(final ImporterService importerService)
+    /**
+     * Internal API used by the {@link ImporterService}.
+     * 
+     * @param importerService
+     *            the common instance of {@link ImporterService}.
+     */
+    void setImporterService(final ImporterService importerService)
     {
         this.importerService = importerService;
     }
 
+    /**
+     * Get the common instance of {@link ImporterService}. Can be used e.g. for
+     * delegating to other importers.
+     * 
+     * @return the common instance of {@link ImporterService}.
+     */
     public ImporterService getImporterService()
     {
         return Objects.requireNonNull(this.importerService, "Importer service was not initialized");
     }
 
+    /**
+     * Get importer specific configuration.
+     * 
+     * @return importer specific configuration.
+     */
     public LegacyTagImporterConfig getTagImporterConfig()
     {
         return this.tagImporterConfig;

@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.importer;
 
-import java.util.Objects;
-
 /*-
  * #%L
  * OpenFastTrace
@@ -23,6 +21,8 @@ import java.util.Objects;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.util.Objects;
+
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**

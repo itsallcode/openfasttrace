@@ -30,28 +30,80 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/**
+ * This represents a file (either physical or virtual as a stream) that can be
+ * read by an importer.
+ */
 public interface InputFile
 {
+    /**
+     * Create an {@link InputFile} for a real file on disk.
+     * {@link StandardCharsets#UTF_8} is used for reading the file.
+     * 
+     * @param file
+     *            a real file on disk.
+     * @return an {@link InputFile}.
+     */
     public static InputFile forPath(final Path file)
     {
         return forPath(file, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Create an {@link InputFile} for a real file on disk.
+     * 
+     * @param file
+     *            a real file on disk.
+     * @param charset
+     *            the {@link Charset} used when reading this file.
+     * @return an {@link InputFile}.
+     */
     public static InputFile forPath(final Path path, final Charset charset)
     {
         return new RealFileInput(path, charset);
     }
 
+    /**
+     * Create an {@link InputFile} for a {@link BufferedReader}. This is useful
+     * for tests to avoid using real files.
+     * 
+     * @param path
+     *            a dummy path.
+     * @param reader
+     *            the base reader.
+     * @return an {@link InputFile}.
+     */
     public static InputFile forReader(final Path path, final BufferedReader reader)
     {
         return new StreamInput(path, reader);
     }
 
+    /**
+     * Create an {@link InputFile} for a {@link ZipEntry} in a {@link ZipFile}.
+     * {@link StandardCharsets#UTF_8} is used for reading the file.
+     * 
+     * @param zip
+     *            the {@link ZipFile} containing the entry.
+     * @param entry
+     *            the {@link ZipEntry} to read.
+     * @return an {@link InputFile}.
+     */
     public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry)
     {
         return forZipEntry(zip, entry, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Create an {@link InputFile} for a {@link ZipEntry} in a {@link ZipFile}.
+     * 
+     * @param zip
+     *            the {@link ZipFile} containing the entry.
+     * @param entry
+     *            the {@link ZipEntry} to read.
+     * @param charset
+     *            the {@link Charset} used for reading the entry.
+     * @return an {@link InputFile}.
+     */
     public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry,
             final Charset charset)
     {
@@ -62,11 +114,37 @@ public interface InputFile
         return new ZipEntryInput(zip, entry, charset);
     }
 
+    /**
+     * Get a {@link BufferedReader} for reading the file.
+     * 
+     * @return a {@link BufferedReader} for reading the file.
+     * @throws IOException
+     *             when there is an error reading the file.
+     */
     BufferedReader createReader() throws IOException;
 
+    /**
+     * Get a string representation of the path.
+     * 
+     * @return a string representation of the path.
+     */
     String getPath();
 
+    /**
+     * Check if this {@link InputFile} is based on a real file on disk.
+     * 
+     * @return <code>true</code> if this {@link InputFile} is based on a real
+     *         file.
+     */
     boolean isRealFile();
 
+    /**
+     * Get the {@link Path} to the file when {@link #isRealFile()} is
+     * <code>true</code>. Else throws an {@link UnsupportedOperationException}.
+     * 
+     * @return the {@link Path} to the file
+     * @throws UnsupportedOperationException
+     *             when this is not a real file.
+     */
     Path toPath();
 }

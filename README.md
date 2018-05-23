@@ -63,8 +63,13 @@ The list below show all build time dependencies in alphabetical order. Note that
 
 ### Essential Build Steps
 
+* `git clone https://github.com/itsallcode/openfasttrace.git`
 * Run `mvn test` to run unit tests.
 * Run `mvn exec:java@trace` to run requirements tracing.
+
+### Using Eclipse
+
+Import as a Maven project using *File > Import... > Maven > Existing Maven Projects*
 
 ### Configure Logging
 

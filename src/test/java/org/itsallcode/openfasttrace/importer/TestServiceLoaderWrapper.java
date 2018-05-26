@@ -30,11 +30,11 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
-import org.itsallcode.openfasttrace.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
+import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
 import org.junit.Test;
 
 /**
@@ -57,12 +57,12 @@ public class TestServiceLoaderWrapper
     public void testServicesRegistered()
     {
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class);
-        assertThat(services, hasSize(4));
-        assertThat(services,
-                contains(instanceOf(MarkdownImporterFactory.class), //
-                        instanceOf(SpecobjectImporterFactory.class), //
-                        instanceOf(TagImporterFactory.class),
-                        instanceOf(LegacyTagImporterFactory.class)));
+        assertThat(services, hasSize(5));
+        assertThat(services, contains(instanceOf(MarkdownImporterFactory.class), //
+                instanceOf(SpecobjectImporterFactory.class), //
+                instanceOf(TagImporterFactory.class), //
+                instanceOf(LegacyTagImporterFactory.class), //
+                instanceOf(ZipFileImporterFactory.class)));
     }
 
     private <T> List<T> getRegisteredServices(final Class<T> type)

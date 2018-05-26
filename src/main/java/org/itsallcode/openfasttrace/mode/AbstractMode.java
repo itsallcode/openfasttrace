@@ -46,8 +46,7 @@ abstract class AbstractMode<T extends AbstractMode<T>>
 
     public T addInputs(final Path... inputs)
     {
-        this.inputs.addAll(Arrays.asList(inputs));
-        return self();
+        return this.addInputs(Arrays.asList(inputs));
     }
 
     public T addInputs(final List<Path> inputs)

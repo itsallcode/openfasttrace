@@ -30,6 +30,7 @@ import java.util.function.Function;
 
 public class MarkdownLineStateMachine
 {
+    private static final int INCLUDE_EMPTY_STRINGS = -1;
     private static final String P_ANY = ".*";
     private static final String P_OL_LI = "^ {0,3}[0-9]+\\..*";
     private static final String P_UL_LI = "^ {0,3}[-+*].*";
@@ -41,6 +42,11 @@ public class MarkdownLineStateMachine
     public MarkdownLineStateMachine()
     {
         super();
+        initializeTransitions();
+    }
+
+    protected void initializeTransitions()
+    {
         // @formatter:off
         t(START         , PREFORMATTED  , P_PRE      , ""          , "<pre>"   , trimPre());
         t(START         , UNORDERED_LIST, P_UL_LI    , ""          , "<ul><li>", trimBullet());
@@ -88,7 +94,7 @@ public class MarkdownLineStateMachine
     {
         final StringBuilder builder = new StringBuilder();
         MarkdownLineState state = START;
-        for (final String line : input.split("(?:\n\r?|\r)"))
+        for (final String line : input.split("(?:\n\r?|\r)", INCLUDE_EMPTY_STRINGS))
         {
             for (final MarkdownLineTransition transition : this.transitions)
             {

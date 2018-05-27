@@ -54,7 +54,12 @@ public class TestMarkdownConverter
                 + " third line   " //
                 + "</pre>" //
                 + "<p>After preformatted</p>";
-        assertThat(this.converter.convert(original), equalTo(expected));
+        assertThat(convert(original), equalTo(expected));
+    }
+
+    protected String convert(final String original)
+    {
+        return this.converter.convert(original);
     }
 
     @Test
@@ -73,7 +78,7 @@ public class TestMarkdownConverter
                 + "<li>third item</li>" //
                 + "</ul>" //
                 + "<p>After list</p>";
-        assertThat(this.converter.convert(original), equalTo(expected));
+        assertThat(convert(original), equalTo(expected));
     }
 
     @Test
@@ -92,12 +97,12 @@ public class TestMarkdownConverter
                 + "<li>second item second item continued</li>" //
                 + "</ul>" //
                 + "<p>After list</p>";
-        assertThat(this.converter.convert(original), equalTo(expected));
+        assertThat(convert(original), equalTo(expected));
 
     }
 
     @Test
-    public void testConvertOrdteredList()
+    public void testConvertOrderedList()
     {
         final String original = "Before list" + System.lineSeparator() //
                 + "1. first item" + System.lineSeparator() //
@@ -112,7 +117,32 @@ public class TestMarkdownConverter
                 + "<li>third item</li>" //
                 + "</ol>" //
                 + "<p>After list</p>";
-        assertThat(this.converter.convert(original), equalTo(expected));
+        assertThat(convert(original), equalTo(expected));
+    }
+
+    @Test
+    public void testCloseOrderedList()
+    {
+        final String original = "5. foobar";
+        assertThat(convert(original), equalTo("<ol><li>foobar</li></ol>"));
+    }
+
+    @Test
+    public void testCloseUnurderedList()
+    {
+        assertThat(this.converter.convert("+ foobar"), equalTo("<ul><li>foobar</li></ul>"));
+    }
+
+    @Test
+    public void testClosePreformatted()
+    {
+        assertThat(this.converter.convert("     foobar  "), equalTo("<pre> foobar  </pre>"));
+    }
+
+    @Test
+    public void testCloseWithTerminator()
+    {
+        assertThat(this.converter.convert("foobar\n\n\n"), equalTo("<p>foobar</p>"));
     }
 
     @Test
@@ -125,7 +155,7 @@ public class TestMarkdownConverter
                 + "... also continued";
         final String expected = "<p>First paragraph ... continued</p>" //
                 + "<p>Second paragraph ... also continued</p>";
-        assertThat(this.converter.convert(original), equalTo(expected));
+        assertThat(convert(original), equalTo(expected));
 
     }
 

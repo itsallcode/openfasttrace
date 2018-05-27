@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.Before;
 import org.junit.Test;
 

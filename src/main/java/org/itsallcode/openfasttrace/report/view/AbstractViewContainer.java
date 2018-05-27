@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -45,7 +45,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
     /*
      * (non-Javadoc)
      * 
-     * @see org.itsallcode.openfasttrace.view.Viewable#render(int)
+     * @see org.itsallcode.openfasttrace.report.view.Viewable#render(int)
      */
     @Override
     public void render(final int level)
@@ -89,7 +89,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * (non-Javadoc)
      * 
      * @see
-     * org.itsallcode.openfasttrace.view.ViewableContainer#add(org.itsallcode.
+     * org.itsallcode.openfasttrace.report.view.ViewableContainer#add(org.itsallcode.
      * openfasttrace.view.Viewable)
      */
     @Override

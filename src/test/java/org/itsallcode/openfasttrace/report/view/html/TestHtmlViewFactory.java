@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,32 +22,27 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.view.Viewable;
-import org.junit.Before;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.report.view.ViewFactory;
+import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.Test;
 
-public class TestHtmlSection extends AbstractTestHtmlRenderer
+public class TestHtmlViewFactory
 {
-    private static final String ID = "section ID";
-    private static final String TITLE = "section title";
-    private static final int LEVEL = 1;
-
-    @Override
-    @Before
-    public void prepareEachTest()
-    {
-        super.prepareEachTest();
-    }
+    private LinkedSpecificationItem item;
 
     @Test
-    public void testRender()
+    public void testCreateSpecificationItem()
     {
-        final Viewable view = this.factory.createSection(ID, TITLE);
-        view.render(LEVEL);
-        assertOutputLines(//
-                "  <section id=\"" + ID + "\">", //
-                "    <h2>" + TITLE + "</h2>", //
-                "  </section>", //
-                "");
+        final OutputStream outputStream = new ByteArrayOutputStream();
+        final ViewFactory factory = new HtmlViewFactory(outputStream);
+        final Viewable view = factory.createSpecificationItem(this.item);
+        assertThat(view, instanceOf(HtmlSpecificationItem.class));
     }
 }

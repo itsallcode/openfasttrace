@@ -31,10 +31,10 @@ import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
-import org.itsallcode.openfasttrace.view.ViewFactory;
-import org.itsallcode.openfasttrace.view.Viewable;
-import org.itsallcode.openfasttrace.view.ViewableContainer;
-import org.itsallcode.openfasttrace.view.html.HtmlViewFactory;
+import org.itsallcode.openfasttrace.report.view.ViewFactory;
+import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.ViewableContainer;
+import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 
 public class HtmlReport implements Reportable
 {

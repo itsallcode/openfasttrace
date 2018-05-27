@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,25 +22,21 @@ package org.itsallcode.openfasttrace.view;
  * #L%
  */
 
-import java.io.OutputStream;
-
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-
-public abstract class AbstractViewFactory implements ViewFactory
+public final class MarkdownSpanConverter
 {
-    protected final OutputStream outputStream;
-
-    protected AbstractViewFactory(final OutputStream outputStream)
+    // Prevent instantiation
+    private MarkdownSpanConverter()
     {
-        this.outputStream = outputStream;
     }
 
-    @Override
-    public abstract ViewableContainer createView(final String id, final String title);
-
-    @Override
-    public abstract ViewableContainer createSection(final String id, final String title);
-
-    @Override
-    public abstract Viewable createSpecificationItem(final LinkedSpecificationItem item);
+    public static String convertLineContent(final String input)
+    {
+        String text = input;
+        text = text.replaceAll("(    .*[\n])+", "<pre>$1</pre>");
+        text = text.replaceAll("`(.*)`", "<code>$1</code>");
+        text = text.replaceAll("\\[(.*)\\]\\((.*)\\)", "<a href=\"$2\">$1</a>");
+        text = text.replaceAll("(__|\\*\\*)(\\p{L}(?:.*\\p{L}))\\1", "<strong>$2</strong>");
+        text = text.replaceAll("([_*])(\\p{L}(?:.*\\p{L}))\\1", "<em>$2</em>");
+        return text;
+    }
 }

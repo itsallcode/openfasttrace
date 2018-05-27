@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -25,11 +25,11 @@ package org.itsallcode.openfasttrace.view.html;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.ITEST;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
-import static org.itsallcode.openfasttrace.view.html.CharacterConstants.CHECKMARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECKMARK;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -86,8 +86,8 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_B_ID) //
                 .title("Item B title") //
-                .description("Description A\nDescription B") //
-                .rationale("Rationale A\nRationale B") //
+                .description("Description A\n\nDescription B") //
+                .rationale("Rationale A\n\nRationale B") //
                 .comment("Comment A\nComment B") //
                 .build();
         renderItemOnIndentationLevel(item, 0);
@@ -97,14 +97,11 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "    <summary title=\"impl~name-b~1\">" + CHECKMARK
                         + " <b>Item B title</b><small>, rev. 1, impl</small></summary>", //
                 "    <p class=\"id\">" + ITEM_B_ID + "</p>", //
-                "    <p>Description A</p>", //
-                "    <p>Description B</p>", //
+                "    <p>Description A</p><p>Description B</p>", //
                 "    <h6>Rationale:</h6>", //
-                "    <p>Rationale A</p>", //
-                "    <p>Rationale B</p>", //
+                "    <p>Rationale A</p><p>Rationale B</p>", //
                 "    <h6>Comment:</h6>", //
-                "    <p>Comment A</p>", //
-                "    <p>Comment B</p>", //
+                "    <p>Comment A Comment B</p>", //
                 "  </details>", //
                 "</section>", //
                 "");

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,16 +22,13 @@ package org.itsallcode.openfasttrace.view;
  * #L%
  */
 
-/**
- * A container for viewable elements
- */
-public interface ViewableContainer extends Viewable
+public class CharacterConstants
 {
-    /**
-     * Add a viewable element
-     * 
-     * @param child
-     *            contained viewable element
-     */
-    public void add(Viewable child);
+    private CharacterConstants()
+    {
+        // prevent instantiation
+    }
+
+    public static final String CHECKMARK = "&#x2705;";
+    public static final String CROSSMARK = "&#x274E;";
 }

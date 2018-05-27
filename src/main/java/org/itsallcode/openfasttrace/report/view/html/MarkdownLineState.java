@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,13 +22,18 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-public class CharacterConstants
+/**
+ * The {@link MarkdownLineState} represents the Markdown states that can be
+ * switched by newlines and the way the next line starts.
+ */
+enum MarkdownLineState
 {
-    private CharacterConstants()
-    {
-        // prevent instantiation
-    }
-
-    public static final String CHECKMARK = "&#x2705;";
-    public static final String CROSSMARK = "&#x274E;";
+    START, //
+    PARAGRAPH, //
+    UNORDERED_LIST, //
+    UNORDERED_LIST_CONTINUED, //
+    ORDERED_LIST, //
+    ORDERED_LIST_CONTINUED, //
+    PREFORMATTED, //
+    TERMINATOR
 }

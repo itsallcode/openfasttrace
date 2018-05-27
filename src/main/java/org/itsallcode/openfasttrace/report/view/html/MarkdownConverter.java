@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,20 +22,12 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-/**
- * Contains static helper methods for indentation.
- */
-public final class IndentationHelper
+public class MarkdownConverter
 {
-    private static final int INDENT_SPACES_PER_LEVEL = 2;
+    private final MarkdownLineStateMachine machine = new MarkdownLineStateMachine();
 
-    private IndentationHelper()
+    public String convert(final String input)
     {
-        // prevent instantiation.
-    }
-
-    public static String createIndentationPrefix(final int level)
-    {
-        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
+        return this.machine.run(input);
     }
 }

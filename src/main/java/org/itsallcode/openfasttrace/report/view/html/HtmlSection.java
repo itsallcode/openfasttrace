@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.view.html;
 
 import java.io.PrintStream;
 
-import org.itsallcode.openfasttrace.view.AbstractViewContainer;
-import org.itsallcode.openfasttrace.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
+import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlSection extends AbstractViewContainer implements Viewable
 {

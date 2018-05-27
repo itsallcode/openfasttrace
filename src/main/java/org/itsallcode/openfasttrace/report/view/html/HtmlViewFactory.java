@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -26,9 +26,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.view.AbstractViewFactory;
-import org.itsallcode.openfasttrace.view.Viewable;
-import org.itsallcode.openfasttrace.view.ViewableContainer;
+import org.itsallcode.openfasttrace.report.view.AbstractViewFactory;
+import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 
 public class HtmlViewFactory extends AbstractViewFactory
 {

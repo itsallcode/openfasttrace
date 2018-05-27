@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -23,20 +23,15 @@ package org.itsallcode.openfasttrace.view;
  */
 
 /**
- * Interface for all view elements which know how to render themselves
+ * A container for viewable elements
  */
-public interface Viewable
+public interface ViewableContainer extends Viewable
 {
     /**
-     * Render the viewable element.
+     * Add a viewable element
+     * 
+     * @param child
+     *            contained viewable element
      */
-    public default void render()
-    {
-        render(0);
-    }
-
-    /**
-     * Render the viewable element on given indentation level.
-     */
-    public void render(int level);
+    public void add(Viewable child);
 }

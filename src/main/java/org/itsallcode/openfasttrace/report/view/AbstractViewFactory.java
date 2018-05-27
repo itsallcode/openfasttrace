@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -22,30 +22,25 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.junit.Assert.assertThat;
-
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-import org.itsallcode.openfasttrace.view.ViewFactory;
-import org.itsallcode.openfasttrace.view.html.HtmlViewFactory;
-import org.junit.Before;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 
-public class AbstractTestHtmlRenderer
+public abstract class AbstractViewFactory implements ViewFactory
 {
-    protected OutputStream outputStream;
-    protected ViewFactory factory;
+    protected final OutputStream outputStream;
 
-    @Before
-    public void prepareEachTest()
+    protected AbstractViewFactory(final OutputStream outputStream)
     {
-        this.outputStream = new ByteArrayOutputStream();
-        this.factory = new HtmlViewFactory(this.outputStream);
+        this.outputStream = outputStream;
     }
 
-    protected void assertOutputLines(final String... lines)
-    {
-        assertThat(this.outputStream.toString(), matchesAllLines(lines));
-    }
+    @Override
+    public abstract ViewableContainer createView(final String id, final String title);
+
+    @Override
+    public abstract ViewableContainer createSection(final String id, final String title);
+
+    @Override
+    public abstract Viewable createSpecificationItem(final LinkedSpecificationItem item);
 }

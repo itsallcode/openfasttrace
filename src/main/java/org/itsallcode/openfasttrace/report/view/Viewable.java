@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -22,7 +22,21 @@ package org.itsallcode.openfasttrace.view;
  * #L%
  */
 
-public enum ViewType
+/**
+ * Interface for all view elements which know how to render themselves
+ */
+public interface Viewable
 {
-    HTML5
+    /**
+     * Render the viewable element.
+     */
+    public default void render()
+    {
+        render(0);
+    }
+
+    /**
+     * Render the viewable element on given indentation level.
+     */
+    public void render(int level);
 }

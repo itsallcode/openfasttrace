@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,16 +22,29 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-public class MarkdownConverter
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.junit.Assert.assertThat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
+import org.itsallcode.openfasttrace.report.view.ViewFactory;
+import org.junit.Before;
+
+public class AbstractTestHtmlRenderer
 {
-    public String convert(final String input)
+    protected OutputStream outputStream;
+    protected ViewFactory factory;
+
+    @Before
+    public void prepareEachTest()
     {
-        String text = input;
-        text = text.replaceAll("(    .*[\n])+", "<pre>$1</pre>");
-        text = text.replaceAll("`(.*)`", "<code>$1</code>");
-        text = text.replaceAll("\\[(.*)\\]\\((.*)\\)", "<a href=\"$2\">$1</a>");
-        text = text.replaceAll("(__|\\*\\*)(\\p{L}(?:.*\\p{L}))\\1", "<strong>$2</strong>");
-        text = text.replaceAll("([_*])(\\p{L}(?:.*\\p{L}))\\1", "<em>$2</em>");
-        return text;
+        this.outputStream = new ByteArrayOutputStream();
+        this.factory = new HtmlViewFactory(this.outputStream);
+    }
+
+    protected void assertOutputLines(final String... lines)
+    {
+        assertThat(this.outputStream.toString(), matchesAllLines(lines));
     }
 }

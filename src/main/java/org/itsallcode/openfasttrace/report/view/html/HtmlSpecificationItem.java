@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.view.html;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.view.html;
  * #L%
  */
 
-import static org.itsallcode.openfasttrace.view.html.CharacterConstants.CHECKMARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECKMARK;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlSpecificationItem implements Viewable
 {
@@ -107,12 +107,8 @@ public class HtmlSpecificationItem implements Viewable
     protected void renderMultilineText(final String indentation, final String text)
     {
         this.stream.print(indentation);
-        for (final String line : text.split("[\n\r]+"))
-        {
-            this.stream.print("    <p>");
-            this.stream.print(this.converter.convert(line));
-            this.stream.println("</p>");
-        }
+        this.stream.print("    ");
+        this.stream.println(this.converter.convert(text));
     }
 
     private void renderRationale(final String indentation)

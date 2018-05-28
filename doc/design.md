@@ -714,8 +714,8 @@ Needs: impl, utest
 
 The return value of the OFT executable is:
 
-    * `0` tracing was successful
-    * `1` tracing ran successfully, but the tracing result is negative
+* `0` tracing was successful
+* `1` tracing ran successfully, but the tracing result is negative
 
 Covers:
 

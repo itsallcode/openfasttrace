@@ -174,6 +174,13 @@ public class TestMarkdownConverter
     }
 
     @Test
+    public void testConvertTwoLinksInOneLine()
+    {
+        assertThat(this.converter.convert("Before [A](#to-a) between [B](#to-b) after."), equalTo(
+                "<p>Before <a href=\"#to-a\">A</a> between <a href=\"#to-b\">B</a> after.</p>"));
+    }
+
+    @Test
     public void testConvertEmphasis()
     {
         assertThat(this.converter.convert("This _is important_, believe me!"),

@@ -59,20 +59,8 @@ public class ReportService
             final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream)
     {
         final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        switch (ReportFormat.parse(format))
-        {
-        case PLAIN_TEXT:
-            new PlainTextReport(trace, newline)
-                    .renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
-            break;
-        case HTML:
-            new HtmlReport(trace, newline).renderToStreamWithVerbosityLevel(bufferedOutputStream,
-                    verbosity);
-            break;
-        default:
-            throw new IllegalArgumentException(
-                    "Unable to create report with format \"" + format + "\"");
-        }
+        final Reportable report = createReport(trace, format, newline);
+        report.renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
         try
         {
             bufferedOutputStream.flush();
@@ -81,6 +69,24 @@ public class ReportService
         {
             throw new ReportException(exception.getMessage());
         }
+    }
+
+    protected Reportable createReport(final Trace trace, final String format, final Newline newline)
+    {
+        Reportable report = null;
+        switch (ReportFormat.parse(format))
+        {
+        case PLAIN_TEXT:
+            report = new PlainTextReport(trace, newline);
+            break;
+        case HTML:
+            report = new HtmlReport(trace, newline);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Unable to create report with format \"" + format + "\"");
+        }
+        return report;
     }
 
 }

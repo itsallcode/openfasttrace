@@ -54,7 +54,7 @@ public class TestMarkdownConverter
                 + " third line   " //
                 + "</pre>" //
                 + "<p>After preformatted</p>";
-        assertThat(convert(original), equalTo(expected));
+        assertConverted(original, expected);
     }
 
     protected String convert(final String original)
@@ -78,6 +78,11 @@ public class TestMarkdownConverter
                 + "<li>third item</li>" //
                 + "</ul>" //
                 + "<p>After list</p>";
+        assertConverted(original, expected);
+    }
+
+    protected void assertConverted(final String original, final String expected)
+    {
         assertThat(convert(original), equalTo(expected));
     }
 
@@ -97,7 +102,7 @@ public class TestMarkdownConverter
                 + "<li>second item second item continued</li>" //
                 + "</ul>" //
                 + "<p>After list</p>";
-        assertThat(convert(original), equalTo(expected));
+        assertConverted(original, expected);
 
     }
 
@@ -117,32 +122,31 @@ public class TestMarkdownConverter
                 + "<li>third item</li>" //
                 + "</ol>" //
                 + "<p>After list</p>";
-        assertThat(convert(original), equalTo(expected));
+        assertConverted(original, expected);
     }
 
     @Test
     public void testCloseOrderedList()
     {
-        final String original = "5. foobar";
-        assertThat(convert(original), equalTo("<ol><li>foobar</li></ol>"));
+        assertConverted("5. foobar", "<ol><li>foobar</li></ol>");
     }
 
     @Test
     public void testCloseUnurderedList()
     {
-        assertThat(this.converter.convert("+ foobar"), equalTo("<ul><li>foobar</li></ul>"));
+        assertConverted("+ foobar", "<ul><li>foobar</li></ul>");
     }
 
     @Test
     public void testClosePreformatted()
     {
-        assertThat(this.converter.convert("     foobar  "), equalTo("<pre> foobar  </pre>"));
+        assertConverted("     foobar  ", "<pre> foobar  </pre>");
     }
 
     @Test
     public void testCloseWithTerminator()
     {
-        assertThat(this.converter.convert("foobar\n\n\n"), equalTo("<p>foobar</p>"));
+        assertConverted("foobar\n\n\n", "<p>foobar</p>");
     }
 
     @Test
@@ -155,46 +159,46 @@ public class TestMarkdownConverter
                 + "... also continued";
         final String expected = "<p>First paragraph ... continued</p>" //
                 + "<p>Second paragraph ... also continued</p>";
-        assertThat(convert(original), equalTo(expected));
+        assertConverted(original, expected);
 
     }
 
     @Test
     public void testConvertCode()
     {
-        assertThat(this.converter.convert("This text `contains code ` and regular text"),
-                equalTo("<p>This text <code>contains code </code> and regular text</p>"));
+        assertConverted("This text `contains code ` and regular text",
+                "<p>This text <code>contains code </code> and regular text</p>");
     }
 
     @Test
     public void testConvertLink()
     {
-        assertThat(this.converter.convert("See [link label](#link-target) for details."),
-                equalTo("<p>See <a href=\"#link-target\">link label</a> for details.</p>"));
+        assertConverted("See [link label](#link-target) for details.",
+                "<p>See <a href=\"#link-target\">link label</a> for details.</p>");
     }
 
     @Test
     public void testConvertTwoLinksInOneLine()
     {
-        assertThat(this.converter.convert("Before [A](#to-a) between [B](#to-b) after."), equalTo(
-                "<p>Before <a href=\"#to-a\">A</a> between <a href=\"#to-b\">B</a> after.</p>"));
+        assertConverted("Before [A](#to-a) between [B](#to-b) after.",
+                "<p>Before <a href=\"#to-a\">A</a> between <a href=\"#to-b\">B</a> after.</p>");
     }
 
     @Test
     public void testConvertEmphasis()
     {
-        assertThat(this.converter.convert("This _is important_, believe me!"),
-                equalTo("<p>This <em>is important</em>, believe me!</p>"));
-        assertThat(this.converter.convert("This *is important*, believe me!"),
-                equalTo("<p>This <em>is important</em>, believe me!</p>"));
+        assertConverted("This _is important_, believe me!",
+                "<p>This <em>is important</em>, believe me!</p>");
+        assertConverted("This *is important*, believe me!",
+                "<p>This <em>is important</em>, believe me!</p>");
     }
 
     @Test
     public void testConvertStrong()
     {
-        assertThat(this.converter.convert("This __is very important__, believe me!"),
-                equalTo("<p>This <strong>is very important</strong>, believe me!</p>"));
-        assertThat(this.converter.convert("This **is very important**, believe me!"),
-                equalTo("<p>This <strong>is very important</strong>, believe me!</p>"));
+        assertConverted("This __is very important__, believe me!",
+                "<p>This <strong>is very important</strong>, believe me!</p>");
+        assertConverted("This **is very important**, believe me!",
+                "<p>This <strong>is very important</strong>, believe me!</p>");
     }
 }

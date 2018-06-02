@@ -42,9 +42,6 @@ public class TestHtmlReport
 {
     @Mock
     private Trace traceMock;
-    private LinkedSpecificationItem itemA;
-    private LinkedSpecificationItem itemB;
-    private OutputStream outputStream;
 
     @Before
     public void prepareTest()
@@ -57,31 +54,33 @@ public class TestHtmlReport
     {
         final String outputAsString = renderToString();
         assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
-        assertThat(outputAsString, not(containsString("<section>")));
+        assertThat(outputAsString, not(containsString("<section")));
         assertThat(outputAsString, endsWith("</html>"));
     }
 
     protected String renderToString()
     {
-        this.outputStream = new ByteArrayOutputStream();
+        final OutputStream outputStream = new ByteArrayOutputStream();
         final Reportable report = new HtmlReport(this.traceMock, Newline.UNIX);
-        report.renderToStreamWithVerbosityLevel(this.outputStream, ReportVerbosity.ALL);
-        final String outputAsString = this.outputStream.toString();
+        report.renderToStreamWithVerbosityLevel(outputStream, ReportVerbosity.ALL);
+        final String outputAsString = outputStream.toString();
         return outputAsString;
     }
 
     @Test
     public void testRenderSimpleTrace()
     {
-        this.itemA = new LinkedSpecificationItem(new SpecificationItem.Builder() //
-                .id(SpecificationItemId.createId("a", "a-item", 1)) //
-                .description("Description A") //
-                .build());
-        this.itemB = new LinkedSpecificationItem(new SpecificationItem.Builder() //
-                .id(SpecificationItemId.createId("b", "b-item", 1)) //
-                .description("Description b") //
-                .build());
-        when(this.traceMock.getItems()).thenReturn(Arrays.asList(this.itemA, this.itemB));
+        final LinkedSpecificationItem itemA = new LinkedSpecificationItem(
+                new SpecificationItem.Builder() //
+                        .id(SpecificationItemId.createId("a", "a-item", 1)) //
+                        .description("Description A") //
+                        .build());
+        final LinkedSpecificationItem itemB = new LinkedSpecificationItem(
+                new SpecificationItem.Builder() //
+                        .id(SpecificationItemId.createId("b", "b-item", 1)) //
+                        .description("Description b") //
+                        .build());
+        when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemA, itemB));
         final String outputAsString = renderToString();
         assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
         assertThat(outputAsString, containsString("<section id=\"A\">"));

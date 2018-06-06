@@ -30,19 +30,33 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
 
 /**
  * Super class for factories producing {@link Exporter}s.
  */
-public abstract class ExporterFactory
+public abstract class ExporterFactory implements Initializable<ExporterContext>
 {
     private static final Logger LOG = Logger.getLogger(ExporterFactory.class.getName());
 
     private final String supportedOutputFormat;
 
+    private ExporterContext context;
+
     protected ExporterFactory(final String supportedOutputFormat)
     {
         this.supportedOutputFormat = supportedOutputFormat;
+    }
+
+    @Override
+    public void init(final ExporterContext context)
+    {
+        this.context = context;
+    }
+
+    protected ExporterContext getContext()
+    {
+        return this.context;
     }
 
     /**

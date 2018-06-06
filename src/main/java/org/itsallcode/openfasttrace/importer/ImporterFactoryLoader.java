@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
@@ -40,19 +40,17 @@ public class ImporterFactoryLoader
 {
     private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
 
-    private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
-    private final ImporterContext context;
+    private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
 
     public ImporterFactoryLoader(final ImporterContext context)
     {
-        this(ServiceLoaderWrapper.load(ImporterFactory.class), context);
+        this(InitializingServiceLoader.load(ImporterFactory.class, context));
     }
 
-    ImporterFactoryLoader(final ServiceLoaderWrapper<ImporterFactory> serviceLoader,
-            final ImporterContext context)
+    ImporterFactoryLoader(
+            final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
-        this.context = context;
     }
 
     /**
@@ -92,7 +90,7 @@ public class ImporterFactoryLoader
     private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .peek(service -> service.init(this.context)).filter(f -> f.supportsFile(file)) //
+                .filter(f -> f.supportsFile(file)) //
                 .collect(toList());
     }
 }

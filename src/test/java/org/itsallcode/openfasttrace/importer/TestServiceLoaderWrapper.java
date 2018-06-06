@@ -29,7 +29,8 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
@@ -38,16 +39,18 @@ import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
 import org.junit.Test;
 
 /**
- * Test for {@link ServiceLoaderWrapper}
+ * Test for {@link InitializingServiceLoader}
  */
 public class TestServiceLoaderWrapper
 {
     @Test
     public void testNoServicesRegistered()
     {
-        final ServiceLoaderWrapper<Void> voidServiceLoader = ServiceLoaderWrapper.load(Void.class);
-        final List<Void> services = StreamSupport.stream(voidServiceLoader.spliterator(), false)
-                .collect(toList());
+        final Object context = new Object();
+        final InitializingServiceLoader<InitializableServiceStub, Object> voidServiceLoader = InitializingServiceLoader
+                .load(InitializableServiceStub.class, context);
+        final List<InitializableServiceStub> services = StreamSupport
+                .stream(voidServiceLoader.spliterator(), false).collect(toList());
         assertThat(services, emptyIterable());
         assertThat(voidServiceLoader, emptyIterable());
     }
@@ -56,18 +59,34 @@ public class TestServiceLoaderWrapper
     @Test
     public void testServicesRegistered()
     {
-        final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class);
+        final ImporterContext context = new ImporterContext(null);
+        final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
+                context);
         assertThat(services, hasSize(5));
         assertThat(services, contains(instanceOf(MarkdownImporterFactory.class), //
                 instanceOf(SpecobjectImporterFactory.class), //
                 instanceOf(TagImporterFactory.class), //
                 instanceOf(LegacyTagImporterFactory.class), //
                 instanceOf(ZipFileImporterFactory.class)));
+        for (final ImporterFactory importerFactory : services)
+        {
+            assertThat(importerFactory.getContext(), sameInstance(context));
+        }
     }
 
-    private <T> List<T> getRegisteredServices(final Class<T> type)
+    private <T extends Initializable<C>, C> List<T> getRegisteredServices(final Class<T> type,
+            final C context)
     {
-        final ServiceLoaderWrapper<T> serviceLoader = ServiceLoaderWrapper.load(type);
+        final InitializingServiceLoader<T, C> serviceLoader = InitializingServiceLoader.load(type,
+                context);
         return StreamSupport.stream(serviceLoader.spliterator(), false).collect(toList());
+    }
+
+    private class InitializableServiceStub implements Initializable<Object>
+    {
+        @Override
+        public void init(final Object context)
+        {
+        }
     }
 }

@@ -23,12 +23,13 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.Objects;
 
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * Super class for factories producing {@link Importer}s.
  */
-public abstract class ImporterFactory
+public abstract class ImporterFactory implements Initializable<ImporterContext>
 {
     private ImporterContext context;
 
@@ -61,6 +62,7 @@ public abstract class ImporterFactory
      * @param context
      *            the context used to initialize this factory.
      */
+    @Override
     public void init(final ImporterContext context)
     {
         this.context = context;

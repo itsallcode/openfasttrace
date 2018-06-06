@@ -42,12 +42,7 @@ public class ImporterFactoryLoader
 
     private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
 
-    public ImporterFactoryLoader(final ImporterContext context)
-    {
-        this(InitializingServiceLoader.load(ImporterFactory.class, context));
-    }
-
-    ImporterFactoryLoader(
+    public ImporterFactoryLoader(
             final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
     {
         this.serviceLoader = serviceLoader;

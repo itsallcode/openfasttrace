@@ -1,54 +1,80 @@
 @startuml
 !include ../clean.skin
+!pragma horizontalLineBetweenDifferentPackageAllowed
 
-class ImporterFactoryLoader {
+package java.util {
+    class ServiceLoader {
+    }
 }
 
-class java.util.ServiceLoader {
+package org.itsallcode.openfasttrace {
+
+    package importer {
+        class ImporterFactoryLoader {
+        }
+
+        class MultiFileImporter {
+        }
+        
+        interface Importer <<interface>> {
+            + runImport() : void
+        }
+        
+        class ImporterFactory <<abstract>> {
+            + supportsFile(inputFile: InputFile) : boolean
+            + createImporter(inputFile: InputFile, listener: ImportEventListener) : Importer
+            * getContext() : ImporterContext
+        }
+
+        class ImporterService {
+            + ImporterService(context: ImporterContext) : ImporterService 
+            + createImporter() : MultiFileImporter
+        }
+        
+        class RegExMatchingImporterFactory <<abstract>> {
+        }
+        
+        class ImporterContext {
+            + getImporterService() : ImporterService
+            + setImporterService(importerService: ImporterService) : void
+        }
+        
+        package zip {
+            class ZipFileImporter {
+            }
+            
+            class ZipFileImporterFactory {
+            }
+            
+            ZipFileImporterFactory -left-> ZipFileImporter : <<create>>
+        }
+        
+        ZipFileImporter .left.|> Importer
+        ZipFileImporterFactory --|> RegExMatchingImporterFactory
+        RegExMatchingImporterFactory --|> ImporterFactory
+        ImporterFactory -right-> ImporterContext : passes
+        ImporterContext -up-> ImporterService : contains
+        ImporterService -down-> ImporterContext : <<create>>
+        ImporterService -right-> MultiFileImporter : <<create>>
+    }
+
+
+    package core.serviceloader {
+        class InitializingServiceLoader {
+        }
+
+        interface Initializable <<interface>> {
+            + init(context: ImporterContext) : void
+        }
+        InitializingServiceLoader -up-> Initializable : <<initialize>>
+    }
+
+    ImporterFactory .right.|> Initializable
+    ImporterFactoryLoader -left-> InitializingServiceLoader : <<use>>
+    
 }
 
-class MultiFileImporter {
-}
+ServiceLoader --> ZipFileImporterFactory : <<create>>
+InitializingServiceLoader --> ServiceLoader : <<use>>
 
-class ImporterService {
-    + ImporterService(context: ImporterContext) : ImporterService 
-    + createImporter() : MultiFileImporter
-}
-
-interface Importer <<interface>> {
-    + runImport() : void
-}
-
-class ZipFileImporter {
-}
-
-class ImporterFactory <<abstract>> {
-    + init(context: ImporterContext) : void
-    + supportsFile(inputFile: InputFile) : boolean
-    + createImporter(inputFile: InputFile, listener: ImportEventListener) : Importer
-    * getContext() : ImporterContext
-}
-
-class RegExMatchingImporterFactory <<abstract>> {
-}
-
-class ZipFileImporterFactory {
-}
-
-class ImporterContext {
-    + getImporterService() : ImporterService
-    + setImporterService(importerService: ImporterService) : void
-}
-
-ZipFileImporter .up.|> Importer
-ZipFileImporterFactory -up-|> RegExMatchingImporterFactory
-RegExMatchingImporterFactory -up-|> ImporterFactory
-ZipFileImporterFactory -right-> ZipFileImporter : <<create>>
-ImporterFactory -right-> ImporterContext : <<use>>
-ImporterContext --> ImporterService : <<use>>
-java.util.ServiceLoader --> ZipFileImporterFactory : <<create>>
-ImporterFactoryLoader --> java.util.ServiceLoader : <<use>>
-ImporterFactoryLoader --> ImporterFactory : <<initialize>>
-ImporterService --> ImporterContext : <<create>>
-ImporterService --> MultiFileImporter : <<create>>
 @enduml

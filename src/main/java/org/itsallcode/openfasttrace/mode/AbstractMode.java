@@ -31,8 +31,8 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.importer.ImporterContext;
-import org.itsallcode.openfasttrace.importer.ImporterService;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
@@ -93,6 +93,12 @@ abstract class AbstractMode<T extends AbstractMode<T>>
 
     private ImporterService createImporterService()
     {
-        return new ImporterService(new ImporterContext(this.tagImporterConfig));
+        final ImporterContext context = new ImporterContext(this.tagImporterConfig);
+        final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader = InitializingServiceLoader
+                .load(ImporterFactory.class, context);
+        final ImporterService service = new ImporterService(
+                new ImporterFactoryLoader(serviceLoader));
+        context.setImporterService(service);
+        return service;
     }
 }

@@ -51,7 +51,7 @@ public class ImporterContext
      * @param importerService
      *            the common instance of {@link ImporterService}.
      */
-    void setImporterService(final ImporterService importerService)
+    public void setImporterService(final ImporterService importerService)
     {
         this.importerService = importerService;
     }

@@ -36,18 +36,10 @@ public class ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
     private FilterSettings filterSettings;
-    private final ImporterContext context;
 
-    public ImporterService(final ImporterContext context)
-    {
-        this(new ImporterFactoryLoader(context), context);
-    }
-
-    ImporterService(final ImporterFactoryLoader factoryLoader, final ImporterContext context)
+    public ImporterService(final ImporterFactoryLoader factoryLoader)
     {
         this.factoryLoader = factoryLoader;
-        this.context = context;
-        this.context.setImporterService(this);
     }
 
     /**

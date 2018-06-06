@@ -1,6 +1,5 @@
 @startuml
 !include ../clean.skin
-!pragma horizontalLineBetweenDifferentPackageAllowed
 
 package java.util {
     class ServiceLoader {
@@ -10,6 +9,7 @@ package java.util {
 package org.itsallcode.openfasttrace {
 
     package importer {
+
         class ImporterFactoryLoader {
         }
 
@@ -49,13 +49,13 @@ package org.itsallcode.openfasttrace {
             ZipFileImporterFactory -left-> ZipFileImporter : <<create>>
         }
         
-        ZipFileImporter .left.|> Importer
-        ZipFileImporterFactory --|> RegExMatchingImporterFactory
-        RegExMatchingImporterFactory --|> ImporterFactory
-        ImporterFactory -right-> ImporterContext : passes
-        ImporterContext -up-> ImporterService : contains
-        ImporterService -down-> ImporterContext : <<create>>
-        ImporterService -right-> MultiFileImporter : <<create>>
+        RegExMatchingImporterFactory -up-|> ImporterFactory
+        ZipFileImporterFactory -up-|> RegExMatchingImporterFactory
+        ImporterContext -down-> ImporterService : contains
+        ImporterService -up-> MultiFileImporter : <<create>>
+        ZipFileImporter -up-> MultiFileImporter : delegates
+        ZipFileImporter .up.|> Importer
+        ImporterFactory -down-> ImporterContext : passes
     }
 
 
@@ -66,15 +66,15 @@ package org.itsallcode.openfasttrace {
         interface Initializable <<interface>> {
             + init(context: ImporterContext) : void
         }
-        InitializingServiceLoader -up-> Initializable : <<initialize>>
+        InitializingServiceLoader -left-> Initializable : <<initialize>>
     }
 
     ImporterFactory .right.|> Initializable
-    ImporterFactoryLoader -left-> InitializingServiceLoader : <<use>>
-    
+    ImporterFactoryLoader -up-> InitializingServiceLoader : get\navailable\nfactories
+    ImporterFactoryLoader -left-> ImporterFactory : find factory responsible\nfor input format
 }
 
-ServiceLoader --> ZipFileImporterFactory : <<create>>
-InitializingServiceLoader --> ServiceLoader : <<use>>
+ServiceLoader -down-> ZipFileImporterFactory : <<create>>
+InitializingServiceLoader -up-> ServiceLoader : <<use>>
 
 @enduml

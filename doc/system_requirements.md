@@ -211,6 +211,8 @@ Covers:
 Needs: dsn
 
 ##### Markdown Outline Readable
+`req~markdown-outline-readable~1`
+
 The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
 
 Rationale:
@@ -237,6 +239,22 @@ Covers:
 * [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
+
+##### Artifact Type Forwarding in Markdown
+`req~artifact-type-forwarding-in-markdown~1`
+
+The Markdown format features a compact way to forward a requirement from the artifact type that war originally required to one or more different artifact types.
+
+Rationale:
+
+Often a system requirement does not affect the highlevel architecture in this case it is convenient for the architect to hand it down to lower levels directly.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
 
 #### Coverage Tags
 

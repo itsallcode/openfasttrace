@@ -395,13 +395,13 @@ Needs: impl, utest
 A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
-
+    
     type = 1*ALPHA
-
+    
     id = id-fragment *("." id-fragment)
-
+    
     id-fragment = ALPHA *(ALPHA / DIGIT / "_" / "-")
-
+    
     revision = 1*DIGIT
 
 Rationale:
@@ -435,6 +435,7 @@ Markdown titles show up in the outline and are a natural way of defining a requi
 Covers:
 
 * `req~markdown-standard-syntax~1`
+* `req~markdown-outline-readable~1`
 
 Needs: impl, utest
 
@@ -444,9 +445,9 @@ Needs: impl, utest
 In Markdown specification item references have the following format:
 
     reference = (plain-reference / url-style-link)
-
+    
     plain-reference = requirement-id
-
+    
     url-style-link = "[" link-text "]" "(" "#" requirement-id ")"
 
 Covers:
@@ -461,9 +462,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links that cover a different specification item.
 
     covers-list = covers-header 1*(LINEBREAK covers-line)
-
+    
     covers-header = "Covers:" *WSP
-
+    
     covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -484,8 +485,8 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
-
-    depends-header = "Depends:" *WSP
+    
+        depends-header = "Depends:" *WSP
 
     depends-line = *WSP "*" *WSP reference
 
@@ -519,6 +520,19 @@ This alternative style of the "needs" list provides backward compatibility to El
 Covers:
 
 * `req~markdown-standard-syntax~1`
+
+Needs: impl, utest
+
+#### Markdown Artifact Forwarding Notation
+`dsn~md.artifact-forwarding-notation~1`
+
+The Markdown Importer supports forwarding required coverage from one artifact type to one or more different artifact types using the following notation.
+
+    artifact-need-redirection = *1BACKQUOTE requirement-id *WSP "->" *WSP *1BACKQUOTE
+    
+Covers:
+
+* `req~artifact-type-forwarding-in-markdown~1`
 
 Needs: impl, utest
 

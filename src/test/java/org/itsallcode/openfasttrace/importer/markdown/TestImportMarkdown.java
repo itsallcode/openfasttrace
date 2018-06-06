@@ -258,4 +258,11 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }
+
+    @Test
+    public void testForwardRequirement()
+    {
+        final String forward = "`req~foobar~1;
+        runImporterOnText(singleNeedsItem);
+    }
 }

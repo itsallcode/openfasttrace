@@ -43,7 +43,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TestImportMarkdown
+public class TestMarkdownImporter
 {
     private static final String TAG2 = "Tag2";
     private static final String TAG1 = "Tag1";
@@ -259,10 +259,25 @@ public class TestImportMarkdown
         inOrder.verifyNoMoreInteractions();
     }
 
+    // [utest->dsn~md.artifact-forwarding-notation~1]
     @Test
     public void testForwardRequirement()
     {
-        final String forward = "`req~foobar~1;
-        runImporterOnText(singleNeedsItem);
+        runImporterOnText("arch-->dsn:req~foobar~2\n" //
+                + "   * `dsn --> impl, utest,itest : arch~bar.zoo~123`");
+        final InOrder inOrder = inOrder(this.listenerMock);
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("arch~foobar~2"));
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("req~foobar~2"));
+        inOrder.verify(this.listenerMock).addNeededArtifactType("dsn");
+        inOrder.verify(this.listenerMock).endSpecificationItem();
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("dsn~bar.zoo~123"));
+        inOrder.verify(this.listenerMock)
+                .addCoveredId(SpecificationItemId.parseId("arch~bar.zoo~123"));
+        inOrder.verify(this.listenerMock).addNeededArtifactType("impl");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("utest");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("itest");
+        inOrder.verify(this.listenerMock).endSpecificationItem();
     }
 }

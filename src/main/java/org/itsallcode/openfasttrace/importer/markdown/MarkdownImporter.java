@@ -43,6 +43,7 @@ class MarkdownImporter implements Importer
     private final  Transition[] transitions = {
         transition(START      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(START      , TITLE      , MdPattern.TITLE      , this::rememberTitle                        ),
+        transition(START      , OUTSIDE    , MdPattern.FORWARD    , this::forward                              ),
         transition(START      , OUTSIDE    , MdPattern.EVERYTHING , () -> {}                                   ),
     
         transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
@@ -50,6 +51,7 @@ class MarkdownImporter implements Importer
         transition(TITLE      , OUTSIDE    , MdPattern.EVERYTHING , this::resetTitle                           ),
     
         transition(OUTSIDE    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
+        transition(OUTSIDE    , OUTSIDE    , MdPattern.FORWARD    , this::forward                              ),
     
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                            ),
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , this::setStatus                            ),
@@ -155,6 +157,7 @@ class MarkdownImporter implements Importer
         transition(TAGS       , TAGS       , MdPattern.TAGS       , () -> {}                                   ),
         transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                               ),
     };
+    // @formatter:on
 
     private final String fileName;
     private final BufferedReader reader;
@@ -191,8 +194,8 @@ class MarkdownImporter implements Importer
         }
         catch (final IOException exception)
         {
-            throw new ImporterException("IO exception after " + this.fileName + ":" + this.lineNumber,
-                    exception);
+            throw new ImporterException(
+                    "IO exception after " + this.fileName + ":" + this.lineNumber, exception);
         }
         finishImport();
     }
@@ -205,8 +208,8 @@ class MarkdownImporter implements Importer
         }
     }
 
-    private static final Transition transition(final State from, final State to, final MdPattern pattern,
-            final TransitionAction action)
+    private static final Transition transition(final State from, final State to,
+            final MdPattern pattern, final TransitionAction action)
     {
         return new Transition(from, to, pattern, action);
     }
@@ -220,7 +223,7 @@ class MarkdownImporter implements Importer
 
     private void cleanUpLastItem()
     {
-        if(this.inSpecificationItem)
+        if (this.inSpecificationItem)
         {
             endItem();
         }
@@ -233,7 +236,7 @@ class MarkdownImporter implements Importer
         this.listener.beginSpecificationItem();
         this.listener.setId(id);
         this.listener.setLocation(this.fileName, this.lineNumber);
-        if(this.lastTitle != null)
+        if (this.lastTitle != null)
         {
             this.listener.setTitle(this.lastTitle);
         }
@@ -245,12 +248,12 @@ class MarkdownImporter implements Importer
         resetTitle();
         this.listener.endSpecificationItem();
     }
-    
+
     private void setStatus()
     {
         this.listener.setStatus(ItemStatus.parseString(this.stateMachine.getLastToken()));
     }
-    
+
     private void beginDescription()
     {
         this.lastDescription = new StringBuilder(this.stateMachine.getLastToken());
@@ -258,29 +261,30 @@ class MarkdownImporter implements Importer
 
     private void appendDescription()
     {
-        this.lastDescription.append(System.lineSeparator()).append(this.stateMachine.getLastToken());
+        this.lastDescription.append(System.lineSeparator())
+                .append(this.stateMachine.getLastToken());
     }
-    
+
     private void endDescription()
     {
         this.listener.appendDescription(this.lastDescription.toString().trim());
         this.lastDescription = null;
     }
-    
+
     private void beginRationale()
     {
         this.lastRationale = new StringBuilder();
     }
-    
+
     private void appendRationale()
     {
-        if(this.lastRationale.length() > 0)
+        if (this.lastRationale.length() > 0)
         {
             this.lastRationale.append(System.lineSeparator());
         }
         this.lastRationale.append(this.stateMachine.getLastToken());
     }
-    
+
     private void endRationale()
     {
         this.listener.appendRationale(this.lastRationale.toString().trim());
@@ -289,18 +293,18 @@ class MarkdownImporter implements Importer
 
     private void beginComment()
     {
-        this.lastComment= new StringBuilder();
+        this.lastComment = new StringBuilder();
     }
 
     private void appendComment()
     {
-        if(this.lastComment.length() > 0)
+        if (this.lastComment.length() > 0)
         {
             this.lastComment.append(System.lineSeparator());
         }
         this.lastComment.append(this.stateMachine.getLastToken());
     }
-    
+
     private void endComment()
     {
         this.listener.appendComment(this.lastComment.toString().trim());
@@ -309,14 +313,15 @@ class MarkdownImporter implements Importer
 
     private void addDependency()
     {
-        final SpecificationItemId.Builder builder = new SpecificationItemId.Builder(this.stateMachine.getLastToken());
+        final SpecificationItemId.Builder builder = new SpecificationItemId.Builder(
+                this.stateMachine.getLastToken());
         this.listener.addDependsOnId(builder.build());
     }
 
     private void addNeeds()
     {
         final String artifactTypes = this.stateMachine.getLastToken();
-        for(final String artifactType : artifactTypes.split(",\\s*"))
+        for (final String artifactType : artifactTypes.split(",\\s*"))
         {
             this.listener.addNeededArtifactType(artifactType);
         }
@@ -337,13 +342,36 @@ class MarkdownImporter implements Importer
     {
         this.listener.addCoveredId(SpecificationItemId.parseId(this.stateMachine.getLastToken()));
     }
-    
+
     private void addTag()
     {
         final String tags = this.stateMachine.getLastToken();
-        for(final String tag : tags.split(",\\s*"))
+        for (final String tag : tags.split(",\\s*"))
         {
             this.listener.addTag(tag);
         }
+    }
+
+    // [impl->dsn~md.artifact-forwarding-notation~1]
+    private void forward()
+    {
+        final String forward = this.stateMachine.getLastToken();
+        final int posForwardMarker = forward.indexOf("-->");
+        final int posOriginalMarker = forward.indexOf(":");
+        final String skippedArtifactType = forward.substring(0, posForwardMarker).trim();
+        final String targetArtifactTypes = forward.substring(posForwardMarker + 3,
+                posOriginalMarker);
+        final SpecificationItemId originalId = SpecificationItemId
+                .parseId(forward.substring(posOriginalMarker + 1).trim());
+        final SpecificationItemId skippedId = SpecificationItemId.createId(skippedArtifactType,
+                originalId.getName(), originalId.getRevision());
+        this.listener.beginSpecificationItem();
+        this.listener.setId(skippedId);
+        this.listener.addCoveredId(originalId);
+        for (final String targetArtifactType : targetArtifactTypes.split("\\s*,\\s*"))
+        {
+            this.listener.addNeededArtifactType(targetArtifactType.trim());
+        }
+        this.listener.endSpecificationItem();
     }
 }

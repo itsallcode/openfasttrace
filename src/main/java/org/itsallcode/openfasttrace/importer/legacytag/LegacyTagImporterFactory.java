@@ -33,6 +33,10 @@ import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
+/**
+ * A {@link ImporterFactory} supporting the compact coverage tag format for
+ * source code.
+ */
 // [impl->dsn~import.short-coverage-tag~1]
 public class LegacyTagImporterFactory extends ImporterFactory
 {

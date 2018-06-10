@@ -42,7 +42,7 @@ public class TestStreamInput
     public void testRelativeFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah");
-        final InputFile inputFile = InputFile.forReader(path, null);
+        final InputFile inputFile = StreamInput.forReader(path, null);
         assertThat(inputFile.getPath(), equalTo("blah"));
         assertThat(inputFile.toString(), equalTo("blah"));
     }
@@ -51,7 +51,7 @@ public class TestStreamInput
     public void testAbsoluteFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
-        final InputFile inputFile = InputFile.forReader(path, null);
+        final InputFile inputFile = StreamInput.forReader(path, null);
         assertThat(inputFile.getPath(), equalTo(path.toString()));
         assertThat(inputFile.toString(), equalTo(path.toString()));
     }
@@ -60,20 +60,20 @@ public class TestStreamInput
     public void testToPathUnsupported() throws IOException
     {
         final Path path = Paths.get("blah");
-        InputFile.forReader(path, null).toPath();
+        StreamInput.forReader(path, null).toPath();
     }
 
     @Test
     public void testIsRealFileFalse() throws IOException
     {
-        final InputFile inputFile = InputFile.forReader(Paths.get("blah"), null);
+        final InputFile inputFile = StreamInput.forReader(Paths.get("blah"), null);
         assertThat(inputFile.isRealFile(), equalTo(false));
     }
 
     @Test
     public void testReadContent() throws IOException
     {
-        final InputFile inputFile = InputFile.forReader(null,
+        final InputFile inputFile = StreamInput.forReader(null,
                 new BufferedReader(new StringReader(CONTENT)));
         assertThat(readContent(inputFile), equalTo(CONTENT));
     }

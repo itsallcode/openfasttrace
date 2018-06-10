@@ -39,6 +39,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -113,7 +114,7 @@ public class TestImportMarkdown
     private void runImporterOnText(final String text)
     {
         final BufferedReader reader = new BufferedReader(new StringReader(text));
-        final InputFile file = InputFile.forReader(Paths.get(FILENAME), reader);
+        final InputFile file = StreamInput.forReader(Paths.get(FILENAME), reader);
         final Importer importer = new MarkdownImporterFactory().createImporter(file,
                 this.listenerMock);
         importer.runImport();

@@ -54,7 +54,13 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
         this.context = context;
     }
 
-    protected ExporterContext getContext()
+    /**
+     * Get the {@link ExporterContext} set by the {@link #init(ExporterContext)}
+     * method.
+     * 
+     * @return the {@link ExporterContext}.
+     */
+    public ExporterContext getContext()
     {
         return this.context;
     }

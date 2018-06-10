@@ -64,21 +64,6 @@ public interface InputFile
     }
 
     /**
-     * Create an {@link InputFile} for a {@link BufferedReader}. This is useful
-     * for tests to avoid using real files.
-     * 
-     * @param path
-     *            a dummy path.
-     * @param reader
-     *            the base reader.
-     * @return an {@link InputFile}.
-     */
-    public static InputFile forReader(final Path path, final BufferedReader reader)
-    {
-        return new StreamInput(path, reader);
-    }
-
-    /**
      * Create an {@link InputFile} for a {@link ZipEntry} in a {@link ZipFile}.
      * {@link StandardCharsets#UTF_8} is used for reading the file.
      * 

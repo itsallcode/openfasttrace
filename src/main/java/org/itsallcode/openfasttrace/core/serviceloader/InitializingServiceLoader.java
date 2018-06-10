@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 import java.util.*;
 
 /**
- * This is a non-final wrapper for {@link ServiceLoader}. It is required as
- * final classes cannot be mocked in unit tests.
+ * This service loader is similar to Java's {@link ServiceLoader} but
+ * additionally initializes services with a given context.
  * 
  * @param <C>
  *            the context type.

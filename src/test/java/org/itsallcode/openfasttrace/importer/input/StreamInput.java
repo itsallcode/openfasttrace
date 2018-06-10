@@ -25,15 +25,30 @@ package org.itsallcode.openfasttrace.importer.input;
 import java.io.BufferedReader;
 import java.nio.file.Path;
 
-class StreamInput implements InputFile
+public class StreamInput implements InputFile
 {
     private final Path path;
     private final BufferedReader reader;
 
-    StreamInput(final Path path, final BufferedReader reader)
+    private StreamInput(final Path path, final BufferedReader reader)
     {
         this.path = path;
         this.reader = reader;
+    }
+
+    /**
+     * Create an {@link InputFile} for a {@link BufferedReader}. This is useful
+     * for tests to avoid using real files.
+     * 
+     * @param path
+     *            a dummy path.
+     * @param reader
+     *            the base reader.
+     * @return an {@link InputFile}.
+     */
+    public static InputFile forReader(final Path path, final BufferedReader reader)
+    {
+        return new StreamInput(path, reader);
     }
 
     @Override

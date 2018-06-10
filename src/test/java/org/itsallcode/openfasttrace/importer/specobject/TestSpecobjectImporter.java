@@ -37,6 +37,7 @@ import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Test;
 
 /**
@@ -68,7 +69,7 @@ public class TestSpecobjectImporter
         final ImportEventListener listenerMock = mock(ImportEventListener.class);
         final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         final StringReader stringReader = new StringReader(text);
-        final InputFile file = InputFile.forReader(Paths.get(PSEUDO_FILENAME),
+        final InputFile file = StreamInput.forReader(Paths.get(PSEUDO_FILENAME),
                 new BufferedReader(stringReader));
         final SpecobjectImporter importer = new SpecobjectImporter(file, saxParserFactory,
                 listenerMock);

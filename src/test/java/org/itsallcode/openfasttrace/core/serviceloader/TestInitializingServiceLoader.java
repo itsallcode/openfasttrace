@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer;
+package org.itsallcode.openfasttrace.core.serviceloader;
 
 /*-
  * #%L
@@ -29,8 +29,11 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.exporter.ExporterContext;
+import org.itsallcode.openfasttrace.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporterFactory;
+import org.itsallcode.openfasttrace.importer.ImporterContext;
+import org.itsallcode.openfasttrace.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
@@ -41,7 +44,7 @@ import org.junit.Test;
 /**
  * Test for {@link InitializingServiceLoader}
  */
-public class TestServiceLoaderWrapper
+public class TestInitializingServiceLoader
 {
     @Test
     public void testNoServicesRegistered()
@@ -57,7 +60,7 @@ public class TestServiceLoaderWrapper
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testServicesRegistered()
+    public void testImporterFactoriesRegistered()
     {
         final ImporterContext context = new ImporterContext(null);
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
@@ -71,6 +74,20 @@ public class TestServiceLoaderWrapper
         for (final ImporterFactory importerFactory : services)
         {
             assertThat(importerFactory.getContext(), sameInstance(context));
+        }
+    }
+
+    @Test
+    public void testExporterFactoriesRegistered()
+    {
+        final ExporterContext context = new ExporterContext();
+        final List<ExporterFactory> services = getRegisteredServices(ExporterFactory.class,
+                context);
+        assertThat(services, hasSize(1));
+        assertThat(services, contains(instanceOf(SpecobjectExporterFactory.class)));
+        for (final ExporterFactory factory : services)
+        {
+            assertThat(factory.getContext(), sameInstance(context));
         }
     }
 

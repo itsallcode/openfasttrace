@@ -29,6 +29,9 @@ import java.util.zip.ZipFile;
 
 import org.itsallcode.openfasttrace.importer.ImporterException;
 
+/**
+ * An {@link InputFile} for {@link ZipEntry} of a {@link ZipFile}.
+ */
 public class ZipEntryInput implements InputFile
 {
     private final ZipFile zip;

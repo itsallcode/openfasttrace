@@ -37,6 +37,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
@@ -285,7 +286,7 @@ public class TestTagImporter
     private List<SpecificationItem> runImporter(final String content)
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
-        final InputFile file = InputFile.forReader(Paths.get(FILENAME),
+        final InputFile file = StreamInput.forReader(Paths.get(FILENAME),
                 new BufferedReader(new StringReader(content)));
         new TagImporterFactory().createImporter(file, builder).runImport();
         return builder.build();

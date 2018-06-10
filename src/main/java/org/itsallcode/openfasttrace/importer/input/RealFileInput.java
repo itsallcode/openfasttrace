@@ -28,6 +28,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * An {@link InputFile} for a file on disk, represented by a {@link Path}.
+ */
 class RealFileInput implements InputFile
 {
     private final Path path;

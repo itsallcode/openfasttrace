@@ -75,6 +75,14 @@ public class ImporterFactoryLoader
         }
     }
 
+    /**
+     * Check if any {@link ImporterFactory} supports importing the given
+     * {@link InputFile}.
+     * 
+     * @param file
+     *            the file for which to check if an importer exists.
+     * @return <code>true</code> if an importer exists, else <code>false</code>.
+     */
     public boolean supportsFile(final InputFile file)
     {
         final boolean supported = !getMatchingFactories(file).isEmpty();

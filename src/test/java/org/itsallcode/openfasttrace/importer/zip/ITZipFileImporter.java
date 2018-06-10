@@ -41,6 +41,7 @@ import java.util.zip.ZipOutputStream;
 import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -90,7 +91,7 @@ public class ITZipFileImporter
     @Test(expected = UnsupportedOperationException.class)
     public void testImportNonRealFile() throws IOException
     {
-        final InputFile file = InputFile.forReader(this.zipFile.toPath(),
+        final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
         new ZipFileImporter(file, this.delegateImporterMock).runImport();
     }

@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -156,7 +157,7 @@ public class TestLegacyTagImporter
 
     private void runImport(final String content)
     {
-        final InputFile file = InputFile.forReader(FILE,
+        final InputFile file = StreamInput.forReader(FILE,
                 new BufferedReader(new StringReader(content)));
 
         new LegacyTagImporter(this.configMock, file, this.listenerMock).runImport();

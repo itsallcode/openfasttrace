@@ -56,19 +56,19 @@ public abstract class ImporterFactory implements Initializable<ImporterContext>
     public abstract Importer createImporter(final InputFile file,
             final ImportEventListener listener);
 
-    /**
-     * Initialize the factory with the given context.
-     * 
-     * @param context
-     *            the context used to initialize this factory.
-     */
     @Override
     public void init(final ImporterContext context)
     {
         this.context = context;
     }
 
-    protected ImporterContext getContext()
+    /**
+     * Get the {@link ImporterContext} set by the {@link #init(ImporterContext)}
+     * method.
+     * 
+     * @return the {@link ImporterContext}.
+     */
+    public ImporterContext getContext()
     {
         return Objects.requireNonNull(this.context, "Context was not initialized");
     }

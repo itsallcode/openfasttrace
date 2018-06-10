@@ -29,18 +29,22 @@ import java.util.zip.ZipFile;
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
+/**
+ * This {@link Importer} supports reading {@link ZipFile} and delegates import
+ * of {@link ZipEntry}s to a {@link MultiFileImporter}.
+ */
 public class ZipFileImporter implements Importer
 {
     private final InputFile file;
     private final MultiFileImporter delegateImporter;
 
-    public ZipFileImporter(final ImporterService importerService, final InputFile file,
+    ZipFileImporter(final ImporterService importerService, final InputFile file,
             final ImportEventListener listener)
     {
         this(file, importerService.createImporter(listener));
     }
 
-    public ZipFileImporter(final InputFile file, final MultiFileImporter delegateImporter)
+    ZipFileImporter(final InputFile file, final MultiFileImporter delegateImporter)
     {
         this.file = file;
         this.delegateImporter = delegateImporter;

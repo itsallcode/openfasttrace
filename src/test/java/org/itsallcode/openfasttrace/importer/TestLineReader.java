@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class TestLineReader
         final Path tempFile = this.tempFolder.newFile().toPath();
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
 
-        LineReader.create(InputFile.forReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
+        LineReader.create(StreamInput.forReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
                 .readLines(this.consumerMock);
 
         assertLinesRead(TEST_CONTENT_LINE_1);
@@ -125,7 +126,7 @@ public class TestLineReader
 
     private void readContent(final String content)
     {
-        final InputFile file = InputFile.forReader(DUMMY_FILE,
+        final InputFile file = StreamInput.forReader(DUMMY_FILE,
                 new BufferedReader(new StringReader(content)));
         LineReader.create(file).readLines(this.consumerMock);
     }

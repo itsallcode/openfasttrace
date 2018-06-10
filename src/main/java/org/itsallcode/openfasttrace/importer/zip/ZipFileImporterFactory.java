@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.importer.zip;
 
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -26,7 +29,8 @@ import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
- * {@link ImporterFactory} for recursively importing ZIP files
+ * {@link ImporterFactory} for importing {@link ZipEntry}s of a {@link ZipFile}
+ * using a {@link ZipFileImporter}.
  */
 public class ZipFileImporterFactory extends RegexMatchingImporterFactory
 {

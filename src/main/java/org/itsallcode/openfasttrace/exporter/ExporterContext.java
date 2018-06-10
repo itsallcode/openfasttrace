@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.exporter;
 
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -22,6 +24,10 @@ package org.itsallcode.openfasttrace.exporter;
  * #L%
  */
 
+/**
+ * Context for {@link ExporterFactory}. Currently only used to satisfy
+ * {@link Initializable} interface.
+ */
 public class ExporterContext
 {
 

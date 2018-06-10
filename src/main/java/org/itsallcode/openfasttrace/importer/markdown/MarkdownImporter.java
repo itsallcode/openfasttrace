@@ -355,20 +355,12 @@ class MarkdownImporter implements Importer
     // [impl->dsn~md.artifact-forwarding-notation~1]
     private void forward()
     {
-        final String forward = this.stateMachine.getLastToken();
-        final int posForwardMarker = forward.indexOf("-->");
-        final int posOriginalMarker = forward.indexOf(":");
-        final String skippedArtifactType = forward.substring(0, posForwardMarker).trim();
-        final String targetArtifactTypes = forward.substring(posForwardMarker + 3,
-                posOriginalMarker);
-        final SpecificationItemId originalId = SpecificationItemId
-                .parseId(forward.substring(posOriginalMarker + 1).trim());
-        final SpecificationItemId skippedId = SpecificationItemId.createId(skippedArtifactType,
-                originalId.getName(), originalId.getRevision());
+        final MarkdownForwardingSpecificationItem forward = new MarkdownForwardingSpecificationItem(
+                this.stateMachine.getLastToken());
         this.listener.beginSpecificationItem();
-        this.listener.setId(skippedId);
-        this.listener.addCoveredId(originalId);
-        for (final String targetArtifactType : targetArtifactTypes.split("\\s*,\\s*"))
+        this.listener.setId(forward.getSkippedId());
+        this.listener.addCoveredId(forward.getOriginalId());
+        for (final String targetArtifactType : forward.getTargetArtifactTypes())
         {
             this.listener.addNeededArtifactType(targetArtifactType.trim());
         }

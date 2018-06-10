@@ -46,12 +46,16 @@ public enum MdPattern
     EVERYTHING("(.*)"),
     FORWARD(".*?("
             + PatternConstants.ARTIFACT_TYPE
-            + "\\s*-->\\s*"
+            + "\\s*"
+            + MarkdownForwardingSpecificationItem.FORWARD_MARKER
+            + "\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + "(?:,\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + ")*"
-            + "\\s*:\\s*"
+            + "\\s*"
+            + MarkdownForwardingSpecificationItem.ORIGINAL_MARKER
+            + "\\s*"
             + SpecificationItemId.ID_PATTERN
             + ").*?"),
     ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),

@@ -486,8 +486,8 @@ The Markdown Importer supports the following format for links to a different spe
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
     
-        depends-header = "Depends:" *WSP
-
+    depends-header = "Depends:" *WSP
+    
     depends-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -528,8 +528,19 @@ Needs: impl, utest
 
 The Markdown Importer supports forwarding required coverage from one artifact type to one or more different artifact types using the following notation.
 
-    artifact-need-redirection = *1BACKQUOTE requirement-id *WSP "->" *WSP *1BACKQUOTE
+    artifact-need-redirection = skipped-artifact-type *WSP "-->" *WSP target-artifact-list
+        *WSP ":" *WSP original-requirement-id
+        
+    skipped-artifact-type = artifact-type
     
+    target-artifact-list = artifact-type *("," *WSP artifact-type)
+        
+    original-requirement-id = requirement-id
+
+The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test.
+
+    arch --> dsn, itest : req~skip-this-requirement~1
+ 
 Covers:
 
 * `req~artifact-type-forwarding-in-markdown~1`
@@ -728,8 +739,8 @@ Needs: impl, utest
 
 The return value of the OFT executable is:
 
-    * `0` tracing was successful
-    * `1` tracing ran successfully, but the tracing result is negative
+* `0` tracing was successful
+* `1` tracing ran successfully, but the tracing result is negative
 
 Covers:
 

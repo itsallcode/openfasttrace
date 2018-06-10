@@ -372,6 +372,7 @@ class MarkdownImporter implements Importer
         {
             this.listener.addNeededArtifactType(targetArtifactType.trim());
         }
+        this.listener.setForwards(true);
         this.listener.endSpecificationItem();
     }
 }

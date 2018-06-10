@@ -183,6 +183,21 @@ Tags are a way to label an artifact intended for grouping.
 
 Needs: dsn
 
+#### Forwarding Needed Coverage
+`req~forwarding_needed_coverage~1`
+
+OFT allows users to forward needed coverage from one artifact type to one or more different types.
+
+Rationale:
+
+Often a system requirement does not affect the highlevel architecture in this case it is convenient for the architect to hand it down to lower levels directly.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
 ### Supported Formats
 
 #### Markdown
@@ -254,7 +269,6 @@ Covers:
 * [feat~markdown-import~1](#markdown-import)
 
 Needs: dsn
-
 
 #### Coverage Tags
 

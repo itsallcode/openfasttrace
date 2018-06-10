@@ -28,7 +28,7 @@ import java.util.Objects;
 
 import javax.annotation.Generated;
 
-// [impl->dsn~specification-item~2]
+// [impl->dsn~specification-item~3]
 public class SpecificationItem
 {
     private final SpecificationItemId id;
@@ -42,6 +42,7 @@ public class SpecificationItem
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> needsArtifactTypes;
     private final List<String> tags;
+    private final boolean forwards;
 
     private SpecificationItem(final Builder builder)
     {
@@ -57,6 +58,7 @@ public class SpecificationItem
         this.dependOnIds = builder.dependOnIds;
         this.needsArtifactTypes = builder.neededArtifactTypes;
         this.tags = builder.tags;
+        this.forwards = builder.forwards;
     }
 
     /**
@@ -194,6 +196,15 @@ public class SpecificationItem
         return this.tags;
     }
 
+    /**
+     * @return <code>true</code> if this specification item forwards needed
+     *         coverage
+     */
+    public boolean isForwarding()
+    {
+        return this.forwards;
+    }
+
     @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final int hashCode()
@@ -204,14 +215,15 @@ public class SpecificationItem
         result = prime * result + ((this.coveredIds == null) ? 0 : this.coveredIds.hashCode());
         result = prime * result + ((this.dependOnIds == null) ? 0 : this.dependOnIds.hashCode());
         result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + (this.forwards ? 1231 : 1237);
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
         result = prime * result
                 + ((this.needsArtifactTypes == null) ? 0 : this.needsArtifactTypes.hashCode());
-        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
         result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
-        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
+        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
+        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         return result;
     }
 
@@ -276,6 +288,10 @@ public class SpecificationItem
         {
             return false;
         }
+        if (this.forwards != other.forwards)
+        {
+            return false;
+        }
         if (this.id == null)
         {
             if (other.id != null)
@@ -309,17 +325,6 @@ public class SpecificationItem
         {
             return false;
         }
-        if (this.tags == null)
-        {
-            if (other.tags != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.tags.equals(other.tags))
-        {
-            return false;
-        }
         if (this.rationale == null)
         {
             if (other.rationale != null)
@@ -331,6 +336,21 @@ public class SpecificationItem
         {
             return false;
         }
+        if (this.status != other.status)
+        {
+            return false;
+        }
+        if (this.tags == null)
+        {
+            if (other.tags != null)
+            {
+                return false;
+            }
+        }
+        else if (!this.tags.equals(other.tags))
+        {
+            return false;
+        }
         if (this.title == null)
         {
             if (other.title != null)
@@ -339,17 +359,6 @@ public class SpecificationItem
             }
         }
         else if (!this.title.equals(other.title))
-        {
-            return false;
-        }
-        if (this.status == null)
-        {
-            if (other.status != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.status.equals(other.status))
         {
             return false;
         }
@@ -372,6 +381,7 @@ public class SpecificationItem
         private final List<SpecificationItemId> dependOnIds;
         private final List<String> neededArtifactTypes;
         private final List<String> tags;
+        private boolean forwards;
 
         /**
          * Create a new instance of type {@link SpecificationItem.Builder}
@@ -615,6 +625,21 @@ public class SpecificationItem
                 throw new IllegalStateException("No id given");
             }
             return new SpecificationItem(this);
+        }
+
+        /**
+         * Set to <code>true</code> if this specification item forwards needed
+         * coverage
+         *
+         * @param forwards
+         *            <code>true</code> if the specification item forwards
+         *            needed coverage
+         * @return this builder instance
+         */
+        public Builder forwards(final boolean forwards)
+        {
+            this.forwards = forwards;
+            return this;
         }
     }
 }

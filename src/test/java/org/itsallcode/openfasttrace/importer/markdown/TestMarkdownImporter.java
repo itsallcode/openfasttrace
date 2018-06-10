@@ -270,6 +270,7 @@ public class TestMarkdownImporter
         inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("arch~foobar~2"));
         inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("req~foobar~2"));
         inOrder.verify(this.listenerMock).addNeededArtifactType("dsn");
+        inOrder.verify(this.listenerMock).setForwards(true);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("dsn~bar.zoo~123"));
@@ -278,6 +279,7 @@ public class TestMarkdownImporter
         inOrder.verify(this.listenerMock).addNeededArtifactType("impl");
         inOrder.verify(this.listenerMock).addNeededArtifactType("utest");
         inOrder.verify(this.listenerMock).addNeededArtifactType("itest");
+        inOrder.verify(this.listenerMock).setForwards(true);
         inOrder.verify(this.listenerMock).endSpecificationItem();
     }
 }

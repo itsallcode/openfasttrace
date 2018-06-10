@@ -87,7 +87,7 @@ Since the specification item IDs inherently look similar, load tests need to sho
 ## Importers
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
-## Import Event Listeners
+## Import Event Listener
 Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
 ### Specification List Builder
@@ -336,7 +336,7 @@ Needs: impl, itest
 ### Internal Data Structures
 
 #### Specification Item
-`dsn~specification-item~2`
+`dsn~specification-item~3`
 
 A `SpecificationItem` consists of the following parts:
 
@@ -351,10 +351,16 @@ A `SpecificationItem` consists of the following parts:
 * Depends (List of `SpecificationItemId`, optional)
 * Needs (List of `String`, optional)
 * Tags (List of `String`, optional)
+* Forwards (`boolean`, internal)
+
+Comment:
+
+See `req~forwarding_needed_coverage~1` for an explanation of the "forwards" fields meaning.
 
 Covers:
 
 * `req~specification-item~2`
+* `req~forwarding_needed_coverage~1`
 
 Needs: impl, utest
 

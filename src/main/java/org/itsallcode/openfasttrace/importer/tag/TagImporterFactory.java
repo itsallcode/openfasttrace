@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,9 +22,8 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-import java.io.Reader;
-
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * {@link ImporterFactory} for tags in source code files.
@@ -38,9 +37,8 @@ public class TagImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
-        return new TagImporter(fileName, reader, listener);
+        return new TagImporter(file, listener);
     }
 }

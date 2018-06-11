@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.exporter;
  * #L%
  */
 
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -38,7 +37,7 @@ public class ExporterService
 
     public ExporterService()
     {
-        this(new ExporterFactoryLoader());
+        this(new ExporterFactoryLoader(new ExporterContext()));
     }
 
     public ExporterService(final ExporterFactoryLoader factoryLoader)
@@ -47,8 +46,8 @@ public class ExporterService
     }
 
     /**
-     * Export the given {@link LinkedSpecificationItem} in the given output format
-     * to a file
+     * Export the given {@link LinkedSpecificationItem} in the given output
+     * format to a file
      *
      * @param itemStream
      *            the {@link SpecificationItem} to export

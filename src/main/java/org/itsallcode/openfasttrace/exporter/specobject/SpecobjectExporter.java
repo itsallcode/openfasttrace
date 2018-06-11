@@ -40,7 +40,10 @@ import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.exporter.Exporter;
 import org.itsallcode.openfasttrace.exporter.ExporterException;
 
-public class SpecobjectExporter implements Exporter
+/**
+ * An {@link Exporter} for the specobject XML format.
+ */
+class SpecobjectExporter implements Exporter
 {
     private static final Logger LOG = Logger.getLogger(SpecobjectExporter.class.getName());
 

@@ -28,6 +28,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.nio.file.Paths;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -35,6 +36,8 @@ import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Test;
 
 /**
@@ -66,8 +69,10 @@ public class TestSpecobjectImporter
         final ImportEventListener listenerMock = mock(ImportEventListener.class);
         final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         final StringReader stringReader = new StringReader(text);
-        final SpecobjectImporter importer = new SpecobjectImporter(PSEUDO_FILENAME,
-                new BufferedReader(stringReader), saxParserFactory, listenerMock);
+        final InputFile file = StreamInput.forReader(Paths.get(PSEUDO_FILENAME),
+                new BufferedReader(stringReader));
+        final SpecobjectImporter importer = new SpecobjectImporter(file, saxParserFactory,
+                listenerMock);
         importer.runImport();
         return listenerMock;
     }

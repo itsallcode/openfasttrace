@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-
 class Transition
 {
     private final State from;
@@ -57,5 +56,12 @@ class Transition
     public TransitionAction getTransition()
     {
         return this.transitionAction;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Transition [from=" + this.from + ", to=" + this.to + ", markdownPattern="
+                + this.markdownPattern + "]";
     }
 }

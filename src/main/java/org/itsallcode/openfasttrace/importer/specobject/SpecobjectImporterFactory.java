@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.specobject;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,12 +22,11 @@ package org.itsallcode.openfasttrace.importer.specobject;
  * #L%
  */
 
-import java.io.Reader;
-
 import javax.xml.parsers.SAXParserFactory;
 
 import org.itsallcode.openfasttrace.core.xml.SaxParserConfigurator;
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * {@link ImporterFactory} for XML specobject files
@@ -43,9 +42,8 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
-        return new SpecobjectImporter(fileName, reader, this.saxParserFactory, listener);
+        return new SpecobjectImporter(file, this.saxParserFactory, listener);
     }
 }

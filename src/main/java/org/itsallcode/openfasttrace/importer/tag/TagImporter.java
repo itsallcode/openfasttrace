@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,13 +24,13 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * {@link Importer} for tags in source code files.
@@ -44,16 +44,13 @@ class TagImporter implements Importer
     private static final String TAG_PREFIX_PATTERN = "\\[";
     private static final String TAG_SUFFIX_PATTERN = "\\]";
 
-    private final BufferedReader reader;
-    private final String fileName;
+    private final InputFile file;
     private final ImportEventListener listener;
     private final Pattern tagPattern;
 
-    public TagImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public TagImporter(final InputFile file, final ImportEventListener listener)
     {
-        this.reader = new BufferedReader(reader);
-        this.fileName = fileName;
+        this.file = file;
         this.listener = listener;
         this.tagPattern = Pattern.compile(TAG_PREFIX_PATTERN //
                 + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
@@ -67,9 +64,9 @@ class TagImporter implements Importer
     {
         String line;
         int lineNumber = 0;
-        try
+        try (BufferedReader reader = this.file.createReader())
         {
-            while ((line = this.reader.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
                 ++lineNumber;
                 processLine(lineNumber, line);
@@ -77,8 +74,7 @@ class TagImporter implements Importer
         }
         catch (final IOException e)
         {
-            throw new ImporterException("Error reading file " + this.fileName + ":" + lineNumber,
-                    e);
+            throw new ImporterException("Error reading file " + this.file + ":" + lineNumber, e);
         }
     }
 
@@ -89,13 +85,13 @@ class TagImporter implements Importer
         while (matcher.find())
         {
             this.listener.beginSpecificationItem();
-            this.listener.setLocation(this.fileName, lineNumber);
+            this.listener.setLocation(this.file.getPath().toString(), lineNumber);
             final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
             final String generatedName = generateName(coveredId, lineNumber, counter);
             final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
                     generatedName, 0);
 
-            LOG.finest(() -> "File " + this.fileName + ":" + lineNumber + ": found '" + generatedId
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
                     + "' covering id '" + coveredId + "'");
             this.listener.setId(generatedId);
             this.listener.addCoveredId(coveredId);
@@ -107,7 +103,7 @@ class TagImporter implements Importer
     private String generateName(final SpecificationItemId coveredId, final int lineNumber,
             final int counter)
     {
-        final String uniqueName = this.fileName + lineNumber + counter + coveredId.toString();
+        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId.toString();
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
         return coveredId.getName() + "-" + checksum;
     }

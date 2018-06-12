@@ -190,7 +190,7 @@ OFT allows users to forward needed coverage from one artifact type to one or mor
 
 Rationale:
 
-Often a system requirement does not affect the highlevel architecture in this case it is convenient for the architect to hand it down to lower levels directly.
+Often a system requirement does not affect the high-level architecture. In this case it is convenient for the architect to hand it down to lower levels directly.
 
 Covers:
 
@@ -258,11 +258,11 @@ Needs: dsn
 ##### Artifact Type Forwarding in Markdown
 `req~artifact-type-forwarding-in-markdown~1`
 
-The Markdown format features a compact way to forward a requirement from the artifact type that war originally required to one or more different artifact types.
+The Markdown format features a compact way to forward a requirement from the artifact type that was originally required to one or more different artifact types.
 
 Rationale:
 
-Often a system requirement does not affect the highlevel architecture in this case it is convenient for the architect to hand it down to lower levels directly.
+Often a system requirement does not affect the high-level architecture. In this case it is convenient for the architect to hand it down to lower levels directly.
 
 Covers:
 

@@ -29,6 +29,7 @@ import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class SpecDocumentHandlerBuilder
 {
@@ -36,12 +37,12 @@ public class SpecDocumentHandlerBuilder
 
     private static final String DOCTYPE_ATTRIBUTE_NAME = "doctype";
     private final CallbackContentHandler handler;
-    private final String fileName;
+    private final InputFile file;
     private final ImportEventListener listener;
 
-    public SpecDocumentHandlerBuilder(final String fileName, final ImportEventListener listener)
+    public SpecDocumentHandlerBuilder(final InputFile file, final ImportEventListener listener)
     {
-        this.fileName = fileName;
+        this.file = file;
         this.listener = listener;
 
         this.handler = new CallbackContentHandler();
@@ -76,7 +77,7 @@ public class SpecDocumentHandlerBuilder
 
             final String defaultDoctype = doctypeAttribute.getValue();
             this.handler.pushDelegate(
-                    new SpecObjectsHandlerBuilder(this.fileName, defaultDoctype, this.listener)
+                    new SpecObjectsHandlerBuilder(this.file, defaultDoctype, this.listener)
                             .build());
         });
 

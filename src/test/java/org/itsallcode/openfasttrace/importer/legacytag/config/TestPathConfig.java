@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Test;
 
 public class TestPathConfig
@@ -98,7 +98,8 @@ public class TestPathConfig
 
     private void assertMatches(final String pattern, final String path, final boolean expected)
     {
-        assertThat(create(pattern).matches(Paths.get(path)), equalTo(expected));
+        final InputFile file = InputFile.forPath(Paths.get(path));
+        assertThat(create(pattern).matches(file), equalTo(expected));
     }
 
     private PathConfig create(final String pattern)

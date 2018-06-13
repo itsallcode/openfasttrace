@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.specobject;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer.specobject;
  * #L%
  */
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -36,6 +35,7 @@ import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.handler.SpecDocumentHandlerBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,38 +46,36 @@ import org.xml.sax.XMLReader;
  */
 class SpecobjectImporter implements Importer
 {
-    private final Reader reader;
     private final ImportEventListener listener;
-    private final String fileName;
+    private final InputFile file;
     private final SAXParserFactory saxParserFactory;
 
-    SpecobjectImporter(final String fileName, final Reader reader,
-            final SAXParserFactory saxParserFactory, final ImportEventListener listener)
+    SpecobjectImporter(final InputFile file, final SAXParserFactory saxParserFactory,
+            final ImportEventListener listener)
     {
-        this.fileName = fileName;
+        this.file = file;
         this.saxParserFactory = saxParserFactory;
         this.listener = listener;
-        this.reader = new BufferedReader(reader);
     }
 
     @Override
     public void runImport()
     {
-        try
+        try (Reader reader = this.file.createReader())
         {
             final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
             xmlReader.setEntityResolver(new IgnoringEntityResolver());
-            final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.fileName,
+            final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.file,
                     this.listener);
             final TreeContentHandler treeContentHandler = config.build();
-            new ContentHandlerAdapter(this.fileName, xmlReader,
+            new ContentHandlerAdapter(this.file.getPath().toString(), xmlReader,
                     new TreeBuildingContentHandler(treeContentHandler)).registerListener();
-            final InputSource input = new InputSource(this.reader);
+            final InputSource input = new InputSource(reader);
             xmlReader.parse(input);
         }
-        catch (SAXException | ParserConfigurationException | IOException e)
+        catch (SAXException | ParserConfigurationException | IOException exception)
         {
-            throw new ImporterException("Error importing specobjects document " + this.fileName, e);
+            throw new ImporterException("Error reading \"" + this.file + "\"", exception);
         }
     }
 }

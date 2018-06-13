@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,79 +22,47 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-public class LineReader implements AutoCloseable
+import org.itsallcode.openfasttrace.importer.input.InputFile;
+
+public class LineReader
 {
-    private final LineNumberReader reader;
-    private final Path file;
+    private final InputFile file;
 
-    LineReader(final Path file, final LineNumberReader reader)
+    LineReader(final InputFile file)
     {
         this.file = file;
-        this.reader = reader;
     }
 
-    public static LineReader create(final Path file, final Charset charset)
+    public static LineReader create(final InputFile file)
     {
-        final BufferedReader bufferedReader = createReader(file, charset);
-        return create(file, bufferedReader);
-    }
-
-    public static LineReader create(final Path file, final Reader reader)
-    {
-        return new LineReader(file, new LineNumberReader(reader));
-    }
-
-    private static BufferedReader createReader(final Path file, final Charset charset)
-    {
-        try
-        {
-            return Files.newBufferedReader(file, charset);
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
-        }
+        return new LineReader(file);
     }
 
     public void readLines(final LineConsumer consumer)
     {
-        try
+        int currentLineNumber = 0;
+        try (final LineNumberReader reader = new LineNumberReader(this.file.createReader()))
         {
             String line;
-            while ((line = this.reader.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
-                consumer.readLine(getOneBasedLineNumber(), line);
+                currentLineNumber = reader.getLineNumber();
+                consumer.readLine(currentLineNumber, line);
             }
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
             throw new ImporterException(
-                    "Error reading file " + this.file + ":" + getOneBasedLineNumber(), e);
+                    "Error reading \"" + this.file + "\" at line " + currentLineNumber, exception);
         }
-    }
-
-    private int getOneBasedLineNumber()
-    {
-        return this.reader.getLineNumber();
     }
 
     @FunctionalInterface
     public interface LineConsumer
     {
         void readLine(int lineNumber, String line);
-    }
-
-    @Override
-    public void close() throws IOException
-    {
-        this.reader.close();
     }
 }

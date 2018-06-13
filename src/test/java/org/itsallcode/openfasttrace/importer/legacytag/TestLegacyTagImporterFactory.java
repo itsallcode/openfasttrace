@@ -26,17 +26,16 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
@@ -54,6 +53,8 @@ public class TestLegacyTagImporterFactory
 
     @Mock
     private ImportEventListener listenerMock;
+    @Mock
+    private ImporterContext contextMock;
 
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
@@ -77,21 +78,15 @@ public class TestLegacyTagImporterFactory
     }
 
     @Test
-    public void testFactorySupportsFileWithBasePath()
-    {
-        assertSupportsFile(configure("base", glob("path")), "base/path", true);
-    }
-
-    @Test
     public void testFactoryDoesNotSupportFileWithWrongBasePath()
     {
-        assertSupportsFile(configure("base", glob("path")), "base1/path", false);
+        assertSupportsFile(configure(glob("path")), "base1/path", false);
     }
 
     @Test
     public void testFactoryDoesNotSupportFileWithWrongPath()
     {
-        assertSupportsFile(configure("base", glob("path")), "base/path1", false);
+        assertSupportsFile(configure(glob("path")), "base/path1", false);
     }
 
     @Test
@@ -125,29 +120,27 @@ public class TestLegacyTagImporterFactory
     private void assertSupportsFile(final LegacyTagImporterConfig config, final String path,
             final boolean expected)
     {
-        assertThat(create(config).supportsFile(Paths.get(path)), equalTo(expected));
+        final InputFile file = InputFile.forPath(Paths.get(path));
+        assertThat(create(config).supportsFile(file), equalTo(expected));
     }
 
     private Importer createImporter(final LegacyTagImporterConfig config, final Path path)
     {
-        return create(config).createImporter(path, StandardCharsets.UTF_8, this.listenerMock);
-    }
-
-    private LegacyTagImporterConfig configure(final String basePath,
-            final PathConfig... pathConfigs)
-    {
-        final Optional<Path> optionalBasePath = Optional.ofNullable(basePath).map(Paths::get);
-        return new LegacyTagImporterConfig(optionalBasePath, asList(pathConfigs));
+        final InputFile file = InputFile.forPath(path, StandardCharsets.UTF_8);
+        return create(config).createImporter(file, this.listenerMock);
     }
 
     private LegacyTagImporterConfig configure(final PathConfig... pathConfigs)
     {
-        return configure(null, pathConfigs);
+        return new LegacyTagImporterConfig(asList(pathConfigs));
     }
 
     private LegacyTagImporterFactory create(final LegacyTagImporterConfig config)
     {
-        return new LegacyTagImporterFactory(() -> config);
+        final LegacyTagImporterFactory factory = new LegacyTagImporterFactory();
+        factory.init(this.contextMock);
+        when(this.contextMock.getTagImporterConfig()).thenReturn(config);
+        return factory;
     }
 
     private PathConfig glob(final String globPattern)

@@ -21,11 +21,7 @@ package org.itsallcode.openfasttrace.exporter;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,24 +30,44 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
 
 /**
  * Super class for factories producing {@link Exporter}s.
  */
-public abstract class ExporterFactory
+public abstract class ExporterFactory implements Initializable<ExporterContext>
 {
     private static final Logger LOG = Logger.getLogger(ExporterFactory.class.getName());
 
     private final String supportedOutputFormat;
+
+    private ExporterContext context;
 
     protected ExporterFactory(final String supportedOutputFormat)
     {
         this.supportedOutputFormat = supportedOutputFormat;
     }
 
+    @Override
+    public void init(final ExporterContext context)
+    {
+        this.context = context;
+    }
+
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory} supports exporting
-     * the given output format.
+     * Get the {@link ExporterContext} set by the {@link #init(ExporterContext)}
+     * method.
+     * 
+     * @return the {@link ExporterContext}.
+     */
+    public ExporterContext getContext()
+    {
+        return this.context;
+    }
+
+    /**
+     * Returns <code>true</code> if this {@link ExporterFactory} supports
+     * exporting the given output format.
      *
      * @param format
      *            the output type to check.
@@ -92,11 +108,18 @@ public abstract class ExporterFactory
     {
         if (file == null)
         {
-            LOG.finest(() -> "Creating exporter for stdout using charset " + charset);
-            return new OutputStreamWriter(System.out, charset);
+            LOG.finest(() -> "Creating exporter for STDOUT using charset " + charset);
+            return new OutputStreamWriter(getStdOutStream(), charset);
         }
         LOG.finest(() -> "Creating exporter for file " + file + " using charset " + charset);
         return createFileWriter(file, charset);
+    }
+
+    // Using System.out by intention
+    @SuppressWarnings("squid:S106")
+    private PrintStream getStdOutStream()
+    {
+        return System.out;
     }
 
     private Writer createFileWriter(final Path file, final Charset charset)

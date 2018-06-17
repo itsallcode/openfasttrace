@@ -22,20 +22,16 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.same;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.ImporterFactory;
-import org.itsallcode.openfasttrace.importer.ImporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -47,16 +43,18 @@ import org.mockito.MockitoAnnotations;
 public class TestImporterFactoryLoader
 {
     @Mock
-    private ServiceLoaderWrapper<ImporterFactory> serviceLoaderMock;
+    private InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoaderMock;
     @Mock
     private ImporterFactory supportedFactory1;
     @Mock
     private ImporterFactory supportedFactory2;
     @Mock
     private ImporterFactory unsupportedFactory;
+    @Mock
+    private ImporterContext contextMock;
 
     private ImporterFactoryLoader loader;
-    private Path file;
+    private InputFile file;
 
     @Before
     public void setUp()
@@ -64,7 +62,7 @@ public class TestImporterFactoryLoader
         MockitoAnnotations.initMocks(this);
 
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
-        this.file = Paths.get("dir", "name");
+        this.file = InputFile.forPath(Paths.get("dir", "name"));
 
         when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
         when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);

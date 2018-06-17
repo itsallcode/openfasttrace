@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
@@ -30,7 +29,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.core.ServiceLoaderWrapper;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This class is responsible for finding the matching {@link ImporterFactory}
@@ -40,22 +40,18 @@ public class ImporterFactoryLoader
 {
     private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
 
-    private final ServiceLoaderWrapper<ImporterFactory> serviceLoader;
+    private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
 
-    public ImporterFactoryLoader()
-    {
-        this(ServiceLoaderWrapper.load(ImporterFactory.class));
-    }
-
-    ImporterFactoryLoader(final ServiceLoaderWrapper<ImporterFactory> serviceLoader)
+    public ImporterFactoryLoader(
+            final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
     }
 
     /**
      * Finds a matching {@link ImporterFactory} that can handle the given
-     * {@link Path}. If no or more than one {@link ImporterFactory} is found, this
-     * throws an {@link ImporterException}.
+     * {@link Path}. If no or more than one {@link ImporterFactory} is found,
+     * this throws an {@link ImporterException}.
      *
      * @param file
      *            the file for which to get a {@link ImporterFactory}.
@@ -64,7 +60,7 @@ public class ImporterFactoryLoader
      * @throws ImporterException
      *             when no or more than one {@link ImporterFactory} is found.
      */
-    public ImporterFactory getImporterFactory(final Path file)
+    public ImporterFactory getImporterFactory(final InputFile file)
     {
         final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
         switch (matchingImporters.size())
@@ -79,14 +75,22 @@ public class ImporterFactoryLoader
         }
     }
 
-    public boolean supportsFile(final Path file)
+    /**
+     * Check if any {@link ImporterFactory} supports importing the given
+     * {@link InputFile}.
+     * 
+     * @param file
+     *            the file for which to check if an importer exists.
+     * @return <code>true</code> if an importer exists, else <code>false</code>.
+     */
+    public boolean supportsFile(final InputFile file)
     {
         final boolean supported = !getMatchingFactories(file).isEmpty();
         LOG.finest(() -> "File " + file + " is supported = " + supported);
         return supported;
     }
 
-    private List<ImporterFactory> getMatchingFactories(final Path file)
+    private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
                 .filter(f -> f.supportsFile(file)) //

@@ -31,23 +31,22 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
 {
-    private final ImporterService importerService = new ImporterService();
     protected final List<Path> inputs = new ArrayList<>();
     protected Newline newline = Newline.UNIX;
     private FilterSettings filterSettings = FilterSettings.createAllowingEverything();
+    private LegacyTagImporterConfig tagImporterConfig = LegacyTagImporterConfig.empty();
 
     protected abstract T self();
 
     public T addInputs(final Path... inputs)
     {
-        this.inputs.addAll(Arrays.asList(inputs));
-        return self();
+        return this.addInputs(Arrays.asList(inputs));
     }
 
     public T addInputs(final List<Path> inputs)
@@ -69,28 +68,37 @@ abstract class AbstractMode<T extends AbstractMode<T>>
         return self();
     }
 
-    public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config)
+    public T setLegacyTagImporterPathConfig(final LegacyTagImporterConfig tagImporterConfig)
     {
-        LegacyTagImporterFactory.setPathConfig(config);
+        this.tagImporterConfig = tagImporterConfig;
         return self();
     }
 
     protected List<LinkedSpecificationItem> importLinkedSpecificationItems()
     {
-        final List<LinkedSpecificationItem> linkedItems;
         final Stream<SpecificationItem> items = importItems();
         final Linker linker = new Linker(items.collect(Collectors.toList()));
-        linkedItems = linker.link();
-        return linkedItems;
+        return linker.link();
     }
 
     protected Stream<SpecificationItem> importItems()
     {
-        return this.importerService //
+        return createImporterService() //
                 .setFilters(this.filterSettings) //
                 .createImporter() //
                 .importAny(this.inputs) //
                 .getImportedItems() //
                 .stream();
+    }
+
+    private ImporterService createImporterService()
+    {
+        final ImporterContext context = new ImporterContext(this.tagImporterConfig);
+        final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader = InitializingServiceLoader
+                .load(ImporterFactory.class, context);
+        final ImporterService service = new ImporterService(
+                new ImporterFactoryLoader(serviceLoader));
+        context.setImporterService(service);
+        return service;
     }
 }

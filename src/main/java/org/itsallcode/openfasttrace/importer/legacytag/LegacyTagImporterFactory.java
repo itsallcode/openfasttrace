@@ -24,93 +24,64 @@ package org.itsallcode.openfasttrace.importer.legacytag;
 
 import static java.util.stream.Collectors.toList;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
+/**
+ * A {@link ImporterFactory} supporting the compact coverage tag format for
+ * source code.
+ */
 // [impl->dsn~import.short-coverage-tag~1]
 public class LegacyTagImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(LegacyTagImporterFactory.class.getName());
 
-    private static LegacyTagImporterConfig defaultConfig = LegacyTagImporterConfig.empty();;
-
-    private final Supplier<LegacyTagImporterConfig> config;
-
-    public LegacyTagImporterFactory()
-    {
-        this(() -> defaultConfig);
-    }
-
-    public LegacyTagImporterFactory(final Supplier<LegacyTagImporterConfig> config)
-    {
-        this.config = config;
-    }
-
     @Override
-    public boolean supportsFile(final Path path)
+    public boolean supportsFile(final InputFile path)
     {
         return findConfig(path).isPresent();
     }
 
-    private Optional<PathConfig> findConfig(final Path path)
+    private Optional<PathConfig> findConfig(final InputFile file)
     {
-        final Path relativePath = makeRelative(path);
-        return this.config.get().getPathConfigs().stream() //
-                .filter(config -> config.matches(relativePath)) //
+        return getPathConfigs()//
+                .peek(c -> LOG.finest(() -> "Checking config " + c + " with file " + file))
+                .filter(config -> config.matches(file)) //
+                .peek(c -> LOG.finest(() -> "Config " + c + " matches file " + file)) //
                 .findFirst();
     }
 
-    private Path makeRelative(final Path path)
-    {
-        return this.config.get().getBasePath() //
-                .map(basePath -> basePath.relativize(path)) //
-                .orElse(path);
-    }
-
     @Override
-    public Importer createImporter(final Path path, final Charset charset,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile path, final ImportEventListener listener)
     {
         final Optional<PathConfig> config = findConfig(path);
         if (!config.isPresent())
         {
-            final List<String> descriptions = this.config.get().getPathConfigs().stream() //
+            final List<String> descriptions = this.getPathConfigs() //
                     .map(PathConfig::getDescription) //
                     .collect(toList());
             throw new ImporterException("File '" + path
                     + "' not supported for import, supported paths: " + descriptions);
         }
-        return () -> runImporter(path, charset, config.get(), listener);
+        return () -> runImporter(path, config.get(), listener);
     }
 
-    private void runImporter(final Path path, final Charset charset, final PathConfig config,
+    private Stream<PathConfig> getPathConfigs()
+    {
+        return getContext().getTagImporterConfig().getPathConfigs().stream();
+    }
+
+    private void runImporter(final InputFile file, final PathConfig config,
             final ImportEventListener listener)
     {
-        LOG.finest(() -> "Creating importer for file " + path);
-        try (final LineReader reader = LineReader.create(path, charset))
-        {
-            final LegacyTagImporter importer = new LegacyTagImporter(config, path, reader,
-                    listener);
-            importer.runImport();
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException("Error importing file '" + path + "': " + e.getMessage(),
-                    e);
-        }
-    }
-
-    public static void setPathConfig(final LegacyTagImporterConfig config)
-    {
-        defaultConfig = config;
+        LOG.finest(() -> "Creating importer for file " + file);
+        final LegacyTagImporter importer = new LegacyTagImporter(config, file, listener);
+        importer.runImport();
     }
 }

@@ -25,8 +25,10 @@ import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * The configuration of a single path that is imported by
@@ -34,6 +36,8 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
  */
 public class PathConfig
 {
+    private static final Logger LOG = Logger.getLogger(PathConfig.class.getName());
+
     private final DescribedPathMatcher pathMatcher;
     private final String coveredItemNamePrefix;
     private final String coveredItemArtifactType;
@@ -53,9 +57,11 @@ public class PathConfig
         return this.pathMatcher.getDescription();
     }
 
-    public boolean matches(final Path file)
+    public boolean matches(final InputFile file)
     {
-        return this.pathMatcher.matches(file);
+        final boolean matches = this.pathMatcher.matches(file);
+        LOG.finest(() -> "File " + file + " matches " + this.pathMatcher + " = " + matches);
+        return matches;
     }
 
     public String getTagArtifactType()

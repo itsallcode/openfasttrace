@@ -104,7 +104,7 @@ public class ArgumentValidator
     {
         boolean ok = false;
         final String format = this.arguments.getOutputFormat();
-        if (format != null && !new ExporterFactoryLoader().isFormatSupported(format))
+        if (format != null && !new ExporterFactoryLoader(null).isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
         }

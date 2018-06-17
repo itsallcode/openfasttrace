@@ -23,18 +23,20 @@ package org.itsallcode.openfasttrace.importer;
  */
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Base class for {@link ImporterFactory} tests.
@@ -46,6 +48,14 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    protected ImporterContext contextMock;
+
+    @Before
+    public void initMocks()
+    {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void testSupportedFileNames()
@@ -60,21 +70,36 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @Test
-    public void testCreateImporterThrowsExceptionForUnsupportedFilenames()
-    {
-        final Path unsupportedPath = Paths.get("dir", getUnsupportedFilenames().get(0));
-        this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("File '" + unsupportedPath + "' not supported for import");
-        createFactory().createImporter(unsupportedPath, null, null);
-    }
-
-    @Test
     public void testCreateImporterThrowsExceptionForMissingFile()
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("Error reading file '" + supportedPath + "'");
-        createFactory().createImporter(supportedPath, StandardCharsets.UTF_8, null).runImport();
+        this.thrown.expectMessage("Error reading file " + supportedPath);
+        createAndInitialize().createImporter(InputFile.forPath(supportedPath), null).runImport();
+    }
+
+    private T createAndInitialize()
+    {
+        final T factory = createFactory();
+        factory.init(this.contextMock);
+        return factory;
+    }
+
+    @Test
+    public void testInit()
+    {
+        final T factory = createFactory();
+        factory.init(this.contextMock);
+        assertThat(factory.getContext(), sameInstance(this.contextMock));
+    }
+
+    @Test
+    public void testMissingContextThrowsException()
+    {
+        final T factory = createFactory();
+        this.thrown.expect(NullPointerException.class);
+        this.thrown.expectMessage(equalTo("Context was not initialized"));
+        factory.getContext();
     }
 
     private void assertSupported(final List<String> filenames, final boolean expectedResult)
@@ -83,7 +108,8 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         for (final String filename : filenames)
         {
             final Path path = Paths.get("dir", filename);
-            assertThat(path.toString(), factory.supportsFile(path), equalTo(expectedResult));
+            assertThat(path.toString(), factory.supportsFile(InputFile.forPath(path)),
+                    equalTo(expectedResult));
         }
     }
 

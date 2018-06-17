@@ -3,3 +3,4 @@ org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory
 org.itsallcode.openfasttrace.importer.tag.TagImporterFactory
 org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory
 org.itsallcode.openfasttrace.importer.rif.RifImporterFactory
+org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory

@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import java.util.logging.Logger;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -37,6 +39,8 @@ import java.util.regex.Matcher;
  */
 public class MarkdownImporterStateMachine
 {
+    private static Logger LOG = Logger.getLogger(MarkdownImporterStateMachine.class.getName());
+
     private State state = State.START;
     private String lastToken = "";
     private final Transition[] transitions;
@@ -66,6 +70,7 @@ public class MarkdownImporterStateMachine
         {
             if ((this.state == entry.getFrom()) && matchToken(line, entry))
             {
+                LOG.finest(() -> entry + " : '" + line + "'");
                 entry.getTransition().transit();
                 this.state = entry.getTo();
                 break;

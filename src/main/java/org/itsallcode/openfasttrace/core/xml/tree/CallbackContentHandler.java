@@ -93,7 +93,7 @@ public class CallbackContentHandler implements TreeContentHandler
                 this.defaultStartElementListener);
         if (consumer == null)
         {
-            LOG.warning("No consumer for event " + treeElement);
+            LOG.warning(() -> "No consumer for event " + treeElement);
             return;
         }
         try

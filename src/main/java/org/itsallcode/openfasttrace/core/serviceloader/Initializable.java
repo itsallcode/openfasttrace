@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.core.serviceloader;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,8 +22,21 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
-public class ReportOptions
+/**
+ * Interface for initializable services that can be loaded by
+ * {@link InitializingServiceLoader}.
+ *
+ * @param <C>
+ *            the context injected via {@link #init(Object)}.
+ */
+public interface Initializable<C>
 {
-
+    /**
+     * Initializes the service with the given context.
+     * 
+     * @param context
+     *            the context object with which to initialize the service
+     *            object.
+     */
+    public void init(C context);
 }

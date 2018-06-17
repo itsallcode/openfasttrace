@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.core;
 
-import static java.util.Collections.emptyList;
-
 /*-
  * #%L
  \* OpenFastTrace
@@ -107,7 +105,7 @@ public class LinkedSpecificationItem
      */
     public List<String> getTags()
     {
-        return emptyList();
+        return this.item.getTags();
     }
 
     /**

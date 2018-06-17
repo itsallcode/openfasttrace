@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -22,37 +24,197 @@ package org.itsallcode.openfasttrace.importer;
  * #L%
  */
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.itsallcode.openfasttrace.FilterSettings;
+import org.itsallcode.openfasttrace.core.ItemStatus;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Test;;
 
 public class TestSpecificationListBuilder
 {
-    private static final SpecificationItemId ITEM_ID = SpecificationItemId.parseId("foo~bar~1");
-    private SpecificationListBuilder builder;
 
-    @Before
-    public void setUp()
+    private static final String DESCRIPTION = "description";
+    private static final String TITLE = "title";
+    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
+
+    @Test
+    public void testBuildBasicItem()
     {
-        this.builder = new SpecificationListBuilder();
+        final SpecificationListBuilder builder = createBasicListBuilder();
+        builder.appendDescription(DESCRIPTION);
+        builder.setTitle(TITLE);
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.size(), equalTo(1));
+        assertThat(items.get(0).getId(), equalTo(ID));
+        assertThat(items.get(0).getDescription(), equalTo(DESCRIPTION));
+        assertThat(items.get(0).getTitle(), equalTo(TITLE));
+    }
+
+    private SpecificationListBuilder createBasicListBuilder()
+    {
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+        builder.beginSpecificationItem();
+        builder.setId(ID);
+        return builder;
+    }
+
+    @Test
+    public void testBuildWithStatus()
+    {
+        final SpecificationListBuilder builder = createBasicListBuilder();
+        builder.setStatus(ItemStatus.DRAFT);
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.get(0).getStatus(), equalTo(ItemStatus.DRAFT));
+    }
+
+    @Test
+    public void testBuildWithTags()
+    {
+        final SpecificationListBuilder builder = createBasicListBuilder();
+        builder.addTag("foo");
+        builder.addTag("bar");
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.get(0).getTags(), containsInAnyOrder("foo", "bar"));
+    }
+
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
+    @Test
+    public void testFilterArtifactOfType()
+    {
+        final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("dsn");
+        builder.beginSpecificationItem();
+        builder.setId(SpecificationItemId.createId("impl", "ignore", 1));
+        builder.endSpecificationItem();
+        builder.beginSpecificationItem();
+        final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
+        builder.setId(importedId);
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.size(), equalTo(1));
+        assertThat(items.get(0).getId(), equalTo(importedId));
+    }
+
+    private SpecificationListBuilder createListBuilderFilteringByArtifactTypes(
+            final String... artifactTypes)
+    {
+        final FilterSettings filterSettings = new FilterSettings.Builder() //
+                .artifactTypes(new HashSet<>(Arrays.asList(artifactTypes))) //
+                .build();
+        return SpecificationListBuilder.createWithFilter(filterSettings);
+    }
+
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
+    @Test
+    public void testFilterNeededArtifactType()
+    {
+        final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("dsn",
+                "utest", "itest");
+        builder.beginSpecificationItem();
+        final SpecificationItemId id = SpecificationItemId.createId("dsn", "import", 1);
+        builder.setId(id);
+        builder.addNeededArtifactType("impl");
+        builder.addNeededArtifactType("utest");
+        builder.addNeededArtifactType("itest");
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.get(0).getNeedsArtifactTypes(), containsInAnyOrder("utest", "itest"));
+    }
+
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
+    @Test
+    public void testFilterCoversLinkWithArtifactType()
+    {
+        final SpecificationItemId acceptedId = SpecificationItemId.createId("utest", "accept", 2);
+        final SpecificationItemId rejectedId = SpecificationItemId.createId("impl", "reject", 3);
+        final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("utest",
+                "dsn");
+        builder.beginSpecificationItem();
+        final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
+        builder.setId(importedId);
+        builder.addCoveredId(acceptedId);
+        builder.addCoveredId(rejectedId);
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.get(0).getCoveredIds(), containsInAnyOrder(acceptedId));
+    }
+
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
+    @Test
+    public void testFilterDependsLinkWithArtifactType()
+    {
+        final SpecificationItemId acceptedId = SpecificationItemId.createId("utest", "accept", 2);
+        final SpecificationItemId rejectedId = SpecificationItemId.createId("impl", "reject", 3);
+        final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("utest",
+                "dsn");
+        builder.beginSpecificationItem();
+        final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
+        builder.setId(importedId);
+        builder.addDependsOnId(acceptedId);
+        builder.addDependsOnId(rejectedId);
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.get(0).getDependOnIds(), containsInAnyOrder(acceptedId));
     }
 
     @Test
     public void testDuplicateIdNotIgnored()
     {
-        this.builder.beginSpecificationItem();
-        this.builder.setId(ITEM_ID);
-        this.builder.endSpecificationItem();
-        this.builder.beginSpecificationItem();
-        this.builder.setId(ITEM_ID);
-        this.builder.endSpecificationItem();
-
-        assertThat(this.builder.getItemCount(), equalTo(2));
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+        builder.beginSpecificationItem();
+        builder.setId(ID);
+        builder.endSpecificationItem();
+        builder.beginSpecificationItem();
+        builder.setId(ID);
+        builder.endSpecificationItem();
+        assertThat(builder.getItemCount(), equalTo(2));
     }
 
+    // [utest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testFilterSpecificationItemsByTags()
+    {
+        final SpecificationListBuilder builder = createListBuilderFilteringByTags("client",
+                "server");
+        builder.beginSpecificationItem();
+        final SpecificationItemId idA = SpecificationItemId.createId("dsn", "in-A", 1);
+        builder.setId(idA);
+        builder.addTag("client");
+        builder.addTag("database");
+        builder.endSpecificationItem();
+        builder.beginSpecificationItem();
+        final SpecificationItemId idB = SpecificationItemId.createId("dsn", "in-B", 1);
+        builder.setId(idB);
+        builder.addTag("server");
+        builder.addTag("database");
+        builder.endSpecificationItem();
+        builder.beginSpecificationItem();
+        final SpecificationItemId idC = SpecificationItemId.createId("dsn", "out-C", 1);
+        builder.setId(idC);
+        builder.addTag("exporter");
+        builder.addTag("database");
+        builder.endSpecificationItem();
+        builder.beginSpecificationItem();
+        final SpecificationItemId idD = SpecificationItemId.createId("dsn", "out-D", 1);
+        builder.setId(idD);
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.stream().map(item -> item.getId().getName()).collect(Collectors.toList()),
+                containsInAnyOrder("in-A", "in-B"));
+    }
+
+    private SpecificationListBuilder createListBuilderFilteringByTags(final String... tags)
+    {
+        final FilterSettings filterSettings = new FilterSettings.Builder() //
+                .tags(new HashSet<>(Arrays.asList(tags))) //
+                .build();
+        return SpecificationListBuilder.createWithFilter(filterSettings);
+    }
 }

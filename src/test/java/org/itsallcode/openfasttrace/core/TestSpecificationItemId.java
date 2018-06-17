@@ -28,7 +28,6 @@ import static org.itsallcode.openfasttrace.core.SpecificationItemId.parseId;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.SpecificationItemId.Builder;
 import org.junit.Test;
 
@@ -153,7 +152,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void equalsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItemId.class).verify();
     }

@@ -29,11 +29,11 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.exporter.ExporterConstants;
+import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,12 +72,13 @@ public class TestCliArguments
         assertAfterSetter(value, this.arguments.getOutputFormat());
     }
 
-    // [utest->dsn~cli.conversion.default-format~1]
+    // [utest->dsn~cli.conversion.default-output-format~1]
     @Test
     public void getStandardOutputFormatForExport()
     {
         this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(Converter.DEFAULT_EXPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(),
+                equalTo(ExporterConstants.DEFAULT_OUTPUT_FORMAT));
     }
 
     // [utest->dsn~cli.tracing.default-format~1]
@@ -85,7 +86,8 @@ public class TestCliArguments
     public void getStandardOutputFormatForReport()
     {
         this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
-        assertThat(this.arguments.getOutputFormat(), equalTo(Reporter.DEFAULT_REPORT_FORMAT));
+        assertThat(this.arguments.getOutputFormat(),
+                equalTo(ReportConstants.DEFAULT_REPORT_FORMAT));
     }
 
     @Test
@@ -126,7 +128,7 @@ public class TestCliArguments
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
-                equalTo(Reporter.DEFAULT_VERBOSITY));
+                equalTo(ReportConstants.DEFAULT_REPORT_VERBOSITY));
         this.arguments.setReportVerbosity(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }
@@ -136,7 +138,7 @@ public class TestCliArguments
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
-                equalTo(Reporter.DEFAULT_VERBOSITY));
+                equalTo(ReportConstants.DEFAULT_REPORT_VERBOSITY));
         this.arguments.setV(value);
         assertThat(AFTER_SETTER, this.arguments.getReportVerbosity(), equalTo(value));
     }
@@ -157,13 +159,14 @@ public class TestCliArguments
         assertThat(AFTER_SETTER, this.arguments.getNewline(), equalTo(value));
     }
 
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
     public void testSetIngnoreArtifactTypes()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
-        this.arguments.setIgnoreArtifactTypes(value);
-        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
+        this.arguments.setWantedArtifactTypes(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
     }
 
@@ -171,9 +174,20 @@ public class TestCliArguments
     public void testSetI()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getIgnoreArtifactTypes(), emptyIterable());
-        this.arguments.setI(value);
-        assertThat(AFTER_SETTER, this.arguments.getIgnoreArtifactTypes(),
+        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
+        this.arguments.setA(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
+    }
+
+    // [utest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testSetIngnoreTags()
+    {
+        final String value = "client,server";
+        assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
+        this.arguments.setWantedTags(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
+                containsInAnyOrder("client", "server"));
     }
 }

@@ -28,21 +28,22 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId.Builder;
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeElement;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class SpecObjectsHandlerBuilder
 {
     private final CallbackContentHandler handler;
-    private final String fileName;
+    private final InputFile file;
     private final ImportEventListener listener;
 
     private Builder idBuilder = new Builder();
     private final String defaultDoctype;
     private Location.Builder locationBuilder;
 
-    public SpecObjectsHandlerBuilder(final String fileName, final String defaultDoctype,
+    public SpecObjectsHandlerBuilder(final InputFile file, final String defaultDoctype,
             final ImportEventListener listener)
     {
-        this.fileName = fileName;
+        this.file = file;
         this.defaultDoctype = defaultDoctype;
         this.listener = listener;
         this.handler = new CallbackContentHandler();
@@ -59,7 +60,7 @@ public class SpecObjectsHandlerBuilder
     {
         this.listener.beginSpecificationItem();
         this.locationBuilder = new Location.Builder() //
-                .path(this.fileName) //
+                .path(this.file.getPath().toString()) //
                 .line(elem.getLocation().getLine());
         this.idBuilder = new SpecificationItemId.Builder() //
                 .artifactType(this.defaultDoctype);

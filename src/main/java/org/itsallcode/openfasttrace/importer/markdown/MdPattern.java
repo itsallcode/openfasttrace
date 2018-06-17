@@ -32,7 +32,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
  */
 public enum MdPattern
 {
-    // [impl~md.specification_item_title~1]
+    // [impl->dsn~md.specification-item-title~1]
 
     // @formatter:off
     COMMENT("Comment:\\s*"),
@@ -53,6 +53,7 @@ public enum MdPattern
     NOT_EMPTY("([^\n\r]+)"),
     RATIONALE("Rationale:\\s*"),
     STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
+    TAGS_INT("Tags:\\s*(\\w+(?:,\\s*\\w+)*)"),
     TAGS("Tags:\\s*"),
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + MdPattern.PatternConstants.BULLETS
             + "\\s*" //

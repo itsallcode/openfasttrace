@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  * #L%
  */
 
-
 import java.io.Writer;
 import java.util.stream.Stream;
 
@@ -36,6 +35,10 @@ import org.itsallcode.openfasttrace.exporter.Exporter;
 import org.itsallcode.openfasttrace.exporter.ExporterException;
 import org.itsallcode.openfasttrace.exporter.ExporterFactory;
 
+/**
+ * {@link ExporterFactory} for creating {@link Exporter}s that support writing
+ * specobject output files.
+ */
 public class SpecobjectExporterFactory extends ExporterFactory
 {
     public static final String SUPPORTED_FORMAT = "specobject";

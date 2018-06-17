@@ -25,33 +25,35 @@ package org.itsallcode.openfasttrace.importer;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
+
+import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 public class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
-    private static final Path FILE1 = FOLDER.resolve("sample_design.md");
-    private static final Path FILE2 = FOLDER.resolve("sample_system_requirements.md");
+    private static final Path PATH2 = FOLDER.resolve("sample_system_requirements.md");
+    private static final Path PATH1 = FOLDER.resolve("sample_design.md");
+    private static final InputFile FILE1 = InputFile.forPath(PATH1);
+    private static final InputFile FILE2 = InputFile.forPath(PATH2);
     private static final Path NON_EXISTING_FILE = FOLDER.resolve("does_not_exist");
-
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     @Mock
     private SpecificationListBuilder specItemBuilderMock;
@@ -84,7 +86,7 @@ public class TestMultiFileImporter
     public void testImportAnySingleFile()
     {
         expectFileImported(FILE1);
-        this.multiFileImporter.importAny(asList(FILE1));
+        this.multiFileImporter.importAny(asList(PATH1));
         verify(this.importerMock).runImport();
     }
 
@@ -123,11 +125,19 @@ public class TestMultiFileImporter
         assertThat(this.multiFileImporter.getImportedItems(), sameInstance(expected));
     }
 
-    private void expectFileImported(final Path file)
+    private void expectFileImported(final InputFile file)
     {
-        when(this.factoryLoaderMock.supportsFile(file)).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(file)).thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(eq(file), eq(DEFAULT_CHARSET),
+        when(this.factoryLoaderMock.supportsFile(autoEqualTo(file))).thenReturn(true);
+        when(this.factoryLoaderMock.getImporterFactory(autoEqualTo(file)))
+                .thenReturn(this.importerFactoryMock);
+        when(this.importerFactoryMock.createImporter(autoEqualTo(file),
                 same(this.specItemBuilderMock))).thenReturn(this.importerMock);
+    }
+
+    private InputFile autoEqualTo(final InputFile file)
+    {
+        final HamcrestArgumentMatcher<InputFile> argMatcher = new HamcrestArgumentMatcher<>(
+                AutoMatcher.equalTo(file));
+        return argThat(argMatcher);
     }
 }

@@ -73,7 +73,8 @@ public class RifImporter implements Importer
         }
         catch (SAXException | ParserConfigurationException | IOException e)
         {
-            throw new ImporterException("Error reading file " + this.file.getPath(), e);
+            throw new ImporterException(
+                    "Error reading file " + this.file.getPath() + ": " + e.getMessage(), e);
         }
     }
 }

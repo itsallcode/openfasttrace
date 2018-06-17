@@ -21,7 +21,6 @@ package org.itsallcode.openfasttrace.importer.rif;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -35,6 +34,7 @@ import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.rif.handler.RifDocumentHandlerBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -42,43 +42,38 @@ import org.xml.sax.XMLReader;
 
 public class RifImporter implements Importer
 {
-
-    private final String fileName;
+    private final InputFile file;
     private final SAXParserFactory saxParserFactory;
     private final ImportEventListener listener;
-    private final BufferedReader reader;
 
-    RifImporter(final String fileName, final Reader reader, final SAXParserFactory saxParserFactory,
+    RifImporter(final InputFile file, final SAXParserFactory saxParserFactory,
             final ImportEventListener listener)
     {
-        this.fileName = fileName;
+        this.file = file;
         this.saxParserFactory = saxParserFactory;
         this.listener = listener;
-        this.reader = new BufferedReader(reader);
     }
 
     @Override
     public void runImport()
     {
-        try
+        try (Reader reader = this.file.createReader())
         {
             final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
             xmlReader.setEntityResolver(new IgnoringEntityResolver());
 
-            final RifDocumentHandlerBuilder config = new RifDocumentHandlerBuilder(this.fileName,
-                    this.listener);
+            final RifDocumentHandlerBuilder config = new RifDocumentHandlerBuilder(
+                    this.file.getPath(), this.listener);
 
             final TreeContentHandler treeContentHandler = config.build();
-            new ContentHandlerAdapter(this.fileName, xmlReader,
+            new ContentHandlerAdapter(this.file.getPath(), xmlReader,
                     new TreeBuildingContentHandler(treeContentHandler)).registerListener();
-            final InputSource input = new InputSource(this.reader);
+            final InputSource input = new InputSource(reader);
             xmlReader.parse(input);
         }
         catch (SAXException | ParserConfigurationException | IOException e)
         {
-            throw new ImporterException("Error importing specobjects document " + this.fileName, e);
+            throw new ImporterException("Error reading file " + this.file.getPath(), e);
         }
-
     }
-
 }

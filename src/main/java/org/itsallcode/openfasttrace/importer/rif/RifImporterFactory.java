@@ -21,14 +21,13 @@ package org.itsallcode.openfasttrace.importer.rif;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.io.Reader;
-
 import javax.xml.parsers.SAXParserFactory;
 
 import org.itsallcode.openfasttrace.core.xml.SaxParserConfigurator;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.RegexMatchingImporterFactory;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class RifImporterFactory extends RegexMatchingImporterFactory
 {
@@ -41,10 +40,8 @@ public class RifImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
-        return new RifImporter(fileName, reader, this.saxParserFactory, listener);
+        return new RifImporter(file, this.saxParserFactory, listener);
     }
-
 }

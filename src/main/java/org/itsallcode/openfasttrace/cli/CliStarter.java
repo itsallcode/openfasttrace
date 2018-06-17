@@ -46,10 +46,17 @@ public class CliStarter
         }
         else
         {
-            System.err.println(
+            printToStdError(
                     "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
             exit(ExitStatus.CLI_ERROR);
         }
+    }
+
+    // Writing to standard error by intention
+    @SuppressWarnings("squid:S106")
+    private static void printToStdError(final String message)
+    {
+        System.err.println(message);
     }
 
     // [impl->dsn~cli.command-selection~1]

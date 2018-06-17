@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,18 +21,18 @@ package org.itsallcode.openfasttrace.importer;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.util.Objects;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * Super class for factories producing {@link Importer}s.
  */
-public abstract class ImporterFactory
+public abstract class ImporterFactory implements Initializable<ImporterContext>
 {
+    private ImporterContext context;
+
     /**
      * Returns <code>true</code> if this {@link ImporterFactory} supports
      * importing the given file based on its file extension.
@@ -41,32 +41,35 @@ public abstract class ImporterFactory
      *            the file to check.
      * @return <code>true</code> if the given file is supported for importing.
      */
-    public abstract boolean supportsFile(final Path file);
+    public abstract boolean supportsFile(final InputFile file);
 
     /**
      * Create an importer that is able to read the given file.
      *
      * @param file
      *            the file from which specification items are imported
-     * @param charset
-     *            the charset used for importing
      * @param listener
      *            the listener to be informed about detected specification item
      *            fragments
      * @return an importer instance
      */
-    public abstract Importer createImporter(final Path file, final Charset charset,
+    public abstract Importer createImporter(final InputFile file,
             final ImportEventListener listener);
 
-    protected static BufferedReader createReader(final Path file, final Charset charset)
+    @Override
+    public void init(final ImporterContext context)
     {
-        try
-        {
-            return Files.newBufferedReader(file, charset);
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException("Error reading file '" + file + "': " + e.getMessage(), e);
-        }
+        this.context = context;
+    }
+
+    /**
+     * Get the {@link ImporterContext} set by the {@link #init(ImporterContext)}
+     * method.
+     * 
+     * @return the {@link ImporterContext}.
+     */
+    public ImporterContext getContext()
+    {
+        return Objects.requireNonNull(this.context, "Context was not initialized");
     }
 }

@@ -26,7 +26,6 @@ import static org.itsallcode.openfasttrace.importer.markdown.State.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.core.ItemStatus;
@@ -34,6 +33,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 class MarkdownImporter implements Importer
 {
@@ -50,6 +50,7 @@ class MarkdownImporter implements Importer
         transition(TITLE      , OUTSIDE    , MdPattern.EVERYTHING , this::resetTitle                                      ),
     
         transition(OUTSIDE    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
+        transition(OUTSIDE    , TITLE      , MdPattern.TITLE      , this::rememberTitle                                   ),
     
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , this::setStatus                                       ),
@@ -156,8 +157,7 @@ class MarkdownImporter implements Importer
         transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                                          )
     };
 
-    private final String fileName;
-    private final BufferedReader reader;
+    private final InputFile file;
     private final ImportEventListener listener;
     private final MarkdownImporterStateMachine stateMachine;
     private String lastTitle = null;
@@ -167,10 +167,9 @@ class MarkdownImporter implements Importer
     private StringBuilder lastComment;
     private int lineNumber = 0;
 
-    MarkdownImporter(final String fileName, final Reader reader, final ImportEventListener listener)
+    MarkdownImporter(final InputFile fileName, final ImportEventListener listener)
     {
-        this.fileName = fileName;
-        this.reader = new BufferedReader(reader);
+        this.file = fileName;
         this.listener = listener;
         this.stateMachine = new MarkdownImporterStateMachine(this.transitions);
     }
@@ -178,12 +177,12 @@ class MarkdownImporter implements Importer
     @Override
     public void runImport()
     {
-        LOG.fine(() -> "Starting import of file " + this.fileName);
+        LOG.fine(() -> "Starting import of file " + this.file);
         String line;
         this.lineNumber = 0;
-        try
+        try(BufferedReader reader = this.file.createReader())
         {
-            while ((line = this.reader.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
                 ++this.lineNumber;
                 this.stateMachine.step(line);
@@ -191,8 +190,7 @@ class MarkdownImporter implements Importer
         }
         catch (final IOException exception)
         {
-            throw new ImporterException("IO exception after " + this.fileName + ":" + this.lineNumber,
-                    exception);
+            throw new ImporterException("Error reading file " + this.file, exception);
         }
         finishImport();
     }
@@ -232,7 +230,7 @@ class MarkdownImporter implements Importer
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
         this.listener.setId(id);
-        this.listener.setLocation(this.fileName, this.lineNumber);
+        this.listener.setLocation(this.file.getPath().toString(), this.lineNumber);
         if(this.lastTitle != null)
         {
             this.listener.setTitle(this.lastTitle);

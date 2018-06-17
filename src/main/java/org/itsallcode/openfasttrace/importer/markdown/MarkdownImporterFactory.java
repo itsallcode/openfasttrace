@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,9 +22,8 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-import java.io.Reader;
-
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * {@link ImporterFactory} for Markdown files
@@ -37,9 +36,8 @@ public class MarkdownImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
-    public Importer createImporter(final String fileName, final Reader reader,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile fileName, final ImportEventListener listener)
     {
-        return new MarkdownImporter(fileName, reader, listener);
+        return new MarkdownImporter(fileName, listener);
     }
 }

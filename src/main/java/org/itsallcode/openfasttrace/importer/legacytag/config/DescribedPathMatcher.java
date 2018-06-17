@@ -21,13 +21,12 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import java.nio.file.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 class DescribedPathMatcher
 {
@@ -70,9 +69,15 @@ class DescribedPathMatcher
         return this.description;
     }
 
-    boolean matches(final Path path)
+    boolean matches(final InputFile path)
     {
-        return this.matcher.matches(path);
+        return this.matcher.matches(Paths.get(path.getPath()));
+    }
+
+    @Override
+    public String toString()
+    {
+        return getDescription();
     }
 
     private static class ListBasedPathMatcher implements PathMatcher

@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.legacytag;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,13 +22,13 @@ package org.itsallcode.openfasttrace.importer.legacytag;
  * #L%
  */
 
-import java.nio.file.Path;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
@@ -39,17 +39,15 @@ class LegacyTagImporter implements Importer
     private static final String TAG_PREFIX = "\\[\\[";
     private static final String TAG_SUFFIX = "\\]\\]";
     private final PathConfig pathConfig;
-    private final LineReader reader;
     private final ImportEventListener listener;
-    private final Path file;
+    private final InputFile file;
     private final Pattern tagPattern;
 
-    LegacyTagImporter(final PathConfig pathConfig, final Path file, final LineReader reader,
+    LegacyTagImporter(final PathConfig pathConfig, final InputFile file,
             final ImportEventListener listener)
     {
         this.pathConfig = pathConfig;
         this.file = file;
-        this.reader = reader;
         this.listener = listener;
         this.tagPattern = Pattern.compile(TAG_PREFIX //
                 + SpecificationItemId.ITEM_NAME_PATTERN + ":"
@@ -59,7 +57,8 @@ class LegacyTagImporter implements Importer
     @Override
     public void runImport()
     {
-        this.reader.readLines(this::processLine);
+        final LineReader reader = LineReader.create(this.file);
+        reader.readLines(this::processLine);
     }
 
     private void processLine(final int lineNumber, final String line)

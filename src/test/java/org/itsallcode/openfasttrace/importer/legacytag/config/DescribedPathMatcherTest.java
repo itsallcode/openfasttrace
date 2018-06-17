@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.Before;
 import org.junit.Test;
@@ -197,7 +198,8 @@ public class DescribedPathMatcherTest
     private void assertMatches(final String path, final boolean expected)
     {
         assertThat("Initialize matcher before assertions", this.matcher, notNullValue());
-        assertThat("path " + path, this.matcher.matches(Paths.get(path)), equalTo(expected));
+        final InputFile file = InputFile.forPath(Paths.get(path));
+        assertThat("path " + path, this.matcher.matches(file), equalTo(expected));
     }
 
     private void assertDescription(final String expected)

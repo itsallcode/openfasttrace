@@ -21,10 +21,7 @@ package org.itsallcode.openfasttrace.report;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -51,8 +48,14 @@ public class ReportService
     public void reportTraceToStdOut(final Trace trace, final String format,
             final ReportVerbosity verbosity, final Newline newline)
     {
+        reportTraceToStream(trace, format, verbosity, newline, getStdOutStream());
+    }
 
-        reportTraceToStream(trace, format, verbosity, newline, System.out);
+    // Using System.out by intention
+    @SuppressWarnings("squid:S106")
+    private PrintStream getStdOutStream()
+    {
+        return System.out;
     }
 
     private void reportTraceToStream(final Trace trace, final String format,

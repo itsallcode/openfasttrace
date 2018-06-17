@@ -48,19 +48,19 @@ public class SingleRifObjectsHandlerBuilder
     public CallbackContentHandler build()
     {
         configureDataHandlers();
-        configureSubTreeHanlders();
+        configureSubTreeHandlers();
         ignoreCharacterData("creationdate", "source");
         return this.handler;
     }
 
-    private void configureSubTreeHanlders()
+    private void configureSubTreeHandlers()
     {
 
     }
 
     private void configureDataHandlers()
     {
-        this.handler.addCharacterDataListener("id", this::removeArtifactTypeFromName)
+        this.handler.addCharacterDataListener("id", this::setIdName)
                 .addIntDataListener("version", this.idBuilder::revision)
                 .addCharacterDataListener("description", this.listener::appendDescription)
                 .addCharacterDataListener("rationale", this.listener::appendRationale)
@@ -76,7 +76,7 @@ public class SingleRifObjectsHandlerBuilder
         this.listener.setStatus(ItemStatus.parseString(statusAsText));
     }
 
-    private void removeArtifactTypeFromName(final String data)
+    private void setIdName(final String data)
     {
         this.idBuilder.name(data);
     }

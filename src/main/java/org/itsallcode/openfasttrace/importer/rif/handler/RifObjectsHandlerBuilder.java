@@ -70,8 +70,8 @@ public class RifObjectsHandlerBuilder
     private void handleEndElement()
     {
         this.listener.setId(this.idBuilder.build());
-        this.listener.endSpecificationItem();
         this.listener.setLocation(this.locationBuilder.build());
+        this.listener.endSpecificationItem();
         this.idBuilder = null;
         this.locationBuilder = null;
     }

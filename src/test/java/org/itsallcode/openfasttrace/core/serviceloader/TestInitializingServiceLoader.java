@@ -99,7 +99,7 @@ public class TestInitializingServiceLoader
         return StreamSupport.stream(serviceLoader.spliterator(), false).collect(toList());
     }
 
-    private class InitializableServiceStub implements Initializable<Object>
+    class InitializableServiceStub implements Initializable<Object>
     {
         @Override
         public void init(final Object context)

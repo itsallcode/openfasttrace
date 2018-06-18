@@ -3,4 +3,4 @@
 /.classpath
 /bin
 doc/**/*.html
-*.html
+/*.html

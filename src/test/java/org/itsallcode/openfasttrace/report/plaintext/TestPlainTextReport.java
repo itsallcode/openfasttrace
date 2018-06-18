@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.plaintext;
 
 /*-
  * #%L
@@ -25,6 +25,8 @@ package org.itsallcode.openfasttrace.report;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -36,7 +38,8 @@ import java.io.OutputStream;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.matcher.MultilineTextMatcher;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -45,10 +48,6 @@ import org.mockito.MockitoAnnotations;
 public class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
-    private static final String DSN = "dsn";
-    private static final String UMAN = "uman";
-    private static final String UTEST = "utest";
-    private static final String IMPL = "impl";
 
     @Mock
     private Trace traceMock;
@@ -86,8 +85,7 @@ public class TestPlainTextReport
             final String... expectedReportLines)
     {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
-        assertThat(getReportOutput(verbosity),
-                MultilineTextMatcher.matchesAllLines(expectedReportText));
+        assertThat(getReportOutput(verbosity), matchesAllLines(expectedReportText));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)
@@ -289,13 +287,15 @@ public class TestPlainTextReport
         final LinkedSpecificationItem otherD = createOtherItemMock("req~foo~1");
         final LinkedSpecificationItem otherE = createOtherItemMock("req~zoo~1");
         final LinkedSpecificationItem otherF = createOtherItemMock("req~zoo~2");
-        final Map<LinkStatus, List<LinkedSpecificationItem>> links = new HashMap<>();
-        links.put(LinkStatus.COVERED_SHALLOW, Arrays.asList(otherA));
-        links.put(LinkStatus.COVERS, Arrays.asList(otherB, otherD));
-        links.put(LinkStatus.UNWANTED, Arrays.asList(otherC));
-        links.put(LinkStatus.OUTDATED, Arrays.asList(otherE));
-        links.put(LinkStatus.ORPHANED, Arrays.asList(otherF));
-        when(itemMock.getLinks()).thenReturn(links);
+        final List<TracedLink> links = new ArrayList<>();
+        links.add(new TracedLink(otherA, LinkStatus.COVERED_SHALLOW));
+        links.add(new TracedLink(otherB, LinkStatus.COVERS));
+        links.add(new TracedLink(otherD, LinkStatus.COVERS));
+        links.add(new TracedLink(otherC, LinkStatus.UNWANTED));
+        links.add(new TracedLink(otherE, LinkStatus.OUTDATED));
+        links.add(new TracedLink(otherF, LinkStatus.ORPHANED));
+        when(itemMock.getTracedLinks()).thenReturn(links);
+        when(itemMock.hasLinks()).thenReturn(true);
     }
 
     private LinkedSpecificationItem createOtherItemMock(final String idAsText)

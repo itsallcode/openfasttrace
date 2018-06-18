@@ -22,6 +22,7 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 /**
@@ -66,6 +67,30 @@ public class LinkedSpecificationItem
     public String getTitle()
     {
         return this.item.getTitle();
+    }
+
+    /**
+     * Get the title or a fallback if the optional title is not specified
+     * 
+     * @return title if exists, otherwise name part of the ID
+     */
+    public String getTitleWithFallback()
+    {
+        final String title = this.getTitle();
+        if (title != null && !title.isEmpty())
+        {
+            return title;
+        }
+        final SpecificationItemId id = this.getId();
+        if (id != null)
+        {
+            final String name = id.getName();
+            if (name != null && !name.isEmpty())
+            {
+                return name;
+            }
+        }
+        return "???";
     }
 
     /**
@@ -152,6 +177,24 @@ public class LinkedSpecificationItem
         final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
         return (linksWithStatus == null) ? Collections.<LinkedSpecificationItem> emptyList()
                 : linksWithStatus;
+    }
+
+    /**
+     * Get a list of traced links (i.e. links including the tracing status)
+     * 
+     * @return list of traced links
+     */
+    public List<TracedLink> getTracedLinks()
+    {
+        final List<TracedLink> tracedLinks = new ArrayList<>();
+        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet())
+        {
+            for (final LinkedSpecificationItem other : entry.getValue())
+            {
+                tracedLinks.add(new TracedLink(other, entry.getKey()));
+            }
+        }
+        return tracedLinks;
     }
 
     /**
@@ -294,6 +337,14 @@ public class LinkedSpecificationItem
                                 || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }
 
+    /**
+     * @return <code>true</code> if the item has one or more links
+     */
+    public boolean hasLinks()
+    {
+        return !this.links.isEmpty();
+    }
+
     private boolean hasBadLinks()
     {
         for (final LinkStatus status : this.links.keySet())
@@ -363,6 +414,9 @@ public class LinkedSpecificationItem
         return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
     }
 
+    /**
+     * @return <code>true</code> if this item has one ore more duplicates.
+     */
     public boolean hasDuplicates()
     {
         return countDuplicateLinks() != 0;

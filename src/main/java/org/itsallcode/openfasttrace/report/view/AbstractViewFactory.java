@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,20 +24,23 @@ package org.itsallcode.openfasttrace.report;
 
 import java.io.OutputStream;
 
-/**
- * Interface for coverage reports.
- */
-@FunctionalInterface
-public interface Reportable
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+
+public abstract class AbstractViewFactory implements ViewFactory
 {
-    /**
-     * Render the plain text coverage stream.
-     *
-     * @param outputStream
-     *            the output stream to which the stream is rendered.
-     * @param verbosity
-     *            the level of detail that is reported.
-     */
-    public void renderToStreamWithVerbosityLevel(OutputStream outputStream,
-            ReportVerbosity verbosity);
+    protected final OutputStream outputStream;
+
+    protected AbstractViewFactory(final OutputStream outputStream)
+    {
+        this.outputStream = outputStream;
+    }
+
+    @Override
+    public abstract ViewableContainer createView(final String id, final String title);
+
+    @Override
+    public abstract ViewableContainer createSection(final String id, final String title);
+
+    @Override
+    public abstract Viewable createSpecificationItem(final LinkedSpecificationItem item);
 }

@@ -130,7 +130,7 @@ public class CliArguments
     }
 
     /**
-     * Get the output format for an export or report
+     * Get the output format for an export or stream
      * 
      * @return the output format
      */
@@ -159,7 +159,7 @@ public class CliArguments
     }
 
     /**
-     * Set the output format for an export or report
+     * Set the output format for an export or stream
      * 
      * @param outputFormat
      *            the output format
@@ -171,7 +171,7 @@ public class CliArguments
     }
 
     /**
-     * Set the output format for an export or report
+     * Set the output format for an export or stream
      * 
      * @param outputFormat
      *            the output format
@@ -182,9 +182,9 @@ public class CliArguments
     }
 
     /**
-     * Get the report verbosity of a report
+     * Get the stream verbosity of a stream
      * 
-     * @return the report verbosity of a report
+     * @return the stream verbosity of a stream
      */
     public ReportVerbosity getReportVerbosity()
     {
@@ -193,10 +193,10 @@ public class CliArguments
     }
 
     /**
-     * Set the report verbosity for a report
+     * Set the stream verbosity for a stream
      * 
      * @param reportVerbosity
-     *            the verbosity of the report
+     *            the verbosity of the stream
      */
     public void setReportVerbosity(final ReportVerbosity reportVerbosity)
     {
@@ -204,10 +204,10 @@ public class CliArguments
     }
 
     /**
-     * Set the report verbosity for a report
+     * Set the stream verbosity for a stream
      * 
      * @param reportVerbosity
-     *            the verbosity of the report
+     *            the verbosity of the stream
      */
     public void setV(final ReportVerbosity reportVerbosity)
     {

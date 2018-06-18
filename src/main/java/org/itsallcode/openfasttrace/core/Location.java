@@ -128,7 +128,7 @@ public final class Location
         return this.column;
     }
 
-    @Generated("Eclipse")
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -140,7 +140,7 @@ public final class Location
         return result;
     }
 
-    @Generated("Eclipse")
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

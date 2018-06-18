@@ -69,7 +69,7 @@ public class TestCliStarter
     public void setUp() throws UnsupportedEncodingException
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
-        this.outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
+        this.outputFile = this.tempFolder.getRoot().toPath().resolve("stream.txt");
         System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
         System.setErr(new PrintStream(this.error, true, "UTF-8"));
     }
@@ -197,7 +197,7 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining report");
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining stream");
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET");

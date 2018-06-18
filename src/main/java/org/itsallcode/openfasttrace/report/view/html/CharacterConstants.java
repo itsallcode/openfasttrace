@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.view.html;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,13 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-import java.io.OutputStream;
-
-/**
- * Interface for coverage reports.
- */
-@FunctionalInterface
-public interface Reportable
+public class CharacterConstants
 {
-    /**
-     * Render the plain text coverage stream.
-     *
-     * @param outputStream
-     *            the output stream to which the stream is rendered.
-     * @param verbosity
-     *            the level of detail that is reported.
-     */
-    public void renderToStreamWithVerbosityLevel(OutputStream outputStream,
-            ReportVerbosity verbosity);
+    private CharacterConstants()
+    {
+        // prevent instantiation
+    }
+
+    public static final String CHECKMARK = "&#x2705;";
+    public static final String CROSSMARK = "&#x274E;";
 }

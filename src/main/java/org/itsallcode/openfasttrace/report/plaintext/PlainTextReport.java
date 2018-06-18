@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.plaintext;
 
 /*-
  * #%L
@@ -27,15 +27,19 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.report.ReportException;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 
 /**
- * Renders a coverage report in plain text. This is intended for command line
+ * Renders a coverage stream in plain text. This is intended for command line
  * application output.
  */
 public class PlainTextReport implements Reportable
@@ -109,7 +113,7 @@ public class PlainTextReport implements Reportable
             break;
         default:
             throw new IllegalStateException(
-                    "Unable to create report for unknown verbosity level " + verbosity);
+                    "Unable to create stream for unknown verbosity level " + verbosity);
         }
     }
 
@@ -269,38 +273,21 @@ public class PlainTextReport implements Reportable
     // [impl->dsn~reporting.plain-text.link-details~1]
     private void renderLinks(final PrintStream report, final LinkedSpecificationItem item)
     {
-
-        final Map<LinkStatus, List<LinkedSpecificationItem>> links = item.getLinks();
-        if (!links.isEmpty())
+        if (item.hasLinks())
         {
             renderEmptyItemDetailsLine(report);
-            renderOrderedLinks(report, links);
+            renderOrderedLinks(report, item);
             ++this.nonEmptySections;
         }
     }
 
-    private void renderOrderedLinks(final PrintStream report,
-            final Map<LinkStatus, List<LinkedSpecificationItem>> links)
+    private void renderOrderedLinks(final PrintStream report, final LinkedSpecificationItem item)
     {
-        final List<TracedLink> tracedLinks = flattenTracedLinks(links);
-        tracedLinks.stream() //
+        item.getTracedLinks() //
+                .stream() //
                 .sorted((a, b) -> a.getOtherLinkEnd().getId()
                         .compareTo(b.getOtherLinkEnd().getId())) //
                 .forEachOrdered(link -> renderLink(report, link));
-    }
-
-    private List<TracedLink> flattenTracedLinks(
-            final Map<LinkStatus, List<LinkedSpecificationItem>> links)
-    {
-        final List<TracedLink> tracedLinks = new ArrayList<>();
-        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : links.entrySet())
-        {
-            for (final LinkedSpecificationItem other : entry.getValue())
-            {
-                tracedLinks.add(new TracedLink(other, entry.getKey()));
-            }
-        }
-        return tracedLinks;
     }
 
     private void renderLink(final PrintStream report, final TracedLink link)

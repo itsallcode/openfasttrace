@@ -61,7 +61,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * @param level
      *            indentation level
      */
-    abstract protected void renderBeforeChildren(final int level);
+    protected abstract void renderBeforeChildren(final int level);
 
     /**
      * Render a the children of this sub(view).
@@ -83,14 +83,13 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * @param level
      *            indentation level
      */
-    abstract protected void renderAfterChildren(final int level);
+    protected abstract void renderAfterChildren(final int level);
 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.itsallcode.openfasttrace.report.view.ViewableContainer#add(org.itsallcode.
-     * openfasttrace.view.Viewable)
+     * @see org.itsallcode.openfasttrace.report.view.ViewableContainer#add(org.
+     * itsallcode. openfasttrace.view.Viewable)
      */
     @Override
     public void add(final Viewable child)

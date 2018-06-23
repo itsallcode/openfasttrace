@@ -24,8 +24,6 @@ package org.itsallcode.openfasttrace.report.view;
 
 import java.io.OutputStream;
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-
 public abstract class AbstractViewFactory implements ViewFactory
 {
     protected final OutputStream outputStream;
@@ -34,13 +32,4 @@ public abstract class AbstractViewFactory implements ViewFactory
     {
         this.outputStream = outputStream;
     }
-
-    @Override
-    public abstract ViewableContainer createView(final String id, final String title);
-
-    @Override
-    public abstract ViewableContainer createSection(final String id, final String title);
-
-    @Override
-    public abstract Viewable createSpecificationItem(final LinkedSpecificationItem item);
 }

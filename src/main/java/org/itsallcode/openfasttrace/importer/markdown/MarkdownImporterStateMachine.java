@@ -39,7 +39,8 @@ import java.util.regex.Matcher;
  */
 public class MarkdownImporterStateMachine
 {
-    private static Logger LOG = Logger.getLogger(MarkdownImporterStateMachine.class.getName());
+    private static final Logger LOG = Logger
+            .getLogger(MarkdownImporterStateMachine.class.getName());
 
     private State state = State.START;
     private String lastToken = "";

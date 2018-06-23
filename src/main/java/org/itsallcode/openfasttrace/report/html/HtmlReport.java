@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
@@ -38,10 +37,9 @@ import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 
 public class HtmlReport implements Reportable
 {
-
     private final Trace trace;
 
-    public HtmlReport(final Trace trace, final Newline newline)
+    public HtmlReport(final Trace trace)
     {
         this.trace = trace;
     }

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+// Duplicate strings help making this easier to understand.
+@SuppressWarnings("squid:S1192")
 public class MarkdownLineStateMachine
 {
     private static final int INCLUDE_EMPTY_STRINGS = -1;
@@ -145,7 +147,7 @@ public class MarkdownLineStateMachine
 
     protected Function<String, String> trimEnum()
     {
-        return s -> s.substring(s.indexOf(".") + 1).trim();
+        return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
     protected Function<String, String> trimPre()

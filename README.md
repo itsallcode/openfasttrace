@@ -88,6 +88,17 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 mvn license:update-project-license license:update-file-header
 ```
 
+### Run local sonar analysis
+
+```bash
+mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.organization=itsallcode \
+    -Dsonar.login=[token]
+```
+
+See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace
+
 ### Publishing to JCenter
 
 1. Add the following to your `~/.m2/settings.xml`:

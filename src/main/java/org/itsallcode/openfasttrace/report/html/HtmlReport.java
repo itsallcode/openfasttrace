@@ -53,7 +53,7 @@ public class HtmlReport implements Reportable
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getTitleWithFallback));
         String initial = "\0";
-        ViewableContainer section = null;
+        ViewableContainer section = factory.createSection(initial, initial);
         for (final LinkedSpecificationItem item : items)
         {
             final String currentInitial = getInitial(item);

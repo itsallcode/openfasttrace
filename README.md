@@ -99,6 +99,14 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 
 See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace
 
+### Run [mutation testing](http://pitest.org)
+
+```bash
+mvn org.pitest:pitest-maven:mutationCoverage
+# speed up repeated analysis with history
+mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
+```
+
 ### Publishing to JCenter
 
 1. Add the following to your `~/.m2/settings.xml`:

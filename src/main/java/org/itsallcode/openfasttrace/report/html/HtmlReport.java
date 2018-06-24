@@ -48,7 +48,7 @@ public class HtmlReport implements Reportable
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        final ViewFactory factory = new HtmlViewFactory(outputStream);
+        final ViewFactory factory = HtmlViewFactory.create(outputStream);
         final ViewableContainer view = factory.createView("", "Specification items by title");
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getTitleWithFallback));

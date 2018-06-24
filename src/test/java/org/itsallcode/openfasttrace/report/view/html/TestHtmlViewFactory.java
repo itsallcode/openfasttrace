@@ -41,7 +41,7 @@ public class TestHtmlViewFactory
     public void testCreateSpecificationItem()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final ViewFactory factory = new HtmlViewFactory(outputStream);
+        final ViewFactory factory = HtmlViewFactory.create(outputStream);
         final Viewable view = factory.createSpecificationItem(this.item);
         assertThat(view, instanceOf(HtmlSpecificationItem.class));
     }

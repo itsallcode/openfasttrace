@@ -40,7 +40,7 @@ public class AbstractTestHtmlRenderer
     public void prepareEachTest()
     {
         this.outputStream = new ByteArrayOutputStream();
-        this.factory = new HtmlViewFactory(this.outputStream);
+        this.factory = HtmlViewFactory.create(this.outputStream);
     }
 
     protected void assertOutputLines(final String... lines)

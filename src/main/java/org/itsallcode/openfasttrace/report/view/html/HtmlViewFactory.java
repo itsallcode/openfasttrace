@@ -24,37 +24,56 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.exporter.ExporterException;
 import org.itsallcode.openfasttrace.report.view.AbstractViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 
 public class HtmlViewFactory extends AbstractViewFactory
 {
-    private final PrintStream stream;
+    private static final Charset DEFAULT_CHARSET = null;
 
-    public HtmlViewFactory(final OutputStream outputStream)
+    HtmlViewFactory(final PrintStream stream)
     {
-        super(outputStream);
-        this.stream = new PrintStream(outputStream);
+        super(stream);
+    }
+
+    public static HtmlViewFactory create(final OutputStream stream)
+    {
+        return new HtmlViewFactory(createPrintStream(stream, DEFAULT_CHARSET));
+    }
+
+    private static PrintStream createPrintStream(final OutputStream stream, final Charset charset)
+    {
+        try
+        {
+            return new PrintStream(stream, false, charset.name());
+        }
+        catch (final UnsupportedEncodingException e)
+        {
+            throw new ExporterException("Error creating print stream for charset " + charset, e);
+        }
     }
 
     @Override
     public ViewableContainer createView(final String id, final String title)
     {
-        return new HtmlView(this.stream, id, title);
+        return new HtmlView(this.outputStream, id, title);
     }
 
     @Override
     public ViewableContainer createSection(final String id, final String title)
     {
-        return new HtmlSection(this.stream, id, title);
+        return new HtmlSection(this.outputStream, id, title);
     }
 
     @Override
     public Viewable createSpecificationItem(final LinkedSpecificationItem item)
     {
-        return new HtmlSpecificationItem(this.stream, item);
+        return new HtmlSpecificationItem(this.outputStream, item);
     }
 }

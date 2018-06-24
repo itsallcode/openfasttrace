@@ -22,13 +22,13 @@ package org.itsallcode.openfasttrace.report.view;
  * #L%
  */
 
-import java.io.OutputStream;
+import java.io.PrintStream;
 
 public abstract class AbstractViewFactory implements ViewFactory
 {
-    protected final OutputStream outputStream;
+    protected final PrintStream outputStream;
 
-    protected AbstractViewFactory(final OutputStream outputStream)
+    protected AbstractViewFactory(final PrintStream outputStream)
     {
         this.outputStream = outputStream;
     }

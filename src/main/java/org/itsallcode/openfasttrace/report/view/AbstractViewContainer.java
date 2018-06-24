@@ -25,8 +25,6 @@ package org.itsallcode.openfasttrace.report.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
-
 /**
  * Abstract base class for all containers of viewable elements
  */
@@ -95,46 +93,5 @@ public abstract class AbstractViewContainer implements ViewableContainer
     public void add(final Viewable child)
     {
         this.children.add(child);
-    }
-
-    @Generated(value = "org.eclipse.Eclipse")
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.children == null) ? 0 : this.children.hashCode());
-        return result;
-    }
-
-    @Generated(value = "org.eclipse.Eclipse")
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!(obj instanceof AbstractViewContainer))
-        {
-            return false;
-        }
-        final AbstractViewContainer other = (AbstractViewContainer) obj;
-        if (this.children == null)
-        {
-            if (other.children != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.children.equals(other.children))
-        {
-            return false;
-        }
-        return true;
     }
 }

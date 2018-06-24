@@ -24,8 +24,6 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import java.io.PrintStream;
 
-import javax.annotation.Generated;
-
 import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 
@@ -72,46 +70,5 @@ public class HtmlView extends AbstractViewContainer implements Viewable
     {
         this.stream.println("  </body>");
         this.stream.print("</html>");
-    }
-
-    @Generated(value = "org.eclipse.Eclipse")
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
-        return result;
-    }
-
-    @Generated(value = "org.eclipse.Eclipse")
-    @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (!super.equals(obj))
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final HtmlView other = (HtmlView) obj;
-        if (this.title == null)
-        {
-            if (other.title != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.title.equals(other.title))
-        {
-            return false;
-        }
-        return true;
     }
 }

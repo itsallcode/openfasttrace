@@ -78,8 +78,7 @@ public class ArgumentValidator
         }
         else
         {
-            final String nullableCommand = command.isPresent() ? command.get() : null;
-            this.error = "'" + nullableCommand + "' is not an OFT command.";
+            this.error = "'" + command.orElse(null) + "' is not an OFT command.";
             this.suggestion = "Choose one of " + listCommands() + ".";
         }
 

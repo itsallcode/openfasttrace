@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.cli;
 import static java.util.Arrays.asList;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
@@ -60,24 +61,25 @@ public class ArgumentValidator
 
     private boolean validate()
     {
-        final String command = this.arguments.getCommand();
+        final Optional<String> command = this.arguments.getCommand();
         boolean ok = false;
-        if (command == null)
+        if (!command.isPresent())
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
         }
-        else if (TraceCommand.COMMAND_NAME.equals(command))
+        else if (TraceCommand.COMMAND_NAME.equals(command.get()))
         {
             ok = validateTraceCommand();
         }
-        else if (ConvertCommand.COMMAND_NAME.equals(command))
+        else if (ConvertCommand.COMMAND_NAME.equals(command.get()))
         {
             ok = validateConvertCommand();
         }
         else
         {
-            this.error = "'" + command + "' is not an OFT command.";
+            final String nullableCommand = command.isPresent() ? command.get() : null;
+            this.error = "'" + nullableCommand + "' is not an OFT command.";
             this.suggestion = "Choose one of " + listCommands() + ".";
         }
 

@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.exporter.ExporterException;
@@ -35,7 +36,7 @@ import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 
 public class HtmlViewFactory extends AbstractViewFactory
 {
-    private static final Charset DEFAULT_CHARSET = null;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     HtmlViewFactory(final PrintStream stream)
     {

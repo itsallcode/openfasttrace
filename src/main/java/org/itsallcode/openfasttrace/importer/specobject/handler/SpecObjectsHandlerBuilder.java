@@ -22,24 +22,28 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
  * #L%
  */
 
+import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.SpecificationItemId.Builder;
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
+import org.itsallcode.openfasttrace.core.xml.tree.TreeElement;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public class SpecObjectsHandlerBuilder
 {
     private final CallbackContentHandler handler;
-    private final String fileName;
+    private final InputFile file;
     private final ImportEventListener listener;
 
     private Builder idBuilder = new Builder();
     private final String defaultDoctype;
+    private Location.Builder locationBuilder;
 
-    public SpecObjectsHandlerBuilder(final String fileName, final String defaultDoctype,
+    public SpecObjectsHandlerBuilder(final InputFile file, final String defaultDoctype,
             final ImportEventListener listener)
     {
-        this.fileName = fileName;
+        this.file = file;
         this.defaultDoctype = defaultDoctype;
         this.listener = listener;
         this.handler = new CallbackContentHandler();
@@ -47,19 +51,29 @@ public class SpecObjectsHandlerBuilder
 
     public CallbackContentHandler build()
     {
-        this.handler.addElementListener("specobject", elem -> {
-            this.listener.beginSpecificationItem();
-            this.listener.setLocation(this.fileName, elem.getLocation().getLine());
-            this.idBuilder = new SpecificationItemId.Builder() //
-                    .artifactType(this.defaultDoctype);
-            this.handler.pushDelegate(
-                    new SingleSpecObjectsHandlerBuilder(this.listener, this.idBuilder).build());
-        }, endElement -> {
-            this.listener.setId(this.idBuilder.build());
-            this.idBuilder = null;
-            this.listener.endSpecificationItem();
-        });
-
+        this.handler.addElementListener("specobject", this::handleStartElement,
+                endElement -> handleEndElement());
         return this.handler;
+    }
+
+    private void handleStartElement(final TreeElement elem)
+    {
+        this.listener.beginSpecificationItem();
+        this.locationBuilder = new Location.Builder() //
+                .path(this.file.getPath().toString()) //
+                .line(elem.getLocation().getLine());
+        this.idBuilder = new SpecificationItemId.Builder() //
+                .artifactType(this.defaultDoctype);
+        this.handler.pushDelegate(new SingleSpecObjectsHandlerBuilder(this.listener, this.idBuilder,
+                this.locationBuilder).build());
+    }
+
+    private void handleEndElement()
+    {
+        this.listener.setId(this.idBuilder.build());
+        this.listener.endSpecificationItem();
+        this.listener.setLocation(this.locationBuilder.build());
+        this.idBuilder = null;
+        this.locationBuilder = null;
     }
 }

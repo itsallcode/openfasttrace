@@ -40,7 +40,6 @@ import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 
-// FIXME: reduce to unit test. Move integration tests to API level.
 public class TestCliStarter
 {
     private static final String NEWLINE = "\n";
@@ -53,7 +52,7 @@ public class TestCliStarter
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
-    private static final String IGNORE_ARTIFACT_TYPES_PARAMETER = "--ignore-artifact-types";
+    private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -70,7 +69,7 @@ public class TestCliStarter
     public void setUp() throws UnsupportedEncodingException
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
-        this.outputFile = this.tempFolder.getRoot().toPath().resolve("report.txt");
+        this.outputFile = this.tempFolder.getRoot().toPath().resolve("stream.txt");
         System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
         System.setErr(new PrintStream(this.error, true, "UTF-8"));
     }
@@ -123,10 +122,20 @@ public class TestCliStarter
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
     }
 
-    // [itest->dsn~cli.conversion.default-format~1]
-    // [itest->dsn~cli.input-file-selection~1]
+    // [itest->dsn~cli.conversion.default-output-format~1]
     @Test
     public void testConvertDefaultOutputFormat() throws IOException
+    {
+        expectCliExitStatusWithAssertions(ExitStatus.OK, () -> {
+            assertOutputFileExists(false);
+            assertStdOutStartsWith(REQM2_PREAMBLE);
+        });
+        runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+    }
+
+    // [itest->dsn~cli.input-file-selection~1]
+    @Test
+    public void testConvertDefaultOutputFormatIntoFile() throws IOException
     {
         expectStandardFileExportResult();
         runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
@@ -188,7 +197,7 @@ public class TestCliStarter
     @Test
     public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining report");
+        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining stream");
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET");
@@ -269,12 +278,12 @@ public class TestCliStarter
     }
 
     @Test
-    public void testTraceWithIgnoredArtifactType() throws IOException
+    public void testTraceWithFilteredArtifactType() throws IOException
     {
         expectReducedReportFileResult();
         runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), IGNORE_ARTIFACT_TYPES_PARAMETER,
-                "dsn");
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), WANTED_ARTIFACT_TYPES_PARAMETER,
+                "feat,req");
     }
 
     private void expectReducedReportFileResult()

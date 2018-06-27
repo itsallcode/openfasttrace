@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +31,8 @@ public class Tracer
     {
         final Trace.Builder builder = new Trace.Builder();
         builder.items(items);
-        builder.uncleanItems(items.stream() //
-                .filter(item -> item.getDeepCoverageStatus() != DeepCoverageStatus.COVERED) //
+        builder.defectItems(items.stream() //
+                .filter(LinkedSpecificationItem::isDefect) //
                 .collect(Collectors.toList()));
         return builder.build();
     }

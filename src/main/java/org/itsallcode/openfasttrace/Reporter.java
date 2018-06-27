@@ -28,8 +28,9 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
+import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
@@ -37,8 +38,14 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
  */
 public interface Reporter
 {
-    String DEFAULT_REPORT_FORMAT = "plain";
-    ReportVerbosity DEFAULT_VERBOSITY = ReportVerbosity.FAILURE_DETAILS;
+    /**
+     * Select one or more input files
+     * 
+     * @param inputs
+     *            input files
+     * @return a <code>Reporter</code> instance for fluent programming
+     */
+    public Reporter addInputs(final Path... inputs);
 
     /**
      * Select one or more input files
@@ -47,24 +54,15 @@ public interface Reporter
      *            input files
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    Reporter addInputs(final Path... inputs);
+    public Reporter addInputs(final List<Path> inputs);
 
     /**
-     * Select one or more input files
+     * Set the filters to be applied during conversion
      * 
-     * @param inputs
-     *            input files
-     * @return a <code>Reporter</code> instance for fluent programming
+     * @param filterSettings
+     *            the filter settings
      */
-    Reporter addInputs(final List<Path> inputs);
-
-    /**
-     * Set the list of artifact type to be ignored during import
-     * 
-     * @param ignoredArtifactTypes
-     *            list of ignored artifact types
-     */
-    Reporter ignoreArtifactTypes(List<String> ignoredArtifactTypes);
+    public Reporter setFilters(FilterSettings filterSettings);
 
     /**
      * Set the representation for new line
@@ -73,16 +71,16 @@ public interface Reporter
      *            type of newline
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    Reporter setNewline(Newline newline);
+    public Reporter setNewline(Newline newline);
 
     /**
-     * Select how verbose the tracing report should be
+     * Select how verbose the tracing stream should be
      * 
      * @param verbosity
-     *            report verbosity
+     *            stream verbosity
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    Reporter setReportVerbosity(final ReportVerbosity verbosity);
+    public Reporter setReportVerbosity(final ReportVerbosity verbosity);
 
     /**
      * Set the {@link LegacyTagImporterConfig} for the
@@ -92,15 +90,15 @@ public interface Reporter
      *            the {@link LegacyTagImporterConfig} to set.
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    Reporter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+    public Reporter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
 
     /**
      * Run a trace on the input files
      */
-    Trace trace();
+    public Trace trace();
 
     /**
-     * Write the tracing report to a file
+     * Write the tracing stream to a file
      * 
      * @param trace
      *            trace result to be written
@@ -109,20 +107,20 @@ public interface Reporter
      *            output file or directory
      * 
      * @param format
-     *            report format (this is a name defined in the respective
+     *            stream format (this is a name defined in the respective
      *            reporter plug-in)
      */
-    void reportToFileInFormat(final Trace trace, final Path output, final String format);
+    public void reportToFileInFormat(final Trace trace, final Path output, final String format);
 
     /**
-     * Write the tracing report to standard out
+     * Write the tracing stream to standard out
      * 
      * @param trace
      *            trace result to be written
      * 
      * @param format
-     *            report format (this is a name defined in the respective
+     *            stream format (this is a name defined in the respective
      *            reporter plug-in)
      */
-    void reportToStdOutInFormat(final Trace trace, final String format);
+    public void reportToStdOutInFormat(final Trace trace, final String format);
 }

@@ -21,46 +21,75 @@ package org.itsallcode.openfasttrace.report;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
+import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 
 public class ReportService
 {
-    public void reportTraceToPath(final Trace trace, final Path outputPath,
+    public void reportTraceToPath(final Trace trace, final Path outputPath, final String format,
             final ReportVerbosity verbosity, final Newline newline)
     {
-
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, verbosity, newline, outputStream);
+            reportTraceToStream(trace, format, verbosity, newline, outputStream);
         }
         catch (final IOException e)
         {
-            throw new ReportException("Error generating report to output path " + outputPath, e);
+            throw new ReportException("Error generating stream to output path " + outputPath, e);
         }
     }
 
-    public void reportTraceToStdOut(final Trace trace, final ReportVerbosity verbosity,
-            final Newline newline)
+    public void reportTraceToStdOut(final Trace trace, final String format,
+            final ReportVerbosity verbosity, final Newline newline)
     {
-
-        reportTraceToStream(trace, verbosity, newline, System.out);
+        reportTraceToStream(trace, format, verbosity, newline, getStdOutStream());
     }
 
-    private void reportTraceToStream(final Trace trace, final ReportVerbosity verbosity,
-            final Newline newline, final OutputStream outputStream)
+    // Using System.out by intention
+    @SuppressWarnings("squid:S106")
+    private PrintStream getStdOutStream()
+    {
+        return System.out;
+    }
+
+    private void reportTraceToStream(final Trace trace, final String format,
+            final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream)
     {
         final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        new PlainTextReport(trace, newline).renderToStreamWithVerbosityLevel(bufferedOutputStream,
-                verbosity);
+        final Reportable report = createReport(trace, format, newline);
+        report.renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
+        try
+        {
+            bufferedOutputStream.flush();
+        }
+        catch (final IOException exception)
+        {
+            throw new ReportException(exception.getMessage());
+        }
+    }
+
+    protected Reportable createReport(final Trace trace, final String format, final Newline newline)
+    {
+        Reportable report = null;
+        switch (ReportFormat.parse(format))
+        {
+        case PLAIN_TEXT:
+            report = new PlainTextReport(trace, newline);
+            break;
+        case HTML:
+            report = new HtmlReport(trace, newline);
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Unable to create report with format \"" + format + "\"");
+        }
+        return report;
     }
 
 }

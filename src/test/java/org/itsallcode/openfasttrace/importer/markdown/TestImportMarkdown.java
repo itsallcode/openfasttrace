@@ -29,13 +29,17 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -65,7 +69,7 @@ public class TestImportMarkdown
         assertMismatch(MdPattern.ID, "test~1", "req-test~1", "req~4test~1");
     }
 
-    // [utest~md.specification_item_title~1]
+    // [utest->dsn~md.specification-item-title~1]
     @Test
     public void testIdentifyTitle()
     {
@@ -109,8 +113,9 @@ public class TestImportMarkdown
 
     private void runImporterOnText(final String text)
     {
-        final StringReader reader = new StringReader(text);
-        final Importer importer = new MarkdownImporterFactory().createImporter(FILENAME, reader,
+        final BufferedReader reader = new BufferedReader(new StringReader(text));
+        final InputFile file = StreamInput.forReader(Paths.get(FILENAME), reader);
+        final Importer importer = new MarkdownImporterFactory().createImporter(file,
                 this.listenerMock);
         importer.runImport();
     }
@@ -153,7 +158,7 @@ public class TestImportMarkdown
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "## " + TITLE //
                 + "\n" //
                 + ID1 + "\n" //
                 + "\n" + ID2 + "\n" //
@@ -204,7 +209,7 @@ public class TestImportMarkdown
     // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "##### " + TITLE //
                 + "\n" //
                 + "`" + LEGACY_ID + "`" //
                 + "\n" //
@@ -258,4 +263,5 @@ public class TestImportMarkdown
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }
+
 }

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
 
 /**
@@ -36,7 +37,7 @@ import org.itsallcode.openfasttrace.core.*;
  */
 public class SpecificationListBuilder implements ImportEventListener
 {
-    private final List<String> ignoredArtifactTypes;
+    private final FilterSettings filterSettings;
     private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder = null;
     private SpecificationItemId id = null;
@@ -45,14 +46,19 @@ public class SpecificationListBuilder implements ImportEventListener
     private StringBuilder comment = new StringBuilder();
     private Location location;
 
-    public SpecificationListBuilder()
+    private SpecificationListBuilder(final FilterSettings filterSettings)
     {
-        this.ignoredArtifactTypes = Collections.emptyList();
+        this.filterSettings = filterSettings;
     }
 
-    public SpecificationListBuilder(final List<String> ignoredArtifactTypes)
+    public static SpecificationListBuilder create()
     {
-        this.ignoredArtifactTypes = ignoredArtifactTypes;
+        return new SpecificationListBuilder(new FilterSettings.Builder().build());
+    }
+
+    public static SpecificationListBuilder createWithFilter(final FilterSettings filterSettings)
+    {
+        return new SpecificationListBuilder(filterSettings);
     }
 
     @Override
@@ -86,7 +92,11 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addCoveredId(final SpecificationItemId id)
     {
-        this.itemBuilder.addCoveredId(id);
+        // [impl->dsn~filtering-by-artifact-types-during-import~1]
+        if (isAcceptedArtifactType(id.getArtifactType()))
+        {
+            this.itemBuilder.addCoveredId(id);
+        }
     }
 
     @Override
@@ -110,14 +120,18 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addDependsOnId(final SpecificationItemId id)
     {
-        this.itemBuilder.addDependOnId(id);
+        // [impl->dsn~filtering-by-artifact-types-during-import~1]
+        if (isAcceptedArtifactType(id.getArtifactType()))
+        {
+            this.itemBuilder.addDependOnId(id);
+        }
     }
 
     @Override
     public void addNeededArtifactType(final String artifactType)
     {
-        // [impl->dsn~ignoring-artifact-types-during-import~1]
-        if (!isIgnoredArtifact(artifactType))
+        // [impl->dsn~filtering-by-artifact-types-during-import~1]
+        if (isAcceptedArtifactType(artifactType))
         {
             this.itemBuilder.addNeedsArtifactType(artifactType);
         }
@@ -158,36 +172,58 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    public void setLocation(final Location location)
+    {
+        this.location = location;
+    }
+
+    @Override
     public void endSpecificationItem()
     {
-        // [impl->dsn~ignoring-artifact-types-during-import~1]
-        if (this.itemBuilder != null && !ignoreCurrentArtifact())
+        if (this.itemBuilder != null)
         {
-            createNewSpecificationItem();
+            final SpecificationItem item = createNewSpecificationItem();
+            // [impl->dsn~filtering-by-artifact-types-during-import~1]
+            if (isAccepted(item))
+            {
+                addNewItemToList(item);
+            }
         }
+        resetState();
     }
 
-    private boolean ignoreCurrentArtifact()
+    private SpecificationItem createNewSpecificationItem()
     {
-        return isIgnoredArtifact(this.id.getArtifactType());
-    }
-
-    private boolean isIgnoredArtifact(final String artifactType)
-    {
-        return this.ignoredArtifactTypes != null
-                && this.ignoredArtifactTypes.contains(artifactType);
-    }
-
-    private void createNewSpecificationItem()
-    {
-        this.itemBuilder //
-                .id(this.id)//
+        return this.itemBuilder //
+                .id(this.id) //
                 .description(this.description.toString()) //
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString()) //
-                .location(this.location);
-        final SpecificationItem item = this.itemBuilder.build();
+                .location(this.location) //
+                .build();
+    }
+
+    private boolean isAccepted(final SpecificationItem item)
+    {
+        return isAcceptedArtifactType(item.getId().getArtifactType())
+                && containsAtLeastOneAcceptedTag(item.getTags());
+    }
+
+    // [impl->dsn~filtering-by-tags-during-import~1]
+    private boolean containsAtLeastOneAcceptedTag(final List<String> tags)
+    {
+        return !this.filterSettings.isTagCriteriaSet()
+                || !Collections.disjoint(this.filterSettings.getTags(), tags);
+    }
+
+    private boolean isAcceptedArtifactType(final String artifactType)
+    {
+        return !this.filterSettings.isArtifactTypeCriteriaSet()
+                || this.filterSettings.getArtifactTypes().contains(artifactType);
+    }
+
+    private void addNewItemToList(final SpecificationItem item)
+    {
         this.items.add(item);
-        resetState();
     }
 }

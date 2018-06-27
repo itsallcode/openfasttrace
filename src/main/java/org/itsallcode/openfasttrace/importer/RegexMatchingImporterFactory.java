@@ -25,15 +25,12 @@ package org.itsallcode.openfasttrace.importer;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 public abstract class RegexMatchingImporterFactory extends ImporterFactory
 {
@@ -55,9 +52,9 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
     }
 
     @Override
-    public boolean supportsFile(final Path file)
+    public boolean supportsFile(final InputFile file)
     {
-        final String fileName = file.getFileName().toString();
+        final String fileName = file.getPath();
         for (final Pattern pattern : this.supportedFilenamePatterns)
         {
             if (pattern.matcher(fileName).matches())
@@ -78,16 +75,13 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
      *
      * @param file
      *            the file from which specification items are imported
-     * @param charset
-     *            the charset used for importing
      * @param listener
      *            the listener to be informed about detected specification item
      *            fragments
      * @return an {@link Importer} instance
      */
     @Override
-    public Importer createImporter(final Path file, final Charset charset,
-            final ImportEventListener listener)
+    public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
         if (!supportsFile(file))
         {
@@ -97,36 +91,12 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
         }
         LOG.finest(() -> "Creating importer for file " + file);
 
-        return () -> runImporter(file, charset, listener);
+        return () -> runImporter(file, listener);
     }
 
-    private void runImporter(final Path file, final Charset charset,
-            final ImportEventListener listener)
+    private void runImporter(final InputFile file, final ImportEventListener listener)
     {
-        try (final BufferedReader reader = createReader(file, charset))
-        {
-            final Importer importer = createImporter(file.toString(), reader, listener);
-            importer.runImport();
-        }
-        catch (final IOException e)
-        {
-            throw new ImporterException(
-                    "Error importing file '" + file + "': " + e.getMessage(), e);
-        }
+        final Importer importer = createImporter(file, listener);
+        importer.runImport();
     }
-
-    /**
-     * Create an importer that is able to read the given file
-     *
-     * @param fileName
-     *            the name of the file.
-     * @param reader
-     *            the reader from which specification items are imported
-     * @param listener
-     *            the listener to be informed about detected specification item
-     *            fragments
-     * @return an importer instance
-     */
-    public abstract Importer createImporter(String fileName, final Reader reader,
-            final ImportEventListener listener);
 }

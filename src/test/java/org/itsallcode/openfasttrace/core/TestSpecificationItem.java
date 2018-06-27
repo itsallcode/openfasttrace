@@ -155,12 +155,19 @@ public class TestSpecificationItem
     @Test
     public void testLocationBuilder()
     {
+        final Location there = Location.create("there", 7);
+        assertThat(createTestItemBuilder().location(there).build().getLocation(), equalTo(there));
+    }
+
+    @Test
+    public void testLocationBuilderFromComponents()
+    {
         assertThat(createTestItemBuilder().location("here", 42).build().getLocation(),
                 equalTo(Location.create("here", 42)));
     }
 
     @Test
-    public void equalsContract()
+    public void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItem.class).verify();
     }

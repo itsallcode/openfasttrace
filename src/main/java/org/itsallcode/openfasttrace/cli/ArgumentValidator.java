@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 
 import java.util.List;
@@ -62,7 +61,7 @@ public class ArgumentValidator
     private boolean validate()
     {
         final String command = this.arguments.getCommand();
-        boolean valid = false;
+        boolean ok = false;
         if (command == null)
         {
             this.error = "Missing command";
@@ -70,11 +69,11 @@ public class ArgumentValidator
         }
         else if (TraceCommand.COMMAND_NAME.equals(command))
         {
-            valid = validateTraceCommand();
+            ok = validateTraceCommand();
         }
         else if (ConvertCommand.COMMAND_NAME.equals(command))
         {
-            valid = validateConvertCommand();
+            ok = validateConvertCommand();
         }
         else
         {
@@ -82,38 +81,38 @@ public class ArgumentValidator
             this.suggestion = "Choose one of " + listCommands() + ".";
         }
 
-        return valid;
+        return ok;
     }
 
     private boolean validateTraceCommand()
     {
-        boolean valid = false;
+        boolean ok = false;
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
                 && this.arguments.getOutputPath() != null)
         {
-            this.error = "combining report verbosity 'quiet' and ouput to file is not supported.";
+            this.error = "combining stream verbosity 'quiet' and ouput to file is not supported.";
             this.suggestion = "remove output file parameter.";
         }
         else
         {
-            valid = true;
+            ok = true;
         }
-        return valid;
+        return ok;
     }
 
     private boolean validateConvertCommand()
     {
-        boolean valid = false;
+        boolean ok = false;
         final String format = this.arguments.getOutputFormat();
-        if (format != null && !new ExporterFactoryLoader().isFormatSupported(format))
+        if (format != null && !new ExporterFactoryLoader(null).isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
         }
         else
         {
-            valid = true;
+            ok = true;
         }
-        return valid;
+        return ok;
     }
 
     private String listCommands()

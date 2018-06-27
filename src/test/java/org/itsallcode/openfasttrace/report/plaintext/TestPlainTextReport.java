@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.plaintext;
 
 /*-
  * #%L
@@ -25,6 +25,8 @@ package org.itsallcode.openfasttrace.report;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -33,12 +35,11 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.matcher.MultilineTextMatcher;
+import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.report.Reportable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -47,10 +48,6 @@ import org.mockito.MockitoAnnotations;
 public class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
-    private static final String DSN = "dsn";
-    private static final String UMAN = "uman";
-    private static final String UTEST = "utest";
-    private static final String IMPL = "impl";
 
     @Mock
     private Trace traceMock;
@@ -73,14 +70,14 @@ public class TestPlainTextReport
     @Test
     public void testReportLevel_Quiet_Ok()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         assertReportOutput(ReportVerbosity.QUIET);
     }
 
     @Test
     public void testReportLevel_Minimal_OK()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         assertReportOutput(ReportVerbosity.MINIMAL, "ok");
     }
 
@@ -88,8 +85,7 @@ public class TestPlainTextReport
             final String... expectedReportLines)
     {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
-        assertThat(getReportOutput(verbosity),
-                MultilineTextMatcher.matchesAllLines(expectedReportText));
+        assertThat(getReportOutput(verbosity), matchesAllLines(expectedReportText));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)
@@ -121,33 +117,33 @@ public class TestPlainTextReport
     @Test
     public void testReport_LevelMinimal_NotOk()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(false);
+        when(this.traceMock.hasNoDefects()).thenReturn(false);
         assertReportOutput(ReportVerbosity.MINIMAL, "not ok");
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~1]
+    // [utest->dsn~reporting.plain-text.summary~2]
     public void testReport_LevelSummary_OK()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
         assertReportOutput(ReportVerbosity.SUMMARY, "ok - 1 total");
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~1]
+    // [utest->dsn~reporting.plain-text.summary~2]
     public void testReport_LevelSummary_NotOK()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(2);
-        when(this.traceMock.countUncovered()).thenReturn(1);
-        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 not covered");
+        when(this.traceMock.countDefects()).thenReturn(1);
+        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 defect");
     }
 
     @Test
     public void testReport_LevelFailures_Ok()
     {
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
         assertReportOutput(ReportVerbosity.FAILURES);
     }
@@ -159,26 +155,26 @@ public class TestPlainTextReport
         final SpecificationItemId idB = SpecificationItemId.parseId("dsn~bar~1");
         final SpecificationItemId idC = SpecificationItemId.parseId("req~zoo~2");
         final SpecificationItemId idD = SpecificationItemId.parseId("req~zoo~1");
-        when(this.traceMock.getUncoveredIds()).thenReturn(asList(idA, idB, idC, idD));
+        when(this.traceMock.getDefectIds()).thenReturn(asList(idA, idB, idC, idD));
         assertReportOutput(ReportVerbosity.FAILURES, //
                 "dsn~bar~1", "req~foo~1", "req~zoo~1", "req~zoo~2");
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.specification-item-overview~1]
-    public void testReport_LevelFailureDetails_NotOK()
+    // [utest->dsn~reporting.plain-text.specification-item-overview~2]
+    public void testReport_LevelFailureSummaries_NotOK()
     {
         when(this.traceMock.count()).thenReturn(6);
-        when(this.traceMock.countUncovered()).thenReturn(4);
+        when(this.traceMock.countDefects()).thenReturn(4);
         prepareFailedItemDetails();
 
-        assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
+        assertReportOutput(ReportVerbosity.FAILURE_SUMMARIES, //
                 "not ok - 0/0>0>2/4 - dsn~bar~1 [proposed] (impl, -uman, utest)", //
                 "not ok - 0/3>1>0/2 - req~foo~1 (dsn)", //
                 "not ok - 3/7>1>2/3 - req~zoo~1 [rejected] (-impl, -utest)", //
                 "not ok - 1/6>0>0/0 - req~zoo~2 [draft] (dsn, +utest)", //
                 "", //
-                "not ok - 6 total, 4 not covered");
+                "not ok - 6 total, 4 defect");
     }
 
     private void prepareFailedItemDetails()
@@ -199,10 +195,10 @@ public class TestPlainTextReport
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UTEST)));
         when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UMAN));
         when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
-        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(asList(UTEST));
+        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(UTEST)));
         when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
         when(itemDMock.getUncoveredArtifactTypes()).thenReturn(asList(IMPL, UTEST));
-        when(this.traceMock.getUncoveredItems())
+        when(this.traceMock.getDefectItems())
                 .thenReturn(asList(itemAMock, itemBMock, itemCMock, itemDMock));
         when(itemAMock.getLocation()).thenReturn(Location.create("/tmp/foo.md", 1));
         when(itemBMock.getLocation()).thenReturn(Location.create("/tmp/bar.md", 2));
@@ -210,25 +206,58 @@ public class TestPlainTextReport
         when(itemDMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 17));
     }
 
+    // [utest->dsn~reporting.plain-text.link-details~1]
+    @Test
+    public void testReport_LevelFailureDetails()
+    {
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countDefects()).thenReturn(1);
+        prepareMixedItemDetails();
+
+        assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
+                "not ok - 0/1>3>2/4 - dsn~failure~0 (impl, uman, -utest)", //
+                "|", //
+                "| This is a failure.", //
+                "|", //
+                "|<-- ( ) imp~failure~0", //
+                "|--> ( ) req~bar~1", //
+                "|--> (+) req~baz~1", //
+                "|--> ( ) req~foo~1", //
+                "|--> (<) req~zoo~1", //
+                "|--> (/) req~zoo~2", //
+                "|", //
+                "", //
+                "not ok - 2 total, 1 defect");
+    }
+
+    // [utest->dsn~reporting.plain-text.link-details~1]
     @Test
     public void testReport_LevelAll()
     {
         when(this.traceMock.count()).thenReturn(2);
-        when(this.traceMock.countUncovered()).thenReturn(1);
+        when(this.traceMock.countDefects()).thenReturn(1);
         prepareMixedItemDetails();
 
         assertReportOutput(ReportVerbosity.ALL, //
-                "not ok - 0/0>3>1/4 - dsn~failure~0 (impl, uman, -utest)", //
+                "not ok - 0/1>3>2/4 - dsn~failure~0 (impl, uman, -utest)", //
                 "|", //
                 "| This is a failure.", //
+                "|", //
+                "|<-- ( ) imp~failure~0", //
+                "|--> ( ) req~bar~1", //
+                "|--> (+) req~baz~1", //
+                "|--> ( ) req~foo~1", //
+                "|--> (<) req~zoo~1", //
+                "|--> (/) req~zoo~2", //
                 "|", //
                 "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
                 "|", //
                 "| This is a success.", //
                 "|", //
                 "| #: tag, another tag", //
+                "|", //
                 "", //
-                "not ok - 2 total, 1 not covered");
+                "not ok - 2 total, 1 defect");
     }
 
     private void prepareMixedItemDetails()
@@ -238,14 +267,42 @@ public class TestPlainTextReport
                 0, 0, 0, 0, 0);
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("dsn~failure~0", //
                 "This is a failure.", //
-                0, 0, 3, 1, 4);
+                0, 1, 3, 2, 4);
 
         when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
         when(itemAMock.getTags()).thenReturn(asList("tag", "another tag"));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UMAN)));
         when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UTEST));
+        prepareLinks(itemBMock);
         when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
+        when(this.traceMock.getDefectItems()).thenReturn(asList(itemBMock));
+    }
+
+    private void prepareLinks(final LinkedSpecificationItem itemMock)
+    {
+        final LinkedSpecificationItem otherA = createOtherItemMock("imp~failure~0");
+        final LinkedSpecificationItem otherB = createOtherItemMock("req~bar~1");
+        final LinkedSpecificationItem otherC = createOtherItemMock("req~baz~1");
+        final LinkedSpecificationItem otherD = createOtherItemMock("req~foo~1");
+        final LinkedSpecificationItem otherE = createOtherItemMock("req~zoo~1");
+        final LinkedSpecificationItem otherF = createOtherItemMock("req~zoo~2");
+        final List<TracedLink> links = new ArrayList<>();
+        links.add(new TracedLink(otherA, LinkStatus.COVERED_SHALLOW));
+        links.add(new TracedLink(otherB, LinkStatus.COVERS));
+        links.add(new TracedLink(otherD, LinkStatus.COVERS));
+        links.add(new TracedLink(otherC, LinkStatus.UNWANTED));
+        links.add(new TracedLink(otherE, LinkStatus.OUTDATED));
+        links.add(new TracedLink(otherF, LinkStatus.ORPHANED));
+        when(itemMock.getTracedLinks()).thenReturn(links);
+        when(itemMock.hasLinks()).thenReturn(true);
+    }
+
+    private LinkedSpecificationItem createOtherItemMock(final String idAsText)
+    {
+        final LinkedSpecificationItem otherA = mock(LinkedSpecificationItem.class);
+        when(otherA.getId()).thenReturn(SpecificationItemId.parseId(idAsText));
+        return otherA;
     }
 
     private LinkedSpecificationItem createLinkedItemMock(final String idAsText,
@@ -283,7 +340,7 @@ public class TestPlainTextReport
         final Newline separator = Newline.OLDMAC;
 
         when(this.traceMock.count()).thenReturn(2);
-        when(this.traceMock.countUncovered()).thenReturn(0);
+        when(this.traceMock.countDefects()).thenReturn(0);
         final LinkedSpecificationItem itemAMock = createLinkedItemMock("a~a~1", //
                 "This is" + separator + "a multiline description", //
                 0, 0, 0, 0, 0);
@@ -293,7 +350,7 @@ public class TestPlainTextReport
         when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL)));
-        when(this.traceMock.isAllCovered()).thenReturn(true);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
 
         assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator), //

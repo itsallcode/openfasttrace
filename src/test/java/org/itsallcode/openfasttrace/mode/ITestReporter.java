@@ -30,10 +30,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +64,8 @@ public class ITestReporter extends AbstractOftModeTest
 
     private void writePlainTextReportFromTrace(final Trace trace)
     {
-        this.reporter.reportToFileInFormat(trace, this.outputFile, Reporter.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToFileInFormat(trace, this.outputFile,
+                ReportConstants.DEFAULT_REPORT_FORMAT);
     }
 
     private void assertStandardReportFileResult() throws IOException
@@ -99,7 +104,7 @@ public class ITestReporter extends AbstractOftModeTest
     {
         final Trace trace = this.reporter.addInputs(this.docDir) //
                 .trace();
-        this.reporter.reportToStdOutInFormat(trace, Reporter.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToStdOutInFormat(trace, ReportConstants.DEFAULT_REPORT_FORMAT);
         assertStandardReportStdOutResult();
     }
 
@@ -108,19 +113,20 @@ public class ITestReporter extends AbstractOftModeTest
         assertStdOutStartsWith("ok - 5 total");
     }
 
+    // [itest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testIgnoreArtifactTypeDsn()
+    public void testFilterAllowsAllAtrifactsButDsn()
     {
-        final String ignoredArtifactType = "dsn";
+        final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         this.reporter.addInputs(this.docDir);
         final Trace fullTrace = this.reporter.trace();
-        assertThat("Number of items with type " + ignoredArtifactType + " in regular trace",
-                countItemsOfArtifactTypeInTrace(ignoredArtifactType, fullTrace), greaterThan(0L));
+        assertThat("Number of items with type \"dsn\" in regular trace",
+                countItemsOfArtifactTypeInTrace("dsn", fullTrace), greaterThan(0L));
         final Trace trace = this.reporter //
-                .ignoreArtifactTypes(Arrays.asList(ignoredArtifactType))//
+                .setFilters(new FilterSettings.Builder().artifactTypes(artifactTypes).build())//
                 .trace();
-        assertThat("Number of items with ignored type " + ignoredArtifactType,
-                countItemsOfArtifactTypeInTrace(ignoredArtifactType, trace), equalTo(0L));
+        assertThat("Number of items with ignored type \"dsn\" in filtered trace",
+                countItemsOfArtifactTypeInTrace("dsn", trace), equalTo(0L));
     }
 
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)
@@ -128,6 +134,32 @@ public class ITestReporter extends AbstractOftModeTest
         return trace.getItems().stream() //
                 .filter(item -> {
                     return item.getId().getArtifactType().equals(artifactType);
+                }) //
+                .count();
+    }
+
+    // [itest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testFilterAllowsTagsClientAndServer()
+    {
+        final Set<String> tags = new HashSet<>(Arrays.asList("client", "server"));
+        this.reporter.addInputs(this.docDir);
+        final Trace fullTrace = this.reporter.trace();
+        final String filteredOutTag = "database";
+        assertThat("Number of items with tag \"" + filteredOutTag + "\" in regular trace",
+                countItemsWithTagInTrace(filteredOutTag, fullTrace), greaterThan(0L));
+        final Trace trace = this.reporter //
+                .setFilters(new FilterSettings.Builder().tags(tags).build())//
+                .trace();
+        assertThat("Number of items with tag \"" + filteredOutTag + "\" in filted trace",
+                countItemsWithTagInTrace(filteredOutTag, trace), equalTo(0L));
+    }
+
+    private long countItemsWithTagInTrace(final String tag, final Trace trace)
+    {
+        return trace.getItems().stream() //
+                .filter(item -> {
+                    return item.getTags().contains(tag);
                 }) //
                 .count();
     }

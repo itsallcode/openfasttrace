@@ -22,6 +22,8 @@ Common options:
   -i, --ignore-artifact-types  Define a comma-separated list of artifact types
                                to be ignored during import.
   -n, --newline format         Newline format one of "unix", "windows", "oldmac"
+  -a, --wanted-artifact-types  Filter out all but the artifact types in the
+                               comma-separated list
 
 Returns:
   0   on success

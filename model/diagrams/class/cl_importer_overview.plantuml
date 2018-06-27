@@ -1,0 +1,80 @@
+@startuml
+!include ../clean.skin
+
+package java.util {
+    class ServiceLoader {
+    }
+}
+
+package org.itsallcode.openfasttrace {
+
+    package importer {
+
+        class ImporterFactoryLoader {
+        }
+
+        class MultiFileImporter {
+        }
+        
+        interface Importer <<interface>> {
+            + runImport() : void
+        }
+        
+        class ImporterFactory <<abstract>> {
+            + supportsFile(inputFile: InputFile) : boolean
+            + createImporter(inputFile: InputFile, listener: ImportEventListener) : Importer
+            * getContext() : ImporterContext
+        }
+
+        class ImporterService {
+            + ImporterService(context: ImporterContext) : ImporterService 
+            + createImporter() : MultiFileImporter
+        }
+        
+        class RegExMatchingImporterFactory <<abstract>> {
+        }
+        
+        class ImporterContext {
+            + getImporterService() : ImporterService
+            + setImporterService(importerService: ImporterService) : void
+        }
+        
+        package zip {
+            class ZipFileImporter {
+            }
+            
+            class ZipFileImporterFactory {
+            }
+            
+            ZipFileImporterFactory -left-> ZipFileImporter : <<create>>
+        }
+        
+        RegExMatchingImporterFactory -up-|> ImporterFactory
+        ZipFileImporterFactory -up-|> RegExMatchingImporterFactory
+        ImporterContext -down-> ImporterService : contains
+        ImporterService -up-> MultiFileImporter : <<create>>
+        ZipFileImporter -up-> MultiFileImporter : delegates
+        ZipFileImporter .up.|> Importer
+        ImporterFactory -down-> ImporterContext : passes
+    }
+
+
+    package core.serviceloader {
+        class InitializingServiceLoader {
+        }
+
+        interface Initializable <<interface>> {
+            + init(context: ImporterContext) : void
+        }
+        InitializingServiceLoader -left-> Initializable : <<initialize>>
+    }
+
+    ImporterFactory .right.|> Initializable
+    ImporterFactoryLoader -up-> InitializingServiceLoader : get\navailable\nfactories
+    ImporterFactoryLoader -left-> ImporterFactory : find factory responsible\nfor input format
+}
+
+ServiceLoader -down-> ZipFileImporterFactory : <<create>>
+InitializingServiceLoader -up-> ServiceLoader : <<use>>
+
+@enduml

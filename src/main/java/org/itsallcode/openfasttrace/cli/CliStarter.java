@@ -46,10 +46,17 @@ public class CliStarter
         }
         else
         {
-            System.err.println(
+            printToStdError(
                     "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
             exit(ExitStatus.CLI_ERROR);
         }
+    }
+
+    // Writing to standard error by intention
+    @SuppressWarnings("squid:S106")
+    private static void printToStdError(final String message)
+    {
+        System.err.println(message);
     }
 
     // [impl->dsn~cli.command-selection~1]
@@ -64,6 +71,8 @@ public class CliStarter
         case TraceCommand.COMMAND_NAME:
             performable = new TraceCommand(this.arguments);
             break;
+        default:
+            throw new IllegalStateException("Command missing trying to execute OFT mode.");
         }
         final ExitStatus status = ExitStatus.fromBoolean(performable.run());
         exit(status);

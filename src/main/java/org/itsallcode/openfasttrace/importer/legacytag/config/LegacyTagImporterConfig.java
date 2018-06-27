@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.legacytag.config;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,18 +26,30 @@ import static java.util.Collections.emptyList;
 
 import java.util.List;
 
+/**
+ * Configuration for the {@link LegacyTagImporter}.
+ */
 public class LegacyTagImporterConfig
 {
     private final List<PathConfig> pathConfigs;
 
-    public LegacyTagImporterConfig()
-    {
-        this(emptyList());
-    }
-
+    /**
+     * Create a new configuration object.
+     * 
+     * @param pathConfigs
+     *            a list of {@link PathConfig} objects.
+     */
     public LegacyTagImporterConfig(final List<PathConfig> pathConfigs)
     {
         this.pathConfigs = pathConfigs;
+    }
+
+    /**
+     * Creates a new, empty configuration.
+     */
+    public static LegacyTagImporterConfig empty()
+    {
+        return new LegacyTagImporterConfig(emptyList());
     }
 
     public List<PathConfig> getPathConfigs()

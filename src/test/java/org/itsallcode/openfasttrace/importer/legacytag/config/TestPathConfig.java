@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.legacytag.config;
 
 /*-
  * #%L
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Test;
 
 public class TestPathConfig
@@ -81,28 +81,33 @@ public class TestPathConfig
     @Test
     public void testGetPatternWithoutPrefix()
     {
-        assertThat(create("pattern").getPattern(), equalTo("pattern"));
+        assertThat(create("pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test
     public void testGetPatternWithGlobPrefix()
     {
-        assertThat(create("glob:pattern").getPattern(), equalTo("glob:pattern"));
+        assertThat(create("glob:pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test
     public void testGetPatternWithRegexPrefix()
     {
-        assertThat(create("regex:pattern").getPattern(), equalTo("regex:pattern"));
+        assertThat(create("regex:pattern").getDescription(), equalTo("regex:pattern"));
     }
 
     private void assertMatches(final String pattern, final String path, final boolean expected)
     {
-        assertThat(create(pattern).matches(Paths.get(path)), equalTo(expected));
+        final InputFile file = InputFile.forPath(Paths.get(path));
+        assertThat(create(pattern).matches(file), equalTo(expected));
     }
 
     private PathConfig create(final String pattern)
     {
-        return new PathConfig(pattern, null, null, null);
+        return PathConfig.builder() //
+                .patternPathMatcher(pattern) //
+                .coveredItemArtifactType("") //
+                .tagArtifactType("") //
+                .build();
     }
 }

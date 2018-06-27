@@ -26,21 +26,23 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.LineReader;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporter;
-import org.itsallcode.openfasttrace.importer.legacytag.PathConfig;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+// [utest->dsn~import.short-coverage-tag~1]
 public class TestLegacyTagImporter
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";
@@ -85,7 +87,10 @@ public class TestLegacyTagImporter
     @Test
     public void testFileWithNewTagFormat()
     {
-        runImport("[type->coveredtype~coveredname~1]");
+        final String itemName = "coveredtype~coveredname~1"; // do not inline to
+                                                             // avoid error in
+                                                             // self-trace
+        runImport("[type->" + itemName + "]");
         verifyZeroInteractions(this.listenerMock);
     }
 
@@ -152,7 +157,9 @@ public class TestLegacyTagImporter
 
     private void runImport(final String content)
     {
-        final LineReader reader = LineReader.create(FILE, new StringReader(content));
-        new LegacyTagImporter(this.configMock, FILE, reader, this.listenerMock).runImport();
+        final InputFile file = StreamInput.forReader(FILE,
+                new BufferedReader(new StringReader(content)));
+
+        new LegacyTagImporter(this.configMock, file, this.listenerMock).runImport();
     }
 }

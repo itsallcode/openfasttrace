@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Generated;
+
 // [impl->dsn~specification-item~2]
 public class SpecificationItem
 {
@@ -192,6 +194,7 @@ public class SpecificationItem
         return this.tags;
     }
 
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final int hashCode()
     {
@@ -212,6 +215,7 @@ public class SpecificationItem
         return result;
     }
 
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final boolean equals(final Object obj)
     {

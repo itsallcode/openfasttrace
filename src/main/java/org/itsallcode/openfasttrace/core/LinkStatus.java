@@ -22,15 +22,26 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-
 public enum LinkStatus
 {
     // Outgoing coverage link status
-    COVERS, PREDATED, OUTDATED, AMBIGUOUS, UNWANTED, ORPHANED, //
+    COVERS(" ", "covers"), PREDATED(">", "predated"), OUTDATED("<", "outdated"), AMBIGUOUS("?",
+            "ambiguous"), UNWANTED("+", "unwanted"), ORPHANED("/", "orphaned"), //
     // Incoming coverage link status
-    COVERED_SHALLOW, COVERED_UNWANTED, COVERED_PREDATED, COVERED_OUTDATED, //
+    COVERED_SHALLOW(" ", "covered shallow"), COVERED_UNWANTED("+",
+            "unwanted coverage"), COVERED_PREDATED(">",
+                    "predated coverage"), COVERED_OUTDATED("<", "outdated coverage"), //
     // Duplicate link status
-    DUPLICATE;
+    DUPLICATE("?", "duplicate");
+
+    private final String shortTag;
+    private final String text;
+
+    private LinkStatus(final String shortTag, final String text)
+    {
+        this.shortTag = shortTag;
+        this.text = text;
+    }
 
     /**
      * Check if this is a bad link status.
@@ -94,5 +105,26 @@ public enum LinkStatus
     public boolean isDuplicate()
     {
         return this == DUPLICATE;
+    }
+
+    /**
+     * Get the short tag representing the link status
+     * 
+     * @return short tag
+     */
+    public String getShortTag()
+    {
+        return this.shortTag;
+    }
+
+    /**
+     * Get a text representing the link status
+     * 
+     * @return link status in human readable form
+     */
+    @Override
+    public String toString()
+    {
+        return this.text;
     }
 }

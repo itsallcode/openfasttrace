@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.core;
 
-import static java.util.Collections.emptyList;
-
 /*-
  * #%L
  \* OpenFastTrace
@@ -24,6 +22,7 @@ import static java.util.Collections.emptyList;
  * #L%
  */
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 /**
@@ -36,6 +35,7 @@ public class LinkedSpecificationItem
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
+    private final Set<String> overCoveredArtifactTypes = new HashSet<>();
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
@@ -67,6 +67,30 @@ public class LinkedSpecificationItem
     public String getTitle()
     {
         return this.item.getTitle();
+    }
+
+    /**
+     * Get the title or a fallback if the optional title is not specified
+     * 
+     * @return title if exists, otherwise name part of the ID
+     */
+    public String getTitleWithFallback()
+    {
+        final String title = this.getTitle();
+        if (title != null && !title.isEmpty())
+        {
+            return title;
+        }
+        final SpecificationItemId id = this.getId();
+        if (id != null)
+        {
+            final String name = id.getName();
+            if (name != null && !name.isEmpty())
+            {
+                return name;
+            }
+        }
+        return "???";
     }
 
     /**
@@ -106,7 +130,7 @@ public class LinkedSpecificationItem
      */
     public List<String> getTags()
     {
-        return emptyList();
+        return this.item.getTags();
     }
 
     /**
@@ -129,13 +153,8 @@ public class LinkedSpecificationItem
      */
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
-        List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
-        if (linksWithStatus == null)
-        {
-            linksWithStatus = new ArrayList<>();
-            this.links.put(status, linksWithStatus);
-        }
-        linksWithStatus.add(item);
+        this.links.computeIfAbsent(status, key -> new ArrayList<>());
+        this.links.get(status).add(item);
     }
 
     /**
@@ -158,6 +177,24 @@ public class LinkedSpecificationItem
         final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
         return (linksWithStatus == null) ? Collections.<LinkedSpecificationItem> emptyList()
                 : linksWithStatus;
+    }
+
+    /**
+     * Get a list of traced links (i.e. links including the tracing status)
+     * 
+     * @return list of traced links
+     */
+    public List<TracedLink> getTracedLinks()
+    {
+        final List<TracedLink> tracedLinks = new ArrayList<>();
+        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet())
+        {
+            for (final LinkedSpecificationItem other : entry.getValue())
+            {
+                tracedLinks.add(new TracedLink(other, entry.getKey()));
+            }
+        }
+        return tracedLinks;
     }
 
     /**
@@ -191,6 +228,11 @@ public class LinkedSpecificationItem
         this.coveredArtifactTypes.add(artifactType);
     }
 
+    public void addOverCoveredArtifactType(final String artifactType)
+    {
+        this.overCoveredArtifactTypes.add(artifactType);
+    }
+
     /**
      * Get the artifact type which are covered.
      *
@@ -206,11 +248,10 @@ public class LinkedSpecificationItem
      * 
      * @return list of over-covered artifact types.
      */
-    public List<String> getOverCoveredArtifactTypes()
+    public Set<String> getOverCoveredArtifactTypes()
     {
-        final List<String> overCovered = new ArrayList<>(getCoveredArtifactTypes());
-        overCovered.removeAll(getNeedsArtifactTypes());
-        return overCovered;
+
+        return this.overCoveredArtifactTypes;
     }
 
     /**
@@ -296,6 +337,14 @@ public class LinkedSpecificationItem
                                 || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }
 
+    /**
+     * @return <code>true</code> if the item has one or more links
+     */
+    public boolean hasLinks()
+    {
+        return !this.links.isEmpty();
+    }
+
     private boolean hasBadLinks()
     {
         for (final LinkStatus status : this.links.keySet())
@@ -365,6 +414,9 @@ public class LinkedSpecificationItem
         return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
     }
 
+    /**
+     * @return <code>true</code> if this item has one ore more duplicates.
+     */
     public boolean hasDuplicates()
     {
         return countDuplicateLinks() != 0;

@@ -93,7 +93,7 @@ public class CallbackContentHandler implements TreeContentHandler
                 this.defaultStartElementListener);
         if (consumer == null)
         {
-            LOG.warning("No consumer for event " + treeElement);
+            LOG.warning(() -> "No consumer for event " + treeElement);
             return;
         }
         try
@@ -121,9 +121,8 @@ public class CallbackContentHandler implements TreeContentHandler
     public void pushDelegate(final TreeContentHandler delegate)
     {
         this.treeParsingController.setDelegate(delegate);
-        this.treeParsingController.getCurrentElement().setEndElementListener(endElement -> {
-            this.treeParsingController.setDelegate(this);
-        });
+        this.treeParsingController.getCurrentElement()
+                .setEndElementListener(endElement -> this.treeParsingController.setDelegate(this));
     }
 
     public CallbackContentHandler addIntDataListener(final String elementName,
@@ -143,9 +142,8 @@ public class CallbackContentHandler implements TreeContentHandler
     public CallbackContentHandler addCharacterDataListener(final String elementName,
             final Consumer<String> listener)
     {
-        addElementListener(elementName, startElement -> {}, endElement -> {
-            listener.accept(endElement.getCharacterData());
-        });
+        addElementListener(elementName, startElement -> {},
+                endElement -> listener.accept(endElement.getCharacterData()));
         return this;
     }
 }

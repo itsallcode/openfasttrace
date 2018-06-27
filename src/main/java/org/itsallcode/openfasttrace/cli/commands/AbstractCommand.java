@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.cli.CliArguments;
 
 /**
@@ -51,5 +52,12 @@ public abstract class AbstractCommand implements Performable
             inputsAsPaths.add(Paths.get(input));
         }
         return inputsAsPaths;
+    }
+
+    protected FilterSettings createFilterSettingsFromArguments()
+    {
+        return new FilterSettings.Builder() //
+                .artifactTypes(this.arguments.getWantedArtifactTypes()) //
+                .build();
     }
 }

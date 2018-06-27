@@ -29,23 +29,23 @@ import java.util.stream.Collectors;
 public class Trace
 {
     private final List<LinkedSpecificationItem> items;
-    private final List<LinkedSpecificationItem> uncoveredItems;
+    private final List<LinkedSpecificationItem> defectItems;
 
     private Trace(final List<LinkedSpecificationItem> items,
             final List<LinkedSpecificationItem> uncleanItems)
     {
         this.items = items;
-        this.uncoveredItems = uncleanItems;
+        this.defectItems = uncleanItems;
     }
 
-    public boolean isAllCovered()
+    public boolean hasNoDefects()
     {
-        return this.uncoveredItems.isEmpty();
+        return this.defectItems.isEmpty();
     }
 
-    public List<LinkedSpecificationItem> getUncoveredItems()
+    public List<LinkedSpecificationItem> getDefectItems()
     {
-        return this.uncoveredItems;
+        return this.defectItems;
     }
 
     public List<LinkedSpecificationItem> getItems()
@@ -53,16 +53,16 @@ public class Trace
         return this.items;
     }
 
-    public List<SpecificationItemId> getUncoveredIds()
+    public List<SpecificationItemId> getDefectIds()
     {
-        return this.uncoveredItems.stream() //
+        return this.defectItems.stream() //
                 .map(LinkedSpecificationItem::getId) //
                 .collect(Collectors.toList());
     }
 
-    public int countUncovered()
+    public int countDefects()
     {
-        return this.uncoveredItems.size();
+        return this.defectItems.size();
     }
 
     public int count()
@@ -73,7 +73,7 @@ public class Trace
     public static class Builder
     {
         private List<LinkedSpecificationItem> items;
-        private List<LinkedSpecificationItem> uncleanItems;
+        private List<LinkedSpecificationItem> defectItems;
 
         public Builder items(final List<LinkedSpecificationItem> items)
         {
@@ -81,15 +81,15 @@ public class Trace
             return this;
         }
 
-        public Builder uncleanItems(final List<LinkedSpecificationItem> uncleanItems)
+        public Builder defectItems(final List<LinkedSpecificationItem> uncleanItems)
         {
-            this.uncleanItems = uncleanItems;
+            this.defectItems = uncleanItems;
             return this;
         }
 
         public Trace build()
         {
-            return new Trace(this.items, this.uncleanItems);
+            return new Trace(this.items, this.defectItems);
         }
     }
 }

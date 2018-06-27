@@ -26,15 +26,13 @@ import static java.util.Arrays.asList;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.exporter.ExporterConstants;
+import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
@@ -50,7 +48,8 @@ public class CliArguments
     private Path outputFile;
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
-    private List<String> ignoredArtifactTypes = Collections.emptyList();
+    private Set<String> wantedArtifactTypes = Collections.emptySet();
+    private Set<String> wantedTags = Collections.emptySet();
 
     /**
      * Get the output file path
@@ -131,31 +130,36 @@ public class CliArguments
     }
 
     /**
-     * Get the output format for an export or report
+     * Get the output format for an export or stream
      * 
      * @return the output format
      */
     // [impl->dsn~cli.tracing.default-format~1]
-    // [impl->dsn~cli.conversion.default-format~1]]
+    // [impl->dsn~cli.conversion.default-output-format~1]]
     // [impl->dsn~cli.tracing.output-format~1]
     public String getOutputFormat()
     {
         if (this.outputFormat == null)
         {
-            if (this.getCommand() == TraceCommand.COMMAND_NAME)
+            if (this.getCommand().equals(TraceCommand.COMMAND_NAME))
             {
-                return Reporter.DEFAULT_REPORT_FORMAT;
+                return ReportConstants.DEFAULT_REPORT_FORMAT;
             }
-            else if (this.getCommand() == ConvertCommand.COMMAND_NAME)
+            else if (this.getCommand().equals(ConvertCommand.COMMAND_NAME))
             {
-                return Converter.DEFAULT_EXPORT_FORMAT;
+                return ExporterConstants.DEFAULT_OUTPUT_FORMAT;
+            }
+            else
+            {
+                throw new IllegalStateException("Illegal command \"" + this.getCommand()
+                        + "\" encountered trying to set default output format.");
             }
         }
         return this.outputFormat;
     }
 
     /**
-     * Set the output format for an export or report
+     * Set the output format for an export or stream
      * 
      * @param outputFormat
      *            the output format
@@ -167,7 +171,7 @@ public class CliArguments
     }
 
     /**
-     * Set the output format for an export or report
+     * Set the output format for an export or stream
      * 
      * @param outputFormat
      *            the output format
@@ -178,20 +182,21 @@ public class CliArguments
     }
 
     /**
-     * Get the report verbosity of a report
+     * Get the stream verbosity of a stream
      * 
-     * @return the report verbosity of a report
+     * @return the stream verbosity of a stream
      */
     public ReportVerbosity getReportVerbosity()
     {
-        return (null == this.reportVerbosity) ? Reporter.DEFAULT_VERBOSITY : this.reportVerbosity;
+        return (null == this.reportVerbosity) ? ReportConstants.DEFAULT_REPORT_VERBOSITY
+                : this.reportVerbosity;
     }
 
     /**
-     * Set the report verbosity for a report
+     * Set the stream verbosity for a stream
      * 
      * @param reportVerbosity
-     *            the verbosity of the report
+     *            the verbosity of the stream
      */
     public void setReportVerbosity(final ReportVerbosity reportVerbosity)
     {
@@ -199,10 +204,10 @@ public class CliArguments
     }
 
     /**
-     * Set the report verbosity for a report
+     * Set the stream verbosity for a stream
      * 
      * @param reportVerbosity
-     *            the verbosity of the report
+     *            the verbosity of the stream
      */
     public void setV(final ReportVerbosity reportVerbosity)
     {
@@ -242,34 +247,71 @@ public class CliArguments
     }
 
     /**
-     * Get a list of artifact types to be ignored during import
+     * Get a list of artifact types to be applied as filter during import
      * 
-     * @return list of artifact types to be ignored
+     * @return list of wanted artifact types
      */
-    public List<String> getIgnoreArtifactTypes()
+    public Set<String> getWantedArtifactTypes()
     {
-        return this.ignoredArtifactTypes;
+        return this.wantedArtifactTypes;
     }
 
     /**
-     * Set a list of artifact types to be ignored during import
+     * Set a list of artifact types to be applied as filter during import
      * 
-     * @param ingoredArtifactTypes
-     *            list of artifact types to be ignored
+     * @param artifactTypes
+     *            list of wanted artifact types
      */
-    public void setIgnoreArtifactTypes(final String ingoredArtifactTypes)
+    public void setWantedArtifactTypes(final String artifactTypes)
     {
-        this.ignoredArtifactTypes = Arrays.asList(ingoredArtifactTypes.split(",\\s*"));
+        this.wantedArtifactTypes = createSetFromCommaSeparatedString(artifactTypes);
+    }
+
+    private HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
+    {
+        return new HashSet<>(Arrays.asList(commaSeparatedString.split(",\\s*")));
     }
 
     /**
-     * Set a list of artifact types to be ignored during import
+     * Set a list of artifact types to be applied as filter during import
      * 
-     * @param ingoredArtifactTypes
-     *            list of artifact types to be ignored
+     * @param artifactTypes
+     *            list of wanted artifact types
      */
-    public void setI(final String ingoredArtifactTypes)
+    public void setA(final String artifactTypes)
     {
-        setIgnoreArtifactTypes(ingoredArtifactTypes);
+        setWantedArtifactTypes(artifactTypes);
+    }
+
+    /**
+     * Get a list of tags to be applied as filter during import
+     * 
+     * @return list of wanted tags
+     */
+    public Set<String> getWantedTags()
+    {
+        return this.wantedTags;
+    }
+
+    /**
+     * Set a list of tags to be applied as filter during import
+     * 
+     * @param tags
+     *            list of wanted tags
+     */
+    public void setWantedTags(final String tags)
+    {
+        this.wantedTags = createSetFromCommaSeparatedString(tags);
+    }
+
+    /**
+     * Set a list of tags to be applied as filter during import
+     * 
+     * @param tags
+     *            list of wanted tags
+     */
+    public void setT(final String tags)
+    {
+        setWantedTags(tags);
     }
 }

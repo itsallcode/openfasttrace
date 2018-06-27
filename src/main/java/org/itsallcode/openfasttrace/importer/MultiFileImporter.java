@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
@@ -64,11 +65,10 @@ public class MultiFileImporter
      *            the file to import.
      * @return <code>this</code> for fluent programming style.
      */
-    public MultiFileImporter importFile(final Path file)
+    public MultiFileImporter importFile(final InputFile file)
     {
-        LOG.fine(() -> "Importing file '" + file + "'...");
         final int itemCountBefore = this.specItemBuilder.getItemCount();
-        createImporter(file, DEFAULT_CHARSET, this.specItemBuilder).runImport();
+        createImporter(file, this.specItemBuilder).runImport();
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
@@ -93,9 +93,9 @@ public class MultiFileImporter
                 {
                     importRecursiveDir(path, ALL_RECURSIVE_GLOB);
                 }
-                else if (file.isFile())
+                else
                 {
-                    importFile(path);
+                    importFile(InputFile.forPath(path));
                 }
             }
             else
@@ -121,17 +121,16 @@ public class MultiFileImporter
     // [impl->dsn~input-directory-recursive-traversal~1]
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
-        LOG.fine(() -> "Importing files from '" + dir + "' matching glob '" + glob + "'...");
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         try (Stream<Path> fileStream = Files.walk(dir))
         {
-            fileStream.filter(path -> !Files.isDirectory(path)) //
+            fileStream.filter(path -> !path.toFile().isDirectory()) //
                     .filter(matcher::matches) //
+                    .map(path -> InputFile.forPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
-                    .map(file -> createImporter(file, DEFAULT_CHARSET, this.specItemBuilder))
-                    .forEach(importer -> {
+                    .map(file -> createImporter(file, this.specItemBuilder)).forEach(importer -> {
                         importer.runImport();
                         fileCount.incrementAndGet();
                     });
@@ -156,11 +155,10 @@ public class MultiFileImporter
         return this.specItemBuilder.build();
     }
 
-    private Importer createImporter(final Path file, final Charset charset,
-            final SpecificationListBuilder builder)
+    private Importer createImporter(final InputFile file, final SpecificationListBuilder builder)
     {
         final ImporterFactory importerFactory = this.factoryLoader.getImporterFactory(file);
-        final Importer importer = importerFactory.createImporter(file, charset, builder);
+        final Importer importer = importerFactory.createImporter(file, builder);
         LOG.fine(() -> "Created importer of type '" + importer.getClass().getSimpleName()
                 + "' for file '" + file + "'");
         return importer;

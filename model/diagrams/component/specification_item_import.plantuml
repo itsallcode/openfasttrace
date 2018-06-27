@@ -1,4 +1,4 @@
-@startuml
+@startuml Import of specification item
 !include ../clean.skin
 class Importer
 class SpecificationItemListBuilder

@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.matcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -21,7 +24,6 @@ package org.itsallcode.openfasttrace.matcher;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -59,22 +61,22 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
     @Override
     protected void describeMismatchSafely(final String text, final Description mismatchDescription)
     {
-        final String[] originalLines = this.originalText.split(LINE_ENDING);
-        final String[] lines = this.text.split(LINE_ENDING);
+        final List<String> originalLines = splitPreservingNewLines(this.originalText);
+        final List<String> lines = splitPreservingNewLines(this.text);
 
-        final int originalLineCount = originalLines.length;
-        final int lineCount = lines.length;
+        final int originalLineCount = originalLines.size();
+        final int lineCount = lines.size();
 
         mismatchDescription.appendText(describeLineCount(lineCount));
 
         for (int i = 0; i < lineCount; ++i)
         {
-            final String line = lines[i];
+            final String line = lines.get(i);
             if (i > originalLineCount - 1)
             {
                 mismatchDescription.appendText("+>> ");
             }
-            else if (line.equals(originalLines[i]))
+            else if (line.equals(originalLines.get(i)))
             {
                 mismatchDescription.appendText("    ");
             }
@@ -95,8 +97,8 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
     @Override
     public void describeTo(final Description description)
     {
-        final String[] originalLines = this.originalText.split(LINE_ENDING);
-        final int originalLineCount = originalLines.length;
+        final List<String> originalLines = splitPreservingNewLines(this.originalText);
+        final int originalLineCount = originalLines.size();
 
         description.appendText(describeLineCount(originalLineCount));
         for (final String line : originalLines)
@@ -110,12 +112,25 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
     /**
      * Factory method for multiline text matcher
      * 
-     * @param text
-     *            the text to be matched against the original
+     * @param line
+     *            a line of text
      * @return the matcher
      */
-    public static MultilineTextMatcher matchesAllLines(final String text)
+    public static MultilineTextMatcher matchesAllLines(final String... lines)
     {
-        return new MultilineTextMatcher(text);
+        return new MultilineTextMatcher(String.join(System.lineSeparator(), lines));
+    }
+
+    private List<String> splitPreservingNewLines(final String text)
+    {
+
+        final String lineSplittingRegEx = "(?<=" + LINE_ENDING + ")";
+        final List<String> lines = new ArrayList<>();
+        for (String line : text.split(lineSplittingRegEx))
+        {
+            line = line.replace('\n', '\u240A').replace('\r', '\u240D').replace('\t', '\u2409');
+            lines.add(line);
+        }
+        return lines;
     }
 }

@@ -1,23 +1,27 @@
 OpenFastTrace
 
 Usage:
-  oft trace [option ...] [<input file or directory> ...]
+  oft command [option ...] [<input file or directory> ...]
 
-Commands
+Commands:
   trace                        Create a trace document
   convert                      Convert to a different requirements format
 
 Tracing options:
   -o, --output-format          Report format, one of "plain"
                                Defaults to "plain"
+  -v, --verbosity-level        Set how verbose the output is. Ranges from
+                               "quiet" to "all".
 
 Converting options:
   -o, --output-format format   Requirements format, one of "specobject"
                                Defaults to "specobject"
 
 Common options: 
-  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
   -f, --file path              The output file. Defaults to STDOUT.
+  -i, --ignore-artifact-types  Define a comma-separated list of artifact types
+                               to be ignored during import.
+  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
   -a, --wanted-artifact-types  Filter out all but the artifact types in the
                                comma-separated list
 

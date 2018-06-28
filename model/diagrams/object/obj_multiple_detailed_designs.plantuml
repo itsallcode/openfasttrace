@@ -1,0 +1,48 @@
+@startuml
+!include ../clean.skin
+!pragma horizontalLineBetweenDifferentPackageAllowed
+allow_mixing
+
+together {
+    object ": System Specification" as sys_spec {
+        artifactTypes[] = ["feat", "req"]
+    }
+    object ": Architecture" as arch {
+        artifactTypes[] = ["arch"]
+    }
+    object "Client Design: Detailed Design" as client {
+        artifactTypes[] = ["dsn"]
+        coveredTags[] = ["HwAbstraction",\n"HttpClient", "LocalStorage", ...]
+    }
+    object "Web Service Design: Detailed Design" as service {
+        artifactTypes[] = ["dsn"]
+        coveredTags[] = ["AuthenticationProvider",\n"ServiceDiscovery", "MapProvider", ...]
+    }
+    object "Web UI Design: Detailed Design" as ui {
+        artifactTypes[] = ["dsn"]
+        coveredTags[] = ["WebPortal",\n"QrCodeScanner", ...]
+    }
+    actor "Andrea" as andrea
+    actor "Curt" as curt
+    actor "Cloe" as cloe
+    actor "Wan" as wan
+    actor "Walter" as walter
+    actor "Soeren" as soeren
+    actor "Uma" as uma
+
+    arch -u-> sys_spec : covers
+    client -u-> arch : covers parts
+    service -u-> arch : covers parts
+    ui -u-> arch : covers parts
+    
+    soeren -r-> sys_spec : writes
+    andrea -r-> arch : writes
+    curt -u-> client : writes
+    cloe -u-> client : writes
+    wan -u-> service : writes
+    walter -u-> service : writes
+    uma -u-> ui : writes
+    
+}
+
+@enduml

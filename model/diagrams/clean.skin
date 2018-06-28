@@ -6,4 +6,5 @@ skinparam style strictuml
 
 hide empty methods
 hide empty attributes
+
 @enduml

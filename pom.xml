@@ -221,6 +221,28 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
+               <plugin>
+                    <groupId>com.github.jeluard</groupId>
+                    <artifactId>plantuml-maven-plugin</artifactId>
+                    <version>1.2</version>
+                    <configuration>
+                        <sourceFiles>
+                            <directory>${basedir}/model/diagrams</directory>
+                            <includes>
+                                <include>**/*.plantuml</include>
+                            </includes>
+                        </sourceFiles>
+                        <format>svg</format>
+                        <outputDirectory>${basedir}/doc/images/uml</outputDirectory>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.sourceforge.plantuml</groupId>
+                            <artifactId>plantuml</artifactId>
+                            <version>8059</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>

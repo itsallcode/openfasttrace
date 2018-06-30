@@ -1,6 +1,6 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
-![oft-logo](../src/main/resources/openfasttrack_logo.svg)
+![oft-logo](../src/main/resources/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 
@@ -235,6 +235,18 @@ Requirements should be accompanied by a rationale in all cases where the reason 
     
     Needs: dsn 
 
+### Delegating Requirement Coverage
+
+Consider a situation where you are responsible for the high-level software architecture of your project. You define the component breakdown, the interfaces and the interworking of the components. You get your requirements from a system requirement specification, but it turns out many of those incoming requirements are at a detail level that does not require design decisions on inter-component-level but rather affects the internals of a single component.
+
+In those cases it would be a waste of time to repeat the original requirement in your architecture just to hand them down to the detailed design of a component. Instead what you need is a fast way to express "yes, I read that requirement and I am sure it does not need design decisions in the high-level architecture."
+
+To achieve this OFT features a shorthand notation for delegating the job of covering a specification item to one or more different artifact types.
+
+In the following example a requirement in the system requirement specification (artifact type `req`) stated that the web user interface of your product should use the corporate design. This clearly does not require an architectural decision (`arch`), so you forward it directly to the detailed design (`dsn`) level.  
+
+    arch --> dsn : req~web-ui-uses-corporate-design~1
+
 ### Distributing the Detailing Work
 
 In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence is the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside of the specification, at least the specification can prepare criteria on which to split the work.
@@ -449,4 +461,4 @@ Editor / IDE                                             | Syntax highl. | Previ
 [Eclipse](https://eclipse.org) with WikiText plug-in     | y             | y       | y       | y
 [Eclipse](https://eclipse.org) with GMF plug-in          |               | y       |         |
 [Vim](https://www.vim.org/)                              | y             |         |         |
- 
+[Visual Studio Code](https://code.visualstudio.com/)     | y             | y       | y       |

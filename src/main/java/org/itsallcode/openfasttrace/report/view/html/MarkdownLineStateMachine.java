@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-// Duplicate strings help making this easier to understand.
-@SuppressWarnings("squid:S1192")
 public class MarkdownLineStateMachine
 {
     private static final int INCLUDE_EMPTY_STRINGS = -1;
@@ -43,10 +41,11 @@ public class MarkdownLineStateMachine
 
     public MarkdownLineStateMachine()
     {
-        super();
         initializeTransitions();
     }
 
+    // Duplicate strings help making this easier to understand.
+    @SuppressWarnings("squid:S1192")
     protected void initializeTransitions()
     {
         // @formatter:off

@@ -29,7 +29,6 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlSection extends AbstractViewContainer implements Viewable
 {
-
     private final PrintStream stream;
     private final String id;
     private final String title;

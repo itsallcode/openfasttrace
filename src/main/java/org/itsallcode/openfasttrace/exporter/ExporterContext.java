@@ -28,6 +28,8 @@ import org.itsallcode.openfasttrace.core.serviceloader.Initializable;
  * Context for {@link ExporterFactory}. Currently only used to satisfy
  * {@link Initializable} interface.
  */
+// Class is empty by intention
+@SuppressWarnings("squid:S2094")
 public class ExporterContext
 {
 

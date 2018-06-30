@@ -60,7 +60,7 @@ public class SpecObjectsHandlerBuilder
     {
         this.listener.beginSpecificationItem();
         this.locationBuilder = new Location.Builder() //
-                .path(this.file.getPath().toString()) //
+                .path(this.file.getPath()) //
                 .line(elem.getLocation().getLine());
         this.idBuilder = new SpecificationItemId.Builder() //
                 .artifactType(this.defaultDoctype);

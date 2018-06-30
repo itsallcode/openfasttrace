@@ -83,7 +83,7 @@ public class ReportService
             report = new PlainTextReport(trace, newline);
             break;
         case HTML:
-            report = new HtmlReport(trace, newline);
+            report = new HtmlReport(trace);
             break;
         default:
             throw new IllegalArgumentException(

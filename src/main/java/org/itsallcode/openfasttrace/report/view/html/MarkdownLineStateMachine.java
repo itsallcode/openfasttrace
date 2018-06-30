@@ -41,10 +41,11 @@ public class MarkdownLineStateMachine
 
     public MarkdownLineStateMachine()
     {
-        super();
         initializeTransitions();
     }
 
+    // Duplicate strings help making this easier to understand.
+    @SuppressWarnings("squid:S1192")
     protected void initializeTransitions()
     {
         // @formatter:off
@@ -145,7 +146,7 @@ public class MarkdownLineStateMachine
 
     protected Function<String, String> trimEnum()
     {
-        return s -> s.substring(s.indexOf(".") + 1).trim();
+        return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
     protected Function<String, String> trimPre()

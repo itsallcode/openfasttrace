@@ -6,6 +6,8 @@ env:
 
 jdk:
   - oraclejdk8
+  - oraclejdk10
+  - openjdk10
 
 cache:
   directories:
@@ -28,7 +30,7 @@ addons:
   coverity_scan:
     project:
       name: itsallcode/openfasttrace
-      version: 0.3.0
+      version: 0.5.4
       description: OpenFastTrace requirement tracing
     notification_email: christoph@users.sourceforge.net
     build_command_prepend: mvn clean

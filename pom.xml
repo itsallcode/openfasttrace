@@ -146,6 +146,8 @@
                     <failIfWarning>true</failIfWarning>
                     <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
                     <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
+                    <encoding>UTF-8</encoding>
+                    <dryRun>false</dryRun>
                 </configuration>
                 <executions>
                     <execution>

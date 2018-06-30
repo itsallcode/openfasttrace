@@ -30,6 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -257,5 +258,69 @@ public class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
         this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasTitle()
+    {
+        final String expectedReturn = "title";
+        when(this.itemMock.getTitle()).thenReturn(expectedReturn);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~wrong-return~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo(expectedReturn));
+    }
+
+    @Test
+    public void testGetTitle()
+    {
+        when(this.itemMock.getTitle()).thenReturn("title");
+        assertThat(this.linkedItem.getTitle(), equalTo("title"));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasNoTitle()
+    {
+        when(this.itemMock.getTitle()).thenReturn(null);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~id-name~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("id-name"));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasEmptyTitle()
+    {
+        when(this.itemMock.getTitle()).thenReturn("");
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~id-name~1"));
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("id-name"));
+    }
+
+    @Test
+    public void testGetTitleWithFallback_HasNothing()
+    {
+        when(this.itemMock.getTitle()).thenReturn("");
+        when(this.itemMock.getId()).thenReturn(null);
+        assertThat(this.linkedItem.getTitleWithFallback(), equalTo("???"));
+    }
+
+    @Test
+    public void testGetTracedLinks()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
+        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.ORPHANED);
+        final List<TracedLink> links = this.linkedItem.getTracedLinks();
+        final TracedLink expectedLinkA = new TracedLink(this.linkedItem, LinkStatus.ORPHANED);
+        final TracedLink expectedLinkB = new TracedLink(this.coveredLinkedItem, LinkStatus.COVERS);
+        assertThat(links, containsInAnyOrder(expectedLinkA, expectedLinkB));
+    }
+
+    @Test
+    public void testHasLinks_InitiallyFalse()
+    {
+        assertThat(this.linkedItem.hasLinks(), equalTo(false));
+    }
+
+    @Test
+    public void testHasLinks()
+    {
+        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.AMBIGUOUS);
+        assertThat(this.linkedItem.hasLinks(), equalTo(true));
     }
 }

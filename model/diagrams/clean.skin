@@ -1,8 +1,8 @@
 @startuml
 skinparam monochrome true
 skinparam style strictuml
-!pragma horizontalLineBetweenDifferentPackageAllowed
 
+!pragma horizontalLineBetweenDifferentPackageAllowed
 
 hide empty methods
 hide empty attributes

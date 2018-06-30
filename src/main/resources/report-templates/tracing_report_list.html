@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  OpenFastTrace
+  %%
+  Copyright (C) 2016 - 2018 itsallcode.org
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html>
+<head>
+<style type="text/css">
+  * {
+    font-family: helvetica, arial
+  }
+  del, ins {
+    color: red;
+  }
+  .ok {
+    color: green;
+  }
+  .nok {
+    color: red;
+    -webkit-text-decoration-style: wavy;
+    -moz-text-decoration-style: wavy;
+    text-decoration-style: wavy;
+  }
+  .part {
+    color: darkorange;
+  }
+  table, th, td {
+    border-collapse: collapse;
+    border: 1px solid darkgrey;
+    padding: 3px;
+    vertical-align: top;
+  }
+</style>
+<meta charset="UTF-8">
+<title>Specification Item list - OFT 0.5.1</title>
+</head>
+<body>
+  <nav>A - B - C - D - E - F - G - H - I - J - K - L - M - N - O -
+    P - Q - R - S - T - U - V - W - X - Y - Z</nav>
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Status</th>
+        <th rowspan="2">Covered</th>
+        <th rowspan="2">Artifact</th>
+        <th rowspan="2">Title / ID</th>
+        <th rowspan="2">Rev.</th>
+        <th colspan="2">In</th>
+        <th rowspan="2">Dupl.</th>
+        <th colspan="2">Out</th>
+        <th rowspan="2">Needs</th>
+      </tr>
+      <tr>
+        <th>&Delta;</th>
+        <th>&sum;</th>
+        <th>&Delta;</th>
+        <th>&sum;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="11">T</td>
+      </tr>
+      <tr>
+        <td class="ok">ok</td>
+        <td class="ok">deep</td>
+        <td>dsn</td>
+        <td id="dsn~design-item-a~1" alt="dsn~design-item-a~1">Title of a design item A</td>
+        <td>1</td>
+        <td class="ok">0</td>
+        <td>3</td>
+        <td class="ok">0</td>
+        <td class="ok">0</td>
+        <td>2</td>
+        <td>impl, utest, itest</td>
+      </tr>
+      <tr>
+        <td class="nok">not ok</td>
+        <td class="part">partially</td>
+        <td>dsn</td>
+        <td id="dsn~design-item-b~1">Title of a design item B</td>
+        <td>1</td>
+        <td class="nok">2</td>
+        <td>3</td>
+        <td class="ok">0</td>
+        <td class="ok">0</td>
+        <td>2</td>
+        <td>impl, <del>uman</del>, utest, <ins>itest</ins></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

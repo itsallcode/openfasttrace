@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  OpenFastTrace
+  %%
+  Copyright (C) 2016 - 2018 itsallcode.org
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="oft_tracing_report.css">
+  <meta charset="UTF-8">
+  <title>Specification Item list - OFT 0.5.1</title>
+</head>
+<body>
+  <nav>A - B - C - D - E - F - G - H - I - J - K - L - M - N - O - P - Q - R - S - <a href="#T">T</a> - U - V -
+    W - X - Y - Z</nav>
+
+  <main>
+  <section id="T">
+    <h2>T</h2>
+    <section class="sitem" id="dsn~design-item-a~1">
+      <details>
+        <summary title="dsn~design-item-a~1">
+          &#x2705; <b>Title of a design item A</b><small>, rev. 1, dsn</small>
+        </summary>
+        <p class="id">dsn~design-item-a~1<p>
+        <p>This is the description of the design item A</p>
+        <h6>Needs: impl, itest, utest</h6>
+        <h6>Out: 1 total</h6>
+        <ul class="out">
+          <li><a href="#arch~design-item-a~1">arch~design-item-a~1</a></li>
+        </ul>
+        <h6>In: 3 total</h6>
+        <ul class="in">
+          <li><a href="#impl~design-item-a~1">impl~design-item-a~1</a></li>
+          <li><a href="#itest~design-item-a~1">itest~design-item-a~1</a></li>
+          <li><a href="#utest~design-item-a~1">utest~design-item-a~1</a></li>
+        </ul>
+      </details>
+    </section>
+    <section class="sitem" id="dsn~design-item-b~2">
+      <details>
+        <summary title="dsn~design-item-b~2">
+         &#x274E; <b>Title of a design item B</b><small>, rev. 2, dsn (covered partially, 3 duplicates, 2 defect links)</small>
+        </summary>
+        <p>This is the description of the design item B</p>
+        <h6>Rationale:</h6>
+        <p>Here we have the rationale, that explains why the requirement is needed.</p>
+        <h6>Comment:</h6>
+        <p>A comment further explaining the requirement without being normative.</p>
+        <h6>
+          Needs: impl,
+          <ins>itest</ins>
+          ,
+          <del>uman</del>
+          , utest
+        </h6>
+        <h6>Out: 1 total</h6>
+        <ul class="out">
+          <li><a href="#arch~design-item-b~1">arch~design-item-b~1</a></li>
+        </ul>
+        <h6>In: 4 total, <span class="red">2 defect</span></h6>
+        <ul class="in">
+          <li><a href="#impl~design-item-b~1">impl~design-item-b~1</a></li>
+          <li><a href="#itest~design-item-b~1">itest~design-item-b~1</a> <span class="red">(missing)</span></li>
+          <li><a href="#utest~design-item-b~1">uman~design-item-b~1</a> <span class="red">(extra)</span></li>
+          <li><a href="#utest~design-item-b~1">utest~design-item-b~1</a></li>
+        </ul>
+        <p>Tags: <span class="tag">Tag A</span> <span class="tag">Tag B</span>
+      </details>
+    </section>
+  </section>
+  </main>
+</body>
+</html>

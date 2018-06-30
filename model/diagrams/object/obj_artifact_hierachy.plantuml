@@ -1,0 +1,32 @@
+@startuml
+!include ../clean.skin
+!pragma horizontalLineBetweenDifferentPackageAllowed
+
+together {
+    object ": Feature" as feat {
+        artifactType = "feat"
+    }
+    object ": User Requirement" as req {
+        artifactType = "req"
+    }
+    object ": Design Requirement" as dsn {
+        artifactType = "dsn"
+    }
+    object ": Implementation" as impl {
+        artifactType = "impl"
+    }
+    object ": Unit Test" as utest {
+        artifactType = "utest"
+    }
+    object ": Integration Test" as itest {
+        artifactType = "itest"
+    }
+
+    req -u-> feat : details
+    dsn -u-> req : details
+    impl -u-> dsn : implements
+    itest -u-> dsn : verifies
+    utest -u-> dsn : verifies  
+}
+
+@enduml

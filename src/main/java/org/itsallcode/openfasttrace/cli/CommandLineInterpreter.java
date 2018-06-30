@@ -22,17 +22,12 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -230,7 +225,7 @@ public class CommandLineInterpreter
         try
         {
             @SuppressWarnings("rawtypes")
-            final Enum enumValue = Enum.valueOf(enumType, stringValue);
+            final Enum enumValue = Enum.valueOf(enumType, stringValue.toUpperCase());
             return type.cast(enumValue);
         }
         catch (final IllegalArgumentException e)

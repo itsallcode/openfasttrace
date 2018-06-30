@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-
 import java.io.OutputStream;
 
 /**
@@ -32,12 +31,13 @@ import java.io.OutputStream;
 public interface Reportable
 {
     /**
-     * Render the plain text coverage report.
+     * Render the plain text coverage stream.
      *
      * @param outputStream
-     *            the output stream to which the report is rendered.
+     *            the output stream to which the stream is rendered.
      * @param verbosity
      *            the level of detail that is reported.
      */
-    void renderToStreamWithVerbosityLevel(OutputStream outputStream, ReportVerbosity verbosity);
+    public void renderToStreamWithVerbosityLevel(OutputStream outputStream,
+            ReportVerbosity verbosity);
 }

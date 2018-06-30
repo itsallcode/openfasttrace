@@ -195,7 +195,7 @@ public class SpecificationListBuilder implements ImportEventListener
     private SpecificationItem createNewSpecificationItem()
     {
         return this.itemBuilder //
-                .id(this.id)//
+                .id(this.id) //
                 .description(this.description.toString()) //
                 .rationale(this.rationale.toString()) //
                 .comment(this.comment.toString()) //

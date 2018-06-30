@@ -1,0 +1,60 @@
+@startuml
+!include ../clean.skin
+
+interface Viewable <<interface>> {
+  + render()
+  + render(level : int)
+}
+
+interface ViewableContainer <<interface>> {
+  + add(Viewable child)
+  # renderBeforeChildren()
+  # renderChildren()
+  # renderAfterChildren()
+}
+
+abstract class AbstractViewContainer <<abstract>> {
+  # children : List<Viewable>
+  + add(Viewable child)
+}
+
+
+together {
+    class HtmlSection {
+        + HtmlSection(id: String, title: String)
+    }
+    
+    class HtmlSpecificationItem {
+        + HtmlSpecificationItem(LinkedSpecificationItem item)
+    }
+    
+    class HtmlView {
+        + HtmlView(title: String)
+    }
+}
+
+class HtmlViewFactory{
+}
+
+abstract class AbstractViewFactory <<abstract>> {
+    + createView(title: String) : ViewableContainer
+    + createSection(id: String, title: String) : ViewableContainer
+    + createSpecificationItem(item: LinkedSpecificationItem) : ViewableContainer
+}
+
+enum ContentType {
+    + PLAIN_TEXT
+    + HTML
+}
+
+ViewableContainer -u-|> Viewable
+AbstractViewContainer .u.|> ViewableContainer
+HtmlView -u-|> AbstractViewContainer
+HtmlSection -u-|> AbstractViewContainer
+HtmlSpecificationItem .u.|> Viewable
+HtmlViewFactory -r-|> AbstractViewFactory
+HtmlViewFactory -u-> HtmlSpecificationItem : create
+HtmlViewFactory -u-> HtmlView : create
+HtmlViewFactory -u-> HtmlSection : create
+
+@enduml

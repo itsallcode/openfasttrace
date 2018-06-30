@@ -90,7 +90,7 @@ public final class FilterSettings
         return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
     }
 
-    @Generated("org.eclipse.Eclipse")
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -102,7 +102,7 @@ public final class FilterSettings
         return result;
     }
 
-    @Generated("org.eclipse.Eclipse")
+    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

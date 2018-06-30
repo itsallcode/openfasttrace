@@ -8,6 +8,10 @@
 
 Sonarcloud status:
 
+## Installation
+
+### Dependencies
+
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=bugs)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![Code smells](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=code_smells)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
@@ -22,11 +26,23 @@ Sonarcloud status:
 
 ## Project Information
 
+
 * ![Contributing guide](CONTRIBUTING.md)
 * ![OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
 * ![Command Line Usage](doc/usage.txt)
 * ![Design](doc/design.md)
 * ![System Requirements](doc/system_requirements.md)
+
+
+### On Linux
+
+#### Ubuntu or Debian
+
+    apt-get install openjdk-8-jre
+
+## Using OpenFastTrace
+
+Check the [user guide](doc/user_guide.md) for information on how to use OpenFastTrack.
 
 ## Installation
 
@@ -45,6 +61,7 @@ If you just want to run OFT:
 If you want to build OFT:
 
     apt-get install openjdk-8-jdk maven
+
 
 ## Development
 

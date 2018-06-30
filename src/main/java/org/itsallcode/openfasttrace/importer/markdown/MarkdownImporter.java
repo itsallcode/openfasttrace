@@ -236,7 +236,7 @@ class MarkdownImporter implements Importer
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
         this.listener.setId(id);
-        this.listener.setLocation(this.file.getPath().toString(), this.lineNumber);
+        this.listener.setLocation(this.file.getPath(), this.lineNumber);
         if (this.lastTitle != null)
         {
             this.listener.setTitle(this.lastTitle);

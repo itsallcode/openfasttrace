@@ -61,7 +61,7 @@ public class TestHtmlReport
     protected String renderToString()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new HtmlReport(this.traceMock, Newline.UNIX);
+        final Reportable report = new HtmlReport(this.traceMock);
         report.renderToStreamWithVerbosityLevel(outputStream, ReportVerbosity.ALL);
         final String outputAsString = outputStream.toString();
         return outputAsString;

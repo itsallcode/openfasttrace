@@ -68,7 +68,7 @@ class SpecobjectImporter implements Importer
             final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.file,
                     this.listener);
             final TreeContentHandler treeContentHandler = config.build();
-            new ContentHandlerAdapter(this.file.getPath().toString(), xmlReader,
+            new ContentHandlerAdapter(this.file.getPath(), xmlReader,
                     new TreeBuildingContentHandler(treeContentHandler)).registerListener();
             final InputSource input = new InputSource(reader);
             xmlReader.parse(input);

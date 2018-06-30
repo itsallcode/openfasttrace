@@ -77,6 +77,7 @@ The list below show all build time dependencies in alphabetical order. Note that
 | [JUnit](https://junit.org/junit4/index.html)                                 | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
 | [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
+| [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
 ### Essential Build Steps
 
@@ -103,6 +104,25 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 ```bash
 mvn license:update-project-license license:update-file-header
+```
+
+### Run local sonar analysis
+
+```bash
+mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.organization=itsallcode \
+    -Dsonar.login=[token]
+```
+
+See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace
+
+### Run [mutation testing](http://pitest.org)
+
+```bash
+mvn org.pitest:pitest-maven:mutationCoverage
+# speed up repeated analysis with history
+mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
 ```
 
 ### Publishing to JCenter

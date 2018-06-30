@@ -27,7 +27,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
@@ -38,10 +37,9 @@ import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 
 public class HtmlReport implements Reportable
 {
-
     private final Trace trace;
 
-    public HtmlReport(final Trace trace, final Newline newline)
+    public HtmlReport(final Trace trace)
     {
         this.trace = trace;
     }
@@ -50,12 +48,12 @@ public class HtmlReport implements Reportable
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        final ViewFactory factory = new HtmlViewFactory(outputStream);
+        final ViewFactory factory = HtmlViewFactory.create(outputStream);
         final ViewableContainer view = factory.createView("", "Specification items by title");
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getTitleWithFallback));
         String initial = "\0";
-        ViewableContainer section = null;
+        ViewableContainer section = factory.createSection(initial, initial);
         for (final LinkedSpecificationItem item : items)
         {
             final String currentInitial = getInitial(item);

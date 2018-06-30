@@ -54,14 +54,14 @@ public class TestCliArguments
     public void testGetCommandWithUnnamedValuesNull()
     {
         this.arguments.setUnnamedValues(null);
-        assertThat(this.arguments.getCommand(), isEmptyOrNullString());
+        assertThat(this.arguments.getCommand().isPresent(), is(false));
     }
 
     @Test
     public void testGetCommandWithUnnamedValuesEmpty()
     {
         this.arguments.setUnnamedValues(emptyList());
-        assertThat(this.arguments.getCommand(), isEmptyOrNullString());
+        assertThat(this.arguments.getCommand().isPresent(), is(false));
     }
 
     @Test

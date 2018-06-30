@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.cli;
 
+import java.util.Optional;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -63,7 +65,12 @@ public class CliStarter
     void run()
     {
         Performable performable = null;
-        switch (this.arguments.getCommand())
+        final Optional<String> command = this.arguments.getCommand();
+        if (!command.isPresent())
+        {
+            throw new IllegalStateException("Command missing trying to execute OFT mode.");
+        }
+        switch (command.get())
         {
         case ConvertCommand.COMMAND_NAME:
             performable = new ConvertCommand(this.arguments);
@@ -72,7 +79,8 @@ public class CliStarter
             performable = new TraceCommand(this.arguments);
             break;
         default:
-            throw new IllegalStateException("Command missing trying to execute OFT mode.");
+            throw new IllegalStateException(
+                    "Unknown command '" + command.get() + "' trying to execute OFT mode.");
         }
         final ExitStatus status = ExitStatus.fromBoolean(performable.run());
         exit(status);

@@ -92,13 +92,13 @@ public class CliArguments
      * 
      * @return the OFT command
      */
-    public String getCommand()
+    public Optional<String> getCommand()
     {
         if (this.unnamedValues == null || this.unnamedValues.isEmpty())
         {
-            return null;
+            return Optional.empty();
         }
-        return this.unnamedValues.get(0);
+        return Optional.of(this.unnamedValues.get(0));
     }
 
     /**
@@ -141,17 +141,18 @@ public class CliArguments
     {
         if (this.outputFormat == null)
         {
-            if (this.getCommand().equals(TraceCommand.COMMAND_NAME))
+            final Optional<String> command = this.getCommand();
+            if (command.isPresent() && command.get().equals(TraceCommand.COMMAND_NAME))
             {
                 return ReportConstants.DEFAULT_REPORT_FORMAT;
             }
-            else if (this.getCommand().equals(ConvertCommand.COMMAND_NAME))
+            else if (command.isPresent() && command.get().equals(ConvertCommand.COMMAND_NAME))
             {
                 return ExporterConstants.DEFAULT_OUTPUT_FORMAT;
             }
             else
             {
-                throw new IllegalStateException("Illegal command \"" + this.getCommand()
+                throw new IllegalStateException("Illegal command \"" + command
                         + "\" encountered trying to set default output format.");
             }
         }

@@ -6,6 +6,12 @@
     <version>0.6.0</version>
     <name>OpenFastTrace</name>
     <description>Free requirement tracking suite</description>
+    <url>https://github.com/itsallcode/openfasttrace</url>
+    <scm>
+        <connection>scm:git:https://github.com/itsallcode/openfasttrace.git</connection>
+        <developerConnection>scm:git:https://github.com/itsallcode/openfasttrace.git</developerConnection>
+        <url>https://github.com/itsallcode/openfasttrace</url>
+    </scm>
 
     <repositories>
         <repository>
@@ -184,6 +190,11 @@
                     <mainClass>org.itsallcode.openfasttrace.cli.CliStarter</mainClass>
                     <commandlineArgs>trace doc src/main/java src/test/java</commandlineArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.4.0</version>
             </plugin>
         </plugins>
         <pluginManagement>

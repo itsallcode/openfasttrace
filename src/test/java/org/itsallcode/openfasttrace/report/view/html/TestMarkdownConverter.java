@@ -29,6 +29,7 @@ import org.junit.Test;
 
 public class TestMarkdownConverter
 {
+    private static final String LINE_SEPARATOR = "\n";
     private MarkdownConverter converter;
 
     @Before
@@ -40,17 +41,16 @@ public class TestMarkdownConverter
     @Test
     public void testConvertPreformatted()
     {
-        final String original = "Before preformatted" + System.lineSeparator() //
-                + "    first line" + System.lineSeparator() //
-                + "       second line" + System.lineSeparator() //
-                + "    " + System.lineSeparator() //
-                + "     third line   " + System.lineSeparator() //
+        final String original = "Before preformatted" + LINE_SEPARATOR //
+                + "    first line" + LINE_SEPARATOR //
+                + "       second line" + LINE_SEPARATOR //
+                + "    " + LINE_SEPARATOR //
+                + "     third line   " + LINE_SEPARATOR //
                 + "After preformatted";
         final String expected = "<p>Before preformatted</p>" //
                 + "<pre>" //
-                + "first line" + System.lineSeparator() //
-                + "   second line" + System.lineSeparator() //
-                + System.lineSeparator() //
+                + "first line" + LINE_SEPARATOR //
+                + "   second line" + LINE_SEPARATOR + LINE_SEPARATOR //
                 + " third line   " //
                 + "</pre>" //
                 + "<p>After preformatted</p>";
@@ -65,11 +65,11 @@ public class TestMarkdownConverter
     @Test
     public void testConvertUnorderedList()
     {
-        final String original = "Before list" + System.lineSeparator() //
-                + "* first item" + System.lineSeparator() //
-                + "  * second item" + System.lineSeparator() //
-                + "   *  third item   " + System.lineSeparator() //
-                + System.lineSeparator() //
+        final String original = "Before list" + LINE_SEPARATOR //
+                + "* first item" + LINE_SEPARATOR //
+                + "  * second item" + LINE_SEPARATOR //
+                + "   *  third item   " + LINE_SEPARATOR //
+                + LINE_SEPARATOR //
                 + "After list";
         final String expected = "<p>Before list</p>" //
                 + "<ul>" //
@@ -89,12 +89,12 @@ public class TestMarkdownConverter
     @Test
     public void testConvertUnorderedListWithMultilineItems()
     {
-        final String original = "Before list" + System.lineSeparator() //
-                + "* first item" + System.lineSeparator() //
-                + "first item continued" + System.lineSeparator() //
-                + "  * second item" + System.lineSeparator() //
-                + "    second item continued" + System.lineSeparator() //
-                + System.lineSeparator() //
+        final String original = "Before list" + LINE_SEPARATOR //
+                + "* first item" + LINE_SEPARATOR //
+                + "first item continued" + LINE_SEPARATOR //
+                + "  * second item" + LINE_SEPARATOR //
+                + "    second item continued" + LINE_SEPARATOR //
+                + LINE_SEPARATOR //
                 + "After list";
         final String expected = "<p>Before list</p>" //
                 + "<ul>" //
@@ -109,11 +109,11 @@ public class TestMarkdownConverter
     @Test
     public void testConvertOrderedList()
     {
-        final String original = "Before list" + System.lineSeparator() //
-                + "1. first item" + System.lineSeparator() //
-                + "  1. second item" + System.lineSeparator() //
-                + "   1234.  third item   " + System.lineSeparator() //
-                + System.lineSeparator() //
+        final String original = "Before list" + LINE_SEPARATOR //
+                + "1. first item" + LINE_SEPARATOR //
+                + "  1. second item" + LINE_SEPARATOR //
+                + "   1234.  third item   " + LINE_SEPARATOR //
+                + LINE_SEPARATOR //
                 + "After list";
         final String expected = "<p>Before list</p>" //
                 + "<ol>" //
@@ -152,10 +152,10 @@ public class TestMarkdownConverter
     @Test
     public void testChainedParagraphs()
     {
-        final String original = "First paragraph" + System.lineSeparator() //
-                + "... continued" + System.lineSeparator() //
-                + System.lineSeparator() //
-                + "Second paragraph " + System.lineSeparator() //
+        final String original = "First paragraph" + LINE_SEPARATOR //
+                + "... continued" + LINE_SEPARATOR //
+                + LINE_SEPARATOR //
+                + "Second paragraph " + LINE_SEPARATOR //
                 + "... also continued";
         final String expected = "<p>First paragraph ... continued</p>" //
                 + "<p>Second paragraph ... also continued</p>";

@@ -60,6 +60,7 @@ The list below show all build time dependencies in alphabetical order. Note that
 | [JUnit](https://junit.org/junit4/index.html)                                 | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
 | [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
+| [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
 ### Essential Build Steps
 

@@ -72,9 +72,10 @@ class TagImporter implements Importer
                 processLine(lineNumber, line);
             }
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
-            throw new ImporterException("Error reading file " + this.file + ":" + lineNumber, e);
+            throw new ImporterException("Error reading \"" + this.file + "\" at " + lineNumber,
+                    exception);
         }
     }
 

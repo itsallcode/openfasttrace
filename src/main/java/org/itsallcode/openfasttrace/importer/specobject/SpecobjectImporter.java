@@ -73,9 +73,9 @@ class SpecobjectImporter implements Importer
             final InputSource input = new InputSource(reader);
             xmlReader.parse(input);
         }
-        catch (SAXException | ParserConfigurationException | IOException e)
+        catch (SAXException | ParserConfigurationException | IOException exception)
         {
-            throw new ImporterException("Error reading file " + this.file, e);
+            throw new ImporterException("Error reading \"" + this.file + "\"", exception);
         }
     }
 }

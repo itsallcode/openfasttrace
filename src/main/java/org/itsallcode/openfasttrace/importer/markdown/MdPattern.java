@@ -33,6 +33,7 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
 public enum MdPattern
 {
     // [impl->dsn~md.specification-item-title~1]
+    // [impl->dsn~md.artifact-forwarding-notation~1]
 
     // @formatter:off
     COMMENT("Comment:\\s*"),
@@ -43,10 +44,24 @@ public enum MdPattern
     DESCRIPTION("Description:\\s*"),
     EMPTY("(\\s*)"),
     EVERYTHING("(.*)"),
+    FORWARD(".*?("
+            + PatternConstants.ARTIFACT_TYPE
+            + "\\s*"
+            + MarkdownForwardingSpecificationItem.FORWARD_MARKER
+            + "\\s*"
+            + PatternConstants.ARTIFACT_TYPE
+            + "(?:,\\s*"
+            + PatternConstants.ARTIFACT_TYPE
+            + ")*"
+            + "\\s*"
+            + MarkdownForwardingSpecificationItem.ORIGINAL_MARKER
+            + "\\s*"
+            + SpecificationItemId.ID_PATTERN
+            + ").*?"),
     ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
     NEEDS_INT("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
     NEEDS("Needs:\\s*"),
-    NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + MdPattern.PatternConstants.BULLETS
+    NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "(?:.*\\W)?" //
             + "(\\p{Alpha}+)" //
             + "(?:\\W.*)?"),
@@ -55,7 +70,7 @@ public enum MdPattern
     STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
     TAGS_INT("Tags:\\s*(\\w+(?:,\\s*\\w+)*)"),
     TAGS("Tags:\\s*"),
-    TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + MdPattern.PatternConstants.BULLETS
+    TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "\\s*" //
             + "(.*)"),
     TITLE("#+\\s*(.*)");
@@ -85,6 +100,7 @@ public enum MdPattern
             // not instantiable
         }
 
+        public static final String ARTIFACT_TYPE = "[a-zA-Z]+";
         public static final String BULLETS = "[+*-]";
         private static final String UP_TO_3_WHITESPACES = "\\s{0,3}";
         // [impl->dsn~md.requirement-references~1]

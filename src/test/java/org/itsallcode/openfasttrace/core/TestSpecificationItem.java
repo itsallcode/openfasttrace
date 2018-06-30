@@ -88,7 +88,7 @@ public class TestSpecificationItem
         assertThat(item.getComment(), equalTo(COMMENT));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testBuildComplexSpecificationItem()
     {
@@ -135,7 +135,7 @@ public class TestSpecificationItem
         assertThat(item.needsCoverageByArtifactType(NOT_NEEDED_ARTIFACT_TYPE), equalTo(false));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testNeedsCoverage()
     {
@@ -145,7 +145,7 @@ public class TestSpecificationItem
         assertThat(builder.build().needsCoverage(), equalTo(true));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testLocationIsNullByDefault()
     {
@@ -195,14 +195,14 @@ public class TestSpecificationItem
         assertThat(item.getDependOnIds(), equalTo(parseIds("foo~bar~3")));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testDefaultStatusIsApproved()
     {
         assertThat(createTestItemBuilder().build().getStatus(), equalTo(ItemStatus.APPROVED));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testBuildWithStatus()
     {
@@ -210,14 +210,14 @@ public class TestSpecificationItem
                 equalTo(ItemStatus.REJECTED));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testByDefaultTagListIsEmpty()
     {
         assertThat(createTestItemBuilder().build().getTags(), emptyIterable());
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test
     public void testTagBuilder()
     {
@@ -225,10 +225,24 @@ public class TestSpecificationItem
                 containsInAnyOrder("the_tag"));
     }
 
-    // [utest->dsn~specification-item~2]
+    // [utest->dsn~specification-item~3]
     @Test(expected = IllegalStateException.class)
     public void testBuildingWithOutIdThrowsExepction()
     {
         new SpecificationItem.Builder().build();
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    public void testForwardsIsFalseByDefault()
+    {
+        assertThat(createSimpleItem().build().isForwarding(), equalTo(false));
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    public void testSetForwards()
+    {
+        assertThat(createSimpleItem().forwards(true).build().isForwarding(), equalTo(true));
     }
 }

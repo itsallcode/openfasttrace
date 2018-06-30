@@ -67,7 +67,7 @@ public class ZipFileImporter implements Importer
         }
         catch (final IOException e)
         {
-            throw new ImporterException("Error reading file " + this.file, e);
+            throw new ImporterException("Error reading \"" + this.file + "\"", e);
         }
     }
 

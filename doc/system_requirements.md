@@ -183,6 +183,21 @@ Tags are a way to label an artifact intended for grouping.
 
 Needs: dsn
 
+#### Forwarding Needed Coverage
+`req~forwarding_needed_coverage~1`
+
+OFT allows users to forward needed coverage from one artifact type to one or more different types.
+
+Rationale:
+
+Often a system requirement does not affect the high-level architecture. In this case it is convenient for the architect to hand it down to lower levels directly.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
 ### Supported Formats
 
 #### Markdown
@@ -211,6 +226,8 @@ Covers:
 Needs: dsn
 
 ##### Markdown Outline Readable
+`req~markdown-outline-readable~1`
+
 The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
 
 Rationale:
@@ -231,6 +248,21 @@ In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elek
 Rationale:
 
 This allows stepwise migration to the OFT standard format. The Elektrobit format is a little bit closer to ReqM2.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+
+Needs: dsn
+
+##### Artifact Type Forwarding in Markdown
+`req~artifact-type-forwarding-in-markdown~1`
+
+The Markdown format features a compact way to forward a requirement from the artifact type that was originally required to one or more different artifact types.
+
+Rationale:
+
+Often a system requirement does not affect the high-level architecture. In this case it is convenient for the architect to hand it down to lower levels directly.
 
 Covers:
 

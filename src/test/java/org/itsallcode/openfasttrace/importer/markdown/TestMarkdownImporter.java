@@ -47,7 +47,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TestImportMarkdown
+public class TestMarkdownImporter
 {
     private static final String TAG2 = "Tag2";
     private static final String TAG1 = "Tag1";
@@ -158,7 +158,7 @@ public class TestImportMarkdown
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "## " + TITLE //
+        return "# " + TITLE //
                 + "\n" //
                 + ID1 + "\n" //
                 + "\n" + ID2 + "\n" //
@@ -209,7 +209,7 @@ public class TestImportMarkdown
     // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
-        return "##### " + TITLE //
+        return "# " + TITLE //
                 + "\n" //
                 + "`" + LEGACY_ID + "`" //
                 + "\n" //
@@ -264,4 +264,27 @@ public class TestImportMarkdown
         inOrder.verifyNoMoreInteractions();
     }
 
+    // [utest->dsn~md.artifact-forwarding-notation~1]
+    @Test
+    public void testForwardRequirement()
+    {
+        runImporterOnText("arch-->dsn:req~foobar~2\n" //
+                + "   * `dsn --> impl, utest,itest : arch~bar.zoo~123`");
+        final InOrder inOrder = inOrder(this.listenerMock);
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("arch~foobar~2"));
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("req~foobar~2"));
+        inOrder.verify(this.listenerMock).addNeededArtifactType("dsn");
+        inOrder.verify(this.listenerMock).setForwards(true);
+        inOrder.verify(this.listenerMock).endSpecificationItem();
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("dsn~bar.zoo~123"));
+        inOrder.verify(this.listenerMock)
+                .addCoveredId(SpecificationItemId.parseId("arch~bar.zoo~123"));
+        inOrder.verify(this.listenerMock).addNeededArtifactType("impl");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("utest");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("itest");
+        inOrder.verify(this.listenerMock).setForwards(true);
+        inOrder.verify(this.listenerMock).endSpecificationItem();
+    }
 }

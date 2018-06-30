@@ -226,4 +226,10 @@ public class SpecificationListBuilder implements ImportEventListener
     {
         this.items.add(item);
     }
+
+    @Override
+    public void setForwards(final boolean forwards)
+    {
+        this.itemBuilder.forwards(forwards);
+    }
 }

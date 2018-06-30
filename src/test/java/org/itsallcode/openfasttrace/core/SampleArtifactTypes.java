@@ -24,11 +24,12 @@ package org.itsallcode.openfasttrace.core;
 
 public class SampleArtifactTypes
 {
-    public static String DSN = "dsn";
-    public static String IMPL = "impl";
-    public static String ITEST = "itest";
-    public static String OMAN = "oman";
-    public static String REQ = "req";
-    public static String UTEST = "utest";
-    public static String UMAN = "uman";
+    public static final String ARCH = "arch";
+    public static final String DSN = "dsn";
+    public static final String IMPL = "impl";
+    public static final String ITEST = "itest";
+    public static final String OMAN = "oman";
+    public static final String REQ = "req";
+    public static final String UTEST = "utest";
+    public static final String UMAN = "uman";
 }

@@ -74,7 +74,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("Error reading file " + supportedPath);
+        this.thrown.expectMessage("Error reading \"" + supportedPath + "\"");
         createAndInitialize().createImporter(InputFile.forPath(supportedPath), null).runImport();
     }
 

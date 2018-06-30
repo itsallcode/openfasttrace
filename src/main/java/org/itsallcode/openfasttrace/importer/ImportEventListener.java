@@ -147,4 +147,14 @@ public interface ImportEventListener
      *            the location
      */
     public void setLocation(Location location);
+
+    /**
+     * Set to <code>true</code> if the specification item forwards needed
+     * coverage
+     * 
+     * @param forwards
+     *            <code>true</code> if the specification item forwards needed
+     *            coverage
+     */
+    public void setForwards(boolean forwards);
 }

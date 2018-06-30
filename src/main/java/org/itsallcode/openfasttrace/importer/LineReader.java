@@ -53,10 +53,10 @@ public class LineReader
                 consumer.readLine(currentLineNumber, line);
             }
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
-            throw new ImporterException("Error reading file " + this.file + ":" + currentLineNumber,
-                    e);
+            throw new ImporterException(
+                    "Error reading \"" + this.file + "\" at line " + currentLineNumber, exception);
         }
     }
 

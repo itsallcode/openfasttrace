@@ -28,11 +28,11 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 
-* ![Contributing guide](CONTRIBUTING.md)
-* ![OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
-* ![Command Line Usage](doc/usage.txt)
-* ![Design](doc/design.md)
-* ![System Requirements](doc/system_requirements.md)
+* [Contributing guide](CONTRIBUTING.md)
+* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [Command Line Usage](doc/usage.txt)
+* [Design](doc/design.md)
+* [System Requirements](doc/system_requirements.md)
 
 ## Download
 

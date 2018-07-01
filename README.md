@@ -1,5 +1,13 @@
 # <img src="src/main/resources/openfasttrace_logo.svg" alt="OFT logo" width="150"/> OpenFastTrace
 
+## What is OpenFastTrace?
+
+OpenFastTrace is a requirement tracing suite. Requirement tracing helps you keeping track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you getting rid of them.
+
+You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide.md).
+
+## Project Information
+
 [![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
 [![Circle CI](https://circleci.com/gh/itsallcode/openfasttrace.svg?style=svg)](https://circleci.com/gh/itsallcode/openfasttrace)
 [![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
@@ -7,10 +15,6 @@
 [![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg)](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
 
 Sonarcloud status:
-
-## Installation
-
-### Dependencies
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=bugs)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
@@ -24,21 +28,54 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode%3Aopenfasttrace%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace%3Adevelop)
 
-## Project Information
+* [Contributing guide](CONTRIBUTING.md)
+* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [User Guide](doc/user_guide.md)
+* [Command Line Usage](doc/usage.txt)
+* [Design](doc/design.md)
+* [System Requirements](doc/system_requirements.md)
 
+## Download
 
-* ![Contributing guide](CONTRIBUTING.md)
-* ![OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
-* ![Command Line Usage](doc/usage.txt)
-* ![Design](doc/design.md)
-* ![System Requirements](doc/system_requirements.md)
+Download the executable jar at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/):
 
+* [openfasttrace-1.0.0.jar](https://jcenter.bintray.com/org/itsallcode/openfasttrace/1.0.0/openfasttrace-1.0.0.jar)
 
-### On Linux
+### Maven
 
-#### Ubuntu or Debian
+To use OpenFastTrace as a dependency in your maven project add this to your `pom.xml`:
 
-    apt-get install openjdk-8-jre
+```xml
+<repositories>
+    <repository>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://jcenter.bintray.com</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>org.itsallcode</groupId>
+        <artifactId>openfasttrace</artifactId>
+        <version>1.0.0</version>
+        <scope>compile</scope>
+    </dependency>
+</dependencies>
+```
+
+### Gradle
+
+To use OpenFastTrace as a dependency in your gradle project:
+
+```groovy
+repositories {
+    jcenter()
+}
+dependencies {
+    compile "org.itsallcode:openfasttrace:1.0.0"
+}
+```
 
 ## Using OpenFastTrace
 
@@ -50,9 +87,9 @@ Check the [user guide](doc/user_guide.md) for information on how to use OpenFast
 
 OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
 
-### Installation on Linux
+#### Installation of runtime dependencies on Linux
 
-#### Ubuntu or Debian
+##### Ubuntu or Debian
 
 If you just want to run OFT:
 
@@ -61,7 +98,6 @@ If you just want to run OFT:
 If you want to build OFT:
 
     apt-get install openjdk-8-jdk maven
-
 
 ## Development
 
@@ -139,14 +175,15 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
     </servers>
     ```
 
-2. Update version in `pom.xml`, commit and push.
-3. Run command
+1. Checkout the `develop` branch.
+1. Update version in `pom.xml` and `README.md`, commit and push.
+1. Run command
 
     ```bash
     mvn deploy
     ```
 
-4. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
-5. Sign in at [bintray.com](https://bintray.com)
-6. Go to the [bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
-7. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link.
+1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
+1. Sign in at [bintray.com](https://bintray.com)
+1. Go to the [bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
+1. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/)

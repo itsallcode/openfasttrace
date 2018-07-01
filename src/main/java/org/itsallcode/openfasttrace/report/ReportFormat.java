@@ -1,5 +1,9 @@
 package org.itsallcode.openfasttrace.report;
 
+import static java.util.stream.Collectors.joining;
+
+import java.util.Arrays;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -55,6 +59,11 @@ public enum ReportFormat
                 return value;
             }
         }
-        throw new IllegalArgumentException("Unknown report format \"" + format + "\"");
+        final String availableValues = Arrays.stream(values()) //
+                .map(ReportFormat::toString) //
+                .map(s -> '"' + s + '"') //
+                .collect(joining(", "));
+        throw new IllegalArgumentException(
+                "Unknown report format \"" + format + "\". Supported formats: " + availableValues);
     }
 }

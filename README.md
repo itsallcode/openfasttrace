@@ -39,7 +39,7 @@ Sonarcloud status:
 
 Download the executable jar at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/):
 
-* [openfasttrace-1.0.0.jar](https://jcenter.bintray.com/org/itsallcode/openfasttrace/1.0.0/:openfasttrace-1.0.0.jar)
+* [openfasttrace-1.0.0.jar](https://jcenter.bintray.com/org/itsallcode/openfasttrace/1.0.0/openfasttrace-1.0.0.jar)
 
 ### Maven
 

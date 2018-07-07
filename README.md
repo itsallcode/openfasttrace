@@ -47,14 +47,6 @@ Download the executable jar at [jcenter](https://jcenter.bintray.com/org/itsallc
 To use OpenFastTrace as a dependency in your maven project add this to your `pom.xml`:
 
 ```xml
-<repositories>
-    <repository>
-        <id>central</id>
-        <name>bintray</name>
-        <url>http://jcenter.bintray.com</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>org.itsallcode</groupId>
@@ -188,3 +180,5 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
 1. Sign in at [bintray.com](https://bintray.com)
 1. Go to the [bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
 1. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/)
+1. Publish to maven central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/.
+

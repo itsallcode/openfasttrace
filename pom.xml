@@ -3,10 +3,38 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>OpenFastTrace</name>
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>redcatbear</id>
+            <url>https://github.com/redcatbear</url>
+            <organization>itsallcode</organization>
+            <organizationUrl>https://github.com/itsallcode</organizationUrl>
+        </developer>
+        <developer>
+            <id>sascha15432</id>
+            <url>https://github.com/sascha15432</url>
+            <organization>itsallcode</organization>
+            <organizationUrl>https://github.com/itsallcode</organizationUrl>
+        </developer>
+        <developer>
+            <id>kaklakariada</id>
+            <url>https://github.com/kaklakariada</url>
+            <organization>itsallcode</organization>
+            <organizationUrl>https://github.com/itsallcode</organizationUrl>
+            <email>github@chp1.net</email>
+        </developer>
+    </developers>
     <scm>
         <connection>scm:git:https://github.com/itsallcode/openfasttrace.git</connection>
         <developerConnection>scm:git:https://github.com/itsallcode/openfasttrace.git</developerConnection>

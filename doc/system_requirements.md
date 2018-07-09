@@ -414,10 +414,21 @@ Covers:
 
 Needs: dsn
 
-#### Include Only Tags
-`req~include-only-tags~1`
+#### Include Items Where at Least One Tag Matches
+`req~include-items-where-at-least-on-tag-matches~1`
 
-OFT gives users the option to include only specification items contained in configurable set of tags during processing.
+OFT gives users the option to include only specification items that have at least one tag from a configurable set of tags during processing.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+#### Include Items That Don't Have Tags Or Where at Least One Tag Matches 
+`req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
+
+OFT gives users the option to include only specification items that either do not have tags or have at least one tag from a configurable set of tags during processing.
 
 Covers:
 

@@ -33,11 +33,13 @@ public final class FilterSettings
 {
     private final Set<String> artifactTypes;
     private final Set<String> tags;
+    private final boolean withoutTags;
 
     private FilterSettings(final Builder builder)
     {
         this.artifactTypes = builder.artifactTypes;
         this.tags = builder.tags;
+        this.withoutTags = builder.withoutTags;
     }
 
     /**
@@ -61,6 +63,14 @@ public final class FilterSettings
     }
 
     /**
+     * @return <code>true</code> if the filter allows items with no tags
+     */
+    public boolean withoutTags()
+    {
+        return this.withoutTags;
+    }
+
+    /**
      * Check if the artifact type filter is set.
      * 
      * @return <code>true</code> if the artifact type filter is set
@@ -77,7 +87,7 @@ public final class FilterSettings
      */
     public boolean isTagCriteriaSet()
     {
-        return this.tags != null && !this.tags.isEmpty();
+        return !this.withoutTags() || (this.tags != null && !this.tags.isEmpty());
     }
 
     /**
@@ -98,6 +108,7 @@ public final class FilterSettings
         int result = 1;
         result = prime * result
                 + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
+        result = prime * result + (this.withoutTags ? 1231 : 1237);
         result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
         return result;
     }
@@ -127,6 +138,10 @@ public final class FilterSettings
             }
         }
         else if (!this.artifactTypes.equals(other.artifactTypes))
+        {
+            return false;
+        }
+        if (this.withoutTags != other.withoutTags)
         {
             return false;
         }
@@ -162,6 +177,7 @@ public final class FilterSettings
     {
         private Set<String> artifactTypes = Collections.emptySet();
         private Set<String> tags = Collections.emptySet();
+        private boolean withoutTags = true;
 
         /**
          * Set the list of artifact types that the filter matches.
@@ -186,6 +202,19 @@ public final class FilterSettings
         public Builder tags(final Set<String> tags)
         {
             this.tags = tags;
+            return this;
+        }
+
+        /**
+         * Configure if filter allows items that have no tags.
+         * 
+         * @param withoutTags
+         *            <code>true</code> to match items without any tags
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder withoutTags(final boolean noTags)
+        {
+            this.withoutTags = noTags;
             return this;
         }
 

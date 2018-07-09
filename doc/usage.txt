@@ -22,8 +22,12 @@ Common options:
   -i, --ignore-artifact-types  Define a comma-separated list of artifact types
                                to be ignored during import.
   -n, --newline format         Newline format one of "unix", "windows", "oldmac"
-  -a, --wanted-artifact-types  Filter out all but the artifact types in the
+  -a, --wanted-artifact-types  Import only specification items contained in the
                                comma-separated list
+  -t, --wanted-tags            Import only specification items that have at
+                               least one tag contained in the comma-separated
+                               list. Add a single underscore as first item in
+                               the list to also import items without any tags.
 
 Returns:
   0   on success

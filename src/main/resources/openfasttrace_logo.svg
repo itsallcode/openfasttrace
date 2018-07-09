@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   #%L
   OpenFastTrace
@@ -21,107 +21,86 @@
   #L%
   -->
 
-
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Creator: fig2dev Version 3.2 Patchlevel 5e -->
+
 <!-- CreationDate: Sun Apr 10 12:45:01 2016 -->
+
 <!-- Magnification: 1.050 -->
-<svg	xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	width="9.4in" height="3.3in"
-	viewBox="2744 2980 11282 3960">
-<g style="stroke-width:.025in; fill:none">
-<!-- Line: box -->
-<rect x="2834" y="3070" width="11102" height="3779" rx="314" 
-style="stroke:#565656;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#c5c5c5;
-"/>
-<!-- Line -->
-<polygon points="3307,5433
-4251,3543
-6141,3543
-6614,4488
-5669,6377
-4015,6377
-3307,5433
-3307,5433
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#00eb00;
-"/>
-<!-- Line -->
-<polygon points="10866,3543
-11574,4960
-10866,6377
-11811,6377
-12519,4960
-11811,3543
-10866,3543
-10866,3543
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#ffffff;
-"/>
-<!-- Line -->
-<polygon points="7086,3543
-5669,6377
-6614,6377
-7086,5433
-8031,5433
-8503,4488
-9448,4488
-8976,3543
-7086,3543
-7086,3543
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#00eb00;
-"/>
-<!-- Line -->
-<polyline points="7559,4488
-8503,4488
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-"/>
-<!-- Line -->
-<polygon points="4724,4488
-4251,5433
-5196,5433
-5669,4488
-4724,4488
-4724,4488
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#c5c5c5;
-"/>
-<!-- Line -->
-<polygon points="9448,4488
-8976,3543
-10866,3543
-11338,4488
-10393,4488
-9448,6377
-8503,6377
-9448,4488
-9448,4488
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#00eb00;
-"/>
-<!-- Line -->
-<polygon points="11811,3543
-12519,4960
-11811,6377
-12755,6377
-13464,4960
-12755,3543
-11811,3543
-11811,3543
-" style="stroke:#006000;stroke-width:111;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#ffffff;
-"/>
-</g>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="9.4in"
+   height="3.3in"
+   viewBox="2744 2980 11282 3960"
+   version="1.1"
+   id="svg20"
+   sodipodi:docname="openfasttrace_logo.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata26">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs24" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2493"
+     inkscape:window-height="1545"
+     id="namedview22"
+     showgrid="false"
+     inkscape:zoom="0.42331562"
+     inkscape:cx="83.861777"
+     inkscape:cy="158.4"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg20" />
+  <polygon
+     id="polygon4"
+     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6141,3543 6614,4488 5669,6377 4015,6377 3307,5433 4251,3543 " />
+  <polygon
+     id="polygon6"
+     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="10866,6377 11811,6377 12519,4960 11811,3543 10866,3543 11574,4960 " />
+  <polygon
+     id="polygon8"
+     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="6614,6377 7086,5433 8031,5433 8503,4488 9448,4488 8976,3543 7086,3543 5669,6377 " />
+  <polyline
+     id="polyline10"
+     style="fill:none;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="7559,4488 8503,4488 " />
+  <polygon
+     id="polygon12"
+     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;fill-opacity:1"
+     points="5196,5433 5669,4488 4724,4488 4251,5433 " />
+  <polygon
+     id="polygon14"
+     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="10866,3543 11338,4488 10393,4488 9448,6377 8503,6377 9448,4488 8976,3543 " />
+  <polygon
+     id="polygon16"
+     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
+     points="11811,6377 12755,6377 13464,4960 12755,3543 11811,3543 12519,4960 " />
 </svg>

@@ -27,9 +27,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.FilterSettings;
@@ -181,40 +179,55 @@ public class TestSpecificationListBuilder
     @Test
     public void testFilterSpecificationItemsByTags()
     {
-        final SpecificationListBuilder builder = createListBuilderFilteringByTags("client",
-                "server");
-        builder.beginSpecificationItem();
-        final SpecificationItemId idA = SpecificationItemId.createId("dsn", "in-A", 1);
-        builder.setId(idA);
-        builder.addTag("client");
-        builder.addTag("database");
-        builder.endSpecificationItem();
-        builder.beginSpecificationItem();
-        final SpecificationItemId idB = SpecificationItemId.createId("dsn", "in-B", 1);
-        builder.setId(idB);
-        builder.addTag("server");
-        builder.addTag("database");
-        builder.endSpecificationItem();
-        builder.beginSpecificationItem();
-        final SpecificationItemId idC = SpecificationItemId.createId("dsn", "out-C", 1);
-        builder.setId(idC);
-        builder.addTag("exporter");
-        builder.addTag("database");
-        builder.endSpecificationItem();
-        builder.beginSpecificationItem();
-        final SpecificationItemId idD = SpecificationItemId.createId("dsn", "out-D", 1);
-        builder.setId(idD);
-        builder.endSpecificationItem();
+        final Set<String> wantedTags = new HashSet<>();
+        wantedTags.add("client");
+        wantedTags.add("server");
+        final FilterSettings filterSettings = new FilterSettings.Builder() //
+                .tags(wantedTags) //
+                .withoutTags(false) //
+                .build();
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createWithFilter(filterSettings);
+        addItemWithTags(builder, "in-A", "client", "database");
+        addItemWithTags(builder, "in-B", "server", "database");
+        addItemWithTags(builder, "out-C", "exporter", "database");
+        addItemWithTags(builder, "out-D");
         final List<SpecificationItem> items = builder.build();
         assertThat(items.stream().map(item -> item.getId().getName()).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B"));
     }
 
-    private SpecificationListBuilder createListBuilderFilteringByTags(final String... tags)
+    private void addItemWithTags(final SpecificationListBuilder builder, final String name,
+            final String... tags)
     {
+        builder.beginSpecificationItem();
+        final SpecificationItemId idA = SpecificationItemId.createId("dsn", name, 1);
+        builder.setId(idA);
+        for (final String tag : tags)
+        {
+            builder.addTag(tag);
+        }
+        builder.endSpecificationItem();
+    }
+
+    // [utest->dsn~filtering-by-tags-or-no-tags-during-import~1]
+    @Test
+    public void testFilterSpecificationItemsByTagsIncludingNoTags()
+    {
+        final Set<String> wantedTags = new HashSet<>();
+        wantedTags.add("client");
+        wantedTags.add("server");
         final FilterSettings filterSettings = new FilterSettings.Builder() //
-                .tags(new HashSet<>(Arrays.asList(tags))) //
+                .tags(wantedTags) //
                 .build();
-        return SpecificationListBuilder.createWithFilter(filterSettings);
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createWithFilter(filterSettings);
+        addItemWithTags(builder, "in-A", "client", "database");
+        addItemWithTags(builder, "in-B", "server", "database");
+        addItemWithTags(builder, "out-C", "exporter", "database");
+        addItemWithTags(builder, "in-D");
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.stream().map(item -> item.getId().getName()).collect(Collectors.toList()),
+                containsInAnyOrder("in-A", "in-B", "in-D"));
     }
 }

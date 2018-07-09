@@ -182,12 +182,23 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testSetIngnoreTags()
+    public void testSetWantedTags()
     {
         final String value = "client,server";
         assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
         this.arguments.setWantedTags(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
                 containsInAnyOrder("client", "server"));
+    }
+
+    // [utest->dsn~filtering-by-tags-or-no-tags-during-import~1]
+    @Test
+    public void testSetWantedTagsIncludingNone()
+    {
+        final String value = "_,client,server";
+        assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
+        this.arguments.setWantedTags(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
+                containsInAnyOrder("_", "client", "server"));
     }
 }

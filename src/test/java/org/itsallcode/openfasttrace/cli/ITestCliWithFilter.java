@@ -71,6 +71,24 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
+    public void testWithoutFilter()
+    {
+        this.exit.checkAssertionAfterwards(new Assertion()
+        {
+            @Override
+            public void checkAssertion()
+            {
+                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
+                assertThat(stdOut, containsString("<id>a<"));
+                assertThat(stdOut, containsString("<id>b<"));
+                assertThat(stdOut, containsString("<id>c<"));
+            }
+        });
+        runWithArguments("convert", this.specFile.toString());
+    }
+
+    // [itest->dsn~filtering-by-tags-during-import~1]
+    @Test
     public void testFilterWithAtLeastOneMatchingTag()
     {
         this.exit.checkAssertionAfterwards(new Assertion()
@@ -90,6 +108,22 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
     private void runWithArguments(final String... args)
     {
         CliStarter.main(args);
+    }
+
+    // [itest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testFilterWithEmptyTagListFiltersOutEverything()
+    {
+        this.exit.checkAssertionAfterwards(new Assertion()
+        {
+            @Override
+            public void checkAssertion()
+            {
+                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
+                assertThat(stdOut, not(containsString("<id>")));
+            }
+        });
+        runWithArguments("convert", "-t", "", this.specFile.toString());
     }
 
     // [itest->dsn~filtering-by-tags-or-no-tags-during-import~1]

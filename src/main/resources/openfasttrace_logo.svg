@@ -50,6 +50,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -69,7 +70,7 @@
      id="namedview22"
      showgrid="false"
      inkscape:zoom="0.42331562"
-     inkscape:cx="83.861777"
+     inkscape:cx="-316.54868"
      inkscape:cy="158.4"
      inkscape:window-x="67"
      inkscape:window-y="27"
@@ -77,30 +78,37 @@
      inkscape:current-layer="svg20" />
   <polygon
      id="polygon4"
-     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="6141,3543 6614,4488 5669,6377 4015,6377 3307,5433 4251,3543 " />
+     style="fill:#58c8fd;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="4015,6377 3307,5433 4251,3543 6141,3543 6614,4488 5669,6377 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon6"
-     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="10866,6377 11811,6377 12519,4960 11811,3543 10866,3543 11574,4960 " />
+     style="fill:#ffffff;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="11811,3543 10866,3543 11574,4960 10866,6377 11811,6377 12519,4960 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon8"
-     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="6614,6377 7086,5433 8031,5433 8503,4488 9448,4488 8976,3543 7086,3543 5669,6377 " />
+     style="fill:#58c8fd;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="8503,4488 9448,4488 8976,3543 7086,3543 5669,6377 6614,6377 7086,5433 8031,5433 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polyline
      id="polyline10"
-     style="fill:none;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="7559,4488 8503,4488 " />
+     style="fill:none;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="7559,4488 8503,4488 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon12"
-     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;fill-opacity:1"
-     points="5196,5433 5669,4488 4724,4488 4251,5433 " />
+     style="fill:#ffffff;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="4251,5433 5196,5433 5669,4488 4724,4488 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon14"
-     style="fill:#00eb00;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="10866,3543 11338,4488 10393,4488 9448,6377 8503,6377 9448,4488 8976,3543 " />
+     style="fill:#58c8fd;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="9448,6377 8503,6377 9448,4488 8976,3543 10866,3543 11338,4488 10393,4488 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon16"
-     style="fill:#ffffff;stroke:#006000;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter"
-     points="11811,6377 12755,6377 13464,4960 12755,3543 11811,3543 12519,4960 " />
+     style="fill:#ffffff;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     points="12755,3543 11811,3543 12519,4960 11811,6377 12755,6377 13464,4960 "
+     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
 </svg>

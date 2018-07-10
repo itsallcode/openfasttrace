@@ -41,6 +41,7 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
  */
 public class CliArguments
 {
+    public static final String NO_TAGS_MARKER = "_";
     private static final String CURRENT_DIRECTORY = ".";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());

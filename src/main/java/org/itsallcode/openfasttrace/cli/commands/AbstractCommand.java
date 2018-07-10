@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.cli.CliArguments;
@@ -56,8 +57,36 @@ public abstract class AbstractCommand implements Performable
 
     protected FilterSettings createFilterSettingsFromArguments()
     {
-        return new FilterSettings.Builder() //
-                .artifactTypes(this.arguments.getWantedArtifactTypes()) //
-                .build();
+        final FilterSettings.Builder builder = new FilterSettings.Builder();
+        setAttributeTypeFilter(builder);
+        setTagFilter(builder);
+        return builder.build();
+    }
+
+    private void setAttributeTypeFilter(final FilterSettings.Builder builder)
+    {
+        if (this.arguments.getWantedArtifactTypes() != null
+                && !this.arguments.getWantedArtifactTypes().isEmpty())
+        {
+            builder.artifactTypes(this.arguments.getWantedArtifactTypes());
+        }
+    }
+
+    private void setTagFilter(final FilterSettings.Builder builder)
+    {
+        final Set<String> wantedTags = this.arguments.getWantedTags();
+        if (wantedTags != null && !wantedTags.isEmpty())
+        {
+            if (wantedTags.contains(CliArguments.NO_TAGS_MARKER))
+            {
+                builder.withoutTags(true);
+                wantedTags.remove(CliArguments.NO_TAGS_MARKER);
+            }
+            else
+            {
+                builder.withoutTags(false);
+            }
+            builder.tags(wantedTags);
+        }
     }
 }

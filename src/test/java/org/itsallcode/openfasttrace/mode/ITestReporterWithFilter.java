@@ -25,9 +25,7 @@ package org.itsallcode.openfasttrace.mode;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -36,12 +34,13 @@ import java.util.stream.Collectors;
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.testutil.AbstractSpecificationFileBasedTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class ITestReporterWithFilter
+public class ITestReporterWithFilter extends AbstractSpecificationFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //
@@ -67,11 +66,7 @@ public class ITestReporterWithFilter
     @Before
     public void before() throws IOException
     {
-        final File specification = this.tempFolder.newFile("spec.md");
-        final PrintWriter writer = new PrintWriter(specification);
-        writer.print(SPECIFICATION);
-        writer.flush();
-        writer.close();
+        writeTextFile(this.tempFolder.newFile("spec.md"), SPECIFICATION);
         this.reporter = new ReportMode();
         this.reporter.addInputs(this.tempFolder.getRoot().toPath());
     }

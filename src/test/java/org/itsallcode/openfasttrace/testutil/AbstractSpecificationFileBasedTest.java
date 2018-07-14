@@ -25,15 +25,14 @@ package org.itsallcode.openfasttrace.testutil;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 public class AbstractSpecificationFileBasedTest
 {
-
     protected void writeTextFile(final File file, final String content) throws IOException
     {
-        final PrintWriter writer = new PrintWriter(file);
+        final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
         writer.print(content);
         writer.close();
     }
-
 }

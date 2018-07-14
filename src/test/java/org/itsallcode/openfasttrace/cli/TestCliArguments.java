@@ -161,20 +161,26 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
+    public void testWantedArtifactTypesEmptyByDefault()
+    {
+        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
+    }
+
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
+    @Test
     public void testSetIngnoreArtifactTypes()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
         this.arguments.setWantedArtifactTypes(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
     }
 
+    // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testSetI()
+    public void testSetA()
     {
         final String value = "impl,utest";
-        assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
         this.arguments.setA(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
@@ -182,12 +188,38 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testSetIngnoreTags()
+    public void testWantedTagsEmptyByDefault()
+    {
+        assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
+    }
+
+    // [utest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testSetWantedTags()
     {
         final String value = "client,server";
-        assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
         this.arguments.setWantedTags(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
                 containsInAnyOrder("client", "server"));
+    }
+
+    // [utest->dsn~filtering-by-tags-during-import~1]
+    @Test
+    public void testSetd()
+    {
+        final String value = "client,server";
+        this.arguments.setT(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
+                containsInAnyOrder("client", "server"));
+    }
+
+    // [utest->dsn~filtering-by-tags-or-no-tags-during-import~1]
+    @Test
+    public void testSetWantedTagsIncludingNone()
+    {
+        final String value = "_,client,server";
+        this.arguments.setWantedTags(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
+                containsInAnyOrder("_", "client", "server"));
     }
 }

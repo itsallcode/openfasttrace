@@ -137,30 +137,4 @@ public class ITestReporter extends AbstractOftModeTest
                 }) //
                 .count();
     }
-
-    // [itest->dsn~filtering-by-tags-during-import~1]
-    @Test
-    public void testFilterAllowsTagsClientAndServer()
-    {
-        final Set<String> tags = new HashSet<>(Arrays.asList("client", "server"));
-        this.reporter.addInputs(this.docDir);
-        final Trace fullTrace = this.reporter.trace();
-        final String filteredOutTag = "database";
-        assertThat("Number of items with tag \"" + filteredOutTag + "\" in regular trace",
-                countItemsWithTagInTrace(filteredOutTag, fullTrace), greaterThan(0L));
-        final Trace trace = this.reporter //
-                .setFilters(new FilterSettings.Builder().tags(tags).build())//
-                .trace();
-        assertThat("Number of items with tag \"" + filteredOutTag + "\" in filted trace",
-                countItemsWithTagInTrace(filteredOutTag, trace), equalTo(0L));
-    }
-
-    private long countItemsWithTagInTrace(final String tag, final Trace trace)
-    {
-        return trace.getItems().stream() //
-                .filter(item -> {
-                    return item.getTags().contains(tag);
-                }) //
-                .count();
-    }
 }

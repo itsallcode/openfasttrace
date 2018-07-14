@@ -275,6 +275,11 @@ Wan and Wu from the web service team in our example would run an OFT convert job
 
 This tells OFT to read all known specification files from the directory "import/arch" and filter by a list of tags. The result is a list of requirements that match the tag filter.
 
+If you want to also import specification items that do not have any tags, add a single underscore "_" as the first entry in the comma-separated list of tags:
+
+    oft convert -t _,AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
+     
+
 ### Tracing the Whole Chain
 
 If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifact.
@@ -336,6 +341,16 @@ Where `command` is one of
 * `convert` - convert to a different requirements format
 
 and `option` is one or more of the options listed below.
+
+#### Import options
+
+    -a, --wanted-artifact-types <artifact type>[,...]
+
+Import only specification items where the artifact type matches one of the listed types.
+
+    -t, --wanted-tags [_,]<tag>[,...]
+
+Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as first entry in the list, specification items that no tags at all are also imported.
 
 #### Tracing options
 

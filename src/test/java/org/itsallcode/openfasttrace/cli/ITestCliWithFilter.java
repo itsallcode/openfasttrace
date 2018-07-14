@@ -34,7 +34,6 @@ import org.itsallcode.openfasttrace.testutil.AbstractSpecificationFileBasedTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.Assertion;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.rules.TemporaryFolder;
@@ -73,16 +72,11 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
     @Test
     public void testWithoutFilter()
     {
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion()
-            {
-                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
-                assertThat(stdOut, containsString("<id>a<"));
-                assertThat(stdOut, containsString("<id>b<"));
-                assertThat(stdOut, containsString("<id>c<"));
-            }
+        this.exit.checkAssertionAfterwards(() -> {
+            final String stdOut = this.systemOutRule.getLog();
+            assertThat(stdOut, containsString("<id>a<"));
+            assertThat(stdOut, containsString("<id>b<"));
+            assertThat(stdOut, containsString("<id>c<"));
         });
         runWithArguments("convert", this.specFile.toString());
     }
@@ -91,16 +85,11 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
     @Test
     public void testFilterWithAtLeastOneMatchingTag()
     {
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion()
-            {
-                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
-                assertThat(stdOut, not(containsString("<id>a<")));
-                assertThat(stdOut, containsString("<id>b<"));
-                assertThat(stdOut, not(containsString("<id>c<")));
-            }
+        this.exit.checkAssertionAfterwards(() -> {
+            final String stdOut = this.systemOutRule.getLog();
+            assertThat(stdOut, not(containsString("<id>a<")));
+            assertThat(stdOut, containsString("<id>b<"));
+            assertThat(stdOut, not(containsString("<id>c<")));
         });
         runWithArguments("convert", "-t", "tag1", this.specFile.toString());
     }
@@ -114,14 +103,9 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
     @Test
     public void testFilterWithEmptyTagListFiltersOutEverything()
     {
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion()
-            {
-                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
-                assertThat(stdOut, not(containsString("<id>")));
-            }
+        this.exit.checkAssertionAfterwards(() -> {
+            final String stdOut = this.systemOutRule.getLog();
+            assertThat(stdOut, not(containsString("<id>")));
         });
         runWithArguments("convert", "-t", "", this.specFile.toString());
     }
@@ -130,16 +114,11 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
     @Test
     public void testFilterWithAtLeastOneMatchingTagOrNoTags()
     {
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion()
-            {
-                final String stdOut = ITestCliWithFilter.this.systemOutRule.getLog();
-                assertThat(stdOut, containsString("<id>a<"));
-                assertThat(stdOut, containsString("<id>b<"));
-                assertThat(stdOut, not(containsString("<id>c<")));
-            }
+        this.exit.checkAssertionAfterwards(() -> {
+            final String stdOut = this.systemOutRule.getLog();
+            assertThat(stdOut, containsString("<id>a<"));
+            assertThat(stdOut, containsString("<id>b<"));
+            assertThat(stdOut, not(containsString("<id>c<")));
         });
         runWithArguments("convert", "-t", "_,tag1", this.specFile.toString());
     }

@@ -31,7 +31,6 @@ import java.util.logging.LogRecord;
  */
 public class NoOpLoggingHandler extends Handler
 {
-
     public NoOpLoggingHandler()
     {
     }
@@ -39,18 +38,18 @@ public class NoOpLoggingHandler extends Handler
     @Override
     public void publish(final LogRecord record)
     {
-        // empty
+        // empty on purpose
     }
 
     @Override
     public void flush()
     {
-        // empty
+        // empty on purpose
     }
 
     @Override
     public void close()
     {
-        // empty
+        // empty on purpose
     }
 }

@@ -38,27 +38,7 @@ public class HtmlView extends AbstractViewContainer implements Viewable
 {
     private final String title;
     private final PrintStream stream;
-    private final boolean inlineCSS;
     private static final String REPORT_CSS_FILE = "/css/report.css";
-
-    /**
-     * Create a new instance of type {@link HtmlView}.
-     * 
-     * @param stream
-     *            the stream to write to
-     * 
-     * @param id
-     *            the view ID
-     * @param title
-     *            the view title
-     */
-    public HtmlView(final PrintStream stream, final String id, final String title,
-            final boolean inlineCSS)
-    {
-        this.stream = stream;
-        this.title = title;
-        this.inlineCSS = inlineCSS;
-    }
 
     /**
      * Create a new instance of type {@link HtmlView}.
@@ -73,7 +53,8 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      */
     public HtmlView(final PrintStream stream, final String id, final String title)
     {
-        this(stream, id, title, true);
+        this.stream = stream;
+        this.title = title;
     }
 
     @Override
@@ -83,7 +64,9 @@ public class HtmlView extends AbstractViewContainer implements Viewable
         this.stream.println("<html>");
         this.stream.println("  <head>");
         this.stream.println("    <meta charset=\"UTF-8\">");
+        this.stream.println("    <style>");
         inlineCSS();
+        this.stream.println("    </style>");
         this.stream.print("    <title>");
         this.stream.print(this.title);
         this.stream.println("</title>");
@@ -94,26 +77,12 @@ public class HtmlView extends AbstractViewContainer implements Viewable
     // [impl->dsn~reporting.html.inline_css~1]
     private void inlineCSS()
     {
-        if (this.inlineCSS)
+        try (final InputStream css = getClass().getResourceAsStream(REPORT_CSS_FILE))
         {
-            this.stream.println("    <style>");
-            final InputStream css = getClass().getResourceAsStream(REPORT_CSS_FILE);
-            if (css == null)
-            {
-                throw new ReportException("Unable open CSS stylesheet \"" + REPORT_CSS_FILE
-                        + "\" trying to generate HTML view.");
-            }
-            copyCSSContent(css);
-            this.stream.println("    </style>");
-        }
-    }
-
-    private void copyCSSContent(final InputStream css) throws ReportException
-    {
-        final byte[] buffer = new byte[4096];
-        int n;
-        try
-        {
+            assert css != null : "Null pointer trying to open CSS stylesheet \"" + REPORT_CSS_FILE
+                    + "\" to generate HTML view.";
+            final byte[] buffer = new byte[4096];
+            int n;
             while ((n = css.read(buffer)) > 0)
             {
                 this.stream.write(buffer, 0, n);

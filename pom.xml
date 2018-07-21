@@ -197,6 +197,8 @@
                         <exclude>
                             test/resources/specobject/*.xml
                         </exclude>
+                        <exclude>**/*.css</exclude>
+                        <exclude>**/*.html</exclude>
                     </excludes>
                     <failOnMissingHeader>true</failOnMissingHeader>
                     <failIfWarning>true</failIfWarning>

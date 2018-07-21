@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,6 +27,7 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import java.io.PrintStream;
 
+import org.itsallcode.openfasttrace.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 
@@ -34,9 +38,33 @@ public class HtmlView extends AbstractViewContainer implements Viewable
 {
     private final String title;
     private final PrintStream stream;
+    private final boolean inlineCSS;
+    private static final String REPORT_CSS_FILE = "/css/report.css";
 
     /**
      * Create a new instance of type {@link HtmlView}.
+     * 
+     * @param stream
+     *            the stream to write to
+     * 
+     * @param id
+     *            the view ID
+     * @param title
+     *            the view title
+     */
+    public HtmlView(final PrintStream stream, final String id, final String title,
+            final boolean inlineCSS)
+    {
+        this.stream = stream;
+        this.title = title;
+        this.inlineCSS = inlineCSS;
+    }
+
+    /**
+     * Create a new instance of type {@link HtmlView}.
+     * 
+     * @param stream
+     *            the stream to write to
      * 
      * @param id
      *            the view ID
@@ -45,8 +73,7 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      */
     public HtmlView(final PrintStream stream, final String id, final String title)
     {
-        this.stream = stream;
-        this.title = title;
+        this(stream, id, title, true);
     }
 
     @Override
@@ -55,14 +82,48 @@ public class HtmlView extends AbstractViewContainer implements Viewable
         this.stream.println("<!DOCTYPE html>");
         this.stream.println("<html>");
         this.stream.println("  <head>");
-        this.stream.println(
-                "    <link rel=\"stylesheet\" type=\"text/css\" href=\"oft_tracing_report.css\">");
         this.stream.println("    <meta charset=\"UTF-8\">");
+        inlineCSS();
         this.stream.print("    <title>");
         this.stream.print(this.title);
         this.stream.println("</title>");
         this.stream.println("  </head>");
         this.stream.println("  <body>");
+    }
+
+    // [impl->dsn~reporting.html.inline_css~1]
+    private void inlineCSS()
+    {
+        if (this.inlineCSS)
+        {
+            this.stream.println("    <style>");
+            final InputStream css = getClass().getResourceAsStream(REPORT_CSS_FILE);
+            if (css == null)
+            {
+                throw new ReportException("Unable open CSS stylesheet \"" + REPORT_CSS_FILE
+                        + "\" trying to generate HTML view.");
+            }
+            copyCSSContent(css);
+            this.stream.println("    </style>");
+        }
+    }
+
+    private void copyCSSContent(final InputStream css) throws ReportException
+    {
+        final byte[] buffer = new byte[4096];
+        int n;
+        try
+        {
+            while ((n = css.read(buffer)) > 0)
+            {
+                this.stream.write(buffer, 0, n);
+            }
+        }
+        catch (final IOException e)
+        {
+            throw new ReportException("Unable to copy CSS content \"" + REPORT_CSS_FILE
+                    + "\" trying to generate HTML view.", e);
+        }
     }
 
     @Override

@@ -322,6 +322,17 @@ Covers:
 
 Needs: impl, utest
 
+#### HTML Report Inlines CSS
+`dsn~reporting.html.inline_css~1`
+
+OFT inlines the cascading style sheet (CSS) into the HTML report.
+
+Covers:
+
+* `req~reporting.html.single_file~1`
+
+Needs: impl, itest
+
 ## Requirement Format Conversion
 
 ### ReqM2 Export

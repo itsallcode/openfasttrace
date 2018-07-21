@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
 import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.testutil.AbstractSpecificationFileBasedTest;
+import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-public class ITestReporterWithFilter extends AbstractSpecificationFileBasedTest
+public class ITestReporterWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //

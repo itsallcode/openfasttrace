@@ -327,6 +327,14 @@ By default this will produce a plain text trace that displays a details of all d
 See also:
 * [Tracing Options](#tracing-options) for controlling the tracing output
 
+### HTML Tracing Reports
+
+While plain text reports are perfect for debugging you tracing chain, sometimes you need reports that are more optically appealing. This is usually true if you have to show reports to management or to quality assessors who usually focus on summaries and statistics rather than detail results. In this case you can tell OFT to create reports in HTML format by adding the `-o html` switch.
+
+```sh
+oft trace -o html
+```
+
 ## Reference
 
 ### OFT Command Line
@@ -360,6 +368,7 @@ The format of the report.
 
 One of:
 * `plain`
+* `html` 
 
 Defaults to `plain`.
 

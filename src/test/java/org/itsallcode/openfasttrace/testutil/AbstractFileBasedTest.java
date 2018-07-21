@@ -27,12 +27,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-public class AbstractSpecificationFileBasedTest
+import org.itsallcode.openfasttrace.cli.CliStarter;
+
+/**
+ * This class is the base class for integration tests that require input files.
+ */
+public class AbstractFileBasedTest
 {
     protected void writeTextFile(final File file, final String content) throws IOException
     {
         final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
         writer.print(content);
         writer.close();
+    }
+
+    protected void runWithArguments(final String... args)
+    {
+        CliStarter.main(args);
     }
 }

@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
 
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.junit.Before;
 
@@ -41,7 +42,7 @@ public class AbstractTestHtmlRenderer
     public void prepareEachTest()
     {
         this.outputStream = new ByteArrayOutputStream();
-        this.factory = HtmlViewFactory.create(this.outputStream);
+        this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl());
     }
 
     protected void assertOutputLines(final String... lines)

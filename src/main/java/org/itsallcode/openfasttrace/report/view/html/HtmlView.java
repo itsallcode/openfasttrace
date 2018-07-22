@@ -26,6 +26,7 @@ import java.io.InputStream;
  */
 
 import java.io.PrintStream;
+import java.net.URL;
 
 import org.itsallcode.openfasttrace.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
@@ -38,7 +39,7 @@ public class HtmlView extends AbstractViewContainer implements Viewable
 {
     private final String title;
     private final PrintStream stream;
-    private static final String REPORT_CSS_FILE = "/css/report.css";
+    private final URL cssURL;
 
     /**
      * Create a new instance of type {@link HtmlView}.
@@ -51,10 +52,11 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      * @param title
      *            the view title
      */
-    public HtmlView(final PrintStream stream, final String id, final String title)
+    public HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
     {
         this.stream = stream;
         this.title = title;
+        this.cssURL = cssURL;
     }
 
     @Override
@@ -77,10 +79,8 @@ public class HtmlView extends AbstractViewContainer implements Viewable
     // [impl->dsn~reporting.html.inline_css~1]
     private void inlineCSS()
     {
-        try (final InputStream css = getClass().getResourceAsStream(REPORT_CSS_FILE))
+        try (final InputStream css = this.cssURL.openStream())
         {
-            assert css != null : "Null pointer trying to open CSS stylesheet \"" + REPORT_CSS_FILE
-                    + "\" to generate HTML view.";
             final byte[] buffer = new byte[4096];
             int n;
             while ((n = css.read(buffer)) > 0)
@@ -90,7 +90,7 @@ public class HtmlView extends AbstractViewContainer implements Viewable
         }
         catch (final IOException e)
         {
-            throw new ReportException("Unable to copy CSS content \"" + REPORT_CSS_FILE
+            throw new ReportException("Unable to copy CSS content \"" + this.cssURL.toString()
                     + "\" trying to generate HTML view.", e);
         }
     }

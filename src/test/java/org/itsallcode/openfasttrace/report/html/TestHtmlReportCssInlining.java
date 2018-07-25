@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.report.html;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertThat;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -35,7 +36,6 @@ import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.rules.TemporaryFolder;
 
 public class TestHtmlReportCssInlining extends AbstractFileBasedTest
@@ -44,8 +44,6 @@ public class TestHtmlReportCssInlining extends AbstractFileBasedTest
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
-    @Rule
-    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
     // [itest->dsn~reporting.html.inline_css~1]
     @Test
@@ -53,10 +51,11 @@ public class TestHtmlReportCssInlining extends AbstractFileBasedTest
     {
         final File cssFile = this.tempFolder.newFile("test.css");
         writeTextFile(cssFile, CSS);
-        final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL());
+        final ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        final HtmlViewFactory factory = HtmlViewFactory.create(stream, cssFile.toURI().toURL());
         final ViewableContainer view = factory.createView("foo", "bar");
         view.render();
-        assertThat(this.systemOutRule.getLog(), containsString(CSS));
+        assertThat(stream.toString(), containsString(CSS));
     }
 
     @Test(expected = org.itsallcode.openfasttrace.report.ReportException.class)

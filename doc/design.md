@@ -1,7 +1,12 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
 # Introduction
-This document is derived from the "[arc42][bib.arc42]" architectural template.
+
+## Acknowledgements
+
+This documents structure is derived from the "[arc42][bib.arc42]" architectural template by Dr. Gernot Starke, Dr. Peter Hruschka.
+
+If you build your own modifications based on this document, please keep the attrbiutions.
 
 ## Terminology
 The terminology from the [system requirement specification][bib.srs] applies.

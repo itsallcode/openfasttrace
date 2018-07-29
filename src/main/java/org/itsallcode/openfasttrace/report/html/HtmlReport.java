@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.report.html;
  */
 
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,17 +39,28 @@ import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 public class HtmlReport implements Reportable
 {
     private final Trace trace;
+    private static final String REPORT_CSS_FILE = "/css/report.css";
 
     public HtmlReport(final Trace trace)
     {
         this.trace = trace;
     }
 
+    /**
+     * Get the URL to the CSS stylesheet that is used to lay out the HTML Report
+     * 
+     * @return the URL of the CSS stylesheet
+     */
+    public static URL getCssUrl()
+    {
+        return HtmlReport.class.getResource(REPORT_CSS_FILE);
+    }
+
     @Override
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
             final ReportVerbosity verbosity)
     {
-        final ViewFactory factory = HtmlViewFactory.create(outputStream);
+        final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
         final ViewableContainer view = factory.createView("", "Specification items by title");
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getTitleWithFallback));

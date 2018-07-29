@@ -27,7 +27,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.regex.Pattern;
 
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.junit.Before;
 
@@ -40,11 +42,21 @@ public class AbstractTestHtmlRenderer
     public void prepareEachTest()
     {
         this.outputStream = new ByteArrayOutputStream();
-        this.factory = HtmlViewFactory.create(this.outputStream);
+        this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl());
     }
 
     protected void assertOutputLines(final String... lines)
     {
         assertThat(this.outputStream.toString(), matchesAllLines(lines));
+    }
+
+    protected void assertOutputLinesWithoutCSS(final String... lines)
+    {
+        final String html = this.outputStream.toString();
+        final String htmlWithoutCSS = Pattern //
+                .compile("<style>.*</style>", Pattern.DOTALL) //
+                .matcher(html) //
+                .replaceAll("<style></style>");
+        assertThat(htmlWithoutCSS, matchesAllLines(lines));
     }
 }

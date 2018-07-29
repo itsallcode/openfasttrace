@@ -43,12 +43,12 @@ public class TestHtmlView extends AbstractTestHtmlRenderer
     {
         final Viewable view = this.factory.createView(ID, TITLE);
         view.render(1);
-        assertOutputLines(//
+        assertOutputLinesWithoutCSS(//
                 "<!DOCTYPE html>", //
                 "<html>", //
                 "  <head>", //
-                "    <link rel=\"stylesheet\" type=\"text/css\" href=\"oft_tracing_report.css\">", //
                 "    <meta charset=\"UTF-8\">", //
+                "    <style></style>", //
                 "    <title>" + TITLE + "</title>", //
                 "  </head>", //
                 "  <body>", //

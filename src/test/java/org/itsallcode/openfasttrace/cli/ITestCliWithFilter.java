@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.IOException;
 
-import org.itsallcode.openfasttrace.testutil.AbstractSpecificationFileBasedTest;
+import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,7 +38,7 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.rules.TemporaryFolder;
 
-public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
+public class ITestCliWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //
@@ -92,11 +92,6 @@ public class ITestCliWithFilter extends AbstractSpecificationFileBasedTest
             assertThat(stdOut, not(containsString("<id>c<")));
         });
         runWithArguments("convert", "-t", "tag1", this.specFile.toString());
-    }
-
-    private void runWithArguments(final String... args)
-    {
-        CliStarter.main(args);
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]

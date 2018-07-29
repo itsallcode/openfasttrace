@@ -130,6 +130,17 @@ This can be read directly as console output or with any text editor.
 
 Needs: req
 
+#### HTML Report
+`feat~html-report~1`
+
+OFT produces a tracing report in Hypertext markup language (HTML).
+
+Rationale:
+
+This report type is more optically appealing than the plain text report and still widely supported on all platforms.
+
+Needs: req
+
 ### User Interface
 
 #### Command Line Interface
@@ -495,6 +506,23 @@ The link detail section shows for all links of a specification item:
 Covers:
 
 * [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+#### HTML Report
+
+##### HTML Report is a Single File
+`req~reporting.html.single_file~1`
+
+OFT creates the HTML Report as a single file.
+
+Rationale:
+
+It makes exchanging reports with other people easier if everything is contained in a single file.  
+
+Covers:
+
+* [feat~html-report~1](#html-report)
 
 Needs: dsn
 

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag.config;
+package org.itsallcode.openfasttrace.importer.tag.config;
 
 /*-
  * #%L
@@ -28,6 +28,7 @@ import static org.junit.Assert.assertThat;
 import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 import org.junit.Test;
 
 public class TestPathConfig

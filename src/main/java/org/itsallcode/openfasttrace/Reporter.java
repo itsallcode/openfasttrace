@@ -28,9 +28,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
@@ -83,14 +81,14 @@ public interface Reporter
     public Reporter setReportVerbosity(final ReportVerbosity verbosity);
 
     /**
-     * Set the {@link LegacyTagImporterConfig} for the
+     * Set the {@link TagImporterConfig} for the
      * {@link LegacyTagImporterFactory}.
      * 
      * @param config
-     *            the {@link LegacyTagImporterConfig} to set.
+     *            the {@link TagImporterConfig} to set.
      * @return a <code>Reporter</code> instance for fluent programming
      */
-    public Reporter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+    public Reporter setLegacyTagImporterPathConfig(final TagImporterConfig config);
 
     /**
      * Run a trace on the input files

@@ -27,9 +27,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.importer.legacytag.LegacyTagImporterFactory;
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 
 /**
  * Convert between different requirements formats (e.g. from ReqM2 to Markdown)
@@ -72,14 +70,14 @@ public interface Converter
     public Converter setNewline(Newline newline);
 
     /**
-     * Set the {@link LegacyTagImporterConfig} for the
+     * Set the {@link TagImporterConfig} for the
      * {@link LegacyTagImporterFactory}.
      * 
      * @param config
-     *            the {@link LegacyTagImporterConfig} to set.
+     *            the {@link TagImporterConfig} to set.
      * @return a <code>Converter</code> instance for fluent programming
      */
-    public Converter setLegacyTagImporterPathConfig(final LegacyTagImporterConfig config);
+    public Converter setLegacyTagImporterPathConfig(final TagImporterConfig config);
 
     /**
      * Convert the collected requirements into target requirement format

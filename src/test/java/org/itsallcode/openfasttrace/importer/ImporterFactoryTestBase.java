@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import static java.util.Collections.emptyList;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -25,12 +27,14 @@ package org.itsallcode.openfasttrace.importer;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,6 +59,8 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     public void initMocks()
     {
         MockitoAnnotations.initMocks(this);
+        when(this.contextMock.getTagImporterConfig())
+                .thenReturn(new TagImporterConfig(emptyList()));
     }
 
     @Test
@@ -97,6 +103,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     public void testMissingContextThrowsException()
     {
         final T factory = createFactory();
+        factory.init(null);
         this.thrown.expect(NullPointerException.class);
         this.thrown.expectMessage(equalTo("Context was not initialized"));
         factory.getContext();

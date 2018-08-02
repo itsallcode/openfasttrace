@@ -22,15 +22,16 @@ package org.itsallcode.openfasttrace.importer.tag;
  * #L%
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.LineReader;
+import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 /**
  * {@link Importer} for tags in source code files.
@@ -38,74 +39,37 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
 // [impl->dsn~import.full-coverage-tag~1]
 class TagImporter implements Importer
 {
-    private static final Logger LOG = Logger.getLogger(TagImporter.class.getName());
-    private static final Pattern COVERED_ID_PATTERN = SpecificationItemId.ID_PATTERN;
-    private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
-    private static final String TAG_PREFIX_PATTERN = "\\[";
-    private static final String TAG_SUFFIX_PATTERN = "\\]";
-
+    private final LineConsumer lineImporter;
     private final InputFile file;
-    private final ImportEventListener listener;
-    private final Pattern tagPattern;
 
-    public TagImporter(final InputFile file, final ImportEventListener listener)
+    public TagImporter(final Optional<PathConfig> config, final InputFile file,
+            final ImportEventListener listener)
     {
+        this(createLineImporter(config, file, listener), file);
+    }
+
+    TagImporter(final LineConsumer lineImporter, final InputFile file)
+    {
+        this.lineImporter = lineImporter;
         this.file = file;
-        this.listener = listener;
-        this.tagPattern = Pattern.compile(TAG_PREFIX_PATTERN //
-                + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
-                + "->" //
-                + "(" + COVERED_ID_PATTERN + ")" //
-                + TAG_SUFFIX_PATTERN);
+    }
+
+    private static LineConsumer createLineImporter(final Optional<PathConfig> config,
+            final InputFile file, final ImportEventListener listener)
+    {
+        final List<LineConsumer> importers = new ArrayList<>();
+        importers.add(new LongTagImportingLineConsumer(file, listener));
+        if (config.isPresent())
+        {
+            importers.add(new ShortTagImportingLineConsumer(config.get(), file, listener));
+        }
+        return new DelegatingLineConsumer(importers);
     }
 
     @Override
     public void runImport()
     {
-        String line;
-        int lineNumber = 0;
-        try (BufferedReader reader = this.file.createReader())
-        {
-            while ((line = reader.readLine()) != null)
-            {
-                ++lineNumber;
-                processLine(lineNumber, line);
-            }
-        }
-        catch (final IOException exception)
-        {
-            throw new ImporterException("Error reading \"" + this.file + "\" at " + lineNumber,
-                    exception);
-        }
-    }
-
-    private void processLine(final int lineNumber, final String line)
-    {
-        final Matcher matcher = this.tagPattern.matcher(line);
-        int counter = 0;
-        while (matcher.find())
-        {
-            this.listener.beginSpecificationItem();
-            this.listener.setLocation(this.file.getPath(), lineNumber);
-            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
-            final String generatedName = generateName(coveredId, lineNumber, counter);
-            final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
-                    generatedName, 0);
-
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId + "'");
-            this.listener.setId(generatedId);
-            this.listener.addCoveredId(coveredId);
-            this.listener.endSpecificationItem();
-            counter++;
-        }
-    }
-
-    private String generateName(final SpecificationItemId coveredId, final int lineNumber,
-            final int counter)
-    {
-        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId.toString();
-        final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
-        return coveredId.getName() + "-" + checksum;
+        final LineReader reader = LineReader.create(this.file);
+        reader.readLines(this.lineImporter);
     }
 }

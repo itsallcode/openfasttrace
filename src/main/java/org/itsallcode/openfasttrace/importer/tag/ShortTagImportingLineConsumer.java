@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
@@ -27,41 +27,43 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
-class LegacyTagImporter implements Importer
+class ShortTagImportingLineConsumer implements LineConsumer
 {
-    private static final Logger LOG = Logger.getLogger(LegacyTagImporter.class.getName());
+    private static final Logger LOG = Logger
+            .getLogger(ShortTagImportingLineConsumer.class.getName());
 
     private static final String TAG_PREFIX = "\\[\\[";
     private static final String TAG_SUFFIX = "\\]\\]";
+    private static final String SHORT_TAG_PATTERN_REGEX = TAG_PREFIX //
+            + SpecificationItemId.ITEM_NAME_PATTERN //
+            + ":" //
+            + SpecificationItemId.ITEM_REVISION_PATTERN //
+            + TAG_SUFFIX;
+
     private final PathConfig pathConfig;
     private final ImportEventListener listener;
     private final InputFile file;
     private final Pattern tagPattern;
 
-    LegacyTagImporter(final PathConfig pathConfig, final InputFile file,
+    ShortTagImportingLineConsumer(final PathConfig pathConfig, final InputFile file,
             final ImportEventListener listener)
     {
         this.pathConfig = pathConfig;
         this.file = file;
         this.listener = listener;
-        this.tagPattern = Pattern.compile(TAG_PREFIX //
-                + SpecificationItemId.ITEM_NAME_PATTERN + ":"
-                + SpecificationItemId.ITEM_REVISION_PATTERN + TAG_SUFFIX);
+        this.tagPattern = Pattern.compile(SHORT_TAG_PATTERN_REGEX);
     }
 
     @Override
-    public void runImport()
-    {
-        final LineReader reader = LineReader.create(this.file);
-        reader.readLines(this::processLine);
-    }
-
-    private void processLine(final int lineNumber, final String line)
+    public void readLine(final int lineNumber, final String line)
     {
         final Matcher matcher = this.tagPattern.matcher(line);
         int counter = 0;

@@ -31,9 +31,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.itsallcode.openfasttrace.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
+import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -58,7 +60,7 @@ public class TestHtmlReportCssInlining extends AbstractFileBasedTest
         assertThat(stream.toString(), containsString(CSS));
     }
 
-    @Test(expected = org.itsallcode.openfasttrace.report.ReportException.class)
+    @Test(expected = ReportException.class)
     public void testInliningNonExistentCssThrowsException() throws MalformedURLException
     {
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
@@ -67,9 +69,10 @@ public class TestHtmlReportCssInlining extends AbstractFileBasedTest
         view.render();
     }
 
-    @Test(expected = org.itsallcode.openfasttrace.report.ReportException.class)
+    @Test(expected = ReportException.class)
     public void testInliningUnreadableCssThrowsException() throws IOException
     {
+        OsDetector.assumeRunningOnUnix();
         final File cssFile = this.tempFolder.newFile("test.css");
         cssFile.setReadable(false);
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL());

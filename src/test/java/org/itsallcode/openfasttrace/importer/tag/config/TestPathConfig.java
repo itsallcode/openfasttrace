@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag.config;
+package org.itsallcode.openfasttrace.importer.tag.config;
 
 /*-
  * #%L
@@ -25,7 +25,10 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.junit.Test;
@@ -94,6 +97,24 @@ public class TestPathConfig
     public void testGetPatternWithRegexPrefix()
     {
         assertThat(create("regex:pattern").getDescription(), equalTo("regex:pattern"));
+    }
+
+    @Test
+    public void testBuilder()
+    {
+        final List<Path> paths = new ArrayList<>();
+        final String pattern = "pattern";
+        final String coveredItemArtifactType = "coveredItemArtifactType";
+        final String coveredItemNamePrefix = "coveredItemNamePrefix";
+        final String tagArtifactType = "tagArtifactType";
+        final PathConfig config = PathConfig.builder().pathListMatcher(paths)
+                .patternPathMatcher(pattern).coveredItemArtifactType(coveredItemArtifactType)
+                .coveredItemNamePrefix(coveredItemNamePrefix).tagArtifactType(tagArtifactType)
+                .build();
+        assertThat(config.getCoveredItemArtifactType(), equalTo(coveredItemArtifactType));
+        assertThat(config.getCoveredItemNamePrefix(), equalTo(coveredItemNamePrefix));
+        assertThat(config.getDescription(), equalTo("glob:" + pattern));
+        assertThat(config.getTagArtifactType(), equalTo(tagArtifactType));
     }
 
     private void assertMatches(final String pattern, final String path, final boolean expected)

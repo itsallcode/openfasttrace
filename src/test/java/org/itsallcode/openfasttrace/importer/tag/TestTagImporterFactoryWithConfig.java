@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.importer.legacytag;
  */
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -36,8 +37,8 @@ import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
-import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +47,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 // [utest->dsn~import.short-coverage-tag~1]
-public class TestLegacyTagImporterFactory
+public class TestTagImporterFactoryWithConfig
 {
     private static final String PATH1 = "path1";
     private static final String PATH2 = "path2";
@@ -98,7 +99,8 @@ public class TestLegacyTagImporterFactory
     @Test(expected = ImporterException.class)
     public void testFactoryThrowsExceptionForUnsupportedFile()
     {
-        createImporter(configure(glob(PATH1)), Paths.get(PATH2));
+        final Importer importer = createImporter(configure(glob(PATH1)), Paths.get(PATH2));
+        assertThat(importer, instanceOf(TagImporter.class));
     }
 
     @Test
@@ -117,27 +119,27 @@ public class TestLegacyTagImporterFactory
         importer.runImport();
     }
 
-    private void assertSupportsFile(final LegacyTagImporterConfig config, final String path,
+    private void assertSupportsFile(final TagImporterConfig config, final String path,
             final boolean expected)
     {
         final InputFile file = InputFile.forPath(Paths.get(path));
         assertThat(create(config).supportsFile(file), equalTo(expected));
     }
 
-    private Importer createImporter(final LegacyTagImporterConfig config, final Path path)
+    private Importer createImporter(final TagImporterConfig config, final Path path)
     {
         final InputFile file = InputFile.forPath(path, StandardCharsets.UTF_8);
         return create(config).createImporter(file, this.listenerMock);
     }
 
-    private LegacyTagImporterConfig configure(final PathConfig... pathConfigs)
+    private TagImporterConfig configure(final PathConfig... pathConfigs)
     {
-        return new LegacyTagImporterConfig(asList(pathConfigs));
+        return new TagImporterConfig(asList(pathConfigs));
     }
 
-    private LegacyTagImporterFactory create(final LegacyTagImporterConfig config)
+    private TagImporterFactory create(final TagImporterConfig config)
     {
-        final LegacyTagImporterFactory factory = new LegacyTagImporterFactory();
+        final TagImporterFactory factory = new TagImporterFactory();
         factory.init(this.contextMock);
         when(this.contextMock.getTagImporterConfig()).thenReturn(config);
         return factory;

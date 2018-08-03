@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.Objects;
 
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 
 /**
  * Common context shared by all {@link ImporterFactory}s. This allows importers
@@ -31,7 +31,7 @@ import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterC
  */
 public class ImporterContext
 {
-    private final LegacyTagImporterConfig tagImporterConfig;
+    private final TagImporterConfig tagImporterConfig;
     private ImporterService importerService;
 
     /**
@@ -40,7 +40,7 @@ public class ImporterContext
      * @param tagImporterConfig
      *            importer specific configuration.
      */
-    public ImporterContext(final LegacyTagImporterConfig tagImporterConfig)
+    public ImporterContext(final TagImporterConfig tagImporterConfig)
     {
         this.tagImporterConfig = tagImporterConfig;
     }
@@ -72,7 +72,7 @@ public class ImporterContext
      * 
      * @return importer specific configuration.
      */
-    public LegacyTagImporterConfig getTagImporterConfig()
+    public TagImporterConfig getTagImporterConfig()
     {
         return this.tagImporterConfig;
     }

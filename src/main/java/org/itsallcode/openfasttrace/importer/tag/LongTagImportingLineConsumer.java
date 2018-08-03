@@ -23,7 +23,6 @@ package org.itsallcode.openfasttrace.importer.tag;
  */
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
@@ -36,14 +35,13 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private static final Logger LOG = Logger
             .getLogger(LongTagImportingLineConsumer.class.getName());
 
-    private static final Pattern COVERED_ID_PATTERN = SpecificationItemId.ID_PATTERN;
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
     private static final String TAG_REGEX = TAG_PREFIX //
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
             + "->" //
-            + "(" + COVERED_ID_PATTERN + ")" //
+            + "(" + SpecificationItemId.ID_PATTERN + ")" //
             + TAG_SUFFIX;
 
     private final InputFile file;
@@ -76,7 +74,13 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private String generateName(final SpecificationItemId coveredId, final int lineNumber,
             final int counter)
     {
-        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId.toString();
+        final String uniqueName = new StringBuilder() //
+                .append(this.file.getPath()) //
+                .append(lineNumber) //
+                .append(counter) //
+                .append(coveredId) //
+                .toString();
+        // this.file.getPath() + lineNumber + counter + coveredId.toString();
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
         return coveredId.getName() + "-" + checksum;
     }

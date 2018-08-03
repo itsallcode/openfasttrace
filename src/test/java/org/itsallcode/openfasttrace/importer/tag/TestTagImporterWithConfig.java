@@ -159,6 +159,6 @@ public class TestTagImporterWithConfig
         final InputFile file = StreamInput.forReader(FILE,
                 new BufferedReader(new StringReader(content)));
 
-        new TagImporter(Optional.of(this.configMock), file, this.listenerMock).runImport();
+        TagImporter.create(Optional.of(this.configMock), file, this.listenerMock).runImport();
     }
 }

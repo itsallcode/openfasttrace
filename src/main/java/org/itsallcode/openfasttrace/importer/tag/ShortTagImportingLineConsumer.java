@@ -40,7 +40,7 @@ class ShortTagImportingLineConsumer extends RegexLineConsumer
 
     private static final String TAG_PREFIX = "\\[\\[";
     private static final String TAG_SUFFIX = "\\]\\]";
-    private static final String SHORT_TAG_PATTERN_REGEX = TAG_PREFIX //
+    private static final String TAG_REGEX = TAG_PREFIX //
             + SpecificationItemId.ITEM_NAME_PATTERN //
             + ":" //
             + SpecificationItemId.ITEM_REVISION_PATTERN //
@@ -53,7 +53,7 @@ class ShortTagImportingLineConsumer extends RegexLineConsumer
     ShortTagImportingLineConsumer(final PathConfig pathConfig, final InputFile file,
             final ImportEventListener listener)
     {
-        super(SHORT_TAG_PATTERN_REGEX);
+        super(TAG_REGEX);
         this.pathConfig = pathConfig;
         this.file = file;
         this.listener = listener;

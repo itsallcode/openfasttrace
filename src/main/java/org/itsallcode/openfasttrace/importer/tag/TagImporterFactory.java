@@ -63,9 +63,10 @@ public class TagImporterFactory extends ImporterFactory
     private Optional<PathConfig> findConfig(final InputFile file)
     {
         return getPathConfigs()//
-                .peek(c -> LOG.finest(() -> "Checking config " + c + " with file " + file))
+                .peek(config -> LOG
+                        .finest(() -> "Checking config " + config + " with file " + file))
                 .filter(config -> config.matches(file)) //
-                .peek(c -> LOG.finest(() -> "Config " + c + " matches file " + file)) //
+                .peek(config -> LOG.finest(() -> "Config " + config + " matches file " + file)) //
                 .findFirst();
     }
 
@@ -74,12 +75,12 @@ public class TagImporterFactory extends ImporterFactory
     {
         if (!supportsFile(path))
         {
-            throw new ImporterException(
-                    "File '" + path + "' not supported for import. Supported file name patterns: "
-                            + DEFAULT_FILE_REGEX + " and " + getPathConfigs().collect(toList()));
+            throw new ImporterException("File '" + path
+                    + "' cannot be imported because it does not match any supported file patterns: "
+                    + DEFAULT_FILE_REGEX + " and " + getPathConfigs().collect(toList()));
         }
         final Optional<PathConfig> config = findConfig(path);
-        return new TagImporter(config, path, listener);
+        return TagImporter.create(config, path, listener);
     }
 
     private Stream<PathConfig> getPathConfigs()

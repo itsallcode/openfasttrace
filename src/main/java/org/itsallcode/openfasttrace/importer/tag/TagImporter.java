@@ -42,19 +42,20 @@ class TagImporter implements Importer
     private final LineConsumer lineImporter;
     private final InputFile file;
 
-    public TagImporter(final Optional<PathConfig> config, final InputFile file,
-            final ImportEventListener listener)
-    {
-        this(createLineImporter(config, file, listener), file);
-    }
-
     TagImporter(final LineConsumer lineImporter, final InputFile file)
     {
         this.lineImporter = lineImporter;
         this.file = file;
     }
 
-    private static LineConsumer createLineImporter(final Optional<PathConfig> config,
+    public static TagImporter create(final Optional<PathConfig> config, final InputFile file,
+            final ImportEventListener listener)
+    {
+        final LineConsumer lineConsumer = createLineConsumer(config, file, listener);
+        return new TagImporter(lineConsumer, file);
+    }
+
+    private static LineConsumer createLineConsumer(final Optional<PathConfig> config,
             final InputFile file, final ImportEventListener listener)
     {
         final List<LineConsumer> importers = new ArrayList<>();

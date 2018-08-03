@@ -24,18 +24,16 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
-class ShortTagImportingLineConsumer implements LineConsumer
+class ShortTagImportingLineConsumer extends RegexLineConsumer
 {
     private static final Logger LOG = Logger
             .getLogger(ShortTagImportingLineConsumer.class.getName());
@@ -51,39 +49,32 @@ class ShortTagImportingLineConsumer implements LineConsumer
     private final PathConfig pathConfig;
     private final ImportEventListener listener;
     private final InputFile file;
-    private final Pattern tagPattern;
 
     ShortTagImportingLineConsumer(final PathConfig pathConfig, final InputFile file,
             final ImportEventListener listener)
     {
+        super(SHORT_TAG_PATTERN_REGEX);
         this.pathConfig = pathConfig;
         this.file = file;
         this.listener = listener;
-        this.tagPattern = Pattern.compile(SHORT_TAG_PATTERN_REGEX);
     }
 
     @Override
-    public void readLine(final int lineNumber, final String line)
+    void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        final Matcher matcher = this.tagPattern.matcher(line);
-        int counter = 0;
-        while (matcher.find())
-        {
-            final String coveredItemName = matcher.group(1);
-            final String coveredItemRevision = matcher.group(2);
-            final SpecificationItemId coveredId = createCoveredItem(coveredItemName,
-                    coveredItemRevision);
+        final String coveredItemName = matcher.group(1);
+        final String coveredItemRevision = matcher.group(2);
+        final SpecificationItemId coveredId = createCoveredItem(coveredItemName,
+                coveredItemRevision);
 
-            final String generatedName = generateName(coveredId, lineNumber, counter);
-            final SpecificationItemId tagItemId = SpecificationItemId
-                    .createId(this.pathConfig.getTagArtifactType(), generatedName);
+        final String generatedName = generateName(coveredId, lineNumber, lineMatchCount);
+        final SpecificationItemId tagItemId = SpecificationItemId
+                .createId(this.pathConfig.getTagArtifactType(), generatedName);
 
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
-                    + "' covering id '" + coveredId + "'");
+        LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
+                + "' covering id '" + coveredId + "'");
 
-            addItem(lineNumber, coveredId, tagItemId);
-            counter++;
-        }
+        addItem(lineNumber, coveredId, tagItemId);
     }
 
     private void addItem(final int lineNumber, final SpecificationItemId coveredId,

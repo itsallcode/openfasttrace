@@ -28,57 +28,49 @@ import java.util.regex.Pattern;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 // [impl->dsn~import.full-coverage-tag~1]
-class LongTagImportingLineConsumer implements LineConsumer
+class LongTagImportingLineConsumer extends RegexLineConsumer
 {
     private static final Logger LOG = Logger
             .getLogger(LongTagImportingLineConsumer.class.getName());
 
     private static final Pattern COVERED_ID_PATTERN = SpecificationItemId.ID_PATTERN;
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
-    private static final String TAG_PREFIX_PATTERN = "\\[";
-    private static final String TAG_SUFFIX_PATTERN = "\\]";
-    private static final String LONG_TAG_PATTERN_REGEX = TAG_PREFIX_PATTERN //
+    private static final String TAG_PREFIX = "\\[";
+    private static final String TAG_SUFFIX = "\\]";
+    private static final String TAG_REGEX = TAG_PREFIX //
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
             + "->" //
             + "(" + COVERED_ID_PATTERN + ")" //
-            + TAG_SUFFIX_PATTERN;
+            + TAG_SUFFIX;
 
     private final InputFile file;
     private final ImportEventListener listener;
-    private final Pattern tagPattern;
 
     LongTagImportingLineConsumer(final InputFile file, final ImportEventListener listener)
     {
+        super(TAG_REGEX);
         this.file = file;
         this.listener = listener;
-        this.tagPattern = Pattern.compile(LONG_TAG_PATTERN_REGEX);
     }
 
     @Override
-    public void readLine(final int lineNumber, final String line)
+    public void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        final Matcher matcher = this.tagPattern.matcher(line);
-        int counter = 0;
-        while (matcher.find())
-        {
-            this.listener.beginSpecificationItem();
-            this.listener.setLocation(this.file.getPath(), lineNumber);
-            final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
-            final String generatedName = generateName(coveredId, lineNumber, counter);
-            final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
-                    generatedName, 0);
+        this.listener.beginSpecificationItem();
+        this.listener.setLocation(this.file.getPath(), lineNumber);
+        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
+        final String generatedName = generateName(coveredId, lineNumber, lineMatchCount);
+        final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
+                generatedName, 0);
 
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId + "'");
-            this.listener.setId(generatedId);
-            this.listener.addCoveredId(coveredId);
-            this.listener.endSpecificationItem();
-            counter++;
-        }
+        LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                + "' covering id '" + coveredId + "'");
+        this.listener.setId(generatedId);
+        this.listener.addCoveredId(coveredId);
+        this.listener.endSpecificationItem();
     }
 
     private String generateName(final SpecificationItemId coveredId, final int lineNumber,

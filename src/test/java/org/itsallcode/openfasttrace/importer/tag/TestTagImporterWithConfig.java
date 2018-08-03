@@ -31,11 +31,14 @@ import java.util.Optional;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -49,6 +52,10 @@ public class TestTagImporterWithConfig
     private static final String COVERED_ITEM_TYPE = "covered_type";
     private static final String COVERING_ITEM_TYPE = "covering_type";
     private static final String COVERED_ITEM_NAME_PREFIX = "prefix.";
+    private static final String INVALID_REVISION = "invalidRevision";
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     private PathConfig configMock;
@@ -129,6 +136,16 @@ public class TestTagImporterWithConfig
                 SpecificationItemId.createId(COVERING_ITEM_TYPE,
                         COVERED_ITEM_NAME2 + "-4032809256"));
         this.inOrderListener.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void testNonIntegerRevisionRejected()
+    {
+        this.thrown.expect(ImporterException.class);
+        this.thrown.expectMessage("Error processing line dummy:1 ([[" + COVERED_ITEM_NAME1 + ":"
+                + INVALID_REVISION + "]]): Error parsing revision '" + INVALID_REVISION
+                + "' for item '" + COVERED_ITEM_NAME1 + "'");
+        runImport("[[" + COVERED_ITEM_NAME1 + ":" + INVALID_REVISION + "]]");
     }
 
     @Test

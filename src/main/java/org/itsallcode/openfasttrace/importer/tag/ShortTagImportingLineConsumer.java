@@ -43,7 +43,7 @@ class ShortTagImportingLineConsumer extends RegexLineConsumer
     private static final String TAG_REGEX = TAG_PREFIX //
             + SpecificationItemId.ITEM_NAME_PATTERN //
             + ":" //
-            + SpecificationItemId.ITEM_REVISION_PATTERN //
+            + "(\\w+)" //
             + TAG_SUFFIX;
 
     private final PathConfig pathConfig;

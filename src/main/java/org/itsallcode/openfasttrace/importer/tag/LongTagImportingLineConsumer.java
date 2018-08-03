@@ -80,7 +80,6 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
                 .append(counter) //
                 .append(coveredId) //
                 .toString();
-        // this.file.getPath() + lineNumber + counter + coveredId.toString();
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
         return coveredId.getName() + "-" + checksum;
     }

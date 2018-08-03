@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag.config;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
@@ -21,39 +21,22 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import static java.util.Collections.emptyList;
-
 import java.util.List;
 
-/**
- * Configuration for the {@link LegacyTagImporter}.
- */
-public class LegacyTagImporterConfig
+import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
+
+class DelegatingLineConsumer implements LineConsumer
 {
-    private final List<PathConfig> pathConfigs;
+    private final List<LineConsumer> delegates;
 
-    /**
-     * Create a new configuration object.
-     * 
-     * @param pathConfigs
-     *            a list of {@link PathConfig} objects.
-     */
-    public LegacyTagImporterConfig(final List<PathConfig> pathConfigs)
+    DelegatingLineConsumer(final List<LineConsumer> delegates)
     {
-        this.pathConfigs = pathConfigs;
+        this.delegates = delegates;
     }
 
-    /**
-     * Creates a new, empty configuration.
-     */
-    public static LegacyTagImporterConfig empty()
+    @Override
+    public void readLine(final int lineNumber, final String line)
     {
-        return new LegacyTagImporterConfig(emptyList());
-    }
-
-    public List<PathConfig> getPathConfigs()
-    {
-        return this.pathConfigs;
+        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
     }
 }

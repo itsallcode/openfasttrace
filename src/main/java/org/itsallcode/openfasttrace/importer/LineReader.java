@@ -50,13 +50,27 @@ public class LineReader
             while ((line = reader.readLine()) != null)
             {
                 currentLineNumber = reader.getLineNumber();
-                consumer.readLine(currentLineNumber, line);
+                processLine(consumer, currentLineNumber, line);
             }
         }
         catch (final IOException exception)
         {
             throw new ImporterException(
                     "Error reading \"" + this.file + "\" at line " + currentLineNumber, exception);
+        }
+    }
+
+    private void processLine(final LineConsumer consumer, final int currentLineNumber,
+            final String line)
+    {
+        try
+        {
+            consumer.readLine(currentLineNumber, line);
+        }
+        catch (final Exception e)
+        {
+            throw new ImporterException("Error processing line " + this.file.getPath() + ":"
+                    + currentLineNumber + " (" + line + "): " + e.getMessage(), e);
         }
     }
 

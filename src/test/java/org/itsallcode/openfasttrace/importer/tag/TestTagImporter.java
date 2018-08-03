@@ -35,6 +35,7 @@ import java.util.zip.CRC32;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.importer.ImporterContext;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
@@ -48,7 +49,7 @@ import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 // [utest->dsn~import.full-coverage-tag~1]
 public class TestTagImporter
 {
-    private static final String FILENAME = "testfilename";
+    private static final String FILENAME = "testfilename.java";
     private static final SpecificationItemId ID1 = id("artifactTypeA", "name1", 1);
     private static final SpecificationItemId ID2 = id("artifactTypeB", "name2.suffix", 2);
     private static final SpecificationItemId ID3 = id("artifactTypeC", "prefix.name3", 3);
@@ -288,7 +289,9 @@ public class TestTagImporter
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
         final InputFile file = StreamInput.forReader(Paths.get(FILENAME),
                 new BufferedReader(new StringReader(content)));
-        new TagImporterFactory().createImporter(file, builder).runImport();
+        final TagImporterFactory factory = new TagImporterFactory();
+        factory.init(new ImporterContext(null));
+        factory.createImporter(file, builder).runImport();
         return builder.build();
     }
 }

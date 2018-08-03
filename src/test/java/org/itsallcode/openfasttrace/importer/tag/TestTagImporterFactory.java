@@ -26,6 +26,7 @@ import static java.util.Arrays.asList;
 
 import java.util.List;
 
+import org.itsallcode.openfasttrace.importer.ImporterContext;
 import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
 
 /**
@@ -37,7 +38,9 @@ public class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterF
     @Override
     protected TagImporterFactory createFactory()
     {
-        return new TagImporterFactory();
+        final TagImporterFactory factory = new TagImporterFactory();
+        factory.init(new ImporterContext(null));
+        return factory;
     }
 
     @Override

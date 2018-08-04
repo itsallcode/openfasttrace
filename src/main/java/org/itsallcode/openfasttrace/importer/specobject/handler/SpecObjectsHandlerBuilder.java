@@ -73,7 +73,6 @@ public class SpecObjectsHandlerBuilder
         this.listener.setId(this.idBuilder.build());
         this.listener.setLocation(this.locationBuilder.build());
         this.listener.endSpecificationItem();
-        this.listener.setLocation(this.locationBuilder.build());
         this.idBuilder = null;
         this.locationBuilder = null;
     }

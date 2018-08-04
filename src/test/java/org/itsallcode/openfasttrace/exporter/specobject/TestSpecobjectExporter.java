@@ -100,7 +100,7 @@ public class TestSpecobjectExporter
                 + "   </needscoverage>\n" //
                 + "   <providescoverage>\n" //
                 + "    <provcov>\n" //
-                + "     <linksto>covered</linksto>\n" //
+                + "     <linksto>feat:covered</linksto>\n" //
                 + "     <dstversion>1</dstversion>\n" //
                 + "    </provcov>\n" //
                 + "   </providescoverage>\n" //

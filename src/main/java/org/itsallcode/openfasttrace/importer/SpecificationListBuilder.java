@@ -168,7 +168,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void setLocation(final String path, final int line)
     {
-        this.location = Location.create(path, line);
+        this.setLocation(Location.create(path, line));
     }
 
     @Override

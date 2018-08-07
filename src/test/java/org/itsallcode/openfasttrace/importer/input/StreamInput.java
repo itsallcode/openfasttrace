@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.importer.input;
  */
 
 import java.io.BufferedReader;
+import java.io.StringReader;
 import java.nio.file.Path;
 
 public class StreamInput implements InputFile
@@ -34,6 +35,21 @@ public class StreamInput implements InputFile
     {
         this.path = path;
         this.reader = reader;
+    }
+
+    /**
+     * Create an {@link InputFile} for a given file content. This is useful for
+     * tests to avoid using real files.
+     * 
+     * @param path
+     *            a dummy path.
+     * @param content
+     *            the file content.
+     * @return an {@link InputFile}.
+     */
+    public static InputFile forContent(final Path path, final String content)
+    {
+        return forReader(path, new BufferedReader(new StringReader(content)));
     }
 
     /**

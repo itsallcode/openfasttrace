@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import java.util.logging.Logger;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -35,6 +37,8 @@ import javax.annotation.Generated;
 // [impl->dsn~specification-item-id~1]
 public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
+    private static final Logger LOG = Logger.getLogger(SpecificationItemId.class.getName());
+
     public static final String UNKONWN_ARTIFACT_TYPE = "unkonwn";
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
@@ -350,6 +354,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
             else
             {
+                LOG.warning(() -> "Name '" + this.name + "' does not match legacy name pattern '"
+                        + LEGACY_NAME_PATTERN + "': using artifact type '" + UNKONWN_ARTIFACT_TYPE
+                        + "'.");
                 this.artifactType = UNKONWN_ARTIFACT_TYPE;
             }
         }

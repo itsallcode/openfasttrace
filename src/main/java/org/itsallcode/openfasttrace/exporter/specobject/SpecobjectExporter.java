@@ -199,7 +199,7 @@ class SpecobjectExporter implements Exporter
         for (final SpecificationItemId coveredId : coveredIds)
         {
             this.writer.writeStartElement("provcov");
-            writeElement("linksto", coveredId.getName());
+            writeElement("linksto", coveredId.getArtifactType() + ":" + coveredId.getName());
             writeElement("dstversion", coveredId.getRevision());
             this.writer.writeEndElement();
         }

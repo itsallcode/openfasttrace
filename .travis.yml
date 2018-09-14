@@ -31,7 +31,7 @@ addons:
   coverity_scan:
     project:
       name: itsallcode/openfasttrace
-      version: $version:
+      version: $version
       description: OpenFastTrace requirement tracing
     notification_email: christoph@users.sourceforge.net
     build_command_prepend: mvn clean

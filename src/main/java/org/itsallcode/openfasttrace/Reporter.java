@@ -91,6 +91,16 @@ public interface Reporter
     public Reporter setLegacyTagImporterPathConfig(final TagImporterConfig config);
 
     /**
+     * Set whether the report should show origin information (e.g. file and line
+     * number) for specification items
+     * 
+     * @param showOrigin
+     *            <code>true</code> if origin information should be shown
+     * @return a <code>Reporter</code> instance for fluent programming
+     */
+    public Reporter setShowOrigin(final boolean showOrigin);
+
+    /**
      * Run a trace on the input files
      */
     public Trace trace();

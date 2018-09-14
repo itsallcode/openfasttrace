@@ -452,6 +452,25 @@ Reports are the main way to find out if a projects requirements are covered prop
 
 #### Common Report Functions
 
+##### Requirement Origin in Report
+`req~reporting.requirement-origin~1`
+
+Users can choose to display the requirement origin (e.g. file and line number) in reports:
+
+* In the body of a specification item
+* For each link to a specification item 
+
+Rationale:
+
+This is especially useful for debugging since it makes finding broken sources faster.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
 #### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
 

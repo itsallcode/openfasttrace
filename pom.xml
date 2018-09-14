@@ -240,7 +240,7 @@
                 </executions>
                 <configuration>
                     <mainClass>org.itsallcode.openfasttrace.cli.CliStarter</mainClass>
-                    <commandlineArgs>trace doc src/main/java src/test/java</commandlineArgs>
+                    <commandlineArgs>trace -s doc src/main/java src/test/java</commandlineArgs>
                 </configuration>
             </plugin>
             <plugin>

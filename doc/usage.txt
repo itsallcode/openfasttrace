@@ -16,6 +16,8 @@ Tracing options:
 Converting options:
   -o, --output-format format   Requirements format, one of "specobject"
                                Defaults to "specobject"
+  -s, --show-origin            Show the origin of specification items
+                               (e.g. file and line number)             
 
 Common options: 
   -f, --file path              The output file. Defaults to STDOUT.

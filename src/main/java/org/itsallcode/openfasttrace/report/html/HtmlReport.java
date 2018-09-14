@@ -58,7 +58,7 @@ public class HtmlReport implements Reportable
 
     @Override
     public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
-            final ReportVerbosity verbosity)
+            final ReportVerbosity verbosity, final boolean showOrigin)
     {
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
         final ViewableContainer view = factory.createView("", "Specification items by title");

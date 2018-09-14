@@ -169,4 +169,36 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "</section>", //
                 "");
     }
+
+    @Test
+    public void testRenderOrigin()
+    {
+        final Location location = Location.create("foo/bar", 13);
+        final SpecificationItem item = new SpecificationItem.Builder() //
+                .id(ITEM_A_ID) //
+                .location(location) //
+                .build();
+        final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
+        linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERED_SHALLOW);
+        when(this.itemMockB.getLocation())
+                .thenReturn(Location.create("http://example.org/foo.txt", 3));
+        final Viewable view = this.factory.createSpecificationItem(linkedItem);
+        view.render(0);
+        assertOutputLines("<section class=\"sitem\" id=\"dsn~name-a~1\">", //
+                "  <details>", //
+                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                        + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
+                "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
+                "    <p class=\"origin\">foo/bar:13</p>", //
+                "    <div class=\"in\">", //
+                "      <h6>In: 1</h6>", //
+                "      <ul>", //
+                "        <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID
+                        + "</a> <span class=\"origin\"><a href=\"http://example.org/foo.txt\">http://example.org/foo.txt</a>:3</span></li>", //
+                "      </ul>", //
+                "    </div>", //
+                "  </details>", //
+                "</section>", //
+                "");
+    }
 }

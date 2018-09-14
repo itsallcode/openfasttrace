@@ -37,6 +37,7 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     private final Tracer tracer = new Tracer();
     private final ReportService reportService = new ReportService();
     private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
+    private boolean showOrigin;
 
     @Override
     public Trace trace()
@@ -48,7 +49,8 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     @Override
     public void reportToFileInFormat(final Trace trace, final Path output, final String format)
     {
-        this.reportService.reportTraceToPath(trace, output, format, this.verbosity, this.newline);
+        this.reportService.reportTraceToPath(trace, output, format, this.verbosity, this.newline,
+                this.showOrigin);
     }
 
     @Override
@@ -61,7 +63,15 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     @Override
     public void reportToStdOutInFormat(final Trace trace, final String format)
     {
-        this.reportService.reportTraceToStdOut(trace, format, this.verbosity, this.newline);
+        this.reportService.reportTraceToStdOut(trace, format, this.verbosity, this.newline,
+                this.showOrigin);
+    }
+
+    @Override
+    public Reporter setShowOrigin(final boolean showOrigin)
+    {
+        this.showOrigin = showOrigin;
+        return this;
     }
 
     @Override

@@ -62,7 +62,7 @@ public class TestReportService
     public void testReportPlainText()
     {
         this.service.reportTraceToStdOut(this.traceMock, "plain", ReportVerbosity.MINIMAL,
-                Newline.UNIX);
+                Newline.UNIX, false);
         assertThat(this.systemOutRule.getLog(), equalTo("not ok\n"));
     }
 
@@ -70,7 +70,7 @@ public class TestReportService
     public void testReportHtml()
     {
         this.service.reportTraceToStdOut(this.traceMock, "html", ReportVerbosity.MINIMAL,
-                Newline.UNIX);
+                Newline.UNIX, false);
         assertThat(this.systemOutRule.getLog(), startsWith("<!DOCTYPE html>"));
     }
 
@@ -78,7 +78,7 @@ public class TestReportService
     public void testInvalidReportFormatThrowsIllegalArgumentException()
     {
         this.service.reportTraceToStdOut(this.traceMock, "invalid", ReportVerbosity.QUIET,
-                Newline.UNIX);
+                Newline.UNIX, false);
     }
 
     @Test(expected = ReportException.class)
@@ -87,6 +87,6 @@ public class TestReportService
         final File readOnlyFile = this.temporaryFolder.newFile();
         readOnlyFile.setReadOnly();
         this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), "plain",
-                ReportVerbosity.QUIET, Newline.UNIX);
+                ReportVerbosity.QUIET, Newline.UNIX, false);
     }
 }

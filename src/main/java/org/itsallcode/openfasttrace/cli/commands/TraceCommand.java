@@ -61,8 +61,9 @@ public class TraceCommand extends AbstractCommand
         final Reporter reporter = new ReportMode();
         reporter.addInputs(toPaths(this.arguments.getInputs())) //
                 .setFilters(createFilterSettingsFromArguments()) //
-                .setNewline(this.arguments.getNewline())
-                .setReportVerbosity(this.arguments.getReportVerbosity());
+                .setNewline(this.arguments.getNewline()) //
+                .setReportVerbosity(this.arguments.getReportVerbosity()) //
+                .setShowOrigin(this.arguments.getShowOrigin());
         return reporter;
     }
 

@@ -33,11 +33,11 @@ import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 public class ReportService
 {
     public void reportTraceToPath(final Trace trace, final Path outputPath, final String format,
-            final ReportVerbosity verbosity, final Newline newline)
+            final ReportVerbosity verbosity, final Newline newline, final boolean showOrigin)
     {
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, format, verbosity, newline, outputStream);
+            reportTraceToStream(trace, format, verbosity, newline, outputStream, showOrigin);
         }
         catch (final IOException e)
         {
@@ -46,9 +46,9 @@ public class ReportService
     }
 
     public void reportTraceToStdOut(final Trace trace, final String format,
-            final ReportVerbosity verbosity, final Newline newline)
+            final ReportVerbosity verbosity, final Newline newline, final boolean showOrigin)
     {
-        reportTraceToStream(trace, format, verbosity, newline, getStdOutStream());
+        reportTraceToStream(trace, format, verbosity, newline, getStdOutStream(), showOrigin);
     }
 
     // Using System.out by intention
@@ -59,11 +59,12 @@ public class ReportService
     }
 
     private void reportTraceToStream(final Trace trace, final String format,
-            final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream)
+            final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream,
+            final boolean showOrigin)
     {
         final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
         final Reportable report = createReport(trace, format, newline);
-        report.renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
+        report.renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity, showOrigin);
         try
         {
             bufferedOutputStream.flush();

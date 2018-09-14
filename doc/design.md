@@ -327,6 +327,40 @@ Covers:
 
 Needs: impl, utest
 
+#### Plain Text Report Contains Specification Item Origin
+`dsn~reporting.plain-text.specification-item-origin~1`
+
+If enabled, the plain text report shows the origin of a specification item
+
+* for files: `<absolute path to file>:<line number>`
+
+Rationale:
+
+This format is recognized by most IDEs and automatically turned into a link in the IDE's console.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+#### Plain Text Report Link Contains Specification Item Origin
+`dsn~reporting.plain-text.linked-specification-item-origin~1`
+
+If enabled, the links in the plain text report show the origin of a specification item
+
+* for files: `<absolute path to file>:<line number>`
+
+Rationale:
+
+This format is recognized by most IDEs and automatically turned into a link in the IDE's console.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+Needs: impl, utest, itest
+
+### HTML Report
+
 #### HTML Report Inlines CSS
 `dsn~reporting.html.inline_css~1`
 
@@ -353,6 +387,26 @@ Covers:
 * `req~conversion.reqm2-export~1`
 
 Needs: impl, itest
+
+#### HTML Report Contains Specification Item Origin
+`dsn~reporting.html.specification-item-origin~1`
+
+If enabled, the HTML report shows the origin of a specification item as an HTML link pointing to the source.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+#### HTML Report Link Contains Specification Item Origin
+`dsn~reporting.html.linked-specification-item-origin~1`
+
+If enabled, the links in the plain text report show the origin of a specification item as an HTML link pointing to the source.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+Needs: impl, utest, itest
 
 # Deployment View
 

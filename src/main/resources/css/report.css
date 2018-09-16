@@ -119,3 +119,16 @@ summary .title {
   border-top: 1px solid lightgrey;
   font-family: courier;
 }
+
+.origin:before {
+  content: "\1F78B";
+  margin: 0 0.5em;
+}
+
+.origin {
+  font-family: courier;
+}
+
+.sitem p.origin {
+  padding-left: 0.5em;
+}

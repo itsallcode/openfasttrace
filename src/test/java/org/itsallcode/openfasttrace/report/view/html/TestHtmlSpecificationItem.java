@@ -171,6 +171,36 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
+    public void testRenderOutgoingLinks()
+    {
+        final SpecificationItem item = new SpecificationItem.Builder() //
+                .id(ITEM_A_ID) //
+                .build();
+        final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
+        linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERS);
+        linkedItem.addLinkToItemWithStatus(this.itemMockC, LinkStatus.UNWANTED);
+        final Viewable view = this.factory.createSpecificationItem(linkedItem);
+        view.render(0);
+        assertOutputLines( //
+                "<section class=\"sitem\" id=\"dsn~name-a~1\">", //
+                "  <details>", //
+                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                        + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
+                "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
+                "    <div class=\"out\">", //
+                "      <h6>Out: 2</h6>", //
+                "      <ul>", //
+                "        <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID + "</a></li>", //
+                "        <li><a href=\"#" + ITEM_C_ID + "\">" + ITEM_C_ID
+                        + "</a> <em>(unwanted)</em></li>", //
+                "      </ul>", //
+                "    </div>", //
+                "  </details>", //
+                "</section>", //
+                "");
+    }
+
+    @Test
     public void testRenderOrigin()
     {
         final Location location = Location.create("foo/bar", 13);

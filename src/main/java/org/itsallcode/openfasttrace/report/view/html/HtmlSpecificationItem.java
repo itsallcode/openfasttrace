@@ -171,10 +171,13 @@ public class HtmlSpecificationItem implements Viewable
 
     private void renderOrigin(final String indentation)
     {
-        this.stream.print(indentation);
-        this.stream.print("    <p class=\"origin\">");
-        this.stream.print(OriginLinkFormatter.format(this.item.getLocation()));
-        this.stream.println("</p>");
+        final String origin = OriginLinkFormatter.formatAsBlock(this.item.getLocation());
+        if (!origin.isEmpty())
+        {
+            this.stream.print(indentation);
+            this.stream.print("    ");
+            this.stream.println(origin);
+        }
     }
 
     private void renderLinks(final String indentation)
@@ -242,9 +245,13 @@ public class HtmlSpecificationItem implements Viewable
 
     private void renderLinkOrigin(final TracedLink link)
     {
-        this.stream.print(" <span class=\"origin\">");
-        this.stream.print(OriginLinkFormatter.format(link.getOtherLinkEnd().getLocation()));
-        this.stream.print("</span>");
+        final String origin = OriginLinkFormatter
+                .formatAsSpan(link.getOtherLinkEnd().getLocation());
+        if (!origin.isEmpty())
+        {
+            this.stream.print(" ");
+            this.stream.print(origin);
+        }
     }
 
     protected void renderEnd(final String indentation)

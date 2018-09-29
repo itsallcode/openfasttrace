@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.cli.commands;
 
 import java.nio.file.Path;
 
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.cli.CliArguments;
 import org.itsallcode.openfasttrace.core.Trace;
@@ -58,13 +59,20 @@ public class TraceCommand extends AbstractCommand
 
     private Reporter createReporter()
     {
+        final ReportSettings settings = convertCommandLineArgumentsToReportSettings();
         final Reporter reporter = new ReportMode();
         reporter.addInputs(toPaths(this.arguments.getInputs())) //
                 .setFilters(createFilterSettingsFromArguments()) //
-                .setNewline(this.arguments.getNewline()) //
-                .setReportVerbosity(this.arguments.getReportVerbosity()) //
-                .setShowOrigin(this.arguments.getShowOrigin());
+                .configureReport(settings);
         return reporter;
+    }
+
+    private ReportSettings convertCommandLineArgumentsToReportSettings()
+    {
+        return new ReportSettings.Builder()
+                .verbosity(this.arguments.getReportVerbosity())
+                .newlineFormat(this.arguments.getNewline())
+                .showOrigin(this.arguments.getShowOrigin()).build();
     }
 
     private Trace report(final Reporter reporter)
@@ -73,12 +81,11 @@ public class TraceCommand extends AbstractCommand
         final Path outputPath = this.arguments.getOutputPath();
         if (null == outputPath)
         {
-            reporter.reportToStdOutInFormat(trace, this.arguments.getOutputFormat());
+            reporter.reportToStdOut(trace);
         }
         else
         {
-            reporter.reportToFileInFormat(trace, this.arguments.getOutputPath(),
-                    this.arguments.getOutputFormat());
+            reporter.reportToFile(trace, this.arguments.getOutputPath());
         }
         return trace;
     }

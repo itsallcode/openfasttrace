@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
@@ -62,8 +63,9 @@ public class TestPlainTextReport
     public void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
-        new PlainTextReport(this.traceMock, NEWLINE_SEPARATOR)
-                .renderToStreamWithVerbosityLevel(outputStreamMock, ReportVerbosity.SUMMARY, false);
+        final ReportSettings settings = new ReportSettings.Builder()
+                .verbosity(ReportVerbosity.SUMMARY).build();
+        new PlainTextReport(this.traceMock, settings).renderToStream(outputStreamMock);
         verify(outputStreamMock).close();
     }
 
@@ -115,8 +117,10 @@ public class TestPlainTextReport
             final Newline newline, final boolean showOrigin)
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new PlainTextReport(this.traceMock, newline);
-        report.renderToStreamWithVerbosityLevel(outputStream, verbosity, showOrigin);
+        final ReportSettings settings = new ReportSettings.Builder().verbosity(verbosity)
+                .newlineFormat(newline).showOrigin(showOrigin).build();
+        final Reportable report = new PlainTextReport(this.traceMock, settings);
+        report.renderToStream(outputStream);
         return outputStream.toString();
     }
 

@@ -25,19 +25,43 @@ package org.itsallcode.openfasttrace.mode;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.core.Tracer;
 import org.itsallcode.openfasttrace.report.ReportService;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 public class ReportMode extends AbstractMode<ReportMode> implements Reporter
 {
     private final Tracer tracer = new Tracer();
     private final ReportService reportService = new ReportService();
-    private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
-    private boolean showOrigin;
+    private ReportSettings settings;
+
+    /**
+     * Create a new instance of a {@link ReportMode} using the default report
+     * settings.
+     */
+    public ReportMode()
+    {
+        this(new ReportSettings.Builder().build());
+    }
+
+    /**
+     * Create a new instance of a {@link ReportMode} using the custom report
+     * settings.
+     */
+    public ReportMode(final ReportSettings settings)
+    {
+        this.settings = settings;
+    }
+
+    @Override
+    public Reporter configureReport(final ReportSettings settings)
+    {
+        this.settings = settings;
+        return this;
+    }
 
     @Override
     public Trace trace()
@@ -47,31 +71,15 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     }
 
     @Override
-    public void reportToFileInFormat(final Trace trace, final Path output, final String format)
+    public void reportToFile(final Trace trace, final Path output)
     {
-        this.reportService.reportTraceToPath(trace, output, format, this.verbosity, this.newline,
-                this.showOrigin);
+        this.reportService.reportTraceToPath(trace, output, this.settings);
     }
 
     @Override
-    public Reporter setReportVerbosity(final ReportVerbosity verbosity)
+    public void reportToStdOut(final Trace trace)
     {
-        this.verbosity = verbosity;
-        return this;
-    }
-
-    @Override
-    public void reportToStdOutInFormat(final Trace trace, final String format)
-    {
-        this.reportService.reportTraceToStdOut(trace, format, this.verbosity, this.newline,
-                this.showOrigin);
-    }
-
-    @Override
-    public Reporter setShowOrigin(final boolean showOrigin)
-    {
-        this.showOrigin = showOrigin;
-        return this;
+        this.reportService.reportTraceToStdOut(trace, this.settings);
     }
 
     @Override

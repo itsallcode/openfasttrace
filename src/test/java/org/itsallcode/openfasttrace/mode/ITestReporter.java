@@ -34,10 +34,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.itsallcode.openfasttrace.FilterSettings;
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.Reporter;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,8 +64,7 @@ public class ITestReporter extends AbstractOftModeTest
 
     private void writePlainTextReportFromTrace(final Trace trace)
     {
-        this.reporter.reportToFileInFormat(trace, this.outputFile,
-                ReportConstants.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToFile(trace, this.outputFile);
     }
 
     private void assertStandardReportFileResult() throws IOException
@@ -77,8 +76,10 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testTraceWithReportVerbosityMinimal() throws IOException
     {
+        final ReportSettings settings = new ReportSettings.Builder()
+                .verbosity(ReportVerbosity.MINIMAL).build();
         final Trace trace = this.reporter.addInputs(this.docDir) //
-                .setReportVerbosity(ReportVerbosity.MINIMAL) //
+                .configureReport(settings) //
                 .trace();
         writePlainTextReportFromTrace(trace);
         assertOutputFileExists(true);
@@ -88,8 +89,11 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testTraceMacNewlines() throws IOException
     {
+        final ReportSettings settings = new ReportSettings.Builder() //
+                .newlineFormat(Newline.OLDMAC) //
+                .build();
         final Trace trace = this.reporter.addInputs(this.docDir) //
-                .setNewline(Newline.OLDMAC) //
+                .configureReport(settings) //
                 .trace();
         writePlainTextReportFromTrace(trace);
         assertThat(Files.exists(this.outputFile), equalTo(true));
@@ -104,7 +108,7 @@ public class ITestReporter extends AbstractOftModeTest
     {
         final Trace trace = this.reporter.addInputs(this.docDir) //
                 .trace();
-        this.reporter.reportToStdOutInFormat(trace, ReportConstants.DEFAULT_REPORT_FORMAT);
+        this.reporter.reportToStdOut(trace);
         assertStandardReportStdOutResult();
     }
 

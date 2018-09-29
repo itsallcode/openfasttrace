@@ -26,10 +26,8 @@ package org.itsallcode.openfasttrace;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
  * OFT requirements tracer
@@ -63,24 +61,6 @@ public interface Reporter
     public Reporter setFilters(FilterSettings filterSettings);
 
     /**
-     * Set the representation for new line
-     * 
-     * @param newline
-     *            type of newline
-     * @return a <code>Reporter</code> instance for fluent programming
-     */
-    public Reporter setNewline(Newline newline);
-
-    /**
-     * Select how verbose the tracing stream should be
-     * 
-     * @param verbosity
-     *            stream verbosity
-     * @return a <code>Reporter</code> instance for fluent programming
-     */
-    public Reporter setReportVerbosity(final ReportVerbosity verbosity);
-
-    /**
      * Set the {@link TagImporterConfig} for the
      * {@link LegacyTagImporterFactory}.
      * 
@@ -91,14 +71,16 @@ public interface Reporter
     public Reporter setLegacyTagImporterPathConfig(final TagImporterConfig config);
 
     /**
-     * Set whether the report should show origin information (e.g. file and line
-     * number) for specification items
+     * Configure the report settings
      * 
-     * @param showOrigin
-     *            <code>true</code> if origin information should be shown
+     * @param settings
+     *            report settings
      * @return a <code>Reporter</code> instance for fluent programming
+     * 
+     * @see {@link ReportSettings.Builder} for a list of available configuration
+     *      options
      */
-    public Reporter setShowOrigin(final boolean showOrigin);
+    public Reporter configureReport(ReportSettings settings);
 
     /**
      * Run a trace on the input files
@@ -113,22 +95,14 @@ public interface Reporter
      * 
      * @param output
      *            output file or directory
-     * 
-     * @param format
-     *            stream format (this is a name defined in the respective
-     *            reporter plug-in)
      */
-    public void reportToFileInFormat(final Trace trace, final Path output, final String format);
+    public void reportToFile(final Trace trace, final Path output);
 
     /**
      * Write the tracing stream to standard out
      * 
      * @param trace
      *            trace result to be written
-     * 
-     * @param format
-     *            stream format (this is a name defined in the respective
-     *            reporter plug-in)
      */
-    public void reportToStdOutInFormat(final Trace trace, final String format);
+    public void reportToStdOut(final Trace trace);
 }

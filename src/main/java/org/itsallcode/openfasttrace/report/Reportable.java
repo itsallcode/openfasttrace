@@ -34,13 +34,7 @@ public interface Reportable
      * Render the plain text coverage stream.
      *
      * @param outputStream
-     *            the output stream to which the stream is rendered
-     * @param verbosity
-     *            the level of detail that is reported
-     * @param showOrigin
-     *            <code>true</code> if the report should contain origin
-     *            information (e.g file and line number)
+     *            output stream to which the stream is rendered
      */
-    public void renderToStreamWithVerbosityLevel(OutputStream outputStream,
-            ReportVerbosity verbosity, boolean showOrigin);
+    public void renderToStream(final OutputStream outputStream);
 }

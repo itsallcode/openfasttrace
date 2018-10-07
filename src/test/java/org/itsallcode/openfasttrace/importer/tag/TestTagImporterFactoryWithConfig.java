@@ -38,7 +38,7 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImportSettings;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -119,25 +119,25 @@ public class TestTagImporterFactoryWithConfig
         importer.runImport();
     }
 
-    private void assertSupportsFile(final TagImporterConfig config, final String path,
+    private void assertSupportsFile(final TagImportSettings config, final String path,
             final boolean expected)
     {
         final InputFile file = InputFile.forPath(Paths.get(path));
         assertThat(create(config).supportsFile(file), equalTo(expected));
     }
 
-    private Importer createImporter(final TagImporterConfig config, final Path path)
+    private Importer createImporter(final TagImportSettings config, final Path path)
     {
         final InputFile file = InputFile.forPath(path, StandardCharsets.UTF_8);
         return create(config).createImporter(file, this.listenerMock);
     }
 
-    private TagImporterConfig configure(final PathConfig... pathConfigs)
+    private TagImportSettings configure(final PathConfig... pathConfigs)
     {
-        return new TagImporterConfig(asList(pathConfigs));
+        return new TagImportSettings(asList(pathConfigs));
     }
 
-    private TagImporterFactory create(final TagImporterConfig config)
+    private TagImporterFactory create(final TagImportSettings config)
     {
         final TagImporterFactory factory = new TagImporterFactory();
         factory.init(this.contextMock);

@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.importer;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImportSettings;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ import org.mockito.MockitoAnnotations;
 public class TestImporterContext
 {
     @Mock
-    private TagImporterConfig configMock;
+    private TagImportSettings configMock;
     @Mock
     private ImporterService importerServiceMock;
 

@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.cli.commands;
 
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.Converter;
+import org.itsallcode.openfasttrace.Export;
 import org.itsallcode.openfasttrace.cli.CliArguments;
 import org.itsallcode.openfasttrace.mode.ConvertMode;
 
@@ -50,23 +50,23 @@ public class ConvertCommand extends AbstractCommand implements Performable
     @Override
     public boolean run()
     {
-        final Converter converter = createConverter();
+        final Export converter = createConverter();
         convert(converter);
         return true;
     }
 
-    private Converter createConverter()
+    private Export createConverter()
     {
-        final Converter converter = new ConvertMode();
+        final Export converter = new ConvertMode();
         converter.addInputs(toPaths(this.arguments.getInputs())) //
                 .setFilters(createFilterSettingsFromArguments()) //
                 .setNewline(this.arguments.getNewline());
         return converter;
     }
 
-    private void convert(final Converter converter)
+    private void convert(final Export converter)
     {
         final Path outputPath = this.arguments.getOutputPath();
-        converter.convertToFileInFormat(outputPath, this.arguments.getOutputFormat());
+        converter.exportToFileInFormat(outputPath, this.arguments.getOutputFormat());
     }
 }

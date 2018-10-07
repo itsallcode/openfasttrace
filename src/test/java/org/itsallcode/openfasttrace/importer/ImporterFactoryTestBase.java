@@ -34,7 +34,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImportSettings;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     {
         MockitoAnnotations.initMocks(this);
         when(this.contextMock.getTagImporterConfig())
-                .thenReturn(new TagImporterConfig(emptyList()));
+                .thenReturn(new TagImportSettings(emptyList()));
     }
 
     @Test

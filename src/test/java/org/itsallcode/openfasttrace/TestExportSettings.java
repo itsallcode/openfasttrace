@@ -25,39 +25,30 @@ package org.itsallcode.openfasttrace;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.itsallcode.openfasttrace.ReportSettings.Builder;
 import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestReportSettings
+/**
+ * This class implements a parameter object to control the settings of OFT's
+ * export mode.
+ */
+public class TestExportSettings
 {
-    private Builder builder;
+    private ExportSettings.Builder builder;
 
     @Before
     public void before()
     {
-        this.builder = new ReportSettings.Builder();
-    }
-
-    @Test
-    public void testDefaultVerbosity()
-    {
-        assertThat(this.builder.build().getReportVerbosity(),
-                equalTo(ReportVerbosity.FAILURE_DETAILS));
-    }
-
-    @Test
-    public void testOriginNotShownByDefault()
-    {
-        assertThat(this.builder.build().showOrigin(), equalTo(false));
+        this.builder = new ExportSettings.Builder();
     }
 
     @Test
     public void testDefaultOutputFormat()
     {
-        assertThat(this.builder.build().getOutputFormat(), equalTo("plain"));
+        assertThat(this.builder.build().getOutputFormat(),
+                equalTo(ExporterConstants.DEFAULT_OUTPUT_FORMAT));
     }
 
     @Test
@@ -67,22 +58,9 @@ public class TestReportSettings
     }
 
     @Test
-    public void testBuildWithVerbosity()
-    {
-        assertThat(this.builder.verbosity(ReportVerbosity.ALL).build().getReportVerbosity(),
-                equalTo(ReportVerbosity.ALL));
-    }
-
-    @Test
-    public void testBuildWithOriginShown()
-    {
-        assertThat(this.builder.showOrigin(true).build().showOrigin(), equalTo(true));
-    }
-
-    @Test
     public void testBuildWithOutputFormat()
     {
-        assertThat(this.builder.outputFormat("html").build().getOutputFormat(), equalTo("html"));
+        assertThat(this.builder.outputFormat("foo").build().getOutputFormat(), equalTo("foo"));
     }
 
     @Test

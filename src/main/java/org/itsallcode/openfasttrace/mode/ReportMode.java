@@ -26,13 +26,13 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.ReportSettings;
-import org.itsallcode.openfasttrace.Reporter;
+import org.itsallcode.openfasttrace.Report;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.core.Tracer;
 import org.itsallcode.openfasttrace.report.ReportService;
 
-public class ReportMode extends AbstractMode<ReportMode> implements Reporter
+public class ReportMode extends AbstractMode<ReportMode> implements Report
 {
     private final Tracer tracer = new Tracer();
     private final ReportService reportService = new ReportService();
@@ -57,7 +57,7 @@ public class ReportMode extends AbstractMode<ReportMode> implements Reporter
     }
 
     @Override
-    public Reporter configureReport(final ReportSettings settings)
+    public Report configure(final ReportSettings settings)
     {
         this.settings = settings;
         return this;

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.Reporter;
+import org.itsallcode.openfasttrace.Report;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.Before;
@@ -61,7 +61,7 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
-    private Reporter reporter;
+    private Report reporter;
 
     @Before
     public void before() throws IOException

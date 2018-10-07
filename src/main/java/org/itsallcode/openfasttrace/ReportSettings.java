@@ -35,14 +35,14 @@ public class ReportSettings
     private final ReportVerbosity verbosity;
     private final boolean showOrigin;
     private final String outputFormat;
-    private final Newline newlineFormat;
+    private final Newline newline;
 
     private ReportSettings(final Builder builder)
     {
         this.verbosity = builder.verbosity;
         this.showOrigin = builder.showOrigin;
         this.outputFormat = builder.outputFormat;
-        this.newlineFormat = builder.newlineFormat;
+        this.newline = builder.newline;
     }
 
     /**
@@ -80,9 +80,19 @@ public class ReportSettings
      * 
      * @return newline format
      */
-    public Newline getNewlineFormat()
+    public Newline getNewline()
     {
-        return this.newlineFormat;
+        return this.newline;
+    }
+
+    /**
+     * Create default report settings
+     * 
+     * @return default settings
+     */
+    public static ReportSettings createDefault()
+    {
+        return new Builder().build();
     }
 
     /**
@@ -90,7 +100,7 @@ public class ReportSettings
      */
     public static class Builder
     {
-        public Newline newlineFormat = Newline.UNIX;
+        public Newline newline = Newline.UNIX;
         public String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
         public boolean showOrigin = false;
         ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
@@ -148,13 +158,13 @@ public class ReportSettings
         /**
          * Set the newline format
          * 
-         * @param newlineFormat
+         * @param newline
          *            newline format
          * @return <code>this</code> for fluent programming
          */
-        public Builder newlineFormat(final Newline newlineFormat)
+        public Builder newline(final Newline newline)
         {
-            this.newlineFormat = newlineFormat;
+            this.newline = newline;
             return this;
         }
     }

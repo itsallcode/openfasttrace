@@ -106,7 +106,7 @@ public class PlainTextReport implements Reportable
             break;
         case ALL:
             renderAll(report, this.settings.showOrigin());
-            report.print(this.settings.getNewlineFormat());
+            report.print(this.settings.getNewline());
             renderSummary(report);
             break;
         default:
@@ -119,14 +119,14 @@ public class PlainTextReport implements Reportable
     {
         if (this.trace.countDefects() > 0)
         {
-            report.print(this.settings.getNewlineFormat());
+            report.print(this.settings.getNewline());
         }
     }
 
     private void renderResultStatus(final PrintStream report)
     {
         report.print(translateStatus(this.trace.hasNoDefects()));
-        report.print(this.settings.getNewlineFormat().toString());
+        report.print(this.settings.getNewline().toString());
     }
 
     private String translateStatus(final boolean ok)
@@ -147,7 +147,7 @@ public class PlainTextReport implements Reportable
             report.print(this.trace.countDefects());
             report.print(" defect");
         }
-        report.print(this.settings.getNewlineFormat());
+        report.print(this.settings.getNewline());
     }
 
     private void renderFailureIds(final PrintStream report)
@@ -156,7 +156,7 @@ public class PlainTextReport implements Reportable
                 .sorted()//
                 .forEachOrdered(id -> {
                     report.print(id);
-                    report.print(this.settings.getNewlineFormat().toString());
+                    report.print(this.settings.getNewline().toString());
                 });
     }
 
@@ -178,7 +178,7 @@ public class PlainTextReport implements Reportable
         report.print(" ");
         renderMaturity(report, item);
         report.print(translateArtifactTypeCoverage(item));
-        report.print(this.settings.getNewlineFormat());
+        report.print(this.settings.getNewline());
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
@@ -263,7 +263,7 @@ public class PlainTextReport implements Reportable
     private void renderEmptyItemDetailsLine(final PrintStream report)
     {
         report.print("|");
-        report.print(this.settings.getNewlineFormat());
+        report.print(this.settings.getNewline());
     }
 
     private void renderDescription(final PrintStream report, final LinkedSpecificationItem item)
@@ -276,7 +276,7 @@ public class PlainTextReport implements Reportable
             {
                 report.print("| ");
                 report.print(line);
-                report.print(this.settings.getNewlineFormat());
+                report.print(this.settings.getNewline());
             }
             ++this.nonEmptySections;
         }
@@ -312,7 +312,7 @@ public class PlainTextReport implements Reportable
         report.print(status.getShortTag());
         report.print(") ");
         report.print(link.getOtherLinkEnd().getId());
-        report.print(this.settings.getNewlineFormat());
+        report.print(this.settings.getNewline());
         if (showOrigin)
         {
             final Location location = link.getOtherLinkEnd().getLocation();
@@ -320,7 +320,7 @@ public class PlainTextReport implements Reportable
             {
                 report.print("|        ");
                 renderOrigin(report, location);
-                report.print(this.settings.getNewlineFormat());
+                report.print(this.settings.getNewline());
             }
         }
     }
@@ -333,7 +333,7 @@ public class PlainTextReport implements Reportable
             renderEmptyItemDetailsLine(report);
             report.print("| #: ");
             report.print(tags.stream().collect(Collectors.joining(", ")));
-            report.print(this.settings.getNewlineFormat());
+            report.print(this.settings.getNewline());
             ++this.nonEmptySections;
         }
     }
@@ -349,7 +349,7 @@ public class PlainTextReport implements Reportable
             report.print(":");
             report.print(location.getLine());
             report.print(")");
-            report.print(this.settings.getNewlineFormat());
+            report.print(this.settings.getNewline());
         }
     }
 

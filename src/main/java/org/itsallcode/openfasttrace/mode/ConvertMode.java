@@ -24,15 +24,15 @@ package org.itsallcode.openfasttrace.mode;
 
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.Converter;
+import org.itsallcode.openfasttrace.Export;
 import org.itsallcode.openfasttrace.exporter.ExporterService;
 
-public class ConvertMode extends AbstractMode<ConvertMode> implements Converter
+public class ConvertMode extends AbstractMode<ConvertMode> implements Export
 {
     private final ExporterService exporterService = new ExporterService();
 
     @Override
-    public void convertToFileInFormat(final Path output, final String format)
+    public void exportToFileInFormat(final Path output, final String format)
     {
         this.exporterService.exportFile(importItems(), format, output, this.newline);
     }

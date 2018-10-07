@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.Objects;
 
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
+import org.itsallcode.openfasttrace.ImportSettings;
 
 /**
  * Common context shared by all {@link ImporterFactory}s. This allows importers
@@ -31,18 +31,18 @@ import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
  */
 public class ImporterContext
 {
-    private final TagImporterConfig tagImporterConfig;
+    private final ImportSettings settings;
     private ImporterService importerService;
 
     /**
      * Creates a new {@link ImporterContext}.
      * 
-     * @param tagImporterConfig
+     * @param settings
      *            importer specific configuration.
      */
-    public ImporterContext(final TagImporterConfig tagImporterConfig)
+    public ImporterContext(final ImportSettings settings)
     {
-        this.tagImporterConfig = tagImporterConfig;
+        this.settings = settings;
     }
 
     /**
@@ -72,8 +72,8 @@ public class ImporterContext
      * 
      * @return importer specific configuration.
      */
-    public TagImporterConfig getTagImporterConfig()
+    public ImportSettings getImportSettings()
     {
-        return this.tagImporterConfig;
+        return this.settings;
     }
 }

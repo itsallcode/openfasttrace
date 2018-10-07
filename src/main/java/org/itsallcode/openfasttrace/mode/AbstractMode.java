@@ -33,14 +33,14 @@ import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.TagImportSettings;
 
 abstract class AbstractMode<T extends AbstractMode<T>>
 {
     protected final List<Path> inputs = new ArrayList<>();
     protected Newline newline = Newline.UNIX;
     private FilterSettings filterSettings = FilterSettings.createAllowingEverything();
-    private TagImporterConfig tagImporterConfig = TagImporterConfig.empty();
+    private TagImportSettings tagImporterConfig = TagImportSettings.empty();
 
     protected abstract T self();
 
@@ -68,7 +68,7 @@ abstract class AbstractMode<T extends AbstractMode<T>>
         return self();
     }
 
-    public T setLegacyTagImporterPathConfig(final TagImporterConfig tagImporterConfig)
+    public T setLegacyTagImporterPathConfig(final TagImportSettings tagImporterConfig)
     {
         this.tagImporterConfig = tagImporterConfig;
         return self();

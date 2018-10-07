@@ -26,7 +26,7 @@ package org.itsallcode.openfasttrace.cli.commands;
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.ReportSettings;
-import org.itsallcode.openfasttrace.Reporter;
+import org.itsallcode.openfasttrace.Report;
 import org.itsallcode.openfasttrace.cli.CliArguments;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.mode.ReportMode;
@@ -52,18 +52,18 @@ public class TraceCommand extends AbstractCommand
     @Override
     public boolean run()
     {
-        final Reporter reporter = createReporter();
+        final Report reporter = createReporter();
         final Trace trace = report(reporter);
         return trace.hasNoDefects();
     }
 
-    private Reporter createReporter()
+    private Report createReporter()
     {
         final ReportSettings settings = convertCommandLineArgumentsToReportSettings();
-        final Reporter reporter = new ReportMode();
+        final Report reporter = new ReportMode();
         reporter.addInputs(toPaths(this.arguments.getInputs())) //
                 .setFilters(createFilterSettingsFromArguments()) //
-                .configureReport(settings);
+                .configure(settings);
         return reporter;
     }
 
@@ -71,11 +71,11 @@ public class TraceCommand extends AbstractCommand
     {
         return new ReportSettings.Builder()
                 .verbosity(this.arguments.getReportVerbosity())
-                .newlineFormat(this.arguments.getNewline())
+                .newline(this.arguments.getNewline())
                 .showOrigin(this.arguments.getShowOrigin()).build();
     }
 
-    private Trace report(final Reporter reporter)
+    private Trace report(final Report reporter)
     {
         final Trace trace = reporter.trace();
         final Path outputPath = this.arguments.getOutputPath();
@@ -85,7 +85,7 @@ public class TraceCommand extends AbstractCommand
         }
         else
         {
-            reporter.reportToFile(trace, this.arguments.getOutputPath());
+            reporter.reportToPath(trace, this.arguments.getOutputPath());
         }
         return trace;
     }

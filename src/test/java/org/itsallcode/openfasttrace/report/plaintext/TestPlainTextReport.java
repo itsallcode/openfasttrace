@@ -118,7 +118,7 @@ public class TestPlainTextReport
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
         final ReportSettings settings = new ReportSettings.Builder().verbosity(verbosity)
-                .newlineFormat(newline).showOrigin(showOrigin).build();
+                .newline(newline).showOrigin(showOrigin).build();
         final Reportable report = new PlainTextReport(this.traceMock, settings);
         report.renderToStream(outputStream);
         return outputStream.toString();

@@ -36,12 +36,12 @@ public class ConvertCommand extends AbstractCommand implements Performable
     private void convert(final List<SpecificationItem> items)
     {
         final ExportSettings exportSettings = createExportSettingsFromArguments();
-        this.oft.export(items, exportSettings);
+        this.oft.exportToPath(items, this.arguments.getOutputPath(), exportSettings);
     }
 
     private ExportSettings createExportSettingsFromArguments()
     {
-        return new ExportSettings.Builder() //
+        return ExportSettings.builder() //
                 .newline(this.arguments.getNewline()) //
                 .outputFormat(this.arguments.getOutputFormat()) //
                 .build();

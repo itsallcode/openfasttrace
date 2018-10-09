@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.*;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.exporter.ExporterService;
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.report.ReportService;
 
@@ -69,25 +70,26 @@ public class OftRunner implements Oft
     }
 
     @Override
-    public void export(final List<SpecificationItem> items)
+    public void exportToPath(final List<SpecificationItem> items, final Path path)
     {
-        // TODO Auto-generated method stub
+        exportToPath(items, path, ExportSettings.createDefault());
     }
 
     @Override
-    public void export(final List<SpecificationItem> items, final ExportSettings settings)
+    public void exportToPath(final List<SpecificationItem> items, final Path path,
+            final ExportSettings settings)
     {
-        // TODO Auto-generated method stub
+        new ExporterService().exportToPath(items.stream(), path, settings);
     }
 
     @Override
-    public void report(final Trace trace)
+    public void reportToStdOut(final Trace trace)
     {
         new ReportService().reportTraceToStdOut(trace, ReportSettings.createDefault());
     }
 
     @Override
-    public void report(final Trace trace, final ReportSettings settings)
+    public void reportToStdOut(final Trace trace, final ReportSettings settings)
     {
         new ReportService().reportTraceToStdOut(trace, settings);
     }

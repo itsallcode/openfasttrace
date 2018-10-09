@@ -58,7 +58,7 @@ public class TestImportSettings
         final String[] expectedTags = { "a", "b" };
         final FilterSettings filter = new FilterSettings.Builder()
                 .tags(new HashSet<>(Arrays.asList(expectedTags))).build();
-        assertThat(new ImportSettings.Builder().filter(filter).build().getFilters().getTags(),
+        assertThat(ImportSettings.builder().filter(filter).build().getFilters().getTags(),
                 containsInAnyOrder(expectedTags));
     }
 
@@ -71,7 +71,7 @@ public class TestImportSettings
                 .coveredItemArtifactType("a1").coveredItemNamePrefix("b1").tagArtifactType("c1")
                 .build();
         expectedPathConfigs.add(expectedFirstPathConfig);
-        assertThat(new ImportSettings.Builder().pathConfigs(expectedPathConfigs).build()
+        assertThat(ImportSettings.builder().pathConfigs(expectedPathConfigs).build()
                 .getPathConfigs().get(0), equalTo(expectedFirstPathConfig));
     }
 }

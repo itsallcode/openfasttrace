@@ -77,7 +77,7 @@ public class TraceCommand extends AbstractCommand
         final ReportSettings reportSettings = convertCommandLineArgumentsToReportSettings();
         if (null == outputPath)
         {
-            oft.report(trace, reportSettings);
+            oft.reportToStdOut(trace, reportSettings);
         }
         else
         {

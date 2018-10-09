@@ -1,4 +1,3 @@
-
 package org.itsallcode.openfasttrace;
 
 /*-
@@ -88,21 +87,31 @@ public interface Oft
 
     /**
      * Export items with default settings
+     * 
+     * @param items
+     *            items to be exported
+     * @param path
+     *            output path for export
      */
-    public void export(List<SpecificationItem> items);
+    public void exportToPath(List<SpecificationItem> items, final Path path);
 
     /**
      * Export items
      * 
+     * @param items
+     *            items to be exported
+     * @param path
+     *            output path for export
      * @param settings
      *            export settings
      */
-    public void export(List<SpecificationItem> items, ExportSettings settings);
+    public void exportToPath(final List<SpecificationItem> items, final Path path,
+            ExportSettings settings);
 
     /**
      * Generate a report with default settings
      */
-    public void report(Trace trace);
+    public void reportToStdOut(Trace trace);
 
     /**
      * Generate a report
@@ -113,7 +122,7 @@ public interface Oft
      * @param settings
      *            report settings
      */
-    public void report(Trace trace, ReportSettings settings);
+    public void reportToStdOut(Trace trace, ReportSettings settings);
 
     /**
      * Generate a report

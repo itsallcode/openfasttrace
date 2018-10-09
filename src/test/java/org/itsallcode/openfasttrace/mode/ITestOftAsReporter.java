@@ -97,7 +97,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     @Test
     public void testTraceToStdOut() throws IOException
     {
-        this.oft.report(this.trace);
+        this.oft.reportToStdOut(this.trace);
         assertStandardReportStdOutResult();
     }
 
@@ -122,7 +122,7 @@ public class ITestOftAsReporter extends AbstractOftTest
 
     private Trace traceWithFilters(final FilterSettings filterSettings)
     {
-        final ImportSettings importSettings = new ImportSettings.Builder().filter(filterSettings)
+        final ImportSettings importSettings = ImportSettings.builder().filter(filterSettings)
                 .build();
         final List<SpecificationItem> filteredItems = this.oft.importItems(importSettings);
         final List<LinkedSpecificationItem> filteredSpecificationItems = this.oft

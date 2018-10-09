@@ -88,7 +88,7 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
     private List<String> getIdsFromTraceWithFilterSettings(final FilterSettings filterSettings)
     {
         final List<SpecificationItem> items = this.oft
-                .importItems(new ImportSettings.Builder().filter(filterSettings).build());
+                .importItems(ImportSettings.builder().filter(filterSettings).build());
         final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
         final Trace trace = this.oft.trace(linkedItems);
         final List<String> filteredIds = trace.getItems() //

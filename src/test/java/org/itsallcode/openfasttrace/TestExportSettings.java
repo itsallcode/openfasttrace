@@ -41,7 +41,7 @@ public class TestExportSettings
     @Before
     public void before()
     {
-        this.builder = new ExportSettings.Builder();
+        this.builder = ExportSettings.builder();
     }
 
     @Test

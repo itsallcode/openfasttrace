@@ -61,12 +61,34 @@ public class ExportSettings
     }
 
     /**
+     * Create default exporter settings
+     * 
+     * @return default exporter settings
+     */
+    public static ExportSettings createDefault()
+    {
+        return builder().build();
+    }
+
+    /**
+     * Create an export settings builder
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    /**
      * Builder for {@link ExportSettings}
      */
     public static class Builder
     {
         private String outputFormat = ExporterConstants.DEFAULT_OUTPUT_FORMAT;
         private Newline newline = Newline.UNIX;
+
+        private Builder()
+        {
+        }
 
         /**
          * Set the converter output format

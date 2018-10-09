@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.importer;
 
-import static java.util.Collections.emptyList;
-
 /*-
  * #%L
  \* OpenFastTrace
@@ -33,8 +31,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.tag.config.TagImportSettings;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,8 +57,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     public void initMocks()
     {
         MockitoAnnotations.initMocks(this);
-        when(this.contextMock.getTagImporterConfig())
-                .thenReturn(new TagImportSettings(emptyList()));
+        when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
 
     @Test

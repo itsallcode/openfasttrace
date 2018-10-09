@@ -66,7 +66,15 @@ public class ImportSettings
      */
     public static ImportSettings createDefault()
     {
-        return new Builder().build();
+        return builder().build();
+    }
+
+    /**
+     * Create an export settings builder
+     */
+    public static Builder builder()
+    {
+        return new Builder();
     }
 
     /**
@@ -76,6 +84,10 @@ public class ImportSettings
     {
         private FilterSettings filter = FilterSettings.createAllowingEverything();
         private List<PathConfig> pathConfigs = new ArrayList<>();
+
+        private Builder()
+        {
+        }
 
         /**
          * Set the filters to be used during import

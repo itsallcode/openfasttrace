@@ -35,7 +35,7 @@ import java.nio.file.Paths;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-public abstract class AbstractOftModeTest
+public abstract class AbstractOftTest
 {
 
     protected static final String NEWLINE = "\n";

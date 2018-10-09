@@ -30,7 +30,7 @@ import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ITestConverter extends AbstractOftModeTest
+public class ITestConverter extends AbstractOftTest
 {
     private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
 

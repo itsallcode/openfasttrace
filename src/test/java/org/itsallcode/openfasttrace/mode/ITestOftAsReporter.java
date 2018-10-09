@@ -39,7 +39,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 
-public class ITestOftAsReporter extends AbstractOftModeTest
+public class ITestOftAsReporter extends AbstractOftTest
 {
     private Oft oft;
     @Rule
@@ -60,6 +60,7 @@ public class ITestOftAsReporter extends AbstractOftModeTest
     @Test
     public void testTraceToFile() throws IOException
     {
+        this.oft.reportToPath(this.trace, this.outputFile);
         assertStandardReportFileResult();
     }
 
@@ -96,9 +97,7 @@ public class ITestOftAsReporter extends AbstractOftModeTest
     @Test
     public void testTraceToStdOut() throws IOException
     {
-        final List<SpecificationItem> items = this.oft.addInputs(this.docDir).importItems();
-        final Trace trace = this.oft.trace(this.oft.link(items));
-        this.oft.report(trace);
+        this.oft.report(this.trace);
         assertStandardReportStdOutResult();
     }
 

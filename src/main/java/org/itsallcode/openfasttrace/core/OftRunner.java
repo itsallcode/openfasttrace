@@ -31,17 +31,16 @@ public class OftRunner implements Oft
     }
 
     @Override
-    public List<SpecificationItem> importItems()
+    public List<SpecificationItem> importItems(final ImportSettings settings)
     {
-        return createImporterService() //
+        return createImporterService(settings) //
                 .createImporter() //
                 .importAny(this.inputs) //
                 .getImportedItems();
     }
 
-    private ImporterService createImporterService()
+    private ImporterService createImporterService(final ImportSettings settings)
     {
-        final ImportSettings settings = ImportSettings.createDefault();
         final ImporterContext context = new ImporterContext(settings);
         final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader = InitializingServiceLoader
                 .load(ImporterFactory.class, context);
@@ -52,12 +51,9 @@ public class OftRunner implements Oft
     }
 
     @Override
-    public List<SpecificationItem> importItems(final ImportSettings settings)
+    public List<SpecificationItem> importItems()
     {
-        return createImporterService() //
-                .createImporter() //
-                .importAny(this.inputs) //
-                .getImportedItems();
+        return importItems(ImportSettings.createDefault());
     }
 
     @Override

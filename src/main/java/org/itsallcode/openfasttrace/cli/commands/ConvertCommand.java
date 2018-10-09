@@ -1,33 +1,11 @@
 
 package org.itsallcode.openfasttrace.cli.commands;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
+import java.util.List;
 
-import java.nio.file.Path;
-
-import org.itsallcode.openfasttrace.Export;
+import org.itsallcode.openfasttrace.ExportSettings;
 import org.itsallcode.openfasttrace.cli.CliArguments;
-import org.itsallcode.openfasttrace.mode.ConvertMode;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
  * Handler for specification item conversion CLI command.
@@ -50,23 +28,22 @@ public class ConvertCommand extends AbstractCommand implements Performable
     @Override
     public boolean run()
     {
-        final Export converter = createConverter();
-        convert(converter);
+        final List<SpecificationItem> items = importItems();
+        convert(items);
         return true;
     }
 
-    private Export createConverter()
+    private void convert(final List<SpecificationItem> items)
     {
-        final Export converter = new ConvertMode();
-        converter.addInputs(toPaths(this.arguments.getInputs())) //
-                .setFilters(createFilterSettingsFromArguments()) //
-                .setNewline(this.arguments.getNewline());
-        return converter;
+        final ExportSettings exportSettings = createExportSettingsFromArguments();
+        this.oft.export(items, exportSettings);
     }
 
-    private void convert(final Export converter)
+    private ExportSettings createExportSettingsFromArguments()
     {
-        final Path outputPath = this.arguments.getOutputPath();
-        converter.exportToFileInFormat(outputPath, this.arguments.getOutputFormat());
+        return new ExportSettings.Builder() //
+                .newline(this.arguments.getNewline()) //
+                .outputFormat(this.arguments.getOutputFormat()) //
+                .build();
     }
 }

@@ -63,8 +63,8 @@ public class TestPlainTextReport
     public void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
-        final ReportSettings settings = new ReportSettings.Builder()
-                .verbosity(ReportVerbosity.SUMMARY).build();
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.SUMMARY)
+                .build();
         new PlainTextReport(this.traceMock, settings).renderToStream(outputStreamMock);
         verify(outputStreamMock).close();
     }
@@ -117,7 +117,7 @@ public class TestPlainTextReport
             final Newline newline, final boolean showOrigin)
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final ReportSettings settings = new ReportSettings.Builder().verbosity(verbosity)
+        final ReportSettings settings = ReportSettings.builder().verbosity(verbosity)
                 .newline(newline).showOrigin(showOrigin).build();
         final Reportable report = new PlainTextReport(this.traceMock, settings);
         report.renderToStream(outputStream);

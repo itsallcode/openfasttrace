@@ -61,8 +61,8 @@ public class TestReportService
     @Test
     public void testReportPlainText()
     {
-        final ReportSettings settings = new ReportSettings.Builder()
-                .verbosity(ReportVerbosity.MINIMAL).build();
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+                .build();
         this.service.reportTraceToStdOut(this.traceMock, settings);
         assertThat(this.systemOutRule.getLog(), equalTo("not ok\n"));
     }
@@ -70,7 +70,7 @@ public class TestReportService
     @Test
     public void testReportHtml()
     {
-        final ReportSettings settings = new ReportSettings.Builder().outputFormat("html")
+        final ReportSettings settings = ReportSettings.builder().outputFormat("html")
                 .verbosity(ReportVerbosity.MINIMAL).build();
         this.service.reportTraceToStdOut(this.traceMock, settings);
         assertThat(this.systemOutRule.getLog(), startsWith("<!DOCTYPE html>"));
@@ -79,7 +79,7 @@ public class TestReportService
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidReportFormatThrowsIllegalArgumentException()
     {
-        final ReportSettings settings = new ReportSettings.Builder().outputFormat("invalid")
+        final ReportSettings settings = ReportSettings.builder().outputFormat("invalid")
                 .verbosity(ReportVerbosity.QUIET).build();
         this.service.reportTraceToStdOut(this.traceMock, settings);
     }
@@ -89,8 +89,8 @@ public class TestReportService
     {
         final File readOnlyFile = this.temporaryFolder.newFile();
         readOnlyFile.setReadOnly();
-        final ReportSettings settings = new ReportSettings.Builder()
-                .verbosity(ReportVerbosity.QUIET).build();
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.QUIET)
+                .build();
         this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), settings);
     }
 }

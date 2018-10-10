@@ -73,8 +73,8 @@ public class ITestOftAsReporter extends AbstractOftTest
     @Test
     public void testTraceWithReportVerbosityMinimal() throws IOException
     {
-        final ReportSettings settings = new ReportSettings.Builder()
-                .verbosity(ReportVerbosity.MINIMAL).build();
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+                .build();
         this.oft.reportToPath(this.trace, this.outputFile, settings);
         assertOutputFileExists(true);
         assertOutputFileContentStartsWith("ok");
@@ -83,7 +83,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     @Test
     public void testTraceMacNewlines() throws IOException
     {
-        final ReportSettings settings = new ReportSettings.Builder() //
+        final ReportSettings settings = ReportSettings.builder() //
                 .newline(Newline.OLDMAC) //
                 .build();
         this.oft.reportToPath(this.trace, this.outputFile, settings);

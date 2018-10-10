@@ -92,7 +92,17 @@ public class ReportSettings
      */
     public static ReportSettings createDefault()
     {
-        return new Builder().build();
+        return builder().build();
+    }
+
+    /**
+     * Create a builder for {@link ReportSettings}
+     * 
+     * @return builder
+     */
+    public static Builder builder()
+    {
+        return new Builder();
     }
 
     /**
@@ -104,6 +114,11 @@ public class ReportSettings
         public String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
         public boolean showOrigin = false;
         ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
+
+        private Builder()
+        {
+
+        }
 
         /**
          * Create a new instance of {@link ReportSettings}

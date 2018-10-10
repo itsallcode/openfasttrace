@@ -420,57 +420,103 @@ Defaults to the platform standard if not given.
 
 If you are a software developer planning to integrate OFT into one of your programs or scripts, you will probably want to use the OFT API.
 
-Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interfaces in the source code.
-
-* [org.itsallcode.openfasttrace.Converter](../src/main/java/org/itsallcoded/openfasttrace/Converter.java)
-* [org.itsallcode.openfasttrace.Reporter](../src/main/java/org/itsallcoded/openfasttrace/Reporter.java)
+Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interface [org.itsallcode.openfasttrace.Oft](../src/main/java/org/itsallcoded/openfasttrace/Oft.java) in the source code.
 
 ### Using OFT From Java
 
 The Java interface uses the "fluent programming" paradigm to make the code more compact and easy to read.
 
-#### Using the Converter From Java
+The steps that you need to program using the OFT API depend on whether you want to covert between requirement formats
 
-The following example code configures a `Converter` to read input form the relative paths `doc`, `src/main/java` and `src/main/test` and output the result to `/tmp/out.xml` in SpecObject format using Unix newlines. 
+    import -> export
+
+or run a report.
+
+     import -> link -> trace -> report
+
+#### Converting File from Java
+
+The following example code use a OFT as a converter to read input form a path and exports it with the standard settings to a ReqM2 file. 
 
 ```JAVA
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.mode.ConvertMode;
-
-final List<String> inputs = Arrays.asList("doc", "src/main/java", "src/main/test");
-final Converter converter = new ConvertMode();
-
-converter.addInputs(inputs)
-         .setNewline(Newline.UNIX)
-         .convertToFileInFormat("/tmp/out.xml", "specobject");
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 ```
 
-#### Using the Tracer From Java
-
-The example below shows how to read documents for the `doc` directory ignoring the artifact types `feat` and `dsn`. The collected specification items are then traced and finally output in a plain text report to STDOUT with verbosity level `ALL`. 
+Select input paths and import specification items from there:
 
 ```JAVA
-import org.itsallcode.openfasttrace.Reporter;
+final List<Path> inputs = new ArrayList<>();
+inputs.add(Paths.get("/input/path"));
+final Oft oft = Oft.create().addInputs(inputs);
+final List<SpecificationItem> items = oft.importItems();
+```
+
+Export the items:
+
+```JAVA
+oft.exportToPath(items, Paths.get("/output/path/export.oreqm"));
+```
+
+#### Tracing and Reporting From Java
+
+The example below shows how to use OFT as a reporter.  
+
+```JAVA
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.mode.ReportMode;
+```
 
-final List<String> inputs = Arrays.asList("doc");
-final List<String> ignoreTypes = Arras.asList("feat", "dsn"); 
-final Reporter reporter = new ReportMode();
+The import is identical to the converter case: 
 
-reporter.addInputs(inputs)
-        .ignoreArtifactTypes(ignoreTypes);
+```JAVA
+final List<Path> inputs = new ArrayList<>();
+inputs.add(Paths.get("/input/path"));
+final Oft oft = Oft.create().addInputs(inputs);
+final List<SpecificationItem> items = oft.importItems();
+```
 
-final Trace trace = reporter.trace();
+Now link the items together (i.e. make them navigable):
 
-reporter.setReportVerbosity(ReportVerbosity.ALL)
-        .reportToStdOutInFormat(trace, "plain");
+```JAVA
+final List<LinkedSpecificationItem> linkedItems = oft.link(items);
+```
 
-if(trace.isAllCovered())
+Run the tracer on the linked items:
+
+```JAVA
+final Trace trace = oft.trace(linkedItems);
+```
+
+Create a report from the trace:
+
+```JAVA
+oft.reportToStdOut(trace);
+```
+
+You can also use the trace results in you own code:
+
+```JAVA
+if (trace.hasNoDefects())
 {
-    // do something
+    // ... do something
 }
+```
+
+#### Configuring the Steps
+
+Import, export and report each have a overloaded variant that can be configured using the following classes
+
+* [org.itsallcode.openfasttrace.ImportSettings](../src/main/java/org/itsallcoded/openfasttrace/ImportSettings.java)
+* [org.itsallcode.openfasttrace.ExportSettings](../src/main/java/org/itsallcoded/openfasttrace/ExportSettings.java)
+* [org.itsallcode.openfasttrace.ReportSettings](../src/main/java/org/itsallcoded/openfasttrace/ReportSettings.java)
+
+Each of those classes comes with a builder which is called like this:
+
+```JAVA
+ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
 
 ## Tool Support

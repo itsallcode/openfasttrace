@@ -38,7 +38,7 @@ public class TestReportSettings
     @Before
     public void before()
     {
-        this.builder = new ReportSettings.Builder();
+        this.builder = ReportSettings.builder();
     }
 
     @Test

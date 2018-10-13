@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view;
+package org.itsallcode.openfasttrace.testutil.log;
 
 /*-
  * #%L
@@ -21,8 +21,35 @@ package org.itsallcode.openfasttrace.report.view;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
-public enum ViewType
+/**
+ * Logging {@link Handler} that ignores all log messages. This is useful for
+ * testing with the highest log level but without spamming the console with log
+ * messages.
+ */
+public class NoOpLoggingHandler extends Handler
 {
-    HTML5
+    public NoOpLoggingHandler()
+    {
+    }
+
+    @Override
+    public void publish(final LogRecord record)
+    {
+        // empty on purpose
+    }
+
+    @Override
+    public void flush()
+    {
+        // empty on purpose
+    }
+
+    @Override
+    public void close()
+    {
+        // empty on purpose
+    }
 }

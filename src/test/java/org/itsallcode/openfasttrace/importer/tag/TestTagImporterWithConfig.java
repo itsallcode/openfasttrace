@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
@@ -21,29 +21,30 @@ package org.itsallcode.openfasttrace.importer.legacytag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 // [utest->dsn~import.short-coverage-tag~1]
-public class TestLegacyTagImporter
+public class TestTagImporterWithConfig
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";
     private static final String COVERED_ITEM_NAME2 = "covered_name2";
@@ -51,6 +52,10 @@ public class TestLegacyTagImporter
     private static final String COVERED_ITEM_TYPE = "covered_type";
     private static final String COVERING_ITEM_TYPE = "covering_type";
     private static final String COVERED_ITEM_NAME_PREFIX = "prefix.";
+    private static final String INVALID_REVISION = "invalidRevision";
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     private PathConfig configMock;
@@ -85,13 +90,14 @@ public class TestLegacyTagImporter
     }
 
     @Test
-    public void testFileWithNewTagFormat()
+    public void testFileWithNewTagFormatAlsoSupported()
     {
         final String itemName = "coveredtype~coveredname~1"; // do not inline to
                                                              // avoid error in
                                                              // self-trace
         runImport("[type->" + itemName + "]");
-        verifyZeroInteractions(this.listenerMock);
+        verify(this.listenerMock)
+                .setId(SpecificationItemId.createId("type", "coveredname" + "-3264583751", 0));
     }
 
     @Test
@@ -133,6 +139,16 @@ public class TestLegacyTagImporter
     }
 
     @Test
+    public void testNonIntegerRevisionRejected()
+    {
+        this.thrown.expect(ImporterException.class);
+        this.thrown.expectMessage("Error processing line dummy:1 ([[" + COVERED_ITEM_NAME1 + ":"
+                + INVALID_REVISION + "]]): Error parsing revision '" + INVALID_REVISION
+                + "' for item '" + COVERED_ITEM_NAME1 + "'");
+        runImport("[[" + COVERED_ITEM_NAME1 + ":" + INVALID_REVISION + "]]");
+    }
+
+    @Test
     public void testFileWithLegacyTagFormatWithPrefix()
     {
         when(this.configMock.getCoveredItemNamePrefix()).thenReturn(COVERED_ITEM_NAME_PREFIX);
@@ -160,6 +176,6 @@ public class TestLegacyTagImporter
         final InputFile file = StreamInput.forReader(FILE,
                 new BufferedReader(new StringReader(content)));
 
-        new LegacyTagImporter(this.configMock, file, this.listenerMock).runImport();
+        TagImporter.create(Optional.of(this.configMock), file, this.listenerMock).runImport();
     }
 }

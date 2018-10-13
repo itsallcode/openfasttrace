@@ -104,17 +104,17 @@ public class SingleSpecObjectsHandlerBuilder
         setContainedLocationIfComplete();
     }
 
+    private void rememberSourceLine(final int line)
+    {
+        this.containedLine = line;
+        setContainedLocationIfComplete();
+    }
+
     private void setContainedLocationIfComplete()
     {
         if (this.containedFileName != null && this.containedLine >= 1)
         {
             this.locationBuilder.path(this.containedFileName).line(this.containedLine);
         }
-    }
-
-    private void rememberSourceLine(final int line)
-    {
-        this.containedLine = line;
-        setContainedLocationIfComplete();
     }
 }

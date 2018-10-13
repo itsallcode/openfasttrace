@@ -1,7 +1,7 @@
 Thank you for your interest in helping us to make OpenFastTrace (OFT) better!
 
 # Goal of This Document
-This document aims at answering all the questions potential contributers to OFT might have before feeling ready to get started.
+This document aims at answering all the questions potential contributors to OFT might have before feeling ready to get started.
 
 # What This Document is not
 If you are looking for general information about what OpenFastTrace is, please make sure to check out the [ReadMe](./README.md) that comes with the project.

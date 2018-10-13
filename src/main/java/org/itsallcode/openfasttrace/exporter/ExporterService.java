@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.ExportSettings;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 public class ExporterService
@@ -51,18 +51,15 @@ public class ExporterService
      *
      * @param itemStream
      *            the {@link SpecificationItem} to export
-     * @param format
-     *            the output format
-     * @param outputFile
-     *            the output file
-     * @param newline
-     *            the newline format
+     * @param settings
+     *            the exporter settings
      */
-    public void exportFile(final Stream<SpecificationItem> itemStream, final String format,
-            final Path outputFile, final Newline newline)
+    public void exportToPath(final Stream<SpecificationItem> itemStream, final Path outputFile,
+            final ExportSettings settings)
     {
-        final ExporterFactory factory = this.factoryLoader.getExporterFactory(format);
-        factory.createExporter(outputFile, format, StandardCharsets.UTF_8, newline, itemStream)
-                .runExport();
+        final ExporterFactory factory = this.factoryLoader
+                .getExporterFactory(settings.getOutputFormat());
+        factory.createExporter(outputFile, settings.getOutputFormat(), StandardCharsets.UTF_8,
+                settings.getNewline(), itemStream).runExport();
     }
 }

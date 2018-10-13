@@ -130,6 +130,17 @@ This can be read directly as console output or with any text editor.
 
 Needs: req
 
+#### HTML Report
+`feat~html-report~1`
+
+OFT produces a tracing report in Hypertext markup language (HTML).
+
+Rationale:
+
+This report type is more optically appealing than the plain text report and still widely supported on all platforms.
+
+Needs: req
+
 ### User Interface
 
 #### Command Line Interface
@@ -414,10 +425,21 @@ Covers:
 
 Needs: dsn
 
-#### Include Only Tags
-`req~include-only-tags~1`
+#### Include Items Where at Least One Tag Matches
+`req~include-items-where-at-least-on-tag-matches~1`
 
-OFT gives users the option to include only specification items contained in configurable set of tags during processing.
+OFT gives users the option to include only specification items that have at least one tag from a configurable set of tags during processing.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+#### Include Items That Don't Have Tags Or Where at Least One Tag Matches 
+`req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
+
+OFT gives users the option to include only specification items that either do not have tags or have at least one tag from a configurable set of tags during processing.
 
 Covers:
 
@@ -429,6 +451,25 @@ Needs: dsn
 Reports are the main way to find out if a projects requirements are covered properly.
 
 #### Common Report Functions
+
+##### Requirement Origin in Report
+`req~reporting.requirement-origin~1`
+
+Users can choose to display the requirement origin (e.g. file and line number) in reports:
+
+* In the body of a specification item
+* For each link to a specification item 
+
+Rationale:
+
+This is especially useful for debugging since it makes finding broken sources faster.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
 
 #### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
@@ -484,6 +525,23 @@ The link detail section shows for all links of a specification item:
 Covers:
 
 * [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+#### HTML Report
+
+##### HTML Report is a Single File
+`req~reporting.html.single_file~1`
+
+OFT creates the HTML Report as a single file.
+
+Rationale:
+
+It makes exchanging reports with other people easier if everything is contained in a single file.  
+
+Covers:
+
+* [feat~html-report~1](#html-report)
 
 Needs: dsn
 

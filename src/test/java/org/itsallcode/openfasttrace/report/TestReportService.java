@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.IOException;
 
-import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.junit.Before;
 import org.junit.Rule;
@@ -61,24 +61,27 @@ public class TestReportService
     @Test
     public void testReportPlainText()
     {
-        this.service.reportTraceToStdOut(this.traceMock, "plain", ReportVerbosity.MINIMAL,
-                Newline.UNIX);
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+                .build();
+        this.service.reportTraceToStdOut(this.traceMock, settings);
         assertThat(this.systemOutRule.getLog(), equalTo("not ok\n"));
     }
 
     @Test
     public void testReportHtml()
     {
-        this.service.reportTraceToStdOut(this.traceMock, "html", ReportVerbosity.MINIMAL,
-                Newline.UNIX);
+        final ReportSettings settings = ReportSettings.builder().outputFormat("html")
+                .verbosity(ReportVerbosity.MINIMAL).build();
+        this.service.reportTraceToStdOut(this.traceMock, settings);
         assertThat(this.systemOutRule.getLog(), startsWith("<!DOCTYPE html>"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidReportFormatThrowsIllegalArgumentException()
     {
-        this.service.reportTraceToStdOut(this.traceMock, "invalid", ReportVerbosity.QUIET,
-                Newline.UNIX);
+        final ReportSettings settings = ReportSettings.builder().outputFormat("invalid")
+                .verbosity(ReportVerbosity.QUIET).build();
+        this.service.reportTraceToStdOut(this.traceMock, settings);
     }
 
     @Test(expected = ReportException.class)
@@ -86,7 +89,8 @@ public class TestReportService
     {
         final File readOnlyFile = this.temporaryFolder.newFile();
         readOnlyFile.setReadOnly();
-        this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), "plain",
-                ReportVerbosity.QUIET, Newline.UNIX);
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.QUIET)
+                .build();
+        this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), settings);
     }
 }

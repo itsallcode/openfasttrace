@@ -24,31 +24,32 @@ package org.itsallcode.openfasttrace.mode;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.exporter.ExporterConstants;
+import org.itsallcode.openfasttrace.ImportSettings;
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ITestConverter extends AbstractOftModeTest
+public class ITestOftAsConverter extends AbstractOftTest
 {
     private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
-
-    private Converter converter;
+    private Oft oft;
 
     @Before
     public void setUp() throws UnsupportedEncodingException
     {
         perpareOutput();
-        this.converter = new ConvertMode();
+        this.oft = Oft.create();
     }
 
     @Test
     public void testConvertToSpecobjectFile() throws IOException
     {
-        this.converter.addInputs(this.docDir);
-        this.converter.convertToFileInFormat(this.outputFile,
-                ExporterConstants.DEFAULT_OUTPUT_FORMAT);
+        final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
+        final List<SpecificationItem> items = this.oft.importItems(settings);
+        this.oft.exportToPath(items, this.outputFile);
         assertStandardFileExportResult();
     }
 

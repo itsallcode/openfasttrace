@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag.config;
+package org.itsallcode.openfasttrace.testutil;
 
 /*-
  * #%L
@@ -22,38 +22,27 @@ package org.itsallcode.openfasttrace.importer.legacytag.config;
  * #L%
  */
 
-import static java.util.Collections.emptyList;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
-import java.util.List;
+import org.itsallcode.openfasttrace.cli.CliStarter;
 
 /**
- * Configuration for the {@link LegacyTagImporter}.
+ * This class is the base class for integration tests that require input files.
  */
-public class LegacyTagImporterConfig
+public class AbstractFileBasedTest
 {
-    private final List<PathConfig> pathConfigs;
-
-    /**
-     * Create a new configuration object.
-     * 
-     * @param pathConfigs
-     *            a list of {@link PathConfig} objects.
-     */
-    public LegacyTagImporterConfig(final List<PathConfig> pathConfigs)
+    protected void writeTextFile(final File file, final String content) throws IOException
     {
-        this.pathConfigs = pathConfigs;
+        final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
+        writer.print(content);
+        writer.close();
     }
 
-    /**
-     * Creates a new, empty configuration.
-     */
-    public static LegacyTagImporterConfig empty()
+    protected void runWithArguments(final String... args)
     {
-        return new LegacyTagImporterConfig(emptyList());
-    }
-
-    public List<PathConfig> getPathConfigs()
-    {
-        return this.pathConfigs;
+        CliStarter.main(args);
     }
 }

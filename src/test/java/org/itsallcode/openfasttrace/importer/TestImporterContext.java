@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.importer;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.itsallcode.openfasttrace.importer.legacytag.config.LegacyTagImporterConfig;
+import org.itsallcode.openfasttrace.ImportSettings;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ import org.mockito.MockitoAnnotations;
 public class TestImporterContext
 {
     @Mock
-    private LegacyTagImporterConfig configMock;
+    private ImportSettings settingsMock;
     @Mock
     private ImporterService importerServiceMock;
 
@@ -44,13 +44,13 @@ public class TestImporterContext
     public void setup()
     {
         MockitoAnnotations.initMocks(this);
-        this.context = new ImporterContext(this.configMock);
+        this.context = new ImporterContext(this.settingsMock);
     }
 
     @Test
     public void testGetImporterConfig()
     {
-        assertThat(this.context.getTagImporterConfig(), sameInstance(this.configMock));
+        assertThat(this.context.getImportSettings(), sameInstance(this.settingsMock));
     }
 
     @Test(expected = NullPointerException.class)

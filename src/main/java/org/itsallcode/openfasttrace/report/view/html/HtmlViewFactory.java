@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.report.view.html;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -37,15 +38,17 @@ import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 public class HtmlViewFactory extends AbstractViewFactory
 {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private final URL cssUrl;
 
-    HtmlViewFactory(final PrintStream stream)
+    HtmlViewFactory(final PrintStream stream, final URL cssUrl)
     {
         super(stream);
+        this.cssUrl = cssUrl;
     }
 
-    public static HtmlViewFactory create(final OutputStream stream)
+    public static HtmlViewFactory create(final OutputStream stream, final URL cssURL)
     {
-        return new HtmlViewFactory(createPrintStream(stream, DEFAULT_CHARSET));
+        return new HtmlViewFactory(createPrintStream(stream, DEFAULT_CHARSET), cssURL);
     }
 
     private static PrintStream createPrintStream(final OutputStream stream, final Charset charset)
@@ -63,7 +66,7 @@ public class HtmlViewFactory extends AbstractViewFactory
     @Override
     public ViewableContainer createView(final String id, final String title)
     {
-        return new HtmlView(this.outputStream, id, title);
+        return new HtmlView(this.outputStream, id, title, this.cssUrl);
     }
 
     @Override

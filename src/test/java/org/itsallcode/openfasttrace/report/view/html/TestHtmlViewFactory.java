@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class TestHtmlViewFactory
     public void testCreateSpecificationItem()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final ViewFactory factory = HtmlViewFactory.create(outputStream);
+        final ViewFactory factory = HtmlViewFactory.create(outputStream, HtmlReport.getCssUrl());
         final Viewable view = factory.createSpecificationItem(this.item);
         assertThat(view, instanceOf(HtmlSpecificationItem.class));
     }

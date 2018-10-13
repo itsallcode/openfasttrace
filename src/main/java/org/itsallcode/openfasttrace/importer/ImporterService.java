@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.List;
 
-import org.itsallcode.openfasttrace.FilterSettings;
+import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
@@ -35,26 +35,29 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
 public class ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
-    private FilterSettings filterSettings;
+    private final ImportSettings settings;
 
-    public ImporterService(final ImporterFactoryLoader factoryLoader)
+    /**
+     * Create a new instance of an {@link ImporterService}
+     * 
+     * @param factoryLoader
+     *            loader for importer factories depending on the source
+     * @param settings
+     *            import settings (e.g. filters)
+     */
+    public ImporterService(final ImporterFactoryLoader factoryLoader, final ImportSettings settings)
     {
         this.factoryLoader = factoryLoader;
+        this.settings = settings;
     }
 
     /**
-     * Set the filters to be applied
+     * Import a file's contents
      * 
-     * @param filterSettings
-     *            filter settings
-     * @return <code>this</code> for fluent programming style
+     * @param file
+     *            file to be imported
+     * @return list of recognized specification items
      */
-    public ImporterService setFilters(final FilterSettings filterSettings)
-    {
-        this.filterSettings = filterSettings;
-        return this;
-    }
-
     public List<SpecificationItem> importFile(final InputFile file)
     {
         return createImporter() //
@@ -69,6 +72,7 @@ public class ImporterService
 
     public MultiFileImporter createImporter()
     {
-        return createImporter(SpecificationListBuilder.createWithFilter(this.filterSettings));
+        return createImporter(
+                SpecificationListBuilder.createWithFilter(this.settings.getFilters()));
     }
 }

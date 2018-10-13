@@ -46,7 +46,6 @@ public class SpecificationItem
 
     private SpecificationItem(final Builder builder)
     {
-        super();
         this.id = builder.id;
         this.title = builder.title;
         this.description = builder.description;

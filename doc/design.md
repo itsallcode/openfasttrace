@@ -1,7 +1,12 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
 # Introduction
-This document is derived from the "[arc42][bib.arc42]" architectural template.
+
+## Acknowledgements
+
+This documents structure is derived from the "[arc42][bib.arc42]" architectural template by Dr. Gernot Starke, Dr. Peter Hruschka.
+
+If you build your own modifications based on this document, please keep the attrbiutions.
 
 ## Terminology
 The terminology from the [system requirement specification][bib.srs] applies.
@@ -140,14 +145,25 @@ Covers:
 
 Needs: impl, utest, itest
 
-#### Filtering by Tags Import
+#### Filtering by Tags During Import
 `dsn~filtering-by-tags-during-import~1`
 
-When OFT is configured to restrict inclusion to tags the [specification list builder](#specification-list-builder) imports a specification item only if at least one of it tags is contained in the configured set of tags.
+The [specification list builder](#specification-list-builder) can be configured to import a specification item only if at least one of its tags is contained in the configured set of tags.
 
 Covers:
 
-* `req~include-only-tags~1`
+* `req~include-items-where-at-least-on-tag-matches~1`
+
+Needs: impl, utest, itest
+
+#### Filtering by Tags or no Tags During Import
+`dsn~filtering-by-tags-or-no-tags-during-import~1`
+
+The [specification list builder](#specification-list-builder) can be configured to import a specification item only if it either has no tags or at least one of its tags is contained in the configured set of tags.
+
+Covers:
+
+* `req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
 
 Needs: impl, utest, itest
 
@@ -311,6 +327,51 @@ Covers:
 
 Needs: impl, utest
 
+#### Plain Text Report Contains Specification Item Origin
+`dsn~reporting.plain-text.specification-item-origin~1`
+
+If enabled, the plain text report shows the origin of a specification item
+
+* for files: `<absolute path to file>:<line number>`
+
+Rationale:
+
+This format is recognized by most IDEs and automatically turned into a link in the IDE's console.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+#### Plain Text Report Link Contains Specification Item Origin
+`dsn~reporting.plain-text.linked-specification-item-origin~1`
+
+If enabled, the links in the plain text report show the origin of a specification item
+
+* for files: `<absolute path to file>:<line number>`
+
+Rationale:
+
+This format is recognized by most IDEs and automatically turned into a link in the IDE's console.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+Needs: impl, utest, itest
+
+### HTML Report
+
+#### HTML Report Inlines CSS
+`dsn~reporting.html.inline_css~1`
+
+OFT inlines the cascading style sheet (CSS) into the HTML report.
+
+Covers:
+
+* `req~reporting.html.single_file~1`
+
+Needs: impl, itest
+
 ## Requirement Format Conversion
 
 ### ReqM2 Export
@@ -326,6 +387,26 @@ Covers:
 * `req~conversion.reqm2-export~1`
 
 Needs: impl, itest
+
+#### HTML Report Contains Specification Item Origin
+`dsn~reporting.html.specification-item-origin~1`
+
+If enabled, the HTML report shows the origin of a specification item as an HTML link pointing to the source.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+#### HTML Report Link Contains Specification Item Origin
+`dsn~reporting.html.linked-specification-item-origin~1`
+
+If enabled, the links in the plain text report show the origin of a specification item as an HTML link pointing to the source.
+
+Covers:
+
+* `req~reporting.requirement-origin~1`
+
+Needs: impl, utest, itest
 
 # Deployment View
 

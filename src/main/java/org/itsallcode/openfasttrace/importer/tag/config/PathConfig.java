@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag.config;
+package org.itsallcode.openfasttrace.importer.tag.config;
 
 /*-
  * #%L
@@ -32,7 +32,7 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * The configuration of a single path that is imported by
- * {@link LegacyTagImporter}. Use {@link #builder()} to create a new instance.
+ * {@link ShortTagImportingLineConsumer}. Use {@link #builder()} to create a new instance.
  */
 public class PathConfig
 {

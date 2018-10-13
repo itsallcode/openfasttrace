@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.legacytag;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
@@ -24,64 +24,57 @@ package org.itsallcode.openfasttrace.importer.legacytag;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.legacytag.config.PathConfig;
+import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
-class LegacyTagImporter implements Importer
+class ShortTagImportingLineConsumer extends RegexLineConsumer
 {
-    private static final Logger LOG = Logger.getLogger(LegacyTagImporter.class.getName());
+    private static final Logger LOG = Logger
+            .getLogger(ShortTagImportingLineConsumer.class.getName());
 
     private static final String TAG_PREFIX = "\\[\\[";
     private static final String TAG_SUFFIX = "\\]\\]";
+    private static final String TAG_REGEX = TAG_PREFIX //
+            + SpecificationItemId.ITEM_NAME_PATTERN //
+            + ":" //
+            + "(\\w+)" //
+            + TAG_SUFFIX;
+
     private final PathConfig pathConfig;
     private final ImportEventListener listener;
     private final InputFile file;
-    private final Pattern tagPattern;
 
-    LegacyTagImporter(final PathConfig pathConfig, final InputFile file,
+    ShortTagImportingLineConsumer(final PathConfig pathConfig, final InputFile file,
             final ImportEventListener listener)
     {
+        super(TAG_REGEX);
         this.pathConfig = pathConfig;
         this.file = file;
         this.listener = listener;
-        this.tagPattern = Pattern.compile(TAG_PREFIX //
-                + SpecificationItemId.ITEM_NAME_PATTERN + ":"
-                + SpecificationItemId.ITEM_REVISION_PATTERN + TAG_SUFFIX);
     }
 
     @Override
-    public void runImport()
+    void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        final LineReader reader = LineReader.create(this.file);
-        reader.readLines(this::processLine);
-    }
+        final String coveredItemName = matcher.group(1);
+        final String coveredItemRevision = matcher.group(2);
+        final SpecificationItemId coveredId = createCoveredItem(coveredItemName,
+                coveredItemRevision);
 
-    private void processLine(final int lineNumber, final String line)
-    {
-        final Matcher matcher = this.tagPattern.matcher(line);
-        int counter = 0;
-        while (matcher.find())
-        {
-            final String coveredItemName = matcher.group(1);
-            final String coveredItemRevision = matcher.group(2);
-            final SpecificationItemId coveredId = createCoveredItem(coveredItemName,
-                    coveredItemRevision);
+        final String generatedName = generateName(coveredId, lineNumber, lineMatchCount);
+        final SpecificationItemId tagItemId = SpecificationItemId
+                .createId(this.pathConfig.getTagArtifactType(), generatedName);
 
-            final String generatedName = generateName(coveredId, lineNumber, counter);
-            final SpecificationItemId tagItemId = SpecificationItemId
-                    .createId(this.pathConfig.getTagArtifactType(), generatedName);
+        LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
+                + "' covering id '" + coveredId + "'");
 
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId
-                    + "' covering id '" + coveredId + "'");
-
-            addItem(lineNumber, coveredId, tagItemId);
-            counter++;
-        }
+        addItem(lineNumber, coveredId, tagItemId);
     }
 
     private void addItem(final int lineNumber, final SpecificationItemId coveredId,

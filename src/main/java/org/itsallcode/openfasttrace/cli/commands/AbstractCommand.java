@@ -27,9 +27,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.itsallcode.openfasttrace.FilterSettings;
+import org.itsallcode.openfasttrace.ImportSettings;
+import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.cli.CliArguments;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
  * This class is the abstract base class for all commands that process a list of
@@ -38,10 +42,12 @@ import org.itsallcode.openfasttrace.cli.CliArguments;
 public abstract class AbstractCommand implements Performable
 {
     protected CliArguments arguments;
+    protected final Oft oft;
 
     protected AbstractCommand(final CliArguments arguments)
     {
         this.arguments = arguments;
+        this.oft = Oft.create();
     }
 
     public List<Path> toPaths(final List<String> inputs)
@@ -56,8 +62,46 @@ public abstract class AbstractCommand implements Performable
 
     protected FilterSettings createFilterSettingsFromArguments()
     {
-        return new FilterSettings.Builder() //
-                .artifactTypes(this.arguments.getWantedArtifactTypes()) //
+        final FilterSettings.Builder builder = new FilterSettings.Builder();
+        setAttributeTypeFilter(builder);
+        setTagFilter(builder);
+        return builder.build();
+    }
+
+    private void setAttributeTypeFilter(final FilterSettings.Builder builder)
+    {
+        if (this.arguments.getWantedArtifactTypes() != null
+                && !this.arguments.getWantedArtifactTypes().isEmpty())
+        {
+            builder.artifactTypes(this.arguments.getWantedArtifactTypes());
+        }
+    }
+
+    private void setTagFilter(final FilterSettings.Builder builder)
+    {
+        final Set<String> wantedTags = this.arguments.getWantedTags();
+        if (wantedTags != null && !wantedTags.isEmpty())
+        {
+            if (wantedTags.contains(CliArguments.NO_TAGS_MARKER))
+            {
+                builder.withoutTags(true);
+                wantedTags.remove(CliArguments.NO_TAGS_MARKER);
+            }
+            else
+            {
+                builder.withoutTags(false);
+            }
+            builder.tags(wantedTags);
+        }
+    }
+
+    protected List<SpecificationItem> importItems()
+    {
+        final ImportSettings importSettings = ImportSettings //
+                .builder() //
+                .addInputs(this.toPaths(this.arguments.getInputs())) //
+                .filter(createFilterSettingsFromArguments()) //
                 .build();
+        return this.oft.importItems(importSettings);
     }
 }

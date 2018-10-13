@@ -168,7 +168,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void setLocation(final String path, final int line)
     {
-        this.location = Location.create(path, line);
+        this.setLocation(Location.create(path, line));
     }
 
     @Override
@@ -206,13 +206,15 @@ public class SpecificationListBuilder implements ImportEventListener
     private boolean isAccepted(final SpecificationItem item)
     {
         return isAcceptedArtifactType(item.getId().getArtifactType())
-                && containsAtLeastOneAcceptedTag(item.getTags());
+                && matchesTagsCriteria(item.getTags());
     }
 
     // [impl->dsn~filtering-by-tags-during-import~1]
-    private boolean containsAtLeastOneAcceptedTag(final List<String> tags)
+    // [impl->dsn~filtering-by-tags-or-no-tags-during-import~1]
+    private boolean matchesTagsCriteria(final List<String> tags)
     {
         return !this.filterSettings.isTagCriteriaSet()
+                || (this.filterSettings.withoutTags() && tags.isEmpty())
                 || !Collections.disjoint(this.filterSettings.getTags(), tags);
     }
 

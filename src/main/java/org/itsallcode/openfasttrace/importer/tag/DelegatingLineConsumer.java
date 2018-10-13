@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.mode;
+package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,25 +21,22 @@ package org.itsallcode.openfasttrace.mode;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.util.List;
 
-import java.nio.file.Path;
+import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 
-import org.itsallcode.openfasttrace.Converter;
-import org.itsallcode.openfasttrace.exporter.ExporterService;
-
-public class ConvertMode extends AbstractMode<ConvertMode> implements Converter
+class DelegatingLineConsumer implements LineConsumer
 {
-    private final ExporterService exporterService = new ExporterService();
+    private final List<LineConsumer> delegates;
 
-    @Override
-    public void convertToFileInFormat(final Path output, final String format)
+    DelegatingLineConsumer(final List<LineConsumer> delegates)
     {
-        this.exporterService.exportFile(importItems(), format, output, this.newline);
+        this.delegates = delegates;
     }
 
     @Override
-    protected ConvertMode self()
+    public void readLine(final int lineNumber, final String line)
     {
-        return this;
+        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
     }
 }

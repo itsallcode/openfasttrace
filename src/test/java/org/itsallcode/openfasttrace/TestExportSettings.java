@@ -30,10 +30,6 @@ import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * This class implements a parameter object to control the settings of OFT's
- * export mode.
- */
 public class TestExportSettings
 {
     private ExportSettings.Builder builder;

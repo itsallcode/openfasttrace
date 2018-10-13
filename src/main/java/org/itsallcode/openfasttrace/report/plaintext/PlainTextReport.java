@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportException;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
 
 /**
@@ -47,32 +47,31 @@ public class PlainTextReport implements Reportable
     private final Trace trace;
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
-    private final Newline newline;
     private int nonEmptySections = 0;
+    private final ReportSettings settings;
 
     /**
      * Create a new instance of {@link PlainTextReport}
      *
      * @param trace
      *            the trace that will be reported.
-     * @param newline
-     *            the newline format
+     * @param settings
+     *            report settings
      */
     // [impl->dsn~newline-format~1]
-    public PlainTextReport(final Trace trace, final Newline newline)
+    public PlainTextReport(final Trace trace, final ReportSettings settings)
     {
         this.trace = trace;
-        this.newline = newline;
+        this.settings = settings;
     }
 
     @Override
-    public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
-            final ReportVerbosity verbosity)
+    public void renderToStream(final OutputStream outputStream)
     {
         final Charset charset = StandardCharsets.UTF_8;
         try (final PrintStream report = new PrintStream(outputStream, false, charset.displayName()))
         {
-            renderToPrintStreamWithVerbosityLevel(report, verbosity);
+            renderToPrintStream(report);
         }
         catch (final UnsupportedEncodingException e)
         {
@@ -80,10 +79,9 @@ public class PlainTextReport implements Reportable
         }
     }
 
-    private void renderToPrintStreamWithVerbosityLevel(final PrintStream report,
-            final ReportVerbosity verbosity)
+    private void renderToPrintStream(final PrintStream report)
     {
-        switch (verbosity)
+        switch (this.settings.getReportVerbosity())
         {
         case QUIET:
             break;
@@ -102,18 +100,18 @@ public class PlainTextReport implements Reportable
             renderSummary(report);
             break;
         case FAILURE_DETAILS:
-            renderFailureDetails(report);
+            renderFailureDetails(report, this.settings.showOrigin());
             separateItemsFromSummary(report);
             renderSummary(report);
             break;
         case ALL:
-            renderAll(report);
-            report.print(this.newline);
+            renderAll(report, this.settings.showOrigin());
+            report.print(this.settings.getNewline());
             renderSummary(report);
             break;
         default:
-            throw new IllegalStateException(
-                    "Unable to create stream for unknown verbosity level " + verbosity);
+            throw new IllegalStateException("Unable to create stream for unknown verbosity level "
+                    + this.settings.getReportVerbosity());
         }
     }
 
@@ -121,14 +119,14 @@ public class PlainTextReport implements Reportable
     {
         if (this.trace.countDefects() > 0)
         {
-            report.print(this.newline);
+            report.print(this.settings.getNewline());
         }
     }
 
     private void renderResultStatus(final PrintStream report)
     {
         report.print(translateStatus(this.trace.hasNoDefects()));
-        report.print(this.newline.toString());
+        report.print(this.settings.getNewline().toString());
     }
 
     private String translateStatus(final boolean ok)
@@ -149,7 +147,7 @@ public class PlainTextReport implements Reportable
             report.print(this.trace.countDefects());
             report.print(" defect");
         }
-        report.print(this.newline);
+        report.print(this.settings.getNewline());
     }
 
     private void renderFailureIds(final PrintStream report)
@@ -158,7 +156,7 @@ public class PlainTextReport implements Reportable
                 .sorted()//
                 .forEachOrdered(id -> {
                     report.print(id);
-                    report.print(this.newline.toString());
+                    report.print(this.settings.getNewline().toString());
                 });
     }
 
@@ -180,7 +178,7 @@ public class PlainTextReport implements Reportable
         report.print(" ");
         renderMaturity(report, item);
         report.print(translateArtifactTypeCoverage(item));
-        report.print(this.newline);
+        report.print(this.settings.getNewline());
     }
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
@@ -225,33 +223,47 @@ public class PlainTextReport implements Reportable
         }
     }
 
-    private void renderFailureDetails(final PrintStream report)
+    private void renderFailureDetails(final PrintStream report, final boolean showOrigin)
     {
         this.trace.getDefectItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(report, item));
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin));
     }
 
-    private void renderAll(final PrintStream report)
+    private void renderAll(final PrintStream report, final boolean showOrigin)
     {
         this.trace.getItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(report, item));
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin));
     }
 
-    private void renderItemDetails(final PrintStream report, final LinkedSpecificationItem item)
+    private void renderItemDetails(final PrintStream report, final LinkedSpecificationItem item,
+            final boolean showOrigin)
     {
         renderItemSummary(report, item);
         renderDescription(report, item);
-        renderLinks(report, item);
+        if (showOrigin)
+        {
+            renderOrigin(report, item);
+        }
+        renderLinks(report, item, showOrigin);
         renderTags(report, item);
         renderItemDetailsEnd(report);
+    }
+
+    private void renderOrigin(final PrintStream report, final Location location)
+    {
+        report.print("(");
+        report.print(location.getPath());
+        report.print(":");
+        report.print(location.getLine());
+        report.print(")");
     }
 
     private void renderEmptyItemDetailsLine(final PrintStream report)
     {
         report.print("|");
-        report.print(this.newline);
+        report.print(this.settings.getNewline());
     }
 
     private void renderDescription(final PrintStream report, final LinkedSpecificationItem item)
@@ -264,40 +276,53 @@ public class PlainTextReport implements Reportable
             {
                 report.print("| ");
                 report.print(line);
-                report.print(this.newline);
+                report.print(this.settings.getNewline());
             }
             ++this.nonEmptySections;
         }
     }
 
     // [impl->dsn~reporting.plain-text.link-details~1]
-    private void renderLinks(final PrintStream report, final LinkedSpecificationItem item)
+    private void renderLinks(final PrintStream report, final LinkedSpecificationItem item,
+            final boolean showOrigin)
     {
         if (item.hasLinks())
         {
             renderEmptyItemDetailsLine(report);
-            renderOrderedLinks(report, item);
+            renderOrderedLinks(report, item, showOrigin);
             ++this.nonEmptySections;
         }
     }
 
-    private void renderOrderedLinks(final PrintStream report, final LinkedSpecificationItem item)
+    private void renderOrderedLinks(final PrintStream report, final LinkedSpecificationItem item,
+            final boolean showOrigin)
     {
         item.getTracedLinks() //
                 .stream() //
                 .sorted((a, b) -> a.getOtherLinkEnd().getId()
                         .compareTo(b.getOtherLinkEnd().getId())) //
-                .forEachOrdered(link -> renderLink(report, link));
+                .forEachOrdered(link -> renderLink(report, link, showOrigin));
     }
 
-    private void renderLink(final PrintStream report, final TracedLink link)
+    private void renderLink(final PrintStream report, final TracedLink link,
+            final boolean showOrigin)
     {
         final LinkStatus status = link.getStatus();
         report.print(status.isIncoming() ? "|<-- (" : "|--> (");
         report.print(status.getShortTag());
         report.print(") ");
         report.print(link.getOtherLinkEnd().getId());
-        report.print(this.newline);
+        report.print(this.settings.getNewline());
+        if (showOrigin)
+        {
+            final Location location = link.getOtherLinkEnd().getLocation();
+            if (location != null)
+            {
+                report.print("|        ");
+                renderOrigin(report, location);
+                report.print(this.settings.getNewline());
+            }
+        }
     }
 
     private void renderTags(final PrintStream report, final LinkedSpecificationItem item)
@@ -308,8 +333,23 @@ public class PlainTextReport implements Reportable
             renderEmptyItemDetailsLine(report);
             report.print("| #: ");
             report.print(tags.stream().collect(Collectors.joining(", ")));
-            report.print(this.newline);
+            report.print(this.settings.getNewline());
             ++this.nonEmptySections;
+        }
+    }
+
+    private void renderOrigin(final PrintStream report, final LinkedSpecificationItem item)
+    {
+        final Location location = item.getLocation();
+        if (location != null)
+        {
+            renderEmptyItemDetailsLine(report);
+            report.print("| (");
+            report.print(location.getPath());
+            report.print(":");
+            report.print(location.getLine());
+            report.print(")");
+            report.print(this.settings.getNewline());
         }
     }
 

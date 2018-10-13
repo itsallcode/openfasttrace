@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.itsallcode.openfasttrace.FilterSettings;
+import org.itsallcode.openfasttrace.ImportSettings;
+import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.cli.CliArguments;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
  * This class is the abstract base class for all commands that process a list of
@@ -39,10 +42,12 @@ import org.itsallcode.openfasttrace.cli.CliArguments;
 public abstract class AbstractCommand implements Performable
 {
     protected CliArguments arguments;
+    protected final Oft oft;
 
     protected AbstractCommand(final CliArguments arguments)
     {
         this.arguments = arguments;
+        this.oft = Oft.create();
     }
 
     public List<Path> toPaths(final List<String> inputs)
@@ -88,5 +93,15 @@ public abstract class AbstractCommand implements Performable
             }
             builder.tags(wantedTags);
         }
+    }
+
+    protected List<SpecificationItem> importItems()
+    {
+        final ImportSettings importSettings = ImportSettings //
+                .builder() //
+                .addInputs(this.toPaths(this.arguments.getInputs())) //
+                .filter(createFilterSettingsFromArguments()) //
+                .build();
+        return this.oft.importItems(importSettings);
     }
 }

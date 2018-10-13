@@ -31,7 +31,6 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +61,7 @@ public class TestHtmlReport
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
         final Reportable report = new HtmlReport(this.traceMock);
-        report.renderToStreamWithVerbosityLevel(outputStream, ReportVerbosity.ALL);
+        report.renderToStream(outputStream);
         final String outputAsString = outputStream.toString();
         return outputAsString;
     }

@@ -29,43 +29,40 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.Reporter;
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.ReportConstants;
+import org.itsallcode.openfasttrace.*;
+import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemErrRule;
 
-public class ITestReporter extends AbstractOftModeTest
+public class ITestOftAsReporter extends AbstractOftTest
 {
-    private Reporter reporter;
+    private Oft oft;
+    @Rule
+    public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
+    private Trace trace;
+    private List<LinkedSpecificationItem> linkedItems;
 
     @Before
     public void setUp() throws UnsupportedEncodingException
     {
         perpareOutput();
-        this.reporter = new ReportMode();
+        final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
+        this.oft = Oft.create();
+        final List<SpecificationItem> items = this.oft.importItems(settings);
+        this.linkedItems = this.oft.link(items);
+        this.trace = this.oft.trace(this.linkedItems);
     }
 
     @Test
     public void testTraceToFile() throws IOException
     {
-        final Trace trace = this.reporter.addInputs(this.docDir) //
-                .trace();
-        writePlainTextReportFromTrace(trace);
+        this.oft.reportToPath(this.trace, this.outputFile);
         assertStandardReportFileResult();
-    }
-
-    private void writePlainTextReportFromTrace(final Trace trace)
-    {
-        this.reporter.reportToFileInFormat(trace, this.outputFile,
-                ReportConstants.DEFAULT_REPORT_FORMAT);
     }
 
     private void assertStandardReportFileResult() throws IOException
@@ -77,10 +74,9 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testTraceWithReportVerbosityMinimal() throws IOException
     {
-        final Trace trace = this.reporter.addInputs(this.docDir) //
-                .setReportVerbosity(ReportVerbosity.MINIMAL) //
-                .trace();
-        writePlainTextReportFromTrace(trace);
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+                .build();
+        this.oft.reportToPath(this.trace, this.outputFile, settings);
         assertOutputFileExists(true);
         assertOutputFileContentStartsWith("ok");
     }
@@ -88,10 +84,10 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testTraceMacNewlines() throws IOException
     {
-        final Trace trace = this.reporter.addInputs(this.docDir) //
-                .setNewline(Newline.OLDMAC) //
-                .trace();
-        writePlainTextReportFromTrace(trace);
+        final ReportSettings settings = ReportSettings.builder() //
+                .newline(Newline.OLDMAC) //
+                .build();
+        this.oft.reportToPath(this.trace, this.outputFile, settings);
         assertThat(Files.exists(this.outputFile), equalTo(true));
         assertThat("Has old Mac newlines", getOutputFileContent().contains(CARRIAGE_RETURN),
                 equalTo(true));
@@ -102,9 +98,7 @@ public class ITestReporter extends AbstractOftModeTest
     @Test
     public void testTraceToStdOut() throws IOException
     {
-        final Trace trace = this.reporter.addInputs(this.docDir) //
-                .trace();
-        this.reporter.reportToStdOutInFormat(trace, ReportConstants.DEFAULT_REPORT_FORMAT);
+        this.oft.reportToStdOut(this.trace);
         assertStandardReportStdOutResult();
     }
 
@@ -118,15 +112,24 @@ public class ITestReporter extends AbstractOftModeTest
     public void testFilterAllowsAllAtrifactsButDsn()
     {
         final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
-        this.reporter.addInputs(this.docDir);
-        final Trace fullTrace = this.reporter.trace();
         assertThat("Number of items with type \"dsn\" in regular trace",
-                countItemsOfArtifactTypeInTrace("dsn", fullTrace), greaterThan(0L));
-        final Trace trace = this.reporter //
-                .setFilters(new FilterSettings.Builder().artifactTypes(artifactTypes).build())//
-                .trace();
+                countItemsOfArtifactTypeInTrace("dsn", this.trace), greaterThan(0L));
+        final FilterSettings filterSettings = new FilterSettings.Builder()
+                .artifactTypes(artifactTypes).build();
+        final Trace filteredTrace = traceWithFilters(filterSettings);
         assertThat("Number of items with ignored type \"dsn\" in filtered trace",
-                countItemsOfArtifactTypeInTrace("dsn", trace), equalTo(0L));
+                countItemsOfArtifactTypeInTrace("dsn", filteredTrace), equalTo(0L));
+    }
+
+    private Trace traceWithFilters(final FilterSettings filterSettings)
+    {
+        final ImportSettings importSettings = ImportSettings.builder().filter(filterSettings)
+                .build();
+        final List<SpecificationItem> filteredItems = this.oft.importItems(importSettings);
+        final List<LinkedSpecificationItem> filteredSpecificationItems = this.oft
+                .link(filteredItems);
+        final Trace filteredTrace = this.oft.trace(filteredSpecificationItems);
+        return filteredTrace;
     }
 
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)

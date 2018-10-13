@@ -33,6 +33,7 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
@@ -67,7 +68,8 @@ public class TestImporterService
     public void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        this.importerService = new ImporterService(this.factoryLoaderMock);
+        this.importerService = new ImporterService(this.factoryLoaderMock,
+                ImportSettings.createDefault());
         this.file = InputFile.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))

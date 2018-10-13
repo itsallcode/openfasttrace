@@ -24,11 +24,14 @@ package org.itsallcode.openfasttrace.cli.commands;
  */
 
 import java.nio.file.Path;
+import java.util.List;
 
-import org.itsallcode.openfasttrace.Reporter;
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.cli.CliArguments;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.mode.ReportMode;
 
 /**
  * Handler for requirement tracing CLI command.
@@ -51,34 +54,43 @@ public class TraceCommand extends AbstractCommand
     @Override
     public boolean run()
     {
-        final Reporter reporter = createReporter();
-        final Trace trace = report(reporter);
+        final List<SpecificationItem> items = importItems();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(items);
+        final Trace trace = traceItems(linkedItems);
+        report(this.oft, trace);
         return trace.hasNoDefects();
     }
 
-    private Reporter createReporter()
+    private List<LinkedSpecificationItem> linkItems(final List<SpecificationItem> items)
     {
-        final Reporter reporter = new ReportMode();
-        reporter.addInputs(toPaths(this.arguments.getInputs())) //
-                .setFilters(createFilterSettingsFromArguments()) //
-                .setNewline(this.arguments.getNewline())
-                .setReportVerbosity(this.arguments.getReportVerbosity());
-        return reporter;
+        return this.oft.link(items);
     }
 
-    private Trace report(final Reporter reporter)
+    private Trace traceItems(final List<LinkedSpecificationItem> linkedItems)
     {
-        final Trace trace = reporter.trace();
+        return this.oft.trace(linkedItems);
+    }
+
+    private void report(final Oft oft, final Trace trace)
+    {
         final Path outputPath = this.arguments.getOutputPath();
+        final ReportSettings reportSettings = convertCommandLineArgumentsToReportSettings();
         if (null == outputPath)
         {
-            reporter.reportToStdOutInFormat(trace, this.arguments.getOutputFormat());
+            oft.reportToStdOut(trace, reportSettings);
         }
         else
         {
-            reporter.reportToFileInFormat(trace, this.arguments.getOutputPath(),
-                    this.arguments.getOutputFormat());
+            oft.reportToPath(trace, this.arguments.getOutputPath(), reportSettings);
         }
-        return trace;
+    }
+
+    private ReportSettings convertCommandLineArgumentsToReportSettings()
+    {
+        return ReportSettings.builder() //
+                .verbosity(this.arguments.getReportVerbosity()) //
+                .newline(this.arguments.getNewline()) //
+                .showOrigin(this.arguments.getShowOrigin()) //
+                .build();
     }
 }

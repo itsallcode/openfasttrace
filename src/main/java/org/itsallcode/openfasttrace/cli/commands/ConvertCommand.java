@@ -3,9 +3,9 @@ package org.itsallcode.openfasttrace.cli.commands;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,11 +23,11 @@ package org.itsallcode.openfasttrace.cli.commands;
  * #L%
  */
 
-import java.nio.file.Path;
+import java.util.List;
 
-import org.itsallcode.openfasttrace.Converter;
+import org.itsallcode.openfasttrace.ExportSettings;
 import org.itsallcode.openfasttrace.cli.CliArguments;
-import org.itsallcode.openfasttrace.mode.ConvertMode;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 /**
  * Handler for specification item conversion CLI command.
@@ -50,23 +50,22 @@ public class ConvertCommand extends AbstractCommand implements Performable
     @Override
     public boolean run()
     {
-        final Converter converter = createConverter();
-        convert(converter);
+        final List<SpecificationItem> items = importItems();
+        convert(items);
         return true;
     }
 
-    private Converter createConverter()
+    private void convert(final List<SpecificationItem> items)
     {
-        final Converter converter = new ConvertMode();
-        converter.addInputs(toPaths(this.arguments.getInputs())) //
-                .setFilters(createFilterSettingsFromArguments()) //
-                .setNewline(this.arguments.getNewline());
-        return converter;
+        final ExportSettings exportSettings = createExportSettingsFromArguments();
+        this.oft.exportToPath(items, this.arguments.getOutputPath(), exportSettings);
     }
 
-    private void convert(final Converter converter)
+    private ExportSettings createExportSettingsFromArguments()
     {
-        final Path outputPath = this.arguments.getOutputPath();
-        converter.convertToFileInFormat(outputPath, this.arguments.getOutputFormat());
+        return ExportSettings.builder() //
+                .newline(this.arguments.getNewline()) //
+                .outputFormat(this.arguments.getOutputFormat()) //
+                .build();
     }
 }

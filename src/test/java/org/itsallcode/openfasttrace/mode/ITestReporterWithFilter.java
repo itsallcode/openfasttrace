@@ -32,7 +32,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.Reporter;
+import org.itsallcode.openfasttrace.ImportSettings;
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.Before;
@@ -61,14 +64,13 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
-    private Reporter reporter;
+    private Oft oft;
 
     @Before
     public void before() throws IOException
     {
         writeTextFile(this.tempFolder.newFile("spec.md"), SPECIFICATION);
-        this.reporter = new ReportMode();
-        this.reporter.addInputs(this.tempFolder.getRoot().toPath());
+        this.oft = Oft.create();
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
@@ -85,9 +87,13 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
 
     private List<String> getIdsFromTraceWithFilterSettings(final FilterSettings filterSettings)
     {
-        final Trace trace = this.reporter //
-                .setFilters(filterSettings) //
-                .trace();
+        final ImportSettings importSettings = ImportSettings.builder() //
+                .addInputs(this.tempFolder.getRoot().toPath()) //
+                .filter(filterSettings) //
+                .build();
+        final List<SpecificationItem> items = this.oft.importItems(importSettings);
+        final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
+        final Trace trace = this.oft.trace(linkedItems);
         final List<String> filteredIds = trace.getItems() //
                 .stream() //
                 .map(item -> item.getId().toString()) //
@@ -104,6 +110,5 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
                 .build();
         final List<String> filteredIds = getIdsFromTraceWithFilterSettings(filterSettings);
         assertThat(filteredIds, containsInAnyOrder("feat~a~1", "req~b~2", "dsn~c~3", "impl~d~4"));
-
     }
 }

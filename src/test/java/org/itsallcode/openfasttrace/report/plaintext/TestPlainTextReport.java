@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
@@ -62,8 +63,9 @@ public class TestPlainTextReport
     public void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
-        new PlainTextReport(this.traceMock, NEWLINE_SEPARATOR)
-                .renderToStreamWithVerbosityLevel(outputStreamMock, ReportVerbosity.SUMMARY);
+        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.SUMMARY)
+                .build();
+        new PlainTextReport(this.traceMock, settings).renderToStream(outputStreamMock);
         verify(outputStreamMock).close();
     }
 
@@ -84,8 +86,14 @@ public class TestPlainTextReport
     private void assertReportOutput(final ReportVerbosity verbosity,
             final String... expectedReportLines)
     {
+        assertReportOutput(verbosity, false, expectedReportLines);
+    }
+
+    private void assertReportOutput(final ReportVerbosity verbosity, final boolean showOrigin,
+            final String... expectedReportLines)
+    {
         final String expectedReportText = getExpectedReportText(expectedReportLines);
-        assertThat(getReportOutput(verbosity), matchesAllLines(expectedReportText));
+        assertThat(getReportOutput(verbosity, showOrigin), matchesAllLines(expectedReportText));
     }
 
     private String getExpectedReportText(final String... expectedReportLines)
@@ -99,18 +107,20 @@ public class TestPlainTextReport
                 + NEWLINE_SEPARATOR;
     }
 
-    private String getReportOutput(final ReportVerbosity verbosity)
+    private String getReportOutput(final ReportVerbosity verbosity, final boolean showOrigin)
     {
         final Newline newline = NEWLINE_SEPARATOR;
-        return getReportOutputWithNewline(verbosity, newline);
+        return getReportOutputWithNewline(verbosity, newline, showOrigin);
     }
 
     private String getReportOutputWithNewline(final ReportVerbosity verbosity,
-            final Newline newline)
+            final Newline newline, final boolean showOrigin)
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new PlainTextReport(this.traceMock, newline);
-        report.renderToStreamWithVerbosityLevel(outputStream, verbosity);
+        final ReportSettings settings = ReportSettings.builder().verbosity(verbosity)
+                .newline(newline).showOrigin(showOrigin).build();
+        final Reportable report = new PlainTextReport(this.traceMock, settings);
+        report.renderToStream(outputStream);
         return outputStream.toString();
     }
 
@@ -353,7 +363,7 @@ public class TestPlainTextReport
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
 
-        assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator), //
+        assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator, false), //
                 equalTo("ok - 0/0>0>0/0 - a~a~1 (dsn)" + separator//
                         + "|" + separator //
                         + "| This is" + separator //
@@ -367,5 +377,45 @@ public class TestPlainTextReport
                         + "" + separator //
                         + "ok - 2 total" + separator));
 
+    }
+
+    // [utest->dsn~reporting.plain-text.specification-item-origin~1]
+    // [utest->dsn~reporting.plain-text.linked-specification-item-origin~1]
+    @Test
+    public void testReportWithOriginDisplayEnabled()
+    {
+        final LinkedSpecificationItem itemMock = createLinkedItemMock("req~item.with-source~77",
+                "Description", 0, 1, 0, 0, 0);
+        when(itemMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
+        when(itemMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        final LinkedSpecificationItem other = createOtherItemMock("dsn~the-other~1");
+        when(other.getLocation()).thenReturn(Location.create("baz/zoo", 10));
+        final List<TracedLink> links = new ArrayList<>();
+        links.add(new TracedLink(other, LinkStatus.COVERED_SHALLOW));
+        when(itemMock.getTracedLinks()).thenReturn(links);
+        when(itemMock.hasLinks()).thenReturn(true);
+        when(itemMock.getLocation()).thenReturn(Location.create("/foo/bar", 42));
+        when(this.traceMock.count()).thenReturn(1);
+        when(this.traceMock.countDefects()).thenReturn(0);
+        when(this.traceMock.hasNoDefects()).thenReturn(true);
+        when(this.traceMock.getItems()).thenReturn(asList(itemMock));
+        assertReportOutputWithOrigin(ReportVerbosity.ALL, //
+                "ok - 0/1>0>0/0 - req~item.with-source~77 (dsn)", //
+                "|", //
+                "| Description", //
+                "|", //
+                "| (/foo/bar:42)", //
+                "|", //
+                "|<-- ( ) dsn~the-other~1", //
+                "|        (baz/zoo:10)", //
+                "|", //
+                "", //
+                "ok - 1 total");
+    }
+
+    private void assertReportOutputWithOrigin(final ReportVerbosity verbosity,
+            final String... expectedReportLines)
+    {
+        assertReportOutput(verbosity, true, expectedReportLines);
     }
 }

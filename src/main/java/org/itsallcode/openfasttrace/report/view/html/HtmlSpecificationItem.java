@@ -35,6 +35,7 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlSpecificationItem implements Viewable
 {
+
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
@@ -57,6 +58,7 @@ public class HtmlSpecificationItem implements Viewable
         renderRationale(indentation);
         renderComment(indentation);
         renderNeeds(indentation);
+        renderOrigin(indentation);
         renderLinks(indentation);
         renderEnd(indentation);
     }
@@ -167,6 +169,17 @@ public class HtmlSpecificationItem implements Viewable
                 .collect(Collectors.joining(", "));
     }
 
+    private void renderOrigin(final String indentation)
+    {
+        final String origin = OriginLinkFormatter.formatAsBlock(this.item.getLocation());
+        if (!origin.isEmpty())
+        {
+            this.stream.print(indentation);
+            this.stream.print("    ");
+            this.stream.println(origin);
+        }
+    }
+
     private void renderLinks(final String indentation)
     {
         renderLinkForDirection(indentation, true);
@@ -225,7 +238,19 @@ public class HtmlSpecificationItem implements Viewable
             {
                 this.stream.print(" <em>(" + link.getStatus() + ")</em>");
             }
+            renderLinkOrigin(link);
             this.stream.println("</li>");
+        }
+    }
+
+    private void renderLinkOrigin(final TracedLink link)
+    {
+        final String origin = OriginLinkFormatter
+                .formatAsSpan(link.getOtherLinkEnd().getLocation());
+        if (!origin.isEmpty())
+        {
+            this.stream.print(" ");
+            this.stream.print(origin);
         }
     }
 

@@ -25,19 +25,19 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 
 public class ReportService
 {
-    public void reportTraceToPath(final Trace trace, final Path outputPath, final String format,
-            final ReportVerbosity verbosity, final Newline newline)
+    public void reportTraceToPath(final Trace trace, final Path outputPath,
+            final ReportSettings settings)
     {
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, format, verbosity, newline, outputStream);
+            reportTraceToStream(trace, outputStream, settings);
         }
         catch (final IOException e)
         {
@@ -45,10 +45,9 @@ public class ReportService
         }
     }
 
-    public void reportTraceToStdOut(final Trace trace, final String format,
-            final ReportVerbosity verbosity, final Newline newline)
+    public void reportTraceToStdOut(final Trace trace, final ReportSettings settings)
     {
-        reportTraceToStream(trace, format, verbosity, newline, getStdOutStream());
+        reportTraceToStream(trace, getStdOutStream(), settings);
     }
 
     // Using System.out by intention
@@ -58,12 +57,12 @@ public class ReportService
         return System.out;
     }
 
-    private void reportTraceToStream(final Trace trace, final String format,
-            final ReportVerbosity verbosity, final Newline newline, final OutputStream outputStream)
+    private void reportTraceToStream(final Trace trace, final OutputStream outputStream,
+            final ReportSettings settings)
     {
         final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        final Reportable report = createReport(trace, format, newline);
-        report.renderToStreamWithVerbosityLevel(bufferedOutputStream, verbosity);
+        final Reportable report = createReport(trace, settings);
+        report.renderToStream(bufferedOutputStream);
         try
         {
             bufferedOutputStream.flush();
@@ -74,13 +73,14 @@ public class ReportService
         }
     }
 
-    protected Reportable createReport(final Trace trace, final String format, final Newline newline)
+    protected Reportable createReport(final Trace trace, final ReportSettings settings)
     {
         Reportable report = null;
+        final String format = settings.getOutputFormat();
         switch (ReportFormat.parse(format))
         {
         case PLAIN_TEXT:
-            report = new PlainTextReport(trace, newline);
+            report = new PlainTextReport(trace, settings);
             break;
         case HTML:
             report = new HtmlReport(trace);

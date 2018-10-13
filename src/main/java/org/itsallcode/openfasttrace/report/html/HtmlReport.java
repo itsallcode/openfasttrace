@@ -29,7 +29,6 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
@@ -41,6 +40,12 @@ public class HtmlReport implements Reportable
     private final Trace trace;
     private static final String REPORT_CSS_FILE = "/css/report.css";
 
+    /**
+     * Create a new instance of an {@link HtmlReport}
+     * 
+     * @param trace
+     *            trace to be reported on
+     */
     public HtmlReport(final Trace trace)
     {
         this.trace = trace;
@@ -57,8 +62,7 @@ public class HtmlReport implements Reportable
     }
 
     @Override
-    public void renderToStreamWithVerbosityLevel(final OutputStream outputStream,
-            final ReportVerbosity verbosity)
+    public void renderToStream(final OutputStream outputStream)
     {
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
         final ViewableContainer view = factory.createView("", "Specification items by title");

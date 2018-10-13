@@ -222,4 +222,36 @@ public class TestCliArguments
         assertThat(AFTER_SETTER, this.arguments.getWantedTags(),
                 containsInAnyOrder("_", "client", "server"));
     }
+
+    // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
+    // [utest->dsn~reporting.plain-text.linked-specification-item-origin~1]
+    // [utest->dsn~reporting.html.specification-item-origin~1]
+    // [utest->dsn~reporting.html.linked-specification-item-origin~1]
+    @Test
+    public void testShowOriginDisabledByDefault()
+    {
+        assertThat(this.arguments.getShowOrigin(), is(false));
+    }
+
+    // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
+    // [utest->dsn~reporting.plain-text.linked-specification-item-origin~1]
+    // [utest->dsn~reporting.html.specification-item-origin~1]
+    // [utest->dsn~reporting.html.linked-specification-item-origin~1]
+    @Test
+    public void testSetShowOrigin()
+    {
+        this.arguments.setShowOrigin(true);
+        assertThat(this.arguments.getShowOrigin(), is(true));
+    }
+
+    // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
+    // [utest->dsn~reporting.plain-text.linked-specification-item-origin~1]
+    // [utest->dsn~reporting.html.specification-item-origin~1]
+    // [utest->dsn~reporting.html.linked-specification-item-origin~1]
+    @Test
+    public void testSetS()
+    {
+        this.arguments.setS(true);
+        assertThat(this.arguments.getShowOrigin(), is(true));
+    }
 }

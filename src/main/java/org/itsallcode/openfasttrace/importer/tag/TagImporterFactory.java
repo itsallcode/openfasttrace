@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.ImportSettings;
 /*-
  * #%L
  * OpenFastTrace
@@ -31,7 +32,6 @@ import java.util.stream.Stream;
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.importer.tag.config.TagImporterConfig;
 
 /**
  * {@link ImporterFactory} for tags in source code files.
@@ -85,7 +85,7 @@ public class TagImporterFactory extends ImporterFactory
 
     private Stream<PathConfig> getPathConfigs()
     {
-        final TagImporterConfig config = getContext().getTagImporterConfig();
-        return config == null ? Stream.empty() : config.getPathConfigs().stream();
+        final ImportSettings settings = getContext().getImportSettings();
+        return settings == null ? Stream.empty() : settings.getPathConfigs().stream();
     }
 }

@@ -27,6 +27,8 @@ import static org.hamcrest.collection.IsEmptyIterable.emptyIterableOf;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
@@ -39,6 +41,12 @@ import org.junit.Test;
 public class TestImportSettings
 {
     @Test
+    public void testInputListEmptyByDefault()
+    {
+        assertThat(ImportSettings.createDefault().getInputs(), emptyIterableOf(Path.class));
+    }
+
+    @Test
     public void testDefaultFilter()
     {
         assertThat(ImportSettings.createDefault().getFilters(),
@@ -50,6 +58,22 @@ public class TestImportSettings
     {
         assertThat(ImportSettings.createDefault().getPathConfigs(),
                 emptyIterableOf(PathConfig.class));
+    }
+
+    @Test
+    public void testAddInputList()
+    {
+        final Path[] expectedInputs = { Paths.get("/a/path"), Paths.get("/another/path") };
+        assertThat(ImportSettings.builder().addInputs(Arrays.asList(expectedInputs)).build()
+                .getInputs(), containsInAnyOrder(expectedInputs));
+    }
+
+    @Test
+    public void testAddInputArray()
+    {
+        final Path[] expectedInputs = { Paths.get("/a/path"), Paths.get("/another/path") };
+        assertThat(ImportSettings.builder().addInputs(expectedInputs).build().getInputs(),
+                containsInAnyOrder(expectedInputs));
     }
 
     @Test

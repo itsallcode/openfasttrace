@@ -23,7 +23,6 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.*;
@@ -34,31 +33,12 @@ import org.itsallcode.openfasttrace.report.ReportService;
 
 public class OftRunner implements Oft
 {
-    private final List<Path> inputs = new ArrayList<>();
-
-    @Override
-    public Oft addInputs(final Path... inputs)
-    {
-        for (final Path input : inputs)
-        {
-            this.inputs.add(input);
-        }
-        return this;
-    }
-
-    @Override
-    public Oft addInputs(final List<Path> inputs)
-    {
-        this.inputs.addAll(inputs);
-        return this;
-    }
-
     @Override
     public List<SpecificationItem> importItems(final ImportSettings settings)
     {
         return createImporterService(settings) //
                 .createImporter() //
-                .importAny(this.inputs) //
+                .importAny(settings.getInputs()) //
                 .getImportedItems();
     }
 

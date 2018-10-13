@@ -33,24 +33,6 @@ import org.itsallcode.openfasttrace.core.*;
 public interface Oft
 {
     /**
-     * Select one or more input files
-     * 
-     * @param inputs
-     *            input files
-     * @return a <code>Converter</code> instance for fluent programming
-     */
-    public Oft addInputs(final Path... inputs);
-
-    /**
-     * Select one or more input files
-     * 
-     * @param inputs
-     *            input files
-     * @return an {@link Oft} instance for fluent programming
-     */
-    public Oft addInputs(final List<Path> inputs);
-
-    /**
      * Run an import with default settings
      * 
      * @return list of imported specification items

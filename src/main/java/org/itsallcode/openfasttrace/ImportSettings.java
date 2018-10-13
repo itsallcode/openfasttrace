@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,25 @@ import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 public class ImportSettings
 {
+    private final List<Path> inputs;
     private final FilterSettings filter;
     private final List<PathConfig> pathConfigs;
 
     protected ImportSettings(final Builder builder)
     {
+        this.inputs = builder.inputs;
         this.filter = builder.filter;
         this.pathConfigs = builder.pathConfigs;
+    }
+
+    /**
+     * Get the list of paths to be scanned for importable artifacts
+     * 
+     * @return list of input paths
+     */
+    public List<Path> getInputs()
+    {
+        return this.inputs;
     }
 
     /**
@@ -82,11 +95,41 @@ public class ImportSettings
      */
     public static class Builder
     {
+        private final List<Path> inputs = new ArrayList<>();
         private FilterSettings filter = FilterSettings.createAllowingEverything();
         private List<PathConfig> pathConfigs = new ArrayList<>();
 
         private Builder()
         {
+        }
+
+        /**
+         * Add a list of input paths to be scanned for importable artifacts
+         * 
+         * @param inputs
+         *            input paths to be scanned
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder addInputs(final List<Path> inputs)
+        {
+            this.inputs.addAll(inputs);
+            return this;
+        }
+
+        /**
+         * Add one or more input paths to be scanned for importable artifacts
+         * 
+         * @param inputs
+         *            input paths to be scanned
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder addInputs(final Path... inputs)
+        {
+            for (final Path input : inputs)
+            {
+                this.inputs.add(input);
+            }
+            return this;
         }
 
         /**

@@ -70,7 +70,7 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
     public void before() throws IOException
     {
         writeTextFile(this.tempFolder.newFile("spec.md"), SPECIFICATION);
-        this.oft = Oft.create().addInputs(this.tempFolder.getRoot().toPath());
+        this.oft = Oft.create();
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
@@ -87,8 +87,11 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
 
     private List<String> getIdsFromTraceWithFilterSettings(final FilterSettings filterSettings)
     {
-        final List<SpecificationItem> items = this.oft
-                .importItems(ImportSettings.builder().filter(filterSettings).build());
+        final ImportSettings importSettings = ImportSettings.builder() //
+                .addInputs(this.tempFolder.getRoot().toPath()) //
+                .filter(filterSettings) //
+                .build();
+        final List<SpecificationItem> items = this.oft.importItems(importSettings);
         final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
         final Trace trace = this.oft.trace(linkedItems);
         final List<String> filteredIds = trace.getItems() //

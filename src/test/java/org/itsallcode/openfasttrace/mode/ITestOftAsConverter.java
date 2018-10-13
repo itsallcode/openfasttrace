@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.junit.Before;
@@ -46,8 +47,8 @@ public class ITestOftAsConverter extends AbstractOftTest
     @Test
     public void testConvertToSpecobjectFile() throws IOException
     {
-        this.oft.addInputs(this.docDir);
-        final List<SpecificationItem> items = this.oft.importItems();
+        final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
+        final List<SpecificationItem> items = this.oft.importItems(settings);
         this.oft.exportToPath(items, this.outputFile);
         assertStandardFileExportResult();
     }

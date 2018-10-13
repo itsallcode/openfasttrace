@@ -436,7 +436,7 @@ or run a report.
 
 #### Converting File from Java
 
-The following example code use a OFT as a converter to read input form a path and exports it with the standard settings to a ReqM2 file. 
+The following example code use a OFT as a converter that scans the current working directory recursively (default import setting) and exports the found artifacts with the standard settings to a ReqM2 file. 
 
 ```JAVA
 import org.itsallcode.openfasttrace.Oft;
@@ -446,10 +446,8 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 Select input paths and import specification items from there:
 
 ```JAVA
-final List<Path> inputs = new ArrayList<>();
-inputs.add(Paths.get("/input/path"));
-final Oft oft = Oft.create().addInputs(inputs);
-final List<SpecificationItem> items = oft.importItems();
+final Oft oft = Oft.create();
+final List<SpecificationItem> items = oft.importItems(settings);
 ```
 
 Export the items:
@@ -469,13 +467,15 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
 ```
 
-The import is identical to the converter case: 
+The import is similar to the converter case, except this time we add an input path explicitly for the sake of demonstration: 
 
 ```JAVA
-final List<Path> inputs = new ArrayList<>();
-inputs.add(Paths.get("/input/path"));
-final Oft oft = Oft.create().addInputs(inputs);
-final List<SpecificationItem> items = oft.importItems();
+final ImportSettings settings = ImportSettings //
+        .builder() //
+        .addInputs("/input/path") //
+        .build;
+final Oft oft = Oft.create();
+final List<SpecificationItem> items = oft.importItems(settings);
 ```
 
 Now link the items together (i.e. make them navigable):

@@ -97,9 +97,11 @@ public abstract class AbstractCommand implements Performable
 
     protected List<SpecificationItem> importItems()
     {
-        this.oft.addInputs(this.toPaths(this.arguments.getInputs()));
-        final ImportSettings importSettings = ImportSettings.builder()
-                .filter(createFilterSettingsFromArguments()).build();
+        final ImportSettings importSettings = ImportSettings //
+                .builder() //
+                .addInputs(this.toPaths(this.arguments.getInputs())) //
+                .filter(createFilterSettingsFromArguments()) //
+                .build();
         return this.oft.importItems(importSettings);
     }
 }

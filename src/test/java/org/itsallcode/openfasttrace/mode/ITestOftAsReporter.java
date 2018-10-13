@@ -51,8 +51,9 @@ public class ITestOftAsReporter extends AbstractOftTest
     public void setUp() throws UnsupportedEncodingException
     {
         perpareOutput();
-        this.oft = Oft.create().addInputs(this.docDir);
-        final List<SpecificationItem> items = this.oft.importItems();
+        final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
+        this.oft = Oft.create();
+        final List<SpecificationItem> items = this.oft.importItems(settings);
         this.linkedItems = this.oft.link(items);
         this.trace = this.oft.trace(this.linkedItems);
     }

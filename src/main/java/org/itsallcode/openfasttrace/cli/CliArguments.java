@@ -51,6 +51,11 @@ public class CliArguments
     private ReportVerbosity reportVerbosity;
     private Set<String> wantedArtifactTypes = Collections.emptySet();
     private Set<String> wantedTags = Collections.emptySet();
+
+    // [impl->dsn~reporting.plain-text.specification-item-origin~1]]
+    // [impl->dsn~reporting.plain-text.linked-specification-item-origin~1]
+    // [impl->dsn~reporting.html.specification-item-origin~1]
+    // [impl->dsn~reporting.html.linked-specification-item-origin~1]
     private boolean showOrigin;
 
     /**

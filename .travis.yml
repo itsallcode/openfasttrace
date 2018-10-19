@@ -6,7 +6,6 @@ env:
 
 jdk:
   - oraclejdk8
-  - oraclejdk10
   - openjdk10
 
 cache:

@@ -25,18 +25,18 @@ package org.itsallcode.openfasttrace.core;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-public class TestLinkedItemIndex
+class TestLinkedItemIndex
 {
     private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
             "name", 42);
@@ -51,7 +51,7 @@ public class TestLinkedItemIndex
     private SpecificationItem duplicateIdItem1Mock, duplicateIdItem2Mock, uniqueIdItemMock,
             duplicateIdIgnoringVersionItemMock;
 
-    @Before
+    @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
@@ -69,7 +69,7 @@ public class TestLinkedItemIndex
     }
 
     @Test
-    public void testEmptyIndex()
+    void testEmptyIndex()
     {
         final LinkedItemIndex index = createIndex();
         assertThat(index.size(), equalTo(0));
@@ -82,7 +82,7 @@ public class TestLinkedItemIndex
     }
 
     @Test
-    public void testNonEmptyIndex()
+    void testNonEmptyIndex()
     {
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock, this.uniqueIdItemMock);
         assertThat(index.size(), equalTo(2));
@@ -92,7 +92,7 @@ public class TestLinkedItemIndex
 
     // [utest->dsn~tracing.tracing.duplicate-items~1]
     @Test
-    public void testDuplicateId()
+    void testDuplicateId()
     {
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock,
                 this.duplicateIdItem2Mock);
@@ -109,7 +109,7 @@ public class TestLinkedItemIndex
     }
 
     @Test
-    public void testDuplicateVersionId()
+    void testDuplicateVersionId()
     {
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock,
                 this.duplicateIdIgnoringVersionItemMock, this.uniqueIdItemMock);

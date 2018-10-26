@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -39,7 +39,7 @@ import org.itsallcode.openfasttrace.importer.ImporterContext;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
@@ -47,7 +47,7 @@ import com.github.hamstercommunity.matcher.auto.AutoMatcher;
  * Test for {@link TagImporter}
  */
 // [utest->dsn~import.full-coverage-tag~1]
-public class TestTagImporter
+class TestTagImporter
 {
     private static final String FILENAME = "testfilename.java";
     private static final SpecificationItemId ID1 = id("artifactTypeA", "name1", 1);
@@ -66,81 +66,81 @@ public class TestTagImporter
     private static final String WINDOWS_NEWLINE = CARRIAGE_RETURN + UNIX_NEWLINE;
 
     @Test
-    public void testEmptyString()
+    void testEmptyString()
     {
         assertItems("");
     }
 
     @Test
-    public void testNonStringNoTag()
+    void testNonStringNoTag()
     {
         assertItems("non empty string");
     }
 
     @Test
-    public void testNonStringMultiLineStringNoTag()
+    void testNonStringMultiLineStringNoTag()
     {
         assertItems("non empty string\nmultiline");
     }
 
     @Test
-    public void testSingleTag()
+    void testSingleTag()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagTrailingNewline()
+    void testSingleTagTrailingNewline()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE, //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataBefore()
+    void testSingleTagWithDataBefore()
     {
         assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataBeforeWithSpaceSeparator()
+    void testSingleTagWithDataBeforeWithSpaceSeparator()
     {
         assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataAfter()
+    void testSingleTagWithDataAfter()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataAfterWithSpaceSeparator()
+    void testSingleTagWithDataAfterWithSpaceSeparator()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataBeforeAndAfter()
+    void testSingleTagWithDataBeforeAndAfter()
     {
         assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testSingleTagWithDataBeforeAndAfterWithSpaceSeparator()
+    void testSingleTagWithDataBeforeAndAfterWithSpaceSeparator()
     {
         assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
     }
 
     @Test
-    public void testMultipleTagsPerLineWithSeparatorWithoutSpace()
+    void testMultipleTagsPerLineWithSeparatorWithoutSpace()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "separator"
@@ -149,7 +149,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testMultipleTagsPerLineWithSeparatorWithSpace()
+    void testMultipleTagsPerLineWithSeparatorWithSpace()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " separator "
@@ -158,7 +158,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testMultipleTagsPerLineWithSpaceSeparator()
+    void testMultipleTagsPerLineWithSpaceSeparator()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "
@@ -167,7 +167,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testMultipleTagsPerLineWithoutSeparator()
+    void testMultipleTagsPerLineWithoutSeparator()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + ""
@@ -176,7 +176,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testThreeTagsOnOneLine()
+    void testThreeTagsOnOneLine()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT)
@@ -186,7 +186,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testLinesSeparatedWithUnixNewLine()
+    void testLinesSeparatedWithUnixNewLine()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
@@ -195,7 +195,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testLinesSeparatedWithWindowsNewLine()
+    void testLinesSeparatedWithWindowsNewLine()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + WINDOWS_NEWLINE
@@ -204,7 +204,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testLinesSeparatedWithCarriageReturn()
+    void testLinesSeparatedWithCarriageReturn()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + CARRIAGE_RETURN
@@ -213,14 +213,14 @@ public class TestTagImporter
     }
 
     @Test
-    public void testDuplicateId()
+    void testDuplicateId()
     {
         assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID1));
     }
 
     @Test
-    public void testDuplicateIdMultipleLines()
+    void testDuplicateIdMultipleLines()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
@@ -229,7 +229,7 @@ public class TestTagImporter
     }
 
     @Test
-    public void testDifferentArtifactTypes()
+    void testDifferentArtifactTypes()
     {
         assertItems(
                 tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "

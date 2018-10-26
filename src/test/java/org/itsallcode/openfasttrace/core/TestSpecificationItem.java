@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
 
@@ -26,7 +27,7 @@ import static org.hamcrest.Matchers.emptyIterable;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,11 +35,11 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.matcher.SpecificationItemIdMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-public class TestSpecificationItem
+class TestSpecificationItem
 {
     private static final String NOT_NEEDED_ARTIFACT_TYPE = "not_needed";
     private static final String NEEDED_ARTIFACT_TYPE = "needed";
@@ -65,7 +66,7 @@ public class TestSpecificationItem
 
     // [utest.requirement_format~1]
     @Test
-    public void testBuildSimpleSpecificationItem()
+    void testBuildSimpleSpecificationItem()
     {
         final SpecificationItem.Builder builder = createSimpleItem();
         final SpecificationItem item = builder.build();
@@ -90,7 +91,7 @@ public class TestSpecificationItem
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testBuildComplexSpecificationItem()
+    void testBuildComplexSpecificationItem()
     {
         final SpecificationItem.Builder builder = createSimpleItem();
         for (final SpecificationItemId coveredId : COVERED_IDS)
@@ -118,7 +119,7 @@ public class TestSpecificationItem
     }
 
     @Test
-    public void testBuildSpecificationItemFromSeparateIdParts()
+    void testBuildSpecificationItemFromSeparateIdParts()
     {
         final SpecificationItem.Builder builder = createTestItemBuilder();
         final SpecificationItem item = builder.build();
@@ -126,7 +127,7 @@ public class TestSpecificationItem
     }
 
     @Test
-    public void testNeedsCoverageByArtifactType()
+    void testNeedsCoverageByArtifactType()
     {
         final SpecificationItem.Builder builder = createTestItemBuilder();
         builder.addNeedsArtifactType(NEEDED_ARTIFACT_TYPE);
@@ -137,7 +138,7 @@ public class TestSpecificationItem
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testNeedsCoverage()
+    void testNeedsCoverage()
     {
         final SpecificationItem.Builder builder = createTestItemBuilder();
         assertThat(builder.build().needsCoverage(), equalTo(false));
@@ -147,33 +148,33 @@ public class TestSpecificationItem
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testLocationIsNullByDefault()
+    void testLocationIsNullByDefault()
     {
         assertThat(createTestItemBuilder().build().getLocation(), equalTo(null));
     }
 
     @Test
-    public void testLocationBuilder()
+    void testLocationBuilder()
     {
         final Location there = Location.create("there", 7);
         assertThat(createTestItemBuilder().location(there).build().getLocation(), equalTo(there));
     }
 
     @Test
-    public void testLocationBuilderFromComponents()
+    void testLocationBuilderFromComponents()
     {
         assertThat(createTestItemBuilder().location("here", 42).build().getLocation(),
                 equalTo(Location.create("here", 42)));
     }
 
     @Test
-    public void testEqualsAndHashContract()
+    void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItem.class).verify();
     }
 
     @Test
-    public void testCoverageBuilderWithIdParts()
+    void testCoverageBuilderWithIdParts()
     {
         final SpecificationItem item = createTestItemBuilder() //
                 .addCoveredId("foo", "bar", 3) //
@@ -188,7 +189,7 @@ public class TestSpecificationItem
     }
 
     @Test
-    public void testDependencyBuilderWithIdParts()
+    void testDependencyBuilderWithIdParts()
     {
         final SpecificationItem item = createTestItemBuilder().addDependOnId("foo", "bar", 3) //
                 .build();
@@ -197,14 +198,14 @@ public class TestSpecificationItem
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testDefaultStatusIsApproved()
+    void testDefaultStatusIsApproved()
     {
         assertThat(createTestItemBuilder().build().getStatus(), equalTo(ItemStatus.APPROVED));
     }
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testBuildWithStatus()
+    void testBuildWithStatus()
     {
         assertThat(createTestItemBuilder().status(ItemStatus.REJECTED).build().getStatus(),
                 equalTo(ItemStatus.REJECTED));
@@ -212,36 +213,36 @@ public class TestSpecificationItem
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testByDefaultTagListIsEmpty()
+    void testByDefaultTagListIsEmpty()
     {
         assertThat(createTestItemBuilder().build().getTags(), emptyIterable());
     }
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testTagBuilder()
+    void testTagBuilder()
     {
         assertThat(createTestItemBuilder().addTag("the_tag").build().getTags(),
                 containsInAnyOrder("the_tag"));
     }
 
     // [utest->dsn~specification-item~3]
-    @Test(expected = IllegalStateException.class)
-    public void testBuildingWithOutIdThrowsExepction()
+    @Test
+    void testBuildingWithOutIdThrowsExepction()
     {
-        new SpecificationItem.Builder().build();
+        assertThrows(IllegalStateException.class, () -> new SpecificationItem.Builder().build());
     }
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testForwardsIsFalseByDefault()
+    void testForwardsIsFalseByDefault()
     {
         assertThat(createSimpleItem().build().isForwarding(), equalTo(false));
     }
 
     // [utest->dsn~specification-item~3]
     @Test
-    public void testSetForwards()
+    void testSetForwards()
     {
         assertThat(createSimpleItem().forwards(true).build().isForwarding(), equalTo(true));
     }

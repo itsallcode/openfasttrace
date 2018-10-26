@@ -104,9 +104,9 @@ The list below show all build time dependencies in alphabetical order. Note that
 | [Apache Maven](https://maven.apache.org/)                                    | Build tool                                             | Apache License 2.0            |
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                    | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher) | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
-| [JUnit](https://junit.org/junit4/index.html)                                 | Unit testing framework                                 | Eclipse Public License 1.0    |
+| [JUnit](https://junit.org/junit5)                                            | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
-| [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
+| [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls    | Eclipse Public License 2.0     |
 | [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
 ### Essential Build Steps
@@ -117,7 +117,7 @@ The list below show all build time dependencies in alphabetical order. Note that
 
 ### Using Eclipse
 
-Import as a Maven project using *File > Import... > Maven > Existing Maven Projects*
+Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr; "Existing Maven Projects"*
 
 ### Configure Logging
 

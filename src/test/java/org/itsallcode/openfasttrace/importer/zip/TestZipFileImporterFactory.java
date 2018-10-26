@@ -23,30 +23,30 @@ package org.itsallcode.openfasttrace.importer.zip;
  */
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
 import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-public class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporterFactory>
+class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporterFactory>
 {
     @Mock
     private ImporterService importerServiceMock;
 
-    @Before
+    @BeforeEach
     public void configureMock()
     {
         when(this.contextMock.getImporterService()).thenReturn(this.importerServiceMock);
     }
 
     @Test
-    public void test()
+    void test()
     {
         new ZipFileImporterFactory();
     }
@@ -70,10 +70,10 @@ public class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileI
     }
 
     @Test
-    public void testFactoryThrowsExceptionWhenContextMissing()
+    void testFactoryThrowsExceptionWhenContextMissing()
     {
-        this.thrown.expect(NullPointerException.class);
-        this.thrown.expectMessage(equalTo("Context was not initialized"));
-        new ZipFileImporterFactory().createImporter(null, null);
+        assertThrows(NullPointerException.class,
+                () -> new ZipFileImporterFactory().createImporter(null, null),
+                "Context was not initialized");
     }
 }

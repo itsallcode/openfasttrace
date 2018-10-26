@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,14 +37,14 @@ import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 /**
  * Test for {@link ImporterService}
  */
-public class TestImporterService
+class TestImporterService
 {
     @Mock
     private ImporterFactoryLoader factoryLoaderMock;
@@ -64,8 +64,8 @@ public class TestImporterService
     private InputFile file;
     private ImporterService importerService;
 
-    @Before
-    public void setUp()
+    @BeforeEach
+    void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
         this.importerService = new ImporterService(this.factoryLoaderMock,
@@ -78,7 +78,7 @@ public class TestImporterService
     }
 
     @Test
-    public void testImportWindows()
+    void testImportWindows()
     {
         OsDetector.assumeRunningOnWindows();
         runImporter();
@@ -86,7 +86,7 @@ public class TestImporterService
     }
 
     @Test
-    public void testImportUnix()
+    void testImportUnix()
     {
         OsDetector.assumeRunningOnUnix();
         runImporter();

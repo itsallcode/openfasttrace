@@ -30,12 +30,12 @@ import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.view.Viewable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
+class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
 {
     private static final SpecificationItemId ITEM_A_ID = SpecificationItemId
             .parseId("dsn~name-a~1");
@@ -50,7 +50,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     private LinkedSpecificationItem itemMockC;
 
     @Override
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         super.prepareEachTest();
@@ -60,7 +60,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderMinimalItem()
+    void testRenderMinimalItem()
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_A_ID) //
@@ -81,7 +81,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderMultiLineItem()
+    void testRenderMultiLineItem()
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_B_ID) //
@@ -116,7 +116,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderNeeds()
+    void testRenderNeeds()
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_A_ID) //
@@ -141,7 +141,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderIncomingLinks()
+    void testRenderIncomingLinks()
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_A_ID) //
@@ -171,7 +171,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderOutgoingLinks()
+    void testRenderOutgoingLinks()
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(ITEM_A_ID) //
@@ -201,7 +201,7 @@ public class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    public void testRenderOrigin()
+    void testRenderOrigin()
     {
         final Location location = Location.create("foo/bar", 13);
         final SpecificationItem item = new SpecificationItem.Builder() //

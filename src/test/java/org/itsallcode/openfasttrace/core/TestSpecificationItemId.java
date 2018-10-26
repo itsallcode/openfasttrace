@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -25,11 +27,11 @@ package org.itsallcode.openfasttrace.core;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.core.SpecificationItemId.parseId;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.itsallcode.openfasttrace.core.SpecificationItemId.Builder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -37,14 +39,14 @@ import nl.jqno.equalsverifier.EqualsVerifier;
  * [utest->dsn~md.specification-item-id-format~2]
  */
 // [utest->dsn~specification-item-id~1]
-public class TestSpecificationItemId
+class TestSpecificationItemId
 {
     private static final int REVISION = 1;
     private static final String NAME = "foo";
     private static final String ARTIFACT_TYPE_FEATURE = "feat";
 
     @Test
-    public void testCreateId()
+    void testCreateId()
     {
         final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME, REVISION);
         assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
@@ -52,7 +54,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testCreateIdWithoutRevision()
+    void testCreateIdWithoutRevision()
     {
         final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
         assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
@@ -60,7 +62,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testParseId_singleDigitRevision()
+    void testParseId_singleDigitRevision()
     {
         final SpecificationItemId id = parseId("feat~foo~1");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
@@ -69,7 +71,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testParseId_multipleFragmentName()
+    void testParseId_multipleFragmentName()
     {
         final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz-narf~1");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
@@ -78,7 +80,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testParseId_multipleDigitRevision()
+    void testParseId_multipleDigitRevision()
     {
         final SpecificationItemId id = parseId("feat~foo~999");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
@@ -86,14 +88,15 @@ public class TestSpecificationItemId
         assertThat(id.getRevision(), equalTo(999));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testParseIdFailsForWildcardRevision()
+    @Test
+    void testParseIdFailsForWildcardRevision()
     {
-        parseId("feat~foo~" + SpecificationItemId.REVISION_WILDCARD);
+        assertThrows(IllegalStateException.class,
+                () -> parseId("feat~foo~" + SpecificationItemId.REVISION_WILDCARD));
     }
 
     @Test
-    public void testParseId_mustFailForIllegalIds()
+    void testParseId_mustFailForIllegalIds()
     {
         final String[] negatives = { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1",
                 "req~1foo~1", "req~.foo~1", "req~foo~-1" };
@@ -119,7 +122,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testToRevisionWildcard()
+    void testToRevisionWildcard()
     {
         final SpecificationItemId id = parseId("feat~foo~999");
         assertThat(id.toRevisionWildcard().getRevision(),
@@ -127,7 +130,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testToString()
+    void testToString()
     {
         final Builder builder = new Builder();
         builder.artifactType("dsn").name("dummy").revision(3);
@@ -135,7 +138,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testToStringRevisionWildcard()
+    void testToStringRevisionWildcard()
     {
         final Builder builder = new Builder();
         builder.artifactType("dsn").name("dummy").revisionWildcard();
@@ -143,7 +146,7 @@ public class TestSpecificationItemId
                 equalTo("dsn~dummy~" + SpecificationItemId.REVISION_WILDCARD));
     }
 
-    public void testCreate_WithRevisionWildcard()
+    void testCreate_WithRevisionWildcard()
     {
         final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
@@ -152,7 +155,7 @@ public class TestSpecificationItemId
     }
 
     @Test
-    public void testEqualsAndHashContract()
+    void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItemId.class).verify();
     }

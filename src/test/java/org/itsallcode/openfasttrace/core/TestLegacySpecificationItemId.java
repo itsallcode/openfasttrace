@@ -23,23 +23,23 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestLegacySpecificationItemId
+class TestLegacySpecificationItemId
 {
     private SpecificationItemId.Builder builder;
 
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         this.builder = new SpecificationItemId.Builder();
     }
 
     @Test
-    public void testBuildInferingArtifactTypeFromShortNamePrefix()
+    void testBuildInferingArtifactTypeFromShortNamePrefix()
     {
         final SpecificationItemId id = this.builder.name("foo:bar").revision(1).build();
         assertIdParts(id, "foo", "bar", 1);
@@ -54,21 +54,21 @@ public class TestLegacySpecificationItemId
     }
 
     @Test
-    public void testBuildInferingArtifactTypeFromLongNamePrefix()
+    void testBuildInferingArtifactTypeFromLongNamePrefix()
     {
         final SpecificationItemId id = this.builder.name("foo~foo:bar").revision(1).build();
         assertIdParts(id, "foo", "bar", 1);
     }
 
     @Test
-    public void testBuildnferingArtifactTypeWithoutPrefixResultsInUnknown()
+    void testBuildnferingArtifactTypeWithoutPrefixResultsInUnknown()
     {
         final SpecificationItemId id = this.builder.name("bar").revision(1).build();
         assertIdParts(id, SpecificationItemId.UNKONWN_ARTIFACT_TYPE, "bar", 1);
     }
 
     @Test
-    public void testBuildCleaningUpNameWherePrefixEqualsArtifactType()
+    void testBuildCleaningUpNameWherePrefixEqualsArtifactType()
     {
         final SpecificationItemId id = this.builder.artifactType("foo").name("foo:bar").revision(1)
                 .build();
@@ -76,7 +76,7 @@ public class TestLegacySpecificationItemId
     }
 
     @Test
-    public void testBuildCleaningUpNameWhereLongPrefixEqualsArtifactType()
+    void testBuildCleaningUpNameWhereLongPrefixEqualsArtifactType()
     {
         final SpecificationItemId id = this.builder.artifactType("foo").name("foo~foo:bar")
                 .revision(1).build();
@@ -84,7 +84,7 @@ public class TestLegacySpecificationItemId
     }
 
     @Test
-    public void testBuildCleaningUpNameWherePrefixNotEqualArtifactType()
+    void testBuildCleaningUpNameWherePrefixNotEqualArtifactType()
     {
         final SpecificationItemId id = this.builder.artifactType("baz").name("foo~foo:bar")
                 .revision(1).build();
@@ -92,14 +92,14 @@ public class TestLegacySpecificationItemId
     }
 
     @Test
-    public void testBuildInferingArtifactTypeAndCleaningUpNameWherePrefixPartsDontMatch()
+    void testBuildInferingArtifactTypeAndCleaningUpNameWherePrefixPartsDontMatch()
     {
         final SpecificationItemId id = this.builder.name("baz~foo:bar").revision(1).build();
         assertIdParts(id, "baz", "bar", 1);
     }
 
     @Test
-    public void testParsingLegacyId()
+    void testParsingLegacyId()
     {
         final SpecificationItemId id = SpecificationItemId.parseId("req:dep-a, v1");
         assertIdParts(id, "req", "dep-a", 1);

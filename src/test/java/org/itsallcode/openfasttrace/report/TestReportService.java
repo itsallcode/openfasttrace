@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,34 +26,34 @@ package org.itsallcode.openfasttrace.report;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
+import org.itsallcode.io.Capturable;
+import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestReportService
+@ExtendWith(TempDirectory.class)
+@ExtendWith(SystemOutGuard.class)
+class TestReportService
 {
-    @Rule
-    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     @Mock
     Trace traceMock;
 
     private ReportService service;
 
-    @Before
+    @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
@@ -59,38 +61,43 @@ public class TestReportService
     }
 
     @Test
-    public void testReportPlainText()
+    void testReportPlainText(final Capturable stream)
     {
         final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
                 .build();
+        stream.capture();
         this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(this.systemOutRule.getLog(), equalTo("not ok\n"));
+        assertThat(stream.getCapturedData(), equalTo("not ok\n"));
     }
 
     @Test
-    public void testReportHtml()
+    void testReportHtml(final Capturable stream)
     {
         final ReportSettings settings = ReportSettings.builder().outputFormat("html")
                 .verbosity(ReportVerbosity.MINIMAL).build();
+        stream.capture();
         this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(this.systemOutRule.getLog(), startsWith("<!DOCTYPE html>"));
+        assertThat(stream.getCapturedData(), startsWith("<!DOCTYPE html>"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidReportFormatThrowsIllegalArgumentException()
+    @Test
+    void testInvalidReportFormatThrowsIllegalArgumentException()
     {
         final ReportSettings settings = ReportSettings.builder().outputFormat("invalid")
                 .verbosity(ReportVerbosity.QUIET).build();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
+        assertThrows(IllegalArgumentException.class,
+                () -> this.service.reportTraceToStdOut(this.traceMock, settings));
     }
 
-    @Test(expected = ReportException.class)
-    public void testReportToIllegalPathThrowsReportExpection() throws IOException
+    @Test
+    void testReportToIllegalPathThrowsReportExpection(@TempDir final Path tempDir)
+            throws IOException
     {
-        final File readOnlyFile = this.temporaryFolder.newFile();
+        final File readOnlyFile = tempDir.resolve("readonly.txt").toFile();
         readOnlyFile.setReadOnly();
         final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.QUIET)
                 .build();
-        this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), settings);
+        assertThrows(ReportException.class, () -> this.service.reportTraceToPath(this.traceMock,
+                readOnlyFile.toPath(), settings));
     }
 }

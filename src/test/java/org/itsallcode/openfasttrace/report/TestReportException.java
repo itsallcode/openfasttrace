@@ -23,14 +23,14 @@ package org.itsallcode.openfasttrace.report;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestReportException
+class TestReportException
 {
     @Test
-    public void testNewReportExceptionWithMessage()
+    void testNewReportExceptionWithMessage()
     {
         final String message = "foobar";
         final ReportException exception = new ReportException(message);
@@ -38,7 +38,7 @@ public class TestReportException
     }
 
     @Test
-    public void testNewReportExceptionWithMessageAndCause()
+    void testNewReportExceptionWithMessageAndCause()
     {
         final String message = "foobar";
         final Exception cause = new Exception("barzoo");

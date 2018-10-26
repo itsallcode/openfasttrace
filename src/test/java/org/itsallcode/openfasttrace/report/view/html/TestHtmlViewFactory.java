@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -32,14 +32,14 @@ import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestHtmlViewFactory
+class TestHtmlViewFactory
 {
     private LinkedSpecificationItem item;
 
     @Test
-    public void testCreateSpecificationItem()
+    void testCreateSpecificationItem()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
         final ViewFactory factory = HtmlViewFactory.create(outputStream, HtmlReport.getCssUrl());

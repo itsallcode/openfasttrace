@@ -24,15 +24,15 @@ package org.itsallcode.openfasttrace.report.view;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-public class TestAbstractViewableContainer
+class TestAbstractViewableContainer
 {
     private ViewContainerStub viewableContainer;
     @Mock
@@ -40,7 +40,7 @@ public class TestAbstractViewableContainer
     @Mock
     private Viewable viewMockB;
 
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         MockitoAnnotations.initMocks(this);
@@ -48,7 +48,7 @@ public class TestAbstractViewableContainer
     }
 
     @Test
-    public void testListOfChildrenIsInitiallyEmpty()
+    void testListOfChildrenIsInitiallyEmpty()
     {
         assertThat(this.viewableContainer.getChildren(), emptyCollectionOf(Viewable.class));
     }
@@ -62,7 +62,7 @@ public class TestAbstractViewableContainer
     }
 
     @Test
-    public void testContainerCallsRenderMethodsOfChildren()
+    void testContainerCallsRenderMethodsOfChildren()
     {
         final int containerIndentationLevel = 42;
         final int childIndentationLevel = containerIndentationLevel + 1;

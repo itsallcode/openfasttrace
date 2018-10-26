@@ -23,21 +23,22 @@ package org.itsallcode.openfasttrace.report;
  */
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestReportFormat
+class TestReportFormat
 {
     @Test
-    public void testParseValid()
+    void testParseValid()
     {
         assertThat(ReportFormat.parse("plain"), equalTo(ReportFormat.PLAIN_TEXT));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testParseInalidFormatThrowsIllegalArguemtException()
+    @Test
+    void testParseInalidFormatThrowsIllegalArguemtException()
     {
-        ReportFormat.parse("invalid");
+        assertThrows(IllegalArgumentException.class, () -> ReportFormat.parse("invalid"));
     }
 }

@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -38,15 +38,15 @@ import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
 import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link InitializingServiceLoader}
  */
-public class TestInitializingServiceLoader
+class TestInitializingServiceLoader
 {
     @Test
-    public void testNoServicesRegistered()
+    void testNoServicesRegistered()
     {
         final Object context = new Object();
         final InitializingServiceLoader<InitializableServiceStub, Object> voidServiceLoader = InitializingServiceLoader
@@ -59,7 +59,7 @@ public class TestInitializingServiceLoader
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testImporterFactoriesRegistered()
+    void testImporterFactoriesRegistered()
     {
         final ImporterContext context = new ImporterContext(null);
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
@@ -76,7 +76,7 @@ public class TestInitializingServiceLoader
     }
 
     @Test
-    public void testExporterFactoriesRegistered()
+    void testExporterFactoriesRegistered()
     {
         final ExporterContext context = new ExporterContext();
         final List<ExporterFactory> services = getRegisteredServices(ExporterFactory.class,

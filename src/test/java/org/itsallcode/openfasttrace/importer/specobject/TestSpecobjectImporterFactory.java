@@ -33,7 +33,7 @@ import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactor
 /**
  * Tests for {@link SpecobjectImporterFactory}
  */
-public class TestSpecobjectImporterFactory
+class TestSpecobjectImporterFactory
         extends ImporterFactoryTestBase<SpecobjectImporterFactory>
 {
 

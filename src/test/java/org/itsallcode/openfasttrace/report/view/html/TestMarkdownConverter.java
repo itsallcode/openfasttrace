@@ -22,24 +22,24 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestMarkdownConverter
+class TestMarkdownConverter
 {
     private static final String LINE_SEPARATOR = "\n";
     private MarkdownConverter converter;
 
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         this.converter = new MarkdownConverter();
     }
 
     @Test
-    public void testConvertPreformatted()
+    void testConvertPreformatted()
     {
         final String original = "Before preformatted" + LINE_SEPARATOR //
                 + "    first line" + LINE_SEPARATOR //
@@ -63,7 +63,7 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testConvertUnorderedList()
+    void testConvertUnorderedList()
     {
         final String original = "Before list" + LINE_SEPARATOR //
                 + "* first item" + LINE_SEPARATOR //
@@ -87,7 +87,7 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testConvertUnorderedListWithMultilineItems()
+    void testConvertUnorderedListWithMultilineItems()
     {
         final String original = "Before list" + LINE_SEPARATOR //
                 + "* first item" + LINE_SEPARATOR //
@@ -107,7 +107,7 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testConvertOrderedList()
+    void testConvertOrderedList()
     {
         final String original = "Before list" + LINE_SEPARATOR //
                 + "1. first item" + LINE_SEPARATOR //
@@ -126,31 +126,31 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testCloseOrderedList()
+    void testCloseOrderedList()
     {
         assertConverted("5. foobar", "<ol><li>foobar</li></ol>");
     }
 
     @Test
-    public void testCloseUnurderedList()
+    void testCloseUnurderedList()
     {
         assertConverted("+ foobar", "<ul><li>foobar</li></ul>");
     }
 
     @Test
-    public void testClosePreformatted()
+    void testClosePreformatted()
     {
         assertConverted("     foobar  ", "<pre> foobar  </pre>");
     }
 
     @Test
-    public void testCloseWithTerminator()
+    void testCloseWithTerminator()
     {
         assertConverted("foobar\n\n\n", "<p>foobar</p>");
     }
 
     @Test
-    public void testChainedParagraphs()
+    void testChainedParagraphs()
     {
         final String original = "First paragraph" + LINE_SEPARATOR //
                 + "... continued" + LINE_SEPARATOR //
@@ -164,28 +164,28 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testConvertCode()
+    void testConvertCode()
     {
         assertConverted("This text `contains code ` and regular text",
                 "<p>This text <code>contains code </code> and regular text</p>");
     }
 
     @Test
-    public void testConvertLink()
+    void testConvertLink()
     {
         assertConverted("See [link label](#link-target) for details.",
                 "<p>See <a href=\"#link-target\">link label</a> for details.</p>");
     }
 
     @Test
-    public void testConvertTwoLinksInOneLine()
+    void testConvertTwoLinksInOneLine()
     {
         assertConverted("Before [A](#to-a) between [B](#to-b) after.",
                 "<p>Before <a href=\"#to-a\">A</a> between <a href=\"#to-b\">B</a> after.</p>");
     }
 
     @Test
-    public void testConvertEmphasis()
+    void testConvertEmphasis()
     {
         assertConverted("This _is important_, believe me!",
                 "<p>This <em>is important</em>, believe me!</p>");
@@ -194,7 +194,7 @@ public class TestMarkdownConverter
     }
 
     @Test
-    public void testConvertStrong()
+    void testConvertStrong()
     {
         assertConverted("This __is very important__, believe me!",
                 "<p>This <strong>is very important</strong>, believe me!</p>");

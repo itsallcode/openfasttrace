@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.matcher;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -22,15 +24,14 @@ package org.itsallcode.openfasttrace.matcher;
  * #L%
  */
 
-
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is the base class for all tests of {@link TypeSafeDiagnosingMatcher}.
@@ -41,10 +42,10 @@ import org.junit.Test;
  */
 public abstract class MatcherTestBase<T>
 {
-    @Test(expected = NullPointerException.class)
-    public void testNullObject()
+    @Test
+    void testNullObject()
     {
-        createMatcher(null);
+        assertThrows(NullPointerException.class, () -> createMatcher(null));
     }
 
     protected void assertMatch(final T object)

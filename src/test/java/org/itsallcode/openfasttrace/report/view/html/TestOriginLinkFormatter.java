@@ -28,6 +28,7 @@ import static org.itsallcode.openfasttrace.report.view.html.OriginLinkFormatter.
 import static org.junit.Assert.assertThat;
 
 import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.Test;
 
 public class TestOriginLinkFormatter
@@ -82,15 +83,33 @@ public class TestOriginLinkFormatter
     @Test
     public void testFormatRegularAbsoluteUnixPath()
     {
+        OsDetector.assumeRunningOnUnix();
         assertPathAndLineRenderedToSpan("/foo/bar/baz", 1111,
                 "<a href=\"file:///foo/bar/baz\">/foo/bar/baz</a>:1111");
     }
 
     @Test
+    public void testFormatRegularAbsoluteWindowsPath()
+    {
+        OsDetector.assumeRunningOnWindows();
+        assertPathAndLineRenderedToSpan("C:\\foo\\bar\\baz", 1111,
+                "<a href=\"file:///C:/foo/bar/baz\">C:\\foo\\bar\\baz</a>:1111");
+    }
+
+    @Test
     public void testFormatAbsoluteUnixPathWithSpecialCharacters()
     {
+        OsDetector.assumeRunningOnUnix();
         assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
                 "<a href=\"file:///fo%20o/b%C3%A4r/baz\">/fo o/bär/baz</a>:12345678");
+    }
+
+    @Test
+    public void testFormatAbsoluteWindowsPathWithSpecialCharacters()
+    {
+        OsDetector.assumeRunningOnWindows();
+        assertPathAndLineRenderedToSpan("C:\\fo o\\bär\\baz", 12345678,
+                "<a href=\"file:///C:/fo%20o/bär/baz\">C:\\fo o\\bär\\baz</a>:12345678");
     }
 
     @Test

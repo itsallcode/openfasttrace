@@ -32,9 +32,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import org.itsallcode.io.CapturingOutputStream;
+import org.itsallcode.io.Capturable;
 import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
+import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,20 +62,19 @@ public class ITestCliWithFilter extends AbstractFileBasedTest
     private File specFile;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir, final CapturingOutputStream stream)
-            throws IOException
+    void beforeEach(@TempDir final Path tempDir, @SysOut final Capturable out) throws IOException
     {
         this.specFile = tempDir.resolve("spec.md").toFile();
         writeTextFile(this.specFile, SPECIFICATION);
-        stream.capture();
+        out.capture();
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testWithoutFilter(final CapturingOutputStream stream)
+    void testWithoutFilter(@SysOut final Capturable out)
     {
         assertExitWithStatus(0, () -> runWithArguments("convert", this.specFile.toString()));
-        final String stdOut = stream.getCapturedData();
+        final String stdOut = out.getCapturedData();
         assertThat(stdOut, containsString("<id>a<"));
         assertThat(stdOut, containsString("<id>b<"));
         assertThat(stdOut, containsString("<id>c<"));
@@ -82,11 +82,11 @@ public class ITestCliWithFilter extends AbstractFileBasedTest
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testFilterWithAtLeastOneMatchingTag(final CapturingOutputStream stream)
+    void testFilterWithAtLeastOneMatchingTag(@SysOut final Capturable out)
     {
         assertExitWithStatus(0,
                 () -> runWithArguments("convert", "-t", "tag1", this.specFile.toString()));
-        final String stdOut = stream.getCapturedData();
+        final String stdOut = out.getCapturedData();
         assertThat(stdOut, not(containsString("<id>a<")));
         assertThat(stdOut, containsString("<id>b<"));
         assertThat(stdOut, not(containsString("<id>c<")));
@@ -94,7 +94,7 @@ public class ITestCliWithFilter extends AbstractFileBasedTest
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testFilterWithEmptyTagListFiltersOutEverything(final CapturingOutputStream stream)
+    void testFilterWithEmptyTagListFiltersOutEverything(final Capturable stream)
     {
         assertExitWithStatus(0,
                 () -> runWithArguments("convert", "-t", "", this.specFile.toString()));
@@ -104,7 +104,7 @@ public class ITestCliWithFilter extends AbstractFileBasedTest
 
     // [itest->dsn~filtering-by-tags-or-no-tags-during-import~1]
     @Test
-    void testFilterWithAtLeastOneMatchingTagOrNoTags(final CapturingOutputStream stream)
+    void testFilterWithAtLeastOneMatchingTagOrNoTags(final Capturable stream)
     {
         assertExitWithStatus(0,
                 () -> runWithArguments("convert", "-t", "_,tag1", this.specFile.toString()));

@@ -128,17 +128,12 @@ public final class OriginLinkFormatter
 
     private static URI convertPathWithoutProtocolToUri(final String path)
     {
-        URI uri;
         final Path realPath = Paths.get(unWindowsify(path));
         if (realPath.isAbsolute())
         {
-            uri = realPath.toUri();
+            return realPath.toUri();
         }
-        else
-        {
-            uri = null;
-        }
-        return uri;
+        return null;
     }
 
     private static String unWindowsify(final String path)

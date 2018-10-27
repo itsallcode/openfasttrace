@@ -64,7 +64,7 @@ class TestLegacySpecificationItemId
     void testBuildnferingArtifactTypeWithoutPrefixResultsInUnknown()
     {
         final SpecificationItemId id = this.builder.name("bar").revision(1).build();
-        assertIdParts(id, SpecificationItemId.UNKONWN_ARTIFACT_TYPE, "bar", 1);
+        assertIdParts(id, SpecificationItemId.UNKNOWN_ARTIFACT_TYPE, "bar", 1);
     }
 
     @Test

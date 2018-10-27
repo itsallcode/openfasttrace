@@ -39,7 +39,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     private static final Logger LOG = Logger.getLogger(SpecificationItemId.class.getName());
 
-    public static final String UNKONWN_ARTIFACT_TYPE = "unkonwn";
+    public static final String UNKNOWN_ARTIFACT_TYPE = "unknown";
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
@@ -355,9 +355,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             else
             {
                 LOG.warning(() -> "Name '" + this.name + "' does not match legacy name pattern '"
-                        + LEGACY_NAME_PATTERN + "': using artifact type '" + UNKONWN_ARTIFACT_TYPE
+                        + LEGACY_NAME_PATTERN + "': using artifact type '" + UNKNOWN_ARTIFACT_TYPE
                         + "'.");
-                this.artifactType = UNKONWN_ARTIFACT_TYPE;
+                this.artifactType = UNKNOWN_ARTIFACT_TYPE;
             }
         }
 

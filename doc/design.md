@@ -342,6 +342,8 @@ Covers:
 
 * `req~reporting.requirement-origin~1`
 
+Needs: impl, utest
+
 #### Plain Text Report Link Contains Specification Item Origin
 `dsn~reporting.plain-text.linked-specification-item-origin~1`
 
@@ -357,7 +359,7 @@ Covers:
 
 * `req~reporting.requirement-origin~1`
 
-Needs: impl, utest, itest
+Needs: impl, utest
 
 ### HTML Report
 
@@ -397,6 +399,8 @@ Covers:
 
 * `req~reporting.requirement-origin~1`
 
+Needs: impl, utest
+
 #### HTML Report Link Contains Specification Item Origin
 `dsn~reporting.html.linked-specification-item-origin~1`
 
@@ -406,7 +410,7 @@ Covers:
 
 * `req~reporting.requirement-origin~1`
 
-Needs: impl, utest, itest
+Needs: impl, utest
 
 # Deployment View
 

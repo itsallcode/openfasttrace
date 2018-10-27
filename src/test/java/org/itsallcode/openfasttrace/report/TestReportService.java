@@ -28,12 +28,13 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.itsallcode.io.Capturable;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
+import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,9 @@ import org.junitpioneer.jupiter.TempDirectory;
 import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 @ExtendWith(TempDirectory.class)
 @ExtendWith(SystemOutGuard.class)
 class TestReportService
@@ -61,30 +64,35 @@ class TestReportService
     }
 
     @Test
-    void testReportPlainText(final Capturable stream)
+    void testReportPlainText(@SysOut final Capturable out)
     {
-        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .verbosity(ReportVerbosity.MINIMAL) //
                 .build();
-        stream.capture();
+        out.capture();
         this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(stream.getCapturedData(), equalTo("not ok\n"));
+        assertThat(out.getCapturedData(), equalTo("not ok\n"));
     }
 
     @Test
-    void testReportHtml(final Capturable stream)
+    void testReportHtml(@SysOut final Capturable out)
     {
-        final ReportSettings settings = ReportSettings.builder().outputFormat("html")
-                .verbosity(ReportVerbosity.MINIMAL).build();
-        stream.capture();
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .outputFormat("html") //
+                .build();
+        out.capture();
         this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(stream.getCapturedData(), startsWith("<!DOCTYPE html>"));
+        assertThat(out.getCapturedData(), startsWith("<!DOCTYPE html>"));
     }
 
     @Test
     void testInvalidReportFormatThrowsIllegalArgumentException()
     {
-        final ReportSettings settings = ReportSettings.builder().outputFormat("invalid")
-                .verbosity(ReportVerbosity.QUIET).build();
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .outputFormat("invalid").verbosity(ReportVerbosity.QUIET).build();
         assertThrows(IllegalArgumentException.class,
                 () -> this.service.reportTraceToStdOut(this.traceMock, settings));
     }
@@ -93,11 +101,20 @@ class TestReportService
     void testReportToIllegalPathThrowsReportExpection(@TempDir final Path tempDir)
             throws IOException
     {
-        final File readOnlyFile = tempDir.resolve("readonly.txt").toFile();
-        readOnlyFile.setReadOnly();
-        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.QUIET)
+        final Path readOnlyFilePath = createReadOnlyFile(tempDir);
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .verbosity(ReportVerbosity.QUIET) //
                 .build();
-        assertThrows(ReportException.class, () -> this.service.reportTraceToPath(this.traceMock,
-                readOnlyFile.toPath(), settings));
+        assertThrows(ReportException.class,
+                () -> this.service.reportTraceToPath(this.traceMock, readOnlyFilePath, settings));
+    }
+
+    private Path createReadOnlyFile(final Path tempDir) throws IOException
+    {
+        final Path readOnlyFilePath = tempDir.resolve("readonly.txt");
+        Files.write(readOnlyFilePath, "r/o".getBytes());
+        readOnlyFilePath.toFile().setReadOnly();
+        return readOnlyFilePath;
     }
 }

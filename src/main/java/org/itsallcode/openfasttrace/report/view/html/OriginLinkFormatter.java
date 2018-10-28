@@ -138,6 +138,6 @@ public final class OriginLinkFormatter
 
     private static String unWindowsify(final String path)
     {
-        return path.replaceAll("([A-Z]:)", "/$1").replaceAll("\\\\", "/");
+        return path.replaceAll("\\\\", "/");
     }
 }

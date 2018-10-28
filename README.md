@@ -162,7 +162,7 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
     ```xml
     <servers>
         <server>
-            <id>bintray-openfasttrack-maven-repo</id>
+            <id>itsallcode-maven-repo</id>
             <username>[bintray-username]</username>
             <password>[bintray-api-key]</password>
         </server>

@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.importer.tag.config;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,28 +34,28 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DescribedPathMatcherTest
 {
     private DescribedPathMatcher matcher;
 
-    @Before
-    public void setup()
+    @BeforeEach
+    void beforeEach()
     {
         this.matcher = null;
     }
 
     @Test
-    public void testListBasedMatcherWithEmptyListMatchesNothing()
+    void testListBasedMatcherWithEmptyListMatchesNothing()
     {
         createListMatcher();
         assertMatches("path", false);
     }
 
     @Test
-    public void testListBasedMatcherMatchesRelativePath()
+    void testListBasedMatcherMatchesRelativePath()
     {
         createListMatcher("rel/path");
         assertMatches("rel/path", true);
@@ -68,7 +68,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherIsCaseInsensitiveUnderWindows()
+    void testListBasedMatcherIsCaseInsensitiveUnderWindows()
     {
         OsDetector.assumeRunningOnWindows();
         createListMatcher("rel/path");
@@ -77,7 +77,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherIsCaseSensitiveUnderUnix()
+    void testListBasedMatcherIsCaseSensitiveUnderUnix()
     {
         OsDetector.assumeRunningOnUnix();
         createListMatcher("rel/path");
@@ -86,7 +86,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsolutePath()
+    void testListBasedMatcherMatchesAbsolutePath()
     {
         createListMatcher("/abs/path");
         assertMatches("/abs/path", true);
@@ -95,7 +95,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlash()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlash()
     {
         createListMatcher("C:/abs/path");
         assertMatches("C:/abs/path", true);
@@ -104,7 +104,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashWindows()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashWindows()
     {
         OsDetector.assumeRunningOnWindows();
         createListMatcher("C:/abs/path");
@@ -112,7 +112,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashUnix()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashUnix()
     {
         OsDetector.assumeRunningOnUnix();
         createListMatcher("C:/abs/path");
@@ -120,7 +120,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslash()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslash()
     {
         createListMatcher("C:\\abs\\path");
         assertMatches("C:\\abs\\path", true);
@@ -128,7 +128,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashUnix()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashUnix()
     {
         OsDetector.assumeRunningOnUnix();
         createListMatcher("C:\\abs\\path");
@@ -137,7 +137,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashWindows()
+    void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashWindows()
     {
         OsDetector.assumeRunningOnWindows();
         createListMatcher("C:\\abs\\path");
@@ -146,7 +146,7 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherMatchesMultiplePaths()
+    void testListBasedMatcherMatchesMultiplePaths()
     {
         createListMatcher("path1", "path2");
         assertMatches("path1", true);
@@ -157,21 +157,21 @@ public class DescribedPathMatcherTest
     }
 
     @Test
-    public void testListBasedMatcherDescription()
+    void testListBasedMatcherDescription()
     {
         createListMatcher("path1", "path2");
         assertDescription("[path1, path2]");
     }
 
     @Test
-    public void testPatternMatcherDescription()
+    void testPatternMatcherDescription()
     {
         createPatternMatcher("path");
         assertDescription("glob:path");
     }
 
     @Test
-    public void testPatternMatcherMatchesGlob()
+    void testPatternMatcherMatchesGlob()
     {
         createPatternMatcher("glob:path/**");
         assertMatches("path", false);

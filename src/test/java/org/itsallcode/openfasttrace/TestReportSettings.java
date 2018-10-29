@@ -23,70 +23,70 @@ package org.itsallcode.openfasttrace;
  */
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.itsallcode.openfasttrace.ReportSettings.Builder;
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestReportSettings
+class TestReportSettings
 {
     private Builder builder;
 
-    @Before
-    public void before()
+    @BeforeEach
+    void beforeEach()
     {
         this.builder = ReportSettings.builder();
     }
 
     @Test
-    public void testDefaultVerbosity()
+    void testDefaultVerbosity()
     {
         assertThat(this.builder.build().getReportVerbosity(),
                 equalTo(ReportVerbosity.FAILURE_DETAILS));
     }
 
     @Test
-    public void testOriginNotShownByDefault()
+    void testOriginNotShownByDefault()
     {
         assertThat(this.builder.build().showOrigin(), equalTo(false));
     }
 
     @Test
-    public void testDefaultOutputFormat()
+    void testDefaultOutputFormat()
     {
         assertThat(this.builder.build().getOutputFormat(), equalTo("plain"));
     }
 
     @Test
-    public void testDefaultNewline()
+    void testDefaultNewline()
     {
         assertThat(this.builder.build().getNewline(), equalTo(Newline.UNIX));
     }
 
     @Test
-    public void testBuildWithVerbosity()
+    void testBuildWithVerbosity()
     {
         assertThat(this.builder.verbosity(ReportVerbosity.ALL).build().getReportVerbosity(),
                 equalTo(ReportVerbosity.ALL));
     }
 
     @Test
-    public void testBuildWithOriginShown()
+    void testBuildWithOriginShown()
     {
         assertThat(this.builder.showOrigin(true).build().showOrigin(), equalTo(true));
     }
 
     @Test
-    public void testBuildWithOutputFormat()
+    void testBuildWithOutputFormat()
     {
         assertThat(this.builder.outputFormat("html").build().getOutputFormat(), equalTo("html"));
     }
 
     @Test
-    public void testBuildWithNewline()
+    void testBuildWithNewline()
     {
         assertThat(this.builder.newline(Newline.OLDMAC).build().getNewline(),
                 equalTo(Newline.OLDMAC));

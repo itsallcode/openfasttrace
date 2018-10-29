@@ -34,91 +34,90 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestLineReader
+@ExtendWith(TempDirectory.class)
+class TestLineReader
 {
     private static final Path DUMMY_FILE = Paths.get("dummy");
     private static final String TEST_CONTENT_LINE_1 = "testContent äöüß";
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+
     @Mock
     private LineConsumer consumerMock;
     @Mock
     private BufferedReader readerMock;
+    private Path tempDir;
 
-    @Before
-    public void setUp()
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir)
     {
         MockitoAnnotations.initMocks(this);
+        this.tempDir = tempDir;
     }
 
     @Test
-    public void testCreateForPathAndCharset() throws IOException
+    void testCreateForPathAndCharset() throws IOException
     {
-        final Path tempFile = this.tempFolder.newFile().toPath();
+        final Path tempFile = this.tempDir.resolve("test");
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
-
         LineReader.create(InputFile.forPath(tempFile)).readLines(this.consumerMock);
-
         assertLinesRead(TEST_CONTENT_LINE_1);
     }
 
     @Test
-    public void testCreateForPathAndReaderReader() throws IOException
+    void testCreateForPathAndReaderReader() throws IOException
     {
-        final Path tempFile = this.tempFolder.newFile().toPath();
+        final Path tempFile = this.tempDir.resolve("test");
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
-
         LineReader.create(StreamInput.forReader(DUMMY_FILE, Files.newBufferedReader(tempFile)))
                 .readLines(this.consumerMock);
-
         assertLinesRead(TEST_CONTENT_LINE_1);
     }
 
     @Test
-    public void testReadLinesEmptyFile()
+    void testReadLinesEmptyFile()
     {
         readContent("");
         assertLinesRead();
     }
 
     @Test
-    public void testReadLinesSingleLine()
+    void testReadLinesSingleLine()
     {
         readContent("line1");
         assertLinesRead("line1");
     }
 
     @Test
-    public void testReadLinesSingleLineWithTrailingNewline()
+    void testReadLinesSingleLineWithTrailingNewline()
     {
         readContent("line1\n");
         assertLinesRead("line1");
     }
 
     @Test
-    public void testReadLinesTwoLinesWithCR()
+    void testReadLinesTwoLinesWithCR()
     {
         readContent("line1\nline2");
         assertLinesRead("line1", "line2");
     }
 
     @Test
-    public void testReadLinesTwoLinesWithLF()
+    void testReadLinesTwoLinesWithLF()
     {
         readContent("line1\rline2");
         assertLinesRead("line1", "line2");
     }
 
     @Test
-    public void testReadLinesTwoLinesWithLFCR()
+    void testReadLinesTwoLinesWithLFCR()
     {
         readContent("line1\r\nline2");
         assertLinesRead("line1", "line2");

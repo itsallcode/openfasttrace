@@ -31,7 +31,7 @@ import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
 /**
  * Tests for {@link MarkdownImporterFactory}
  */
-public class TestMarkdownImporterFactory extends ImporterFactoryTestBase<MarkdownImporterFactory>
+class TestMarkdownImporterFactory extends ImporterFactoryTestBase<MarkdownImporterFactory>
 {
     @Override
     protected MarkdownImporterFactory createFactory()

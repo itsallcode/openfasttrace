@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.html;
  */
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -32,24 +32,24 @@ import java.util.Arrays;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.Reportable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestHtmlReport
+class TestHtmlReport
 {
     @Mock
     private Trace traceMock;
 
-    @Before
+    @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testRenderEmptyTrace()
+    void testRenderEmptyTrace()
     {
         final String outputAsString = renderToString();
         assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
@@ -67,7 +67,7 @@ public class TestHtmlReport
     }
 
     @Test
-    public void testRenderSimpleTrace()
+    void testRenderSimpleTrace()
     {
         final LinkedSpecificationItem itemA = new LinkedSpecificationItem(
                 new SpecificationItem.Builder() //

@@ -24,28 +24,33 @@ package org.itsallcode.openfasttrace.mode;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
+@ExtendWith(TempDirectory.class)
 public class ITestOftAsConverter extends AbstractOftTest
 {
     private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
     private Oft oft;
 
-    @Before
-    public void setUp() throws UnsupportedEncodingException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput();
+        perpareOutput(tempDir);
         this.oft = Oft.create();
     }
 
     @Test
-    public void testConvertToSpecobjectFile() throws IOException
+    void testConvertToSpecobjectFile() throws IOException
     {
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         final List<SpecificationItem> items = this.oft.importItems(settings);

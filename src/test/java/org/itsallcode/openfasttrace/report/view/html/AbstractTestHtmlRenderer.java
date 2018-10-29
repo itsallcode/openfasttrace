@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -31,14 +31,14 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractTestHtmlRenderer
 {
     protected OutputStream outputStream;
     protected ViewFactory factory;
 
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         this.outputStream = new ByteArrayOutputStream();

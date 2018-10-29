@@ -24,14 +24,15 @@ package org.itsallcode.openfasttrace.importer;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.itsallcode.openfasttrace.ImportSettings;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestImporterContext
+class TestImporterContext
 {
     @Mock
     private ImportSettings settingsMock;
@@ -40,27 +41,27 @@ public class TestImporterContext
 
     private ImporterContext context;
 
-    @Before
-    public void setup()
+    @BeforeEach
+    void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
         this.context = new ImporterContext(this.settingsMock);
     }
 
     @Test
-    public void testGetImporterConfig()
+    void testGetImporterConfig()
     {
         assertThat(this.context.getImportSettings(), sameInstance(this.settingsMock));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetImporterServiceNullByDefault()
+    @Test
+    void testGetImporterServiceNullByDefault()
     {
-        this.context.getImporterService();
+        assertThrows(NullPointerException.class, () -> this.context.getImporterService());
     }
 
     @Test
-    public void testGetImporterService()
+    void testGetImporterService()
     {
         this.context.setImporterService(this.importerServiceMock);
         assertThat(this.context.getImporterService(), sameInstance(this.importerServiceMock));

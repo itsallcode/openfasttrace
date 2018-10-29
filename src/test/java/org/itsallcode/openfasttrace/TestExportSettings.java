@@ -23,44 +23,44 @@ package org.itsallcode.openfasttrace;
  */
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.exporter.ExporterConstants;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestExportSettings
+class TestExportSettings
 {
     private ExportSettings.Builder builder;
 
-    @Before
-    public void before()
+    @BeforeEach
+    void beforeEach()
     {
         this.builder = ExportSettings.builder();
     }
 
     @Test
-    public void testDefaultOutputFormat()
+    void testDefaultOutputFormat()
     {
         assertThat(this.builder.build().getOutputFormat(),
                 equalTo(ExporterConstants.DEFAULT_OUTPUT_FORMAT));
     }
 
     @Test
-    public void testDefaultNewline()
+    void testDefaultNewline()
     {
         assertThat(this.builder.build().getNewline(), equalTo(Newline.UNIX));
     }
 
     @Test
-    public void testBuildWithOutputFormat()
+    void testBuildWithOutputFormat()
     {
         assertThat(this.builder.outputFormat("foo").build().getOutputFormat(), equalTo("foo"));
     }
 
     @Test
-    public void testBuildWithNewline()
+    void testBuildWithNewline()
     {
         assertThat(this.builder.newline(Newline.OLDMAC).build().getNewline(),
                 equalTo(Newline.OLDMAC));

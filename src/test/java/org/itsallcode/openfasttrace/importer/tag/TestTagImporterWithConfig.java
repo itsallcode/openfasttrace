@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 /*-
  * #%L
  \* OpenFastTrace
@@ -35,16 +36,14 @@ import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 // [utest->dsn~import.short-coverage-tag~1]
-public class TestTagImporterWithConfig
+class TestTagImporterWithConfig
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";
     private static final String COVERED_ITEM_NAME2 = "covered_name2";
@@ -54,18 +53,14 @@ public class TestTagImporterWithConfig
     private static final String COVERED_ITEM_NAME_PREFIX = "prefix.";
     private static final String INVALID_REVISION = "invalidRevision";
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Mock
     private PathConfig configMock;
     @Mock
     private ImportEventListener listenerMock;
-
     private InOrder inOrderListener;
 
-    @Before
-    public void setUp()
+    @BeforeEach
+    void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
         this.inOrderListener = inOrder(this.listenerMock);
@@ -76,21 +71,21 @@ public class TestTagImporterWithConfig
     }
 
     @Test
-    public void testEmptyFile()
+    void testEmptyFile()
     {
         runImport("");
         verifyZeroInteractions(this.listenerMock);
     }
 
     @Test
-    public void testFileWithoutMatchingTag()
+    void testFileWithoutMatchingTag()
     {
         runImport("non matching\nfile\n");
         verifyZeroInteractions(this.listenerMock);
     }
 
     @Test
-    public void testFileWithNewTagFormatAlsoSupported()
+    void testFileWithNewTagFormatAlsoSupported()
     {
         final String itemName = "coveredtype~coveredname~1"; // do not inline to
                                                              // avoid error in
@@ -101,7 +96,7 @@ public class TestTagImporterWithConfig
     }
 
     @Test
-    public void testFileWithLegacyTagFormat()
+    void testFileWithLegacyTagFormat()
     {
         runImport("[[" + COVERED_ITEM_NAME1 + ":1]]");
         verifyTag(1, SpecificationItemId.createId(COVERED_ITEM_TYPE, COVERED_ITEM_NAME1, 1),
@@ -111,7 +106,7 @@ public class TestTagImporterWithConfig
     }
 
     @Test
-    public void testFileWithLegacyTagFormatTwoTagsInTwoLines()
+    void testFileWithLegacyTagFormatTwoTagsInTwoLines()
     {
         runImport("[[" + COVERED_ITEM_NAME1 + ":1]]\n" //
                 + "[[" + COVERED_ITEM_NAME2 + ":2]]");
@@ -125,7 +120,7 @@ public class TestTagImporterWithConfig
     }
 
     @Test
-    public void testFileWithLegacyTagFormatTwoTagsInSameLine()
+    void testFileWithLegacyTagFormatTwoTagsInSameLine()
     {
         runImport("[[" + COVERED_ITEM_NAME1 + ":1]]" //
                 + "[[" + COVERED_ITEM_NAME2 + ":2]]");
@@ -139,17 +134,18 @@ public class TestTagImporterWithConfig
     }
 
     @Test
-    public void testNonIntegerRevisionRejected()
+    void testNonIntegerRevisionRejected()
     {
-        this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("Error processing line dummy:1 ([[" + COVERED_ITEM_NAME1 + ":"
-                + INVALID_REVISION + "]]): Error parsing revision '" + INVALID_REVISION
-                + "' for item '" + COVERED_ITEM_NAME1 + "'");
-        runImport("[[" + COVERED_ITEM_NAME1 + ":" + INVALID_REVISION + "]]");
+        final String expectedMessage = "Error processing line dummy:1 ([[" + COVERED_ITEM_NAME1
+                + ":" + INVALID_REVISION + "]]): Error parsing revision '" + INVALID_REVISION
+                + "' for item '" + COVERED_ITEM_NAME1 + "'";
+        assertThrows(ImporterException.class,
+                () -> runImport("[[" + COVERED_ITEM_NAME1 + ":" + INVALID_REVISION + "]]"),
+                expectedMessage);
     }
 
     @Test
-    public void testFileWithLegacyTagFormatWithPrefix()
+    void testFileWithLegacyTagFormatWithPrefix()
     {
         when(this.configMock.getCoveredItemNamePrefix()).thenReturn(COVERED_ITEM_NAME_PREFIX);
         runImport("[[" + COVERED_ITEM_NAME1 + ":1]]");

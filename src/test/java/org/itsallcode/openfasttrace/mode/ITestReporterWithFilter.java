@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.mode;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,9 +25,9 @@ package org.itsallcode.openfasttrace.mode;
  */
 
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +40,13 @@ import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
+@ExtendWith(TempDirectory.class)
 public class ITestReporterWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
@@ -61,21 +65,20 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
             "A unit test", //
             "Tags: tag3");
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
     private Oft oft;
+    private Path tempDir;
 
-    @Before
-    public void before() throws IOException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws IOException
     {
-        writeTextFile(this.tempFolder.newFile("spec.md"), SPECIFICATION);
+        this.tempDir = tempDir;
+        writeTextFile(tempDir.resolve("spec.md").toFile(), SPECIFICATION);
         this.oft = Oft.create();
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testFilterWithAtLeastOneMatchingTag()
+    void testFilterWithAtLeastOneMatchingTag()
     {
         final FilterSettings filterSettings = new FilterSettings.Builder() //
                 .tags(new HashSet<>(Arrays.asList("tag1", "tag2"))) //
@@ -88,7 +91,7 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
     private List<String> getIdsFromTraceWithFilterSettings(final FilterSettings filterSettings)
     {
         final ImportSettings importSettings = ImportSettings.builder() //
-                .addInputs(this.tempFolder.getRoot().toPath()) //
+                .addInputs(this.tempDir) //
                 .filter(filterSettings) //
                 .build();
         final List<SpecificationItem> items = this.oft.importItems(importSettings);
@@ -103,7 +106,7 @@ public class ITestReporterWithFilter extends AbstractFileBasedTest
 
     // [itest->dsn~filtering-by-tags-or-no-tags-during-import~1]
     @Test
-    public void testFilterWithAtLeastOneMatchingTagOrNoTags()
+    void testFilterWithAtLeastOneMatchingTagOrNoTags()
     {
         final FilterSettings filterSettings = new FilterSettings.Builder() //
                 .tags(new HashSet<>(Arrays.asList("tag1", "tag2"))) //

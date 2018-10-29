@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -23,34 +25,33 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.itsallcode.openfasttrace.core.Newline;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestNewline
+class TestNewline
 {
     @Test
-    public void testUnix()
+    void testUnix()
     {
         assertThat(Newline.fromRepresentation("\n"), equalTo(Newline.UNIX));
     }
 
     @Test
-    public void testWindows()
+    void testWindows()
     {
         assertThat(Newline.fromRepresentation("\r\n"), equalTo(Newline.WINDOWS));
     }
 
     @Test
-    public void testOldMac()
+    void testOldMac()
     {
         assertThat(Newline.fromRepresentation("\r"), equalTo(Newline.OLDMAC));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testUnknown()
+    @Test
+    void testUnknownThrowsException()
     {
-        Newline.fromRepresentation("unknown");
+        assertThrows(IllegalArgumentException.class, () -> Newline.fromRepresentation("unknown"));
     }
 }

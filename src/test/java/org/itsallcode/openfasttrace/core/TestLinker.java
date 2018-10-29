@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -30,19 +31,18 @@ import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.REQ;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
 import static org.itsallcode.openfasttrace.core.SpecificationItemId.createId;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestLinker
+class TestLinker
 {
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testDetectOutgoingLinkStatusCovered()
+    void testDetectOutgoingLinkStatusCovered()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "covered", 1) //
@@ -87,7 +87,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testDetectOutgoingLinkStatusOrphaned()
+    void testDetectOutgoingLinkStatusOrphaned()
     {
         final SpecificationItem orphan = new SpecificationItem.Builder() //
                 .id(IMPL, "orphan", 1) //
@@ -99,7 +99,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testDetectOutgoingLinkStatusOutdated()
+    void testDetectOutgoingLinkStatusOutdated()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "this-is-newer-than-link", 2) //
@@ -118,7 +118,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testDetectOutgoingLinkStatusPredated()
+    void testDetectOutgoingLinkStatusPredated()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "this-is-older-than-link", 1) //
@@ -137,7 +137,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.outgoing-coverage-link-status~3]
     @Test
-    public void testDetectOutgoingLinkStatusAmbiguous()
+    void testDetectOutgoingLinkStatusAmbiguous()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "covered", 1) //
@@ -157,7 +157,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.tracing.duplicate-items~1]
     @Test
-    public void testDetectOutgoingLinkStatusDuplicate()
+    void testDetectOutgoingLinkStatusDuplicate()
     {
         final SpecificationItem original = new SpecificationItem.Builder() //
                 .id(REQ, "covered", 1) //
@@ -172,7 +172,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.incoming-coverage-link-status~1]
     @Test
-    public void testDetectIncomingLinkStatusCoveredShallow()
+    void testDetectIncomingLinkStatusCoveredShallow()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "covered", 1) //
@@ -250,7 +250,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.incoming-coverage-link-status~1]
     @Test
-    public void testDetectIncomingLinkStatusUnwanted()
+    void testDetectIncomingLinkStatusUnwanted()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "covered", 1) //
@@ -269,7 +269,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.incoming-coverage-link-status~1]
     @Test
-    public void testDetectIncomingLinkStatusCoveredOutdated()
+    void testDetectIncomingLinkStatusCoveredOutdated()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "newer", 2) //
@@ -285,7 +285,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.incoming-coverage-link-status~1]
     @Test
-    public void testDetectIncomingLinkStatusCoveredPredated()
+    void testDetectIncomingLinkStatusCoveredPredated()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "older", 1) //
@@ -301,7 +301,7 @@ public class TestLinker
 
     // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
-    public void testCoverageForDifferentArtifactTypes()
+    void testCoverageForDifferentArtifactTypes()
     {
         final SpecificationItem covered = new SpecificationItem.Builder() //
                 .id(REQ, "to-be-covered", 42) //

@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.joining;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,26 +41,26 @@ import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.report.Reportable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class TestPlainTextReport
+class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
 
     @Mock
     private Trace traceMock;
 
-    @Before
+    @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testOutputStreamClosed() throws IOException
+    void testOutputStreamClosed() throws IOException
     {
         final OutputStream outputStreamMock = mock(OutputStream.class);
         final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.SUMMARY)
@@ -70,14 +70,14 @@ public class TestPlainTextReport
     }
 
     @Test
-    public void testReportLevel_Quiet_Ok()
+    void testReportLevel_Quiet_Ok()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         assertReportOutput(ReportVerbosity.QUIET);
     }
 
     @Test
-    public void testReportLevel_Minimal_OK()
+    void testReportLevel_Minimal_OK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         assertReportOutput(ReportVerbosity.MINIMAL, "ok");
@@ -125,7 +125,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    public void testReport_LevelMinimal_NotOk()
+    void testReport_LevelMinimal_NotOk()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(false);
         assertReportOutput(ReportVerbosity.MINIMAL, "not ok");
@@ -133,7 +133,7 @@ public class TestPlainTextReport
 
     @Test
     // [utest->dsn~reporting.plain-text.summary~2]
-    public void testReport_LevelSummary_OK()
+    void testReport_LevelSummary_OK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
@@ -142,7 +142,7 @@ public class TestPlainTextReport
 
     @Test
     // [utest->dsn~reporting.plain-text.summary~2]
-    public void testReport_LevelSummary_NotOK()
+    void testReport_LevelSummary_NotOK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(2);
@@ -151,7 +151,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    public void testReport_LevelFailures_Ok()
+    void testReport_LevelFailures_Ok()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(1);
@@ -159,7 +159,7 @@ public class TestPlainTextReport
     }
 
     @Test
-    public void testReport_LevelFailures_NotOK()
+    void testReport_LevelFailures_NotOK()
     {
         final SpecificationItemId idA = SpecificationItemId.parseId("req~foo~1");
         final SpecificationItemId idB = SpecificationItemId.parseId("dsn~bar~1");
@@ -172,7 +172,7 @@ public class TestPlainTextReport
 
     @Test
     // [utest->dsn~reporting.plain-text.specification-item-overview~2]
-    public void testReport_LevelFailureSummaries_NotOK()
+    void testReport_LevelFailureSummaries_NotOK()
     {
         when(this.traceMock.count()).thenReturn(6);
         when(this.traceMock.countDefects()).thenReturn(4);
@@ -218,7 +218,7 @@ public class TestPlainTextReport
 
     // [utest->dsn~reporting.plain-text.link-details~1]
     @Test
-    public void testReport_LevelFailureDetails()
+    void testReport_LevelFailureDetails()
     {
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countDefects()).thenReturn(1);
@@ -242,7 +242,7 @@ public class TestPlainTextReport
 
     // [utest->dsn~reporting.plain-text.link-details~1]
     @Test
-    public void testReport_LevelAll()
+    void testReport_LevelAll()
     {
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countDefects()).thenReturn(1);
@@ -345,7 +345,7 @@ public class TestPlainTextReport
 
     // [itest->dsn~newline-format~1]
     @Test
-    public void testReportWithDifferentLineSeparator()
+    void testReportWithDifferentLineSeparator()
     {
         final Newline separator = Newline.OLDMAC;
 
@@ -382,7 +382,7 @@ public class TestPlainTextReport
     // [utest->dsn~reporting.plain-text.specification-item-origin~1]
     // [utest->dsn~reporting.plain-text.linked-specification-item-origin~1]
     @Test
-    public void testReportWithOriginDisplayEnabled()
+    void testReportWithOriginDisplayEnabled()
     {
         final LinkedSpecificationItem itemMock = createLinkedItemMock("req~item.with-source~77",
                 "Description", 0, 1, 0, 0, 0);

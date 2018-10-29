@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.cli;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.nio.file.Paths;
 
@@ -35,37 +35,37 @@ import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 import org.itsallcode.openfasttrace.report.ReportConstants;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestCliArguments
+class TestCliArguments
 {
     private static final String AFTER_SETTER = "after setter";
     private static final String BEFORE_SETTER = "before setter";
     private CliArguments arguments;
 
-    @Before
-    public void testSetUp()
+    @BeforeEach
+    void testSetUp()
     {
         this.arguments = new CliArguments();
     }
 
     @Test
-    public void testGetCommandWithUnnamedValuesNull()
+    void testGetCommandWithUnnamedValuesNull()
     {
         this.arguments.setUnnamedValues(null);
         assertThat(this.arguments.getCommand().isPresent(), is(false));
     }
 
     @Test
-    public void testGetCommandWithUnnamedValuesEmpty()
+    void testGetCommandWithUnnamedValuesEmpty()
     {
         this.arguments.setUnnamedValues(emptyList());
         assertThat(this.arguments.getCommand().isPresent(), is(false));
     }
 
     @Test
-    public void testSetOutputFormat()
+    void testSetOutputFormat()
     {
         final String value = "foobar";
         this.arguments.setOutputFormat(value);
@@ -91,7 +91,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetO()
+    void testSetO()
     {
         final String value = "foobar";
         this.arguments.setO(value);
@@ -104,7 +104,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetOutputFile()
+    void testSetOutputFile()
     {
         final String value = "/tmp/foobar";
         final String expectedPath = Paths.get(value).toString();
@@ -114,7 +114,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetF()
+    void testSetF()
     {
         final String value = "/tmp/foobar";
         final String expectedPath = Paths.get(value).toString();
@@ -124,7 +124,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetReportVerbositiy()
+    void testSetReportVerbositiy()
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
@@ -134,7 +134,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetV()
+    void testSetV()
     {
         final ReportVerbosity value = ReportVerbosity.QUIET;
         assertThat(BEFORE_SETTER, this.arguments.getReportVerbosity(),
@@ -144,7 +144,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetNewline()
+    void testSetNewline()
     {
         final Newline value = Newline.OLDMAC;
         this.arguments.setNewline(value);
@@ -152,7 +152,7 @@ public class TestCliArguments
     }
 
     @Test
-    public void testSetN()
+    void testSetN()
     {
         final Newline value = Newline.OLDMAC;
         this.arguments.setN(value);
@@ -161,14 +161,14 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testWantedArtifactTypesEmptyByDefault()
+    void testWantedArtifactTypesEmptyByDefault()
     {
         assertThat(BEFORE_SETTER, this.arguments.getWantedArtifactTypes(), emptyIterable());
     }
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testSetIngnoreArtifactTypes()
+    void testSetIngnoreArtifactTypes()
     {
         final String value = "impl,utest";
         this.arguments.setWantedArtifactTypes(value);
@@ -178,7 +178,7 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testSetA()
+    void testSetA()
     {
         final String value = "impl,utest";
         this.arguments.setA(value);
@@ -188,14 +188,14 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testWantedTagsEmptyByDefault()
+    void testWantedTagsEmptyByDefault()
     {
         assertThat(BEFORE_SETTER, this.arguments.getWantedTags(), emptyIterable());
     }
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testSetWantedTags()
+    void testSetWantedTags()
     {
         final String value = "client,server";
         this.arguments.setWantedTags(value);
@@ -205,7 +205,7 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testSetd()
+    void testSetd()
     {
         final String value = "client,server";
         this.arguments.setT(value);
@@ -215,7 +215,7 @@ public class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-or-no-tags-during-import~1]
     @Test
-    public void testSetWantedTagsIncludingNone()
+    void testSetWantedTagsIncludingNone()
     {
         final String value = "_,client,server";
         this.arguments.setWantedTags(value);
@@ -228,7 +228,7 @@ public class TestCliArguments
     // [utest->dsn~reporting.html.specification-item-origin~1]
     // [utest->dsn~reporting.html.linked-specification-item-origin~1]
     @Test
-    public void testShowOriginDisabledByDefault()
+    void testShowOriginDisabledByDefault()
     {
         assertThat(this.arguments.getShowOrigin(), is(false));
     }
@@ -238,7 +238,7 @@ public class TestCliArguments
     // [utest->dsn~reporting.html.specification-item-origin~1]
     // [utest->dsn~reporting.html.linked-specification-item-origin~1]
     @Test
-    public void testSetShowOrigin()
+    void testSetShowOrigin()
     {
         this.arguments.setShowOrigin(true);
         assertThat(this.arguments.getShowOrigin(), is(true));
@@ -249,7 +249,7 @@ public class TestCliArguments
     // [utest->dsn~reporting.html.specification-item-origin~1]
     // [utest->dsn~reporting.html.linked-specification-item-origin~1]
     @Test
-    public void testSetS()
+    void testSetS()
     {
         this.arguments.setS(true);
         assertThat(this.arguments.getShowOrigin(), is(true));

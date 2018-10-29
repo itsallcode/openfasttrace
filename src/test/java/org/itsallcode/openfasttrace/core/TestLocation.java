@@ -1,7 +1,8 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /*-
  * #%L
@@ -25,40 +26,40 @@ import static org.junit.Assert.assertThat;
  * #L%
  */
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-public class TestLocation
+class TestLocation
 {
     private static final String PATH = "path";
 
     @Test
-    public void testEqualsAndHashContract()
+    void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(Location.class).verify();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails()
+    @Test
+    void testCreateLocationWithNegativeLineFails()
     {
-        Location.create(PATH, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeLineFails2()
-    {
-        Location.create(PATH, -1, 1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateLocationWithNegativeColumnFails()
-    {
-        Location.create(PATH, 1, -1);
+        assertThrows(IllegalArgumentException.class, () -> Location.create(PATH, -1));
     }
 
     @Test
-    public void testBuilder()
+    void testCreateLocationWithNegativeLineFails2()
+    {
+        assertThrows(IllegalArgumentException.class, () -> Location.create(PATH, -1, 1));
+    }
+
+    @Test
+    void testCreateLocationWithNegativeColumnFails()
+    {
+        assertThrows(IllegalArgumentException.class, () -> Location.create(PATH, 1, -1));
+    }
+
+    @Test
+    void testBuilder()
     {
         final String expectedPath = "expected";
         final int expectedLine = 4007;
@@ -71,7 +72,7 @@ public class TestLocation
     }
 
     @Test
-    public void testIsComplete()
+    void testIsComplete()
     {
         final Location.Builder builder = new Location.Builder().path("a");
         assertThat("builder with path set to null is complete", builder.isCompleteEnough(),
@@ -79,7 +80,7 @@ public class TestLocation
     }
 
     @Test
-    public void testIsNotCompleteEnoughWithoutPath()
+    void testIsNotCompleteEnoughWithoutPath()
     {
         final Location.Builder builderA = new Location.Builder().path("");
         final Location.Builder builderB = new Location.Builder();

@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.cli;
 
+import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -26,27 +28,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.cli.CliArguments;
-import org.itsallcode.openfasttrace.cli.CliStarter;
-import org.itsallcode.openfasttrace.cli.ExitStatus;
+import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
-import org.junit.Rule;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-
-public class TestCliExit
+@ExtendWith(ExitGuard.class)
+class TestCliExit
 {
     private static final String TEST_RESOURCES_MARKDOWN = "src/test/resources/markdown";
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";
     private static final String SAMPLE_SYSTEM_REQUIREMENTS = TEST_RESOURCES_MARKDOWN
             + "/sample_system_requirements.md";
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     @Test
-    public void testCliExitCode_Ok()
+    void testCliExitCode_Ok()
     {
         assertExitStatusForTracedFiles(ExitStatus.OK, SAMPLE_SYSTEM_REQUIREMENTS, SAMPLE_DESIGN);
     }
@@ -65,12 +61,11 @@ public class TestCliExit
         values.add(command);
         values.addAll(Arrays.asList(files));
         arguments.setUnnamedValues(values);
-        this.exit.expectSystemExitWithStatus(expectedStatus.getCode());
-        new CliStarter(arguments).run();
+        assertExitWithStatus(expectedStatus.getCode(), () -> new CliStarter(arguments).run());
     }
 
     @Test
-    public void testCliExitCode_Failure()
+    void testCliExitCode_Failure()
     {
         assertExitStatusForTracedFiles(ExitStatus.FAILURE, SAMPLE_SYSTEM_REQUIREMENTS);
     }

@@ -23,10 +23,10 @@ package org.itsallcode.openfasttrace.importer.tag;
  */
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -39,15 +39,17 @@ import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 // [utest->dsn~import.short-coverage-tag~1]
-public class TestTagImporterFactoryWithConfig
+@ExtendWith(TempDirectory.class)
+class TestTagImporterFactoryWithConfig
 {
     private static final String PATH1 = "path1";
     private static final String PATH2 = "path2";
@@ -57,66 +59,63 @@ public class TestTagImporterFactoryWithConfig
     @Mock
     private ImporterContext contextMock;
 
-    @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
-
-    @Before
-    public void setup()
+    @BeforeEach
+    void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testFactoryWithEmptyPathConfigListSupportsNothing()
+    void testFactoryWithEmptyPathConfigListSupportsNothing()
     {
         assertSupportsFile(configure(), PATH1, false);
     }
 
     @Test
-    public void testFactorySupportsFile()
+    void testFactorySupportsFile()
     {
         assertSupportsFile(configure(glob(PATH1)), PATH1, true);
     }
 
     @Test
-    public void testFactoryDoesNotSupportFileWithWrongBasePath()
+    void testFactoryDoesNotSupportFileWithWrongBasePath()
     {
         assertSupportsFile(configure(glob("path")), "base1/path", false);
     }
 
     @Test
-    public void testFactoryDoesNotSupportFileWithWrongPath()
+    void testFactoryDoesNotSupportFileWithWrongPath()
     {
         assertSupportsFile(configure(glob("path")), "base/path1", false);
     }
 
     @Test
-    public void testFactoryDoesNotSupportsFile()
+    void testFactoryDoesNotSupportsFile()
     {
         assertSupportsFile(configure(glob(PATH1)), PATH2, false);
     }
 
-    @Test(expected = ImporterException.class)
-    public void testFactoryThrowsExceptionForUnsupportedFile()
+    @Test
+    void testFactoryForUnsupportedFileThrowsException()
     {
-        final Importer importer = createImporter(configure(glob(PATH1)), Paths.get(PATH2));
-        assertThat(importer, instanceOf(TagImporter.class));
+        assertThrows(ImporterException.class,
+                () -> createImporter(configure(glob(PATH1)), Paths.get(PATH2)));
     }
 
     @Test
-    public void testFactoryCreatesImporterForSupportedFile() throws IOException
+    void testFactoryCreatesImporterForSupportedFile(@TempDir final Path tempDir) throws IOException
     {
-        final File tempFile = this.temp.newFile();
+        final File tempFile = tempDir.resolve("test").toFile();
         final String glob = tempFile.getAbsolutePath().replace('\\', '/');
         final Importer importer = createImporter(configure(glob(glob)), tempFile.toPath());
         assertThat(importer, notNullValue());
     }
 
-    @Test(expected = ImporterException.class)
-    public void testFactoryThrowsExceptionForMissingFile() throws IOException
+    @Test
+    void testFactoryForMissingFileThrowsException() throws IOException
     {
         final Importer importer = createImporter(configure(glob(PATH1)), Paths.get(PATH1));
-        importer.runImport();
+        assertThrows(ImporterException.class, () -> importer.runImport());
     }
 
     private void assertSupportsFile(final ImportSettings settings, final String path,

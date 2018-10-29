@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 
 import static java.util.Arrays.asList;
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,16 +34,16 @@ import javax.xml.stream.*;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link SpecobjectExporter}
  */
-public class TestSpecobjectExporter
+class TestSpecobjectExporter
 {
     // [itest->dsn~conversion.reqm2-export~1]
     @Test
-    public void testExportSimpleSpecObjectWithMandatoryElements()
+    void testExportSimpleSpecObjectWithMandatoryElements()
             throws IOException, XMLStreamException
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
@@ -66,7 +66,7 @@ public class TestSpecobjectExporter
     }
 
     @Test
-    public void testExportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
+    void testExportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
@@ -115,7 +115,7 @@ public class TestSpecobjectExporter
     }
 
     @Test
-    public void testExportTwoSpecObjects() throws IOException, XMLStreamException
+    void testExportTwoSpecObjects() throws IOException, XMLStreamException
     {
         final SpecificationItem itemA = new SpecificationItem.Builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //

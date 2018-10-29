@@ -24,41 +24,43 @@ package org.itsallcode.openfasttrace.importer.input;
 
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.zip.*;
 
 import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.MockitoAnnotations;
 
-public class TestZipEntryInput
+@ExtendWith(TempDirectory.class)
+class TestZipEntryInput
 {
+    private static final String TEST_ZIP = "test.zip";
     private static final String CONTENT = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
     private File zipFile;
     private ZipOutputStream zipOutputStream;
 
-    @Before
-    public void setUp() throws IOException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws IOException
     {
         MockitoAnnotations.initMocks(this);
-        this.zipFile = this.tempFolder.newFile();
+        this.zipFile = tempDir.resolve(TEST_ZIP).toFile();
         this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
                 StandardCharsets.UTF_8);
     }
 
     @Test
-    public void testRelativeFileGetPath() throws IOException
+    void testRelativeFileGetPath() throws IOException
     {
         final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("dir/file"));
         final String expectedName = this.zipFile.getPath() + "!dir/file";
@@ -72,34 +74,36 @@ public class TestZipEntryInput
         return new ZipFile(this.zipFile);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testToPathUnsupported() throws IOException
+    @Test
+    void testToPathUnsupportedThrowsException() throws IOException
     {
-        InputFile.forZipEntry(getZipFile(), new ZipEntry("file")).toPath();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateZipEntryForDirNotSupported() throws IOException
-    {
-        InputFile.forZipEntry(getZipFile(), new ZipEntry("dir/"));
+        assertThrows(UnsupportedOperationException.class,
+                () -> InputFile.forZipEntry(getZipFile(), new ZipEntry("file")).toPath());
     }
 
     @Test
-    public void testIsRealFileFalse() throws IOException
+    void testCreateZipEntryForDirNotSupportedThrowsException() throws IOException
+    {
+        assertThrows(IllegalArgumentException.class,
+                () -> InputFile.forZipEntry(getZipFile(), new ZipEntry("dir/")));
+    }
+
+    @Test
+    void testIsRealFileFalse() throws IOException
     {
         final InputFile file = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
         assertThat(file.isRealFile(), equalTo(false));
     }
 
-    @Test(expected = ImporterException.class)
-    public void testReadContentEntryDoesNotExist() throws IOException
+    @Test
+    void testReadContentEntryDoesNotExistThrowsException() throws IOException
     {
         final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
-        assertThat(readContent(inputFile), equalTo(CONTENT));
+        assertThrows(ImporterException.class, () -> readContent(inputFile));
     }
 
     @Test
-    public void testReadContentUtf8() throws IOException
+    void testReadContentUtf8() throws IOException
     {
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.UTF_8));
         final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
@@ -107,7 +111,7 @@ public class TestZipEntryInput
     }
 
     @Test
-    public void testReadContentIso() throws IOException
+    void testReadContentIso() throws IOException
     {
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.ISO_8859_1));
         final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"),

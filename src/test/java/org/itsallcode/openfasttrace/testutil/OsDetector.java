@@ -22,8 +22,8 @@ package org.itsallcode.openfasttrace.testutil;
  * #L%
  */
 
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class OsDetector
 {
@@ -36,12 +36,12 @@ public class OsDetector
 
     public static void assumeRunningOnWindows()
     {
-        assumeTrue("not running on windows", runningOnWindows());
+        assumeTrue(OsDetector::runningOnWindows, "not running on windows");
     }
 
     public static void assumeRunningOnUnix()
     {
-        assumeFalse("not running on unix", runningOnWindows());
+        assumeFalse(OsDetector::runningOnWindows, "not running on unix");
     }
 
     private static boolean runningOnWindows()

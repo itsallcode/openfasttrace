@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,9 +34,9 @@ import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.core.ItemStatus;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.junit.Test;;
+import org.junit.jupiter.api.Test;;
 
-public class TestSpecificationListBuilder
+class TestSpecificationListBuilder
 {
 
     private static final String DESCRIPTION = "description";
@@ -44,7 +44,7 @@ public class TestSpecificationListBuilder
     private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
     @Test
-    public void testBuildBasicItem()
+    void testBuildBasicItem()
     {
         final SpecificationListBuilder builder = createBasicListBuilder();
         builder.appendDescription(DESCRIPTION);
@@ -65,7 +65,7 @@ public class TestSpecificationListBuilder
     }
 
     @Test
-    public void testBuildWithStatus()
+    void testBuildWithStatus()
     {
         final SpecificationListBuilder builder = createBasicListBuilder();
         builder.setStatus(ItemStatus.DRAFT);
@@ -74,7 +74,7 @@ public class TestSpecificationListBuilder
     }
 
     @Test
-    public void testBuildWithTags()
+    void testBuildWithTags()
     {
         final SpecificationListBuilder builder = createBasicListBuilder();
         builder.addTag("foo");
@@ -85,7 +85,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterArtifactOfType()
+    void testFilterArtifactOfType()
     {
         final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("dsn");
         builder.beginSpecificationItem();
@@ -111,7 +111,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterNeededArtifactType()
+    void testFilterNeededArtifactType()
     {
         final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("dsn",
                 "utest", "itest");
@@ -128,7 +128,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterCoversLinkWithArtifactType()
+    void testFilterCoversLinkWithArtifactType()
     {
         final SpecificationItemId acceptedId = SpecificationItemId.createId("utest", "accept", 2);
         final SpecificationItemId rejectedId = SpecificationItemId.createId("impl", "reject", 3);
@@ -146,7 +146,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterDependsLinkWithArtifactType()
+    void testFilterDependsLinkWithArtifactType()
     {
         final SpecificationItemId acceptedId = SpecificationItemId.createId("utest", "accept", 2);
         final SpecificationItemId rejectedId = SpecificationItemId.createId("impl", "reject", 3);
@@ -163,7 +163,7 @@ public class TestSpecificationListBuilder
     }
 
     @Test
-    public void testDuplicateIdNotIgnored()
+    void testDuplicateIdNotIgnored()
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
         builder.beginSpecificationItem();
@@ -177,7 +177,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    public void testFilterSpecificationItemsByTags()
+    void testFilterSpecificationItemsByTags()
     {
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");
@@ -212,7 +212,7 @@ public class TestSpecificationListBuilder
 
     // [utest->dsn~filtering-by-tags-or-no-tags-during-import~1]
     @Test
-    public void testFilterSpecificationItemsByTagsIncludingNoTags()
+    void testFilterSpecificationItemsByTagsIncludingNoTags()
     {
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");

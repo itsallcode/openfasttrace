@@ -23,8 +23,8 @@ package org.itsallcode.openfasttrace.mode;
  */
 
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -32,26 +32,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-
 public abstract class AbstractOftTest
 {
-
     protected static final String NEWLINE = "\n";
     protected static final String CARRIAGE_RETURN = "\r";
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
     protected Path docDir;
     protected Path outputFile;
     protected final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     protected final ByteArrayOutputStream error = new ByteArrayOutputStream();
 
-    protected void perpareOutput() throws UnsupportedEncodingException
+    protected void perpareOutput(final Path outputDir) throws UnsupportedEncodingException
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
-        this.outputFile = this.tempFolder.getRoot().toPath().resolve("stream.txt");
+        this.outputFile = outputDir.resolve("stream.txt");
         System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
         System.setErr(new PrintStream(this.error, true, "UTF-8"));
     }

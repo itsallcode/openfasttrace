@@ -40,14 +40,14 @@ import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TestMarkdownImporter
+@ExtendWith(MockitoExtension.class)
+class TestMarkdownImporter
 {
     private static final String TAG2 = "Tag2";
     private static final String TAG1 = "Tag1";
@@ -61,7 +61,7 @@ public class TestMarkdownImporter
 
     // [utest~md.specification_item_id_format~1]
     @Test
-    public void testIdentifyId()
+    void testIdentifyId()
     {
         assertMatch(MdPattern.ID, "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
                 "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
@@ -71,14 +71,14 @@ public class TestMarkdownImporter
 
     // [utest->dsn~md.specification-item-title~1]
     @Test
-    public void testIdentifyTitle()
+    void testIdentifyTitle()
     {
         assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title");
         assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title");
     }
 
     @Test
-    public void testFindRequirement()
+    void testFindRequirement()
     {
         final String completeItem = createCompleteSpecificationItemInMarkdownFormat();
         runImporterOnText(completeItem);
@@ -150,7 +150,7 @@ public class TestMarkdownImporter
     }
 
     @Test
-    public void testTwoConsecutiveSpecificationItems()
+    void testTwoConsecutiveSpecificationItems()
     {
         runImporterOnText(createTwoConsecutiveItemsInMarkdownFormat());
         assertImporterEventsForTwoConsecutiveItemsCalled();
@@ -181,7 +181,7 @@ public class TestMarkdownImporter
     }
 
     @Test
-    public void testSingleNeeds()
+    void testSingleNeeds()
     {
         final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + NEEDS_ARTIFACT_TYPE1;
         runImporterOnText(singleNeedsItem);
@@ -190,7 +190,7 @@ public class TestMarkdownImporter
 
     // [utest->dsn~md.eb-markdown-id~1]
     @Test
-    public void testIdentifyLegacyId()
+    void testIdentifyLegacyId()
     {
         assertMatch(MdPattern.ID, "a:b, v0", "req:test, v1", "req:test,v1", "req:test, v999",
                 "req:test.requirement, v1", "req:test_underscore, v1",
@@ -199,7 +199,7 @@ public class TestMarkdownImporter
     }
 
     @Test
-    public void testFindLegacyRequirement()
+    void testFindLegacyRequirement()
     {
         final String completeItem = createCompleteSpecificationItemInLegacyMarkdownFormat();
         runImporterOnText(completeItem);
@@ -266,7 +266,7 @@ public class TestMarkdownImporter
 
     // [utest->dsn~md.artifact-forwarding-notation~1]
     @Test
-    public void testForwardRequirement()
+    void testForwardRequirement()
     {
         runImporterOnText("arch-->dsn:req~foobar~2\n" //
                 + "   * `dsn --> impl, utest,itest : arch~bar.zoo~123`");

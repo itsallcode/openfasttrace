@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -21,29 +23,29 @@ package org.itsallcode.openfasttrace;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ITestSelfTrace
+class ITestSelfTrace
 {
     private Oft oft;
 
-    @Before
-    public void setUp()
+    @BeforeEach
+    void beforeEach()
     {
         this.oft = new OftRunner();
     }
 
     @Test
-    public void testSelfTrace()
+    void testSelfTrace()
     {
         final ImportSettings importSettings = buildOftSettings();
         final Trace trace = trace(importSettings);

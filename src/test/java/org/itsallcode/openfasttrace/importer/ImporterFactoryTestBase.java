@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -24,7 +26,7 @@ package org.itsallcode.openfasttrace.importer;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
@@ -33,10 +35,8 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -48,12 +48,10 @@ import org.mockito.MockitoAnnotations;
  */
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     @Mock
     protected ImporterContext contextMock;
 
-    @Before
+    @BeforeEach
     public void initMocks()
     {
         MockitoAnnotations.initMocks(this);
@@ -61,24 +59,25 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @Test
-    public void testSupportedFileNames()
+    void testSupportedFileNames()
     {
         assertSupported(getSupportedFilenames(), true);
     }
 
     @Test
-    public void testUnsupportedFileNames()
+    void testUnsupportedFileNames()
     {
         assertSupported(getUnsupportedFilenames(), false);
     }
 
     @Test
-    public void testCreateImporterThrowsExceptionForMissingFile()
+    void testCreateImporterThrowsExceptionForMissingFile()
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
-        this.thrown.expect(ImporterException.class);
-        this.thrown.expectMessage("Error reading \"" + supportedPath + "\"");
-        createAndInitialize().createImporter(InputFile.forPath(supportedPath), null).runImport();
+        assertThrows(ImporterException.class, //
+                () -> createAndInitialize().createImporter(InputFile.forPath(supportedPath), null)
+                        .runImport(), //
+                "Error reading \"" + supportedPath + "\"");
     }
 
     private T createAndInitialize()
@@ -89,7 +88,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @Test
-    public void testInit()
+    void testInit()
     {
         final T factory = createFactory();
         factory.init(this.contextMock);
@@ -97,13 +96,12 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @Test
-    public void testMissingContextThrowsException()
+    void testMissingContextThrowsException()
     {
         final T factory = createFactory();
         factory.init(null);
-        this.thrown.expect(NullPointerException.class);
-        this.thrown.expectMessage(equalTo("Context was not initialized"));
-        factory.getContext();
+        assertThrows(NullPointerException.class, () -> factory.getContext(),
+                "Context was not initialized");
     }
 
     private void assertSupported(final List<String> filenames, final boolean expectedResult)

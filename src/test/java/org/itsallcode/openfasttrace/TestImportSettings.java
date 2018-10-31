@@ -25,43 +25,43 @@ package org.itsallcode.openfasttrace;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsEmptyIterable.emptyIterableOf;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This class implements a parameter object to control the settings of OFT's
  * export mode.
  */
-public class TestImportSettings
+class TestImportSettings
 {
     @Test
-    public void testInputListEmptyByDefault()
+    void testInputListEmptyByDefault()
     {
         assertThat(ImportSettings.createDefault().getInputs(), emptyIterableOf(Path.class));
     }
 
     @Test
-    public void testDefaultFilter()
+    void testDefaultFilter()
     {
         assertThat(ImportSettings.createDefault().getFilters(),
                 equalTo(FilterSettings.createAllowingEverything()));
     }
 
     @Test
-    public void testDefaultPathConfigs()
+    void testDefaultPathConfigs()
     {
         assertThat(ImportSettings.createDefault().getPathConfigs(),
                 emptyIterableOf(PathConfig.class));
     }
 
     @Test
-    public void testAddInputList()
+    void testAddInputList()
     {
         final Path[] expectedInputs = { Paths.get("/a/path"), Paths.get("/another/path") };
         assertThat(ImportSettings.builder().addInputs(Arrays.asList(expectedInputs)).build()
@@ -69,7 +69,7 @@ public class TestImportSettings
     }
 
     @Test
-    public void testAddInputArray()
+    void testAddInputArray()
     {
         final Path[] expectedInputs = { Paths.get("/a/path"), Paths.get("/another/path") };
         assertThat(ImportSettings.builder().addInputs(expectedInputs).build().getInputs(),
@@ -77,7 +77,7 @@ public class TestImportSettings
     }
 
     @Test
-    public void testBuildWithFilter()
+    void testBuildWithFilter()
     {
         final String[] expectedTags = { "a", "b" };
         final FilterSettings filter = new FilterSettings.Builder()
@@ -87,7 +87,7 @@ public class TestImportSettings
     }
 
     @Test
-    public void testBuildWithPathConfigs()
+    void testBuildWithPathConfigs()
     {
         final List<PathConfig> expectedPathConfigs = new ArrayList<>();
         final PathConfig.Builder builder = PathConfig.builder();

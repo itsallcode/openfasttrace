@@ -21,7 +21,9 @@ package org.itsallcode.openfasttrace.report;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -60,12 +62,11 @@ public class ReportService
     private void reportTraceToStream(final Trace trace, final OutputStream outputStream,
             final ReportSettings settings)
     {
-        final OutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
         final Reportable report = createReport(trace, settings);
-        report.renderToStream(bufferedOutputStream);
+        report.renderToStream(outputStream);
         try
         {
-            bufferedOutputStream.flush();
+            outputStream.flush();
         }
         catch (final IOException exception)
         {

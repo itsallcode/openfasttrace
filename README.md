@@ -104,9 +104,9 @@ The list below show all build time dependencies in alphabetical order. Note that
 | [Apache Maven](https://maven.apache.org/)                                    | Build tool                                             | Apache License 2.0            |
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                    | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher) | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
-| [JUnit](https://junit.org/junit4/index.html)                                 | Unit testing framework                                 | Eclipse Public License 1.0    |
+| [JUnit](https://junit.org/junit5)                                            | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
-| [System rules](https://stefanbirkner.github.io/system-rules/)                | JUnit rules for testing `STDOUT`, `STDIN` and `STDERR` | Common Public License 1.0     |
+| [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls    | Eclipse Public License 2.0     |
 | [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
 ### Essential Build Steps
@@ -117,7 +117,7 @@ The list below show all build time dependencies in alphabetical order. Note that
 
 ### Using Eclipse
 
-Import as a Maven project using *File > Import... > Maven > Existing Maven Projects*
+Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr; "Existing Maven Projects"*
 
 ### Configure Logging
 
@@ -162,7 +162,7 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
     ```xml
     <servers>
         <server>
-            <id>bintray-openfasttrack-maven-repo</id>
+            <id>itsallcode-maven-repo</id>
             <username>[bintray-username]</username>
             <password>[bintray-api-key]</password>
         </server>
@@ -176,10 +176,10 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
     ```bash
     mvn deploy
     ```
-
-1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) on GitHub.
+1. Merge to `master` branch
+1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Sign in at [bintray.com](https://bintray.com)
-1. Go to the [bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
-1. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/)
+1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
+1. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/)
 1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/.
 

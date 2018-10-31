@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,15 +25,15 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestItemStatus
+class TestItemStatus
 {
 
     @Test
-    public void testParseString()
+    void testParseString()
     {
         assertThat(ItemStatus.parseString("approved"), equalTo(ItemStatus.APPROVED));
         assertThat(ItemStatus.parseString("Approved"), equalTo(ItemStatus.APPROVED));
@@ -40,9 +42,9 @@ public class TestItemStatus
         assertThat(ItemStatus.parseString("ReJeCtEd"), equalTo(ItemStatus.REJECTED));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testParseUnknownStringThrowsException()
+    @Test
+    void testParseUnknownStringThrowsException()
     {
-        ItemStatus.parseString("Unkown");
+        assertThrows(IllegalArgumentException.class, () -> ItemStatus.parseString("Unkown"));
     }
 }

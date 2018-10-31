@@ -33,7 +33,7 @@ import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
  * Tests for {@link TagImporterFactory}
  */
 // [utest->dsn~import.full-coverage-tag~1]
-public class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
+class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
 {
     @Override
     protected TagImporterFactory createFactory()

@@ -27,12 +27,12 @@ import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for {@link SpecificationItemMatcher}
  */
-public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
+class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 {
     private final static SpecificationItemId ID1 = new SpecificationItemId.Builder()
             .artifactType("artifactType").name("name").revision(42).build();
@@ -44,68 +44,68 @@ public class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationI
             .artifactType("artifactType4").name("name4").revision(42 + 4).build();
 
     @Test
-    public void testEmptyObjectMatches()
+    void testEmptyObjectMatches()
     {
         assertMatch(new SpecificationItem.Builder().id(ID1).build());
     }
 
     @Test
-    public void testFilledObjectMatches()
+    void testFilledObjectMatches()
     {
         assertMatch(baseBuilder().build());
     }
 
     @Test
-    public void testFilledObjectMultipleIdsMatches()
+    void testFilledObjectMultipleIdsMatches()
     {
         assertMatch(baseBuilder().addCoveredId(ID4).addDependOnId(ID4).addNeedsArtifactType("ID4")
                 .build());
     }
 
     @Test
-    public void testDifferentEmptyIdLists()
+    void testDifferentEmptyIdLists()
     {
         assertDifferentFromBase(new SpecificationItem.Builder().id(ID1));
     }
 
     @Test
-    public void testDifferentCoveredId()
+    void testDifferentCoveredId()
     {
         assertDifferentFromBase(baseBuilder().addCoveredId(ID4));
     }
 
     @Test
-    public void testDifferentDependOnId()
+    void testDifferentDependOnId()
     {
         assertDifferentFromBase(baseBuilder().addDependOnId(ID4));
     }
 
     @Test
-    public void testDifferentNeededArtifactType()
+    void testDifferentNeededArtifactType()
     {
         assertDifferentFromBase(baseBuilder().addNeedsArtifactType("ID4"));
     }
 
     @Test
-    public void testDifferentId()
+    void testDifferentId()
     {
         assertDifferentFromBase(baseBuilder().id(ID2));
     }
 
     @Test
-    public void testDifferentComment()
+    void testDifferentComment()
     {
         assertDifferentFromBase(baseBuilder().comment("comment2"));
     }
 
     @Test
-    public void testDifferentRationale()
+    void testDifferentRationale()
     {
         assertDifferentFromBase(baseBuilder().rationale("rationale2"));
     }
 
     @Test
-    public void testDifferentDescription()
+    void testDifferentDescription()
     {
         assertDifferentFromBase(baseBuilder().description("description2"));
     }

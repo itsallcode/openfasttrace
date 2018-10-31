@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer.input;
 
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -33,19 +33,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
-public class TestRealFileInput
+@ExtendWith(TempDirectory.class)
+class TestRealFileInput
 {
     private static final String CONTENT = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
+    private Path tempDir;
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir)
+    {
+        this.tempDir = tempDir;
+    }
 
     @Test
-    public void testRelativeFileGetPath() throws IOException
+    void testRelativeFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = InputFile.forPath(path);
@@ -54,7 +61,7 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testAbsoluteFileGetPath() throws IOException
+    void testAbsoluteFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = InputFile.forPath(path);
@@ -63,7 +70,7 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testRelativeFileToPath() throws IOException
+    void testRelativeFileToPath() throws IOException
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = InputFile.forPath(path);
@@ -71,7 +78,7 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testAbsoluteFileToPath() throws IOException
+    void testAbsoluteFileToPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = InputFile.forPath(path);
@@ -79,14 +86,14 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testIsRealFileTrue() throws IOException
+    void testIsRealFileTrue() throws IOException
     {
         final InputFile inputFile = InputFile.forPath(Paths.get("blah"));
         assertThat(inputFile.isRealFile(), equalTo(true));
     }
 
     @Test
-    public void testReadWithDefaultEncoding() throws IOException
+    void testReadWithDefaultEncoding() throws IOException
     {
         final InputFile inputFile = InputFile
                 .forPath(writeTempFile(CONTENT, StandardCharsets.UTF_8));
@@ -99,7 +106,7 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testReadWithIsoEncoding() throws IOException
+    void testReadWithIsoEncoding() throws IOException
     {
         final InputFile inputFile = InputFile.forPath(
                 writeTempFile(CONTENT, StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
@@ -107,7 +114,7 @@ public class TestRealFileInput
     }
 
     @Test
-    public void testReadWithUtf8Encoding() throws IOException
+    void testReadWithUtf8Encoding() throws IOException
     {
         final InputFile inputFile = InputFile
                 .forPath(writeTempFile(CONTENT, StandardCharsets.UTF_8), StandardCharsets.UTF_8);
@@ -116,7 +123,7 @@ public class TestRealFileInput
 
     private Path writeTempFile(final String content, final Charset charset) throws IOException
     {
-        final Path path = this.tempFolder.newFile().toPath();
+        final Path path = this.tempDir.resolve("test");
         Files.write(path, content.getBytes(charset));
         return path;
     }

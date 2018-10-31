@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -25,27 +27,27 @@ package org.itsallcode.openfasttrace.report.view.html;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.itsallcode.openfasttrace.report.view.html.OriginLinkFormatter.formatAsBlock;
 import static org.itsallcode.openfasttrace.report.view.html.OriginLinkFormatter.formatAsSpan;
-import static org.junit.Assert.assertThat;
 
 import org.itsallcode.openfasttrace.core.Location;
-import org.junit.Test;
+import org.itsallcode.openfasttrace.testutil.OsDetector;
+import org.junit.jupiter.api.Test;
 
-public class TestOriginLinkFormatter
+class TestOriginLinkFormatter
 {
     @Test
-    public void testNullOrigin()
+    void testNullOrigin()
     {
         assertThat(formatAsSpan(null), equalTo(""));
     }
 
     @Test
-    public void testEmptyOrigin()
+    void testEmptyOrigin()
     {
         assertThat(formatAsSpan(Location.create("", 1)), equalTo(""));
     }
 
     @Test
-    public void testFormatMinimalHttpLink()
+    void testFormatMinimalHttpLink()
     {
         assertPathAndLineRenderedToSpan("http://example.org", 1,
                 "<a href=\"http://example.org\">http://example.org</a>:1");
@@ -59,7 +61,7 @@ public class TestOriginLinkFormatter
     }
 
     @Test
-    public void testFormatMinimalHttpLinkAsBlock()
+    void testFormatMinimalHttpLinkAsBlock()
     {
         assertPathAndLineRenderedToBlock("http://example.org", 1,
                 "<a href=\"http://example.org\">http://example.org</a>:1");
@@ -73,34 +75,44 @@ public class TestOriginLinkFormatter
     }
 
     @Test
-    public void testLongerHttpLink()
+    void testLongerHttpLink()
     {
         assertPathAndLineRenderedToSpan("http://example.org/foo/bar%20baz?zoo", 1,
                 "<a href=\"http://example.org/foo/bar%20baz?zoo\">http://example.org/foo/bar%20baz?zoo</a>:1");
     }
 
     @Test
-    public void testFormatRegularAbsoluteUnixPath()
+    void testFormatRegularAbsoluteUnixPath()
     {
+        OsDetector.assumeRunningOnUnix();
         assertPathAndLineRenderedToSpan("/foo/bar/baz", 1111,
                 "<a href=\"file:///foo/bar/baz\">/foo/bar/baz</a>:1111");
     }
 
     @Test
-    public void testFormatAbsoluteUnixPathWithSpecialCharacters()
+    void testFormatRegularAbsoluteWindowsPath()
     {
+        OsDetector.assumeRunningOnWindows();
+        assertPathAndLineRenderedToSpan("C:\\foo\\bar\\baz", 1111,
+                "<a href=\"file:///C:/foo/bar/baz\">C:\\foo\\bar\\baz</a>:1111");
+    }
+
+    @Test
+    void testFormatAbsoluteUnixPathWithSpecialCharacters()
+    {
+        OsDetector.assumeRunningOnUnix();
         assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
                 "<a href=\"file:///fo%20o/b%C3%A4r/baz\">/fo o/bär/baz</a>:12345678");
     }
 
     @Test
-    public void testFormatRelativeUnixPath()
+    void testFormatRelativeUnixPath()
     {
         assertPathAndLineRenderedToSpan("foo/bar/baz", 2, "foo/bar/baz:2");
     }
 
     @Test
-    public void testIllegalUri()
+    void testIllegalUri()
     {
         assertPathAndLineRenderedToSpan("http://example.org/a b", 5, "http://example.org/a b:5");
     }

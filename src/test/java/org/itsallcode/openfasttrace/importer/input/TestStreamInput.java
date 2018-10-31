@@ -24,7 +24,8 @@ package org.itsallcode.openfasttrace.importer.input;
 
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,14 +33,14 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestStreamInput
+class TestStreamInput
 {
     private static final String CONTENT = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
 
     @Test
-    public void testRelativeFileGetPath() throws IOException
+    void testRelativeFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = StreamInput.forReader(path, null);
@@ -48,7 +49,7 @@ public class TestStreamInput
     }
 
     @Test
-    public void testAbsoluteFileGetPath() throws IOException
+    void testAbsoluteFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = StreamInput.forReader(path, null);
@@ -56,22 +57,23 @@ public class TestStreamInput
         assertThat(inputFile.toString(), equalTo(path.toString()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testToPathUnsupported() throws IOException
+    @Test
+    void testToPathUnsupported() throws IOException
     {
         final Path path = Paths.get("blah");
-        StreamInput.forReader(path, null).toPath();
+        assertThrows(UnsupportedOperationException.class,
+                () -> StreamInput.forReader(path, null).toPath());
     }
 
     @Test
-    public void testIsRealFileFalse() throws IOException
+    void testIsRealFileFalse() throws IOException
     {
         final InputFile inputFile = StreamInput.forReader(Paths.get("blah"), null);
         assertThat(inputFile.isRealFile(), equalTo(false));
     }
 
     @Test
-    public void testReadContent() throws IOException
+    void testReadContent() throws IOException
     {
         final InputFile inputFile = StreamInput.forReader(null,
                 new BufferedReader(new StringReader(CONTENT)));

@@ -21,29 +21,39 @@ package org.itsallcode.openfasttrace.cli;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.Assertion;
-import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import org.junit.rules.TemporaryFolder;
+import org.itsallcode.io.Capturable;
+import org.itsallcode.junit.sysextensions.ExitGuard;
+import org.itsallcode.junit.sysextensions.SystemErrGuard;
+import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
+import org.itsallcode.junit.sysextensions.SystemOutGuard;
+import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
+import org.itsallcode.junit.sysextensions.security.ExitTrapException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.opentest4j.MultipleFailuresError;
 
-public class TestCliStarter
+@ExtendWith(TempDirectory.class)
+@ExtendWith(ExitGuard.class)
+@ExtendWith(SystemOutGuard.class)
+@ExtendWith(SystemErrGuard.class)
+// [itest->dsn~cli.tracing.exit-status~1]
+class TestCliStarter
 {
-    private static final String NEWLINE = "\n";
-    private static final String CARRIAGE_RETURN = "\r";
     private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
@@ -53,315 +63,318 @@ public class TestCliStarter
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
     private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    private static final String CARRIAGE_RETURN = "\r";
+    private static final String NEWLINE = "\n";
 
     private Path docDir;
     private Path outputFile;
 
-    @Rule
-    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream error = new ByteArrayOutputStream();
-
-    @Before
-    public void setUp() throws UnsupportedEncodingException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
-        this.outputFile = this.tempFolder.getRoot().toPath().resolve("stream.txt");
-        System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
-        System.setErr(new PrintStream(this.error, true, "UTF-8"));
+        this.outputFile = tempDir.resolve("stream.txt");
     }
 
     @Test
-    public void testNoArguments()
+    void testNoArguments(@SysErr final Capturable err)
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: Missing command");
-        runCliStarter();
-
+        assertExitWithError(() -> runCliStarter(), ExitStatus.CLI_ERROR, "oft: Missing command",
+                err);
     }
 
-    // [itest->dsn~cli.command-selection~1]
-    @Test
-    public void testIllegalCommand()
+    private void assertExitWithError(final Runnable runnable, final ExitStatus status,
+            final String message, final Capturable stream) throws MultipleFailuresError
     {
-
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
-                "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.");
-        runCliStarter(ILLEGAL_COMMAND);
+        stream.capture();
+        assertAll( //
+                () -> assertExitWithStatus(status.getCode(), runnable),
+                () -> assertThat(stream.getCapturedData(), startsWith(message)) //
+        );
     }
 
     // [itest->dsn~cli.command-selection~1]
     @Test
-    public void testConvertWithoutExplicitInputs()
+    void testIllegalCommand(@SysErr final Capturable err)
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(false);
-            assertStdOutStartsWith(REQM2_PREAMBLE);
-        });
-        runCliStarter(CONVERT_COMMAND);
+        assertExitWithError(() -> runCliStarter(ILLEGAL_COMMAND), ExitStatus.CLI_ERROR,
+                "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.", err);
+    }
+
+    // [itest->dsn~cli.command-selection~1]
+    @Test
+    void testConvertWithoutExplicitInputs(@SysOut final Capturable out)
+    {
+        assertExitOkWithStdOutStart(() -> runCliStarter(CONVERT_COMMAND), REQM2_PREAMBLE, out);
+
+    }
+
+    private void assertExitOkWithStdOutStart(final Runnable runnable, final String outputStart,
+            final Capturable out) throws MultipleFailuresError
+    {
+        out.capture();
+        assertAll(() -> {
+            assertExitWithStatus(ExitStatus.OK.getCode(), runnable);
+        }, () -> assertOutputFileExists(false), //
+                () -> {
+                    assertThat(out.getCapturedData(), startsWith(outputStart));
+                });
     }
 
     @Test
-    public void testConvertUnknownExporter()
+    void testConvertUnknownExporter(@SysErr final Capturable err)
     {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR,
-                "oft: export format 'illegal' is not supported.");
-        runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FORMAT_PARAMETER, "illegal",
+        final Runnable runnable = () -> runCliStarter( //
+                CONVERT_COMMAND, this.docDir.toString(), //
+                OUTPUT_FORMAT_PARAMETER, "illegal", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        assertExitWithError(runnable, ExitStatus.CLI_ERROR,
+                "oft: export format 'illegal' is not supported.", err);
     }
 
     // [itest->dsn~cli.conversion.output-format~1]
     @Test
-    public void testConvertToSpecobjectFile() throws IOException
+    void testConvertToSpecobjectFile() throws IOException
     {
-        expectStandardFileExportResult();
-        runCliStarter(CONVERT_COMMAND, this.docDir.toString(), //
+        final Runnable runnable = () -> runCliStarter( //
+                CONVERT_COMMAND, this.docDir.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "specobject", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE + "<specobjects doctype=\"");
+    }
+
+    private void assertExitOkWithOutputFileStart(final Runnable runnable, final String fileStart)
+            throws MultipleFailuresError
+    {
+        assertAll( //
+                () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
+                () -> assertOutputFileExists(true), //
+                () -> assertOutputFileContentStartsWith(fileStart) //
+        );
     }
 
     // [itest->dsn~cli.conversion.default-output-format~1]
     @Test
-    public void testConvertDefaultOutputFormat() throws IOException
+    void testConvertDefaultOutputFormat(@SysOut final Capturable out) throws IOException
     {
-        expectCliExitStatusWithAssertions(ExitStatus.OK, () -> {
-            assertOutputFileExists(false);
-            assertStdOutStartsWith(REQM2_PREAMBLE);
-        });
-        runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+        assertExitOkWithStdOutStart(runnable, REQM2_PREAMBLE, out);
     }
 
     // [itest->dsn~cli.input-file-selection~1]
     @Test
-    public void testConvertDefaultOutputFormatIntoFile() throws IOException
+    void testConvertDefaultOutputFormatIntoFile() throws IOException
     {
-        expectStandardFileExportResult();
-        runCliStarter(CONVERT_COMMAND, this.docDir.toString(), OUTPUT_FILE_PARAMETER,
-                this.outputFile.toString());
+        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.docDir.toString(),
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE);
     }
 
     // [itest->dsn~cli.default-input~1]
     @Test
-    public void testConvertDefaultInputDir() throws IOException
+    void testConvertDefaultInputDir() throws IOException
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertThat(getOutputFileContent().length(), greaterThan(10000));
-        });
-        runCliStarter(CONVERT_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        final Runnable runnable = () -> runCliStarter( //
+                CONVERT_COMMAND, //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString() //
+        );
+        assertExitOkWithOutputFileOfLength(runnable, 10000);
     }
 
     @Test
-    public void testTraceNoArguments()
+    void testTraceNoArguments(@SysErr final Capturable err)
     {
-        expectCliExitWithAssertions(() -> {
-            assertOutputFileExists(false);
-        });
-        runCliStarter(TRACE_COMMAND);
+        // This test is fragile, since we can't influence the current working
+        // directory which is automatically used if no directory is specified.
+        // All we know is that no CLI error should be returned.
+        try
+        {
+            runCliStarter(TRACE_COMMAND);
+        }
+        catch (final ExitTrapException e)
+        {
+            assertThat(e.getExitStatus(),
+                    anyOf(equalTo(ExitStatus.OK.getCode()), equalTo(ExitStatus.FAILURE.getCode())));
+            assertThat(err.getCapturedData(), isEmptyOrNullString());
+        }
     }
 
     // [itest->dsn~cli.command-selection~1]
     @Test
-    public void testTrace() throws IOException
+    void testTrace() throws IOException
     {
-        expectStandardReportFileResult();
-        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString());
-    }
-
-    @Test
-    public void testTraceWithReportVerbosityMinimal() throws IOException
-    {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertOutputFileContentStartsWith("ok");
-        });
-        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
-                REPORT_VERBOSITY_PARAMETER, "MINIMAL");
+                this.docDir.toString() //
+        );
+        assertExitOkWithOutputFileStart(runnable, "ok - 5 total");
     }
 
     @Test
-    public void testTraceWithReportVerbosityQuietToStdOut() throws IOException
+    void testTraceWithReportVerbosityMinimal() throws IOException
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(false);
-            assertStdOutEmpty();
-        });
-        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
-                REPORT_VERBOSITY_PARAMETER, "QUIET");
-    }
-
-    @Test
-    public void testTraceWithReportVerbosityQuietToFileMustBeRejected() throws IOException
-    {
-        expectCliExitOnErrorThatStartsWith(ExitStatus.CLI_ERROR, "oft: combining stream");
-        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, this.docDir.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
-                REPORT_VERBOSITY_PARAMETER, "QUIET");
+                REPORT_VERBOSITY_PARAMETER, "MINIMAL" //
+        );
+        assertExitOkWithOutputFileStart(runnable, "ok");
+    }
+
+    @Test
+    void testTraceWithReportVerbosityQuietToStdOut(@SysOut final Capturable out) throws IOException
+    {
+        final Runnable runnable = () -> runCliStarter(//
+                TRACE_COMMAND, this.docDir.toString(), //
+                REPORT_VERBOSITY_PARAMETER, "QUIET" //
+        );
+        out.capture();
+        assertAll( //
+                () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
+                () -> assertOutputFileExists(false),
+                () -> assertThat(out.getCapturedData(), isEmptyOrNullString()) //
+        );
+    }
+
+    @Test
+    void testTraceWithReportVerbosityQuietToFileMustBeRejected(@SysErr final Capturable err)
+            throws IOException
+    {
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, this.docDir.toString(), //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
+                REPORT_VERBOSITY_PARAMETER, "QUIET" //
+        );
+        assertExitWithError(runnable, ExitStatus.CLI_ERROR, "oft: combining stream", err);
     }
 
     @Test
     // [itest->dsn~cli.default-input~1]
-    public void testTraceDefaultInputDir() throws IOException
+    void testTraceDefaultInputDir(@SysErr final Capturable err) throws IOException
     {
-        expectCliExitWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertThat(getOutputFileContent().length(), greaterThan(400));
-        });
-        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        // This test is fragile, since we can't influence the current working
+        // directory which is automatically used if no directory is specified.
+        // All we know is that no CLI error should be returned and an output
+        // file must exist.
+        try
+        {
+            runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+        }
+        catch (final ExitTrapException e)
+        {
+            assertAll( //
+                    () -> assertThat(e.getExitStatus(),
+                            anyOf(equalTo(ExitStatus.OK.getCode()),
+                                    equalTo(ExitStatus.FAILURE.getCode()))),
+                    () -> assertThat(err.getCapturedData(), isEmptyOrNullString()),
+                    () -> assertOutputFileExists(true));
+        }
     }
 
-    private void expectStandardFileExportResult()
+    private void assertExitOkWithOutputFileOfLength(final Runnable runnable, final int length)
+            throws MultipleFailuresError
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"");
-        });
+        assertAll( //
+                () -> assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE), //
+                () -> assertOutputFileLength(length) //
+        );
+    }
+
+    private void assertOutputFileLength(final int length)
+    {
+        assertThat(getOutputFileContent().length(), greaterThan(length));
     }
 
     // [itest->dsn~cli.tracing.output-format~1]]
-    public void testTraceOutputFormatPlain() throws IOException
+    void testTraceOutputFormatPlain() throws IOException
     {
-        expectCliExitWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertThat(getOutputFileContent().length(), greaterThan(1000));
-        });
-        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
-                OUTPUT_FORMAT_PARAMETER, "plain");
+        final Runnable runnable = () -> runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), OUTPUT_FORMAT_PARAMETER, "plain");
+        assertExitOkWithOutputFileOfLength(runnable, 1000);
     }
 
     @Test
-    public void testTraceMacNewlines() throws IOException
+    void testTraceMacNewlines() throws IOException
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertThat(Files.exists(this.outputFile), equalTo(true));
-            assertThat("Has old Mac newlines", getOutputFileContent().contains(CARRIAGE_RETURN),
-                    equalTo(true));
-            assertThat("Has no Unix newlines", getOutputFileContent().contains(NEWLINE),
-                    equalTo(false));
-        });
-        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
-                this.docDir.toString(), NEWLINE_PARAMETER, "OLDMAC");
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
+                NEWLINE_PARAMETER, "OLDMAC", //
+                this.docDir.toString() //
+        );
+        assertAll( //
+                () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
+                () -> assertOutputFileExists(true), //
+                () -> assertOutputFileContainsOldMacNewlines(), //
+                () -> assertOutputFileContainsNoUnixNewlines() //
+        );
+    }
+
+    private void assertOutputFileContainsOldMacNewlines()
+    {
+        assertThat("Has old Mac newlines", getOutputFileContent().contains(CARRIAGE_RETURN),
+                equalTo(true));
+    }
+
+    private void assertOutputFileContainsNoUnixNewlines()
+    {
+        assertThat("Has no Unix newlines", getOutputFileContent().contains(NEWLINE),
+                equalTo(false));
     }
 
     @Test
     // [itest->dsn~cli.default-newline-format~1]
-    public void testTraceDefaultNewlines() throws IOException
+    void testTraceDefaultNewlines() throws IOException
     {
-        expectCliExitOkWithAssertions(() -> {
-            assertThat(Files.exists(this.outputFile), equalTo(true));
-            assertThat("Has native platform line separator",
-                    getOutputFileContent().contains(System.lineSeparator()), equalTo(true));
-            switch (System.lineSeparator())
-            {
-            case NEWLINE:
-                assertThat("Has no carriage returns",
-                        getOutputFileContent().contains(CARRIAGE_RETURN), equalTo(false));
-                break;
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
+                this.docDir.toString() //
+        );
+        assertAll( //
+                () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
+                () -> assertOutputFileExists(true), //
+                () -> assertPlatformNewlines(), //
+                () -> assertNoOffendingNewlines() //
+        );
 
-            case CARRIAGE_RETURN:
-                assertThat("Has no newlines", getOutputFileContent().contains(NEWLINE),
-                        equalTo(false));
-                break;
+    }
 
-            case NEWLINE + CARRIAGE_RETURN:
-                assertThat("Has no newline without carriage return and vice-versa",
-                        getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
-                break;
-            }
-        });
-        runCliStarter(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
-                this.docDir.toString());
+    private void assertPlatformNewlines()
+    {
+        assertThat("Has native platform line separator",
+                getOutputFileContent().contains(System.lineSeparator()), equalTo(true));
+    }
+
+    private void assertNoOffendingNewlines()
+    {
+        switch (System.lineSeparator())
+        {
+        case NEWLINE:
+            assertThat("Has no carriage returns", getOutputFileContent().contains(CARRIAGE_RETURN),
+                    equalTo(false));
+            break;
+        case CARRIAGE_RETURN:
+            assertThat("Has no newlines", getOutputFileContent().contains(NEWLINE), equalTo(false));
+            break;
+        case NEWLINE + CARRIAGE_RETURN:
+            assertThat("Has no newline without carriage return and vice-versa",
+                    getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
+            break;
+        }
     }
 
     @Test
-    public void testTraceWithFilteredArtifactType() throws IOException
+    void testTraceWithFilteredArtifactType() throws IOException
     {
-        expectReducedReportFileResult();
-        runCliStarter(TRACE_COMMAND, this.docDir.toString(), //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), WANTED_ARTIFACT_TYPES_PARAMETER,
-                "feat,req");
-    }
-
-    private void expectReducedReportFileResult()
-    {
-        final int expectedNumber = 3;
-        expectCliExitOkWithNumberOfItems(expectedNumber);
-    }
-
-    private void expectStandardReportFileResult()
-    {
-        final int expectedNumber = 5;
-        expectCliExitOkWithNumberOfItems(expectedNumber);
-    }
-
-    private void expectCliExitOkWithNumberOfItems(final int expectedNumber)
-    {
-        expectCliExitOkWithAssertions(() -> {
-            assertOutputFileExists(true);
-            assertOutputFileContentStartsWith("ok - " + expectedNumber + " total");
-        });
-    }
-
-    private void expectCliExitOkWithAssertions(final ExitAssertable assertions)
-    {
-        expectCliExitStatusWithAssertions(ExitStatus.OK, assertions);
-    }
-
-    // [itest->dsn~cli.tracing.exit-status~1]
-    private void expectCliExitStatusWithAssertions(final ExitStatus status,
-            final ExitAssertable assertions)
-    {
-        this.exit.expectSystemExitWithStatus(status.getCode());
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion() throws Exception
-            {
-                assertions.doAsserts();
-            }
-        });
-    }
-
-    private void expectCliExitWithAssertions(final ExitAssertable assertions)
-    {
-        this.exit.expectSystemExit();
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion() throws Exception
-            {
-                assertions.doAsserts();
-            }
-        });
-    }
-
-    private void expectCliExitOnErrorThatStartsWith(final ExitStatus status,
-            final String expectedError)
-    {
-        this.exit.expectSystemExitWithStatus(status.getCode());
-        this.exit.checkAssertionAfterwards(new Assertion()
-        {
-            @Override
-            public void checkAssertion() throws Exception
-            {
-                assertThat(TestCliStarter.this.error.toString(), startsWith(expectedError));
-            }
-        });
-    }
-
-    private void assertStdOutStartsWith(final String content)
-    {
-        assertThat(TestCliStarter.this.outputStream.toString(), startsWith(content));
-    }
-
-    private void assertStdOutEmpty()
-    {
-        assertThat("STDOUT stream is empty", TestCliStarter.this.outputStream.toString(),
-                equalTo(""));
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, this.docDir.toString(), //
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
+                WANTED_ARTIFACT_TYPES_PARAMETER, "feat,req"
+        //
+        );
+        assertExitOkWithOutputFileStart(runnable, "ok - 3 total");
     }
 
     private void assertOutputFileContentStartsWith(final String content)

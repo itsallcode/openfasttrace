@@ -23,17 +23,17 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-public class TestTracedLink
+class TestTracedLink
 {
     @Test
-    public void testEqualsAndHashContract()
+    void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(TracedLink.class) //
                 .withPrefabValues(LinkedSpecificationItem.class,
@@ -50,7 +50,7 @@ public class TestTracedLink
     }
 
     @Test
-    public void testTracedLink()
+    void testTracedLink()
     {
         final LinkedSpecificationItem other = mock(LinkedSpecificationItem.class);
         final LinkStatus status = LinkStatus.AMBIGUOUS;

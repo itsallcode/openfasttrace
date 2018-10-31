@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.mode;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -24,33 +26,33 @@ package org.itsallcode.openfasttrace.mode;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.*;
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemErrRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
+@ExtendWith(TempDirectory.class)
 public class ITestOftAsReporter extends AbstractOftTest
 {
     private Oft oft;
-    @Rule
-    public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
     private Trace trace;
     private List<LinkedSpecificationItem> linkedItems;
 
-    @Before
-    public void setUp() throws UnsupportedEncodingException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput();
+        perpareOutput(tempDir);
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         this.oft = Oft.create();
         final List<SpecificationItem> items = this.oft.importItems(settings);
@@ -59,7 +61,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    public void testTraceToFile() throws IOException
+    void testTraceToFile() throws IOException
     {
         this.oft.reportToPath(this.trace, this.outputFile);
         assertStandardReportFileResult();
@@ -72,7 +74,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    public void testTraceWithReportVerbosityMinimal() throws IOException
+    void testTraceWithReportVerbosityMinimal() throws IOException
     {
         final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
                 .build();
@@ -82,7 +84,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    public void testTraceMacNewlines() throws IOException
+    void testTraceMacNewlines() throws IOException
     {
         final ReportSettings settings = ReportSettings.builder() //
                 .newline(Newline.OLDMAC) //
@@ -96,7 +98,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    public void testTraceToStdOut() throws IOException
+    void testTraceToStdOut() throws IOException
     {
         this.oft.reportToStdOut(this.trace);
         assertStandardReportStdOutResult();
@@ -109,7 +111,7 @@ public class ITestOftAsReporter extends AbstractOftTest
 
     // [itest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    public void testFilterAllowsAllAtrifactsButDsn()
+    void testFilterAllowsAllAtrifactsButDsn()
     {
         final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         assertThat("Number of items with type \"dsn\" in regular trace",

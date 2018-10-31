@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,34 +26,37 @@ package org.itsallcode.openfasttrace.report;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.itsallcode.io.Capturable;
+import org.itsallcode.junit.sysextensions.SystemOutGuard;
+import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class TestReportService
+@ExtendWith(MockitoExtension.class)
+@ExtendWith(TempDirectory.class)
+@ExtendWith(SystemOutGuard.class)
+class TestReportService
 {
-    @Rule
-    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     @Mock
     Trace traceMock;
 
     private ReportService service;
 
-    @Before
+    @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
@@ -59,38 +64,57 @@ public class TestReportService
     }
 
     @Test
-    public void testReportPlainText()
+    void testReportPlainText(@SysOut final Capturable out)
     {
-        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.MINIMAL)
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .verbosity(ReportVerbosity.MINIMAL) //
                 .build();
+        out.capture();
         this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(this.systemOutRule.getLog(), equalTo("not ok\n"));
+        assertThat(out.getCapturedData(), equalTo("not ok\n"));
     }
 
     @Test
-    public void testReportHtml()
+    void testReportHtml(@SysOut final Capturable out)
     {
-        final ReportSettings settings = ReportSettings.builder().outputFormat("html")
-                .verbosity(ReportVerbosity.MINIMAL).build();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(this.systemOutRule.getLog(), startsWith("<!DOCTYPE html>"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidReportFormatThrowsIllegalArgumentException()
-    {
-        final ReportSettings settings = ReportSettings.builder().outputFormat("invalid")
-                .verbosity(ReportVerbosity.QUIET).build();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
-    }
-
-    @Test(expected = ReportException.class)
-    public void testReportToIllegalPathThrowsReportExpection() throws IOException
-    {
-        final File readOnlyFile = this.temporaryFolder.newFile();
-        readOnlyFile.setReadOnly();
-        final ReportSettings settings = ReportSettings.builder().verbosity(ReportVerbosity.QUIET)
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .outputFormat("html") //
                 .build();
-        this.service.reportTraceToPath(this.traceMock, readOnlyFile.toPath(), settings);
+        out.capture();
+        this.service.reportTraceToStdOut(this.traceMock, settings);
+        assertThat(out.getCapturedData(), startsWith("<!DOCTYPE html>"));
+    }
+
+    @Test
+    void testInvalidReportFormatThrowsIllegalArgumentException()
+    {
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .outputFormat("invalid").verbosity(ReportVerbosity.QUIET).build();
+        assertThrows(IllegalArgumentException.class,
+                () -> this.service.reportTraceToStdOut(this.traceMock, settings));
+    }
+
+    @Test
+    void testReportToIllegalPathThrowsReportExpection(@TempDir final Path tempDir)
+            throws IOException
+    {
+        final Path readOnlyFilePath = createReadOnlyFile(tempDir);
+        final ReportSettings settings = ReportSettings //
+                .builder() //
+                .verbosity(ReportVerbosity.QUIET) //
+                .build();
+        assertThrows(ReportException.class,
+                () -> this.service.reportTraceToPath(this.traceMock, readOnlyFilePath, settings));
+    }
+
+    private Path createReadOnlyFile(final Path tempDir) throws IOException
+    {
+        final Path readOnlyFilePath = tempDir.resolve("readonly.txt");
+        Files.write(readOnlyFilePath, "r/o".getBytes());
+        readOnlyFilePath.toFile().setReadOnly();
+        return readOnlyFilePath;
     }
 }

@@ -48,7 +48,14 @@ public class HtmlViewFactory extends AbstractViewFactory
 
     public static HtmlViewFactory create(final OutputStream stream, final URL cssURL)
     {
-        return new HtmlViewFactory(createPrintStream(stream, DEFAULT_CHARSET), cssURL);
+        if (stream instanceof PrintStream)
+        {
+            return new HtmlViewFactory((PrintStream) stream, cssURL);
+        }
+        else
+        {
+            return new HtmlViewFactory(createPrintStream(stream, DEFAULT_CHARSET), cssURL);
+        }
     }
 
     private static PrintStream createPrintStream(final OutputStream stream, final Charset charset)

@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.importer.tag.config;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,24 +31,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestPathConfig
+class TestPathConfig
 {
     @Test
-    public void testGlobMatches()
+    void testGlobMatches()
     {
         assertMatches("glob:pattern", "pattern", true);
     }
 
     @Test
-    public void testGlobUsedByDefault()
+    void testGlobUsedByDefault()
     {
         assertMatches("**/pattern", "blah/blubb/pattern", true);
     }
 
     @Test
-    public void testGlobWithStarStarMatches()
+    void testGlobWithStarStarMatches()
     {
         assertMatches("glob:**/pattern", "blah/blubb/pattern", true);
         assertMatches("glob:**/pattern", "/pattern", true);
@@ -57,50 +57,50 @@ public class TestPathConfig
     }
 
     @Test
-    public void testGlobDoesNotMatch()
+    void testGlobDoesNotMatch()
     {
         assertMatches("glob:pattern", "wrongpattern", false);
     }
 
     @Test
-    public void testLiteralMatches()
+    void testLiteralMatches()
     {
         assertMatches("regex:pattern", "pattern", true);
     }
 
     @Test
-    public void testRegexpWithWildCardMatches()
+    void testRegexpWithWildCardMatches()
     {
         assertMatches("regex:.*pattern", "pattern", true);
         assertMatches("regex:.*pattern", "blubbpattern", true);
     }
 
     @Test
-    public void testRegexDoesNotMatch()
+    void testRegexDoesNotMatch()
     {
         assertMatches("regex:pattern", "wrongpattern", false);
     }
 
     @Test
-    public void testGetPatternWithoutPrefix()
+    void testGetPatternWithoutPrefix()
     {
         assertThat(create("pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test
-    public void testGetPatternWithGlobPrefix()
+    void testGetPatternWithGlobPrefix()
     {
         assertThat(create("glob:pattern").getDescription(), equalTo("glob:pattern"));
     }
 
     @Test
-    public void testGetPatternWithRegexPrefix()
+    void testGetPatternWithRegexPrefix()
     {
         assertThat(create("regex:pattern").getDescription(), equalTo("regex:pattern"));
     }
 
     @Test
-    public void testBuilder()
+    void testBuilder()
     {
         final List<Path> paths = new ArrayList<>();
         final String pattern = "pattern";

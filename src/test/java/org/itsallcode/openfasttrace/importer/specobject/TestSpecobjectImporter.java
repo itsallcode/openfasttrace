@@ -38,18 +38,18 @@ import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link SpecobjectImporter}
  */
-public class TestSpecobjectImporter
+class TestSpecobjectImporter
 {
     private static final String PSEUDO_FILENAME = "pseudo_filename";
     private static final Location STANDARD_LOCATION = Location.create(PSEUDO_FILENAME, 2);
 
     @Test
-    public void testImportOfMinimalSpecObject()
+    void testImportOfMinimalSpecObject()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
@@ -78,7 +78,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportOfComplexSpecObject()
+    void testImportOfComplexSpecObject()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
@@ -107,7 +107,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testSelectedElementsAreIgnoredDuringImport()
+    void testSelectedElementsAreIgnoredDuringImport()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"feat\">\n" //
                 + "  <specobject>\n" //
@@ -126,7 +126,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testStripSuperfluousArtifactPrefixFromName()
+    void testStripSuperfluousArtifactPrefixFromName()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"impl\">\n" //
                 + "  <specobject>\n" //
@@ -142,7 +142,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testTakeOverLocationFromImportedFile()
+    void testTakeOverLocationFromImportedFile()
     {
         final String expectedFileName = "/home/johndoe/openfasttrace/examples/specobject.xml";
         final int expectedLine = 42;
@@ -163,7 +163,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportWithTags()
+    void testImportWithTags()
     {
         final ImportEventListener listenerMock = importFromString(
                 "<specobjects doctype=\"itest\">\n" //
@@ -186,7 +186,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportWithNeedsCoverage()
+    void testImportWithNeedsCoverage()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
@@ -208,7 +208,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportWithDependencies()
+    void testImportWithDependencies()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
@@ -230,7 +230,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportFulfilledByIsIgnored()
+    void testImportFulfilledByIsIgnored()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
@@ -258,7 +258,7 @@ public class TestSpecobjectImporter
     }
 
     @Test
-    public void testImportProvidesCoverage()
+    void testImportProvidesCoverage()
     {
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //

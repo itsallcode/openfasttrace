@@ -24,26 +24,26 @@ package org.itsallcode.openfasttrace.importer;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
 import org.itsallcode.openfasttrace.FilterSettings;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-public class TestImportFilterSettings
+class TestImportFilterSettings
 {
     @Test
-    public void testFilterUnsetIfEmpty()
+    void testFilterUnsetIfEmpty()
     {
         assertFilterSet(new FilterSettings.Builder().build(), false);
     }
 
     @Test
-    public void testBuilder()
+    void testBuilder()
     {
         final String[] expectedArtifactTypes = { "foo", "bar" };
         final FilterSettings filterSettings = new FilterSettings.Builder() //
@@ -59,7 +59,7 @@ public class TestImportFilterSettings
     }
 
     @Test
-    public void testEqualsAndHashContract()
+    void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(FilterSettings.class).verify();
     }

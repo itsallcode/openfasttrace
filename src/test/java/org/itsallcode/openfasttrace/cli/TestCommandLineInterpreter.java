@@ -23,104 +23,100 @@ package org.itsallcode.openfasttrace.cli;
  */
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
 import org.itsallcode.openfasttrace.cli.CommandLineArgumentsStub.StubEnum;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link CommandLineInterpreter}
  */
-public class TestCommandLineInterpreter
+class TestCommandLineInterpreter
 {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
-    public void testGetNamedStringParamter()
+    void testGetNamedStringParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a");
         assertThat(stub.getA(), equalTo("value_a"));
     }
 
     @Test
-    public void testGetLongNamedStringParamter()
+    void testGetLongNamedStringParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("--the-long-parameter", "value_a");
         assertThat(stub.getTheLongParameter(), equalTo("value_a"));
     }
 
     @Test
-    public void testGetNamedStringParamterCaseIndependent()
+    void testGetNamedStringParamterCaseIndependent()
     {
         final CommandLineArgumentsStub stub = parseArguments("-A", "value_a");
         assertThat(stub.getA(), equalTo("value_a"));
     }
 
     @Test
-    public void testMissingValueForStringParameter()
+    void testMissingValueForStringParameter()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-a"),
                 "No value for argument 'a'");
     }
 
     @Test
-    public void testUnexpectedArgumentName()
+    void testUnexpectedArgumentName()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("--unexpected"),
                 "Unexpected parameter 'unexpected' is not allowed");
     }
 
     @Test
-    public void testUnexpectedSingleCharacterArgumentName()
+    void testUnexpectedSingleCharacterArgumentName()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-u"),
                 "Unexpected parameter 'u' is not allowed");
     }
 
     @Test
-    public void testGetNamedBooleanParamter()
+    void testGetNamedBooleanParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-b");
         assertThat(stub.isB(), equalTo(true));
     }
 
     @Test
-    public void testGetNamedBooleanBoxedParamter()
+    void testGetNamedBooleanBoxedParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-d");
         assertThat(stub.isD(), equalTo(true));
     }
 
     @Test
-    public void testGetNamedEnumParamter()
+    void testGetNamedEnumParamter()
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "VALUE1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
     }
 
     @Test
-    public void testGetNamedEnumParamterLowercase()
+    void testGetNamedEnumParamterLowercase()
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "value1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
     }
 
     @Test
-    public void testInvalidEnumParamter()
+    void testInvalidEnumParamter()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-c", "INVALID_VALUE"),
                 "Cannot convert value 'INVALID_VALUE' to enum org.itsallcode.openfasttrace.cli.CommandLineArgumentsStub$StubEnum");
     }
 
     @Test
-    public void testGetUnnamedParamters()
+    void testGetUnnamedParamters()
     {
         final String[] args = { "value_1", "value_2" };
         final CommandLineArgumentsStub stub = parseArguments(args);
@@ -128,14 +124,14 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testNoSetterForUnnamedParameters()
+    void testNoSetterForUnnamedParameters()
     {
         expectParseException(new CliArgsWithoutUnnamedParameters(), asList("value_1", "value_2"),
                 "Unnamed arguments '[value_1, value_2]' are not allowed");
     }
 
     @Test
-    public void testSetterWithoutArgument()
+    void testSetterWithoutArgument()
     {
         expectParseException(new CliArgsWithNoArgSetter(), asList("--invalid"),
                 "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
@@ -143,7 +139,7 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testSetterWithTooManyArguments()
+    void testSetterWithTooManyArguments()
     {
         expectParseException(new CliArgsMultiArgSetter(), asList("--invalid"),
                 "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
@@ -151,21 +147,21 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testSetterWithUnsupportedArgumentType()
+    void testSetterWithUnsupportedArgumentType()
     {
         expectParseException(new CliArgsUnsupportedSetterArg(), asList("--invalid", "3.14"),
                 "Type 'float' not supported for converting argument '3.14'");
     }
 
     @Test
-    public void testArgumentFollowedByArgument()
+    void testArgumentFollowedByArgument()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-a", "--unexpected"),
                 "No value for argument 'a'");
     }
 
     @Test
-    public void testCombinedParameters()
+    void testCombinedParameters()
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "-c", "VALUE2");
@@ -176,7 +172,7 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testCombinedParametersWithDifferentOrder()
+    void testCombinedParametersWithDifferentOrder()
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "value_3", "-c", "VALUE2");
@@ -187,7 +183,7 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testChainedSingleCharacterParameters()
+    void testChainedSingleCharacterParameters()
     {
         final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",
                 "value_2");
@@ -198,7 +194,7 @@ public class TestCommandLineInterpreter
     }
 
     @Test
-    public void testChainedSingleCharacterParametersMustFailIfNonBooleanMisplaced()
+    void testChainedSingleCharacterParametersMustFailIfNonBooleanMisplaced()
     {
         final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
         expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
@@ -217,9 +213,11 @@ public class TestCommandLineInterpreter
     private void expectParseException(final Object argumentsReceiver, final List<String> arguments,
             final String expectedExceptionMessage)
     {
-        this.thrown.expect(CliException.class);
-        this.thrown.expectMessage(expectedExceptionMessage);
-        new CommandLineInterpreter(arguments.toArray(new String[0]), argumentsReceiver).parse();
+        assertThrows(CliException.class,
+                () -> new CommandLineInterpreter(arguments.toArray(new String[0]),
+                        argumentsReceiver).parse(),
+                expectedExceptionMessage);
+
     }
 
     private static class CliArgsWithoutUnnamedParameters

@@ -23,27 +23,27 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestChecksumCalculator
+class TestChecksumCalculator
 {
     @Test
-    public void testCalculateCrc32OfEmptyString()
+    void testCalculateCrc32OfEmptyString()
     {
         assertThat(ChecksumCalculator.calculateCrc32(""), equalTo(0L));
     }
 
     @Test
-    public void testCalculateCrc32OfSimpleString()
+    void testCalculateCrc32OfSimpleString()
     {
         assertThat(ChecksumCalculator.calculateCrc32("abcd"), equalTo(3984772369L));
     }
 
     @Test
-    public void testCalculateCrc32OfUtf8String()
+    void testCalculateCrc32OfUtf8String()
     {
         assertThat(ChecksumCalculator.calculateCrc32("äöüÖÄÜß"), equalTo(2866547662L));
     }

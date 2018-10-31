@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.html;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,35 +25,35 @@ package org.itsallcode.openfasttrace.report.html;
  */
 
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 
-public class TestHtmlReportCssInlining extends AbstractFileBasedTest
+@ExtendWith(TempDirectory.class)
+class TestHtmlReportCssInlining extends AbstractFileBasedTest
 {
     private static final String CSS = "* { font-family: helvetica; }";
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
     // [itest->dsn~reporting.html.inline_css~1]
     @Test
-    public void testHtmlReportContainsInlineCSS() throws IOException
+    void testHtmlReportContainsInlineCSS(@TempDir final Path tempDir) throws IOException
     {
-        final File cssFile = this.tempFolder.newFile("test.css");
+        final File cssFile = tempDir.resolve("test.css").toFile();
         writeTextFile(cssFile, CSS);
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         final HtmlViewFactory factory = HtmlViewFactory.create(stream, cssFile.toURI().toURL());
@@ -60,23 +62,23 @@ public class TestHtmlReportCssInlining extends AbstractFileBasedTest
         assertThat(stream.toString(), containsString(CSS));
     }
 
-    @Test(expected = ReportException.class)
-    public void testInliningNonExistentCssThrowsException() throws MalformedURLException
+    @Test
+    void testInliningNonExistentCssThrowsException() throws MalformedURLException
     {
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
                 new URL("file:///this_file_does_not_exist.css"));
         final ViewableContainer view = factory.createView("foo", "bar");
-        view.render();
+        assertThrows(ReportException.class, () -> view.render());
     }
 
-    @Test(expected = ReportException.class)
-    public void testInliningUnreadableCssThrowsException() throws IOException
+    @Test
+    void testInliningUnreadableCssThrowsException(@TempDir final Path tempDir) throws IOException
     {
         OsDetector.assumeRunningOnUnix();
-        final File cssFile = this.tempFolder.newFile("test.css");
+        final File cssFile = tempDir.resolve("test.css").toFile();
         cssFile.setReadable(false);
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL());
         final ViewableContainer view = factory.createView("foo", "bar");
-        view.render();
+        assertThrows(ReportException.class, () -> view.render());
     }
 }

@@ -25,33 +25,33 @@ package org.itsallcode.openfasttrace.matcher;
 
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for {@link SpecificationItemIdMatcher}
  */
-public class TestSpecificationItemIdMatcher extends MatcherTestBase<SpecificationItemId>
+class TestSpecificationItemIdMatcher extends MatcherTestBase<SpecificationItemId>
 {
     @Test
-    public void testMatches()
+    void testMatches()
     {
         assertMatch(baseBuilder().build());
     }
 
     @Test
-    public void testDifferentArtifactType()
+    void testDifferentArtifactType()
     {
         assertDifferentFromBase(baseBuilder().artifactType("artifactType2"));
     }
 
     @Test
-    public void testDifferentName()
+    void testDifferentName()
     {
         assertDifferentFromBase(baseBuilder().name("name2"));
     }
 
     @Test
-    public void testDifferentRevision()
+    void testDifferentRevision()
     {
         assertDifferentFromBase(baseBuilder().revision(43));
     }

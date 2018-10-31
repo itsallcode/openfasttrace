@@ -23,24 +23,24 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import org.itsallcode.openfasttrace.report.view.Viewable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestHtmlSection extends AbstractTestHtmlRenderer
+class TestHtmlSection extends AbstractTestHtmlRenderer
 {
     private static final String ID = "section ID";
     private static final String TITLE = "section title";
     private static final int LEVEL = 1;
 
     @Override
-    @Before
+    @BeforeEach
     public void prepareEachTest()
     {
         super.prepareEachTest();
     }
 
     @Test
-    public void testRender()
+    void testRender()
     {
         final Viewable view = this.factory.createSection(ID, TITLE);
         view.render(LEVEL);

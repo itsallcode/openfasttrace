@@ -33,14 +33,14 @@ import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
-public class TestSpecobjectImportExport
+class TestSpecobjectImportExport
 {
     @Test
-    public void testTraceContent()
+    void testTraceContent()
     {
         final String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //
                 + "<specdocument>\n" //

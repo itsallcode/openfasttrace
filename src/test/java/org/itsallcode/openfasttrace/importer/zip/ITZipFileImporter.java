@@ -24,15 +24,17 @@ package org.itsallcode.openfasttrace.importer.zip;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -42,12 +44,14 @@ import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.TempDirectory;
+import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.*;
 
+@ExtendWith(TempDirectory.class)
 public class ITZipFileImporter
 {
     private static final String FILE_CONTENT_STRING = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
@@ -56,8 +60,6 @@ public class ITZipFileImporter
     private static final byte[] FILE_CONTENT2 = FILE_CONTENT2_STRING
             .getBytes(StandardCharsets.UTF_8);
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
     @Mock
     private MultiFileImporter delegateImporterMock;
     @Captor
@@ -67,12 +69,12 @@ public class ITZipFileImporter
     private ZipOutputStream zipOutputStream;
     private List<String> actualFileContent;
 
-    @Before
-    public void setUp() throws IOException
+    @BeforeEach
+    void beforeEach(@TempDir final Path tempDir) throws IOException
     {
         MockitoAnnotations.initMocks(this);
         this.actualFileContent = new ArrayList<>();
-        this.zipFile = this.tempFolder.newFile();
+        this.zipFile = tempDir.resolve("test.zip").toFile();
         this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
                 StandardCharsets.UTF_8);
         when(this.delegateImporterMock.importFile(any())).thenAnswer(invocation -> {
@@ -83,28 +85,29 @@ public class ITZipFileImporter
     }
 
     @Test
-    public void testImportEmptyZipDoesNothing() throws IOException
+    void testImportEmptyZipDoesNothing() throws IOException
     {
         runImporter(0);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testImportNonRealFile() throws IOException
+    @Test
+    void testImportNonRealFile() throws IOException
     {
         final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
-        new ZipFileImporter(file, this.delegateImporterMock).runImport();
+        assertThrows(UnsupportedOperationException.class,
+                () -> new ZipFileImporter(file, this.delegateImporterMock).runImport());
     }
 
     @Test
-    public void testImportZipWithEmptyDirectoryDoesNothing() throws IOException
+    void testImportZipWithEmptyDirectoryDoesNothing() throws IOException
     {
         addZipEntryDirectory("dir");
         runImporter(0);
     }
 
     @Test
-    public void testImportZipWithFileInRootDir() throws IOException
+    void testImportZipWithFileInRootDir() throws IOException
     {
         addEntryToZip("file", FILE_CONTENT);
         final List<InputFile> importedFiles = runImporter(1);
@@ -112,7 +115,7 @@ public class ITZipFileImporter
     }
 
     @Test
-    public void testImportZipWithFileInSubDir() throws IOException
+    void testImportZipWithFileInSubDir() throws IOException
     {
         addEntryToZip("dir/file", FILE_CONTENT);
         final List<InputFile> importedFiles = runImporter(1);
@@ -120,7 +123,7 @@ public class ITZipFileImporter
     }
 
     @Test
-    public void testImportZipAssertFileContent() throws IOException
+    void testImportZipAssertFileContent() throws IOException
     {
         addEntryToZip("file", FILE_CONTENT);
 
@@ -130,7 +133,7 @@ public class ITZipFileImporter
     }
 
     @Test
-    public void testImportZipWithMultipleFilesAssertFileContent() throws IOException
+    void testImportZipWithMultipleFilesAssertFileContent() throws IOException
     {
         addEntryToZip("file1", FILE_CONTENT);
         addEntryToZip("dir/file2", FILE_CONTENT2);

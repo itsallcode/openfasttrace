@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
@@ -38,15 +38,15 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
-public class TestMultiFileImporter
+class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
     private static final Path PATH2 = FOLDER.resolve("sample_system_requirements.md");
@@ -66,8 +66,8 @@ public class TestMultiFileImporter
 
     private MultiFileImporter multiFileImporter;
 
-    @Before
-    public void setup()
+    @BeforeEach
+    void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
         this.multiFileImporter = new MultiFileImporter(this.specItemBuilderMock,
@@ -75,7 +75,7 @@ public class TestMultiFileImporter
     }
 
     @Test
-    public void testImportSingleFile()
+    void testImportSingleFile()
     {
         expectFileImported(FILE1);
         this.multiFileImporter.importFile(FILE1);
@@ -83,7 +83,7 @@ public class TestMultiFileImporter
     }
 
     @Test
-    public void testImportAnySingleFile()
+    void testImportAnySingleFile()
     {
         expectFileImported(FILE1);
         this.multiFileImporter.importAny(asList(PATH1));
@@ -91,14 +91,14 @@ public class TestMultiFileImporter
     }
 
     @Test
-    public void testImportAnyNonExistingFile()
+    void testImportAnyNonExistingFile()
     {
         this.multiFileImporter.importAny(asList(NON_EXISTING_FILE));
         verify(this.importerMock, times(0)).runImport();
     }
 
     @Test
-    public void testImportAnyFolderFile()
+    void testImportAnyFolderFile()
     {
         expectFileImported(FILE1);
         expectFileImported(FILE2);
@@ -108,7 +108,7 @@ public class TestMultiFileImporter
 
     // [itest->dsn~input-directory-recursive-traversal~1]
     @Test
-    public void testRecursiveDir()
+    void testRecursiveDir()
     {
         expectFileImported(FILE1);
         expectFileImported(FILE2);
@@ -117,7 +117,7 @@ public class TestMultiFileImporter
     }
 
     @Test
-    public void testGetImportedItems()
+    void testGetImportedItems()
     {
         final List<SpecificationItem> expected = new ArrayList<>();
         when(this.specItemBuilderMock.build()).thenReturn(expected);

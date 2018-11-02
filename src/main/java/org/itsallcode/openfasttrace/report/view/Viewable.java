@@ -37,6 +37,9 @@ public interface Viewable
 
     /**
      * Render the viewable element on given indentation level.
+     * 
+     * @param level
+     *            indentation level
      */
     public void render(int level);
 }

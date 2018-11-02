@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace</artifactId>
-    <version>2.0.2</version><!-- PRODUCT VERSION: do not remove this comment! -->
+    <version>2.0.3</version><!-- PRODUCT VERSION: do not remove this comment! -->
     <name>OpenFastTrace</name>
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
@@ -177,8 +177,8 @@
                     <charset>UTF-8</charset>
                     <doclint></doclint>
                     <serialwarn>true</serialwarn>
-                    <failOnError>false</failOnError>
-                    <failOnWarnings>false</failOnWarnings>
+                    <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
                 </configuration>
             </plugin>
             <plugin>

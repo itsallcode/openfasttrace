@@ -92,6 +92,9 @@ public interface Oft
 
     /**
      * Generate a report with default settings
+     * 
+     * @param trace
+     *            trace from which the report is generated
      */
     public void reportToStdOut(Trace trace);
 
@@ -115,9 +118,6 @@ public interface Oft
      * @param outputPath
      *            path the report should be written to (or file in case this is
      *            a single-file report)
-     *
-     * @param settings
-     *            report settings
      */
     public void reportToPath(Trace trace, Path outputPath);
 
@@ -138,6 +138,8 @@ public interface Oft
 
     /**
      * Create a new instance of a object implementing the {@link Oft} interface
+     * 
+     * @return object implementing {@link Oft} interface
      */
     public static Oft create()
     {

@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 /**
  * Settings for import filtering
@@ -100,7 +100,7 @@ public final class FilterSettings
         return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
+    @Generated("org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -113,7 +113,7 @@ public final class FilterSettings
         return result;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
+    @Generated("org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {
@@ -208,7 +208,7 @@ public final class FilterSettings
         /**
          * Configure if filter allows items that have no tags.
          * 
-         * @param withoutTags
+         * @param noTags
          *            <code>true</code> to match items without any tags
          * @return <code>this</code> for fluent programming
          */

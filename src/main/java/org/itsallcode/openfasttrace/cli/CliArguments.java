@@ -42,7 +42,6 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
 public class CliArguments
 {
     public static final String NO_TAGS_MARKER = "_";
-    private static final String CURRENT_DIRECTORY = ".";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
     private List<String> unnamedValues;
@@ -119,7 +118,7 @@ public class CliArguments
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return asList(CURRENT_DIRECTORY);
+            return asList(CurrentDirectory.get());
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }

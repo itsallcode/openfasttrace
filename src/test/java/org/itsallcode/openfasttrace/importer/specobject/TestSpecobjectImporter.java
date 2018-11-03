@@ -40,9 +40,6 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
-/**
- * Test for {@link SpecobjectImporter}
- */
 class TestSpecobjectImporter
 {
     private static final String PSEUDO_FILENAME = "pseudo_filename";

@@ -40,6 +40,7 @@ import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,6 +75,13 @@ class TestCliStarter
     {
         this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
         this.outputFile = tempDir.resolve("stream.txt");
+        CurrentDirectory.override(this.docDir.toString());
+    }
+
+    @AfterEach
+    void afterEach()
+    {
+        CurrentDirectory.reset();
     }
 
     @Test
@@ -178,7 +186,7 @@ class TestCliStarter
                 CONVERT_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString() //
         );
-        assertExitOkWithOutputFileOfLength(runnable, 10000);
+        assertExitOkWithOutputFileOfLength(runnable, 2000);
     }
 
     @Test
@@ -405,10 +413,5 @@ class TestCliStarter
     private void runCliStarter(final String... arguments)
     {
         CliStarter.main(arguments);
-    }
-
-    interface ExitAssertable
-    {
-        void doAsserts();
     }
 }

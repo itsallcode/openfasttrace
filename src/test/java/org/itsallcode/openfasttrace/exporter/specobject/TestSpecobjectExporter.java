@@ -23,8 +23,8 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  */
 
 import static java.util.Arrays.asList;
-import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,15 +36,11 @@ import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
 
-/**
- * Unit tests for {@link SpecobjectExporter}
- */
 class TestSpecobjectExporter
 {
     // [itest->dsn~conversion.reqm2-export~1]
     @Test
-    void testExportSimpleSpecObjectWithMandatoryElements()
-            throws IOException, XMLStreamException
+    void testExportSimpleSpecObjectWithMandatoryElements() throws IOException, XMLStreamException
     {
         final SpecificationItem item = new SpecificationItem.Builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //

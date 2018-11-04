@@ -59,7 +59,7 @@ public class SpecObjectsHandlerBuilder
     private void handleStartElement(final TreeElement elem)
     {
         this.listener.beginSpecificationItem();
-        this.locationBuilder = new Location.Builder() //
+        this.locationBuilder = Location.builder() //
                 .path(this.file.getPath()) //
                 .line(elem.getLocation().getLine());
         this.idBuilder = new SpecificationItemId.Builder() //

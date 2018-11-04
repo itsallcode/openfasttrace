@@ -10,6 +10,10 @@
 <listEntry value="org.eclipse.eclemma.ui.launchGroup.coverage"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
+<listAttribute key="org.eclipse.eclemma.core.SCOPE_IDS">
+<listEntry value="=openfasttrace/src\/main\/resources"/>
+<listEntry value="=openfasttrace/src\/main\/java"/>
+</listAttribute>
 <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=openfasttrace"/>
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>

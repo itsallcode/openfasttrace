@@ -109,10 +109,6 @@ The list below show all build time dependencies in alphabetical order. Note that
 | [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls    | Eclipse Public License 2.0     |
 | [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
-### Building Requires Java 11
-
-While OFT can be run with Java 8, it **must be built with Java 11**. The reason is that at least one imported Annotation (`@Generated`) moved to a different Java package, so it is not possible to build with both versions.
-
 ### Essential Build Steps
 
 * `git clone https://github.com/itsallcode/openfasttrace.git`

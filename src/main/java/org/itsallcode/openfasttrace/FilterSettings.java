@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.annotation.processing.Generated;
+import javax.annotation.Generated;
 
 /**
  * Settings for import filtering

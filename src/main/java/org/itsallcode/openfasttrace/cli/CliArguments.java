@@ -56,6 +56,12 @@ public class CliArguments
     // [impl->dsn~reporting.html.specification-item-origin~1]
     // [impl->dsn~reporting.html.linked-specification-item-origin~1]
     private boolean showOrigin;
+    private final DirectoryService directoryService;
+
+    public CliArguments(final DirectoryService directoryService)
+    {
+        this.directoryService = directoryService;
+    }
 
     /**
      * Get the output file path
@@ -118,7 +124,7 @@ public class CliArguments
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return asList(CurrentDirectory.get());
+            return asList(this.directoryService.getCurrent());
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }

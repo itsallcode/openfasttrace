@@ -28,12 +28,6 @@
             <organizationUrl>https://github.com/itsallcode</organizationUrl>
         </developer>
         <developer>
-            <id>sascha15432</id>
-            <url>https://github.com/sascha15432</url>
-            <organization>itsallcode</organization>
-            <organizationUrl>https://github.com/itsallcode</organizationUrl>
-        </developer>
-        <developer>
             <id>kaklakariada</id>
             <url>https://github.com/kaklakariada</url>
             <organization>itsallcode</organization>
@@ -82,7 +76,8 @@
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>0.2.2</version>
+            <version>0.3.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

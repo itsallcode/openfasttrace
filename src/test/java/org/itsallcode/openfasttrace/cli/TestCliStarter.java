@@ -272,6 +272,15 @@ class TestCliStarter
         }
     }
 
+    @Test
+    void testBasicHtmlTrace(@SysOut final Capturable out)
+    {
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, this.docDir.toString(), //
+                OUTPUT_FORMAT_PARAMETER, "html");
+        assertExitOkWithStdOutStart(runnable, "<!DOCTYPE html>", out);
+    }
+
     private void assertExitOkWithOutputFileOfLength(final Runnable runnable, final int length)
             throws MultipleFailuresError
     {
@@ -338,7 +347,6 @@ class TestCliStarter
                 () -> assertPlatformNewlines(), //
                 () -> assertNoOffendingNewlines() //
         );
-
     }
 
     private void assertPlatformNewlines()

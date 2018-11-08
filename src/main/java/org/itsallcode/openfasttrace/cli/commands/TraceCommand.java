@@ -88,6 +88,7 @@ public class TraceCommand extends AbstractCommand
     private ReportSettings convertCommandLineArgumentsToReportSettings()
     {
         return ReportSettings.builder() //
+                .outputFormat(this.arguments.getOutputFormat()) //
                 .verbosity(this.arguments.getReportVerbosity()) //
                 .newline(this.arguments.getNewline()) //
                 .showOrigin(this.arguments.getShowOrigin()) //

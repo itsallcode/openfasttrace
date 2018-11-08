@@ -30,13 +30,11 @@ import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 public interface ViewFactory
 {
     /**
-     * Create a view.
+     * Create a view element that represents a {@link LinkedSpecificationItem}.
      * 
-     * @param id
-     *            view ID
-     * @param title
-     *            view title
-     * @return view
+     * @param item
+     *            linked specification item
+     * @return view view representing the linked specificaition item
      */
     public Viewable createSpecificationItem(final LinkedSpecificationItem item);
 
@@ -52,10 +50,12 @@ public interface ViewFactory
     public ViewableContainer createSection(final String id, final String title);
 
     /**
-     * Create a view element that represents a {@link LinkedSpecificationItem}.
+     * Create a view.
      * 
-     * @param item
-     *            represented {@link LinkedSpecificationItem}
+     * @param id
+     *            ID of the specification item
+     * @param title
+     *            title of the specification item
      * @return view element
      */
     public ViewableContainer createView(final String id, final String title);

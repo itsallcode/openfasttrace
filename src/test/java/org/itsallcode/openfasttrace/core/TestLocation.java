@@ -1,9 +1,5 @@
 package org.itsallcode.openfasttrace.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 /*-
  * #%L
  \* OpenFastTrace
@@ -25,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +64,7 @@ class TestLocation
         final String expectedPath = "expected";
         final int expectedLine = 4007;
         final int expectedColumn = 10203;
-        final Location location = new Location.Builder().path(expectedPath).line(expectedLine)
+        final Location location = Location.builder().path(expectedPath).line(expectedLine)
                 .column(expectedColumn).build();
         assertThat(location.getPath(), equalTo(expectedPath));
         assertThat(location.getLine(), equalTo(expectedLine));
@@ -74,7 +74,7 @@ class TestLocation
     @Test
     void testIsComplete()
     {
-        final Location.Builder builder = new Location.Builder().path("a");
+        final Location.Builder builder = Location.builder().path("a");
         assertThat("builder with path set to null is complete", builder.isCompleteEnough(),
                 equalTo(true));
     }
@@ -82,11 +82,35 @@ class TestLocation
     @Test
     void testIsNotCompleteEnoughWithoutPath()
     {
-        final Location.Builder builderA = new Location.Builder().path("");
-        final Location.Builder builderB = new Location.Builder();
+        final Location.Builder builderA = Location.builder().path("");
+        final Location.Builder builderB = Location.builder();
         assertThat("builder with empty path is complete", builderA.isCompleteEnough(),
                 equalTo(false));
         assertThat("builder with path set to null is complete", builderB.isCompleteEnough(),
                 equalTo(false));
+    }
+
+    @Test
+    void testToStringWithAllComponents()
+    {
+        final Location location = Location.builder().path("foo").line(1).column(2).build();
+        assertThat(location.toString(), equalTo("foo:1:2"));
+
+    }
+
+    @Test
+    void testToStringWithFileAndLine()
+    {
+        final Location location = Location.builder().path("foo").line(1).build();
+        assertThat(location.toString(), equalTo("foo:1"));
+
+    }
+
+    @Test
+    void testToStringWithFile()
+    {
+        final Location location = Location.builder().path("foo").build();
+        assertThat(location.toString(), equalTo("foo"));
+
     }
 }

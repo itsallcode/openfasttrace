@@ -48,9 +48,11 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      *            the stream to write to
      * 
      * @param id
-     *            the view ID
+     *            view ID
      * @param title
-     *            the view title
+     *            view title
+     * @param cssURL
+     *            URL of the CSS stylesheet to be used in the HTML view
      */
     public HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
     {

@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.cli;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
 
@@ -47,7 +47,7 @@ class TestCliArguments
     @BeforeEach
     void testSetUp()
     {
-        this.arguments = new CliArguments();
+        this.arguments = new CliArguments(new StandardDirectoryService());
     }
 
     @Test

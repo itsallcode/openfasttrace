@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view;
+package org.itsallcode.openfasttrace.cli;
 
 /*-
  * #%L
@@ -23,23 +23,13 @@ package org.itsallcode.openfasttrace.report.view;
  */
 
 /**
- * Interface for all view elements which know how to render themselves
+ * This class allows users to query the current directory.
  */
-public interface Viewable
+public class StandardDirectoryService implements DirectoryService
 {
-    /**
-     * Render the viewable element.
-     */
-    public default void render()
+    @Override
+    public String getCurrent()
     {
-        render(0);
+        return System.getProperty("user.dir");
     }
-
-    /**
-     * Render the viewable element on given indentation level.
-     * 
-     * @param level
-     *            indentation level
-     */
-    public void render(int level);
 }

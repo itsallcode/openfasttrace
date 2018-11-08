@@ -178,7 +178,7 @@ class TestCliStarter
                 CONVERT_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString() //
         );
-        assertExitOkWithOutputFileOfLength(runnable, 10000);
+        assertExitOkWithOutputFileOfLength(runnable, 2000);
     }
 
     @Test
@@ -412,11 +412,6 @@ class TestCliStarter
 
     private void runCliStarter(final String... arguments)
     {
-        CliStarter.main(arguments);
-    }
-
-    interface ExitAssertable
-    {
-        void doAsserts();
+        CliStarter.main(arguments, new FakeDirectoryService(this.docDir.toString()));
     }
 }

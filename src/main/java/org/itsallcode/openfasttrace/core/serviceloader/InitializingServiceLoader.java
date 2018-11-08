@@ -27,8 +27,10 @@ import java.util.*;
  * This service loader is similar to Java's {@link ServiceLoader} but
  * additionally initializes services with a given context.
  * 
+ * @param <T>
+ *            initializable object
  * @param <C>
- *            the context type.
+ *            the context type
  */
 public class InitializingServiceLoader<T extends Initializable<C>, C> implements Iterable<T>
 {

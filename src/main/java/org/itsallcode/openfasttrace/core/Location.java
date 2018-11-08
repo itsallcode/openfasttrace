@@ -188,13 +188,23 @@ public final class Location
     }
 
     /**
-     * Builder for {@link Location} objects
+     * Create a new builder for {@link Location} objects
      */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
         private String path;
         private int line = NO_LINE;
         private int column = NO_COLUMN;
+
+        private Builder()
+        {
+            // prevent external instantiation
+        }
 
         /**
          * Set the path

@@ -55,7 +55,7 @@ public class SpecobjectExporterFactory extends ExporterFactory
             final Stream<SpecificationItem> itemStream, final Newline newline)
     {
         final XMLStreamWriter xmlWriter = createXmlWriter(writer);
-        return new SpecobjectExporter(itemStream, xmlWriter, newline);
+        return new SpecobjectExporter(itemStream, xmlWriter, writer, newline);
     }
 
     private XMLStreamWriter createXmlWriter(final Writer writer)

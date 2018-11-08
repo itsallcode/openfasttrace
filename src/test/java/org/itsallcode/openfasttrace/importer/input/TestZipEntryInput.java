@@ -62,10 +62,13 @@ class TestZipEntryInput
     @Test
     void testRelativeFileGetPath() throws IOException
     {
-        final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("dir/file"));
-        final String expectedName = this.zipFile.getPath() + "!dir/file";
-        assertThat(inputFile.getPath(), equalTo(expectedName));
-        assertThat(inputFile.toString(), equalTo(expectedName));
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("dir/file"));
+            final String expectedName = this.zipFile.getPath() + "!dir/file";
+            assertThat(inputFile.getPath(), equalTo(expectedName));
+            assertThat(inputFile.toString(), equalTo(expectedName));
+        }
     }
 
     private ZipFile getZipFile() throws ZipException, IOException
@@ -77,46 +80,64 @@ class TestZipEntryInput
     @Test
     void testToPathUnsupportedThrowsException() throws IOException
     {
-        assertThrows(UnsupportedOperationException.class,
-                () -> InputFile.forZipEntry(getZipFile(), new ZipEntry("file")).toPath());
+        try (final ZipFile zip = getZipFile())
+        {
+            assertThrows(UnsupportedOperationException.class,
+                    () -> InputFile.forZipEntry(zip, new ZipEntry("file")).toPath());
+        }
     }
 
     @Test
     void testCreateZipEntryForDirNotSupportedThrowsException() throws IOException
     {
-        assertThrows(IllegalArgumentException.class,
-                () -> InputFile.forZipEntry(getZipFile(), new ZipEntry("dir/")));
+        try (final ZipFile zip = getZipFile())
+        {
+            assertThrows(IllegalArgumentException.class,
+                    () -> InputFile.forZipEntry(zip, new ZipEntry("dir/")));
+        }
     }
 
     @Test
     void testIsRealFileFalse() throws IOException
     {
-        final InputFile file = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
-        assertThat(file.isRealFile(), equalTo(false));
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile file = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            assertThat(file.isRealFile(), equalTo(false));
+        }
     }
 
     @Test
     void testReadContentEntryDoesNotExistThrowsException() throws IOException
     {
-        final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
-        assertThrows(ImporterException.class, () -> readContent(inputFile));
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            assertThrows(ImporterException.class, () -> readContent(inputFile));
+        }
     }
 
     @Test
     void testReadContentUtf8() throws IOException
     {
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.UTF_8));
-        final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"));
-        assertThat(readContent(inputFile), equalTo(CONTENT));
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            assertThat(readContent(inputFile), equalTo(CONTENT));
+        }
     }
 
     @Test
     void testReadContentIso() throws IOException
     {
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.ISO_8859_1));
-        final InputFile inputFile = InputFile.forZipEntry(getZipFile(), new ZipEntry("file"),
-                StandardCharsets.ISO_8859_1);
-        assertThat(readContent(inputFile), equalTo(CONTENT));
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"),
+                    StandardCharsets.ISO_8859_1);
+            assertThat(readContent(inputFile), equalTo(CONTENT));
+        }
     }
 
     private String readContent(final InputFile inputFile) throws IOException

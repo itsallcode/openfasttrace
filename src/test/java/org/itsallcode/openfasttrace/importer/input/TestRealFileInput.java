@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -102,7 +103,10 @@ class TestRealFileInput
 
     private String readContent(final InputFile inputFile) throws IOException
     {
-        return inputFile.createReader().lines().collect(joining("\n"));
+        try (BufferedReader reader = inputFile.createReader())
+        {
+            return reader.lines().collect(joining("\n"));
+        }
     }
 
     @Test

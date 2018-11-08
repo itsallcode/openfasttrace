@@ -39,9 +39,6 @@ import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-/**
- * Unit tests for {@link SpecobjectExporter}
- */
 class TestSpecobjectExporter
 {
     // [itest->dsn~conversion.reqm2-export~1]

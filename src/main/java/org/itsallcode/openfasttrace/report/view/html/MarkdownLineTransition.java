@@ -26,7 +26,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
- * The {@link MarkdownLineTransition} is a transition in the
+ * The <code>MarkdownLineTransition</code> is a transition in the
  * {@link MarkdownLineStateMachine}.
  */
 class MarkdownLineTransition
@@ -39,7 +39,7 @@ class MarkdownLineTransition
     private final Function<String, String> conversion;
 
     /**
-     * Create a new instance of {@link MarkdownLineTransition}
+     * Create a new instance of <code>MarkdownLineTransition</code>
      * 
      * @param from
      *            origin state of the transition

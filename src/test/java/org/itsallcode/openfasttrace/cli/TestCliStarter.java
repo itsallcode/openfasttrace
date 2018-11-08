@@ -178,7 +178,7 @@ class TestCliStarter
                 CONVERT_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString() //
         );
-        assertExitOkWithOutputFileOfLength(runnable, 10000);
+        assertExitOkWithOutputFileOfLength(runnable, 2000);
     }
 
     @Test
@@ -272,6 +272,15 @@ class TestCliStarter
         }
     }
 
+    @Test
+    void testBasicHtmlTrace(@SysOut final Capturable out)
+    {
+        final Runnable runnable = () -> runCliStarter( //
+                TRACE_COMMAND, this.docDir.toString(), //
+                OUTPUT_FORMAT_PARAMETER, "html");
+        assertExitOkWithStdOutStart(runnable, "<!DOCTYPE html>", out);
+    }
+
     private void assertExitOkWithOutputFileOfLength(final Runnable runnable, final int length)
             throws MultipleFailuresError
     {
@@ -338,7 +347,6 @@ class TestCliStarter
                 () -> assertPlatformNewlines(), //
                 () -> assertNoOffendingNewlines() //
         );
-
     }
 
     private void assertPlatformNewlines()
@@ -404,11 +412,6 @@ class TestCliStarter
 
     private void runCliStarter(final String... arguments)
     {
-        CliStarter.main(arguments);
-    }
-
-    interface ExitAssertable
-    {
-        void doAsserts();
+        CliStarter.main(arguments, new FakeDirectoryService(this.docDir.toString()));
     }
 }

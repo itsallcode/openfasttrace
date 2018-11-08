@@ -138,11 +138,11 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
      * Create an exporter that is able to write to the given file.
      *
      * @param writer
-     *            the {@link Writer} to which specification items are exported
-     * @param itemStream
-     *            the {@link Stream} of items to export
+     *            {@link Writer} to which specification items are exported
+     * @param linkedSpecItemStream
+     *            {@link Stream} of items to export
      * @param newline
-     *            the newline format
+     *            newline format
      * @return an {@link Exporter} instance
      */
     protected abstract Exporter createExporter(final Writer writer,

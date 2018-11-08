@@ -169,6 +169,9 @@ public class LinkedSpecificationItem
 
     /**
      * Get all links to the item by item status.
+     * 
+     * @param status
+     *            link status
      *
      * @return the covered items
      */

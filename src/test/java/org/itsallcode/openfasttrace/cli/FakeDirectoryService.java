@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view;
+package org.itsallcode.openfasttrace.cli;
 
 /*-
  * #%L
@@ -22,24 +22,18 @@ package org.itsallcode.openfasttrace.report.view;
  * #L%
  */
 
-/**
- * Interface for all view elements which know how to render themselves
- */
-public interface Viewable
+public class FakeDirectoryService implements DirectoryService
 {
-    /**
-     * Render the viewable element.
-     */
-    public default void render()
+    private final String fakeCurrentDir;
+
+    public FakeDirectoryService(final String fakeCurrentDir)
     {
-        render(0);
+        this.fakeCurrentDir = fakeCurrentDir;
     }
 
-    /**
-     * Render the viewable element on given indentation level.
-     * 
-     * @param level
-     *            indentation level
-     */
-    public void render(int level);
+    @Override
+    public String getCurrent()
+    {
+        return this.fakeCurrentDir;
+    }
 }

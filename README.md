@@ -41,7 +41,7 @@ Sonarcloud status:
 
 Download the executable jar at [jcenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/):
 
-* [openfasttrace-1.2.1.jar](https://jcenter.bintray.com/org/itsallcode/openfasttrace/1.2.1/openfasttrace-1.2.1.jar)
+* [openfasttrace-2.0.3.jar](https://jcenter.bintray.com/org/itsallcode/openfasttrace/3.0.3/openfasttrace-2.0.3.jar)
 
 ### Maven
 
@@ -52,7 +52,7 @@ To use OpenFastTrace as a dependency in your maven project add this to your `pom
     <dependency>
         <groupId>org.itsallcode</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>1.2.1</version>
+        <version>2.0.3</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -67,7 +67,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile "org.itsallcode:openfasttrace:1.2.1"
+    compile "org.itsallcode:openfasttrace:2.0.3"
 }
 ```
 

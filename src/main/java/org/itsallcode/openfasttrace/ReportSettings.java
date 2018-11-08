@@ -123,7 +123,7 @@ public class ReportSettings
         /**
          * Create a new instance of {@link ReportSettings}
          * 
-         * @return
+         * @return report settings
          */
         public ReportSettings build()
         {
@@ -147,7 +147,7 @@ public class ReportSettings
          * Set the whether the origin of specification items should be shown in
          * the report
          * 
-         * @param showOrign
+         * @param showOrigin
          *            set to <code>true</code> if the origin should be shown
          * @return <code>this</code> for fluent programming
          */

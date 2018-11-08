@@ -50,9 +50,11 @@ public class ExporterService
      * format to a file
      *
      * @param itemStream
-     *            the {@link SpecificationItem} to export
+     *            {@link SpecificationItem} to export
+     * @param outputFile
+     *            path to which the export is written
      * @param settings
-     *            the exporter settings
+     *            exporter settings
      */
     public void exportToPath(final Stream<SpecificationItem> itemStream, final Path outputFile,
             final ExportSettings settings)

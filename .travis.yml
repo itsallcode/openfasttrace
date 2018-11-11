@@ -20,7 +20,7 @@ before_install:
 
 script:
   - echo "Parsed the version $version from pom.xml" 
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -38,4 +38,4 @@ addons:
   sonarcloud:
     organization: "itsallcode"
     token:
-      secure: "stET2mlxtWuTjhrgBC1xO77FHuyF7E7tf+9CY9W9TEUS5UlTNVr9/gzu3p4VeWU7knpiq4PuPabPCAFfbZaPF9vMP0lO6qKvsrd0RBnCIYn2l6AEMKzd0M1yksSBvUnS+7LoT8+qkJ7hPxzSkgM7oWCsHzp//gFvr7r1+n2B9QxrsjpAPqmZlU+0cthX4cy6yIVgMG6T1TlBORcNx9TTZ+ppGLoBJ7PTL04R1GNbNy0IExlegO6JRGo6T2uURr5UkrWeKVlRZY0u3VDs6OUahE3g2srJZPruedX9KRa4XLztTLXYmOUO/6XFxxfx/eqpWqD68Eal/IguTVibPiU0dCpXsTvWE/bO1dDolBxu9afKI7ntNWmIbfKpIT0bRypz+Ss12A9cw3bNJYRXkbA4sfsMmI4kcAhdl+P0bgfyWlmwXE8z+akOOEzkHZ2vT28WVZ27KkByTtl64uWqweeAwPLQN3ORcilyt9Ip+u1Z/sZUaRuXFMi5pciB3lfLq5Bm1bu2VDep2XLQnZD+KPp5+YHCxVrXBy0quDMNYU18R/OSWfqkCOPkklopG02ngvQAYHeezJILqnlS7bD6ujdthv/97LM39W8heFxxUOQiXKw+zWccFTS+lMChX+8n5+xFoJV1NjlGv1rz5PAcUCudCTHu5Pk/2H6XFcTq9/6Ysds="
+      secure: "OtSONb6/yeCjs+50b0qFn+MDge71d5Z8fQyJoDNyip0OBrwdYeU8iqglILN3RhVo0VGfvRiT4t4dqtjRChONHOdBUoYzKqFV4dYc+PCkr0rD0NllzZ3HDpS1qzgMGjyZvQ31i4Uc7/xb5/2lyUDSThNA1/3BIJJWzXYDfSS5J8eNXWobdRQ2YbFfl4Np50gGHtUwROZroLuHU3sc0yYJilAP/iffWtyt+x/TH5fdEdeJPjRYUykX4cij8fT8ZQp2o/Ds84jHQnbd+k6KG/HRk5ndUcx7AoBkZRdgYz+zD06BkM0GbYdOvsUNiPgi6VS7EIofmUbxGbzB285ju/SexRHwpXW+CKDnrVtGmcjzD3+fm5p/PhBEdyS7/IA/tfK1Ap5HsgmeAbuykqgDAN4F0AfZxMSVhUG38LiMoWt/rzmOIRFVvFb02Ai9OUT/yy/FaVn6HgFOAelZpMmvG0/6IIec21prDIrFfer79OudGAQd222QdkyqVuxNOo/WBhIXcPONJ47BfL+1ZE9VpzGOclwV9ewc0xdzzvTejBFk92QlZq+9DPE2x5QV6NTxMdmqjm0woDTN+BhyTdT3XB0htiSy0Eo5SNN0Aldjrtiz3LlEkw9nzrVyAEkjjHKC7tb5sknb4K+s/r1/JzHVrNdlBSLVq0U+onAI6UBK/DTzlq8="

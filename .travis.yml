@@ -14,6 +14,8 @@ cache:
 
 before_script:
   - version=$(grep -oP '(?<=^    <version>)[^<]*' pom.xml)
+  # Required for sonar to provide blame information
+  - git fetch --unshallow
 
 before_install:
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-

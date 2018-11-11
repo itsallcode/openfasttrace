@@ -25,16 +25,19 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import javax.xml.stream.*;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 class TestSpecobjectExporter
 {
@@ -154,6 +157,19 @@ class TestSpecobjectExporter
         assertThat(actual, matchesAllLines(expected));
     }
 
+    @Test
+    void testExportClosesWriters() throws XMLStreamException, IOException
+    {
+        final XMLStreamWriter xmlWriterMock = mock(XMLStreamWriter.class);
+        final Writer writerMock = mock(Writer.class);
+        new SpecobjectExporter(Stream.empty(), xmlWriterMock, writerMock, Newline.UNIX).runExport();
+
+        final InOrder inOrder = inOrder(xmlWriterMock, writerMock);
+        inOrder.verify(xmlWriterMock).close();
+        inOrder.verify(writerMock).close();
+        inOrder.verifyNoMoreInteractions();
+    }
+
     private String exportToString(final SpecificationItem... items)
     {
         try (final ByteArrayOutputStream stream = new ByteArrayOutputStream())
@@ -163,7 +179,7 @@ class TestSpecobjectExporter
                     StandardCharsets.UTF_8.name());
             new SpecobjectExporter(asList(items).stream(),
                     new IndentingXMLStreamWriter(xmlWriter, " ", Newline.UNIX.toString()),
-                    Newline.UNIX).runExport();
+                    new OutputStreamWriter(stream), Newline.UNIX).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }
         catch (IOException | XMLStreamException | FactoryConfigurationError e)

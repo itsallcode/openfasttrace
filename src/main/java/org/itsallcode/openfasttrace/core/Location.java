@@ -188,7 +188,9 @@ public final class Location
     }
 
     /**
-     * Create a new builder for {@link Location} objects
+     * Create a new builder for {@link Location} objects.
+     * 
+     * @return a new {@link Builder}.
      */
     public static Builder builder()
     {

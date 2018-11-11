@@ -54,9 +54,12 @@ public class CliStarter
      * injection of a
      * 
      * @param args
+     *            command line arguments.
      * @param directoryService
+     *            directory service for getting the current directory. This
+     *            allows injecting a mock in unit tests.
      */
-    public static void main(final String[] args, final DirectoryService directoryService)
+    static void main(final String[] args, final DirectoryService directoryService)
     {
         final CliArguments arguments = new CliArguments(directoryService);
         new CommandLineInterpreter(args, arguments).parse();

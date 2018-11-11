@@ -102,19 +102,36 @@ class TestReportService
             throws IOException
     {
         final Path readOnlyFilePath = createReadOnlyFile(tempDir);
-        final ReportSettings settings = ReportSettings //
-                .builder() //
-                .verbosity(ReportVerbosity.QUIET) //
-                .build();
-        assertThrows(ReportException.class,
-                () -> this.service.reportTraceToPath(this.traceMock, readOnlyFilePath, settings));
+        makeFileReadOnly(readOnlyFilePath);
+        try
+        {
+            final ReportSettings settings = ReportSettings //
+                    .builder() //
+                    .verbosity(ReportVerbosity.QUIET) //
+                    .build();
+            assertThrows(ReportException.class, () -> this.service.reportTraceToPath(this.traceMock,
+                    readOnlyFilePath, settings));
+        }
+        finally
+        {
+            makeFileWritable(readOnlyFilePath);
+        }
     }
 
     private Path createReadOnlyFile(final Path tempDir) throws IOException
     {
         final Path readOnlyFilePath = tempDir.resolve("readonly.txt");
         Files.write(readOnlyFilePath, "r/o".getBytes());
-        readOnlyFilePath.toFile().setReadOnly();
         return readOnlyFilePath;
+    }
+
+    private void makeFileReadOnly(final Path readOnlyFilePath) throws IOException
+    {
+        readOnlyFilePath.toFile().setReadOnly();
+    }
+
+    private void makeFileWritable(final Path readOnlyFilePath)
+    {
+        readOnlyFilePath.toFile().setWritable(true);
     }
 }

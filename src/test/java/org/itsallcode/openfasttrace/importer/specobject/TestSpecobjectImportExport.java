@@ -82,10 +82,10 @@ class TestSpecobjectImportExport
         final LinkedSpecificationItem tag = trace.getItems().get(0);
         final LinkedSpecificationItem req = trace.getItems().get(1);
 
-        final SpecificationItem expectedTag = new SpecificationItem.Builder()
+        final SpecificationItem expectedTag = SpecificationItem.builder()
                 .id("impl", "exampleB-3454416016", 0).location("source.java", 1)
                 .status(ItemStatus.APPROVED).addCoveredId("dsn", "exampleB", 1).build();
-        final SpecificationItem expectedReq = new SpecificationItem.Builder()
+        final SpecificationItem expectedReq = SpecificationItem.builder()
                 .id("dsn", "exampleB", 1).location("spec.md", 2).description("Example requirement")
                 .addNeedsArtifactType("utest").addNeedsArtifactType("impl").build();
 

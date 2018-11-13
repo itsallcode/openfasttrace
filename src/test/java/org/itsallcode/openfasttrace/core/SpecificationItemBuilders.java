@@ -32,6 +32,6 @@ public class SpecificationItemBuilders
 {
     public static Builder prepare(final String artifactType, final String name, final int revision)
     {
-        return new SpecificationItem.Builder().id(artifactType, name, revision);
+        return SpecificationItem.builder().id(artifactType, name, revision);
     }
 }

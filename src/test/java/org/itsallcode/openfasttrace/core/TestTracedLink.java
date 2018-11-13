@@ -46,7 +46,7 @@ class TestTracedLink
             final String artifactType, final String name, final int revision)
     {
         return new LinkedSpecificationItem(
-                new SpecificationItem.Builder().id(artifactType, name, revision).build());
+                SpecificationItem.builder().id(artifactType, name, revision).build());
     }
 
     @Test

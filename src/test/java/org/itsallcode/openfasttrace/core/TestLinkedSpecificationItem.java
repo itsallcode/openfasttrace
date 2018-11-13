@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -25,7 +27,6 @@ package org.itsallcode.openfasttrace.core;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -253,7 +254,7 @@ class TestLinkedSpecificationItem
 
     // [utest->dsn~tracing.link-cycle~1]
     @Test
-    void testGetDeepCoverageStatus_DeepCylce()
+    void testGetDeepCoverageStatus_DeepCycle()
     {
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
         this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERS);

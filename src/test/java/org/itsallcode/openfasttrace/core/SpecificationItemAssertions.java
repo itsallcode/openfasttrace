@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -36,49 +36,95 @@ public final class SpecificationItemAssertions
 
     public static void assertItemHasNoUncoveredArtifactTypes(final LinkedSpecificationItem item)
     {
-        assertThat(item + " has no uncovered artifact types", item.getUncoveredArtifactTypes(),
+        assertThat(nameItem(item) + "'s uncovered artifact types", item.getUncoveredArtifactTypes(),
                 empty());
     }
 
-    public static void assertItemDoesNotCoverAnyArtifactTypes(final LinkedSpecificationItem item)
+    protected static String nameItem(final LinkedSpecificationItem item)
     {
-        assertThat(item + " has no uncovered artifact types", item.getUncoveredArtifactTypes(),
+        return item.getId().toString();
+    }
+
+    public static void assertItemHasNoCoveredArtifactTypes(final LinkedSpecificationItem item)
+    {
+        assertThat(nameItem(item) + "'s covered artifact types", item.getCoveredArtifactTypes(),
                 empty());
     }
 
     public static void assertItemDoesNotCoverArtifactTypes(final LinkedSpecificationItem item,
             final String... artifactTypes)
     {
-        assertThat(item + " has uncovered artifact types", item.getUncoveredArtifactTypes(),
-                contains(artifactTypes));
+        assertThat(nameItem(item) + "'s uncovered artifact types", item.getUncoveredArtifactTypes(),
+                containsInAnyOrder(artifactTypes));
     }
 
-    public static void assertItemCoversArtifactTypes(final LinkedSpecificationItem item,
-            final String artifactTypes)
+    public static void assertItemHasCoveredArtifactTypes(final LinkedSpecificationItem item,
+            final String... artifactTypes)
     {
-        assertThat(item + " coveres artifact types", item.getCoveredArtifactTypes(),
-                contains(artifactTypes));
+        assertThat(nameItem(item) + "'s covered artifact types", item.getCoveredArtifactTypes(),
+                containsInAnyOrder(artifactTypes));
+    }
+
+    public static void assertItemHasUncoveredArtifactTypes(final LinkedSpecificationItem item,
+            final String... artifactTypes)
+    {
+        assertThat(nameItem(item) + "'s uncovered artifact types", item.getUncoveredArtifactTypes(),
+                containsInAnyOrder(artifactTypes));
+    }
+
+    public static void assertItemHasOvercoveredArtifactTypes(final LinkedSpecificationItem item,
+            final String... artifactTypes)
+    {
+        assertThat(nameItem(item) + "'s over-covered artifact types",
+                item.getOverCoveredArtifactTypes(), containsInAnyOrder(artifactTypes));
     }
 
     public static void assertItemCoversIds(final LinkedSpecificationItem item,
             final SpecificationItemId... ids)
     {
-        assertThat(item.getId() + " covers IDs", item.getCoveredIds(), contains(ids));
+        assertThat(nameItem(item) + " covers IDs", item.getCoveredIds(), containsInAnyOrder(ids));
     }
 
     public static void assertItemDefect(final LinkedSpecificationItem item, final boolean defect)
     {
-        assertThat(item.getId() + " is defect", item.isDefect(), equalTo(defect));
+        assertThat(nameItem(item) + " is defect", item.isDefect(), equalTo(defect));
     }
 
     public static void assertItemDeepCoverageStatus(final LinkedSpecificationItem item,
             final DeepCoverageStatus status)
     {
-        assertThat(item.getId() + " deep coverage", item.getDeepCoverageStatus(), equalTo(status));
+        assertThat(nameItem(item) + " deep coverage", item.getDeepCoverageStatus(),
+                equalTo(status));
     }
 
-    public static void assertItemCoveredShallow(final LinkedSpecificationItem item)
+    public static void assertItemCoveredShallow(final LinkedSpecificationItem item,
+            final boolean covered)
     {
-        assertThat(item.getId() + " is covered shallow", item.isCoveredShallow(), equalTo(true));
+        assertThat(nameItem(item) + " is covered shallow", item.isCoveredShallow(),
+                equalTo(covered));
+    }
+
+    public static void assertItemOutgoingLinkCount(final LinkedSpecificationItem item,
+            final int count)
+    {
+        assertThat(item.countOutgoingLinks(), equalTo(count));
+    }
+
+    public static void assertItemOutgoingBadLinkCount(final LinkedSpecificationItem item,
+            final int count)
+    {
+        assertThat(item.countOutgoingBadLinks(), equalTo(count));
+    }
+
+    public static void assertItemIncomingLinkCount(final LinkedSpecificationItem item,
+            final int count)
+    {
+        assertThat(item.countIncomingLinks(), equalTo(count));
+    }
+
+    public static void assertItemIncomingBadLinkCount(final LinkedSpecificationItem item,
+            final int count)
+    {
+        assertThat(item.countIncomingBadLinks(), equalTo(count));
     }
 }

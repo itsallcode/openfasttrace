@@ -315,9 +315,9 @@ public class LinkedSpecificationItem
                 status = DeepCoverageStatus.getWorst(status, otherStatus);
             }
         }
-        if (status == DeepCoverageStatus.COVERED && isCoveredShallow())
+        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
         {
-            return DeepCoverageStatus.COVERED;
+            return DeepCoverageStatus.UNCOVERED;
         }
         else
         {

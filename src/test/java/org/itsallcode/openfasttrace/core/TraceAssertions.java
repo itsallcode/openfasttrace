@@ -34,6 +34,20 @@ public final class TraceAssertions
         // prevent instantiation
     }
 
+    public static LinkedSpecificationItem getItemFromTraceForId(final Trace trace,
+            final SpecificationItemId id)
+    {
+        for (final LinkedSpecificationItem item : trace.getItems())
+        {
+            if (item.getId().equals(id))
+            {
+                return item;
+            }
+        }
+        throw new AssertionError(
+                "Could not find linked specification item with ID \"" + id.toString() + "\"");
+    }
+
     public static void assertTraceSize(final Trace trace, final int traceSize)
     {
         assertThat("Number of items", trace.getItems().size(), equalTo(traceSize));

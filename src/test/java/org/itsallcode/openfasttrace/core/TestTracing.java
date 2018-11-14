@@ -55,6 +55,8 @@ class TestTracing
         this.childABuilder = SpecificationItem.builder().id(childAId);
     }
 
+    // [utest->dsn~tracing.deep-coverage~1]
+    // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
     void testTwoLevelsOk()
     {
@@ -96,6 +98,8 @@ class TestTracing
         return items;
     }
 
+    // [utest->dsn~tracing.deep-coverage~1]
+    // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
     void testThreeLevelsOk() throws IOException
     {
@@ -124,6 +128,8 @@ class TestTracing
                 () -> assertItemCoversIds(child, parentId));
     }
 
+    // [utest->dsn~tracing.deep-coverage~1]
+    // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
     void testTwoLevelsWithOneNeededArtifactTypeMissing() throws IOException
     {

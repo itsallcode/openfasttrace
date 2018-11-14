@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
@@ -316,6 +317,12 @@ class TestLinkedSpecificationItem
     void testHasLinks_InitiallyFalse()
     {
         assertThat(this.linkedItem.hasLinks(), equalTo(false));
+    }
+
+    @Test
+    void testGetLinksForStatus_InitiallyEmpty()
+    {
+        assertThat(this.linkedItem.getLinksByStatus(LinkStatus.AMBIGUOUS), empty());
     }
 
     @Test

@@ -67,7 +67,7 @@ class SpecobjectExporter implements Exporter
             final Stream<SpecificationItem> itemStream)
     {
         return itemStream.collect(
-                groupingBy(item -> item.getArtifactType(), LinkedHashMap::new, toList()));
+                groupingBy(SpecificationItem::getArtifactType, LinkedHashMap::new, toList()));
     }
 
     @Override

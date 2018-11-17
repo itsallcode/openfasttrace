@@ -331,4 +331,28 @@ class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.AMBIGUOUS);
         assertThat(this.linkedItem.hasLinks(), equalTo(true));
     }
+
+    @Test
+    void testGetArtifactType()
+    {
+        final String expectedArtifactType = "atype";
+        when(this.itemMock.getArtifactType()).thenReturn(expectedArtifactType);
+        assertThat(this.linkedItem.getArtifactType(), equalTo(expectedArtifactType));
+    }
+
+    @Test
+    void testGetName()
+    {
+        final String expectedName = "name";
+        when(this.itemMock.getName()).thenReturn(expectedName);
+        assertThat(this.linkedItem.getName(), equalTo(expectedName));
+    }
+
+    @Test
+    void testGetRevision()
+    {
+        final int expectedRevision = 1024;
+        when(this.itemMock.getRevision()).thenReturn(expectedRevision);
+        assertThat(this.linkedItem.getRevision(), equalTo(expectedRevision));
+    }
 }

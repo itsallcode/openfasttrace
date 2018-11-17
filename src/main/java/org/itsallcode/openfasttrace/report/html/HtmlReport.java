@@ -68,12 +68,13 @@ public class HtmlReport implements Reportable
         final ViewableContainer view = factory.createView("",
                 "Specification items by artifact type");
         final List<LinkedSpecificationItem> items = this.trace.getItems();
-        items.sort(Comparator.comparing(item -> item.getId().getArtifactType()));
+        items.sort(Comparator.comparing(LinkedSpecificationItem::getArtifactType)
+                .thenComparing(LinkedSpecificationItem::getTitleWithFallback));
         String artifactType = "\0";
         ViewableContainer section = factory.createSection(artifactType, artifactType);
         for (final LinkedSpecificationItem item : items)
         {
-            final String currentArtifactType = item.getId().getArtifactType();
+            final String currentArtifactType = item.getArtifactType();
             if (!artifactType.equals(currentArtifactType))
             {
                 artifactType = currentArtifactType;
@@ -84,10 +85,5 @@ public class HtmlReport implements Reportable
             section.add(itemView);
         }
         view.render();
-    }
-
-    protected String getInitial(final LinkedSpecificationItem item)
-    {
-        return item.getTitleWithFallback().substring(0, 1).toUpperCase();
     }
 }

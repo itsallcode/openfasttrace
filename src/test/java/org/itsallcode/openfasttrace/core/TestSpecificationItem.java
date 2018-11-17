@@ -246,4 +246,22 @@ class TestSpecificationItem
     {
         assertThat(createSimpleItem().forwards(true).build().isForwarding(), equalTo(true));
     }
+
+    @Test
+    void testGetArtifactType()
+    {
+        assertThat(createSimpleItem().build().getArtifactType(), equalTo(ARTIFACT_TYPE));
+    }
+
+    @Test
+    void testGetName()
+    {
+        assertThat(createSimpleItem().build().getName(), equalTo(NAME));
+    }
+
+    @Test
+    void testGetRevision()
+    {
+        assertThat(createSimpleItem().build().getRevision(), equalTo(REVISION));
+    }
 }

@@ -225,7 +225,7 @@ public class LinkedSpecificationItem
      * Add a covered artifact type.
      *
      * @param artifactType
-     *            the covered artifact type.
+     *            covered artifact type.
      */
     public void addCoveredArtifactType(final String artifactType)
     {
@@ -382,7 +382,7 @@ public class LinkedSpecificationItem
     /**
      * Count all outgoing links.
      * 
-     * @return the total number of outgoing links.
+     * @return total number of outgoing links.
      */
     public int countOutgoingLinks()
     {
@@ -399,7 +399,7 @@ public class LinkedSpecificationItem
     /**
      * Count all bad outgoing links.
      * 
-     * @return the number of outgoing links that are bad.
+     * @return number of outgoing links that are bad.
      */
     public int countOutgoingBadLinks()
     {
@@ -409,7 +409,7 @@ public class LinkedSpecificationItem
     /**
      * Count all incoming links.
      * 
-     * @return the total number of incoming links.
+     * @return total number of incoming links.
      */
     public int countIncomingLinks()
     {
@@ -419,7 +419,7 @@ public class LinkedSpecificationItem
     /**
      * Count all bad incoming links.
      * 
-     * @return the number of incoming links that are bad.
+     * @return number of incoming links that are bad.
      */
     public int countIncomingBadLinks()
     {
@@ -442,5 +442,41 @@ public class LinkedSpecificationItem
     public boolean hasDuplicates()
     {
         return countDuplicateLinks() != 0;
+    }
+
+    /**
+     * Get the artifact type of the linked specification item
+     * 
+     * @return artifact type
+     */
+    public String getArtifactType()
+    {
+        return this.item.getArtifactType();
+    }
+
+    /**
+     * Get the name part of the linked specification item ID
+     * 
+     * <p>
+     * Not to be mixed up with the {@link #title(String)} of the linked
+     * specification item
+     * </p>
+     * 
+     * @return name part of the specification item ID
+     */
+    public String getName()
+    {
+
+        return this.item.getName();
+    }
+
+    /**
+     * Get the revision of the specification item
+     * 
+     * @return revision
+     */
+    public int getRevision()
+    {
+        return this.item.getRevision();
     }
 }

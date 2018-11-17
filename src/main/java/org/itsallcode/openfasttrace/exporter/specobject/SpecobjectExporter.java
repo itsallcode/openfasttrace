@@ -67,7 +67,7 @@ class SpecobjectExporter implements Exporter
             final Stream<SpecificationItem> itemStream)
     {
         return itemStream.collect(
-                groupingBy(item -> item.getId().getArtifactType(), LinkedHashMap::new, toList()));
+                groupingBy(item -> item.getArtifactType(), LinkedHashMap::new, toList()));
     }
 
     @Override
@@ -137,9 +137,9 @@ class SpecobjectExporter implements Exporter
         final String rationale = processMultilineText(item.getRationale());
         final String comment = processMultilineText(item.getComment());
         this.writer.writeStartElement("specobject");
-        writeElement("id", item.getId().getName());
+        writeElement("id", item.getName());
         writeElement("status", item.getStatus().toString());
-        writeElement("version", item.getId().getRevision());
+        writeElement("version", item.getRevision());
         writeLocation(item.getLocation());
         writeElementIfPresent("description", description);
         writeElementIfPresent("rationale", rationale);

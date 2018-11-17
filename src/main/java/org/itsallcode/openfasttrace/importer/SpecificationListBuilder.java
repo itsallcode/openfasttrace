@@ -205,7 +205,7 @@ public class SpecificationListBuilder implements ImportEventListener
 
     private boolean isAccepted(final SpecificationItem item)
     {
-        return isAcceptedArtifactType(item.getId().getArtifactType())
+        return isAcceptedArtifactType(item.getArtifactType())
                 && matchesTagsCriteria(item.getTags());
     }
 

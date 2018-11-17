@@ -365,6 +365,16 @@ public class SpecificationItem
     }
 
     /**
+     * Create a builder for specification items
+     * 
+     * @return new {@link Builder} instance
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    /**
      * Builder for objects of type {@link SpecificationItem}
      */
     public static class Builder
@@ -385,7 +395,7 @@ public class SpecificationItem
         /**
          * Create a new instance of type {@link SpecificationItem.Builder}
          */
-        public Builder()
+        private Builder()
         {
             this.id = null;
             this.title = "";

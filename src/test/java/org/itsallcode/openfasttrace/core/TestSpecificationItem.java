@@ -75,7 +75,7 @@ class TestSpecificationItem
 
     private SpecificationItem.Builder createSimpleItem()
     {
-        final SpecificationItem.Builder builder = new SpecificationItem.Builder().id(ID);
+        final SpecificationItem.Builder builder = SpecificationItem.builder().id(ID);
         builder.title(TITLE).description(DESCRIPTION).rationale(RATIONALE).comment(COMMENT);
         return builder;
     }
@@ -184,7 +184,7 @@ class TestSpecificationItem
 
     private Builder createTestItemBuilder()
     {
-        return new SpecificationItem.Builder() //
+        return SpecificationItem.builder() //
                 .id(ARTIFACT_TYPE, NAME, REVISION);
     }
 
@@ -230,7 +230,7 @@ class TestSpecificationItem
     @Test
     void testBuildingWithOutIdThrowsExepction()
     {
-        assertThrows(IllegalStateException.class, () -> new SpecificationItem.Builder().build());
+        assertThrows(IllegalStateException.class, () -> SpecificationItem.builder().build());
     }
 
     // [utest->dsn~specification-item~3]

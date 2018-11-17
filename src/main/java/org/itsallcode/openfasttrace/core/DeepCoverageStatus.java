@@ -22,8 +22,42 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-
+/**
+ * This enumeration represents the different kinds of deep coverage.
+ * 
+ * <ul>
+ * <li><code>COVERED</code> - this item and all its children are covered
+ * correctly</li>
+ * <li><code>UNCOVERED</code> - this item or at least one of its children are
+ * not covered correctly</li>
+ * <li><code>CYCLE</code> - this item is part of a link cycle, which means real
+ * coverage cannot be evaluated</li>
+ * </ul>
+ */
 public enum DeepCoverageStatus
 {
-    UNCOVERED, COVERED, CYCLE;
+    COVERED(0), UNCOVERED(1), CYCLE(2);
+
+    private final int badness;
+
+    private DeepCoverageStatus(final int badness)
+    {
+        this.badness = badness;
+
+    }
+
+    /**
+     * Get the worse of two coverage status
+     * 
+     * @param a
+     *            left status to compare
+     * @param b
+     *            right status to compare
+     * @return worse of both provided status
+     */
+    public static DeepCoverageStatus getWorst(final DeepCoverageStatus a,
+            final DeepCoverageStatus b)
+    {
+        return (b.badness > a.badness) ? b : a;
+    }
 }

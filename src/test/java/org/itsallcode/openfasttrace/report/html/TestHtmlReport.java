@@ -71,12 +71,12 @@ class TestHtmlReport
     void testRenderSimpleTrace()
     {
         final LinkedSpecificationItem itemA = new LinkedSpecificationItem(
-                new SpecificationItem.Builder() //
+                SpecificationItem.builder() //
                         .id(SpecificationItemId.createId("a", "a-item", 1)) //
                         .description("Description A") //
                         .build());
         final LinkedSpecificationItem itemB = new LinkedSpecificationItem(
-                new SpecificationItem.Builder() //
+                SpecificationItem.builder() //
                         .id(SpecificationItemId.createId("b", "b-item", 1)) //
                         .description("Description b") //
                         .build());

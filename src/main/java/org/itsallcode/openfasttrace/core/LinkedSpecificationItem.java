@@ -24,6 +24,7 @@ package org.itsallcode.openfasttrace.core;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Specification items with links that can be followed.
@@ -288,31 +289,49 @@ public class LinkedSpecificationItem
     // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId());
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+                DeepCoverageStatus.COVERED);
     }
 
     // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
-            final SpecificationItemId startId)
+            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen)
     {
-        final boolean covered = isCoveredShallow();
-        for (final LinkedSpecificationItem coveringItem : getLinksByStatus(LinkStatus.COVERS))
+        DeepCoverageStatus status = worstStatusSeen;
+        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
         {
-            if (coveringItem.getId().equals(startId))
+            if (incomingItem.getId().equals(startId))
             {
                 return DeepCoverageStatus.CYCLE;
             }
             else
             {
-                final DeepCoverageStatus otherStatus = coveringItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId);
-                if (otherStatus != DeepCoverageStatus.COVERED)
+                final DeepCoverageStatus otherStatus = incomingItem
+                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status);
+                if (otherStatus == DeepCoverageStatus.CYCLE)
                 {
-                    return otherStatus;
+                    return DeepCoverageStatus.CYCLE;
                 }
+                status = DeepCoverageStatus.getWorst(status, otherStatus);
             }
         }
-        return covered ? DeepCoverageStatus.COVERED : DeepCoverageStatus.UNCOVERED;
+        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
+        {
+            return DeepCoverageStatus.UNCOVERED;
+        }
+        else
+        {
+            return status;
+        }
+    }
+
+    private List<LinkedSpecificationItem> getIncomingItems()
+    {
+        return this.links.entrySet() //
+                .stream() //
+                .filter(entry -> entry.getKey().isIncoming()) //
+                .flatMap(entry -> entry.getValue().stream()) //
+                .collect(Collectors.toList());
     }
 
     /**
@@ -335,7 +354,7 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || (this.getStatus() != ItemStatus.REJECTED) //
+                || (getStatus() != ItemStatus.REJECTED) //
                         && (hasBadLinks()
                                 || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }

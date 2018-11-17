@@ -255,7 +255,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 generateName(coveredId, lineNumber, counter), 0);
-        return new SpecificationItem.Builder() //
+        return SpecificationItem.builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber) //

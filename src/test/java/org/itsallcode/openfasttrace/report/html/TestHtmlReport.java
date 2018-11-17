@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.html;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,7 +25,6 @@ package org.itsallcode.openfasttrace.report.html;
  */
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -82,8 +83,8 @@ class TestHtmlReport
         when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemA, itemB));
         final String outputAsString = renderToString();
         assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
-        assertThat(outputAsString, containsString("<section id=\"A\">"));
-        assertThat(outputAsString, containsString("<section id=\"B\">"));
+        assertThat(outputAsString, containsString("<section id=\"a\">"));
+        assertThat(outputAsString, containsString("<section id=\"b\">"));
         assertThat(outputAsString, endsWith("</html>"));
     }
 }

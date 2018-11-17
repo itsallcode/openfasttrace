@@ -458,8 +458,9 @@ public class LinkedSpecificationItem
      * Get the name part of the linked specification item ID
      * 
      * <p>
-     * Not to be mixed up with the {@link #title(String)} of the linked
-     * specification item
+     * Not to be mixed up with the
+     * {@link org.itsallcode.openfasttrace.core.LinkedSpecificationItem#getTitle()}
+     * of the linked specification item
      * </p>
      * 
      * @return name part of the specification item ID

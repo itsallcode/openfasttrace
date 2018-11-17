@@ -84,8 +84,9 @@ public class SpecificationItem
      * Get the name part of the specification item ID
      * 
      * <p>
-     * Not to be mixed up with the {@link #title(String)} of the specification
-     * item
+     * Not to be mixed up with the
+     * {@link org.itsallcode.openfasttrace.core.SpecificationItem#getTitle()} of
+     * the specification item
      * </p>
      * 
      * @return name part of the specification item ID

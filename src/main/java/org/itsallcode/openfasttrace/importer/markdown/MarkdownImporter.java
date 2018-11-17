@@ -47,6 +47,7 @@ class MarkdownImporter implements Importer
         transition(START      , OUTSIDE    , MdPattern.EVERYTHING , () -> {}                                              ),
     
         transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
+        transition(TITLE      , TITLE      , MdPattern.TITLE      , this::rememberTitle                                   ),
         transition(TITLE      , TITLE      , MdPattern.EMPTY      , () -> {}                                              ),
         transition(TITLE      , OUTSIDE    , MdPattern.EVERYTHING , this::resetTitle                                      ),
     

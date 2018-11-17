@@ -287,4 +287,18 @@ class TestMarkdownImporter
         inOrder.verify(this.listenerMock).setForwards(true);
         inOrder.verify(this.listenerMock).endSpecificationItem();
     }
+
+    // [utest->dsn~md.specification-item-title~1]
+    @Test
+    void testFindTitleAfterTitle()
+    {
+        runImporterOnText("## This title should be ignored\n\n" //
+                + "### Title\n" //
+                + "`a~b~1`");
+        final InOrder inOrder = inOrder(this.listenerMock);
+        inOrder.verify(this.listenerMock).beginSpecificationItem();
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("a~b~1"));
+        inOrder.verify(this.listenerMock).setTitle("Title");
+        inOrder.verify(this.listenerMock).endSpecificationItem();
+    }
 }

@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.importer.tag;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -39,8 +38,6 @@ import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 // [impl->dsn~import.full-coverage-tag~1]
 public class TagImporterFactory extends ImporterFactory
 {
-    private static final Logger LOG = Logger.getLogger(TagImporterFactory.class.getName());
-
     private static final String DEFAULT_FILE_REGEX = "(?i).*\\.java";
     private static final Pattern DEFAULT_FILE_PATTERN = Pattern.compile(DEFAULT_FILE_REGEX);
 

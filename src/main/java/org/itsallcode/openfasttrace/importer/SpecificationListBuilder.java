@@ -64,7 +64,7 @@ public class SpecificationListBuilder implements ImportEventListener
     @Override
     public void beginSpecificationItem()
     {
-        this.itemBuilder = new SpecificationItem.Builder();
+        this.itemBuilder = SpecificationItem.builder();
     }
 
     private void resetState()

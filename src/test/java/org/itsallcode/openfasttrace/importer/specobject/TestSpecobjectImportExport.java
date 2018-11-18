@@ -23,7 +23,10 @@ package org.itsallcode.openfasttrace.importer.specobject;
  */
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import static org.itsallcode.openfasttrace.core.TraceAssertions.assertTraceContainsDefectIds;
+import static org.itsallcode.openfasttrace.core.TraceAssertions.assertTraceSize;
+import static org.itsallcode.openfasttrace.core.TraceAssertions.getItemFromTraceForId;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -76,21 +79,24 @@ class TestSpecobjectImportExport
                 + "</specdocument>";
 
         final Trace trace = trace(content);
-        assertThat(trace.getItems(), hasSize(2));
-        assertThat(trace.getDefectItems(), hasSize(2));
+        final SpecificationItemId dsnId = SpecificationItemId.createId("dsn", "exampleB", 1);
+        final SpecificationItemId implId = SpecificationItemId.createId("impl",
+                "exampleB-3454416016", 0);
 
-        final LinkedSpecificationItem tag = trace.getItems().get(0);
-        final LinkedSpecificationItem req = trace.getItems().get(1);
+        final LinkedSpecificationItem dsn = getItemFromTraceForId(trace, dsnId);
+        final LinkedSpecificationItem impl = getItemFromTraceForId(trace, implId);
 
-        final SpecificationItem expectedTag = new SpecificationItem.Builder()
-                .id("impl", "exampleB-3454416016", 0).location("source.java", 1)
-                .status(ItemStatus.APPROVED).addCoveredId("dsn", "exampleB", 1).build();
-        final SpecificationItem expectedReq = new SpecificationItem.Builder()
-                .id("dsn", "exampleB", 1).location("spec.md", 2).description("Example requirement")
+        final SpecificationItem expectedImpl = SpecificationItem.builder().id(implId)
+                .location("source.java", 1).status(ItemStatus.APPROVED)
+                .addCoveredId("dsn", "exampleB", 1).build();
+        final SpecificationItem expectedDsn = SpecificationItem.builder().id(dsnId)
+                .location("spec.md", 2).description("Example requirement")
                 .addNeedsArtifactType("utest").addNeedsArtifactType("impl").build();
 
-        assertThat(tag.getItem(), AutoMatcher.equalTo(expectedTag));
-        assertThat(req.getItem(), AutoMatcher.equalTo(expectedReq));
+        assertAll(() -> assertTraceSize(trace, 2), //
+                () -> assertTraceContainsDefectIds(trace, dsnId), //
+                () -> assertThat(dsn.getItem(), AutoMatcher.equalTo(expectedDsn)), //
+                () -> assertThat(impl.getItem(), AutoMatcher.equalTo(expectedImpl)));
     }
 
     private Trace trace(final String content)

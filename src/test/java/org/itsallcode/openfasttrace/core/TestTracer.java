@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,10 +22,11 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -40,6 +41,7 @@ class TestTracer
     private static final SpecificationItemId ID_A = SpecificationItemId.parseId("req~a~1");
     private static final SpecificationItemId ID_B = SpecificationItemId.parseId("dsn~b~2");
     private static final SpecificationItemId ID_C = SpecificationItemId.parseId("impl~c~3");
+
     @Mock
     LinkedSpecificationItem aMock, bMock, cMock;
 
@@ -58,12 +60,12 @@ class TestTracer
         when(this.aMock.isDefect()).thenReturn(false);
         when(this.bMock.isDefect()).thenReturn(false);
         final Trace trace = traceItems(this.aMock, this.bMock);
-        assertThat(trace.hasNoDefects(), equalTo(true));
-        assertThat(trace.getDefectItems(), empty());
-        assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
-        assertThat(trace.countDefects(), equalTo(0));
-        assertThat(trace.count(), equalTo(2));
-        assertThat(trace.getDefectIds(), empty());
+        assertAll(() -> assertThat(trace.hasNoDefects(), equalTo(true)),
+                () -> assertThat(trace.getDefectItems(), empty()),
+                () -> assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock)),
+                () -> assertThat(trace.countDefects(), equalTo(0)),
+                () -> assertThat(trace.count(), equalTo(2)),
+                () -> assertThat(trace.getDefectIds(), empty()));
     }
 
     private Trace traceItems(final LinkedSpecificationItem... items)
@@ -78,11 +80,11 @@ class TestTracer
         when(this.aMock.isDefect()).thenReturn(false);
         when(this.bMock.isDefect()).thenReturn(true);
         final Trace trace = traceItems(this.aMock, this.bMock);
-        assertThat(trace.hasNoDefects(), equalTo(false));
-        assertThat(trace.getDefectItems(), containsInAnyOrder(this.bMock));
-        assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock));
-        assertThat(trace.countDefects(), equalTo(1));
-        assertThat(trace.count(), equalTo(2));
-        assertThat(trace.getDefectIds(), containsInAnyOrder(ID_B));
+        assertAll(() -> assertThat(trace.hasNoDefects(), equalTo(false)),
+                () -> assertThat(trace.getDefectItems(), containsInAnyOrder(this.bMock)),
+                () -> assertThat(trace.getItems(), containsInAnyOrder(this.aMock, this.bMock)),
+                () -> assertThat(trace.countDefects(), equalTo(1)),
+                () -> assertThat(trace.count(), equalTo(2)),
+                () -> assertThat(trace.getDefectIds(), containsInAnyOrder(ID_B)));
     }
 }

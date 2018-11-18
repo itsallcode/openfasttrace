@@ -62,7 +62,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderMinimalItem()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .title("Item A title") //
                 .description("Single line description") //
@@ -83,7 +83,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderMultiLineItem()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_B_ID) //
                 .title("Item B title") //
                 .description("Description A\n\nDescription B") //
@@ -118,7 +118,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderNeeds()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .addNeedsArtifactType(IMPL) //
                 .addNeedsArtifactType(UTEST) //
@@ -143,7 +143,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderIncomingLinks()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
@@ -173,7 +173,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderOutgoingLinks()
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
@@ -204,7 +204,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     void testRenderOrigin()
     {
         final Location location = Location.create("foo/bar", 13);
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .location(location) //
                 .build();

@@ -141,7 +141,7 @@ public class Linker
     private LinkedSpecificationItem findOrCreateStaleItem(final SpecificationItemId id)
     {
         this.staleIndex.computeIfAbsent(id,
-                key -> new LinkedSpecificationItem(new SpecificationItem.Builder().id(id).build()));
+                key -> new LinkedSpecificationItem(SpecificationItem.builder().id(id).build()));
         return this.staleIndex.get(id);
     }
 

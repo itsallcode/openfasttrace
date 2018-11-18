@@ -89,6 +89,13 @@ class TestSpecificationItemId
     }
 
     @Test
+    void testParseId_IllegalNumberFormat()
+    {
+        assertThrows(IllegalArgumentException.class,
+                () -> parseId("feat~foo~999999999999999999999999999999999999999"));
+    }
+
+    @Test
     void testParseIdFailsForWildcardRevision()
     {
         assertThrows(IllegalStateException.class,

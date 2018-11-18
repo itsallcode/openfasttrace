@@ -46,7 +46,7 @@ class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
     @Test
     void testEmptyObjectMatches()
     {
-        assertMatch(new SpecificationItem.Builder().id(ID1).build());
+        assertMatch(SpecificationItem.builder().id(ID1).build());
     }
 
     @Test
@@ -65,7 +65,7 @@ class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
     @Test
     void testDifferentEmptyIdLists()
     {
-        assertDifferentFromBase(new SpecificationItem.Builder().id(ID1));
+        assertDifferentFromBase(SpecificationItem.builder().id(ID1));
     }
 
     @Test
@@ -112,7 +112,7 @@ class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 
     private Builder baseBuilder()
     {
-        return new SpecificationItem.Builder().id(ID1).addCoveredId(ID2).addDependOnId(ID3)
+        return SpecificationItem.builder().id(ID1).addCoveredId(ID2).addDependOnId(ID3)
                 .addNeedsArtifactType("neededType").comment("comment").description("description")
                 .rationale("rationale");
     }

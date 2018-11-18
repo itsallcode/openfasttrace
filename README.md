@@ -52,7 +52,7 @@ To use OpenFastTrace as a dependency in your maven project add this to your `pom
     <dependency>
         <groupId>org.itsallcode</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>2.0.3</version>
+        <version>2.1.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -67,7 +67,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile "org.itsallcode:openfasttrace:2.0.3"
+    compile "org.itsallcode:openfasttrace:2.1.0"
 }
 ```
 

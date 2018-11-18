@@ -63,14 +63,6 @@ public class HtmlSpecificationItem implements Viewable
         renderEnd(indentation);
     }
 
-    private void renderId(final String indentation, final SpecificationItemId id)
-    {
-        this.stream.print(indentation);
-        this.stream.print("    <p class=\"id\">");
-        this.stream.print(id);
-        this.stream.println("</p>");
-    }
-
     protected void renderStart(final String indentation, final SpecificationItemId id)
     {
         this.stream.print(indentation);
@@ -79,6 +71,14 @@ public class HtmlSpecificationItem implements Viewable
         this.stream.println("\">");
         this.stream.print(indentation);
         this.stream.println("  <details>");
+    }
+
+    private void renderId(final String indentation, final SpecificationItemId id)
+    {
+        this.stream.print(indentation);
+        this.stream.print("    <p class=\"id\">");
+        this.stream.print(id);
+        this.stream.println("</p>");
     }
 
     protected void renderSummary(final String indentation, final SpecificationItemId id)

@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +57,7 @@ class MarkdownLineTransition
      */
     public MarkdownLineTransition(final MarkdownLineState from, final MarkdownLineState to,
             final String pattern, final String prefix, final String postfix,
-            final Function<String, String> conversion)
+            final UnaryOperator<String> conversion)
     {
         super();
         this.from = from;

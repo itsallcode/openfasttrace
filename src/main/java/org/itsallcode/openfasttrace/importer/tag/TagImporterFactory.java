@@ -62,11 +62,8 @@ public class TagImporterFactory extends ImporterFactory
 
     private Optional<PathConfig> findConfig(final InputFile file)
     {
-        return getPathConfigs()//
-                .peek(config -> LOG
-                        .finest(() -> "Checking config " + config + " with file " + file))
+        return getPathConfigs() //
                 .filter(config -> config.matches(file)) //
-                .peek(config -> LOG.finest(() -> "Config " + config + " matches file " + file)) //
                 .findFirst();
     }
 

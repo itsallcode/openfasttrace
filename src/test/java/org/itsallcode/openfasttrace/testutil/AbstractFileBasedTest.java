@@ -32,6 +32,8 @@ import org.itsallcode.openfasttrace.cli.CliStarter;
 /**
  * This class is the base class for integration tests that require input files.
  */
+// This is a base class for tests and has no tests by intention.
+@SuppressWarnings("squid:S2187")
 public class AbstractFileBasedTest
 {
     protected void writeTextFile(final File file, final String content) throws IOException

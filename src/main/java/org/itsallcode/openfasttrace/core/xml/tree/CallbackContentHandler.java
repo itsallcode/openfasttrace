@@ -25,6 +25,7 @@ package org.itsallcode.openfasttrace.core.xml.tree;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -126,7 +127,7 @@ public class CallbackContentHandler implements TreeContentHandler
     }
 
     public CallbackContentHandler addIntDataListener(final String elementName,
-            final Consumer<Integer> listener)
+            final IntConsumer listener)
     {
         addCharacterDataListener(elementName, data -> {
             if (data == null || data.isEmpty())

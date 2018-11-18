@@ -26,7 +26,7 @@ import static org.itsallcode.openfasttrace.report.view.html.MarkdownLineState.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class MarkdownLineStateMachine
 {
@@ -85,7 +85,7 @@ public class MarkdownLineStateMachine
     }
 
     private void t(final MarkdownLineState from, final MarkdownLineState to, final String pattern,
-            final String postfix, final String prefix, final Function<String, String> conversion)
+            final String postfix, final String prefix, final UnaryOperator<String> conversion)
     {
         this.transitions
                 .add(new MarkdownLineTransition(from, to, pattern, prefix, postfix, conversion));
@@ -139,22 +139,22 @@ public class MarkdownLineStateMachine
         }
     }
 
-    protected Function<String, String> empty()
+    protected UnaryOperator<String> empty()
     {
         return s -> "";
     }
 
-    protected Function<String, String> trimEnum()
+    protected UnaryOperator<String> trimEnum()
     {
         return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
-    protected Function<String, String> trimPre()
+    protected UnaryOperator<String> trimPre()
     {
         return s -> s.substring(4);
     }
 
-    protected Function<String, String> trimBullet()
+    protected UnaryOperator<String> trimBullet()
     {
         return s -> s.replaceFirst("^ {0,3}[-+*]", "").trim();
     }

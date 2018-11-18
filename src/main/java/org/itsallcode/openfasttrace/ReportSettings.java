@@ -110,10 +110,10 @@ public class ReportSettings
      */
     public static class Builder
     {
-        public Newline newline = Newline.UNIX;
-        public String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
-        public boolean showOrigin = false;
-        ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
+        private Newline newline = Newline.UNIX;
+        private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
+        private boolean showOrigin = false;
+        private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
 
         private Builder()
         {

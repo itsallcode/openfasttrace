@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -24,7 +26,6 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -43,9 +44,6 @@ import org.junit.jupiter.api.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
-/**
- * Test for {@link TagImporter}
- */
 // [utest->dsn~import.full-coverage-tag~1]
 class TestTagImporter
 {
@@ -257,7 +255,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 generateName(coveredId, lineNumber, counter), 0);
-        return new SpecificationItem.Builder() //
+        return SpecificationItem.builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber) //

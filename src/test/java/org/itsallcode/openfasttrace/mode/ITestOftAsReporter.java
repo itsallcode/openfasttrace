@@ -138,7 +138,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     {
         return trace.getItems().stream() //
                 .filter(item -> {
-                    return item.getId().getArtifactType().equals(artifactType);
+                    return item.getArtifactType().equals(artifactType);
                 }) //
                 .count();
     }

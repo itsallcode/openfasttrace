@@ -31,8 +31,8 @@ import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
- * The configuration of a single path that is imported by
- * {@link ShortTagImportingLineConsumer}. Use {@link #builder()} to create a new instance.
+ * The configuration of a single path that is imported by the tag importer Use
+ * {@link #builder()} to create a new instance.
  */
 public class PathConfig
 {
@@ -161,8 +161,8 @@ public class PathConfig
         }
 
         /**
-         * tagArtifactType the artifact type of the imported
-         * {@link SpecificationItem}s.
+         * @param tagArtifactType
+         *            artifact type of the imported {@link SpecificationItem}s.
          * 
          * @return this builder instance.
          */

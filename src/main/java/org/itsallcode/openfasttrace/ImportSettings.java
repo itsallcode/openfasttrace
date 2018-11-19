@@ -83,7 +83,9 @@ public class ImportSettings
     }
 
     /**
-     * Create an export settings builder
+     * Create an import settings builder
+     * 
+     * @return import settings builder
      */
     public static Builder builder()
     {

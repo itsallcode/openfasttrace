@@ -23,30 +23,29 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  */
 
 import static java.util.Arrays.asList;
-import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import javax.xml.stream.*;
 
 import org.itsallcode.openfasttrace.core.*;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
-/**
- * Unit tests for {@link SpecobjectExporter}
- */
 class TestSpecobjectExporter
 {
     // [itest->dsn~conversion.reqm2-export~1]
     @Test
-    void testExportSimpleSpecObjectWithMandatoryElements()
-            throws IOException, XMLStreamException
+    void testExportSimpleSpecObjectWithMandatoryElements() throws IOException, XMLStreamException
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .description("the description") //
                 .build();
@@ -68,7 +67,7 @@ class TestSpecobjectExporter
     @Test
     void testExportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
     {
-        final SpecificationItem item = new SpecificationItem.Builder() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
                 .status(ItemStatus.DRAFT) //
                 .description("the description") //
@@ -117,14 +116,14 @@ class TestSpecobjectExporter
     @Test
     void testExportTwoSpecObjects() throws IOException, XMLStreamException
     {
-        final SpecificationItem itemA = new SpecificationItem.Builder() //
+        final SpecificationItem itemA = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .status(ItemStatus.PROPOSED) //
                 .description("the description") //
                 .rationale("the rationale") //
                 .comment("the comment") //
                 .build();
-        final SpecificationItem itemB = new SpecificationItem.Builder() //
+        final SpecificationItem itemB = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("baz", "zoo", 2)) //
                 .status(ItemStatus.REJECTED) //
                 .description("another\ndescription") //
@@ -158,6 +157,19 @@ class TestSpecobjectExporter
         assertThat(actual, matchesAllLines(expected));
     }
 
+    @Test
+    void testExportClosesWriters() throws XMLStreamException, IOException
+    {
+        final XMLStreamWriter xmlWriterMock = mock(XMLStreamWriter.class);
+        final Writer writerMock = mock(Writer.class);
+        new SpecobjectExporter(Stream.empty(), xmlWriterMock, writerMock, Newline.UNIX).runExport();
+
+        final InOrder inOrder = inOrder(xmlWriterMock, writerMock);
+        inOrder.verify(xmlWriterMock).close();
+        inOrder.verify(writerMock).close();
+        inOrder.verifyNoMoreInteractions();
+    }
+
     private String exportToString(final SpecificationItem... items)
     {
         try (final ByteArrayOutputStream stream = new ByteArrayOutputStream())
@@ -167,7 +179,7 @@ class TestSpecobjectExporter
                     StandardCharsets.UTF_8.name());
             new SpecobjectExporter(asList(items).stream(),
                     new IndentingXMLStreamWriter(xmlWriter, " ", Newline.UNIX.toString()),
-                    Newline.UNIX).runExport();
+                    new OutputStreamWriter(stream), Newline.UNIX).runExport();
             return new String(stream.toByteArray(), StandardCharsets.UTF_8);
         }
         catch (IOException | XMLStreamException | FactoryConfigurationError e)

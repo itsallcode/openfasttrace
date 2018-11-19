@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core;
+package org.itsallcode.openfasttrace.cli;
 
 /*-
  * #%L
@@ -22,16 +22,16 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
-
 /**
- * Convenience class containing static factory methods for creating builders.
+ * This interface provides access to the current directory. This allows stubbing
+ * the service for test purposes.
  */
-public class SpecificationItemBuilders
+public interface DirectoryService
 {
-    public static Builder prepare(final String artifactType, final String name, final int revision)
-    {
-        return SpecificationItem.builder().id(artifactType, name, revision);
-    }
+    /**
+     * Get the current directory or the override directory if set
+     * 
+     * @return current directory
+     */
+    public String getCurrent();
 }

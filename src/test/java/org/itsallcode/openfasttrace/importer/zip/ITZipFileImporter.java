@@ -75,8 +75,7 @@ public class ITZipFileImporter
         MockitoAnnotations.initMocks(this);
         this.actualFileContent = new ArrayList<>();
         this.zipFile = tempDir.resolve("test.zip").toFile();
-        this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
-                StandardCharsets.UTF_8);
+        this.zipOutputStream = null;
         when(this.delegateImporterMock.importFile(any())).thenAnswer(invocation -> {
             final InputFile inputFile = invocation.getArgument(0);
             this.actualFileContent.add(inputFile.createReader().lines().collect(joining("\n")));
@@ -84,14 +83,21 @@ public class ITZipFileImporter
         });
     }
 
+    private void initializeZipFile() throws FileNotFoundException
+    {
+        this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
+                StandardCharsets.UTF_8);
+    }
+
     @Test
     void testImportEmptyZipDoesNothing() throws IOException
     {
+        initializeZipFile();
         runImporter(0);
     }
 
     @Test
-    void testImportNonRealFile() throws IOException
+    void testImportNonPhysicalFile() throws IOException
     {
         final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
@@ -102,6 +108,7 @@ public class ITZipFileImporter
     @Test
     void testImportZipWithEmptyDirectoryDoesNothing() throws IOException
     {
+        initializeZipFile();
         addZipEntryDirectory("dir");
         runImporter(0);
     }
@@ -109,6 +116,7 @@ public class ITZipFileImporter
     @Test
     void testImportZipWithFileInRootDir() throws IOException
     {
+        initializeZipFile();
         addEntryToZip("file", FILE_CONTENT);
         final List<InputFile> importedFiles = runImporter(1);
         assertThat(importedFiles.get(0).getPath(), equalTo(this.zipFile.getPath() + "!file"));
@@ -117,6 +125,7 @@ public class ITZipFileImporter
     @Test
     void testImportZipWithFileInSubDir() throws IOException
     {
+        initializeZipFile();
         addEntryToZip("dir/file", FILE_CONTENT);
         final List<InputFile> importedFiles = runImporter(1);
         assertThat(importedFiles.get(0).getPath(), equalTo(this.zipFile.getPath() + "!dir/file"));
@@ -125,6 +134,7 @@ public class ITZipFileImporter
     @Test
     void testImportZipAssertFileContent() throws IOException
     {
+        initializeZipFile();
         addEntryToZip("file", FILE_CONTENT);
 
         final List<InputFile> importedFiles = runImporter(1);
@@ -135,6 +145,7 @@ public class ITZipFileImporter
     @Test
     void testImportZipWithMultipleFilesAssertFileContent() throws IOException
     {
+        initializeZipFile();
         addEntryToZip("file1", FILE_CONTENT);
         addEntryToZip("dir/file2", FILE_CONTENT2);
 

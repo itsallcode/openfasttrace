@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace</artifactId>
-    <version>2.0.2</version><!-- PRODUCT VERSION: do not remove this comment! -->
+    <version>2.1.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
     <name>OpenFastTrace</name>
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
@@ -11,6 +11,7 @@
         <java.version>1.8</java.version>
         <junit.version>5.3.1</junit.version>
         <junit.platform.version>1.3.1</junit.platform.version>
+        <maven.surefire.version>2.22.1</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <licenses>
@@ -24,12 +25,6 @@
         <developer>
             <id>redcatbear</id>
             <url>https://github.com/redcatbear</url>
-            <organization>itsallcode</organization>
-            <organizationUrl>https://github.com/itsallcode</organizationUrl>
-        </developer>
-        <developer>
-            <id>sascha15432</id>
-            <url>https://github.com/sascha15432</url>
             <organization>itsallcode</organization>
             <organizationUrl>https://github.com/itsallcode</organizationUrl>
         </developer>
@@ -74,6 +69,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit.platform.version}</version>
@@ -82,7 +83,8 @@
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>0.2.2</version>
+            <version>0.3.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -111,7 +113,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>2.4.6</version>
+            <version>3.0.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -120,7 +122,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -141,11 +143,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>${maven.surefire.version}</version>
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
+                    <!-- Workaround for failing tests on Circle CI with Surefire -->
+                    <!-- ${argLine} is required to inject default arguments for jacoco -->
+                    <argLine>${argLine} -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -177,14 +182,14 @@
                     <charset>UTF-8</charset>
                     <doclint></doclint>
                     <serialwarn>true</serialwarn>
-                    <failOnError>false</failOnError>
-                    <failOnWarnings>false</failOnWarnings>
+                    <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -333,7 +338,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>${maven.surefire.version}</version>
             </plugin>
         </plugins>
     </reporting>

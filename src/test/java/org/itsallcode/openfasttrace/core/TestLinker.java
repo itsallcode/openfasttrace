@@ -44,11 +44,11 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusCovered()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "covered", 1) //
                 .build();
@@ -89,7 +89,7 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusOrphaned()
     {
-        final SpecificationItem orphan = new SpecificationItem.Builder() //
+        final SpecificationItem orphan = SpecificationItem.builder() //
                 .id(IMPL, "orphan", 1) //
                 .addCoveredId(createId(REQ, "non-existent", 1)) //
                 .build();
@@ -101,11 +101,11 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusOutdated()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "this-is-newer-than-link", 2) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "this-is-newer-than-link", 1) //
                 .build();
@@ -120,11 +120,11 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusPredated()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "this-is-older-than-link", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "this-is-older-than-link", 2) //
                 .build();
@@ -139,15 +139,15 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusAmbiguous()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem duplicate = new SpecificationItem.Builder() //
+        final SpecificationItem duplicate = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "covered", 1) //
                 .build();
@@ -159,10 +159,10 @@ class TestLinker
     @Test
     void testDetectOutgoingLinkStatusDuplicate()
     {
-        final SpecificationItem original = new SpecificationItem.Builder() //
+        final SpecificationItem original = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .build();
-        final SpecificationItem duplicate = new SpecificationItem.Builder() //
+        final SpecificationItem duplicate = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(original, duplicate);
@@ -174,11 +174,11 @@ class TestLinker
     @Test
     void testDetectIncomingLinkStatusCoveredShallow()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "covered", 1) //
                 .build();
@@ -252,10 +252,10 @@ class TestLinker
     @Test
     void testDetectIncomingLinkStatusUnwanted()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "covered", 1) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "covered", 1) //
                 .build();
@@ -271,11 +271,11 @@ class TestLinker
     @Test
     void testDetectIncomingLinkStatusCoveredOutdated()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "newer", 2) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "newer", 1) //
                 .build();
@@ -287,11 +287,11 @@ class TestLinker
     @Test
     void testDetectIncomingLinkStatusCoveredPredated()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "older", 1) //
                 .addNeedsArtifactType(IMPL) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "older", 2) //
                 .build();
@@ -303,16 +303,16 @@ class TestLinker
     @Test
     void testCoverageForDifferentArtifactTypes()
     {
-        final SpecificationItem covered = new SpecificationItem.Builder() //
+        final SpecificationItem covered = SpecificationItem.builder() //
                 .id(REQ, "to-be-covered", 42) //
                 .addNeedsArtifactType(IMPL) //
                 .addNeedsArtifactType(UTEST) //
                 .build();
-        final SpecificationItem covering = new SpecificationItem.Builder() //
+        final SpecificationItem covering = SpecificationItem.builder() //
                 .id(IMPL, "covering", 1) //
                 .addCoveredId(REQ, "to-be-covered", 42) //
                 .build();
-        final SpecificationItem unwanted = new SpecificationItem.Builder() //
+        final SpecificationItem unwanted = SpecificationItem.builder() //
                 .id(REQ, "unwanted", 1) //
                 .addCoveredId(REQ, "to-be-covered", 42) //
                 .build();

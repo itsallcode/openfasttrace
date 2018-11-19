@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /*-
  * #%L
  * OpenFastTrace
@@ -24,12 +22,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * #L%
  */
 
-import static org.hamcrest.Matchers.equalTo;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.cli.StandardDirectoryService;
 import org.itsallcode.openfasttrace.core.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,12 +47,34 @@ class ITestSelfTrace
         final ImportSettings importSettings = buildOftSettings();
         final Trace trace = trace(importSettings);
         this.oft.reportToStdOut(trace);
-        assertThat("defect count", trace.countDefects(), equalTo(0));
+        assertSelfTraceClean(trace);
+    }
+
+    private void assertSelfTraceClean(final Trace trace)
+    {
+        if (!trace.hasNoDefects())
+        {
+            final String message = createSelfTraceReport(trace);
+            throw new AssertionError(message);
+        }
+    }
+
+    protected String createSelfTraceReport(final Trace trace)
+    {
+        String message = "Self trace has " + trace.countDefects() + " / " + trace.count()
+                + " defect items.\n\n";
+        for (final LinkedSpecificationItem item : trace.getDefectItems())
+        {
+            final Location location = item.getLocation();
+            message += "at " + item.getId() + " (" + location.getPath() + ":" + location.getLine()
+                    + ")\n";
+        }
+        return message;
     }
 
     private ImportSettings buildOftSettings()
     {
-        final Path baseDir = Paths.get(".").toAbsolutePath();
+        final Path baseDir = Paths.get(new StandardDirectoryService().getCurrent());
         return ImportSettings.builder() //
                 .addInputs(baseDir.resolve("src/main")) //
                 .addInputs(baseDir.resolve("src/test/java")) //

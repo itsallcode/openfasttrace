@@ -23,10 +23,11 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 /**
- * The {@link MarkdownLineTransition} is a transition in the
+ * The <code>MarkdownLineTransition</code> is a transition in the
  * {@link MarkdownLineStateMachine}.
  */
 class MarkdownLineTransition
@@ -39,7 +40,7 @@ class MarkdownLineTransition
     private final Function<String, String> conversion;
 
     /**
-     * Create a new instance of {@link MarkdownLineTransition}
+     * Create a new instance of <code>MarkdownLineTransition</code>
      * 
      * @param from
      *            origin state of the transition
@@ -56,7 +57,7 @@ class MarkdownLineTransition
      */
     public MarkdownLineTransition(final MarkdownLineState from, final MarkdownLineState to,
             final String pattern, final String prefix, final String postfix,
-            final Function<String, String> conversion)
+            final UnaryOperator<String> conversion)
     {
         super();
         this.from = from;

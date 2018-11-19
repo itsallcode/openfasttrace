@@ -110,10 +110,10 @@ public class ReportSettings
      */
     public static class Builder
     {
-        public Newline newline = Newline.UNIX;
-        public String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
-        public boolean showOrigin = false;
-        ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
+        private Newline newline = Newline.UNIX;
+        private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
+        private boolean showOrigin = false;
+        private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
 
         private Builder()
         {
@@ -123,7 +123,7 @@ public class ReportSettings
         /**
          * Create a new instance of {@link ReportSettings}
          * 
-         * @return
+         * @return report settings
          */
         public ReportSettings build()
         {
@@ -147,7 +147,7 @@ public class ReportSettings
          * Set the whether the origin of specification items should be shown in
          * the report
          * 
-         * @param showOrign
+         * @param showOrigin
          *            set to <code>true</code> if the origin should be shown
          * @return <code>this</code> for fluent programming
          */

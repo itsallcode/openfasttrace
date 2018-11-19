@@ -56,7 +56,7 @@ class TestCliExit
     private void assertExitStatusForCommandWithFiles(final ExitStatus expectedStatus,
             final String command, final String... files)
     {
-        final CliArguments arguments = new CliArguments();
+        final CliArguments arguments = new CliArguments(new StandardDirectoryService());
         final List<String> values = new ArrayList<>();
         values.add(command);
         values.addAll(Arrays.asList(files));

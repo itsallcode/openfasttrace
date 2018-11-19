@@ -37,9 +37,31 @@ public class CliStarter
         this.arguments = arguments;
     }
 
+    /**
+     * Main entry point for the command line application
+     * 
+     * @param args
+     *            command line parameters
+     */
     public static void main(final String[] args)
     {
-        final CliArguments arguments = new CliArguments();
+        final DirectoryService directoryService = new StandardDirectoryService();
+        main(args, directoryService);
+    }
+
+    /**
+     * Auxiliary entry point to the command line application that allows
+     * injection of a
+     * 
+     * @param args
+     *            command line arguments.
+     * @param directoryService
+     *            directory service for getting the current directory. This
+     *            allows injecting a mock in unit tests.
+     */
+    static void main(final String[] args, final DirectoryService directoryService)
+    {
+        final CliArguments arguments = new CliArguments(directoryService);
         new CommandLineInterpreter(args, arguments).parse();
         final ArgumentValidator validator = new ArgumentValidator(arguments);
         if (validator.isValid())

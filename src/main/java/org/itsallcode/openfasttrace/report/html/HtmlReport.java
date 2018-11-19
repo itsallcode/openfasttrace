@@ -65,28 +65,25 @@ public class HtmlReport implements Reportable
     public void renderToStream(final OutputStream outputStream)
     {
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
-        final ViewableContainer view = factory.createView("", "Specification items by title");
+        final ViewableContainer view = factory.createView("",
+                "Specification items by artifact type");
         final List<LinkedSpecificationItem> items = this.trace.getItems();
-        items.sort(Comparator.comparing(LinkedSpecificationItem::getTitleWithFallback));
-        String initial = "\0";
-        ViewableContainer section = factory.createSection(initial, initial);
+        items.sort(Comparator.comparing(LinkedSpecificationItem::getArtifactType)
+                .thenComparing(LinkedSpecificationItem::getTitleWithFallback));
+        String artifactType = "\0";
+        ViewableContainer section = factory.createSection(artifactType, artifactType);
         for (final LinkedSpecificationItem item : items)
         {
-            final String currentInitial = getInitial(item);
-            if (!initial.equals(currentInitial))
+            final String currentArtifactType = item.getArtifactType();
+            if (!artifactType.equals(currentArtifactType))
             {
-                initial = currentInitial;
-                section = factory.createSection(initial, initial);
+                artifactType = currentArtifactType;
+                section = factory.createSection(artifactType, artifactType);
                 view.add(section);
             }
             final Viewable itemView = factory.createSpecificationItem(item);
             section.add(itemView);
         }
         view.render();
-    }
-
-    protected String getInitial(final LinkedSpecificationItem item)
-    {
-        return item.getTitleWithFallback().substring(0, 1).toUpperCase();
     }
 }

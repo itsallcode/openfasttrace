@@ -52,8 +52,8 @@ public interface InputFile
     /**
      * Create an {@link InputFile} for a real file on disk.
      * 
-     * @param file
-     *            a real file on disk.
+     * @param path
+     *            path to file on disk.
      * @param charset
      *            the {@link Charset} used when reading this file.
      * @return an {@link InputFile}.

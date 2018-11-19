@@ -50,7 +50,7 @@ public abstract class AbstractCommand implements Performable
         this.oft = Oft.create();
     }
 
-    public List<Path> toPaths(final List<String> inputs)
+    protected List<Path> toPaths(final List<String> inputs)
     {
         final List<Path> inputsAsPaths = new ArrayList<>();
         for (final String input : inputs)

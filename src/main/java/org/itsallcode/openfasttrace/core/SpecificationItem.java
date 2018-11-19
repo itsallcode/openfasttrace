@@ -63,7 +63,7 @@ public class SpecificationItem
     /**
      * Get the ID of the specification item
      *
-     * @return the ID
+     * @return ID
      */
     public SpecificationItemId getId()
     {
@@ -71,9 +71,45 @@ public class SpecificationItem
     }
 
     /**
+     * Get the artifact type of the specification item
+     * 
+     * @return artifact type
+     */
+    public String getArtifactType()
+    {
+        return this.id.getArtifactType();
+    }
+
+    /**
+     * Get the name part of the specification item ID
+     * 
+     * <p>
+     * Not to be mixed up with the
+     * {@link org.itsallcode.openfasttrace.core.SpecificationItem#getTitle()} of
+     * the specification item
+     * </p>
+     * 
+     * @return name part of the specification item ID
+     */
+    public String getName()
+    {
+        return this.id.getName();
+    }
+
+    /**
+     * Get the revision of the specification item
+     * 
+     * @return revision
+     */
+    public int getRevision()
+    {
+        return this.id.getRevision();
+    }
+
+    /**
      * Get the title of the specification item
      *
-     * @return the title
+     * @return title
      */
     public String getTitle()
     {
@@ -83,7 +119,7 @@ public class SpecificationItem
     /**
      * Get the description of the specification item
      *
-     * @return the description
+     * @return description
      */
     public String getDescription()
     {
@@ -93,7 +129,7 @@ public class SpecificationItem
     /**
      * Get the rationale of the specification item
      *
-     * @return the rationale
+     * @return rationale
      */
     public String getRationale()
     {
@@ -103,7 +139,7 @@ public class SpecificationItem
     /**
      * Get the comment of the specification item
      *
-     * @return the comment
+     * @return comment
      */
     public String getComment()
     {
@@ -113,7 +149,7 @@ public class SpecificationItem
     /**
      * Get the list of covered {@link SpecificationItemId}s
      *
-     * @return the list of covered IDs
+     * @return list of covered IDs
      */
     public List<SpecificationItemId> getCoveredIds()
     {
@@ -123,7 +159,7 @@ public class SpecificationItem
     /**
      * Get the list of {@link SpecificationItemId}s this item depends on
      *
-     * @return the list of IDs this item depends on
+     * @return list of IDs this item depends on
      */
     public List<SpecificationItemId> getDependOnIds()
     {
@@ -134,7 +170,7 @@ public class SpecificationItem
      * Get the list of artifact types this specification item need to be covered
      * in
      *
-     * @return the list of artifact types
+     * @return list of artifact types
      */
     public List<String> getNeedsArtifactTypes()
     {
@@ -168,7 +204,7 @@ public class SpecificationItem
     /**
      * Get the location where this specification item was defined.
      * 
-     * @return the location of this item.
+     * @return location of this item.
      */
     public Location getLocation()
     {
@@ -178,7 +214,7 @@ public class SpecificationItem
     /**
      * Get the maturity status of the specification item
      * 
-     * @return the maturity status
+     * @return maturity status
      */
     public ItemStatus getStatus()
     {
@@ -365,6 +401,16 @@ public class SpecificationItem
     }
 
     /**
+     * Create a builder for specification items
+     * 
+     * @return new {@link Builder} instance
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
+    /**
      * Builder for objects of type {@link SpecificationItem}
      */
     public static class Builder
@@ -385,7 +431,7 @@ public class SpecificationItem
         /**
          * Create a new instance of type {@link SpecificationItem.Builder}
          */
-        public Builder()
+        private Builder()
         {
             this.id = null;
             this.title = "";

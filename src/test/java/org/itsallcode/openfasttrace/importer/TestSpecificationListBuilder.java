@@ -193,7 +193,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "out-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(item -> item.getId().getName()).collect(Collectors.toList()),
+        assertThat(items.stream().map(item -> item.getName()).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B"));
     }
 
@@ -227,7 +227,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "in-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(item -> item.getId().getName()).collect(Collectors.toList()),
+        assertThat(items.stream().map(item -> item.getName()).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B", "in-D"));
     }
 }

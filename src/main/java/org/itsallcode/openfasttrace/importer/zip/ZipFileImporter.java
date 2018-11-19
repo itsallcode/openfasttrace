@@ -56,7 +56,7 @@ public class ZipFileImporter implements Importer
         if (!this.file.isRealFile())
         {
             throw new UnsupportedOperationException(
-                    "Importing a zip file from a strem is not supported");
+                    "Importing a zip file from a stream is not supported");
         }
         try (ZipFile zip = new ZipFile(this.file.toPath().toFile(), StandardCharsets.UTF_8))
         {

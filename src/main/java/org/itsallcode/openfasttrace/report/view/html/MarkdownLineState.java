@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 /**
- * The {@link MarkdownLineState} represents the Markdown states that can be
+ * The <code>MarkdownLineState</code> represents the Markdown states that can be
  * switched by newlines and the way the next line starts.
  */
 enum MarkdownLineState

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core;
+package org.itsallcode.openfasttrace.cli;
 
 /*-
  * #%L
@@ -22,16 +22,14 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
-
 /**
- * Convenience class containing static factory methods for creating builders.
+ * This class allows users to query the current directory.
  */
-public class SpecificationItemBuilders
+public class StandardDirectoryService implements DirectoryService
 {
-    public static Builder prepare(final String artifactType, final String name, final int revision)
+    @Override
+    public String getCurrent()
     {
-        return SpecificationItem.builder().id(artifactType, name, revision);
+        return System.getProperty("user.dir");
     }
 }

@@ -98,7 +98,7 @@ public class Linker
     private void linkMatchingRevision(final LinkedSpecificationItem covering,
             final LinkedSpecificationItem covered)
     {
-        final String coveringArtifactType = covering.getId().getArtifactType();
+        final String coveringArtifactType = covering.getArtifactType();
         if (covered.getItem().getNeedsArtifactTypes().contains(coveringArtifactType))
         {
             if (covered.hasDuplicates())
@@ -141,7 +141,7 @@ public class Linker
     private LinkedSpecificationItem findOrCreateStaleItem(final SpecificationItemId id)
     {
         this.staleIndex.computeIfAbsent(id,
-                key -> new LinkedSpecificationItem(new SpecificationItem.Builder().id(id).build()));
+                key -> new LinkedSpecificationItem(SpecificationItem.builder().id(id).build()));
         return this.staleIndex.get(id);
     }
 
@@ -151,7 +151,7 @@ public class Linker
 
         for (final LinkedSpecificationItem itemCoveredIgnoringVersion : coveredLinkedItems)
         {
-            final int coveredItemRevision = itemCoveredIgnoringVersion.getId().getRevision();
+            final int coveredItemRevision = itemCoveredIgnoringVersion.getRevision();
             if (id.getRevision() < coveredItemRevision)
             {
                 item.addLinkToItemWithStatus(itemCoveredIgnoringVersion, LinkStatus.OUTDATED);

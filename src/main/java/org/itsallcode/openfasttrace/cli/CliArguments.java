@@ -42,7 +42,6 @@ import org.itsallcode.openfasttrace.report.ReportVerbosity;
 public class CliArguments
 {
     public static final String NO_TAGS_MARKER = "_";
-    private static final String CURRENT_DIRECTORY = ".";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
     private List<String> unnamedValues;
@@ -57,6 +56,12 @@ public class CliArguments
     // [impl->dsn~reporting.html.specification-item-origin~1]
     // [impl->dsn~reporting.html.linked-specification-item-origin~1]
     private boolean showOrigin;
+    private final DirectoryService directoryService;
+
+    public CliArguments(final DirectoryService directoryService)
+    {
+        this.directoryService = directoryService;
+    }
 
     /**
      * Get the output file path
@@ -119,7 +124,7 @@ public class CliArguments
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return asList(CURRENT_DIRECTORY);
+            return asList(this.directoryService.getCurrent());
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }

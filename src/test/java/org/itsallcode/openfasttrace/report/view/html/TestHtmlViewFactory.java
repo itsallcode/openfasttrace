@@ -29,21 +29,54 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.ViewableContainer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestHtmlViewFactory
 {
     private LinkedSpecificationItem item;
+    private OutputStream outputStream;
+    private ViewFactory factory;
+
+    @BeforeEach
+    void beforeEach()
+    {
+        this.outputStream = new ByteArrayOutputStream();
+        this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl());
+    }
 
     @Test
     void testCreateSpecificationItem()
     {
-        final OutputStream outputStream = new ByteArrayOutputStream();
-        final ViewFactory factory = HtmlViewFactory.create(outputStream, HtmlReport.getCssUrl());
-        final Viewable view = factory.createSpecificationItem(this.item);
+        final Viewable view = this.factory.createSpecificationItem(this.item);
         assertThat(view, instanceOf(HtmlSpecificationItem.class));
+    }
+
+    @Test
+    void testCreateTraceSummary()
+    {
+        final Trace trace = Trace.builder().build();
+        final Viewable view = this.factory.createTraceSummary(trace);
+        assertThat(view, instanceOf(HtmlTraceSummary.class));
+    }
+
+    @Test
+    void testCreateReportSummary()
+    {
+        final Viewable view = this.factory.createReportSummary();
+        assertThat(view, instanceOf(HtmlReportSummary.class));
+    }
+
+    @Test
+    void testCreateTableOfContents()
+    {
+        final ViewableContainer parent = this.factory.createView("foo", "bar");
+        final Viewable view = this.factory.createTableOfContents(parent);
+        assertThat(view, instanceOf(HtmlTableOfContents.class));
     }
 }

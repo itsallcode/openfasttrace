@@ -23,6 +23,7 @@ package org.itsallcode.openfasttrace.report.view;
  */
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.Trace;
 
 /**
  * Interface for abstract factory that creates OFT view (e.g. for reports).
@@ -34,7 +35,7 @@ public interface ViewFactory
      * 
      * @param item
      *            linked specification item
-     * @return view view representing the linked specificaition item
+     * @return view representing the linked specification item
      */
     public Viewable createSpecificationItem(final LinkedSpecificationItem item);
 
@@ -59,4 +60,31 @@ public interface ViewFactory
      * @return view element
      */
     public ViewableContainer createView(final String id, final String title);
+
+    /**
+     * Create a trace summary.
+     * 
+     * @param trace
+     *            trace from which the summary is created
+     * 
+     * @return summary view for tracing results
+     */
+    public Viewable createTraceSummary(final Trace trace);
+
+    /**
+     * Create a report summary.
+     * 
+     * @return summary view for tracing results
+     */
+    public ViewableContainer createReportSummary();
+
+    /**
+     * Create a table of contents.
+     * 
+     * @param from
+     *            view container from which the ToC is taken
+     * 
+     * @return table of contents
+     */
+    public Viewable createTableOfContents(final ViewableContainer from);
 }

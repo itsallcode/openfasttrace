@@ -1,5 +1,9 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import java.io.PrintStream;
+
+import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -22,18 +26,33 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-public class CharacterConstants
+public class HtmlReportSummary extends AbstractViewContainer
 {
-    private CharacterConstants()
+    private final PrintStream stream;
+
+    /**
+     * Create a new instance of an {@link HtmlReportSummary}
+     * 
+     * @param stream
+     *            print stream
+     */
+    public HtmlReportSummary(final PrintStream stream)
     {
-        // prevent instantiation
+        super();
+        this.stream = stream;
     }
 
-    public static final String CHECK_MARK = "&#x2705;";
-    public static final String CROSS_MARK = "&#x274E;";
-    public final static String EMPTY_CIRCLE = "&#x25CB;";
-    public final static String QUATER_CIRCLE = "&#x25D4;";
-    public final static String HALF_CIRCLE = "&#x25D1;";
-    public final static String THREE_QUARTERS_CIRCLE = "&#x25D5;";
-    public final static String FULL_CIRCLE = "&#x25CF;";
+    @Override
+    protected void renderBeforeChildren(final int level)
+    {
+        final String indentation = IndentationHelper.createIndentationPrefix(level);
+        this.stream.print(indentation);
+        this.stream.println("<nav>");
+    }
+
+    @Override
+    protected void renderAfterChildren(final int level)
+    {
+        this.stream.println("</nav>");
+    }
 }

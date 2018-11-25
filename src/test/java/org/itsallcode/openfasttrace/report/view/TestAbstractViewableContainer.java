@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.view;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,9 +26,7 @@ package org.itsallcode.openfasttrace.report.view;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.List;
+import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,16 +74,42 @@ class TestAbstractViewableContainer
         inOrder.verify(this.viewMockB).render(childIndentationLevel);
     }
 
+    @Test
+    void testIsReferenceableFalseWithDefaultConstructor()
+    {
+        assertThat(new ViewContainerStub().isReferenceable(), equalTo(false));
+    }
+
+    @Test
+    void testIsReferenceableTrueIfIdAssigned()
+    {
+        assertThat(new ViewContainerStub("id", "title").isReferenceable(), equalTo(true));
+    }
+
+    @Test
+    void testGetId()
+    {
+        final String expectedId = "foo";
+        assertThat(new ViewContainerStub(expectedId, "").getId(), equalTo(expectedId));
+    }
+
+    @Test
+    void testGetTitle()
+    {
+        final String expectedTitle = "bar";
+        assertThat(new ViewContainerStub("", expectedTitle).getTitle(), equalTo(expectedTitle));
+    }
+
     private class ViewContainerStub extends AbstractViewContainer
     {
-        /**
-         * Get the list of contained viewable elements
-         * 
-         * @return list of viewable elements
-         */
-        public List<Viewable> getChildren()
+        public ViewContainerStub()
         {
-            return this.children;
+            super();
+        }
+
+        public ViewContainerStub(final String id, final String title)
+        {
+            super(id, title);
         }
 
         @Override

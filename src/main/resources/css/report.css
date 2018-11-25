@@ -6,11 +6,11 @@ nav {
   width: 100%;
   position: fixed;
   top: 0px;
-  text-align: center;
-  padding-bottom: 1em;
+  padding: 0.5em 1em;
   z-index: 100;
   background-color: white;
   color: grey;
+  border-bottom: 1px solid lightgrey;
 }
 
 main {

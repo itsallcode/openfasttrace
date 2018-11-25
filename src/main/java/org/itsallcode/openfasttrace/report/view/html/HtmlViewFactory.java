@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.exporter.ExporterException;
 import org.itsallcode.openfasttrace.report.view.AbstractViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
@@ -86,5 +87,23 @@ public class HtmlViewFactory extends AbstractViewFactory
     public Viewable createSpecificationItem(final LinkedSpecificationItem item)
     {
         return new HtmlSpecificationItem(this.outputStream, item);
+    }
+
+    @Override
+    public Viewable createTraceSummary(final Trace trace)
+    {
+        return new HtmlTraceSummary(this.outputStream, trace);
+    }
+
+    @Override
+    public ViewableContainer createReportSummary()
+    {
+        return new HtmlReportSummary(this.outputStream);
+    }
+
+    @Override
+    public Viewable createTableOfContents(final ViewableContainer from)
+    {
+        return new HtmlTableOfContents(this.outputStream, from);
     }
 }

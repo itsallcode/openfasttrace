@@ -37,7 +37,6 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
  */
 public class HtmlView extends AbstractViewContainer implements Viewable
 {
-    private final String title;
     private final PrintStream stream;
     private final URL cssURL;
 
@@ -56,8 +55,8 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      */
     public HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
     {
+        super(id, title);
         this.stream = stream;
-        this.title = title;
         this.cssURL = cssURL;
     }
 

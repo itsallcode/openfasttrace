@@ -30,14 +30,11 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
 public class HtmlSection extends AbstractViewContainer implements Viewable
 {
     private final PrintStream stream;
-    private final String id;
-    private final String title;
 
     public HtmlSection(final PrintStream stream, final String id, final String title)
     {
+        super(id, title);
         this.stream = stream;
-        this.id = id;
-        this.title = title;
     }
 
     @Override

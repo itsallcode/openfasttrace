@@ -29,7 +29,7 @@ public class Tracer
 {
     public Trace trace(final List<LinkedSpecificationItem> items)
     {
-        final Trace.Builder builder = new Trace.Builder();
+        final Trace.Builder builder = Trace.builder();
         builder.items(items);
         builder.defectItems(items.stream() //
                 .filter(LinkedSpecificationItem::isDefect) //

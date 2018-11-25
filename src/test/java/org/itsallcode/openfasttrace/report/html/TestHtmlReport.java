@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.report.html;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 /*-
  * #%L
  * OpenFastTrace
@@ -23,8 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -53,9 +52,9 @@ class TestHtmlReport
     void testRenderEmptyTrace()
     {
         final String outputAsString = renderToString();
-        assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
-        assertThat(outputAsString, not(containsString("<section")));
-        assertThat(outputAsString, endsWith("</html>"));
+        assertAll(() -> assertThat(outputAsString, startsWith("<!DOCTYPE html>")),
+                () -> assertThat(outputAsString, not(containsString("<section"))),
+                () -> assertThat(outputAsString, endsWith("</html>")));
     }
 
     protected String renderToString()
@@ -81,10 +80,13 @@ class TestHtmlReport
                         .description("Description b") //
                         .build());
         when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemA, itemB));
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countDefects()).thenReturn(0);
         final String outputAsString = renderToString();
-        assertThat(outputAsString, startsWith("<!DOCTYPE html>"));
-        assertThat(outputAsString, containsString("<section id=\"a\">"));
-        assertThat(outputAsString, containsString("<section id=\"b\">"));
-        assertThat(outputAsString, endsWith("</html>"));
+        assertAll(() -> assertThat(outputAsString, startsWith("<!DOCTYPE html>")),
+                () -> assertThat(outputAsString, containsString("<section id=\"a\">")),
+                () -> assertThat(outputAsString, containsString("<section id=\"b\">")),
+                () -> assertThat(outputAsString, containsString("2 total")),
+                () -> assertThat(outputAsString, endsWith("</html>")));
     }
 }

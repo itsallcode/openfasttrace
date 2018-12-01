@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view.html;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -22,20 +22,31 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-/**
- * Contains static helper methods for indentation.
- */
-public final class IndentationHelper
-{
-    private static final int INDENT_SPACES_PER_LEVEL = 2;
+import java.io.PrintStream;
 
-    private IndentationHelper()
+/**
+ * Abstract base class for View Containers that can be rendered to an output
+ * stream.
+ */
+public abstract class AbstractStreamableViewContainer extends AbstractViewContainer
+{
+    protected PrintStream stream;
+
+    public AbstractStreamableViewContainer(final PrintStream stream)
     {
-        // prevent instantiation.
+        super();
+        this.stream = stream;
     }
 
-    public static String createIndentationPrefix(final int level)
+    public AbstractStreamableViewContainer(final PrintStream stream, final String id,
+            final String title)
     {
-        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
+        super(id, title);
+        this.stream = stream;
+    }
+
+    public void renderIndentation(final int level)
+    {
+        this.stream.print(IndentationHelper.createIndentationPrefix(level));
     }
 }

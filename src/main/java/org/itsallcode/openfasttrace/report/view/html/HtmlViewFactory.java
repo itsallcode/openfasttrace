@@ -78,6 +78,12 @@ public class HtmlViewFactory extends AbstractViewFactory
     }
 
     @Override
+    public ViewableContainer createReportDetails()
+    {
+        return new HtmlReportDetails(this.outputStream);
+    }
+
+    @Override
     public ViewableContainer createSection(final String id, final String title)
     {
         return new HtmlSection(this.outputStream, id, title);

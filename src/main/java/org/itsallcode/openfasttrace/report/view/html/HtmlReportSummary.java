@@ -2,7 +2,8 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import java.io.PrintStream;
 
-import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
+import org.itsallcode.openfasttrace.report.view.AbstractStreamableViewContainer;
+import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 
 /*-
  * #%L
@@ -26,10 +27,8 @@ import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
  * #L%
  */
 
-public class HtmlReportSummary extends AbstractViewContainer
+public class HtmlReportSummary extends AbstractStreamableViewContainer
 {
-    private final PrintStream stream;
-
     /**
      * Create a new instance of an {@link HtmlReportSummary}
      * 
@@ -38,8 +37,7 @@ public class HtmlReportSummary extends AbstractViewContainer
      */
     public HtmlReportSummary(final PrintStream stream)
     {
-        super();
-        this.stream = stream;
+        super(stream);
     }
 
     @Override

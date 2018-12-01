@@ -24,17 +24,27 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import java.io.PrintStream;
 
-import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
-import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.AbstractStreamableViewContainer;
+import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 
-public class HtmlSection extends AbstractViewContainer implements Viewable
+/**
+ * HTML variant of a report section
+ */
+public class HtmlSection extends AbstractStreamableViewContainer
 {
-    private final PrintStream stream;
-
+    /**
+     * Create a new instance of a {@link HtmlSection}
+     * 
+     * @param stream
+     *            stream the section is rendered to
+     * @param id
+     *            section ID
+     * @param title
+     *            section title
+     */
     public HtmlSection(final PrintStream stream, final String id, final String title)
     {
-        super(id, title);
-        this.stream = stream;
+        super(stream, id, title);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import java.io.PrintStream;
+
+import org.itsallcode.openfasttrace.report.view.AbstractStreamableViewContainer;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -22,13 +26,24 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-public class CharacterConstants
+public class HtmlReportDetails extends AbstractStreamableViewContainer
 {
-    private CharacterConstants()
+    public HtmlReportDetails(final PrintStream stream)
     {
-        // prevent instantiation
+        super(stream);
     }
 
-    public static final String CHECK_MARK = "<span class=\"green\">&check;</span>";
-    public static final String CROSS_MARK = "<span class=\"red\">&cross;</span>";
+    @Override
+    protected void renderBeforeChildren(final int level)
+    {
+        renderIndentation(level);
+        this.stream.println("<main>");
+    }
+
+    @Override
+    protected void renderAfterChildren(final int level)
+    {
+        renderIndentation(level);
+        this.stream.println("</main>");
+    }
 }

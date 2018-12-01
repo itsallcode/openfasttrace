@@ -24,6 +24,7 @@ package org.itsallcode.openfasttrace.report.view.html;
 import java.io.PrintStream;
 
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlTraceSummary implements Viewable
@@ -69,30 +70,27 @@ public class HtmlTraceSummary implements Viewable
 
     protected void renderCompletionIndicator()
     {
-        if (this.trace.hasNoDefects() || this.trace.count() == 0)
+        final int count = this.trace.count();
+        if (count == 0)
         {
-            this.stream.print(CharacterConstants.FULL_CIRCLE);
+            this.stream.print("<meter>100%</meter>");
         }
         else
         {
-            final int completion = 100 * (this.trace.count() - this.trace.countDefects())
-                    / this.trace.count();
-            if (completion >= 75)
+            final int value = count - this.trace.countDefects();
+            final int percent = 100 * value / count;
+            this.stream.print("<meter value=\"");
+            this.stream.print(value);
+            if (value < count)
             {
-                this.stream.print(CharacterConstants.THREE_QUARTERS_CIRCLE);
+                this.stream.print("\" low=\"");
+                this.stream.print(count - 1);
             }
-            else if (completion < 75 && completion >= 50)
-            {
-                this.stream.print(CharacterConstants.HALF_CIRCLE);
-            }
-            else if (completion < 50 && completion >= 25)
-            {
-                this.stream.print(CharacterConstants.QUATER_CIRCLE);
-            }
-            else
-            {
-                this.stream.print(CharacterConstants.EMPTY_CIRCLE);
-            }
+            this.stream.print("\" max=\"");
+            this.stream.print(count);
+            this.stream.print("\">");
+            this.stream.print(percent);
+            this.stream.print("%</meter>");
         }
     }
 

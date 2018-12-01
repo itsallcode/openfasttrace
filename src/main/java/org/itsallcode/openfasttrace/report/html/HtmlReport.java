@@ -67,10 +67,19 @@ public class HtmlReport implements Reportable
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
         final ViewableContainer view = factory.createView("",
                 "Specification items by artifact type");
-        final List<LinkedSpecificationItem> items = getSortedItems();
-        addSectionedItems(factory, view, items);
-        addSummary(view, factory);
+        final ViewableContainer details = createDetails(factory);
+        final ViewableContainer summary = createSummary(details, factory);
+        view.add(details);
+        view.add(summary);
         view.render();
+    }
+
+    protected ViewableContainer createDetails(final ViewFactory factory)
+    {
+        final ViewableContainer details = factory.createReportDetails();
+        final List<LinkedSpecificationItem> items = getSortedItems();
+        addSectionedItems(factory, details, items);
+        return details;
     }
 
     protected List<LinkedSpecificationItem> getSortedItems()
@@ -100,11 +109,12 @@ public class HtmlReport implements Reportable
         }
     }
 
-    protected void addSummary(final ViewableContainer view, final ViewFactory factory)
+    protected ViewableContainer createSummary(final ViewableContainer view,
+            final ViewFactory factory)
     {
         final ViewableContainer summary = factory.createReportSummary();
         summary.add(factory.createTraceSummary(this.trace));
         summary.add(factory.createTableOfContents(view));
-        view.add(summary);
+        return summary;
     }
 }

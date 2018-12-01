@@ -51,6 +51,13 @@ class TestHtmlViewFactory
     }
 
     @Test
+    void testCreateReportDetails()
+    {
+        final Viewable view = this.factory.createReportDetails();
+        assertThat(view, instanceOf(HtmlReportDetails.class));
+    }
+
+    @Test
     void testCreateSpecificationItem()
     {
         final Viewable view = this.factory.createSpecificationItem(this.item);

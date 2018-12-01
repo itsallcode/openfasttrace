@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view.html;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -22,13 +22,27 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-public class CharacterConstants
+/**
+ * Contains static helper methods for indentation.
+ */
+public final class IndentationHelper
 {
-    private CharacterConstants()
+    private static final int INDENT_SPACES_PER_LEVEL = 2;
+
+    private IndentationHelper()
     {
-        // prevent instantiation
+        // prevent instantiation.
     }
 
-    public static final String CHECK_MARK = "<span class=\"green\">&check;</span>";
-    public static final String CROSS_MARK = "<span class=\"red\">&cross;</span>";
+    /**
+     * Create indentation prefix (i.e. white spaces)
+     * 
+     * @param level
+     *            indentation level
+     * @return white spaces
+     */
+    public static String createIndentationPrefix(final int level)
+    {
+        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
+    }
 }

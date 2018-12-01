@@ -29,7 +29,7 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -53,8 +53,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
         when(this.traceMock.count()).thenReturn(200);
         when(this.traceMock.countDefects()).thenReturn(0);
         renderTaceSummaryOnIndentationLevel(1);
-        assertOutputLines(
-                CharacterConstants.CHECK_MARK + " 200 total " + CharacterConstants.FULL_CIRCLE);
+        assertOutputLines(CharacterConstants.CHECK_MARK
+                + " 200 total <meter value=\"200\" max=\"200\">100%</meter>");
     }
 
     private void renderTaceSummaryOnIndentationLevel(final int indentationLevel)
@@ -64,15 +64,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     }
 
     @ParameterizedTest
-    @CsvSource({ "0, " + CharacterConstants.EMPTY_CIRCLE, //
-            "24, " + CharacterConstants.EMPTY_CIRCLE, //
-            "25, " + CharacterConstants.QUATER_CIRCLE, //
-            "49, " + CharacterConstants.QUATER_CIRCLE, //
-            "50, " + CharacterConstants.HALF_CIRCLE, //
-            "74, " + CharacterConstants.HALF_CIRCLE, //
-            "75, " + CharacterConstants.THREE_QUARTERS_CIRCLE, //
-            "99, " + CharacterConstants.THREE_QUARTERS_CIRCLE })
-    void testRenderPercentagesNotOk(final int value, final String completionChar)
+    @ValueSource(ints = { 0, 1, 50, 99 })
+    void testRenderPercentagesNotOk(final int value)
     {
         final int maximum = 100;
         final int defects = maximum - value;
@@ -80,7 +73,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
         when(this.traceMock.count()).thenReturn(maximum);
         when(this.traceMock.countDefects()).thenReturn(defects);
         renderTaceSummaryOnIndentationLevel(1);
-        assertOutputLines(CharacterConstants.CROSS_MARK + " " + maximum + " total " + completionChar
+        assertOutputLines(CharacterConstants.CROSS_MARK + " " + maximum + " total <meter value=\""
+                + value + "\" low=\"99\" max=\"100\">" + value + "%</meter>"
                 + " <span class=\".red\">" + defects + " defects</span>");
     }
 }

@@ -21,8 +21,8 @@ package org.itsallcode.openfasttrace.report.view.html;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECK_MARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CROSS_MARK;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 
 public class HtmlSpecificationItem implements Viewable
@@ -87,7 +88,7 @@ public class HtmlSpecificationItem implements Viewable
         this.stream.print("    <summary title=\"");
         this.stream.print(id);
         this.stream.print("\">");
-        this.stream.print(CHECK_MARK);
+        this.stream.print(this.item.isDefect() ? CROSS_MARK : CHECK_MARK);
         this.stream.print(" <b>");
         this.stream.print(this.item.getTitleWithFallback());
         this.stream.print("</b><small>, rev. ");

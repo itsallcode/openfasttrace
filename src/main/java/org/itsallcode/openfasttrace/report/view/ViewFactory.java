@@ -72,6 +72,13 @@ public interface ViewFactory
     public Viewable createTraceSummary(final Trace trace);
 
     /**
+     * Create a container for the details of the report
+     * 
+     * @return report details container
+     */
+    public ViewableContainer createReportDetails();
+
+    /**
      * Create a report summary.
      * 
      * @return summary view for tracing results

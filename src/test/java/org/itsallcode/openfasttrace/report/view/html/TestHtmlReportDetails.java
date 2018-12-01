@@ -26,11 +26,8 @@ import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestHtmlView extends AbstractTestHtmlRenderer
+class TestHtmlReportDetails extends AbstractTestHtmlRenderer
 {
-    private static final String ID = "view ID";
-    private static final String TITLE = "view title";
-
     @Override
     @BeforeEach
     public void prepareEachTest()
@@ -41,18 +38,11 @@ class TestHtmlView extends AbstractTestHtmlRenderer
     @Test
     void testRender()
     {
-        final Viewable view = this.factory.createView(ID, TITLE);
-        view.render();
-        assertOutputLinesWithoutCSS(//
-                "<!DOCTYPE html>", //
-                "<html>", //
-                "  <head>", //
-                "    <meta charset=\"UTF-8\">", //
-                "    <style></style>", //
-                "    <title>" + TITLE + "</title>", //
-                "  </head>", //
-                "  <body>", //
-                "  </body>", //
-                "</html>");
+        final Viewable view = this.factory.createReportDetails();
+        view.render(1);
+        assertOutputLines(//
+                "  <main>", //
+                "  </main>", //
+                "");
     }
 }

@@ -327,11 +327,18 @@ public class LinkedSpecificationItem
 
     private List<LinkedSpecificationItem> getIncomingItems()
     {
-        return this.links.entrySet() //
-                .stream() //
-                .filter(entry -> entry.getKey().isIncoming()) //
-                .flatMap(entry -> entry.getValue().stream()) //
-                .collect(Collectors.toList());
+        if (this.links == null)
+        {
+            return Collections.emptyList();
+        }
+        else
+        {
+            return this.links.entrySet() //
+                    .stream() //
+                    .filter(entry -> entry.getKey().isIncoming()) //
+                    .flatMap(entry -> entry.getValue().stream()) //
+                    .collect(Collectors.toList());
+        }
     }
 
     /**

@@ -53,7 +53,7 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
         when(this.traceMock.count()).thenReturn(200);
         when(this.traceMock.countDefects()).thenReturn(0);
         renderTaceSummaryOnIndentationLevel(1);
-        assertOutputLines(CharacterConstants.CHECK_MARK
+        assertOutputLines("  " + CharacterConstants.CHECK_MARK
                 + " 200 total <meter value=\"200\" max=\"200\">100%</meter>");
     }
 
@@ -73,8 +73,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
         when(this.traceMock.count()).thenReturn(maximum);
         when(this.traceMock.countDefects()).thenReturn(defects);
         renderTaceSummaryOnIndentationLevel(1);
-        assertOutputLines(CharacterConstants.CROSS_MARK + " " + maximum + " total <meter value=\""
-                + value + "\" low=\"99\" max=\"100\">" + value + "%</meter>"
-                + " <span class=\".red\">" + defects + " defects</span>");
+        assertOutputLines("  " + CharacterConstants.CROSS_MARK + " " + maximum
+                + " total <meter value=\"" + value + "\" low=\"99\" max=\"100\">" + value
+                + "%</meter>" + " <span class=\".red\">" + defects + " defects</span>");
     }
 }

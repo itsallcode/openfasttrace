@@ -53,6 +53,7 @@ public class HtmlTraceSummary implements Viewable
 
     protected void renderStart(final String indentation)
     {
+        this.stream.print(indentation);
     }
 
     protected void renderStatusIndicator()
@@ -106,5 +107,6 @@ public class HtmlTraceSummary implements Viewable
 
     protected void renderEnd()
     {
+        // intentionally left empty
     }
 }

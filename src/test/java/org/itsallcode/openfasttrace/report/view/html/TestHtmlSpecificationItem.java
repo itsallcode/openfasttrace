@@ -210,14 +210,15 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 .location(location) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERED_SHALLOW);
-        when(this.itemMockB.getLocation())
-                .thenReturn(Location.create("http://example.org/foo.txt", 3));
+        final SpecificationItem subItem = SpecificationItem.builder() //
+                .id(ITEM_B_ID).location(Location.create("http://example.org/foo.txt", 3)).build();
+        final LinkedSpecificationItem linkedSubItem = new LinkedSpecificationItem(subItem);
+        linkedItem.addLinkToItemWithStatus(linkedSubItem, LinkStatus.COVERED_SHALLOW);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(0);
         assertOutputLines("<section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "  <details>", //
-                "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
+                "    <summary title=\"dsn~name-a~1\">" + CHECK_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "    <p class=\"origin\">foo/bar:13</p>", //

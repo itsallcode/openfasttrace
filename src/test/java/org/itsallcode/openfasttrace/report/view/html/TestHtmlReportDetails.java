@@ -23,18 +23,10 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import org.itsallcode.openfasttrace.report.view.Viewable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestHtmlReportDetails extends AbstractTestHtmlRenderer
 {
-    @Override
-    @BeforeEach
-    public void prepareEachTest()
-    {
-        super.prepareEachTest();
-    }
-
     @Test
     void testRender()
     {

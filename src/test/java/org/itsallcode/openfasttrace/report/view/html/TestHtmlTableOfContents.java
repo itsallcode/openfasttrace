@@ -23,14 +23,12 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestHtmlView extends AbstractTestHtmlRenderer
+class TestHtmlTableOfContents extends AbstractTestHtmlRenderer
 {
-    private static final String ID = "view ID";
-    private static final String TITLE = "view title";
-
     @Override
     @BeforeEach
     public void prepareEachTest()
@@ -41,18 +39,15 @@ class TestHtmlView extends AbstractTestHtmlRenderer
     @Test
     void testRender()
     {
-        final Viewable view = this.factory.createView(ID, TITLE);
-        view.render();
-        assertOutputLinesWithoutCSS(//
-                "<!DOCTYPE html>", //
-                "<html>", //
-                "  <head>", //
-                "    <meta charset=\"UTF-8\">", //
-                "    <style></style>", //
-                "    <title>" + TITLE + "</title>", //
-                "  </head>", //
-                "  <body>", //
-                "  </body>", //
-                "</html>");
+        final Viewable sectionA = this.factory.createSection("a", "section a");
+        final Viewable sectionB = this.factory.createSection("b", "section b");
+        final Viewable unreferenceableSection = this.factory.createSection(null, null);
+        final ViewableContainer container = this.factory.createView("foo", "bar");
+        container.add(sectionA);
+        container.add(sectionB);
+        container.add(unreferenceableSection);
+        final Viewable toc = this.factory.createTableOfContents(container);
+        toc.render(1);
+        assertOutputLines(" | <a href=\"#a\">section a</a> &middot; <a href=\"#b\">section b</a>");
     }
 }

@@ -29,16 +29,13 @@ import java.io.PrintStream;
 import java.net.URL;
 
 import org.itsallcode.openfasttrace.report.ReportException;
-import org.itsallcode.openfasttrace.report.view.AbstractViewContainer;
-import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.itsallcode.openfasttrace.report.view.AbstractStreamableViewContainer;
 
 /**
  * Single HTML page view
  */
-public class HtmlView extends AbstractViewContainer implements Viewable
+public class HtmlView extends AbstractStreamableViewContainer
 {
-    private final String title;
-    private final PrintStream stream;
     private final URL cssURL;
 
     /**
@@ -56,8 +53,7 @@ public class HtmlView extends AbstractViewContainer implements Viewable
      */
     public HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
     {
-        this.stream = stream;
-        this.title = title;
+        super(stream, id, title);
         this.cssURL = cssURL;
     }
 

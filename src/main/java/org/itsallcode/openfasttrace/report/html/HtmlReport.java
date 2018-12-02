@@ -67,9 +67,32 @@ public class HtmlReport implements Reportable
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
         final ViewableContainer view = factory.createView("",
                 "Specification items by artifact type");
+        final ViewableContainer details = createDetails(factory);
+        final ViewableContainer summary = createSummary(details, factory);
+        view.add(details);
+        view.add(summary);
+        view.render();
+    }
+
+    protected ViewableContainer createDetails(final ViewFactory factory)
+    {
+        final ViewableContainer details = factory.createReportDetails();
+        final List<LinkedSpecificationItem> items = getSortedItems();
+        addSectionedItems(factory, details, items);
+        return details;
+    }
+
+    protected List<LinkedSpecificationItem> getSortedItems()
+    {
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getArtifactType)
                 .thenComparing(LinkedSpecificationItem::getTitleWithFallback));
+        return items;
+    }
+
+    protected void addSectionedItems(final ViewFactory factory, final ViewableContainer view,
+            final List<LinkedSpecificationItem> items)
+    {
         String artifactType = "\0";
         ViewableContainer section = factory.createSection(artifactType, artifactType);
         for (final LinkedSpecificationItem item : items)
@@ -84,6 +107,14 @@ public class HtmlReport implements Reportable
             final Viewable itemView = factory.createSpecificationItem(item);
             section.add(itemView);
         }
-        view.render();
+    }
+
+    protected ViewableContainer createSummary(final ViewableContainer view,
+            final ViewFactory factory)
+    {
+        final ViewableContainer summary = factory.createReportSummary();
+        summary.add(factory.createTraceSummary(this.trace));
+        summary.add(factory.createTableOfContents(view));
+        return summary;
     }
 }

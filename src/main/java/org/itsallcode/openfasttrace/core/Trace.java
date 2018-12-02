@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,10 +69,24 @@ public class Trace
         return this.items.size();
     }
 
+    /**
+     * Create a new instance of a {@link Builder}
+     * 
+     * @return builder
+     */
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     public static class Builder
     {
         private List<LinkedSpecificationItem> items;
         private List<LinkedSpecificationItem> defectItems;
+
+        private Builder()
+        {
+        }
 
         public Builder items(final List<LinkedSpecificationItem> items)
         {

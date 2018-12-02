@@ -22,20 +22,19 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-/**
- * Contains static helper methods for indentation.
- */
-public final class IndentationHelper
+import org.itsallcode.openfasttrace.report.view.Viewable;
+import org.junit.jupiter.api.Test;
+
+class TestHtmlReportDetails extends AbstractTestHtmlRenderer
 {
-    private static final int INDENT_SPACES_PER_LEVEL = 2;
-
-    private IndentationHelper()
+    @Test
+    void testRender()
     {
-        // prevent instantiation.
-    }
-
-    public static String createIndentationPrefix(final int level)
-    {
-        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
+        final Viewable view = this.factory.createReportDetails();
+        view.render(1);
+        assertOutputLines(//
+                "  <main>", //
+                "  </main>", //
+                "");
     }
 }

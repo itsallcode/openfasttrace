@@ -39,7 +39,7 @@ public final class IndentationHelper
      * 
      * @param level
      *            indentation level
-     * @return white spaces
+     * @return <code>level</code> white spaces
      */
     public static String createIndentationPrefix(final int level)
     {

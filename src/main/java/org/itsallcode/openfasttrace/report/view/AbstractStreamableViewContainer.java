@@ -30,7 +30,7 @@ import java.io.PrintStream;
  */
 public abstract class AbstractStreamableViewContainer extends AbstractViewContainer
 {
-    protected PrintStream stream;
+    protected final PrintStream stream;
 
     public AbstractStreamableViewContainer(final PrintStream stream)
     {

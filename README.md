@@ -52,6 +52,8 @@ Check the [user guide](doc/user_guide.md) for detailed information on how to use
 
 ## Getting OpenFastTrace
 
+OpenFastTrace at it's core is a Java Archive (short "[JAR]"(https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)). This file contains the OpenFastTrace Library and an entry point for [running OFT from the command line](#running-openfasttrace).
+
 ### Getting Pre-Built Packages
 
 Pre-Built JAR files (called `openfasttrace-2.2.0.jar`) are available from the following places:
@@ -60,30 +62,7 @@ Pre-Built JAR files (called `openfasttrace-2.2.0.jar`) are available from the fo
 * [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/2.2.0/openfasttrace-2.2.0.jar)
 * [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/2.2.0/openfasttrace-2.2.0.jar)
  
-#### Getting OFT via Maven
-
-To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) project add this to your `pom.xml`:
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.itsallcode</groupId>
-        <artifactId>openfasttrace</artifactId>
-        <version>2.2.0</version>
-        <scope>compile</scope>
-    </dependency>
-</dependencies>
-```
-
-### Getting OFT via Gradle
-
-To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) project:
-
-```groovy
-dependencies {
-    compile "org.itsallcode:openfasttrace:2.2.0"
-}
-```
+Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library] to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
 ## Installation
 
@@ -99,8 +78,20 @@ If you just want to run OFT:
 
     apt-get install openjdk-8-jre
 
+## Running OpenFastTrace
+
+The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
+
+```bash
+java -jar openfasttrace-2.2.0.jar trace /path/to/directory/being/traced
+```
+
+If you want to run OFT automatically as part of a continuous build, we recommend using our [Gradle Plugin](https://github.com/itsallcode/openfasttrace-gradle).
+
+For more details about how to run OFT please consult the [user guide](doc/user_guide.md).
+
 ## Development
 
 If you want to learn how to build OpenFastTrace, please check our [Developer Guide](doc/developer_guide.md).
 
-You would like to contribute to OFT? Please check out our [Contributor Guide](../CONTRIBUTION.md) to get started. 
+You would like to contribute to OFT? Please check out our [Contributor Guide](../CONTRIBUTION.md) to get started.

@@ -4,6 +4,33 @@ This document contains technical information for developers contributing to Open
 
 If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../CONTRIBUTION.md).
 
+## Getting the OpenFastTrace Library
+
+#### Getting OFT via Maven
+
+To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) project add this to your `pom.xml`:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.itsallcode</groupId>
+        <artifactId>openfasttrace</artifactId>
+        <version>2.2.0</version>
+        <scope>compile</scope>
+    </dependency>
+</dependencies>
+```
+
+### Getting OFT via Gradle
+
+To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) project:
+
+```groovy
+dependencies {
+    compile "org.itsallcode:openfasttrace:2.2.0"
+}
+```
+
 ## Build Time Dependencies
 
 The list below show all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven.

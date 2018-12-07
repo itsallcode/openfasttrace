@@ -6,7 +6,7 @@ If you want to know more about how to contribute to OFT, please check out our [C
 
 ## Build Time Dependencies
 
-The list below show all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven.
+The list below shows all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven.
 
 | Dependency                                                                   | Purpose                                                | License                       |
 -------------------------------------------------------------------------------|--------------------------------------------------------|--------------------------------

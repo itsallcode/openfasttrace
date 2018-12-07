@@ -22,7 +22,7 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 
 OpenFastTrace uses [Apache Maven](https://maven.apache.org) as technical project management tool that resolves and downloads the build-dependencies before building the packages.
 
-### Installation of Build Initial Dependencies on Linux
+### Installation of Initial Build Dependencies on Linux
 
 #### Ubuntu or Debian
 

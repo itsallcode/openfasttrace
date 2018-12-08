@@ -25,7 +25,8 @@ package org.itsallcode.openfasttrace.report.view.html;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.ITEST;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
-import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECKMARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECK_MARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CROSS_MARK;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.core.*;
@@ -71,7 +72,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         assertOutputLines( //
                 "  <section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "    <details>", //
-                "      <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                "      <summary title=\"dsn~name-a~1\">" + CHECK_MARK
                         + " <b>Item A title</b><small>, rev. 1, dsn</small></summary>", //
                 "      <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "      <p>Single line description</p>", //
@@ -94,7 +95,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         assertOutputLines( //
                 "<section class=\"sitem\" id=\"impl~name-b~1\">", //
                 "  <details>", //
-                "    <summary title=\"impl~name-b~1\">" + CHECKMARK
+                "    <summary title=\"impl~name-b~1\">" + CHECK_MARK
                         + " <b>Item B title</b><small>, rev. 1, impl</small></summary>", //
                 "    <p class=\"id\">" + ITEM_B_ID + "</p>", //
                 "    <p>Description A</p><p>Description B</p>", //
@@ -131,7 +132,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         assertOutputLines( //
                 "<section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "  <details>", //
-                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "    <h6>Needs: impl, <del>itest</del>, <ins>utest</ins></h6>", //
@@ -154,7 +155,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         assertOutputLines( //
                 "<section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "  <details>", //
-                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "    <div class=\"in\">", //
@@ -184,7 +185,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         assertOutputLines( //
                 "<section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "  <details>", //
-                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "    <div class=\"out\">", //
@@ -209,14 +210,15 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 .location(location) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERED_SHALLOW);
-        when(this.itemMockB.getLocation())
-                .thenReturn(Location.create("http://example.org/foo.txt", 3));
+        final SpecificationItem subItem = SpecificationItem.builder() //
+                .id(ITEM_B_ID).location(Location.create("http://example.org/foo.txt", 3)).build();
+        final LinkedSpecificationItem linkedSubItem = new LinkedSpecificationItem(subItem);
+        linkedItem.addLinkToItemWithStatus(linkedSubItem, LinkStatus.COVERED_SHALLOW);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(0);
         assertOutputLines("<section class=\"sitem\" id=\"dsn~name-a~1\">", //
                 "  <details>", //
-                "    <summary title=\"dsn~name-a~1\">" + CHECKMARK
+                "    <summary title=\"dsn~name-a~1\">" + CHECK_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
                 "    <p class=\"origin\">foo/bar:13</p>", //

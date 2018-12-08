@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.report.view.html;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
@@ -22,13 +22,31 @@ package org.itsallcode.openfasttrace.report.view.html;
  * #L%
  */
 
-public class CharacterConstants
+import java.io.PrintStream;
+
+/**
+ * Abstract base class for View Containers that can be rendered to an output
+ * stream.
+ */
+public abstract class AbstractStreamableViewContainer extends AbstractViewContainer
 {
-    private CharacterConstants()
+    protected final PrintStream stream;
+
+    public AbstractStreamableViewContainer(final PrintStream stream)
     {
-        // prevent instantiation
+        super();
+        this.stream = stream;
     }
 
-    public static final String CHECK_MARK = "<span class=\"green\">&check;</span>";
-    public static final String CROSS_MARK = "<span class=\"red\">&cross;</span>";
+    public AbstractStreamableViewContainer(final PrintStream stream, final String id,
+            final String title)
+    {
+        super(id, title);
+        this.stream = stream;
+    }
+
+    public void renderIndentation(final int level)
+    {
+        this.stream.print(IndentationHelper.createIndentationPrefix(level));
+    }
 }

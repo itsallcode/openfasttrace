@@ -22,11 +22,34 @@ package org.itsallcode.openfasttrace.report.view;
  * #L%
  */
 
+import java.util.List;
+
 /**
  * A container for viewable elements
  */
 public interface ViewableContainer extends Viewable
 {
+    /**
+     * Get the ID of this view element
+     * 
+     * @return unique ID through which the element can be referenced
+     */
+    public String getId();
+
+    /**
+     * Get the title of this view element
+     * 
+     * @return title of the view element
+     */
+    public String getTitle();
+
+    /**
+     * Check if the view element can be referenced
+     * 
+     * @return <code>true</code> if the view element can be referenced
+     */
+    public boolean isReferenceable();
+
     /**
      * Add a viewable element
      * 
@@ -34,4 +57,11 @@ public interface ViewableContainer extends Viewable
      *            contained viewable element
      */
     public void add(Viewable child);
+
+    /**
+     * Get the list of children of the viewable container
+     * 
+     * @return list of children
+     */
+    public List<Viewable> getChildren();
 }

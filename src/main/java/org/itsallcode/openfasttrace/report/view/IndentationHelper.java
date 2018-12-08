@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.core;
+package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,27 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Tracer
+/**
+ * Contains static helper methods for indentation.
+ */
+public final class IndentationHelper
 {
-    public Trace trace(final List<LinkedSpecificationItem> items)
+    private static final int INDENT_SPACES_PER_LEVEL = 2;
+
+    private IndentationHelper()
     {
-        final Trace.Builder builder = Trace.builder();
-        builder.items(items);
-        builder.defectItems(items.stream() //
-                .filter(LinkedSpecificationItem::isDefect) //
-                .collect(Collectors.toList()));
-        return builder.build();
+        // prevent instantiation.
+    }
+
+    /**
+     * Create indentation prefix (i.e. white spaces)
+     * 
+     * @param level
+     *            indentation level
+     * @return <code>level</code> white spaces
+     */
+    public static String createIndentationPrefix(final int level)
+    {
+        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
     }
 }

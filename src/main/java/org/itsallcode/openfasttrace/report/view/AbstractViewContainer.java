@@ -31,20 +31,49 @@ import java.util.List;
 public abstract class AbstractViewContainer implements ViewableContainer
 {
     protected List<Viewable> children;
+    protected final String id;
+    protected final String title;
 
     /**
      * Create a new instance of type {@link AbstractViewContainer}.
      */
     public AbstractViewContainer()
     {
+        this(null, null);
+    }
+
+    /**
+     * Create a new instance of type {@link AbstractViewContainer}.
+     * 
+     * @param id
+     *            unique container ID
+     * @param title container title
+     */
+    public AbstractViewContainer(final String id, final String title)
+    {
+        this.id = id;
+        this.title = title;
         this.children = new ArrayList<>();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.itsallcode.openfasttrace.report.view.Viewable#render(int)
-     */
+    @Override
+    public String getId()
+    {
+        return this.id;
+    }
+
+    @Override
+    public String getTitle()
+    {
+        return this.title;
+    }
+
+    @Override
+    public boolean isReferenceable()
+    {
+        return this.id != null;
+    }
+
     @Override
     public void render(final int level)
     {
@@ -93,5 +122,11 @@ public abstract class AbstractViewContainer implements ViewableContainer
     public void add(final Viewable child)
     {
         this.children.add(child);
+    }
+
+    @Override
+    public List<Viewable> getChildren()
+    {
+        return this.children;
     }
 }

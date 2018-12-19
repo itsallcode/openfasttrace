@@ -56,11 +56,11 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR]"(https://docs.oracle.
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-2.2.0.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-2.3.0.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/2.2.0/openfasttrace-2.2.0.jar)
-* [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/2.2.0/openfasttrace-2.2.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/2.2.0/openfasttrace-2.2.0.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/2.3.0/openfasttrace-2.3.0.jar)
+* [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/2.3.0/openfasttrace-2.3.0.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/2.3.0/openfasttrace-2.3.0.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library] to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
@@ -68,7 +68,7 @@ Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-lib
 
 ### Runtime Dependencies
 
-OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
+OpenFastTrace only needs a Java 11 (or later) runtime environment to run.
 
 #### Installation of Runtime Dependencies on Linux
 
@@ -76,14 +76,14 @@ OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
 
 If you just want to run OFT:
 
-    apt-get install openjdk-8-jre
+    apt-get install openjdk-11-jre
 
 ## Running OpenFastTrace
 
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```bash
-java -jar openfasttrace-2.2.0.jar trace /path/to/directory/being/traced
+java -jar openfasttrace-2.3.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our [Gradle Plugin](https://github.com/itsallcode/openfasttrace-gradle).

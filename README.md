@@ -94,4 +94,4 @@ For more details about how to run OFT please consult the [user guide](doc/user_g
 
 If you want to learn how to build OpenFastTrace, please check our [Developer Guide](doc/developer_guide.md).
 
-You would like to contribute to OFT? Please check out our [Contributor Guide](CONTRIBUTION.md) to get started. 
+You would like to contribute to OFT? Please check out our [Contributor Guide](CONTRIBUTING.md) to get started. 

@@ -132,7 +132,7 @@ Informative passages of a specification provide explanations and context that is
 
 #### Normative Passages
 
-Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item). Unlike [informative passages](#informative-passages) they require that someone details, implements or or verifies the contained specification items.
+Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item). Unlike [informative passages](#informative-passages) they require that someone details, implements or verifies the contained specification items.
 
 #### Coverage
 

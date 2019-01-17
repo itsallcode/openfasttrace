@@ -122,7 +122,7 @@ The revision of a specification item is intended to obsolete existing coverage l
 
 Examples:
 
-If you change a requirement that list all browsers that an HTML export needs to be compatible with, you made a semantic changes and should raise the revision number.
+If you change a requirement that lists all browsers that an HTML export needs to be compatible with, you made a semantic change and should raise the revision number.
 
 If on the other hand you only added a missing period at the end of a sentence, the requirement content did not really change and there is no need to invalidate existing coverage. 
 

@@ -138,7 +138,7 @@ class SpecobjectExporter implements Exporter
         final String comment = processMultilineText(item.getComment());
         this.writer.writeStartElement("specobject");
         writeElement("id", item.getName());
-        writeElementIfPresent("title", item.getTitle());
+        writeElementIfPresent("shortdesc", item.getTitle());
         writeElement("status", item.getStatus().toString());
         writeElement("version", item.getRevision());
         writeLocation(item.getLocation());

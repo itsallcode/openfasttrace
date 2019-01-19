@@ -44,7 +44,6 @@ public class SpecDocumentHandlerBuilder
     {
         this.file = file;
         this.listener = listener;
-
         this.handler = new CallbackContentHandler();
     }
 

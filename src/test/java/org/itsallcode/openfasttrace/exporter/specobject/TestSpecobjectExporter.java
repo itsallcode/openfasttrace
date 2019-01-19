@@ -85,7 +85,7 @@ class TestSpecobjectExporter
                 + " <specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
                 + "   <id>me</id>\n" //
-                + "   <title>My item title</title>\n" //
+                + "   <shortdesc>My item title</shortdesc>\n" //
                 + "   <status>draft</status>\n" //
                 + "   <version>2</version>\n" //
                 + "   <sourcefile>/the/file</sourcefile>\n" //

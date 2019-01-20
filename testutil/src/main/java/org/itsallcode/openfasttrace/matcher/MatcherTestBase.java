@@ -66,7 +66,7 @@ public abstract class MatcherTestBase<T>
         assertThat(getDescription(objectB), equalTo(getDescription(objectB)));
     }
 
-    protected abstract Matcher<? super T> createMatcher(final T object);
+    protected abstract Matcher<T> createMatcher(final T object);
 
     private String getDescription(final T object)
     {

@@ -22,14 +22,12 @@ package org.itsallcode.openfasttrace.testutil.xml;
  * #L%
  */
 
-
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 public abstract class StreamWriterDelegate implements XMLStreamWriter
 {
-
     protected StreamWriterDelegate(final XMLStreamWriter out)
     {
         this.out = out;
@@ -38,7 +36,7 @@ public abstract class StreamWriterDelegate implements XMLStreamWriter
     protected XMLStreamWriter out;
 
     @Override
-    public Object getProperty(final String name) throws IllegalArgumentException
+    public Object getProperty(final String name)
     {
         return this.out.getProperty(name);
     }

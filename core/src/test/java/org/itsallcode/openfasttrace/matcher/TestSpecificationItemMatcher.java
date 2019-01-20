@@ -22,11 +22,10 @@ package org.itsallcode.openfasttrace.matcher;
  * #L%
  */
 
-
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.core.SpecificationItemId;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -123,7 +122,7 @@ class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
     }
 
     @Override
-    protected Matcher<? super SpecificationItem> createMatcher(final SpecificationItem object)
+    protected Matcher<SpecificationItem> createMatcher(final SpecificationItem object)
     {
         return SpecificationItemMatcher.equalTo(object);
     }

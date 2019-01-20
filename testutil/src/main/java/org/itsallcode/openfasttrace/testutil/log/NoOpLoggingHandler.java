@@ -31,10 +31,6 @@ import java.util.logging.LogRecord;
  */
 public class NoOpLoggingHandler extends Handler
 {
-    public NoOpLoggingHandler()
-    {
-    }
-
     @Override
     public void publish(final LogRecord record)
     {

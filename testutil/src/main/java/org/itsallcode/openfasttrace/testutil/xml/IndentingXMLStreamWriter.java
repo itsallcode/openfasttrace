@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.testutil.xml;
  * #L%
  */
 
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -310,7 +309,8 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
      */
     protected void afterEndDocument() throws XMLStreamException
     {
-        if (this.stack[this.depth = 0] == WROTE_MARKUP)
+        this.depth = 0;
+        if (this.stack[this.depth] == WROTE_MARKUP)
         { // but not data
             writeNewLine(0);
         }

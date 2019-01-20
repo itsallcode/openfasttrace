@@ -2,11 +2,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>openfasttrace-core</artifactId>
-    <name>OpenFastTrace Core</name>
+    <artifactId>openfasttrace-exporter-specobject</artifactId>
+    <name>OpenFastTrace Specobject Exporter</name>
 
     <parent>
-        <relativePath>../parent/pom.xml</relativePath>
+        <relativePath>../../parent/pom.xml</relativePath>
         <groupId>org.itsallcode</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>2.2.0</version>
@@ -15,23 +15,13 @@
     <dependencies>
         <dependency>
             <groupId>org.itsallcode</groupId>
-            <artifactId>openfasttrace-api</artifactId>
+            <artifactId>openfasttrace-core</artifactId>
             <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <version>${oft.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit-pioneer</groupId>
-            <artifactId>junit-pioneer</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -45,18 +35,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
-            <artifactId>junit5-system-extensions</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.kaklakariada</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

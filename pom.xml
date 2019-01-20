@@ -9,6 +9,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>parent</module>
+        <module>api</module>
         <module>core</module>
+        <module>product</module>
+        <module>exporter</module>
+        <module>testutil</module>
     </modules>
 </project>

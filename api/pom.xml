@@ -2,8 +2,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>openfasttrace-core</artifactId>
-    <name>OpenFastTrace Core</name>
+    <artifactId>openfasttrace-api</artifactId>
+    <name>OpenFastTrace API</name>
 
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
@@ -13,17 +13,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>org.itsallcode</groupId>
-            <artifactId>openfasttrace-api</artifactId>
-            <version>${oft.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode</groupId>
-            <artifactId>openfasttrace-testutil</artifactId>
-            <version>${oft.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>

@@ -22,12 +22,15 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,13 +69,13 @@ class TestCliStarter
     private static final String CARRIAGE_RETURN = "\r";
     private static final String NEWLINE = "\n";
 
-    private Path docDir;
+    private final Path DOC_DIR = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
+
     private Path outputFile;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
+    void beforeEach(@TempDir final Path tempDir)
     {
-        this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
         this.outputFile = tempDir.resolve("stream.txt");
     }
 
@@ -125,7 +128,7 @@ class TestCliStarter
     void testConvertUnknownExporter(@SysErr final Capturable err)
     {
         final Runnable runnable = () -> runCliStarter( //
-                CONVERT_COMMAND, this.docDir.toString(), //
+                CONVERT_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "illegal", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
         assertExitWithError(runnable, ExitStatus.CLI_ERROR,
@@ -137,7 +140,7 @@ class TestCliStarter
     void testConvertToSpecobjectFile() throws IOException
     {
         final Runnable runnable = () -> runCliStarter( //
-                CONVERT_COMMAND, this.docDir.toString(), //
+                CONVERT_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "specobject", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
         assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE + "<specobjects doctype=\"");
@@ -157,7 +160,7 @@ class TestCliStarter
     @Test
     void testConvertDefaultOutputFormat(@SysOut final Capturable out) throws IOException
     {
-        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.docDir.toString());
+        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.DOC_DIR.toString());
         assertExitOkWithStdOutStart(runnable, REQM2_PREAMBLE, out);
     }
 
@@ -165,7 +168,7 @@ class TestCliStarter
     @Test
     void testConvertDefaultOutputFormatIntoFile() throws IOException
     {
-        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.docDir.toString(),
+        final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
         assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE);
     }
@@ -206,7 +209,7 @@ class TestCliStarter
         final Runnable runnable = () -> runCliStarter( //
                 TRACE_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
-                this.docDir.toString() //
+                this.DOC_DIR.toString() //
         );
         assertExitOkWithOutputFileStart(runnable, "ok - 5 total");
     }
@@ -215,7 +218,7 @@ class TestCliStarter
     void testTraceWithReportVerbosityMinimal() throws IOException
     {
         final Runnable runnable = () -> runCliStarter( //
-                TRACE_COMMAND, this.docDir.toString(), //
+                TRACE_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "MINIMAL" //
         );
@@ -226,7 +229,7 @@ class TestCliStarter
     void testTraceWithReportVerbosityQuietToStdOut(@SysOut final Capturable out) throws IOException
     {
         final Runnable runnable = () -> runCliStarter(//
-                TRACE_COMMAND, this.docDir.toString(), //
+                TRACE_COMMAND, this.DOC_DIR.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET" //
         );
         out.capture();
@@ -242,7 +245,7 @@ class TestCliStarter
             throws IOException
     {
         final Runnable runnable = () -> runCliStarter( //
-                TRACE_COMMAND, this.docDir.toString(), //
+                TRACE_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET" //
         );
@@ -276,7 +279,7 @@ class TestCliStarter
     void testBasicHtmlTrace(@SysOut final Capturable out)
     {
         final Runnable runnable = () -> runCliStarter( //
-                TRACE_COMMAND, this.docDir.toString(), //
+                TRACE_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "html");
         assertExitOkWithStdOutStart(runnable, "<!DOCTYPE html>", out);
     }
@@ -310,7 +313,7 @@ class TestCliStarter
                 TRACE_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 NEWLINE_PARAMETER, "OLDMAC", //
-                this.docDir.toString() //
+                this.DOC_DIR.toString() //
         );
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
@@ -339,7 +342,7 @@ class TestCliStarter
         final Runnable runnable = () -> runCliStarter( //
                 TRACE_COMMAND, //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
-                this.docDir.toString() //
+                this.DOC_DIR.toString() //
         );
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
@@ -377,7 +380,7 @@ class TestCliStarter
     void testTraceWithFilteredArtifactType() throws IOException
     {
         final Runnable runnable = () -> runCliStarter( //
-                TRACE_COMMAND, this.docDir.toString(), //
+                TRACE_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 WANTED_ARTIFACT_TYPES_PARAMETER, "feat,req"
         //
@@ -412,6 +415,6 @@ class TestCliStarter
 
     private void runCliStarter(final String... arguments)
     {
-        CliStarter.main(arguments, new FakeDirectoryService(this.docDir.toString()));
+        CliStarter.main(arguments, new FakeDirectoryService(this.DOC_DIR.toString()));
     }
 }

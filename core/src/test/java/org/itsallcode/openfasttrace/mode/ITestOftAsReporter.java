@@ -35,6 +35,7 @@ import java.util.*;
 
 import org.itsallcode.openfasttrace.*;
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -32,7 +32,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +67,7 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
-            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("dir/file"));
+            final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("dir/file"));
             final String expectedName = this.zipFile.getPath() + "!dir/file";
             assertThat(inputFile.getPath(), equalTo(expectedName));
             assertThat(inputFile.toString(), equalTo(expectedName));
@@ -83,7 +86,7 @@ class TestZipEntryInput
         try (final ZipFile zip = getZipFile())
         {
             assertThrows(UnsupportedOperationException.class,
-                    () -> InputFile.forZipEntry(zip, new ZipEntry("file")).toPath());
+                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("file")).toPath());
         }
     }
 
@@ -93,7 +96,7 @@ class TestZipEntryInput
         try (final ZipFile zip = getZipFile())
         {
             assertThrows(IllegalArgumentException.class,
-                    () -> InputFile.forZipEntry(zip, new ZipEntry("dir/")));
+                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("dir/")));
         }
     }
 
@@ -102,7 +105,7 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
-            final InputFile file = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            final InputFile file = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
             assertThat(file.isRealFile(), equalTo(false));
         }
     }
@@ -112,7 +115,7 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
-            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
             assertThrows(ImporterException.class, () -> readContent(inputFile));
         }
     }
@@ -123,7 +126,7 @@ class TestZipEntryInput
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.UTF_8));
         try (final ZipFile zip = getZipFile())
         {
-            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"));
+            final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
             assertThat(readContent(inputFile), equalTo(CONTENT));
         }
     }
@@ -134,7 +137,7 @@ class TestZipEntryInput
         addEntryToZip("file", CONTENT.getBytes(StandardCharsets.ISO_8859_1));
         try (final ZipFile zip = getZipFile())
         {
-            final InputFile inputFile = InputFile.forZipEntry(zip, new ZipEntry("file"),
+            final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"),
                     StandardCharsets.ISO_8859_1);
             assertThat(readContent(inputFile), equalTo(CONTENT));
         }

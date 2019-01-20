@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.ImportSettings;
 /*-
  * #%L
  * OpenFastTrace

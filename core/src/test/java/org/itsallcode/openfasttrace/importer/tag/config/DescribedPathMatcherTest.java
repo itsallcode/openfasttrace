@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.importer.tag.config;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -198,7 +199,7 @@ public class DescribedPathMatcherTest
     private void assertMatches(final String path, final boolean expected)
     {
         assertThat("Initialize matcher before assertions", this.matcher, notNullValue());
-        final InputFile file = InputFile.forPath(Paths.get(path));
+        final InputFile file = TestingFileInput.forPath(Paths.get(path));
         assertThat("path " + path, this.matcher.matches(file), equalTo(expected));
     }
 

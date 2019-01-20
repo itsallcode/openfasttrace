@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /*-
  * #%L
@@ -25,7 +26,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 
 import static org.hamcrest.Matchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,16 +33,19 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
- * Test for {@link ImporterService}
+ * Test for {@link ImporterServiceImpl}
  */
 class TestImporterService
 {
@@ -68,9 +71,9 @@ class TestImporterService
     void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
-        this.importerService = new ImporterService(this.factoryLoaderMock,
+        this.importerService = new ImporterServiceImpl(this.factoryLoaderMock,
                 ImportSettings.createDefault());
-        this.file = InputFile.forPath(Paths.get("dir", "file"));
+        this.file = TestingFileInput.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
                 .thenReturn(this.importerFactoryMock);

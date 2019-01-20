@@ -33,8 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.ImportSettings;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -75,8 +74,8 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     {
         final Path supportedPath = Paths.get("dir", getSupportedFilenames().get(0));
         assertThrows(ImporterException.class, //
-                () -> createAndInitialize().createImporter(InputFile.forPath(supportedPath), null)
-                        .runImport(), //
+                () -> createAndInitialize()
+                        .createImporter(TestingFileInput.forPath(supportedPath), null).runImport(), //
                 "Error reading \"" + supportedPath + "\"");
     }
 
@@ -110,7 +109,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         for (final String filename : filenames)
         {
             final Path path = Paths.get("dir", filename);
-            assertThat(path.toString(), factory.supportsFile(InputFile.forPath(path)),
+            assertThat(path.toString(), factory.supportsFile(TestingFileInput.forPath(path)),
                     equalTo(expectedResult));
         }
     }

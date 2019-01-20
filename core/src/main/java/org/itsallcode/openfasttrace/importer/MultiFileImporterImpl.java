@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -34,38 +36,32 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
  * multiple files.
  * 
- * @see ImporterService#createImporter()
+ * @see ImporterServiceImpl#createImporter()
  */
-public class MultiFileImporter
+public class MultiFileImporterImpl implements MultiFileImporter
 {
-    private static final Logger LOG = Logger.getLogger(MultiFileImporter.class.getName());
+    private static final Logger LOG = Logger.getLogger(MultiFileImporterImpl.class.getName());
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private static final String ALL_RECURSIVE_GLOB = "**/*";
 
     private final SpecificationListBuilder specItemBuilder;
     private final ImporterFactoryLoader factoryLoader;
 
-    MultiFileImporter(final SpecificationListBuilder specItemBuilder,
+    MultiFileImporterImpl(final SpecificationListBuilder specItemBuilder,
             final ImporterFactoryLoader factoryLoader)
     {
         this.specItemBuilder = specItemBuilder;
         this.factoryLoader = factoryLoader;
     }
 
-    /**
-     * Import the given file using the matching {@link Importer} using character
-     * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
-     *
-     * @param file
-     *            the file to import.
-     * @return <code>this</code> for fluent programming style.
-     */
-    public MultiFileImporter importFile(final InputFile file)
+    @Override
+    public MultiFileImporterImpl importFile(final InputFile file)
     {
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         createImporter(file, this.specItemBuilder).runImport();
@@ -74,14 +70,7 @@ public class MultiFileImporter
         return this;
     }
 
-    /**
-     * Import from the path, independently of whether it is represents a
-     * directory or a file.
-     * 
-     * @param paths
-     *            lists of paths to files or directories
-     * @return <code>this</code> for fluent programming style.
-     */
+    @Override
     public MultiFileImporter importAny(final List<Path> paths)
     {
         for (final Path path : paths)
@@ -95,7 +84,7 @@ public class MultiFileImporter
                 }
                 else
                 {
-                    importFile(InputFile.forPath(path));
+                    importFile(RealFileInput.forPath(path));
                 }
             }
             else
@@ -107,18 +96,8 @@ public class MultiFileImporter
         return this;
     }
 
-    /**
-     * Import all files from the given directory that match the given
-     * {@link FileSystem#getPathMatcher(String) glob expression} and character
-     * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
-     *
-     * @param dir
-     *            the dir to search for files to import.
-     * @param glob
-     *            the {@link FileSystem#getPathMatcher(String) glob expression}
-     * @return <code>this</code> for fluent programming style.
-     */
     // [impl->dsn~input-directory-recursive-traversal~1]
+    @Override
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
@@ -128,7 +107,7 @@ public class MultiFileImporter
         {
             fileStream.filter(path -> !path.toFile().isDirectory()) //
                     .filter(matcher::matches) //
-                    .map(path -> InputFile.forPath(path, DEFAULT_CHARSET))
+                    .map(path -> RealFileInput.forPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
                     .map(file -> createImporter(file, this.specItemBuilder)).forEach(importer -> {
                         importer.runImport();
@@ -145,11 +124,7 @@ public class MultiFileImporter
         return this;
     }
 
-    /**
-     * Get all imported {@link SpecificationItem}s.
-     * 
-     * @return all imported {@link SpecificationItem}s.
-     */
+    @Override
     public List<SpecificationItem> getImportedItems()
     {
         return this.specItemBuilder.build();

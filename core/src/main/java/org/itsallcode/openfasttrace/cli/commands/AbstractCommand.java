@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.cli.CliArguments;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 
 /**
  * This class is the abstract base class for all commands that process a list of

@@ -56,7 +56,7 @@ class TestRealFileInput
     void testRelativeFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah");
-        final InputFile inputFile = InputFile.forPath(path);
+        final InputFile inputFile = TestingFileInput.forPath(path);
         assertThat(inputFile.getPath(), equalTo("blah"));
         assertThat(inputFile.toString(), equalTo("blah"));
     }
@@ -65,7 +65,7 @@ class TestRealFileInput
     void testAbsoluteFileGetPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
-        final InputFile inputFile = InputFile.forPath(path);
+        final InputFile inputFile = TestingFileInput.forPath(path);
         assertThat(inputFile.getPath(), equalTo(path.toString()));
         assertThat(inputFile.toString(), equalTo(path.toString()));
     }
@@ -74,7 +74,7 @@ class TestRealFileInput
     void testRelativeFileToPath() throws IOException
     {
         final Path path = Paths.get("blah");
-        final InputFile inputFile = InputFile.forPath(path);
+        final InputFile inputFile = TestingFileInput.forPath(path);
         assertThat(inputFile.toPath(), equalTo(path));
     }
 
@@ -82,21 +82,21 @@ class TestRealFileInput
     void testAbsoluteFileToPath() throws IOException
     {
         final Path path = Paths.get("blah").toAbsolutePath();
-        final InputFile inputFile = InputFile.forPath(path);
+        final InputFile inputFile = TestingFileInput.forPath(path);
         assertThat(inputFile.toPath(), equalTo(path));
     }
 
     @Test
     void testIsRealFileTrue() throws IOException
     {
-        final InputFile inputFile = InputFile.forPath(Paths.get("blah"));
+        final InputFile inputFile = TestingFileInput.forPath(Paths.get("blah"));
         assertThat(inputFile.isRealFile(), equalTo(true));
     }
 
     @Test
     void testReadWithDefaultEncoding() throws IOException
     {
-        final InputFile inputFile = InputFile
+        final InputFile inputFile = TestingFileInput
                 .forPath(writeTempFile(CONTENT, StandardCharsets.UTF_8));
         assertThat(readContent(inputFile), equalTo(CONTENT));
     }
@@ -112,7 +112,7 @@ class TestRealFileInput
     @Test
     void testReadWithIsoEncoding() throws IOException
     {
-        final InputFile inputFile = InputFile.forPath(
+        final InputFile inputFile = TestingFileInput.forPath(
                 writeTempFile(CONTENT, StandardCharsets.ISO_8859_1), StandardCharsets.ISO_8859_1);
         assertThat(readContent(inputFile), equalTo(CONTENT));
     }
@@ -120,7 +120,7 @@ class TestRealFileInput
     @Test
     void testReadWithUtf8Encoding() throws IOException
     {
-        final InputFile inputFile = InputFile
+        final InputFile inputFile = TestingFileInput
                 .forPath(writeTempFile(CONTENT, StandardCharsets.UTF_8), StandardCharsets.UTF_8);
         assertThat(readContent(inputFile), equalTo(CONTENT));
     }

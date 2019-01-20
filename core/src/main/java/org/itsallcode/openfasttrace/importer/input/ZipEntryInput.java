@@ -21,8 +21,12 @@ package org.itsallcode.openfasttrace.importer.input;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -38,11 +42,47 @@ public class ZipEntryInput implements InputFile
     private final ZipEntry entry;
     private final Charset charset;
 
-    ZipEntryInput(final ZipFile zip, final ZipEntry entry, final Charset charset)
+    private ZipEntryInput(final ZipFile zip, final ZipEntry entry, final Charset charset)
     {
         this.zip = zip;
         this.entry = entry;
         this.charset = charset;
+    }
+
+    /**
+     * Create an {@link InputFile} for a {@link ZipEntry} in a {@link ZipFile}.
+     * {@link StandardCharsets#UTF_8} is used for reading the file.
+     * 
+     * @param zip
+     *            the {@link ZipFile} containing the entry.
+     * @param entry
+     *            the {@link ZipEntry} to read.
+     * @return an {@link InputFile}.
+     */
+    public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry)
+    {
+        return forZipEntry(zip, entry, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Create an {@link InputFile} for a {@link ZipEntry} in a {@link ZipFile}.
+     * 
+     * @param zip
+     *            the {@link ZipFile} containing the entry.
+     * @param entry
+     *            the {@link ZipEntry} to read.
+     * @param charset
+     *            the {@link Charset} used for reading the entry.
+     * @return an {@link InputFile}.
+     */
+    public static InputFile forZipEntry(final ZipFile zip, final ZipEntry entry,
+            final Charset charset)
+    {
+        if (entry.isDirectory())
+        {
+            throw new IllegalArgumentException("ZIP entry " + entry + " must not be a directory");
+        }
+        return new ZipEntryInput(zip, entry, charset);
     }
 
     @Override

@@ -35,9 +35,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.ImportSettings;
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
+import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.ImporterContext;
+import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,13 +125,13 @@ class TestTagImporterFactoryWithConfig
     private void assertSupportsFile(final ImportSettings settings, final String path,
             final boolean expected)
     {
-        final InputFile file = InputFile.forPath(Paths.get(path));
+        final InputFile file = TestingFileInput.forPath(Paths.get(path));
         assertThat(create(settings).supportsFile(file), equalTo(expected));
     }
 
     private Importer createImporter(final ImportSettings settings, final Path path)
     {
-        final InputFile file = InputFile.forPath(path, StandardCharsets.UTF_8);
+        final InputFile file = TestingFileInput.forPath(path, StandardCharsets.UTF_8);
         return create(settings).createImporter(file, this.listenerMock);
     }
 

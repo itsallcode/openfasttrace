@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -63,7 +64,7 @@ class TestImporterFactoryLoader
         MockitoAnnotations.initMocks(this);
 
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
-        this.file = InputFile.forPath(Paths.get("dir", "name"));
+        this.file = TestingFileInput.forPath(Paths.get("dir", "name"));
 
         when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
         when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);

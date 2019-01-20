@@ -32,12 +32,12 @@ import java.nio.file.Path;
 /**
  * An {@link InputFile} for a file on disk, represented by a {@link Path}.
  */
-public class RealFileInput implements InputFile
+public class TestingFileInput implements InputFile
 {
     private final Path path;
     private final Charset charset;
 
-    private RealFileInput(final Path path, final Charset charset)
+    private TestingFileInput(final Path path, final Charset charset)
     {
         this.path = path;
         this.charset = charset;
@@ -67,7 +67,7 @@ public class RealFileInput implements InputFile
      */
     public static InputFile forPath(final Path path, final Charset charset)
     {
-        return new RealFileInput(path, charset);
+        return new TestingFileInput(path, charset);
     }
 
     @Override

@@ -26,12 +26,18 @@ import java.util.zip.ZipFile;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.itsallcode.openfasttrace.importer.*;
+import org.itsallcode.openfasttrace.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.importer.Importer;
+import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.ImporterService;
+import org.itsallcode.openfasttrace.importer.MultiFileImporter;
+import org.itsallcode.openfasttrace.importer.MultiFileImporterImpl;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
 
 /**
  * This {@link Importer} supports reading {@link ZipFile} and delegates import
- * of {@link ZipEntry}s to a {@link MultiFileImporter}.
+ * of {@link ZipEntry}s to a {@link MultiFileImporterImpl}.
  */
 public class ZipFileImporter implements Importer
 {
@@ -73,6 +79,6 @@ public class ZipFileImporter implements Importer
 
     private InputFile createInput(final ZipFile zip, final ZipEntry entry)
     {
-        return InputFile.forZipEntry(zip, entry);
+        return ZipEntryInput.forZipEntry(zip, entry);
     }
 }

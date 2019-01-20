@@ -23,8 +23,8 @@ package org.itsallcode.openfasttrace.importer;
  */
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
@@ -38,6 +38,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -51,8 +52,8 @@ class TestMultiFileImporter
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
     private static final Path PATH2 = FOLDER.resolve("sample_system_requirements.md");
     private static final Path PATH1 = FOLDER.resolve("sample_design.md");
-    private static final InputFile FILE1 = InputFile.forPath(PATH1);
-    private static final InputFile FILE2 = InputFile.forPath(PATH2);
+    private static final InputFile FILE1 = TestingFileInput.forPath(PATH1);
+    private static final InputFile FILE2 = TestingFileInput.forPath(PATH2);
     private static final Path NON_EXISTING_FILE = FOLDER.resolve("does_not_exist");
 
     @Mock
@@ -70,7 +71,7 @@ class TestMultiFileImporter
     void beforeEach()
     {
         MockitoAnnotations.initMocks(this);
-        this.multiFileImporter = new MultiFileImporter(this.specItemBuilderMock,
+        this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
     }
 

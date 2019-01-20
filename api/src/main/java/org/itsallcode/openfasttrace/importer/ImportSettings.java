@@ -1,9 +1,10 @@
-package org.itsallcode.openfasttrace;
+package org.itsallcode.openfasttrace.importer;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 /*-

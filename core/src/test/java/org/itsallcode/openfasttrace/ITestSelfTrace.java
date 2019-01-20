@@ -32,6 +32,7 @@ import org.itsallcode.openfasttrace.core.Location;
 import org.itsallcode.openfasttrace.core.OftRunner;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

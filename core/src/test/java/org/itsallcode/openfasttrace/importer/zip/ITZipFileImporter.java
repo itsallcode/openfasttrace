@@ -30,9 +30,17 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,15 +49,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.hamcrest.Matchers;
-import org.itsallcode.openfasttrace.importer.MultiFileImporter;
+import org.itsallcode.openfasttrace.importer.MultiFileImporterImpl;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.TempDirectory;
 import org.junitpioneer.jupiter.TempDirectory.TempDir;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 @ExtendWith(TempDirectory.class)
 public class ITZipFileImporter
@@ -61,7 +73,7 @@ public class ITZipFileImporter
             .getBytes(StandardCharsets.UTF_8);
 
     @Mock
-    private MultiFileImporter delegateImporterMock;
+    private MultiFileImporterImpl delegateImporterMock;
     @Captor
     private ArgumentCaptor<InputFile> arg;
 
@@ -175,7 +187,7 @@ public class ITZipFileImporter
     private List<InputFile> runImporter(final int expectedFileCount) throws IOException
     {
         this.zipOutputStream.close();
-        final InputFile file = InputFile.forPath(this.zipFile.toPath());
+        final InputFile file = TestingFileInput.forPath(this.zipFile.toPath());
         new ZipFileImporter(file, this.delegateImporterMock).runImport();
         if (expectedFileCount == 0)
         {

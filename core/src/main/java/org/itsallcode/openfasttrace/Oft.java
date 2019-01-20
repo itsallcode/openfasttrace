@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 
 /**
  * Import requirements (e.g. from ReqM2 to Markdown)

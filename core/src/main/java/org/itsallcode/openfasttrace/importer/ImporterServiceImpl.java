@@ -23,7 +23,6 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.List;
 
-import org.itsallcode.openfasttrace.ImportSettings;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
@@ -32,32 +31,29 @@ import org.itsallcode.openfasttrace.importer.input.InputFile;
  * {@link SpecificationItem}s that automatically use the correct
  * {@link Importer} based on the filename.
  */
-public class ImporterService
+public class ImporterServiceImpl implements ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;
     private final ImportSettings settings;
 
     /**
-     * Create a new instance of an {@link ImporterService}
+     * Create a new instance of an {@link ImporterServiceImpl}
      * 
      * @param factoryLoader
      *            loader for importer factories depending on the source
      * @param settings
      *            import settings (e.g. filters)
      */
-    public ImporterService(final ImporterFactoryLoader factoryLoader, final ImportSettings settings)
+    public ImporterServiceImpl(final ImporterFactoryLoader factoryLoader, final ImportSettings settings)
     {
         this.factoryLoader = factoryLoader;
         this.settings = settings;
     }
 
-    /**
-     * Import a file's contents
-     * 
-     * @param file
-     *            file to be imported
-     * @return list of recognized specification items
+    /* 
+     * {@inheritDoc}
      */
+    @Override
     public List<SpecificationItem> importFile(final InputFile file)
     {
         return createImporter() //
@@ -65,11 +61,19 @@ public class ImporterService
                 .getImportedItems();
     }
 
-    public MultiFileImporter createImporter(final ImportEventListener builder)
+    /* 
+     * {@inheritDoc}
+     */
+    @Override
+    public MultiFileImporterImpl createImporter(final ImportEventListener builder)
     {
-        return new MultiFileImporter((SpecificationListBuilder) builder, this.factoryLoader);
+        return new MultiFileImporterImpl((SpecificationListBuilder) builder, this.factoryLoader);
     }
 
+    /* 
+     * {@inheritDoc}
+     */
+    @Override
     public MultiFileImporter createImporter()
     {
         return createImporter(

@@ -47,7 +47,7 @@ public class OftRunner implements Oft
         final ImporterContext context = new ImporterContext(settings);
         final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader = InitializingServiceLoader
                 .load(ImporterFactory.class, context);
-        final ImporterService service = new ImporterService(
+        final ImporterService service = new ImporterServiceImpl(
                 new ImporterFactoryLoader(serviceLoader), settings);
         context.setImporterService(service);
         return service;

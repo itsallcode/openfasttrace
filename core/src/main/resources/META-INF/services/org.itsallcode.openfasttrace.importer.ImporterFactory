@@ -1,4 +1,3 @@
-org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory
 org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory
 org.itsallcode.openfasttrace.importer.tag.TagImporterFactory
 org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory

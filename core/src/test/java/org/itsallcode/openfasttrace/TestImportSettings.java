@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 import org.junit.jupiter.api.Test;
 

@@ -27,7 +27,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.cli.StandardDirectoryService;
-import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.core.OftRunner;
+import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.core.Trace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

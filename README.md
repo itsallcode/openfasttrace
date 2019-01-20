@@ -83,7 +83,7 @@ If you just want to run OFT:
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```bash
-java -jar openfasttrace-2.2.0.jar trace /path/to/directory/being/traced
+java -jar core/target/openfasttrace-2.2.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our [Gradle Plugin](https://github.com/itsallcode/openfasttrace-gradle).

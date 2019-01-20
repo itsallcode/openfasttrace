@@ -15,22 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -68,14 +53,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
@@ -99,96 +76,12 @@
                         -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <charset>UTF-8</charset>
-                    <doclint></doclint>
-                    <serialwarn>true</serialwarn>
-                    <failOnError>true</failOnError>
-                    <failOnWarnings>true</failOnWarnings>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <verbose>false</verbose>
-                    <detail>true</detail>
-                    <licenseName>gpl_v3</licenseName>
-                    <organizationName>itsallcode.org</organizationName>
-                    <inceptionYear>2016</inceptionYear>
-                    <excludes>
-                        <exclude>
-                            test/resources/specobject/*.xml
-                        </exclude>
-                        <exclude>**/*.css</exclude>
-                        <exclude>**/*.html</exclude>
-                    </excludes>
-                    <failOnMissingHeader>true</failOnMissingHeader>
-                    <failIfWarning>true</failIfWarning>
-                    <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                    <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
-                    <encoding>UTF-8</encoding>
-                    <dryRun>false</dryRun>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check-file-header</id>
-                        <goals>
-                            <goal>check-file-header</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                    <execution>
-                        <id>add-third-party-licenses</id>
-                        <goals>
-                            <goal>add-third-party</goal>
-                            <goal>third-party-report</goal>
-                            <goal>download-licenses</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
+
             <!-- Self trace. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -207,19 +100,6 @@
                         src/test/java</commandlineArgs>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-            </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${maven.surefire.version}</version>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

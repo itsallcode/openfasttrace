@@ -40,6 +40,26 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-importer-markdown</artifactId>
+            <version>${oft.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-importer-specoboject</artifactId>
+            <version>${oft.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-importer-tag</artifactId>
+            <version>${oft.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-importer-zip</artifactId>
+            <version>${oft.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <version>${oft.version}</version>
             <scope>test</scope>

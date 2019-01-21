@@ -49,10 +49,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.hamcrest.Matchers;
-import org.itsallcode.openfasttrace.importer.MultiFileImporterImpl;
+import org.itsallcode.openfasttrace.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +73,7 @@ public class ITZipFileImporter
             .getBytes(StandardCharsets.UTF_8);
 
     @Mock
-    private MultiFileImporterImpl delegateImporterMock;
+    private MultiFileImporter delegateImporterMock;
     @Captor
     private ArgumentCaptor<InputFile> arg;
 

@@ -31,7 +31,6 @@ import org.itsallcode.openfasttrace.importer.Importer;
 import org.itsallcode.openfasttrace.importer.ImporterException;
 import org.itsallcode.openfasttrace.importer.ImporterService;
 import org.itsallcode.openfasttrace.importer.MultiFileImporter;
-import org.itsallcode.openfasttrace.importer.MultiFileImporterImpl;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
 

@@ -5,15 +5,22 @@
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace</artifactId>
     <version>2.2.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
-    <name>OpenFastTrace Modules</name>
+    <name>OpenFastTrace</name>
     <packaging>pom</packaging>
     <modules>
         <module>parent</module>
         <module>api</module>
         <module>core</module>
         <module>product</module>
-        <module>exporter</module>
-        <module>importer</module>
+
+        <module>exporter/markdown</module>
+        <module>exporter/specobject</module>
+
+        <module>importer/markdown</module>
+        <module>importer/specobject</module>
+        <module>importer/tag</module>
+        <module>importer/zip</module>
+
         <module>testutil</module>
     </modules>
 </project>

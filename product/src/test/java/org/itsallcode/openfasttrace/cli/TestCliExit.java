@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(ExitGuard.class)
 class TestCliExit
 {
-    private static final String TEST_RESOURCES_MARKDOWN = "src/test/resources/markdown";
+    private static final String TEST_RESOURCES_MARKDOWN = "../core/src/test/resources/markdown";
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";
     private static final String SAMPLE_SYSTEM_REQUIREMENTS = TEST_RESOURCES_MARKDOWN
             + "/sample_system_requirements.md";

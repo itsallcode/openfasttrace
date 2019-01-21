@@ -26,7 +26,10 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +47,7 @@ public abstract class AbstractOftTest
 
     protected void perpareOutput(final Path outputDir) throws UnsupportedEncodingException
     {
-        this.docDir = Paths.get("src", "test", "resources", "markdown").toAbsolutePath();
+        this.docDir = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
         this.outputFile = outputDir.resolve("stream.txt");
         System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
         System.setErr(new PrintStream(this.error, true, "UTF-8"));

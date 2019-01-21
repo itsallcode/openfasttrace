@@ -25,11 +25,6 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
-            <artifactId>openfasttrace-importer-markdown</artifactId>
-            <version>${oft.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-exporter-markdown</artifactId>
             <version>${oft.version}</version>
         </dependency>

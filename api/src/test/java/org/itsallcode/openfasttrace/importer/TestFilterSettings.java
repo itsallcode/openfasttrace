@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
-class TestImportFilterSettings
+class TestFilterSettings
 {
     @Test
     void testFilterUnsetIfEmpty()

@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -127,7 +126,7 @@ class TestTagImporterFactoryWithConfig
 
     private Importer createImporter(final ImportSettings settings, final Path path)
     {
-        final InputFile file = TestingFileInput.forPath(path, StandardCharsets.UTF_8);
+        final InputFile file = TestingFileInput.forPath(path);
         return create(settings).createImporter(file, this.listenerMock);
     }
 

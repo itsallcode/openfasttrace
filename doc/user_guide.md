@@ -519,6 +519,14 @@ Each of those classes comes with a builder which is called like this:
 ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
 
+### Exit Codes
+
+The OFT command line interface returns the following exit codes:
+
+* `0` on success
+* `1` on OFT error
+* `2` on command line error
+
 ## Tool Support
 
 ### Tools for Authoring OFT Documents

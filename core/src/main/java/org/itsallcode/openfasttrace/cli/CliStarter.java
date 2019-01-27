@@ -104,8 +104,14 @@ public class CliStarter
             throw new IllegalStateException(
                     "Unknown command '" + command.get() + "' trying to execute OFT mode.");
         }
-        final ExitStatus status = ExitStatus.fromBoolean(performable.run());
-        exit(status);
+        if (performable.run())
+        {
+            exit(ExitStatus.OK);
+        }
+        else
+        {
+            exit(ExitStatus.FAILURE);
+        }
     }
 
     // [impl->dsn~cli.tracing.exit-status~1]

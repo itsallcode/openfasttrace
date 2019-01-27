@@ -16,85 +16,43 @@
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-api</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-core</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-exporter-markdown</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-markdown</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-specoboject</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-tag</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-zip</artifactId>
-            <version>${oft.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
-            <version>${oft.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit-pioneer</groupId>
-            <artifactId>junit-pioneer</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode</groupId>
-            <artifactId>junit5-system-extensions</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.kaklakariada</groupId>
-            <artifactId>hamcrest-auto-matcher</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <finalName>openfasttrace-${oft.version}</finalName>
         <plugins>
@@ -123,25 +81,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
-                    </systemPropertyVariables>
-                    <!-- Workaround for failing tests on Circle CI with Surefire -->
-                    <!-- ${argLine} is required to inject default arguments 
-                        for jacoco -->
-                    <argLine>${argLine}
-                        -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-                </configuration>
-            </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-            </plugin>
+
 
             <!-- Self trace. -->
             <plugin>

@@ -17,7 +17,6 @@
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-api</artifactId>
-            <version>${oft.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -41,34 +40,15 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
-                    </systemPropertyVariables>
-                    <!-- Workaround for failing tests on Circle CI with Surefire -->
-                    <!-- ${argLine} is required to inject default arguments 
-                        for jacoco -->
-                    <argLine>${argLine}
-                        -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

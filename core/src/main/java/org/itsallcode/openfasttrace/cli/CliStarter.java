@@ -61,8 +61,7 @@ public class CliStarter
      */
     static void main(final String[] args, final DirectoryService directoryService)
     {
-        final CliArguments arguments = new CliArguments(directoryService);
-        new CommandLineInterpreter(args, arguments).parse();
+        final CliArguments arguments = parseCommandLineArguments(args, directoryService);
         final ArgumentValidator validator = new ArgumentValidator(arguments);
         if (validator.isValid())
         {
@@ -74,6 +73,22 @@ public class CliStarter
                     "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
             exit(ExitStatus.CLI_ERROR);
         }
+    }
+
+    private static CliArguments parseCommandLineArguments(final String[] args,
+            final DirectoryService directoryService)
+    {
+        final CliArguments arguments = new CliArguments(directoryService);
+        try
+        {
+            new CommandLineInterpreter(args, arguments).parse();
+        }
+        catch (final CliException e)
+        {
+            printToStdError("oft: " + e.getMessage());
+            exit(ExitStatus.CLI_ERROR);
+        }
+        return arguments;
     }
 
     // Writing to standard error by intention
@@ -104,8 +119,14 @@ public class CliStarter
             throw new IllegalStateException(
                     "Unknown command '" + command.get() + "' trying to execute OFT mode.");
         }
-        final ExitStatus status = ExitStatus.fromBoolean(performable.run());
-        exit(status);
+        if (performable.run())
+        {
+            exit(ExitStatus.OK);
+        }
+        else
+        {
+            exit(ExitStatus.FAILURE);
+        }
     }
 
     // [impl->dsn~cli.tracing.exit-status~1]

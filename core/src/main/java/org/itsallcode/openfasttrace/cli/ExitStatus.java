@@ -22,7 +22,9 @@ package org.itsallcode.openfasttrace.cli;
  * #L%
  */
 
-
+/**
+ * Exit status of the OpenFastTrace command line interface.
+ */
 public enum ExitStatus
 {
     OK(0), FAILURE(1), CLI_ERROR(2);
@@ -34,13 +36,12 @@ public enum ExitStatus
         this.code = code;
     }
 
-    int getCode()
+    /**
+     * Get the numeric representation of the exit status code
+     * @return exit status code as integer number
+     */
+    public int getCode()
     {
         return this.code;
-    }
-
-    public static ExitStatus fromBoolean(final boolean status)
-    {
-        return status ? OK : FAILURE;
     }
 }

@@ -69,4 +69,11 @@ class TestCliExit
     {
         assertExitStatusForTracedFiles(ExitStatus.FAILURE, SAMPLE_SYSTEM_REQUIREMENTS);
     }
+
+    @Test
+    void testCliExitCode_CliError()
+    {
+        final String[] arguments = { "--zzzzz" };
+        assertExitWithStatus(ExitStatus.CLI_ERROR.getCode(), () -> CliStarter.main(arguments));
+    }
 }

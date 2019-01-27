@@ -90,8 +90,11 @@ public class CommandLineInterpreter
 
     /**
      * Parse the command line and inject the values into the receiver object
+     * 
+     * @throws CliException
+     *             in case the command line could not be parsed
      */
-    public void parse()
+    public void parse() throws CliException
     {
         final List<String> unnamedArguments = new ArrayList<>();
         final ListIterator<String> iterator = asList(this.arguments).listIterator();
@@ -118,7 +121,7 @@ public class CommandLineInterpreter
     }
 
     private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
-            final String argument)
+            final String argument) throws CliException
     {
         final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase();
         final int lastPosition = characters.length() - 1;
@@ -145,6 +148,7 @@ public class CommandLineInterpreter
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
+            throws CliException
     {
         final String argumentName = argument.replaceAll("-", "").toLowerCase();
         if (this.setters.containsKey(argumentName))
@@ -162,13 +166,13 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private void reportUnexpectedNamedArgument(final String argument)
+    private void reportUnexpectedNamedArgument(final String argument) throws CliException
     {
         throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
 
     private void handleExpectedNamedArgument(final ListIterator<String> iterator,
-            final String argumentName)
+            final String argumentName) throws CliException
     {
         final Method setter = this.setters.get(argumentName);
         if (setter.getParameterTypes().length != 1)
@@ -203,7 +207,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private <T> T convertArgument(final String stringValue, final Class<T> type)
+    private <T> T convertArgument(final String stringValue, final Class<T> type) throws CliException
     {
         if (type.equals(String.class))
         {
@@ -218,7 +222,7 @@ public class CommandLineInterpreter
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T convertEnum(final String stringValue, final Class<T> type)
+    private <T> T convertEnum(final String stringValue, final Class<T> type) throws CliException
     {
         @SuppressWarnings("rawtypes")
         final Class enumType = type;
@@ -235,13 +239,13 @@ public class CommandLineInterpreter
         }
     }
 
-    private void reportUnsupportedSetterArgumentCount(final Method setter)
+    private void reportUnsupportedSetterArgumentCount(final Method setter) throws CliException
     {
         throw new CliException("Unsupported argument count for setter '" + setter
                 + "'. Only one argument is allowed.");
     }
 
-    private void reportMissingParamterValue(final String argumentName)
+    private void reportMissingParamterValue(final String argumentName) throws CliException
     {
         throw new CliException("No value for argument '" + argumentName + "'");
     }
@@ -251,7 +255,7 @@ public class CommandLineInterpreter
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }
 
-    private void assignUnnamedArgument(final List<String> unnamedArguments)
+    private void assignUnnamedArgument(final List<String> unnamedArguments) throws CliException
     {
         final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
         if (unnamedArgumentSetter != null)
@@ -264,7 +268,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private void assignValue(final Method setter, final Object value)
+    private void assignValue(final Method setter, final Object value) throws CliException
     {
         try
         {

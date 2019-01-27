@@ -39,21 +39,21 @@ import org.junit.jupiter.api.Test;
 class TestCommandLineInterpreter
 {
     @Test
-    void testGetNamedStringParamter()
+    void testGetNamedStringParamter() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a");
         assertThat(stub.getA(), equalTo("value_a"));
     }
 
     @Test
-    void testGetLongNamedStringParamter()
+    void testGetLongNamedStringParamter() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("--the-long-parameter", "value_a");
         assertThat(stub.getTheLongParameter(), equalTo("value_a"));
     }
 
     @Test
-    void testGetNamedStringParamterCaseIndependent()
+    void testGetNamedStringParamterCaseIndependent() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-A", "value_a");
         assertThat(stub.getA(), equalTo("value_a"));
@@ -81,28 +81,28 @@ class TestCommandLineInterpreter
     }
 
     @Test
-    void testGetNamedBooleanParamter()
+    void testGetNamedBooleanParamter() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-b");
         assertThat(stub.isB(), equalTo(true));
     }
 
     @Test
-    void testGetNamedBooleanBoxedParamter()
+    void testGetNamedBooleanBoxedParamter() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-d");
         assertThat(stub.isD(), equalTo(true));
     }
 
     @Test
-    void testGetNamedEnumParamter()
+    void testGetNamedEnumParamter() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "VALUE1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
     }
 
     @Test
-    void testGetNamedEnumParamterLowercase()
+    void testGetNamedEnumParamterLowercase() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-c", "value1");
         assertThat(stub.getC(), equalTo(StubEnum.VALUE1));
@@ -116,7 +116,7 @@ class TestCommandLineInterpreter
     }
 
     @Test
-    void testGetUnnamedParamters()
+    void testGetUnnamedParamters() throws CliException
     {
         final String[] args = { "value_1", "value_2" };
         final CommandLineArgumentsStub stub = parseArguments(args);
@@ -161,7 +161,7 @@ class TestCommandLineInterpreter
     }
 
     @Test
-    void testCombinedParameters()
+    void testCombinedParameters() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "-c", "VALUE2");
@@ -172,7 +172,7 @@ class TestCommandLineInterpreter
     }
 
     @Test
-    void testCombinedParametersWithDifferentOrder()
+    void testCombinedParametersWithDifferentOrder() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "value_3", "-c", "VALUE2");
@@ -183,7 +183,7 @@ class TestCommandLineInterpreter
     }
 
     @Test
-    void testChainedSingleCharacterParameters()
+    void testChainedSingleCharacterParameters() throws CliException
     {
         final CommandLineArgumentsStub stub = parseArguments("-bda", "value_a", "value_1",
                 "value_2");
@@ -200,7 +200,7 @@ class TestCommandLineInterpreter
         expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
     }
 
-    private CommandLineArgumentsStub parseArguments(final String... args)
+    private CommandLineArgumentsStub parseArguments(final String... args) throws CliException
     {
         final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
         assertThat("Boolean parameter must be false before CLI parsing", stub.isB(),

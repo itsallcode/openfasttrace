@@ -75,7 +75,6 @@
             <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
@@ -113,9 +112,62 @@
         </dependency>
     </dependencies>
 
-
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-api</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-core</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-exporter-markdown</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-exporter-specobject</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-importer-markdown</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-importer-specoboject</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-importer-tag</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-importer-zip</artifactId>
+                <version>${oft.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-testutil</artifactId>
+                <version>${oft.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
@@ -174,11 +226,6 @@
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
                 <version>3.0.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.itsallcode</groupId>
-                <artifactId>openfasttrace-testutil</artifactId>
                 <scope>test</scope>
             </dependency>
         </dependencies>

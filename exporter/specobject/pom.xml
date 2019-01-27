@@ -16,7 +16,12 @@
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-api</artifactId>
-            <version>${oft.version}</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-testutil</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

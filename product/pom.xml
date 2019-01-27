@@ -16,45 +16,43 @@
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-api</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-core</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-exporter-markdown</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-markdown</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-specoboject</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-tag</artifactId>
-            <version>${oft.version}</version>
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-importer-zip</artifactId>
-            <version>${oft.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-testutil</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <finalName>openfasttrace-${oft.version}</finalName>
         <plugins>
@@ -84,7 +82,7 @@
                 </executions>
             </plugin>
 
-         
+
 
             <!-- Self trace. -->
             <plugin>

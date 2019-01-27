@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,7 +25,6 @@ package org.itsallcode.openfasttrace.report;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 

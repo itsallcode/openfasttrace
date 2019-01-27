@@ -39,10 +39,7 @@ import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 /**
  * Test for {@link ImporterServiceImpl}

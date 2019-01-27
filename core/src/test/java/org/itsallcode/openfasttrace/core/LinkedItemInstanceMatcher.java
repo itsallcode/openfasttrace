@@ -26,8 +26,6 @@ package org.itsallcode.openfasttrace.core;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
 
 public class LinkedItemInstanceMatcher extends TypeSafeMatcher<LinkedSpecificationItem>
 {

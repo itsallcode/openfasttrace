@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -23,7 +25,6 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

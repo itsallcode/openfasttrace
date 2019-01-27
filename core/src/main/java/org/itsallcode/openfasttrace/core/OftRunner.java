@@ -25,7 +25,9 @@ package org.itsallcode.openfasttrace.core;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.*;
+import org.itsallcode.openfasttrace.ExportSettings;
+import org.itsallcode.openfasttrace.Oft;
+import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.exporter.ExporterService;
 import org.itsallcode.openfasttrace.importer.*;

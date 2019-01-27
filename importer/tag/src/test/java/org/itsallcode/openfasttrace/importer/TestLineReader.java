@@ -33,8 +33,8 @@ import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

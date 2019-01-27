@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.core;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;

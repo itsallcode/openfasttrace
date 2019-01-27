@@ -30,48 +30,43 @@ import java.util.List;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
-public interface MultiFileImporter
-{
+public interface MultiFileImporter {
 
-    /**
-     * Import the given file using the matching {@link Importer} using character
-     * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
-     *
-     * @param file
-     *            the file to import.
-     * @return <code>this</code> for fluent programming style.
-     */
-    MultiFileImporter importFile(InputFile file);
+	/**
+	 * Import the given file using the matching {@link Importer} using character set {@link StandardCharsets#UTF_8 UTF-8} for reading.
+	 *
+	 * @param file
+	 *            the file to import.
+	 * @return <code>this</code> for fluent programming style.
+	 */
+	public MultiFileImporter importFile(InputFile file);
 
-    /**
-     * Import from the path, independently of whether it is represents a
-     * directory or a file.
-     * 
-     * @param paths
-     *            lists of paths to files or directories
-     * @return <code>this</code> for fluent programming style.
-     */
-    MultiFileImporter importAny(List<Path> paths);
+	/**
+	 * Import from the path, independently of whether it is represents a directory or a file.
+	 * 
+	 * @param paths
+	 *            lists of paths to files or directories
+	 * @return <code>this</code> for fluent programming style.
+	 */
+	public MultiFileImporter importAny(List<Path> paths);
 
-    /**
-     * Import all files from the given directory that match the given
-     * {@link FileSystem#getPathMatcher(String) glob expression} and character
-     * set {@link StandardCharsets#UTF_8 UTF-8} for reading.
-     *
-     * @param dir
-     *            the dir to search for files to import.
-     * @param glob
-     *            the {@link FileSystem#getPathMatcher(String) glob expression}
-     * @return <code>this</code> for fluent programming style.
-     */
-    // [impl->dsn~input-directory-recursive-traversal~1]
-    MultiFileImporter importRecursiveDir(Path dir, String glob);
+	/**
+	 * Import all files from the given directory that match the given {@link FileSystem#getPathMatcher(String) glob expression} and character set
+	 * {@link StandardCharsets#UTF_8 UTF-8} for reading.
+	 *
+	 * @param dir
+	 *            the dir to search for files to import.
+	 * @param glob
+	 *            the {@link FileSystem#getPathMatcher(String) glob expression}
+	 * @return <code>this</code> for fluent programming style.
+	 */
+	// [impl->dsn~input-directory-recursive-traversal~1]
+	public MultiFileImporter importRecursiveDir(Path dir, String glob);
 
-    /**
-     * Get all imported {@link SpecificationItem}s.
-     * 
-     * @return all imported {@link SpecificationItem}s.
-     */
-    List<SpecificationItem> getImportedItems();
-
+	/**
+	 * Get all imported {@link SpecificationItem}s.
+	 * 
+	 * @return all imported {@link SpecificationItem}s.
+	 */
+	public List<SpecificationItem> getImportedItems();
 }

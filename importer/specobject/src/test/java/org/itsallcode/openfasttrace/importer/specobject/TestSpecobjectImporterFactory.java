@@ -28,7 +28,6 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.ImporterFactoryTestBase;
-import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 
 /**
  * Tests for {@link SpecobjectImporterFactory}

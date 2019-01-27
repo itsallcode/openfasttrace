@@ -24,10 +24,10 @@ package org.itsallcode.openfasttrace.report.plaintext;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

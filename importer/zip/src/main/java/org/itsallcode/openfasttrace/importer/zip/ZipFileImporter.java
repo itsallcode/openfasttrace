@@ -26,11 +26,7 @@ import java.util.zip.ZipFile;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.MultiFileImporter;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
 

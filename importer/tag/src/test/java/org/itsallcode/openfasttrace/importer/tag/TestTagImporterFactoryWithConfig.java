@@ -35,11 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterContext;
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.*;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;

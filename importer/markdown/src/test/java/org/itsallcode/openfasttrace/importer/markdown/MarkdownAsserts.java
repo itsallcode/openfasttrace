@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -23,11 +25,8 @@ package org.itsallcode.openfasttrace.importer.markdown;
  */
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.regex.Matcher;
-
-import org.itsallcode.openfasttrace.importer.markdown.MdPattern;
 
 public class MarkdownAsserts
 {

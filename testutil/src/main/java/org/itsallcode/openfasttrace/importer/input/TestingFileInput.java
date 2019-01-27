@@ -28,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+// Duplications in test code are ok
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class TestingFileInput implements InputFile
 {
     private final Path path;

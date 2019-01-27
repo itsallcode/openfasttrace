@@ -24,56 +24,28 @@ package org.itsallcode.openfasttrace.importer.input;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * An {@link InputFile} for a file on disk, represented by a {@link Path}.
- */
 public class TestingFileInput implements InputFile
 {
     private final Path path;
-    private final Charset charset;
 
-    private TestingFileInput(final Path path, final Charset charset)
+    private TestingFileInput(final Path path)
     {
         this.path = path;
-        this.charset = charset;
     }
 
-    /**
-     * Create an {@link InputFile} for a real file on disk.
-     * {@link StandardCharsets#UTF_8} is used for reading the file.
-     * 
-     * @param file
-     *            a real file on disk.
-     * @return an {@link InputFile}.
-     */
     public static InputFile forPath(final Path file)
     {
-        return forPath(file, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Create an {@link InputFile} for a real file on disk.
-     * 
-     * @param path
-     *            path to file on disk.
-     * @param charset
-     *            the {@link Charset} used when reading this file.
-     * @return an {@link InputFile}.
-     */
-    public static InputFile forPath(final Path path, final Charset charset)
-    {
-        return new TestingFileInput(path, charset);
+        return new TestingFileInput(file);
     }
 
     @Override
     public BufferedReader createReader() throws IOException
     {
-        return Files.newBufferedReader(this.path, this.charset);
+        return Files.newBufferedReader(this.path, StandardCharsets.UTF_8);
     }
 
     @Override

@@ -33,8 +33,8 @@ import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,7 +68,7 @@ class TestLineReader
     {
         final Path tempFile = this.tempDir.resolve("test");
         Files.write(tempFile, TEST_CONTENT_LINE_1.getBytes(StandardCharsets.UTF_8));
-        LineReader.create(TestingFileInput.forPath(tempFile)).readLines(this.consumerMock);
+        LineReader.create(RealFileInput.forPath(tempFile)).readLines(this.consumerMock);
         assertLinesRead(TEST_CONTENT_LINE_1);
     }
 

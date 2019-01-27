@@ -43,8 +43,8 @@ import java.util.zip.ZipOutputStream;
 import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.importer.input.StreamInput;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -176,7 +176,7 @@ public class ITZipFileImporter
     private List<InputFile> runImporter(final int expectedFileCount) throws IOException
     {
         this.zipOutputStream.close();
-        final InputFile file = TestingFileInput.forPath(this.zipFile.toPath());
+        final InputFile file = RealFileInput.forPath(this.zipFile.toPath());
         new ZipFileImporter(file, this.delegateImporterMock).runImport();
         if (expectedFileCount == 0)
         {

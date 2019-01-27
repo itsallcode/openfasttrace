@@ -32,7 +32,7 @@ import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
 
 /**
  * This {@link Importer} supports reading {@link ZipFile} and delegates import
- * of {@link ZipEntry}s to a {@link MultiFileImporterImpl}.
+ * of {@link ZipEntry}s to a {@link MultiFileImporter}.
  */
 public class ZipFileImporter implements Importer
 {

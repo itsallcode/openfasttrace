@@ -82,7 +82,7 @@ class TestSpecobjectImporter
                 + "    <id>complex</id>\n" //
                 + "    <status>draft</status>" //
                 + "    <version>2</version>\n" //
-                + " <shortdesc>the title</shortdesc>\n" //
+                + "    <shortdesc>my short description</shortdesc>\n" //
                 + "    <description>multiline description\n" //
                 + "one more line</description>\n" //
                 + "    <rationale>multiline rationale\n" //
@@ -95,10 +95,28 @@ class TestSpecobjectImporter
         verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).setStatus(ItemStatus.DRAFT);
         verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
-        verify(listenerMock).setTitle("the title");
+        verify(listenerMock).setTitle("my short description");
         verify(listenerMock).appendDescription("multiline description\none more line");
         verify(listenerMock).appendRationale("multiline rationale\nand another line");
         verify(listenerMock).appendComment("multiline comment\nyet another line");
+        verify(listenerMock).endSpecificationItem();
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    void testImportOnlyShortDescription()
+    {
+        final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"req\">\n" //
+                + "  <specobject>\n" //
+                + "    <id>complex</id>\n" //
+                + "    <version>2</version>\n" //
+                + "    <shortdesc>My item title</shortdesc>\n" //
+                + "  </specobject>\n" //
+                + "</specobjects>");
+        verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
+        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setTitle("My item title");
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }

@@ -69,6 +69,7 @@ class TestSpecobjectExporter
     {
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
+                .title("My item title") //
                 .status(ItemStatus.DRAFT) //
                 .description("the description") //
                 .rationale("the rationale") //
@@ -84,6 +85,7 @@ class TestSpecobjectExporter
                 + " <specobjects doctype=\"req\">\n" //
                 + "  <specobject>\n" //
                 + "   <id>me</id>\n" //
+                + "   <shortdesc>My item title</shortdesc>\n" //
                 + "   <status>draft</status>\n" //
                 + "   <version>2</version>\n" //
                 + "   <sourcefile>/the/file</sourcefile>\n" //

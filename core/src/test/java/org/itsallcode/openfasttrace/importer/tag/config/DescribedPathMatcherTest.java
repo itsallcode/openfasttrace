@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -199,7 +199,7 @@ public class DescribedPathMatcherTest
     private void assertMatches(final String path, final boolean expected)
     {
         assertThat("Initialize matcher before assertions", this.matcher, notNullValue());
-        final InputFile file = TestingFileInput.forPath(Paths.get(path));
+        final InputFile file = RealFileInput.forPath(Paths.get(path));
         assertThat("path " + path, this.matcher.matches(file), equalTo(expected));
     }
 

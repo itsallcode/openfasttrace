@@ -12,15 +12,12 @@
         <module>api</module>
         <module>core</module>
         <module>product</module>
-
         <module>exporter/markdown</module>
         <module>exporter/specobject</module>
-
         <module>importer/markdown</module>
         <module>importer/specobject</module>
         <module>importer/tag</module>
         <module>importer/zip</module>
-
         <module>testutil</module>
     </modules>
 </project>

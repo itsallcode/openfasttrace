@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.junit.jupiter.api.Test;
 
 class TestPathConfig
@@ -121,7 +121,7 @@ class TestPathConfig
 
     private void assertMatches(final String pattern, final String path, final boolean expected)
     {
-        final InputFile file = TestingFileInput.forPath(Paths.get(path));
+        final InputFile file = RealFileInput.forPath(Paths.get(path));
         assertThat(create(pattern).matches(file), equalTo(expected));
     }
 

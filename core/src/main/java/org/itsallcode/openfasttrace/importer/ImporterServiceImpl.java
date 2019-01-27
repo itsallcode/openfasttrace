@@ -44,15 +44,13 @@ public class ImporterServiceImpl implements ImporterService
      * @param settings
      *            import settings (e.g. filters)
      */
-    public ImporterServiceImpl(final ImporterFactoryLoader factoryLoader, final ImportSettings settings)
+    public ImporterServiceImpl(final ImporterFactoryLoader factoryLoader,
+            final ImportSettings settings)
     {
         this.factoryLoader = factoryLoader;
         this.settings = settings;
     }
 
-    /* 
-     * {@inheritDoc}
-     */
     @Override
     public List<SpecificationItem> importFile(final InputFile file)
     {
@@ -61,18 +59,12 @@ public class ImporterServiceImpl implements ImporterService
                 .getImportedItems();
     }
 
-    /* 
-     * {@inheritDoc}
-     */
     @Override
     public MultiFileImporterImpl createImporter(final ImportEventListener builder)
     {
         return new MultiFileImporterImpl((SpecificationListBuilder) builder, this.factoryLoader);
     }
 
-    /* 
-     * {@inheritDoc}
-     */
     @Override
     public MultiFileImporter createImporter()
     {

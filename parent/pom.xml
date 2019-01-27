@@ -7,7 +7,6 @@
     <version>2.2.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
     <name>OpenFastTrace Parent</name>
     <packaging>pom</packaging>
-
     <properties>
         <oft.version>2.2.0</oft.version>
         <java.version>1.8</java.version>
@@ -16,7 +15,6 @@
         <maven.surefire.version>2.22.1</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <licenses>
         <license>
             <name>GNU General Public License v3.0</name>
@@ -58,7 +56,6 @@
             <!-- <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url> -->
         </repository>
     </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -111,7 +108,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -230,7 +226,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -290,7 +285,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -305,18 +299,15 @@
                         -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
             </plugin>
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -396,8 +387,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
-
                 <!-- Self trace. -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -409,7 +398,6 @@
                     <artifactId>pitest-maven</artifactId>
                     <version>1.4.0</version>
                 </plugin>
-
                 <!--This plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>

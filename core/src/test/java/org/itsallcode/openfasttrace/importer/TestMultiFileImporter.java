@@ -38,7 +38,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -48,7 +48,7 @@ class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
     private static final Path PATH1 = FOLDER.resolve("sample_design.md");
-    private static final InputFile FILE1 = TestingFileInput.forPath(PATH1);
+    private static final InputFile FILE1 = RealFileInput.forPath(PATH1);
     private static final Path NON_EXISTING_FILE = FOLDER.resolve("does_not_exist");
 
     @Mock

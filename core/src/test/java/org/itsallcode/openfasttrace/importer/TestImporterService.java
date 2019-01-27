@@ -35,7 +35,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.TestingFileInput;
+import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class TestImporterService
         MockitoAnnotations.initMocks(this);
         this.importerService = new ImporterServiceImpl(this.factoryLoaderMock,
                 ImportSettings.createDefault());
-        this.file = TestingFileInput.forPath(Paths.get("dir", "file"));
+        this.file = RealFileInput.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
                 .thenReturn(this.importerFactoryMock);

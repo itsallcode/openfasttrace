@@ -4,20 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-importer-tag</artifactId>
     <name>OpenFastTrace Tag Importer</name>
-
     <parent>
         <relativePath>../../parent/pom.xml</relativePath>
         <groupId>org.itsallcode</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>2.2.0</version>
     </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-testutil</artifactId>

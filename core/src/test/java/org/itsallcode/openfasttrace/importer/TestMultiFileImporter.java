@@ -25,7 +25,7 @@ package org.itsallcode.openfasttrace.importer;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,9 +43,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 class TestMultiFileImporter
 {
@@ -73,12 +70,16 @@ class TestMultiFileImporter
         MockitoAnnotations.initMocks(this);
         this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
+
+        when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
+        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
+        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
+                .thenReturn(this.importerMock);
     }
 
     @Test
     void testImportSingleFile()
     {
-        expectFileImported(FILE1);
         this.multiFileImporter.importFile(FILE1);
         verify(this.importerMock).runImport();
     }
@@ -86,7 +87,6 @@ class TestMultiFileImporter
     @Test
     void testImportAnySingleFile()
     {
-        expectFileImported(FILE1);
         this.multiFileImporter.importAny(asList(PATH1));
         verify(this.importerMock).runImport();
     }
@@ -101,8 +101,6 @@ class TestMultiFileImporter
     @Test
     void testImportAnyFolderFile()
     {
-        expectFileImported(FILE1);
-        expectFileImported(FILE2);
         this.multiFileImporter.importAny(asList(FOLDER));
         verify(this.importerMock, times(2)).runImport();
     }
@@ -111,8 +109,6 @@ class TestMultiFileImporter
     @Test
     void testRecursiveDir()
     {
-        expectFileImported(FILE1);
-        expectFileImported(FILE2);
         this.multiFileImporter.importRecursiveDir(FOLDER, "**/*.md");
         verify(this.importerMock, times(2)).runImport();
     }
@@ -124,21 +120,5 @@ class TestMultiFileImporter
         when(this.specItemBuilderMock.build()).thenReturn(expected);
 
         assertThat(this.multiFileImporter.getImportedItems(), sameInstance(expected));
-    }
-
-    private void expectFileImported(final InputFile file)
-    {
-        when(this.factoryLoaderMock.supportsFile(autoEqualTo(file))).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(autoEqualTo(file)))
-                .thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(autoEqualTo(file),
-                same(this.specItemBuilderMock))).thenReturn(this.importerMock);
-    }
-
-    private InputFile autoEqualTo(final InputFile file)
-    {
-        final HamcrestArgumentMatcher<InputFile> argMatcher = new HamcrestArgumentMatcher<>(
-                AutoMatcher.equalTo(file));
-        return argThat(argMatcher);
     }
 }

@@ -2,7 +2,7 @@
 
 This document contains technical information for developers contributing to OpenFastTrace (short OFT).
 
-If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../CONTRIBUTION.md).
+If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../CONTRIBUTING.md).
 
 ## Getting the OpenFastTrace Library
 

@@ -47,10 +47,8 @@ import org.mockito.MockitoAnnotations;
 class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
-    private static final Path PATH2 = FOLDER.resolve("sample_system_requirements.md");
     private static final Path PATH1 = FOLDER.resolve("sample_design.md");
     private static final InputFile FILE1 = TestingFileInput.forPath(PATH1);
-    private static final InputFile FILE2 = TestingFileInput.forPath(PATH2);
     private static final Path NON_EXISTING_FILE = FOLDER.resolve("does_not_exist");
 
     @Mock

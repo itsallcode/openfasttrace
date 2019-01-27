@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-api</artifactId>
     <name>OpenFastTrace API</name>
-
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
         <groupId>org.itsallcode</groupId>

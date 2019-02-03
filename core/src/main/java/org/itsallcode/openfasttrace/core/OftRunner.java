@@ -89,25 +89,29 @@ public class OftRunner implements Oft
     @Override
     public void reportToStdOut(final Trace trace)
     {
-        new ReportService().reportTraceToStdOut(trace, ReportSettings.createDefault());
+        final ReportSettings settings = ReportSettings.createDefault();
+        new ReportService(settings).reportTraceToStdOut(trace, settings.getOutputFormat());
     }
 
     @Override
     public void reportToStdOut(final Trace trace, final ReportSettings settings)
     {
-        new ReportService().reportTraceToStdOut(trace, settings);
+        new ReportService(settings).reportTraceToStdOut(trace, settings.getOutputFormat());
     }
 
     @Override
     public void reportToPath(final Trace trace, final Path outputPath)
     {
-        new ReportService().reportTraceToPath(trace, outputPath, ReportSettings.createDefault());
+        ReportSettings settings = ReportSettings.createDefault();
+        new ReportService(settings).reportTraceToPath(trace, outputPath,
+                settings.getOutputFormat());
     }
 
     @Override
     public void reportToPath(final Trace trace, final Path outputPath,
             final ReportSettings settings)
     {
-        new ReportService().reportTraceToPath(trace, outputPath, settings);
+        new ReportService(settings).reportTraceToPath(trace, outputPath,
+                settings.getOutputFormat());
     }
 }

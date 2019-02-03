@@ -54,13 +54,10 @@ class TestReportService
     @Mock
     Trace traceMock;
 
-    private ReportService service;
-
     @BeforeEach
     public void prepareTest()
     {
         MockitoAnnotations.initMocks(this);
-        this.service = new ReportService();
     }
 
     @Test
@@ -71,7 +68,7 @@ class TestReportService
                 .verbosity(ReportVerbosity.MINIMAL) //
                 .build();
         out.capture();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
+        createService(settings).reportTraceToStdOut(this.traceMock, settings.getOutputFormat());
         assertThat(out.getCapturedData(), equalTo("not ok\n"));
     }
 
@@ -83,7 +80,7 @@ class TestReportService
                 .outputFormat("html") //
                 .build();
         out.capture();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
+        createService(settings).reportTraceToStdOut(this.traceMock, settings.getOutputFormat());
         assertThat(out.getCapturedData(), startsWith("<!DOCTYPE html>"));
     }
 
@@ -93,8 +90,8 @@ class TestReportService
         final ReportSettings settings = ReportSettings //
                 .builder() //
                 .outputFormat("invalid").verbosity(ReportVerbosity.QUIET).build();
-        assertThrows(IllegalArgumentException.class,
-                () -> this.service.reportTraceToStdOut(this.traceMock, settings));
+        assertThrows(IllegalArgumentException.class, () -> createService(settings)
+                .reportTraceToStdOut(this.traceMock, settings.getOutputFormat()));
     }
 
     @Test
@@ -109,13 +106,19 @@ class TestReportService
                     .builder() //
                     .verbosity(ReportVerbosity.QUIET) //
                     .build();
-            assertThrows(ReportException.class, () -> this.service.reportTraceToPath(this.traceMock,
-                    readOnlyFilePath, settings));
+            assertThrows(ReportException.class,
+                    () -> createService(settings).reportTraceToPath(this.traceMock,
+                            readOnlyFilePath, settings.getOutputFormat()));
         }
         finally
         {
             makeFileWritable(readOnlyFilePath);
         }
+    }
+
+    private ReportService createService(ReportSettings settings)
+    {
+        return new ReportService(new ReporterFactoryLoader(new ReporterContext(settings)));
     }
 
     private Path createReadOnlyFile(final Path tempDir) throws IOException

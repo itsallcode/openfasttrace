@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.report.plaintext;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Plaintext Reporter
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,21 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.report.Reportable;
+import org.itsallcode.openfasttrace.report.ReporterFactory;
 
-import org.junit.jupiter.api.Test;
-
-class TestReportFormat
+public class PlaintextReporterFactory extends ReporterFactory
 {
-    @Test
-    void testParseValid()
+    @Override
+    public boolean supportsFormat(String format)
     {
-        assertThat(ReportFormat.parse("plain"), equalTo(ReportFormat.PLAIN_TEXT));
+        return "plain".equalsIgnoreCase(format);
     }
 
-    @Test
-    void testParseInalidFormatThrowsIllegalArguemtException()
+    @Override
+    public Reportable createImporter(Trace trace)
     {
-        assertThrows(IllegalArgumentException.class, () -> ReportFormat.parse("invalid"));
+        return new PlainTextReport(trace, getContext().getSettings());
     }
 }

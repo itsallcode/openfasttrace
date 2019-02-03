@@ -29,17 +29,27 @@ import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.html.HtmlReport;
-import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 
 public class ReportService
 {
+    private final ReporterFactoryLoader reporterFactoryLoader;
+
+    public ReportService(ReportSettings settings)
+    {
+        this(new ReporterFactoryLoader(new ReporterContext(settings)));
+    }
+
+    public ReportService(ReporterFactoryLoader reporterFactoryLoader)
+    {
+        this.reporterFactoryLoader = reporterFactoryLoader;
+    }
+
     public void reportTraceToPath(final Trace trace, final Path outputPath,
-            final ReportSettings settings)
+            final String outputFormat)
     {
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, outputStream, settings);
+            reportTraceToStream(trace, outputStream, outputFormat);
         }
         catch (final IOException e)
         {
@@ -47,9 +57,9 @@ public class ReportService
         }
     }
 
-    public void reportTraceToStdOut(final Trace trace, final ReportSettings settings)
+    public void reportTraceToStdOut(final Trace trace, final String outputFormat)
     {
-        reportTraceToStream(trace, getStdOutStream(), settings);
+        reportTraceToStream(trace, getStdOutStream(), outputFormat);
     }
 
     // Using System.out by intention
@@ -60,9 +70,9 @@ public class ReportService
     }
 
     private void reportTraceToStream(final Trace trace, final OutputStream outputStream,
-            final ReportSettings settings)
+            final String outputFormat)
     {
-        final Reportable report = createReport(trace, settings);
+        final Reportable report = createReport(trace, outputFormat);
         report.renderToStream(outputStream);
         try
         {
@@ -74,23 +84,10 @@ public class ReportService
         }
     }
 
-    protected Reportable createReport(final Trace trace, final ReportSettings settings)
+    protected Reportable createReport(final Trace trace, final String outputFormat)
     {
-        Reportable report = null;
-        final String format = settings.getOutputFormat();
-        switch (ReportFormat.parse(format))
-        {
-        case PLAIN_TEXT:
-            report = new PlainTextReport(trace, settings);
-            break;
-        case HTML:
-            report = new HtmlReport(trace);
-            break;
-        default:
-            throw new IllegalArgumentException(
-                    "Unable to create report with format \"" + format + "\"");
-        }
-        return report;
+        final ReporterFactory reporterFactory = reporterFactoryLoader
+                .getReporterFactory(outputFormat);
+        return reporterFactory.createImporter(trace);
     }
-
 }

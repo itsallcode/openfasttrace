@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
+
 /*-
  * #%L
  \* OpenFastTrace

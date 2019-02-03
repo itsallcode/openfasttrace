@@ -45,6 +45,14 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-reporter-plaintext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>openfasttrace-reporter-html</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>

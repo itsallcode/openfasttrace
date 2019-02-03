@@ -37,6 +37,7 @@ import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.exporter.ExporterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,9 +90,14 @@ class TestReportService
     {
         final ReportSettings settings = ReportSettings //
                 .builder() //
-                .outputFormat("invalid").verbosity(ReportVerbosity.QUIET).build();
-        assertThrows(IllegalArgumentException.class, () -> createService(settings)
-                .reportTraceToStdOut(this.traceMock, settings.getOutputFormat()));
+                .outputFormat("invalid") //
+                .verbosity(ReportVerbosity.QUIET) //
+                .build();
+        final ExporterException exception = assertThrows(ExporterException.class,
+                () -> createService(settings).reportTraceToStdOut(this.traceMock,
+                        settings.getOutputFormat()));
+        assertThat(exception.getMessage(), equalTo("Found no matching reporter for output format '"
+                + settings.getOutputFormat() + "'"));
     }
 
     @Test

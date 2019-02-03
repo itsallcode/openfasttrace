@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace</artifactId>
-    <version>2.2.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
+    <version>2.3.0-SNAPSHOT</version><!-- PRODUCT VERSION: do not remove this comment! -->
     <name>OpenFastTrace</name>
     <packaging>pom</packaging>
     <modules>

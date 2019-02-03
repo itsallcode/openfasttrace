@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
     <artifactId>openfasttrace-parent</artifactId>
-    <version>2.2.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
+    <version>${revision}</version>
     <name>OpenFastTrace Parent</name>
     <packaging>pom</packaging>
     <properties>
-        <oft.version>2.2.0</oft.version>
+        <revision>2.3.0-SNAPSHOT</revision>
         <java.version>1.8</java.version>
         <junit.version>5.3.1</junit.version>
         <junit.platform.version>1.3.1</junit.platform.version>
@@ -113,55 +113,55 @@
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-api</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-core</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-exporter-markdown</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-exporter-specobject</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-importer-markdown</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-importer-specoboject</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-importer-tag</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-importer-zip</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-testutil</artifactId>
-                <version>${oft.version}</version>
+                <version>${revision}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -307,6 +307,30 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -344,6 +368,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -423,6 +452,25 @@
                                                 check-file-header
                                             </goal>
                                             <goal>add-third-party</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            flatten-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.1.0,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>flatten</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>

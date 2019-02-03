@@ -5,4 +5,4 @@
 **/*.md.html
 doc/**/*.html
 /*.html
-
+.flattened-pom.xml

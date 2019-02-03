@@ -113,6 +113,11 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
             <username>[bintray-username]</username>
             <password>[bintray-api-key]</password>
         </server>
+        <server>
+            <id>itsallcode-maven-repo-snapshots</id>
+            <username>[bintray-username]</username>
+            <password>[bintray-api-key]</password>
+        </server>
     </servers>
     ```
 

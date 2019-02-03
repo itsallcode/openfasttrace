@@ -18,6 +18,8 @@
         <module>importer/specobject</module>
         <module>importer/tag</module>
         <module>importer/zip</module>
+        <module>reporter/plaintext</module>
+        <module>reporter/html</module>
         <module>testutil</module>
     </modules>
     <build>

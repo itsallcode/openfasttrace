@@ -27,7 +27,6 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 
 /**
@@ -37,17 +36,6 @@ import org.itsallcode.openfasttrace.core.Trace;
 public class ReportService
 {
     private final ReporterFactoryLoader reporterFactoryLoader;
-
-    /**
-     * Create a new {@link ReportService} for the given {@link ReportSettings}.
-     * 
-     * @param settings
-     *            the settings used for the new {@link ReportService}.
-     */
-    public ReportService(ReportSettings settings)
-    {
-        this(new ReporterFactoryLoader(new ReporterContext(settings)));
-    }
 
     /**
      * Create a new {@link ReportService} for the given

@@ -35,11 +35,6 @@ public class ExporterService
 
     private final ExporterFactoryLoader factoryLoader;
 
-    public ExporterService()
-    {
-        this(new ExporterFactoryLoader(new ExporterContext()));
-    }
-
     public ExporterService(final ExporterFactoryLoader factoryLoader)
     {
         this.factoryLoader = factoryLoader;

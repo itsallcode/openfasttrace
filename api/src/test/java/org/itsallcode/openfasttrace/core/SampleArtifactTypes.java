@@ -24,6 +24,11 @@ package org.itsallcode.openfasttrace.core;
 
 public class SampleArtifactTypes
 {
+    private SampleArtifactTypes()
+    {
+        // Not instantiable
+    }
+
     public static final String ARCH = "arch";
     public static final String DSN = "dsn";
     public static final String IMPL = "impl";

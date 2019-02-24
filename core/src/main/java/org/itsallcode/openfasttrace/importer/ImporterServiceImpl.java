@@ -26,11 +26,6 @@ import java.util.List;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
-/**
- * This service provides convenient methods for importing
- * {@link SpecificationItem}s that automatically use the correct
- * {@link Importer} based on the filename.
- */
 public class ImporterServiceImpl implements ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;

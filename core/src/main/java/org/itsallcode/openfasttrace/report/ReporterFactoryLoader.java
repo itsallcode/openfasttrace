@@ -80,7 +80,7 @@ public class ReporterFactoryLoader
     private List<ReporterFactory> getMatchingFactories(final String format)
     {
         return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter(f -> f.supportsFormat(format)) //
+                .filter(factory -> factory.supportsFormat(format)) //
                 .collect(toList());
     }
 

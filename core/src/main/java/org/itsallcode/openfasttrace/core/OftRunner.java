@@ -102,7 +102,7 @@ public class OftRunner implements Oft
     @Override
     public void reportToPath(final Trace trace, final Path outputPath)
     {
-        ReportSettings settings = ReportSettings.createDefault();
+        final ReportSettings settings = ReportSettings.createDefault();
         new ReportService(settings).reportTraceToPath(trace, outputPath,
                 settings.getOutputFormat());
     }

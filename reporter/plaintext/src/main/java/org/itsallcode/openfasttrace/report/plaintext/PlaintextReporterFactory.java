@@ -26,12 +26,18 @@ import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.Reportable;
 import org.itsallcode.openfasttrace.report.ReporterFactory;
 
+/**
+ * A {@link ReporterFactory} for plain text reports. This supports the
+ * <code>plain</code> format.
+ */
 public class PlaintextReporterFactory extends ReporterFactory
 {
+    private static final String PLAIN_REPORT_FORMAT = "plain";
+
     @Override
     public boolean supportsFormat(String format)
     {
-        return "plain".equalsIgnoreCase(format);
+        return PLAIN_REPORT_FORMAT.equalsIgnoreCase(format);
     }
 
     @Override

@@ -30,20 +30,50 @@ import java.nio.file.Path;
 import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 
+/**
+ * This service provides convenient methods to create a report for a given
+ * {@link Trace}.
+ */
 public class ReportService
 {
     private final ReporterFactoryLoader reporterFactoryLoader;
 
+    /**
+     * Create a new {@link ReportService} for the given {@link ReportSettings}.
+     * 
+     * @param settings
+     *            the settings used for the new {@link ReportService}.
+     */
     public ReportService(ReportSettings settings)
     {
         this(new ReporterFactoryLoader(new ReporterContext(settings)));
     }
 
+    /**
+     * Create a new {@link ReportService} for the given
+     * {@link ReporterFactoryLoader}
+     * 
+     * @param reporterFactoryLoader
+     *            the {@link ReporterFactoryLoader} for the new
+     *            {@link ReportService}.
+     */
     public ReportService(ReporterFactoryLoader reporterFactoryLoader)
     {
         this.reporterFactoryLoader = reporterFactoryLoader;
     }
 
+    /**
+     * Generate a report for the given {@link Trace} in the given output format
+     * and write it to a file.
+     * 
+     * @param trace
+     *            the content of the report.
+     * @param outputPath
+     *            the path of the report to generate.
+     * @param outputFormat
+     *            the format of the report. Must be a value supported by
+     *            {@link ReporterFactory#supportsFormat(String)}.
+     */
     public void reportTraceToPath(final Trace trace, final Path outputPath,
             final String outputFormat)
     {
@@ -57,6 +87,16 @@ public class ReportService
         }
     }
 
+    /**
+     * Generate a report for the given {@link Trace} in the given output format
+     * and write it to standard out.
+     * 
+     * @param trace
+     *            the content of the report.
+     * @param outputFormat
+     *            the format of the report. Must be a value supported by
+     *            {@link ReporterFactory#supportsFormat(String)}.
+     */
     public void reportTraceToStdOut(final Trace trace, final String outputFormat)
     {
         reportTraceToStream(trace, getStdOutStream(), outputFormat);
@@ -84,7 +124,7 @@ public class ReportService
         }
     }
 
-    protected Reportable createReport(final Trace trace, final String outputFormat)
+    private Reportable createReport(final Trace trace, final String outputFormat)
     {
         final ReporterFactory reporterFactory = reporterFactoryLoader
                 .getReporterFactory(outputFormat);

@@ -26,12 +26,18 @@ import org.itsallcode.openfasttrace.core.Trace;
 import org.itsallcode.openfasttrace.report.Reportable;
 import org.itsallcode.openfasttrace.report.ReporterFactory;
 
+/**
+ * A {@link ReporterFactory} for HTML reports. This supports the
+ * <code>html</code> format.
+ */
 public class HtmlReporterFactory extends ReporterFactory
 {
+    private static final String HTML_REPORT_FORMAT = "html";
+
     @Override
     public boolean supportsFormat(String format)
     {
-        return "html".equalsIgnoreCase(format);
+        return HTML_REPORT_FORMAT.equalsIgnoreCase(format);
     }
 
     @Override

@@ -38,12 +38,19 @@ public class ReporterFactoryLoader
 {
     private final InitializingServiceLoader<ReporterFactory, ReporterContext> serviceLoader;
 
+    /**
+     * Create a new {@link ReporterFactoryLoader}.
+     * 
+     * @param context
+     *            the context used for initializing new
+     *            {@link ReporterFactory}s.
+     */
     public ReporterFactoryLoader(final ReporterContext context)
     {
         this(InitializingServiceLoader.load(ReporterFactory.class, context));
     }
 
-    ReporterFactoryLoader(
+    private ReporterFactoryLoader(
             final InitializingServiceLoader<ReporterFactory, ReporterContext> serviceLoader)
     {
         this.serviceLoader = serviceLoader;

@@ -104,12 +104,24 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
 
 ## Publishing to JCenter
 
+---
+**NOTE**
+
+This currently only works for release version numbers, not SNAPSHOT versions.
+
+---
+
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
     <servers>
         <server>
             <id>itsallcode-maven-repo</id>
+            <username>[bintray-username]</username>
+            <password>[bintray-api-key]</password>
+        </server>
+        <server>
+            <id>itsallcode-maven-repo-snapshots</id>
             <username>[bintray-username]</username>
             <password>[bintray-api-key]</password>
         </server>

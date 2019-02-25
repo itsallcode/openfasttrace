@@ -13,7 +13,7 @@ cache:
   - $HOME/.sonar/cache
 
 before_script:
-  - version=$(grep -oP '(?<=^    <version>)[^<]*' pom.xml)
+  - version=$(grep -oP '(?<=^        <revision>)[^<]*' parent/pom.xml)
   # Required for sonar to provide blame information
   - git fetch --unshallow
 

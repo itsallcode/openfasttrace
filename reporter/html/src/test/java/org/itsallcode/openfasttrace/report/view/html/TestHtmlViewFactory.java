@@ -24,9 +24,9 @@ package org.itsallcode.openfasttrace.report.view.html;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.Trace;
@@ -51,10 +51,25 @@ class TestHtmlViewFactory
     }
 
     @Test
+    void testCreateFactoryWithPrintStream() throws UnsupportedEncodingException
+    {
+        factory = HtmlViewFactory.create(new PrintStream(outputStream, true, "UTF-8"),
+                HtmlReport.getCssUrl());
+        assertThat(factory, notNullValue());
+    }
+
+    @Test
     void testCreateReportDetails()
     {
         final Viewable view = this.factory.createReportDetails();
         assertThat(view, instanceOf(HtmlReportDetails.class));
+    }
+
+    @Test
+    void testCreateSection()
+    {
+        final ViewableContainer view = this.factory.createSection("id", "title");
+        assertThat(view, instanceOf(HtmlSection.class));
     }
 
     @Test

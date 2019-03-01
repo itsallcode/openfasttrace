@@ -22,7 +22,7 @@ before_install:
 
 script:
   - echo "Parsed the version $version from pom.xml" 
-  - mvn --threads 1C --errors clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn --errors clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

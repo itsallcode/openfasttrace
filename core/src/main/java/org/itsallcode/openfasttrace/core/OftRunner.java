@@ -39,7 +39,7 @@ public class OftRunner implements Oft
         this(new ServiceFactory());
     }
 
-    public OftRunner(ServiceFactory serviceFactory)
+    OftRunner(ServiceFactory serviceFactory)
     {
         this.serviceFactory = serviceFactory;
     }

@@ -35,6 +35,7 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         SEEN_NOTHING, SEEN_ELEMENT, SEEN_DATA
     }
 
+    private static final String NEWLINE = "\n";
     private static final String INDENTATION = "  ";
     private final Deque<State> stateStack = new LinkedList<>();
 
@@ -51,21 +52,21 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
     public void writeStartDocument() throws XMLStreamException
     {
         super.writeStartDocument();
-        super.writeCharacters("\n");
+        super.writeCharacters(NEWLINE);
     }
 
     @Override
     public void writeStartDocument(String version) throws XMLStreamException
     {
         super.writeStartDocument(version);
-        super.writeCharacters("\n");
+        super.writeCharacters(NEWLINE);
     }
 
     @Override
     public void writeStartDocument(String encoding, String version) throws XMLStreamException
     {
         super.writeStartDocument(encoding, version);
-        super.writeCharacters("\n");
+        super.writeCharacters(NEWLINE);
     }
 
     @Override
@@ -96,7 +97,7 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         state = State.SEEN_NOTHING;
         if (depth > 0)
         {
-            super.writeCharacters("\n");
+            super.writeCharacters(NEWLINE);
         }
         doIndent();
         depth++;
@@ -137,7 +138,7 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         state = State.SEEN_ELEMENT;
         if (depth > 0)
         {
-            super.writeCharacters("\n");
+            super.writeCharacters(NEWLINE);
         }
         doIndent();
     }
@@ -154,7 +155,7 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         depth--;
         if (state == State.SEEN_ELEMENT)
         {
-            super.writeCharacters("\n");
+            super.writeCharacters(NEWLINE);
             doIndent();
         }
         state = stateStack.pop();

@@ -26,7 +26,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-abstract class DelegatingXMLStreamWriter implements XMLStreamWriter
+class DelegatingXMLStreamWriter implements XMLStreamWriter
 {
     private final XMLStreamWriter writer;
 
@@ -226,7 +226,7 @@ abstract class DelegatingXMLStreamWriter implements XMLStreamWriter
     }
 
     @Override
-    public Object getProperty(String name) throws IllegalArgumentException
+    public Object getProperty(String name)
     {
         return writer.getProperty(name);
     }

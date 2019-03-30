@@ -162,6 +162,18 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-reporter-plaintext</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>openfasttrace-reporter-html</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
                 <artifactId>openfasttrace-testutil</artifactId>
                 <version>${revision}</version>
                 <scope>test</scope>

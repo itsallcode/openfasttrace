@@ -80,7 +80,7 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 * To update files with correct license headers and generate file `LICENSE.txt`, run command
 
 ```bash
-mvn license:update-project-license license:update-file-header
+mvn license:update-file-header
 ```
 
 ## Run local sonar analysis

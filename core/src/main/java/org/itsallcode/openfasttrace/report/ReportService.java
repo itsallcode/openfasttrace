@@ -27,19 +27,47 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.html.HtmlReport;
-import org.itsallcode.openfasttrace.report.plaintext.PlainTextReport;
 
+/**
+ * This service provides convenient methods to create a report for a given
+ * {@link Trace}.
+ */
 public class ReportService
 {
+    private final ReporterFactoryLoader reporterFactoryLoader;
+
+    /**
+     * Create a new {@link ReportService} for the given
+     * {@link ReporterFactoryLoader}
+     * 
+     * @param reporterFactoryLoader
+     *            the {@link ReporterFactoryLoader} for the new
+     *            {@link ReportService}.
+     */
+    public ReportService(ReporterFactoryLoader reporterFactoryLoader)
+    {
+        this.reporterFactoryLoader = reporterFactoryLoader;
+    }
+
+    /**
+     * Generate a report for the given {@link Trace} in the given output format
+     * and write it to a file.
+     * 
+     * @param trace
+     *            the content of the report.
+     * @param outputPath
+     *            the path of the report to generate.
+     * @param outputFormat
+     *            the format of the report. Must be a value supported by
+     *            {@link ReporterFactory#supportsFormat(String)}.
+     */
     public void reportTraceToPath(final Trace trace, final Path outputPath,
-            final ReportSettings settings)
+            final String outputFormat)
     {
         try (OutputStream outputStream = Files.newOutputStream(outputPath))
         {
-            reportTraceToStream(trace, outputStream, settings);
+            reportTraceToStream(trace, outputStream, outputFormat);
         }
         catch (final IOException e)
         {
@@ -47,9 +75,19 @@ public class ReportService
         }
     }
 
-    public void reportTraceToStdOut(final Trace trace, final ReportSettings settings)
+    /**
+     * Generate a report for the given {@link Trace} in the given output format
+     * and write it to standard out.
+     * 
+     * @param trace
+     *            the content of the report.
+     * @param outputFormat
+     *            the format of the report. Must be a value supported by
+     *            {@link ReporterFactory#supportsFormat(String)}.
+     */
+    public void reportTraceToStdOut(final Trace trace, final String outputFormat)
     {
-        reportTraceToStream(trace, getStdOutStream(), settings);
+        reportTraceToStream(trace, getStdOutStream(), outputFormat);
     }
 
     // Using System.out by intention
@@ -60,9 +98,9 @@ public class ReportService
     }
 
     private void reportTraceToStream(final Trace trace, final OutputStream outputStream,
-            final ReportSettings settings)
+            final String outputFormat)
     {
-        final Reportable report = createReport(trace, settings);
+        final Reportable report = createReport(trace, outputFormat);
         report.renderToStream(outputStream);
         try
         {
@@ -74,23 +112,10 @@ public class ReportService
         }
     }
 
-    protected Reportable createReport(final Trace trace, final ReportSettings settings)
+    private Reportable createReport(final Trace trace, final String outputFormat)
     {
-        Reportable report = null;
-        final String format = settings.getOutputFormat();
-        switch (ReportFormat.parse(format))
-        {
-        case PLAIN_TEXT:
-            report = new PlainTextReport(trace, settings);
-            break;
-        case HTML:
-            report = new HtmlReport(trace);
-            break;
-        default:
-            throw new IllegalArgumentException(
-                    "Unable to create report with format \"" + format + "\"");
-        }
-        return report;
+        final ReporterFactory reporterFactory = reporterFactoryLoader
+                .getReporterFactory(outputFormat);
+        return reporterFactory.createImporter(trace);
     }
-
 }

@@ -28,31 +28,29 @@ import java.util.List;
 import org.itsallcode.openfasttrace.ExportSettings;
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.ReportSettings;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.exporter.ExporterService;
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.report.ReportService;
+import org.itsallcode.openfasttrace.importer.ImportSettings;
 
 public class OftRunner implements Oft
 {
+    private final ServiceFactory serviceFactory;
+
+    public OftRunner()
+    {
+        this(new ServiceFactory());
+    }
+
+    OftRunner(ServiceFactory serviceFactory)
+    {
+        this.serviceFactory = serviceFactory;
+    }
+
     @Override
     public List<SpecificationItem> importItems(final ImportSettings settings)
     {
-        return createImporterService(settings) //
+        return serviceFactory.createImporterService(settings) //
                 .createImporter() //
                 .importAny(settings.getInputs()) //
                 .getImportedItems();
-    }
-
-    private ImporterService createImporterService(final ImportSettings settings)
-    {
-        final ImporterContext context = new ImporterContext(settings);
-        final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader = InitializingServiceLoader
-                .load(ImporterFactory.class, context);
-        final ImporterService service = new ImporterServiceImpl(
-                new ImporterFactoryLoader(serviceLoader), settings);
-        context.setImporterService(service);
-        return service;
     }
 
     @Override
@@ -64,13 +62,13 @@ public class OftRunner implements Oft
     @Override
     public List<LinkedSpecificationItem> link(final List<SpecificationItem> items)
     {
-        return new Linker(items).link();
+        return serviceFactory.createLinker(items).link();
     }
 
     @Override
     public Trace trace(final List<LinkedSpecificationItem> linkedItems)
     {
-        return new Tracer().trace(linkedItems);
+        return serviceFactory.createTracer().trace(linkedItems);
     }
 
     @Override
@@ -83,31 +81,37 @@ public class OftRunner implements Oft
     public void exportToPath(final List<SpecificationItem> items, final Path path,
             final ExportSettings settings)
     {
-        new ExporterService().exportToPath(items.stream(), path, settings);
+        serviceFactory.createExporterService().exportToPath(items.stream(), path, settings);
     }
 
     @Override
     public void reportToStdOut(final Trace trace)
     {
-        new ReportService().reportTraceToStdOut(trace, ReportSettings.createDefault());
+        final ReportSettings settings = ReportSettings.createDefault();
+        serviceFactory.createReportService(settings).reportTraceToStdOut(trace,
+                settings.getOutputFormat());
     }
 
     @Override
     public void reportToStdOut(final Trace trace, final ReportSettings settings)
     {
-        new ReportService().reportTraceToStdOut(trace, settings);
+        serviceFactory.createReportService(settings).reportTraceToStdOut(trace,
+                settings.getOutputFormat());
     }
 
     @Override
     public void reportToPath(final Trace trace, final Path outputPath)
     {
-        new ReportService().reportTraceToPath(trace, outputPath, ReportSettings.createDefault());
+        final ReportSettings settings = ReportSettings.createDefault();
+        serviceFactory.createReportService(settings).reportTraceToPath(trace, outputPath,
+                settings.getOutputFormat());
     }
 
     @Override
     public void reportToPath(final Trace trace, final Path outputPath,
             final ReportSettings settings)
     {
-        new ReportService().reportTraceToPath(trace, outputPath, settings);
+        serviceFactory.createReportService(settings).reportTraceToPath(trace, outputPath,
+                settings.getOutputFormat());
     }
 }

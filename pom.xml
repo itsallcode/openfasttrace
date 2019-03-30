@@ -5,7 +5,7 @@
     <groupId>org.itsallcode</groupId>
     <version>0.0.0</version>
     <artifactId>openfasttrace-root</artifactId>
-    <name>OpenFastTrace</name>
+    <name>OpenFastTrace Root Project</name>
     <packaging>pom</packaging>
     <modules>
         <module>parent</module>
@@ -18,6 +18,8 @@
         <module>importer/specobject</module>
         <module>importer/tag</module>
         <module>importer/zip</module>
+        <module>reporter/plaintext</module>
+        <module>reporter/html</module>
         <module>testutil</module>
     </modules>
     <build>
@@ -26,6 +28,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.16</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

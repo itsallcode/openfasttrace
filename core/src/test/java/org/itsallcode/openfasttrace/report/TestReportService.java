@@ -1,12 +1,10 @@
 package org.itsallcode.openfasttrace.report;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Core
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,18 +22,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * #L%
  */
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.itsallcode.io.Capturable;
-import org.itsallcode.junit.sysextensions.SystemOutGuard;
-import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
-import org.itsallcode.openfasttrace.ReportSettings;
 import org.itsallcode.openfasttrace.core.Trace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,94 +37,44 @@ import org.junitpioneer.jupiter.TempDirectory;
 import org.junitpioneer.jupiter.TempDirectory.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 @ExtendWith(TempDirectory.class)
-@ExtendWith(SystemOutGuard.class)
 class TestReportService
 {
+    private static final String OUTPUT_FORMAT = "format";
+
     @Mock
-    Trace traceMock;
+    private ReporterFactoryLoader reporterFactoryLoaderMock;
+    @Mock
+    private Trace traceMock;
+    @Mock
+    private ReporterFactory reporterFactoryMock;
+    @Mock
+    private Reportable reportableMock;
 
     private ReportService service;
 
     @BeforeEach
-    public void prepareTest()
+    void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        this.service = new ReportService();
+        service = new ReportService(reporterFactoryLoaderMock);
+        when(reporterFactoryLoaderMock.getReporterFactory(OUTPUT_FORMAT))
+                .thenReturn(reporterFactoryMock);
+        when(reporterFactoryMock.createImporter(same(traceMock))).thenReturn(reportableMock);
     }
 
     @Test
-    void testReportPlainText(@SysOut final Capturable out)
+    void testReportTraceToPath(@TempDir Path tempDir)
     {
-        final ReportSettings settings = ReportSettings //
-                .builder() //
-                .verbosity(ReportVerbosity.MINIMAL) //
-                .build();
-        out.capture();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(out.getCapturedData(), equalTo("not ok\n"));
+        service.reportTraceToPath(traceMock, tempDir.resolve("output"), OUTPUT_FORMAT);
+        verify(reportableMock).renderToStream(any());
     }
 
     @Test
-    void testReportHtml(@SysOut final Capturable out)
+    void testReportTraceToStdOut()
     {
-        final ReportSettings settings = ReportSettings //
-                .builder() //
-                .outputFormat("html") //
-                .build();
-        out.capture();
-        this.service.reportTraceToStdOut(this.traceMock, settings);
-        assertThat(out.getCapturedData(), startsWith("<!DOCTYPE html>"));
-    }
-
-    @Test
-    void testInvalidReportFormatThrowsIllegalArgumentException()
-    {
-        final ReportSettings settings = ReportSettings //
-                .builder() //
-                .outputFormat("invalid").verbosity(ReportVerbosity.QUIET).build();
-        assertThrows(IllegalArgumentException.class,
-                () -> this.service.reportTraceToStdOut(this.traceMock, settings));
-    }
-
-    @Test
-    void testReportToIllegalPathThrowsReportExpection(@TempDir final Path tempDir)
-            throws IOException
-    {
-        final Path readOnlyFilePath = createReadOnlyFile(tempDir);
-        makeFileReadOnly(readOnlyFilePath);
-        try
-        {
-            final ReportSettings settings = ReportSettings //
-                    .builder() //
-                    .verbosity(ReportVerbosity.QUIET) //
-                    .build();
-            assertThrows(ReportException.class, () -> this.service.reportTraceToPath(this.traceMock,
-                    readOnlyFilePath, settings));
-        }
-        finally
-        {
-            makeFileWritable(readOnlyFilePath);
-        }
-    }
-
-    private Path createReadOnlyFile(final Path tempDir) throws IOException
-    {
-        final Path readOnlyFilePath = tempDir.resolve("readonly.txt");
-        Files.write(readOnlyFilePath, "r/o".getBytes());
-        return readOnlyFilePath;
-    }
-
-    private void makeFileReadOnly(final Path readOnlyFilePath) throws IOException
-    {
-        readOnlyFilePath.toFile().setReadOnly();
-    }
-
-    private void makeFileWritable(final Path readOnlyFilePath)
-    {
-        readOnlyFilePath.toFile().setWritable(true);
+        service.reportTraceToStdOut(traceMock, OUTPUT_FORMAT);
+        verify(reportableMock).renderToStream(any());
     }
 }

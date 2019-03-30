@@ -22,7 +22,7 @@ before_install:
 
 script:
   - echo "Parsed the version $version from pom.xml" 
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn --errors clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -34,8 +34,8 @@ addons:
       version: $version
       description: OpenFastTrace requirement tracing
     notification_email: christoph@users.sourceforge.net
-    build_command_prepend: mvn clean
-    build_command: mvn -DskipTests=true compile
+    build_command_prepend: mvn --threads 1C --errors clean
+    build_command: mvn --threads 1C --errors -DskipTests=true compile
     branch_pattern: coverity_scan
   sonarcloud:
     organization: "itsallcode"

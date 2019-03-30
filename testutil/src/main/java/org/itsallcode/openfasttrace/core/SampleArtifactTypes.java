@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.report;
+package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- * OpenFastTrace
+ \* OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2017 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,19 @@ package org.itsallcode.openfasttrace.report;
  * #L%
  */
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-
-class TestReportFormat
+public class SampleArtifactTypes
 {
-    @Test
-    void testParseValid()
+    private SampleArtifactTypes()
     {
-        assertThat(ReportFormat.parse("plain"), equalTo(ReportFormat.PLAIN_TEXT));
+        // Not instantiable
     }
 
-    @Test
-    void testParseInalidFormatThrowsIllegalArguemtException()
-    {
-        assertThrows(IllegalArgumentException.class, () -> ReportFormat.parse("invalid"));
-    }
+    public static final String ARCH = "arch";
+    public static final String DSN = "dsn";
+    public static final String IMPL = "impl";
+    public static final String ITEST = "itest";
+    public static final String OMAN = "oman";
+    public static final String REQ = "req";
+    public static final String UTEST = "utest";
+    public static final String UMAN = "uman";
 }

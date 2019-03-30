@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.core;
+package org.itsallcode.openfasttrace.report;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace API
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,14 +22,18 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-public class SampleArtifactTypes
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.sameInstance;
+
+import org.itsallcode.openfasttrace.ReportSettings;
+import org.junit.jupiter.api.Test;
+
+class TestReporterContext
 {
-    public static final String ARCH = "arch";
-    public static final String DSN = "dsn";
-    public static final String IMPL = "impl";
-    public static final String ITEST = "itest";
-    public static final String OMAN = "oman";
-    public static final String REQ = "req";
-    public static final String UTEST = "utest";
-    public static final String UMAN = "uman";
+    @Test
+    void testGetSettings()
+    {
+        final ReportSettings settings = ReportSettings.createDefault();
+        assertThat(new ReporterContext(settings).getSettings(), sameInstance(settings));
+    }
 }

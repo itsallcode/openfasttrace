@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode</groupId>
-    <artifactId>openfasttrace</artifactId>
-    <version>2.3.0</version><!-- PRODUCT VERSION: do not remove this comment! -->
-    <name>OpenFastTrace</name>
+    <version>0.0.0</version>
+    <artifactId>openfasttrace-root</artifactId>
+    <name>OpenFastTrace Root Project</name>
     <packaging>pom</packaging>
     <modules>
         <module>parent</module>
@@ -18,6 +17,31 @@
         <module>importer/specobject</module>
         <module>importer/tag</module>
         <module>importer/zip</module>
+        <module>reporter/plaintext</module>
+        <module>reporter/html</module>
         <module>testutil</module>
     </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.16</version>
+                <configuration>
+                    <skip>true</skip>
+                    <licenseName>gpl_v3</licenseName>
+                    <organizationName>itsallcode.org</organizationName>
+                    <inceptionYear>2016</inceptionYear>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -80,7 +80,7 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 * To update files with correct license headers and generate file `LICENSE.txt`, run command
 
 ```bash
-mvn license:update-project-license license:update-file-header
+mvn license:update-file-header
 ```
 
 ## Run local sonar analysis
@@ -104,12 +104,24 @@ mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
 
 ## Publishing to JCenter
 
+---
+**NOTE**
+
+This currently only works for release version numbers, not SNAPSHOT versions.
+
+---
+
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
     <servers>
         <server>
             <id>itsallcode-maven-repo</id>
+            <username>[bintray-username]</username>
+            <password>[bintray-api-key]</password>
+        </server>
+        <server>
+            <id>itsallcode-maven-repo-snapshots</id>
             <username>[bintray-username]</username>
             <password>[bintray-api-key]</password>
         </server>

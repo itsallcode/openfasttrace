@@ -27,9 +27,13 @@ import java.util.List;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 import org.itsallcode.openfasttrace.importer.input.InputFile;
 
+/**
+ * This service provides convenient methods for importing
+ * {@link SpecificationItem}s that automatically use the correct
+ * {@link Importer} based on the filename.
+ */
 public interface ImporterService
 {
-
     /**
      * Import a file's contents
      * 
@@ -39,8 +43,20 @@ public interface ImporterService
      */
     List<SpecificationItem> importFile(InputFile file);
 
+    /**
+     * Create a new {@link MultiFileImporter} using the given
+     * {@link ImportEventListener}.
+     * 
+     * @param builder
+     *            the builder used by the new importer.
+     * @return a new importer.
+     */
     MultiFileImporter createImporter(ImportEventListener builder);
 
+    /**
+     * Create a new {@link MultiFileImporter}.
+     * 
+     * @return a new importer.
+     */
     MultiFileImporter createImporter();
-
 }

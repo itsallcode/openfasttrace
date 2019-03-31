@@ -53,7 +53,7 @@ import org.opentest4j.MultipleFailuresError;
 // [itest->dsn~cli.tracing.exit-status~1]
 class TestCliStarter
 {
-    private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
+    private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
     private static final String CONVERT_COMMAND = "convert";
@@ -104,7 +104,7 @@ class TestCliStarter
     @Test
     void testConvertWithoutExplicitInputs(@SysOut final Capturable out)
     {
-        assertExitOkWithStdOutStart(() -> runCliStarter(CONVERT_COMMAND), REQM2_PREAMBLE, out);
+        assertExitOkWithStdOutStart(() -> runCliStarter(CONVERT_COMMAND), SPECOBJECT_PREAMBLE, out);
 
     }
 
@@ -139,7 +139,8 @@ class TestCliStarter
                 CONVERT_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "specobject", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
-        assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE + "<specobjects doctype=\"");
+        assertExitOkWithOutputFileStart(runnable,
+                SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"");
     }
 
     private void assertExitOkWithOutputFileStart(final Runnable runnable, final String fileStart)
@@ -157,7 +158,7 @@ class TestCliStarter
     void testConvertDefaultOutputFormat(@SysOut final Capturable out) throws IOException
     {
         final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.DOC_DIR.toString());
-        assertExitOkWithStdOutStart(runnable, REQM2_PREAMBLE, out);
+        assertExitOkWithStdOutStart(runnable, SPECOBJECT_PREAMBLE, out);
     }
 
     // [itest->dsn~cli.input-file-selection~1]
@@ -166,7 +167,7 @@ class TestCliStarter
     {
         final Runnable runnable = () -> runCliStarter(CONVERT_COMMAND, this.DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
-        assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE);
+        assertExitOkWithOutputFileStart(runnable, SPECOBJECT_PREAMBLE);
     }
 
     // [itest->dsn~cli.default-input~1]
@@ -284,7 +285,7 @@ class TestCliStarter
             throws MultipleFailuresError
     {
         assertAll( //
-                () -> assertExitOkWithOutputFileStart(runnable, REQM2_PREAMBLE), //
+                () -> assertExitOkWithOutputFileStart(runnable, SPECOBJECT_PREAMBLE), //
                 () -> assertOutputFileLength(length) //
         );
     }

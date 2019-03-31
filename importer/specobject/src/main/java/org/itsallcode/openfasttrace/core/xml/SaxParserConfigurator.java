@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.core.xml;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+
 /*-
  * #%L
  \* OpenFastTrace
@@ -24,6 +27,9 @@ package org.itsallcode.openfasttrace.core.xml;
 
 import javax.xml.parsers.SAXParserFactory;
 
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+
 public class SaxParserConfigurator
 {
     private SaxParserConfigurator()
@@ -32,6 +38,16 @@ public class SaxParserConfigurator
 
     public static SAXParserFactory createSaxParserFactory()
     {
-        return SAXParserFactory.newInstance();
+        final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        try
+        {
+            parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        }
+        catch (SAXNotRecognizedException | SAXNotSupportedException
+                | ParserConfigurationException e)
+        {
+            throw new IllegalStateException("Error configuring sax parser factory", e);
+        }
+        return parserFactory;
     }
 }

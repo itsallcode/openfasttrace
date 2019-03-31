@@ -158,7 +158,14 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
             super.writeCharacters(NEWLINE);
             doIndent();
         }
-        state = stateStack.pop();
+        if (stateStack.isEmpty())
+        {
+            state = null;
+        }
+        else
+        {
+            state = stateStack.pop();
+        }
     }
 
     @Override

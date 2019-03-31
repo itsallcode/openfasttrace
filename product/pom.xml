@@ -5,7 +5,7 @@
     <name>OpenFastTrace Product</name>
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
@@ -17,43 +17,43 @@
     </distributionManagement>
     <dependencies>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-markdown</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-specoboject</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-tag</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-zip</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-reporter-plaintext</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-reporter-html</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>

@@ -2,13 +2,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.itsallcode</groupId>
+    <groupId>org.itsallcode.openfasttrace</groupId>
     <artifactId>openfasttrace-parent</artifactId>
     <version>${revision}</version>
     <name>OpenFastTrace Parent</name>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.3.0</revision>
+        <revision>2.3.2</revision>
         <java.version>1.8</java.version>
         <junit.version>5.4.1</junit.version>
         <junit.platform.version>1.4.1</junit.platform.version>
@@ -113,67 +113,67 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-api</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-core</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-exporter-markdown</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-exporter-specobject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-markdown</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-specoboject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-tag</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-zip</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-reporter-plaintext</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-reporter-html</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.itsallcode</groupId>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-testutil</artifactId>
                 <version>${revision}</version>
                 <scope>test</scope>

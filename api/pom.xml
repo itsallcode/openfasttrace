@@ -6,7 +6,7 @@
     <name>OpenFastTrace API</name>
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>

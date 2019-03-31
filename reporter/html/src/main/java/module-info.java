@@ -1,6 +1,6 @@
 /*-
  * #%L
- * OpenFastTrace Core
+ * OpenFastTrace HTML Reporter
  * %%
  * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
@@ -19,20 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-module org.itsallcode.openfasttrace.core
+module org.itsallcode.openfasttrace.reporter.html
 {
-    exports org.itsallcode.openfasttrace.importer.tag.config;
-    exports org.itsallcode.openfasttrace.matcher;
-    exports org.itsallcode.openfasttrace.cli;
-    exports org.itsallcode.openfasttrace.report;
-    exports org.itsallcode.openfasttrace.cli.commands;
-    exports org.itsallcode.openfasttrace.core.serviceloader;
-    exports org.itsallcode.openfasttrace.importer;
-    exports org.itsallcode.openfasttrace;
-    exports org.itsallcode.openfasttrace.exporter;
-    exports org.itsallcode.openfasttrace.importer.input;
-    exports org.itsallcode.openfasttrace.core;
+    exports org.itsallcode.openfasttrace.report.html;
+    exports org.itsallcode.openfasttrace.report.view.html;
+    exports org.itsallcode.openfasttrace.report.view;
 
-    requires java.logging;
     requires org.itsallcode.openfasttrace.api;
 }

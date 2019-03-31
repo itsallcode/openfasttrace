@@ -54,6 +54,6 @@ class TestSpecobjectExporterFactory
         exporter.runExport();
 
         assertThat(writer.getBuffer().toString(), equalTo(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument><specobjects doctype=\"art\"><specobject><id>name</id><status>approved</status><version>42</version></specobject></specobjects></specdocument>"));
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>\n  <specobjects doctype=\"art\">\n    <specobject>\n      <id>name</id>\n      <status>approved</status>\n      <version>42</version>\n    </specobject>\n  </specobjects>\n</specdocument>"));
     }
 }

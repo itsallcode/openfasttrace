@@ -39,7 +39,7 @@ import org.junitpioneer.jupiter.TempDirectory.TempDir;
 @ExtendWith(TempDirectory.class)
 public class ITestOftAsConverter extends AbstractOftTest
 {
-    private static final String REQM2_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><specdocument>";
+    private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
     private Oft oft;
 
     @BeforeEach
@@ -61,6 +61,6 @@ public class ITestOftAsConverter extends AbstractOftTest
     private void assertStandardFileExportResult() throws IOException
     {
         assertOutputFileExists(true);
-        assertOutputFileContentStartsWith(REQM2_PREAMBLE + "<specobjects doctype=\"dsn\">");
+        assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"dsn\">");
     }
 }

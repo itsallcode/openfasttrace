@@ -23,6 +23,8 @@ package org.itsallcode.openfasttrace.importer.zip;
  */
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -46,9 +48,9 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     }
 
     @Test
-    void test()
+    void testConstructor()
     {
-        new ZipFileImporterFactory();
+        assertThat(createFactory(), notNullValue());
     }
 
     @Override

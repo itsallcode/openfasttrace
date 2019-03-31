@@ -55,20 +55,19 @@ public class SpecobjectExporterFactory extends ExporterFactory
             final Stream<SpecificationItem> itemStream, final Newline newline)
     {
         final XMLStreamWriter xmlWriter = createXmlWriter(writer);
-        return new SpecobjectExporter(itemStream, xmlWriter, writer, newline);
+        final IndentingXMLStreamWriter indentingXmlWriter = new IndentingXMLStreamWriter(xmlWriter);
+        return new SpecobjectExporter(itemStream, indentingXmlWriter, writer, newline);
     }
 
     private XMLStreamWriter createXmlWriter(final Writer writer)
     {
-        XMLStreamWriter xmlWriter;
         try
         {
-            xmlWriter = this.xmlOutputFactory.createXMLStreamWriter(writer);
+            return this.xmlOutputFactory.createXMLStreamWriter(writer);
         }
         catch (final XMLStreamException e)
         {
             throw new ExporterException("Error creating xml stream writer for writer " + writer, e);
         }
-        return xmlWriter;
     }
 }

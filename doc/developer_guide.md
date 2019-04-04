@@ -13,7 +13,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
         <version>2.2.0</version>
         <scope>compile</scope>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode:openfasttrace:2.2.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:2.2.0"
 }
 ```
 
@@ -92,7 +92,7 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.login=[token]
 ```
 
-See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace
+See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace
 
 ## Run [mutation testing](http://pitest.org)
 

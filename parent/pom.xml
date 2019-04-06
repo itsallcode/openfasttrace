@@ -56,7 +56,7 @@
         </snapshotRepository>
         <repository>
             <id>itsallcode-maven-repo</id>
-            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace-parent/;publish=0</url>
+            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace/;publish=0</url>
         </repository>
     </distributionManagement>
     <dependencies>

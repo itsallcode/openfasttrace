@@ -9,12 +9,6 @@
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
-    <distributionManagement>
-        <repository>
-            <id>itsallcode-maven-repo</id>
-            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace/;publish=0</url>
-        </repository>
-    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>

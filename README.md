@@ -37,6 +37,7 @@ Sonarcloud status:
 
 * [Blog](https://blog.itsallcode.org/)
 * [User Guide](doc/user_guide.md)
+* [Changelog](doc/CHANGELOG.md)
 * [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
 * [Developer Guide](doc/developer_guide.md)
 * [Contributing guide](CONTRIBUTING.md)

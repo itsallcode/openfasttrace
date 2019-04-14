@@ -53,7 +53,7 @@ Check the [user guide](doc/user_guide.md) for detailed information on how to use
 
 ## Getting OpenFastTrace
 
-OpenFastTrace at it's core is a Java Archive (short "[JAR]"(https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)). This file contains the OpenFastTrace Library and an entry point for [running OFT from the command line](#running-openfasttrace).
+OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)"). This file contains the OpenFastTrace Library and an entry point for [running OFT from the command line](#running-openfasttrace).
 
 ### Getting Pre-Built Packages
 

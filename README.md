@@ -63,7 +63,7 @@ Pre-Built JAR files (called `openfasttrace-2.3.5.jar`) are available from the fo
 * [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/openfasttrace/2.3.5/openfasttrace-2.3.5.jar)
 * [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/2.3.5/openfasttrace-2.3.5.jar)
  
-Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library] to learn how to use the OFT JAR as dependency in your own code with popular build tools.
+Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
 ## Installation
 

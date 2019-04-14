@@ -5,49 +5,49 @@
     <name>OpenFastTrace Product</name>
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
     <dependencies>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-markdown</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-specoboject</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-tag</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-zip</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-reporter-plaintext</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-reporter-html</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>
@@ -80,13 +80,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
             <!-- Self trace. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -103,6 +96,13 @@
                     <mainClass>org.itsallcode.openfasttrace.cli.CliStarter</mainClass>
                     <commandlineArgs>trace -s doc src/main/java
                         src/test/java</commandlineArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <includeDependencySources>true</includeDependencySources>
                 </configuration>
             </plugin>
         </plugins>

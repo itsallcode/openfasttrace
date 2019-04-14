@@ -7,13 +7,13 @@
     <packaging>jar</packaging>
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
     <dependencies>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
             <scope>compile</scope>
         </dependency>
@@ -43,6 +43,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

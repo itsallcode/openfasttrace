@@ -6,17 +6,17 @@
     <name>OpenFastTrace Tag Importer</name>
     <parent>
         <relativePath>../../parent/pom.xml</relativePath>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
     <dependencies>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.itsallcode</groupId>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>

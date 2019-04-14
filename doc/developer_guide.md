@@ -13,9 +13,9 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.itsallcode</groupId>
+        <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>2.2.0</version>
+        <version>2.3.5</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode:openfasttrace:2.2.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:2.3.5"
 }
 ```
 
@@ -92,7 +92,7 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.login=[token]
 ```
 
-See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode%3Aopenfasttrace
+See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace
 
 ## Run [mutation testing](http://pitest.org)
 
@@ -129,15 +129,15 @@ This currently only works for release version numbers, not SNAPSHOT versions.
     ```
 
 1. Checkout the `develop` branch.
-1. Update version in `pom.xml` and `README.md`, commit and push.
-1. Run command
+1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`, commit and push.
+1. Run this command (will take up to 10 minutes)
 
     ```bash
-    mvn deploy
+    mvn clean deploy
     ```
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Sign in at [bintray.com](https://bintray.com)
 1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
-1. There should be a notice saying "You have 6 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/)
-1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/.
+1. There should be a notice saying "You have 176 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/). This will take a few minutes.
+1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/).

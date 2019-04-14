@@ -129,7 +129,9 @@ This currently only works for release version numbers, not SNAPSHOT versions.
     ```
 
 1. Checkout the `develop` branch.
-1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`, commit and push.
+1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`.
+1. Add changes in new version to `CHANGELOG.md`.
+1. Commit and push changes
 1. Run this command (will take up to 10 minutes)
 
     ```bash
@@ -137,6 +139,7 @@ This currently only works for release version numbers, not SNAPSHOT versions.
     ```
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
+1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
 1. Sign in at [bintray.com](https://bintray.com)
 1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
 1. There should be a notice saying "You have 176 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/). This will take a few minutes.

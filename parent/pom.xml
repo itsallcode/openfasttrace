@@ -7,6 +7,8 @@
     <version>${revision}</version>
     <name>OpenFastTrace Parent</name>
     <packaging>pom</packaging>
+    <description>Free requirement tracking suite</description>
+    <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
         <revision>2.3.2</revision>
         <java.version>1.8</java.version>
@@ -258,7 +260,7 @@
                     <execution>
                         <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>

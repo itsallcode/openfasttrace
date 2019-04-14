@@ -10,7 +10,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>2.3.2</revision>
+        <revision>2.3.5</revision>
         <java.version>1.8</java.version>
         <junit.version>5.4.1</junit.version>
         <junit.platform.version>1.4.1</junit.platform.version>

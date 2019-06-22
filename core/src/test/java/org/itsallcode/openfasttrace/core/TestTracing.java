@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.junit.jupiter.api.BeforeEach;

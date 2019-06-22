@@ -1,4 +1,6 @@
-package org.itsallcode.openfasttrace.testutil;
+package org.itsallcode.openfasttrace.core.cli;
+
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 
 /*-
  * #%L
@@ -22,29 +24,14 @@ package org.itsallcode.openfasttrace.testutil;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-
-import org.itsallcode.openfasttrace.core.cli.CliStarter;
-
 /**
- * This class is the base class for integration tests that require input files.
+ * This class allows users to query the current directory.
  */
-// This is a base class for tests and has no tests by intention.
-@SuppressWarnings("squid:S2187")
-public class AbstractFileBasedTest
+public class StandardDirectoryService implements DirectoryService
 {
-    protected void writeTextFile(final File file, final String content) throws IOException
+    @Override
+    public String getCurrent()
     {
-        final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
-        writer.print(content);
-        writer.close();
-    }
-
-    protected void runWithArguments(final String... args)
-    {
-        CliStarter.main(args);
+        return System.getProperty("user.dir");
     }
 }

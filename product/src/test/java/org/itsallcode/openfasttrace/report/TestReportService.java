@@ -41,6 +41,8 @@ import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.core.report.ReportService;
+import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -37,14 +37,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.ExportSettings;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.api.importer.ImporterService;
 import org.itsallcode.openfasttrace.api.importer.MultiFileImporter;
-import org.itsallcode.openfasttrace.exporter.ExporterService;
-import org.itsallcode.openfasttrace.report.ReportService;
+import org.itsallcode.openfasttrace.core.exporter.ExporterService;
+import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

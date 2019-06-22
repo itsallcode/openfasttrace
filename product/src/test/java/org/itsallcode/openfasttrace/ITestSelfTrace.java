@@ -35,8 +35,9 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-import org.itsallcode.openfasttrace.cli.StandardDirectoryService;
+import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.OftRunner;
+import org.itsallcode.openfasttrace.core.cli.StandardDirectoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

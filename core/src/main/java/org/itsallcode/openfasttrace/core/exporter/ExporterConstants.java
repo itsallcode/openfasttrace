@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.testutil;
+package org.itsallcode.openfasttrace.core.exporter;
 
 /*-
  * #%L
@@ -22,29 +22,15 @@ package org.itsallcode.openfasttrace.testutil;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-
-import org.itsallcode.openfasttrace.core.cli.CliStarter;
-
 /**
- * This class is the base class for integration tests that require input files.
+ * Common constants for exporters.
  */
-// This is a base class for tests and has no tests by intention.
-@SuppressWarnings("squid:S2187")
-public class AbstractFileBasedTest
+public final class ExporterConstants
 {
-    protected void writeTextFile(final File file, final String content) throws IOException
-    {
-        final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
-        writer.print(content);
-        writer.close();
-    }
+    public static final String DEFAULT_OUTPUT_FORMAT = "specobject";
 
-    protected void runWithArguments(final String... args)
+    // Prevent class from being instantiated.
+    private ExporterConstants()
     {
-        CliStarter.main(args);
     }
 }

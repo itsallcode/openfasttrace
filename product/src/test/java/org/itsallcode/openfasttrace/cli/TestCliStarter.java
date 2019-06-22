@@ -39,6 +39,8 @@ import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
+import org.itsallcode.openfasttrace.core.cli.CliStarter;
+import org.itsallcode.openfasttrace.core.cli.ExitStatus;
 import org.itsallcode.openfasttrace.test.cli.FakeDirectoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

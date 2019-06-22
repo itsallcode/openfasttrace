@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
-import org.itsallcode.openfasttrace.matcher.SpecificationItemIdMatcher;
+import org.itsallcode.openfasttrace.core.matcher.SpecificationItemIdMatcher;
 import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;

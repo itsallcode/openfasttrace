@@ -32,9 +32,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.api.importer.tag.config.DescribedPathMatcher;
+import org.itsallcode.openfasttrace.test.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

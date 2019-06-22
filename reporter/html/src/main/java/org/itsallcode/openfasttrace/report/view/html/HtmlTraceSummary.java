@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.view.html;
  */
 import java.io.PrintStream;
 
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 

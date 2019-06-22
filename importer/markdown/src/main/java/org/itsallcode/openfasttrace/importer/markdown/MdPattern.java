@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import java.util.regex.Pattern;
 
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
 /**
  * Patterns that describe tokens to be recognized within Markdown-style

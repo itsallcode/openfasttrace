@@ -27,8 +27,11 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
+import org.itsallcode.openfasttrace.api.report.ReportException;
+import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.exporter.ExporterException;
 
 /**
  * This class is responsible for finding the matching {@link ReporterFactory}

@@ -29,12 +29,12 @@ import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.api.core.Newline;
+import org.itsallcode.openfasttrace.api.report.ReportConstants;
+import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.exporter.ExporterConstants;
-import org.itsallcode.openfasttrace.report.ReportConstants;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

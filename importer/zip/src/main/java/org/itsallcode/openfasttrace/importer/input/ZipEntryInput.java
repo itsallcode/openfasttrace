@@ -28,7 +28,8 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 /**
  * An {@link InputFile} for {@link ZipEntry} of a {@link ZipFile}.

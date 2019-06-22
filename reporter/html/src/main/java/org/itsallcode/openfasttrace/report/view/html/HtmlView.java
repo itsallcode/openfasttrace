@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
 
-import org.itsallcode.openfasttrace.report.ReportException;
+import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.AbstractStreamableViewContainer;
 
 /**

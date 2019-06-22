@@ -29,9 +29,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.exporter.ExporterException;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.report.view.AbstractViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.itsallcode.openfasttrace.report.view.ViewableContainer;

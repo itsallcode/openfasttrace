@@ -23,9 +23,10 @@ package org.itsallcode.openfasttrace.matcher;
  */
 
 import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.test.matcher.MatcherTestBase;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.ReportSettings;
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.report.ReportException;
-import org.itsallcode.openfasttrace.report.Reportable;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.report.ReportException;
+import org.itsallcode.openfasttrace.api.report.Reportable;
 
 /**
  * Renders a coverage stream in plain text. This is intended for command line

@@ -28,6 +28,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
+import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 
 /**

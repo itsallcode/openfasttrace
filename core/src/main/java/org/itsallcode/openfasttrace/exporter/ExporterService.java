@@ -27,8 +27,9 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.ExportSettings;
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
 
 public class ExporterService
 {

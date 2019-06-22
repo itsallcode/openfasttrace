@@ -22,9 +22,9 @@ package org.itsallcode.openfasttrace.report.plaintext;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.report.Reportable;
-import org.itsallcode.openfasttrace.report.ReporterFactory;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 
 /**
  * A {@link ReporterFactory} for plain text reports. This supports the

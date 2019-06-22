@@ -25,7 +25,8 @@ package org.itsallcode.openfasttrace.importer;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 public class LineReader
 {

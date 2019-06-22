@@ -2,6 +2,8 @@ package org.itsallcode.openfasttrace.cli;
 
 import java.util.Optional;
 
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+
 /*-
  * #%L
  * OpenFastTrace

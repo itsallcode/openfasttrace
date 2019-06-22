@@ -28,8 +28,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.itsallcode.openfasttrace.report.view.html.OriginLinkFormatter.formatAsBlock;
 import static org.itsallcode.openfasttrace.report.view.html.OriginLinkFormatter.formatAsSpan;
 
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
+import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.test.OsDetector;
 import org.junit.jupiter.api.Test;
 
 class TestOriginLinkFormatter

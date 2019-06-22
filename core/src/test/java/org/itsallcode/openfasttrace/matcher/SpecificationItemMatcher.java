@@ -33,7 +33,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
 import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
 import com.github.hamstercommunity.matcher.config.MatcherConfig;

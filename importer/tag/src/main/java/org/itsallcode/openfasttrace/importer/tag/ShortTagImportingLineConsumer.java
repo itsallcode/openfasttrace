@@ -25,12 +25,12 @@ package org.itsallcode.openfasttrace.importer.tag;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
 class ShortTagImportingLineConsumer extends RegexLineConsumer

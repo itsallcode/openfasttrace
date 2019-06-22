@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.core.xml.event;
 
 import javax.xml.namespace.QName;
 
-import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.api.core.Location;
 
 public class EndElementEvent
 {

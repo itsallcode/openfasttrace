@@ -33,6 +33,8 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.test.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
 class TestStreamInput

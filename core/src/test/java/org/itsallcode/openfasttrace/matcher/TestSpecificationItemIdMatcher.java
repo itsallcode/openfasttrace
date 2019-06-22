@@ -23,7 +23,8 @@ package org.itsallcode.openfasttrace.matcher;
  */
 
 import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.test.matcher.MatcherTestBase;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,7 +56,7 @@ class TestSpecificationItemIdMatcher extends MatcherTestBase<SpecificationItemId
         assertDifferentFromBase(baseBuilder().revision(43));
     }
 
-    private org.itsallcode.openfasttrace.core.SpecificationItemId.Builder baseBuilder()
+    private org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder baseBuilder()
     {
         return new SpecificationItemId.Builder().artifactType("artifactType").name("name")
                 .revision(42);

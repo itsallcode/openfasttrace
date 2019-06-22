@@ -23,8 +23,9 @@ package org.itsallcode.openfasttrace.importer;
  */
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 public class ImporterServiceImpl implements ImporterService
 {

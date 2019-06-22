@@ -3,7 +3,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import java.util.Arrays;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
 /*-
  * #%L

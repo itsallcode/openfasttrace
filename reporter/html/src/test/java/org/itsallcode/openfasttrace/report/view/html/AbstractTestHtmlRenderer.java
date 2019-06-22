@@ -1,12 +1,10 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace HTML Reporter
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,7 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * #L%
  */
 
-import static org.itsallcode.openfasttrace.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.itsallcode.openfasttrace.test.matcher.MultilineTextMatcher.matchesAllLines;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

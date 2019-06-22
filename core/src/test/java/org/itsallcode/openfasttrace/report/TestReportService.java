@@ -29,7 +29,9 @@ import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

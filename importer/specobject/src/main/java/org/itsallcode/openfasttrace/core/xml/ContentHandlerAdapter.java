@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.core.xml;
 
 import java.util.logging.Logger;
 
-import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.core.xml.event.EndElementEvent;
 import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
 import org.xml.sax.*;

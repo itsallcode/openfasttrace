@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
 
 /**
  * This class is responsible for finding the matching {@link ImporterFactory}

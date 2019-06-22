@@ -1,15 +1,10 @@
 package org.itsallcode.openfasttrace.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Core
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,7 +21,13 @@ import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.*;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.itsallcode.openfasttrace.core.SpecificationItemAssertions.*;
+import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,6 +35,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.api.core.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

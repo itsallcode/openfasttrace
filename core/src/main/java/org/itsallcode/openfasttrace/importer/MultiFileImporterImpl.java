@@ -34,9 +34,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from

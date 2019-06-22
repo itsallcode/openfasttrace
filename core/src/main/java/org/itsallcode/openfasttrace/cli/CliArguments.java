@@ -28,12 +28,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+import org.itsallcode.openfasttrace.api.core.Newline;
+import org.itsallcode.openfasttrace.api.report.ReportConstants;
+import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
-import org.itsallcode.openfasttrace.core.Newline;
 import org.itsallcode.openfasttrace.exporter.ExporterConstants;
-import org.itsallcode.openfasttrace.report.ReportConstants;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
  * This class implements a parameter object into which the command line parser

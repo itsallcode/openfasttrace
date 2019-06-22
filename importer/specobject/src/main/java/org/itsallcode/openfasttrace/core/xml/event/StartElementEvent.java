@@ -26,7 +26,7 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.api.core.Location;
 import org.xml.sax.Attributes;
 
 public class StartElementEvent

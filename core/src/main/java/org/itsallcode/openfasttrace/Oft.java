@@ -25,8 +25,10 @@ package org.itsallcode.openfasttrace;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.core.OftRunner;
 
 /**
  * Import requirements (e.g. from ReqM2 to Markdown)

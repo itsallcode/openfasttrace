@@ -29,11 +29,12 @@ import static org.hamcrest.Matchers.*;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.exporter.ExporterContext;
-import org.itsallcode.openfasttrace.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
+import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
+import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporterFactory;
-import org.itsallcode.openfasttrace.importer.ImporterContext;
-import org.itsallcode.openfasttrace.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;

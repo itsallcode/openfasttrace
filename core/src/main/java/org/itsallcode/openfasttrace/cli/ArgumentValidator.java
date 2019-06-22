@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.exporter.ExporterFactoryLoader;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
 
 /**
  * The {@link ArgumentValidator} checks whether the command line arguments given

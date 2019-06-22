@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.cli;
 
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+
 /*-
  * #%L
  * OpenFastTrace

@@ -31,8 +31,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.junit.jupiter.api.Test;
 
 class TestPathConfig

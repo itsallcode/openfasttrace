@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+
 /*-
  * #%L
  * OpenFastTrace
@@ -24,7 +26,6 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
 public class NeedsCoverageHandlerBuilder
 {

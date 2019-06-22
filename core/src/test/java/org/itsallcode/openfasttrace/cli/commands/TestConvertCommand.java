@@ -27,9 +27,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.cli.CliArguments;
-import org.itsallcode.openfasttrace.cli.DirectoryService;
-import org.itsallcode.openfasttrace.exporter.ExporterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

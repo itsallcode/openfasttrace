@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.core.xml.event.Attribute;
 import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
 

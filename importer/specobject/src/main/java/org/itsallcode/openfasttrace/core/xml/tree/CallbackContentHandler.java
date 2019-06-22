@@ -29,7 +29,7 @@ import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 
 public class CallbackContentHandler implements TreeContentHandler
 {

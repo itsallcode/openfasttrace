@@ -1,10 +1,13 @@
 package org.itsallcode.openfasttrace.report.view.html;
 
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECK_MARK;
+import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CROSS_MARK;
+
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace HTML Reporter
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,15 +24,12 @@ package org.itsallcode.openfasttrace.report.view.html;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.ITEST;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
-import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CHECK_MARK;
-import static org.itsallcode.openfasttrace.report.view.html.CharacterConstants.CROSS_MARK;
+import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.IMPL;
+import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.ITEST;
+import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.UTEST;
 import static org.mockito.Mockito.when;
 
-import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

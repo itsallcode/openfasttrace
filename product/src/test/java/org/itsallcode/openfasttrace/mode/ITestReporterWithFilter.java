@@ -33,12 +33,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.itsallcode.openfasttrace.FilterSettings;
 import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.FilterSettings;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

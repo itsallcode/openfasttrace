@@ -27,7 +27,10 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.report.ReportException;
+import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 
 /**
  * This service provides convenient methods to create a report for a given

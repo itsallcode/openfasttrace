@@ -27,11 +27,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.ReportSettings;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.cli.CliArguments;
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
 
 /**
  * Handler for requirement tracing CLI command.

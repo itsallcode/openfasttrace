@@ -1,15 +1,10 @@
 package org.itsallcode.openfasttrace.importer.zip;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Zip Importer
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,8 +21,14 @@ import java.util.zip.ZipFile;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
 
 /**

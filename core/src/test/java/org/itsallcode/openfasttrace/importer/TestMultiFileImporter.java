@@ -36,9 +36,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

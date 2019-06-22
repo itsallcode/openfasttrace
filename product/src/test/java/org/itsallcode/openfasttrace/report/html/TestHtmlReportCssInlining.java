@@ -34,11 +34,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.report.ReportException;
+import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.report.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
+import org.itsallcode.openfasttrace.test.OsDetector;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.TempDirectory;

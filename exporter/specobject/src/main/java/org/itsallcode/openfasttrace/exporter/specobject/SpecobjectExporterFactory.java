@@ -29,11 +29,11 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.exporter.Exporter;
-import org.itsallcode.openfasttrace.exporter.ExporterException;
-import org.itsallcode.openfasttrace.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.api.core.Newline;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.exporter.Exporter;
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
+import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
 
 /**
  * {@link ExporterFactory} for creating {@link Exporter}s that support writing

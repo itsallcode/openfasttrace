@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.core.*;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.view.Viewable;
 

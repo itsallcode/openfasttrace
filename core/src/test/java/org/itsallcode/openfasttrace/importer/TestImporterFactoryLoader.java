@@ -31,9 +31,12 @@ import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

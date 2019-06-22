@@ -34,7 +34,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.zip.*;
 
-import org.itsallcode.openfasttrace.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
-import org.itsallcode.openfasttrace.core.Location;
+import org.itsallcode.openfasttrace.api.core.Location;
 
 /**
  * This class renders {@link Location} object as HTML spans or blocks.

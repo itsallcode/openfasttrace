@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Specobject Importer
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,11 +22,11 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.ItemStatus;
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
+import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
 
 public class SingleSpecObjectsHandlerBuilder
 {

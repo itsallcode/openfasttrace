@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Core
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.Newline;
+import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.exporter.ExporterConstants;
 
 /**

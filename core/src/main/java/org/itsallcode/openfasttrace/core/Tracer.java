@@ -25,6 +25,9 @@ package org.itsallcode.openfasttrace.core;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
+
 public class Tracer
 {
     public Trace trace(final List<LinkedSpecificationItem> items)

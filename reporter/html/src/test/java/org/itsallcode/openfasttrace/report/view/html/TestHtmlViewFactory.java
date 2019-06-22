@@ -28,8 +28,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.*;
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.view.ViewFactory;
 import org.itsallcode.openfasttrace.report.view.Viewable;

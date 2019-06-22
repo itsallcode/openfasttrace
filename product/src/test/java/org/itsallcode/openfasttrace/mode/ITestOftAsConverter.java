@@ -28,8 +28,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

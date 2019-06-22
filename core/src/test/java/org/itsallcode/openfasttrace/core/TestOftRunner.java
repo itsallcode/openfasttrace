@@ -38,11 +38,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.ExportSettings;
-import org.itsallcode.openfasttrace.ReportSettings;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.importer.ImporterService;
+import org.itsallcode.openfasttrace.api.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.exporter.ExporterService;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
-import org.itsallcode.openfasttrace.importer.ImporterService;
-import org.itsallcode.openfasttrace.importer.MultiFileImporter;
 import org.itsallcode.openfasttrace.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

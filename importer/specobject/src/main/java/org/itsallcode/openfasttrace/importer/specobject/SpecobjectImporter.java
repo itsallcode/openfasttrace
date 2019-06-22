@@ -28,14 +28,14 @@ import java.io.Reader;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.api.importer.Importer;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.core.xml.ContentHandlerAdapter;
 import org.itsallcode.openfasttrace.core.xml.IgnoringEntityResolver;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeBuildingContentHandler;
 import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.ImporterException;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.handler.SpecDocumentHandlerBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

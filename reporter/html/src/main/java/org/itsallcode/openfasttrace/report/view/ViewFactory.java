@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.report.view;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace HTML Reporter
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,8 +22,8 @@ package org.itsallcode.openfasttrace.report.view;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.core.Trace;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.Trace;
 
 /**
  * Interface for abstract factory that creates OFT view (e.g. for reports).

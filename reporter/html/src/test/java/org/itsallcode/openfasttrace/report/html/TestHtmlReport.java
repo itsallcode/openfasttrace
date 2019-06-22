@@ -30,8 +30,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.report.Reportable;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

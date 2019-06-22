@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view;
 
 /*-
  * #%L
@@ -21,22 +21,15 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import java.io.PrintStream;
 
-class DelegatingLineConsumer implements LineConsumer
+public abstract class AbstractViewFactory implements ViewFactory
 {
-    private final List<LineConsumer> delegates;
+    protected final PrintStream outputStream;
 
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    protected AbstractViewFactory(final PrintStream outputStream)
     {
-        this.delegates = delegates;
-    }
-
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        this.outputStream = outputStream;
     }
 }

@@ -1,10 +1,12 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /*-
  * #%L
- * OpenFastTrace
+ \* OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,22 +23,29 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import static org.hamcrest.Matchers.equalTo;
 
-class DelegatingLineConsumer implements LineConsumer
+import org.itsallcode.openfasttrace.importer.tag.ChecksumCalculator;
+import org.junit.jupiter.api.Test;
+
+class TestChecksumCalculator
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    @Test
+    void testCalculateCrc32OfEmptyString()
     {
-        this.delegates = delegates;
+        assertThat(ChecksumCalculator.calculateCrc32(""), equalTo(0L));
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
+    @Test
+    void testCalculateCrc32OfSimpleString()
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        assertThat(ChecksumCalculator.calculateCrc32("abcd"), equalTo(3984772369L));
+    }
+
+    @Test
+    void testCalculateCrc32OfUtf8String()
+    {
+        assertThat(ChecksumCalculator.calculateCrc32("äöüÖÄÜß"), equalTo(2866547662L));
     }
 }

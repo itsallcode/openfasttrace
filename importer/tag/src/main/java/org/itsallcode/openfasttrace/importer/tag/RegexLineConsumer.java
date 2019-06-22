@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer.tag;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
 
 abstract class RegexLineConsumer implements LineConsumer
 {

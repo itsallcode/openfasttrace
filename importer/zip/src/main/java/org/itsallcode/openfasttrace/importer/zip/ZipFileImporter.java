@@ -29,7 +29,7 @@ import java.util.zip.ZipFile;
 
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.ZipEntryInput;
+import org.itsallcode.openfasttrace.importer.zip.input.ZipEntryInput;
 
 /**
  * This {@link Importer} supports reading {@link ZipFile} and delegates import

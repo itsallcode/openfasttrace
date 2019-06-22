@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
 
 /*-
  * #%L
@@ -21,22 +21,14 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+public class CharacterConstants
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    private CharacterConstants()
     {
-        this.delegates = delegates;
+        // prevent instantiation
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
-    }
+    public static final String CHECK_MARK = "<span class=\"green\">&check;</span>";
+    public static final String CROSS_MARK = "<span class=\"red\">&cross;</span>";
 }

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
 
 /*-
  * #%L
@@ -21,22 +21,22 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+public final class MarkdownSpanConverter
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    // Prevent instantiation
+    private MarkdownSpanConverter()
     {
-        this.delegates = delegates;
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
+    public static String convertLineContent(final String input)
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        String text = input;
+        text = text.replaceAll("(    .*[\n])+", "<pre>$1</pre>");
+        text = text.replaceAll("`(.*?)`", "<code>$1</code>");
+        text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
+        text = text.replaceAll("(__|\\*\\*)(\\p{L}(?:.*?\\p{L}))\\1", "<strong>$2</strong>");
+        text = text.replaceAll("([_*])(\\p{L}(?:.*?\\p{L}))\\1", "<em>$2</em>");
+        return text;
     }
 }

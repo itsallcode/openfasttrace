@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view;
 
 /*-
  * #%L
@@ -21,22 +21,28 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+/**
+ * Contains static helper methods for indentation.
+ */
+public final class IndentationHelper
 {
-    private final List<LineConsumer> delegates;
+    private static final int INDENT_SPACES_PER_LEVEL = 2;
 
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    private IndentationHelper()
     {
-        this.delegates = delegates;
+        // prevent instantiation.
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
+    /**
+     * Create indentation prefix (i.e. white spaces)
+     * 
+     * @param level
+     *            indentation level
+     * @return <code>level</code> white spaces
+     */
+    public static String createIndentationPrefix(final int level)
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        return new String(new char[level * INDENT_SPACES_PER_LEVEL]).replace("\0", " ");
     }
 }

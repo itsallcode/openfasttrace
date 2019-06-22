@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
 
 /*-
  * #%L
@@ -21,22 +21,19 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+/**
+ * The <code>MarkdownLineState</code> represents the Markdown states that can be
+ * switched by newlines and the way the next line starts.
+ */
+enum MarkdownLineState
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
-    {
-        this.delegates = delegates;
-    }
-
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
-    }
+    START, //
+    PARAGRAPH, //
+    UNORDERED_LIST, //
+    UNORDERED_LIST_CONTINUED, //
+    ORDERED_LIST, //
+    ORDERED_LIST_CONTINUED, //
+    PREFORMATTED, //
+    TERMINATOR
 }

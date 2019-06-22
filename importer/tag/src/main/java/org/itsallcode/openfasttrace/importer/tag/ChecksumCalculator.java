@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 /*-
  * #%L
- * OpenFastTrace
+ \* OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2018 hamstercommunity
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,22 +21,21 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.CRC32;
 
-class DelegatingLineConsumer implements LineConsumer
+public class ChecksumCalculator
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    private ChecksumCalculator()
     {
-        this.delegates = delegates;
+
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
+    public static long calculateCrc32(final String value)
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        final CRC32 checksum = new CRC32();
+        checksum.update(value.getBytes(StandardCharsets.UTF_8));
+        return checksum.getValue();
     }
 }

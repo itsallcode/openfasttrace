@@ -27,7 +27,6 @@ import java.util.regex.Matcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.ChecksumCalculator;
 
 // [impl->dsn~import.full-coverage-tag~1]
 class LongTagImportingLineConsumer extends RegexLineConsumer

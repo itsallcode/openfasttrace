@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view;
 
 /*-
  * #%L
@@ -21,22 +21,25 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+/**
+ * Interface for all view elements which know how to render themselves
+ */
+public interface Viewable
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    /**
+     * Render the viewable element.
+     */
+    public default void render()
     {
-        this.delegates = delegates;
+        render(0);
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
-    }
+    /**
+     * Render the viewable element on given indentation level.
+     * 
+     * @param level
+     *            indentation level
+     */
+    public void render(int level);
 }

@@ -1,4 +1,8 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
+
+import java.io.PrintStream;
+
+import org.itsallcode.openfasttrace.report.html.view.AbstractStreamableViewContainer;
 
 /*-
  * #%L
@@ -21,22 +25,25 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+public class HtmlReportDetails extends AbstractStreamableViewContainer
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    public HtmlReportDetails(final PrintStream stream)
     {
-        this.delegates = delegates;
+        super(stream);
     }
 
     @Override
-    public void readLine(final int lineNumber, final String line)
+    protected void renderBeforeChildren(final int level)
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        renderIndentation(level);
+        this.stream.println("<main>");
+    }
+
+    @Override
+    protected void renderAfterChildren(final int level)
+    {
+        renderIndentation(level);
+        this.stream.println("</main>");
     }
 }

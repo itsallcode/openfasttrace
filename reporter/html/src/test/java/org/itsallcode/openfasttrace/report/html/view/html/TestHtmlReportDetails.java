@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace HTML Reporter
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,22 +21,20 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.report.html.view.Viewable;
+import org.junit.jupiter.api.Test;
 
-class DelegatingLineConsumer implements LineConsumer
+class TestHtmlReportDetails extends AbstractTestHtmlRenderer
 {
-    private final List<LineConsumer> delegates;
-
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    @Test
+    void testRender()
     {
-        this.delegates = delegates;
-    }
-
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        final Viewable view = this.factory.createReportDetails();
+        view.render(1);
+        assertOutputLines(//
+                "  <main>", //
+                "  </main>", //
+                "");
     }
 }

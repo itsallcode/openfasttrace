@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view;
 
 /*-
  * #%L
@@ -21,22 +21,32 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import java.io.PrintStream;
 
-class DelegatingLineConsumer implements LineConsumer
+/**
+ * Abstract base class for View Containers that can be rendered to an output
+ * stream.
+ */
+public abstract class AbstractStreamableViewContainer extends AbstractViewContainer
 {
-    private final List<LineConsumer> delegates;
+    protected final PrintStream stream;
 
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    public AbstractStreamableViewContainer(final PrintStream stream)
     {
-        this.delegates = delegates;
+        super();
+        this.stream = stream;
     }
 
-    @Override
-    public void readLine(final int lineNumber, final String line)
+    public AbstractStreamableViewContainer(final PrintStream stream, final String id,
+            final String title)
     {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        super(id, title);
+        this.stream = stream;
+    }
+
+    public void renderIndentation(final int level)
+    {
+        this.stream.print(IndentationHelper.createIndentationPrefix(level));
     }
 }

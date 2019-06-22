@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.report.html.view.html;
 
 /*-
  * #%L
@@ -21,22 +21,13 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
-
-class DelegatingLineConsumer implements LineConsumer
+public class MarkdownConverter
 {
-    private final List<LineConsumer> delegates;
+    private final MarkdownLineStateMachine machine = new MarkdownLineStateMachine();
 
-    DelegatingLineConsumer(final List<LineConsumer> delegates)
+    public String convert(final String input)
     {
-        this.delegates = delegates;
-    }
-
-    @Override
-    public void readLine(final int lineNumber, final String line)
-    {
-        this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
+        return this.machine.run(input);
     }
 }

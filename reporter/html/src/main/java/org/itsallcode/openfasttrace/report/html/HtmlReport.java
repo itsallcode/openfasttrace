@@ -30,10 +30,10 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.itsallcode.openfasttrace.report.view.ViewFactory;
-import org.itsallcode.openfasttrace.report.view.Viewable;
-import org.itsallcode.openfasttrace.report.view.ViewableContainer;
-import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
+import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
+import org.itsallcode.openfasttrace.report.html.view.Viewable;
+import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
+import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 
 public class HtmlReport implements Reportable
 {

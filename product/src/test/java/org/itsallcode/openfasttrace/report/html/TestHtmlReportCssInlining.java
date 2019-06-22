@@ -35,8 +35,8 @@ import java.net.URL;
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.api.report.ReportException;
-import org.itsallcode.openfasttrace.report.view.ViewableContainer;
-import org.itsallcode.openfasttrace.report.view.html.HtmlViewFactory;
+import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
+import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.test.OsDetector;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.Test;

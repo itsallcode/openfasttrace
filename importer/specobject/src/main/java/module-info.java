@@ -30,4 +30,7 @@ module org.itsallcode.openfasttrace.importer.specobject
     requires java.logging;
     requires java.xml;
     requires org.itsallcode.openfasttrace.api;
+
+    provides org.itsallcode.openfasttrace.api.importer.ImporterFactory
+            with org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 }

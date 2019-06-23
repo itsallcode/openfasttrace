@@ -24,4 +24,7 @@ module org.itsallcode.openfasttrace.report.plaintext
     exports org.itsallcode.openfasttrace.report.plaintext;
 
     requires org.itsallcode.openfasttrace.api;
+
+    provides org.itsallcode.openfasttrace.api.report.ReporterFactory
+            with org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory;
 }

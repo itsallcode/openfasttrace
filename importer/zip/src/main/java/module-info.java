@@ -25,4 +25,7 @@ module org.itsallcode.openfasttrace.importer.zip
     exports org.itsallcode.openfasttrace.importer.zip.input;
 
     requires org.itsallcode.openfasttrace.api;
+
+    provides org.itsallcode.openfasttrace.api.importer.ImporterFactory
+            with org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
 }

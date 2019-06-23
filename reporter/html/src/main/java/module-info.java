@@ -26,4 +26,7 @@ module org.itsallcode.openfasttrace.report.html
     exports org.itsallcode.openfasttrace.report.html.view;
 
     requires org.itsallcode.openfasttrace.api;
+
+    provides org.itsallcode.openfasttrace.api.report.ReporterFactory
+            with org.itsallcode.openfasttrace.report.html.HtmlReporterFactory;
 }

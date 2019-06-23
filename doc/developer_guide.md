@@ -83,6 +83,16 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 mvn license:update-file-header
 ```
 
+## Check for updated dependencies / plugins
+
+```bash
+mvn versions:display-dependency-updates
+```
+
+```bash
+mvn versions:display-plugin-updates
+```
+
 ## Run local sonar analysis
 
 ```bash

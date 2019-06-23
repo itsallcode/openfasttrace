@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.test.importer.input;
+package org.itsallcode.openfasttrace.testutil.importer.input;
 
 /*-
  * #%L

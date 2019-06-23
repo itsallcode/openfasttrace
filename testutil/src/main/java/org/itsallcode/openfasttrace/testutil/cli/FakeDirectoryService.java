@@ -1,4 +1,6 @@
-package org.itsallcode.openfasttrace.test;
+package org.itsallcode.openfasttrace.testutil.cli;
+
+import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 
 /*-
  * #%L
@@ -22,30 +24,18 @@ package org.itsallcode.openfasttrace.test;
  * #L%
  */
 
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
-public class OsDetector
+public class FakeDirectoryService implements DirectoryService
 {
-    private static final String OS = System.getProperty("os.name").toLowerCase();
+    private final String fakeCurrentDir;
 
-    private OsDetector()
+    public FakeDirectoryService(final String fakeCurrentDir)
     {
-        // not instantiable
+        this.fakeCurrentDir = fakeCurrentDir;
     }
 
-    public static void assumeRunningOnWindows()
+    @Override
+    public String getCurrent()
     {
-        assumeTrue(OsDetector::runningOnWindows, "not running on windows");
-    }
-
-    public static void assumeRunningOnUnix()
-    {
-        assumeFalse(OsDetector::runningOnWindows, "not running on unix");
-    }
-
-    private static boolean runningOnWindows()
-    {
-        return OS.indexOf("win") >= 0;
+        return this.fakeCurrentDir;
     }
 }

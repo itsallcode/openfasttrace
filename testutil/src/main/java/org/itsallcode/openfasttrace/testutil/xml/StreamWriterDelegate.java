@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.test.xml;
+package org.itsallcode.openfasttrace.testutil.xml;
 
 /*-
  * #%L

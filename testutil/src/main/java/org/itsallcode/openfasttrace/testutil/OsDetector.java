@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.test.log;
+package org.itsallcode.openfasttrace.testutil;
 
 /*-
  * #%L
@@ -21,31 +21,31 @@ package org.itsallcode.openfasttrace.test.log;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
-/**
- * Logging {@link Handler} that ignores all log messages. This is useful for
- * testing with the highest log level but without spamming the console with log
- * messages.
- */
-public class NoOpLoggingHandler extends Handler
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
+public class OsDetector
 {
-    @Override
-    public void publish(final LogRecord record)
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+
+    private OsDetector()
     {
-        // empty on purpose
+        // not instantiable
     }
 
-    @Override
-    public void flush()
+    public static void assumeRunningOnWindows()
     {
-        // empty on purpose
+        assumeTrue(OsDetector::runningOnWindows, "not running on windows");
     }
 
-    @Override
-    public void close()
+    public static void assumeRunningOnUnix()
     {
-        // empty on purpose
+        assumeFalse(OsDetector::runningOnWindows, "not running on unix");
+    }
+
+    private static boolean runningOnWindows()
+    {
+        return OS.indexOf("win") >= 0;
     }
 }

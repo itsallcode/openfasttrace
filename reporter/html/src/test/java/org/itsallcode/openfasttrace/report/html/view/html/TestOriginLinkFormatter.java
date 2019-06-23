@@ -29,7 +29,7 @@ import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkForma
 import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkFormatter.formatAsSpan;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.test.OsDetector;
+import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.Test;
 
 class TestOriginLinkFormatter

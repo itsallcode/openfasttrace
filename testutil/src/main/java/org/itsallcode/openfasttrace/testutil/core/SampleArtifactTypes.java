@@ -1,12 +1,10 @@
-package org.itsallcode.openfasttrace.test.cli;
-
-import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+package org.itsallcode.openfasttrace.testutil.core;
 
 /*-
  * #%L
- * OpenFastTrace
+ \* OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2017 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,18 +22,19 @@ import org.itsallcode.openfasttrace.api.cli.DirectoryService;
  * #L%
  */
 
-public class FakeDirectoryService implements DirectoryService
+public class SampleArtifactTypes
 {
-    private final String fakeCurrentDir;
-
-    public FakeDirectoryService(final String fakeCurrentDir)
+    private SampleArtifactTypes()
     {
-        this.fakeCurrentDir = fakeCurrentDir;
+        // Not instantiable
     }
 
-    @Override
-    public String getCurrent()
-    {
-        return this.fakeCurrentDir;
-    }
+    public static final String ARCH = "arch";
+    public static final String DSN = "dsn";
+    public static final String IMPL = "impl";
+    public static final String ITEST = "itest";
+    public static final String OMAN = "oman";
+    public static final String REQ = "req";
+    public static final String UTEST = "utest";
+    public static final String UMAN = "uman";
 }

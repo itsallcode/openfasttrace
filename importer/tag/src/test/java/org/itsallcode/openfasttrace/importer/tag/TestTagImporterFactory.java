@@ -27,7 +27,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.test.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
 
 /**
  * Tests for {@link TagImporterFactory}

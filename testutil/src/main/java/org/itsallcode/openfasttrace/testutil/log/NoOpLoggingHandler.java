@@ -1,10 +1,10 @@
-package org.itsallcode.openfasttrace.test.core;
+package org.itsallcode.openfasttrace.testutil.log;
 
 /*-
  * #%L
- \* OpenFastTrace
+ * OpenFastTrace
  * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
+ * Copyright (C) 2016 - 2018 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -21,20 +21,31 @@ package org.itsallcode.openfasttrace.test.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
-public class SampleArtifactTypes
+/**
+ * Logging {@link Handler} that ignores all log messages. This is useful for
+ * testing with the highest log level but without spamming the console with log
+ * messages.
+ */
+public class NoOpLoggingHandler extends Handler
 {
-    private SampleArtifactTypes()
+    @Override
+    public void publish(final LogRecord record)
     {
-        // Not instantiable
+        // empty on purpose
     }
 
-    public static final String ARCH = "arch";
-    public static final String DSN = "dsn";
-    public static final String IMPL = "impl";
-    public static final String ITEST = "itest";
-    public static final String OMAN = "oman";
-    public static final String REQ = "req";
-    public static final String UTEST = "utest";
-    public static final String UMAN = "uman";
+    @Override
+    public void flush()
+    {
+        // empty on purpose
+    }
+
+    @Override
+    public void close()
+    {
+        // empty on purpose
+    }
 }

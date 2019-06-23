@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.itsallcode.openfasttrace.test.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.*;
 
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.test.xml.IndentingXMLStreamWriter;
+import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 

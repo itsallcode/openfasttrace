@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.itsallcode.openfasttrace.core.SpecificationItemAssertions.*;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.*;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

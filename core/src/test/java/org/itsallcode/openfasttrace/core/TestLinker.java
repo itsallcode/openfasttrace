@@ -27,9 +27,9 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.LinkStatus.*;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.REQ;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.UTEST;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.REQ;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;

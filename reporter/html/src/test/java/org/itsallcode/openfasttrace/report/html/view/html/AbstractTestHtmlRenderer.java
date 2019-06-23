@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  */
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.itsallcode.openfasttrace.test.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

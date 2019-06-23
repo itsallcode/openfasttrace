@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.itsallcode.openfasttrace.core.SpecificationItemAssertions.*;
-import static org.itsallcode.openfasttrace.test.core.TraceAssertions.*;
+import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;

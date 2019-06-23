@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterService;
-import org.itsallcode.openfasttrace.test.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

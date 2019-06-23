@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
-import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
-import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
 /*-
  * #%L
  * OpenFastTrace HTML Reporter
@@ -23,9 +21,12 @@ import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConsta
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.ITEST;
-import static org.itsallcode.openfasttrace.test.core.SampleArtifactTypes.UTEST;
+
+import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
+import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITEST;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.api.core.*;

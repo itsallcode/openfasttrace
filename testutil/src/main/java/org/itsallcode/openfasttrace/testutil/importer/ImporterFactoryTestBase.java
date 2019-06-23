@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.test.importer;
+package org.itsallcode.openfasttrace.testutil.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

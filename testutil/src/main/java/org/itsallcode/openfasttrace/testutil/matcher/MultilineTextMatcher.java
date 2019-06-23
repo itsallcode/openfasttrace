@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.test.matcher;
+package org.itsallcode.openfasttrace.testutil.matcher;
 
 import java.util.ArrayList;
 import java.util.List;

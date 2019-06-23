@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 // [impl->dsn~specification-item~3]
 public class SpecificationItem

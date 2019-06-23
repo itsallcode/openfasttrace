@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 /**
  * Specification item ID

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.tree;
+package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
 
 /*-
  * #%L

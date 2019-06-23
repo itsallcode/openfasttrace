@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml;
+package org.itsallcode.openfasttrace.importer.specobject.xml;
 
 /*-
  * #%L
@@ -25,8 +25,8 @@ package org.itsallcode.openfasttrace.core.xml;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.core.xml.event.EndElementEvent;
-import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.EndElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 

@@ -24,8 +24,8 @@ package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
-import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
+import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
+import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
 public class DependenciesHandlerBuilder
 {

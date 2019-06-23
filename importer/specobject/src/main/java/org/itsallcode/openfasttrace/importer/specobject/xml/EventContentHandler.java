@@ -1,4 +1,7 @@
-package org.itsallcode.openfasttrace.core.xml.event;
+package org.itsallcode.openfasttrace.importer.specobject.xml;
+
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.EndElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
 
 /*-
  * #%L
@@ -22,21 +25,13 @@ package org.itsallcode.openfasttrace.core.xml.event;
  * #L%
  */
 
-import javax.xml.namespace.QName;
-
-class QNameFactory
+public interface EventContentHandler
 {
-    private QNameFactory()
-    {
+    void startElement(StartElementEvent event);
 
-    }
+    void endElement(EndElementEvent event);
 
-    static QName create(final String uri, final String localName, final String qName)
-    {
-        if (localName == null || localName.isEmpty())
-        {
-            return new QName(uri, qName, "");
-        }
-        return new QName(uri, localName);
-    }
+    void characters(String characters);
+
+    void init(ContentHandlerAdapterController contentHandlerAdapter);
 }

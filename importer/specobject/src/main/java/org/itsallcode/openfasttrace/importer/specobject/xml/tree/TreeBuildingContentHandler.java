@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.tree;
+package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
 
 /*-
  * #%L
@@ -25,10 +25,10 @@ package org.itsallcode.openfasttrace.core.xml.tree;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.itsallcode.openfasttrace.core.xml.ContentHandlerAdapterController;
-import org.itsallcode.openfasttrace.core.xml.EventContentHandler;
-import org.itsallcode.openfasttrace.core.xml.event.EndElementEvent;
-import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.ContentHandlerAdapterController;
+import org.itsallcode.openfasttrace.importer.specobject.xml.EventContentHandler;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.EndElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
 
 public class TreeBuildingContentHandler implements EventContentHandler, TreeParsingController
 {

@@ -1,7 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml;
-
-import org.itsallcode.openfasttrace.core.xml.event.EndElementEvent;
-import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
+package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
 
 /*-
  * #%L
@@ -25,13 +22,11 @@ import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
  * #L%
  */
 
-public interface EventContentHandler
+public interface TreeParsingController
 {
-    void startElement(StartElementEvent event);
+    void setDelegate(TreeContentHandler newDelegate);
 
-    void endElement(EndElementEvent event);
+    TreeElement getCurrentElement();
 
-    void characters(String characters);
-
-    void init(ContentHandlerAdapterController contentHandlerAdapter);
+    void stopParsing();
 }

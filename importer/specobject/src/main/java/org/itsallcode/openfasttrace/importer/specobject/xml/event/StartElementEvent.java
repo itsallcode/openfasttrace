@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.event;
+package org.itsallcode.openfasttrace.importer.specobject.xml.event;
 
 /*-
  * #%L

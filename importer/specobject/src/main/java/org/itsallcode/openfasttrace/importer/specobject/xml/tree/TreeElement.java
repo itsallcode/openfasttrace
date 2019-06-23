@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.tree;
+package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
 
 /*-
  * #%L
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.core.xml.event.Attribute;
-import org.itsallcode.openfasttrace.core.xml.event.StartElementEvent;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
 
 public class TreeElement
 {

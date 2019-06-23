@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml;
+package org.itsallcode.openfasttrace.importer.specobject.xml.event;
 
 /*-
  * #%L
@@ -22,7 +22,21 @@ package org.itsallcode.openfasttrace.core.xml;
  * #L%
  */
 
-public interface ContentHandlerAdapterController
+import javax.xml.namespace.QName;
+
+class QNameFactory
 {
-    void parsingFinished();
+    private QNameFactory()
+    {
+
+    }
+
+    static QName create(final String uri, final String localName, final String qName)
+    {
+        if (localName == null || localName.isEmpty())
+        {
+            return new QName(uri, qName, "");
+        }
+        return new QName(uri, localName);
+    }
 }

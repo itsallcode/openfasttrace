@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.tree;
+package org.itsallcode.openfasttrace.importer.specobject.xml;
 
 /*-
  * #%L
@@ -22,11 +22,21 @@ package org.itsallcode.openfasttrace.core.xml.tree;
  * #L%
  */
 
-public interface TreeParsingController
+import java.io.StringReader;
+import java.util.logging.Logger;
+
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+
+public class IgnoringEntityResolver implements EntityResolver
 {
-    void setDelegate(TreeContentHandler newDelegate);
+    private static final Logger LOG = Logger.getLogger(IgnoringEntityResolver.class.getName());
 
-    TreeElement getCurrentElement();
-
-    void stopParsing();
+    @Override
+    public InputSource resolveEntity(final String publicId, final String systemId)
+    {
+        LOG.warning(() -> "Ignoring entity with public id '" + publicId + "' and system id '"
+                + systemId + "'.");
+        return new InputSource(new StringReader(""));
+    }
 }

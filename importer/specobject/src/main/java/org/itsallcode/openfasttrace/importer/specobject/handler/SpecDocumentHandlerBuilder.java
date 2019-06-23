@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.core.xml.event.Attribute;
-import org.itsallcode.openfasttrace.core.xml.tree.CallbackContentHandler;
-import org.itsallcode.openfasttrace.core.xml.tree.TreeContentHandler;
+import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
+import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
+import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
 public class SpecDocumentHandlerBuilder
 {

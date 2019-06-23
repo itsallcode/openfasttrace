@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml;
+package org.itsallcode.openfasttrace.importer.specobject.xml;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;

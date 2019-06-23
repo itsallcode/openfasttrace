@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.core.xml.tree;
+package org.itsallcode.openfasttrace.importer.specobject.xml;
 
 /*-
  * #%L
@@ -22,11 +22,7 @@ package org.itsallcode.openfasttrace.core.xml.tree;
  * #L%
  */
 
-public interface TreeContentHandler
+public interface ContentHandlerAdapterController
 {
-    void startElement(TreeElement treeElement);
-
-    void endElement(TreeElement closedElement);
-
-    void init(TreeParsingController parsingController);
+    void parsingFinished();
 }

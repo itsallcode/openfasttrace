@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 public final class Location
 {

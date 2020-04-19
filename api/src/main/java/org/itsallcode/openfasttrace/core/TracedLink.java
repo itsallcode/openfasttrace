@@ -1,6 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 
 /*-
  * #%L

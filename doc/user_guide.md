@@ -416,6 +416,45 @@ Newline format, one of
 
 Defaults to the platform standard if not given.
 
+### Input Format Support
+
+#### Tags in Programming Language Files
+
+OFT's Tag importer by default supports embedding tags into the source files of the following programming or markup languages:
+
+* C (`.c`, `.h`)
+* C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
+* C# (`.c#`)
+* Database related (`.sql`, `.pls`)
+* Configuration files (`.cfg`, `.conf`, `.ini`)
+* Groovy (`.groovy`)
+* Java (`.java`)
+* JavaScript (`.js`)
+* JSON (`.json`)
+* Lua (`.lua`)
+* Objective C (`.m`, `.mm`)
+* Perl (`.pl`, `.pm`)
+* PHP (`.php`)
+* Python (`.py`)
+* R (`.r`)
+* Rust (`.rs`)
+* Shell programming (`.sh`, `.bash`, `.zsh`)
+* Swift (`.swift`)
+* HTML (`.html`, `.htm`, `.xhtml`)
+* Windows batch files (`.bat`)
+* YAML (`.yaml`)
+* Z-Shell (`.zsh`)
+
+Note that XML is at the moment not yet supported by the Tag Importer, because it would collide with the SpecObj Importer. Once import fallback is implemented, XML will be supported too.
+
+#### Markdown
+
+The main importer of OFT accepts markdown files with the extensions `.md` and `.markdown`.
+
+#### SpecObject
+
+Elektrobit's SpecObject format is read from SpecObject files with the `.xml` extension.
+
 ## OFT API
 
 If you are a software developer planning to integrate OFT into one of your programs or scripts, you will probably want to use the OFT API.

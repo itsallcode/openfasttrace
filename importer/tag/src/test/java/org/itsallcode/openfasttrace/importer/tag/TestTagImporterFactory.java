@@ -46,7 +46,12 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
     @Override
     protected List<String> getSupportedFilenames()
     {
-        return asList("file.java", "file.JAVA", "FILE.java", "FILE.JAVA", "file.md.java");
+        return asList("file.java", "FILE.java", "file.md.java", "foo.bash", "foo.bar.bash",
+                "foo.bat", "foo.java", "foo.c", "foo.C", "foo.c++", "foo.c#", "foo.cc", "foo.cfg",
+                "foo.conf", "foo.cpp", "foo.groovy", "foo.h", "foo.H", "foo.hh", "foo.h++",
+                "foo.htm", "foo.html", "foo.ini", "foo.js", "foo.json", "foo.lua", "foo.m",
+                "foo.mm", "foo.php", "foo.pl", "foo.pls", "foo.pm", "foo.py", "foo.sql", "foo.r",
+                "foo.rs", "foo.sh", "foo.yaml", "foo.xhtml", "foo.zsh");
     }
 
     @Override

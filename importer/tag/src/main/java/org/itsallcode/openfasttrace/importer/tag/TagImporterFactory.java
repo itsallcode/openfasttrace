@@ -2,8 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /*-
@@ -38,7 +39,26 @@ import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
 public class TagImporterFactory extends ImporterFactory
 {
     private static final String DEFAULT_FILE_REGEX = "(?i).*\\.java";
-    private static final Pattern DEFAULT_FILE_PATTERN = Pattern.compile(DEFAULT_FILE_REGEX);
+    private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList( //
+            "bat", // Windows batch files
+            "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
+            "c#", // C#
+            "cfg", "conf", "ini", // configuration files
+            "groovy", // Groovy
+            "json", "htm", "html", "xhtml", "yaml", // markup languages
+            "java", // Java
+            "js", // Java script
+            "lua", // Lua
+            "m", "mm", // Objective C
+            "php", // PHP
+            "pl", "pm", // Perl
+            "py", // Python
+            "r", // R Language
+            "rs", // Rust
+            "sh", "bash", "zsh", // Shell programming
+            "swift", // Swift
+            "sql", "pls" // Database related
+    );
 
     @Override
     public boolean supportsFile(final InputFile path)
@@ -53,7 +73,17 @@ public class TagImporterFactory extends ImporterFactory
 
     public boolean supportsDefaultFile(final InputFile file)
     {
-        return DEFAULT_FILE_PATTERN.matcher(file.getPath()).matches();
+        final String path = file.getPath();
+        final int lastDotPosition = path.lastIndexOf(".");
+        if (lastDotPosition > 0)
+        {
+            final String extension = path.substring(lastDotPosition + 1);
+            return SUPPORTED_DEFAULT_EXTENSIONS.contains(extension);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private Optional<PathConfig> findConfig(final InputFile file)

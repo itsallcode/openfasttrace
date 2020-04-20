@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import javax.annotation.Generated;
-
 /*-
  * #%L
  \* OpenFastTrace
@@ -23,6 +21,8 @@ import javax.annotation.Generated;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import javax.annotation.processing.Generated;
 
 public final class Location
 {

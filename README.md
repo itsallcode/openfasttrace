@@ -69,7 +69,7 @@ Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-lib
 
 ### Runtime Dependencies
 
-OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
+OpenFastTrace 3.0.0 and above only needs a Java 11 (or later) runtime environment to run. Older versions of OpenFastTrace can run with Java 8.
 
 #### Installation of Runtime Dependencies on Linux
 
@@ -77,7 +77,7 @@ OpenFastTrace only needs a Java 8 (or later) runtime environment to run.
 
 If you just want to run OFT:
 
-    apt-get install openjdk-8-jre
+    apt-get install openjdk-11-jre
 
 ## Running OpenFastTrace
 

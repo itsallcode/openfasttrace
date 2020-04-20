@@ -55,7 +55,7 @@ OpenFastTrace uses [Apache Maven](https://maven.apache.org) as technical project
 
 If you want to build OFT:
 
-    apt-get install openjdk-8-jdk maven
+    apt-get install openjdk-11-jdk maven
 
 ## Essential Build Steps
 

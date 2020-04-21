@@ -29,7 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.itsallcode.junit.sysextensions.ExitGuard;
-import org.itsallcode.openfasttrace.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.*;
+import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

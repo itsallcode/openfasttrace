@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.core;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Core
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,15 +23,15 @@ package org.itsallcode.openfasttrace.core;
  */
 
 import static org.itsallcode.openfasttrace.core.SpecificationItemAssertions.*;
-import static org.itsallcode.openfasttrace.core.TraceAssertions.*;
+import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

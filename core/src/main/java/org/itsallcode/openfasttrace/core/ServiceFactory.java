@@ -24,15 +24,18 @@ package org.itsallcode.openfasttrace.core;
 
 import java.util.List;
 
-import org.itsallcode.openfasttrace.ReportSettings;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.exporter.ExporterService;
+import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.importer.ImporterServiceImpl;
+import org.itsallcode.openfasttrace.core.report.ReportService;
+import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.exporter.ExporterContext;
-import org.itsallcode.openfasttrace.exporter.ExporterFactoryLoader;
-import org.itsallcode.openfasttrace.exporter.ExporterService;
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.report.ReportService;
-import org.itsallcode.openfasttrace.report.ReporterContext;
-import org.itsallcode.openfasttrace.report.ReporterFactoryLoader;
 
 class ServiceFactory
 {

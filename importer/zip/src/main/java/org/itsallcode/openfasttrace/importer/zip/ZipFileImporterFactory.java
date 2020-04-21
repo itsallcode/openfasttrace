@@ -1,13 +1,10 @@
 package org.itsallcode.openfasttrace.importer.zip;
 
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Zip Importer
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,8 +22,11 @@ import java.util.zip.ZipFile;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 /**
  * {@link ImporterFactory} for importing {@link ZipEntry}s of a {@link ZipFile}

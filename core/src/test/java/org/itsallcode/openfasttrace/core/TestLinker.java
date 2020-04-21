@@ -1,14 +1,10 @@
 package org.itsallcode.openfasttrace.core;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Core
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,16 +22,23 @@ import static org.hamcrest.Matchers.equalTo;
  * #L%
  */
 
-import static org.itsallcode.openfasttrace.core.LinkStatus.*;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.REQ;
-import static org.itsallcode.openfasttrace.core.SampleArtifactTypes.UTEST;
-import static org.itsallcode.openfasttrace.core.SpecificationItemId.createId;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.api.core.LinkStatus.*;
+import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.REQ;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.core.LinkStatus;
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.core.Linker;
 import org.junit.jupiter.api.Test;
 
 class TestLinker

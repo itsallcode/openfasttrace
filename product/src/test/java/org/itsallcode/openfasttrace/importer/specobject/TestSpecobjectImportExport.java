@@ -23,19 +23,21 @@ package org.itsallcode.openfasttrace.importer.specobject;
  */
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.itsallcode.openfasttrace.core.TraceAssertions.assertTraceContainsDefectIds;
-import static org.itsallcode.openfasttrace.core.TraceAssertions.assertTraceSize;
-import static org.itsallcode.openfasttrace.core.TraceAssertions.getItemFromTraceForId;
+import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.assertTraceContainsDefectIds;
+import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.assertTraceSize;
+import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.getItemFromTraceForId;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.importer.Importer;
-import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.Importer;
+import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.core.Linker;
+import org.itsallcode.openfasttrace.core.Tracer;
+import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
 import com.github.hamstercommunity.matcher.auto.AutoMatcher;

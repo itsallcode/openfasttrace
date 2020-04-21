@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.core.*;
+
 public class LinkedItemIndex
 {
     private final Map<SpecificationItemId, LinkedSpecificationItem> idIndex;

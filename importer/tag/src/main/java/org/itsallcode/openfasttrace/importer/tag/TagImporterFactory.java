@@ -1,17 +1,10 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Tag Importer
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2020 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -28,9 +21,17 @@ import java.util.stream.Stream;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.tag.config.PathConfig;
+
+import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 
 /**
  * {@link ImporterFactory} for tags in source code files.

@@ -32,12 +32,12 @@ import java.nio.file.Paths;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.itsallcode.openfasttrace.core.ItemStatus;
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
+import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
 class TestSpecobjectImporter

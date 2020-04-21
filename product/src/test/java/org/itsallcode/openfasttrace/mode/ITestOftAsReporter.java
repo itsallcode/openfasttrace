@@ -33,12 +33,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import org.itsallcode.openfasttrace.FilterSettings;
-import org.itsallcode.openfasttrace.Oft;
-import org.itsallcode.openfasttrace.ReportSettings;
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.importer.ImportSettings;
-import org.itsallcode.openfasttrace.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.api.FilterSettings;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.core.Oft;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

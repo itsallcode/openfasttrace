@@ -2,9 +2,9 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 /*-
  * #%L
- * OpenFastTrace
+ * OpenFastTrace Markdown Importer
  * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
+ * Copyright (C) 2016 - 2019 itsallcode.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,8 +22,8 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 /**
  * {@link ImporterFactory} for Markdown files

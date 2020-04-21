@@ -24,9 +24,9 @@ package org.itsallcode.openfasttrace.importer.specobject;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.itsallcode.openfasttrace.core.xml.SaxParserConfigurator;
-import org.itsallcode.openfasttrace.importer.*;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.specobject.xml.SaxParserConfigurator;
 
 /**
  * {@link ImporterFactory} for XML specobject files

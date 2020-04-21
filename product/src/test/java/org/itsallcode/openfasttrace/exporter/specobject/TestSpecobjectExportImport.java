@@ -34,12 +34,12 @@ import java.util.List;
 
 import javax.xml.stream.*;
 
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.core.Location;
-import org.itsallcode.openfasttrace.importer.SpecificationListBuilder;
-import org.itsallcode.openfasttrace.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
+import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
 

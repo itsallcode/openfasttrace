@@ -21,7 +21,9 @@ package org.itsallcode.openfasttrace.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-import org.itsallcode.openfasttrace.core.SpecificationItem.Builder;
+
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 
 /**
  * Convenience class containing static factory methods for creating builders.

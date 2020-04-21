@@ -28,9 +28,9 @@ import static org.hamcrest.Matchers.equalTo;
 import java.io.StringWriter;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.core.Newline;
-import org.itsallcode.openfasttrace.core.SpecificationItem;
-import org.itsallcode.openfasttrace.exporter.Exporter;
+import org.itsallcode.openfasttrace.api.core.Newline;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.exporter.Exporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

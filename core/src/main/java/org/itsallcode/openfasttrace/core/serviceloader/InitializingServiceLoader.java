@@ -23,6 +23,8 @@ package org.itsallcode.openfasttrace.core.serviceloader;
  */
 import java.util.*;
 
+import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
+
 /**
  * This service loader is similar to Java's {@link ServiceLoader} but
  * additionally initializes services with a given context.

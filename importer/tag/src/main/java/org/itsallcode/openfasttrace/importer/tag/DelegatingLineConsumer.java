@@ -23,7 +23,7 @@ package org.itsallcode.openfasttrace.importer.tag;
  */
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
 
 class DelegatingLineConsumer implements LineConsumer
 {

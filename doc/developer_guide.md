@@ -73,6 +73,7 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 ```bash
 -Djava.util.logging.config.file=src/test/resources/logging.properties
+```
 
 ## License File Header
 

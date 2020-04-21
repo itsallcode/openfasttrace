@@ -38,9 +38,9 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.itsallcode.openfasttrace.core.*;
-import org.itsallcode.openfasttrace.exporter.Exporter;
-import org.itsallcode.openfasttrace.exporter.ExporterException;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.exporter.Exporter;
+import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 
 /**
  * An {@link Exporter} for the specobject XML format.

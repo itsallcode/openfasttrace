@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-import org.itsallcode.openfasttrace.cli.CliStarter;
+import org.itsallcode.openfasttrace.core.cli.CliStarter;
 
 /**
  * This class is the base class for integration tests that require input files.

@@ -1,8 +1,9 @@
-/target/
-/cov-int/
-/.classpath
-/bin
+**/target/
+**/cov-int/
+**/.classpath
+**/bin
 **/*.md.html
+**/.settings/org.eclipse.jdt.apt.core.prefs
 doc/**/*.html
 /*.html
-
+.flattened-pom.xml

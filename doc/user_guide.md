@@ -122,7 +122,7 @@ The revision of a specification item is intended to obsolete existing coverage l
 
 Examples:
 
-If you change a requirement that list all browsers that an HTML export needs to be compatible with, you made a semantic changes and should raise the revision number.
+If you change a requirement that lists all browsers that an HTML export needs to be compatible with, you made a semantic change and should raise the revision number.
 
 If on the other hand you only added a missing period at the end of a sentence, the requirement content did not really change and there is no need to invalidate existing coverage. 
 
@@ -132,7 +132,7 @@ Informative passages of a specification provide explanations and context that is
 
 #### Normative Passages
 
-Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item). Unlike [informative passages](#informative-passages) they require that someone details, implements or or verifies the contained specification items.
+Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item). Unlike [informative passages](#informative-passages) they require that someone details, implements or verifies the contained specification items.
 
 #### Coverage
 
@@ -161,7 +161,7 @@ Example:
 Preconditions:
 * Text editor (preferably with syntax highlighting for [Markdown](https://daringfireball.net/projects/markdown/))
 
-OFT's native format for writing specifications is [Markdown](https://daringfireball.net/projects/markdown/)). Markdown is an easy to learn, easy to read markup format that can be written with any text editor and is typically rendered to HTML. For your convenience we recommend using an editor that provides at least syntax highlighting. A preview function is also helpful. In the best case it features an outline view too. Check ["Tools for Authoring OFT Documents"](#tools-for-authoring-oft-documents) for some suggestions.
+OFT's native format for writing specifications is [Markdown](https://daringfireball.net/projects/markdown/). Markdown is an easy to learn, easy to read markup format that can be written with any text editor and is typically rendered to HTML. For your convenience we recommend using an editor that provides at least syntax highlighting. A preview function is also helpful. In the best case it features an outline view too. Check ["Tools for Authoring OFT Documents"](#tools-for-authoring-oft-documents) for some suggestions.
 
 While OFT introduces additional syntax rules so that it can distinguish between [informative](#informative-passages) and [normative passages](#normative-passages), all elements are valid Markdown.
 
@@ -184,7 +184,7 @@ The upside of giving requirements a title is that they appear in Markdown outlin
 
 The number of hash marks in front of the title must adhere to the rules of Markdown, meaning that if you want to put a [specification item](#specification-item) inside a section with a level two header, the item title must start with three hash marks.
 
-At the moment the specification item is a [terminating item](#terminating-specification-item) because it does not require coverage by any [artifact type](#artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
+At the moment the specification item above is a [terminating item](#terminating-specification-item) because it does not require coverage by any [artifact type](#artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
 
     ### The Requirement Title
     `req~this-is-the-id~1`
@@ -249,13 +249,13 @@ In the following example a requirement in the system requirement specification (
 
 ### Distributing the Detailing Work
 
-In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence is the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside of the specification, at least the specification can prepare criteria on which to split the work.
+In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside of the specification, at least the specification can prepare criteria on which to split the work.
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
 ![Covering selected tags](images/uml/object/obj_multiple_detailed_designs.svg)
 
-In our example it is the job of Andrea the architect to create a system architecture for the system specification coming from Soeren. Andrea defines a set of components which communicate with each other through well-defined, minimal interfaces. Each component is designed so that it can independently developed and tested. Only an integration test is later necessary to prove that the components work together as designed. You tag each architectural requirement with the names of the affected components.
+In our example it is the job of Andrea the architect to create a system architecture for the system specification coming from Soeren. Andrea defines a set of components which communicate with each other through well-defined, minimal interfaces. Each component is designed so that it can be independently developed and tested. Only an integration test is later necessary to prove that the components work together as designed. You tag each architectural requirement with the names of the affected components.
 
 A typical requirement would then look like this (shortened to emphasize the "needs" and "tags" part): 
 
@@ -267,9 +267,9 @@ A typical requirement would then look like this (shortened to emphasize the "nee
     
     Tags: AuthenticationProvider
 
-The development teams distribute the components among themselves and use the tags to filter for only the [specification items](#specification-item) they are responsible for. The teams then cover all items they are responsible for in the detailed design and deliver everything to an integrator. The sum of all detailed designs must then cover the architectural design.
+The development teams distribute the components among themselves and use the tags to filter for only the [specification items](#specification-item) they are responsible for. The teams then cover all of these in the detailed design and deliver everything to an integrator. The sum of all detailed designs must then cover the architectural design.
 
-Wan and Wu from the web service team in our example would run an OFT convert job like this to pick the parts of the architecture that they affected by:
+Wan and Wu from the web service team in our example run an OFT convert job like this to pick the parts of the architecture they are affected by:
 
     oft convert -t AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
 
@@ -282,7 +282,7 @@ If you want to also import specification items that do not have any tags, add a 
 
 ### Tracing the Whole Chain
 
-If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifact.
+If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifacts.
 
 ### Tracing the Whole Chain in the Same File System
 
@@ -322,14 +322,14 @@ oft trace doc src/main/java src/test/java
 
 The first variant is better suited for integration into scripts where you usually want to avoid changing the directory.
 
-By default this will produce a plain text trace that displays a details of all defect specification items and a summary.
+By default this will produce a plain text trace that displays details of all defect specification items and a summary.
 
 See also:
 * [Tracing Options](#tracing-options) for controlling the tracing output
 
 ### HTML Tracing Reports
 
-While plain text reports are perfect for debugging you tracing chain, sometimes you need reports that are more optically appealing. This is usually true if you have to show reports to management or to quality assessors who usually focus on summaries and statistics rather than detail results. In this case you can tell OFT to create reports in HTML format by adding the `-o html` switch.
+While plain text reports are perfect for debugging your tracing chain, sometimes you need reports that are more optically appealing. This is usually true if you have to show reports to management or to quality assessors who usually focus on summaries and statistics rather than detail results. In this case you can tell OFT to create reports in HTML format by adding the `-o html` switch.
 
 ```sh
 oft trace -o html
@@ -358,7 +358,7 @@ Import only specification items where the artifact type matches one of the liste
 
     -t, --wanted-tags [_,]<tag>[,...]
 
-Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as first entry in the list, specification items that no tags at all are also imported.
+Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as first entry in the list, specification items that have no tags at all are also imported.
 
 #### Tracing options
 
@@ -415,6 +415,45 @@ Newline format, one of
 * `oldmac`
 
 Defaults to the platform standard if not given.
+
+### Input Format Support
+
+#### Tags in Programming Language Files
+
+OFT's Tag importer by default supports embedding tags into the source files of the following programming or markup languages:
+
+* C (`.c`, `.h`)
+* C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
+* C# (`.c#`)
+* Database related (`.sql`, `.pls`)
+* Configuration files (`.cfg`, `.conf`, `.ini`)
+* Groovy (`.groovy`)
+* Java (`.java`)
+* JavaScript (`.js`)
+* JSON (`.json`)
+* Lua (`.lua`)
+* Objective C (`.m`, `.mm`)
+* Perl (`.pl`, `.pm`)
+* PHP (`.php`)
+* Python (`.py`)
+* R (`.r`)
+* Rust (`.rs`)
+* Shell programming (`.sh`, `.bash`, `.zsh`)
+* Swift (`.swift`)
+* HTML (`.html`, `.htm`, `.xhtml`)
+* Windows batch files (`.bat`)
+* YAML (`.yaml`)
+* Z-Shell (`.zsh`)
+
+Note that XML is at the moment not yet supported by the Tag Importer, because it would collide with the SpecObj Importer. Once import fallback is implemented, XML will be supported too.
+
+#### Markdown
+
+The main importer of OFT accepts markdown files with the extensions `.md` and `.markdown`.
+
+#### SpecObject
+
+Elektrobit's SpecObject format is read from SpecObject files with the `.xml` extension.
 
 ## OFT API
 
@@ -496,7 +535,7 @@ Create a report from the trace:
 oft.reportToStdOut(trace);
 ```
 
-You can also use the trace results in you own code:
+You can also use the trace results in your own code:
 
 ```JAVA
 if (trace.hasNoDefects())
@@ -518,6 +557,14 @@ Each of those classes comes with a builder which is called like this:
 ```JAVA
 ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
+
+### Exit Codes
+
+The OFT command line interface returns the following exit codes:
+
+* `0` on success
+* `1` on OFT error
+* `2` on command line error
 
 ## Tool Support
 

@@ -2,4 +2,4 @@
 script_path=$(dirname "$(readlink -f "$0")")
 version=$(grep -zo '<version>.*</ver.*\n.*<name>OpenFastTrace' pom.xml | sed -e's/[^0-9.]//g')
 
-java -jar "$script_path/target/openfasttrace-$version.jar" $@
+java -jar "$script_path/product/target/openfasttrace-$version.jar" $@

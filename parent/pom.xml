@@ -10,7 +10,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.0.0</revision>
+        <revision>3.0.1</revision>
         <java.version>11</java.version>
         <junit.version>5.4.1</junit.version>
         <junit.platform.version>1.4.1</junit.platform.version>
@@ -325,6 +325,10 @@
                 <artifactId>pitest-maven</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
@@ -408,10 +412,9 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.1.0</version>
+                    <version>1.2.2</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
-                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
                     </configuration>
                     <executions>
                         <execution>

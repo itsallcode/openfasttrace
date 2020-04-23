@@ -6,12 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1]
+
 ### Fixed
 
+- Published pom files contained invalid version: `<version>${revision}</version>`
+
+## [3.0.0]
 
 ### Changed
 
-- Java 11 support [#187](https://github.com/itsallcode/openfasttrace/issues/187) [#206](https://github.com/itsallcode/openfasttrace/pull/206)
+- Added support for more file types and use Java 11 [#238](https://github.com/itsallcode/openfasttrace/issues/238) [#239](https://github.com/itsallcode/openfasttrace/issues/239)
+- Rename Java packages so that they are unique for each module [#237](https://github.com/itsallcode/openfasttrace/pull/237)
 
 ## [2.3.5] - 2019-04-14
 

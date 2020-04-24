@@ -10,7 +10,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.0.1</revision>
+        <revision>3.0.2</revision>
         <java.version>11</java.version>
         <junit.version>5.4.1</junit.version>
         <junit.platform.version>1.4.1</junit.platform.version>
@@ -415,6 +415,7 @@
                     <version>1.2.2</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
                     </configuration>
                     <executions>
                         <execution>

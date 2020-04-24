@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.2]
+
+### Fixed
+
+- Fix deployment to maven central: attributes in pom.xml where missing.
+
 ## [3.0.1]
 
 ### Fixed

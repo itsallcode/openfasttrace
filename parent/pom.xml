@@ -309,11 +309,6 @@
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
-                    <!-- Workaround for failing tests on Circle CI with Surefire -->
-                    <!-- ${argLine} is required to inject default arguments 
-                        for jacoco -->
-                    <argLine>${argLine}
-                        -Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
                 </configuration>
             </plugin>
             <plugin>

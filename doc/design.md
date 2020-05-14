@@ -2,7 +2,7 @@
 
 # Introduction
 
-## Acknowledgements
+## Acknowledgments
 
 This documents structure is derived from the "[arc42][bib.arc42]" architectural template by Dr. Gernot Starke, Dr. Peter Hruschka.
 

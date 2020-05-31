@@ -180,7 +180,7 @@ public class ITZipFileImporter
         new ZipFileImporter(file, this.delegateImporterMock).runImport();
         if (expectedFileCount == 0)
         {
-            verifyZeroInteractions(this.delegateImporterMock);
+            verifyNoInteractions(this.delegateImporterMock);
             return emptyList();
         }
         verify(this.delegateImporterMock, times(expectedFileCount)).importFile(this.arg.capture());

@@ -74,14 +74,14 @@ class TestTagImporterWithConfig
     void testEmptyFile()
     {
         runImport("");
-        verifyZeroInteractions(this.listenerMock);
+        verifyNoInteractions(this.listenerMock);
     }
 
     @Test
     void testFileWithoutMatchingTag()
     {
         runImport("non matching\nfile\n");
-        verifyZeroInteractions(this.listenerMock);
+        verifyNoInteractions(this.listenerMock);
     }
 
     @Test

@@ -55,7 +55,7 @@ class TestSpecificationItem
     final static String COMMENT = "A comment\nwith multiple lines";
     final static List<SpecificationItemId> COVERED_IDS = parseIds("feat~foo~1", "feat~bar~2",
             "constr~baz~3");
-    final static List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList(new String[] { "dsn", "uman" });
+    final static List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList("dsn", "uman");
     final static List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req~blah~4", "req~zoo~5");
     private static final String TITLE = "The title";
 

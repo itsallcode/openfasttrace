@@ -70,7 +70,7 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
     {
         if (expected.isEmpty())
         {
-            return IsEmptyIterable.<SpecificationItemId> emptyIterable();
+            return IsEmptyIterable.emptyIterable();
         }
         final List<Matcher<? super SpecificationItemId>> matchers = expected.stream()
                 .map(SpecificationItemIdMatcher::equalTo) //

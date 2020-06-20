@@ -33,5 +33,5 @@ public interface DirectoryService
      * 
      * @return current directory
      */
-    public String getCurrent();
+    String getCurrent();
 }

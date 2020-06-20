@@ -36,5 +36,5 @@ public interface Reportable
      * @param outputStream
      *            output stream to which the stream is rendered
      */
-    public void renderToStream(final OutputStream outputStream);
+    void renderToStream(final OutputStream outputStream);
 }

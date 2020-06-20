@@ -39,7 +39,7 @@ public interface Oft
      * 
      * @return list of imported specification items
      */
-    public List<SpecificationItem> importItems();
+    List<SpecificationItem> importItems();
 
     /**
      * Run an import
@@ -49,7 +49,7 @@ public interface Oft
      * 
      * @return list of imported specification items.
      */
-    public List<SpecificationItem> importItems(ImportSettings settings);
+    List<SpecificationItem> importItems(ImportSettings settings);
 
     /**
      * Link specification items
@@ -58,7 +58,7 @@ public interface Oft
      *            specification items to be interlinked
      * @return list of linked specification items
      */
-    public List<LinkedSpecificationItem> link(List<SpecificationItem> items);
+    List<LinkedSpecificationItem> link(List<SpecificationItem> items);
 
     /**
      * Trace a list of linked specification items
@@ -67,7 +67,7 @@ public interface Oft
      *            items to be traced
      * @return trace result
      */
-    public Trace trace(List<LinkedSpecificationItem> linkedItems);
+    Trace trace(List<LinkedSpecificationItem> linkedItems);
 
     /**
      * Export items with default settings
@@ -77,7 +77,7 @@ public interface Oft
      * @param path
      *            output path for export
      */
-    public void exportToPath(List<SpecificationItem> items, final Path path);
+    void exportToPath(List<SpecificationItem> items, final Path path);
 
     /**
      * Export items
@@ -89,8 +89,8 @@ public interface Oft
      * @param settings
      *            export settings
      */
-    public void exportToPath(final List<SpecificationItem> items, final Path path,
-            ExportSettings settings);
+    void exportToPath(final List<SpecificationItem> items, final Path path,
+                      ExportSettings settings);
 
     /**
      * Generate a report with default settings
@@ -98,7 +98,7 @@ public interface Oft
      * @param trace
      *            trace from which the report is generated
      */
-    public void reportToStdOut(Trace trace);
+    void reportToStdOut(Trace trace);
 
     /**
      * Generate a report
@@ -109,7 +109,7 @@ public interface Oft
      * @param settings
      *            report settings
      */
-    public void reportToStdOut(Trace trace, ReportSettings settings);
+    void reportToStdOut(Trace trace, ReportSettings settings);
 
     /**
      * Generate a report
@@ -121,7 +121,7 @@ public interface Oft
      *            path the report should be written to (or file in case this is
      *            a single-file report)
      */
-    public void reportToPath(Trace trace, Path outputPath);
+    void reportToPath(Trace trace, Path outputPath);
 
     /**
      * Generate a report
@@ -136,14 +136,14 @@ public interface Oft
      * @param settings
      *            report settings
      */
-    public void reportToPath(Trace trace, Path outputPath, ReportSettings settings);
+    void reportToPath(Trace trace, Path outputPath, ReportSettings settings);
 
     /**
      * Create a new instance of a object implementing the {@link Oft} interface
      * 
      * @return object implementing {@link Oft} interface
      */
-    public static Oft create()
+    static Oft create()
     {
         return new OftRunner();
     }

@@ -37,7 +37,7 @@ public interface ViewFactory
      *            linked specification item
      * @return view representing the linked specification item
      */
-    public Viewable createSpecificationItem(final LinkedSpecificationItem item);
+    Viewable createSpecificationItem(final LinkedSpecificationItem item);
 
     /**
      * Create a section.
@@ -48,7 +48,7 @@ public interface ViewFactory
      *            section title
      * @return section
      */
-    public ViewableContainer createSection(final String id, final String title);
+    ViewableContainer createSection(final String id, final String title);
 
     /**
      * Create a view.
@@ -59,7 +59,7 @@ public interface ViewFactory
      *            title of the specification item
      * @return view element
      */
-    public ViewableContainer createView(final String id, final String title);
+    ViewableContainer createView(final String id, final String title);
 
     /**
      * Create a trace summary.
@@ -69,21 +69,21 @@ public interface ViewFactory
      * 
      * @return summary view for tracing results
      */
-    public Viewable createTraceSummary(final Trace trace);
+    Viewable createTraceSummary(final Trace trace);
 
     /**
      * Create a container for the details of the report
      * 
      * @return report details container
      */
-    public ViewableContainer createReportDetails();
+    ViewableContainer createReportDetails();
 
     /**
      * Create a report summary.
      * 
      * @return summary view for tracing results
      */
-    public ViewableContainer createReportSummary();
+    ViewableContainer createReportSummary();
 
     /**
      * Create a table of contents.
@@ -93,5 +93,5 @@ public interface ViewFactory
      * 
      * @return table of contents
      */
-    public Viewable createTableOfContents(final ViewableContainer from);
+    Viewable createTableOfContents(final ViewableContainer from);
 }

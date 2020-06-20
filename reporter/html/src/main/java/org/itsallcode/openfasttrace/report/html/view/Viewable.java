@@ -30,7 +30,7 @@ public interface Viewable
     /**
      * Render the viewable element.
      */
-    public default void render()
+    default void render()
     {
         render(0);
     }
@@ -41,5 +41,5 @@ public interface Viewable
      * @param level
      *            indentation level
      */
-    public void render(int level);
+    void render(int level);
 }

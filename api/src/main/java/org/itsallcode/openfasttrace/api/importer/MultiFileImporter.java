@@ -39,7 +39,7 @@ public interface MultiFileImporter {
 	 *            the file to import.
 	 * @return <code>this</code> for fluent programming style.
 	 */
-	public MultiFileImporter importFile(InputFile file);
+    MultiFileImporter importFile(InputFile file);
 
 	/**
 	 * Import from the path, independently of whether it is represents a directory or a file.
@@ -48,7 +48,7 @@ public interface MultiFileImporter {
 	 *            lists of paths to files or directories
 	 * @return <code>this</code> for fluent programming style.
 	 */
-	public MultiFileImporter importAny(List<Path> paths);
+    MultiFileImporter importAny(List<Path> paths);
 
 	/**
 	 * Import all files from the given directory that match the given {@link FileSystem#getPathMatcher(String) glob expression} and character set
@@ -61,12 +61,12 @@ public interface MultiFileImporter {
 	 * @return <code>this</code> for fluent programming style.
 	 */
 	// [impl->dsn~input-directory-recursive-traversal~1]
-	public MultiFileImporter importRecursiveDir(Path dir, String glob);
+    MultiFileImporter importRecursiveDir(Path dir, String glob);
 
 	/**
 	 * Get all imported {@link SpecificationItem}s.
 	 * 
 	 * @return all imported {@link SpecificationItem}s.
 	 */
-	public List<SpecificationItem> getImportedItems();
+    List<SpecificationItem> getImportedItems();
 }

@@ -79,10 +79,8 @@ public class InitializingServiceLoader<T extends Initializable<C>, C> implements
     private List<T> loadServices()
     {
         final List<T> initializedServices = new ArrayList<>();
-        final Iterator<T> iterator = this.serviceLoader.iterator();
-        while (iterator.hasNext())
+        for (final T service : this.serviceLoader)
         {
-            final T service = iterator.next();
             service.init(this.context);
             initializedServices.add(service);
         }

@@ -32,5 +32,5 @@ public interface Importer
     /**
      * Run the import.
      */
-    public void runImport();
+    void runImport();
 }

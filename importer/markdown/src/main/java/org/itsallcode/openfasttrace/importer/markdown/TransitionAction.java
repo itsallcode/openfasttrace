@@ -26,5 +26,5 @@ package org.itsallcode.openfasttrace.importer.markdown;
 @FunctionalInterface
 public interface TransitionAction
 {
-    public abstract void transit();
+    void transit();
 }

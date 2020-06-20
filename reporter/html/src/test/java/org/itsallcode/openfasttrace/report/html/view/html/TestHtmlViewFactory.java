@@ -27,6 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
@@ -53,7 +54,7 @@ class TestHtmlViewFactory
     @Test
     void testCreateFactoryWithPrintStream() throws UnsupportedEncodingException
     {
-        factory = HtmlViewFactory.create(new PrintStream(outputStream, true, "UTF-8"),
+        factory = HtmlViewFactory.create(new PrintStream(outputStream, true, StandardCharsets.UTF_8),
                 HtmlReport.getCssUrl());
         assertThat(factory, notNullValue());
     }

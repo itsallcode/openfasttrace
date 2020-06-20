@@ -46,8 +46,8 @@ public abstract class AbstractOftTest
     {
         this.docDir = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
         this.outputFile = outputDir.resolve("stream.txt");
-        System.setOut(new PrintStream(this.outputStream, true, "UTF-8"));
-        System.setErr(new PrintStream(this.error, true, "UTF-8"));
+        System.setOut(new PrintStream(this.outputStream, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(this.error, true, StandardCharsets.UTF_8));
     }
 
     protected void assertOutputFileContentStartsWith(final String content) throws IOException
@@ -63,7 +63,7 @@ public abstract class AbstractOftTest
     protected String getOutputFileContent() throws IOException
     {
         final Path file = this.outputFile;
-        return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+        return Files.readString(file);
     }
 
     protected void assertStdOutStartsWith(final String content)

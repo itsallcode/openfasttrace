@@ -114,7 +114,7 @@ class TestTagImporterFactoryWithConfig
     void testFactoryForMissingFileThrowsException() throws IOException
     {
         final Importer importer = createImporter(configure(glob(PATH1)), Paths.get(PATH1));
-        assertThrows(ImporterException.class, () -> importer.runImport());
+        assertThrows(ImporterException.class, importer::runImport);
     }
 
     private void assertSupportsFile(final ImportSettings settings, final String path,

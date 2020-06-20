@@ -117,13 +117,11 @@ class TestAbstractViewableContainer
         @Override
         protected void renderBeforeChildren(final int level)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
         protected void renderAfterChildren(final int level)
         {
-            // TODO Auto-generated method stub
         }
     }
 }

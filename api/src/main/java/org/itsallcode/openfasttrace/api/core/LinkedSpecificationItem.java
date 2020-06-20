@@ -179,7 +179,7 @@ public class LinkedSpecificationItem
     public List<LinkedSpecificationItem> getLinksByStatus(final LinkStatus status)
     {
         final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
-        return (linksWithStatus == null) ? Collections.<LinkedSpecificationItem> emptyList()
+        return (linksWithStatus == null) ? Collections.emptyList()
                 : linksWithStatus;
     }
 

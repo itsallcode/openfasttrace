@@ -35,7 +35,7 @@ import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
-import org.junit.jupiter.api.Test;;
+import org.junit.jupiter.api.Test;
 
 class TestSpecificationListBuilder
 {
@@ -194,7 +194,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "out-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(item -> item.getName()).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B"));
     }
 
@@ -228,7 +228,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "in-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(item -> item.getName()).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B", "in-D"));
     }
 }

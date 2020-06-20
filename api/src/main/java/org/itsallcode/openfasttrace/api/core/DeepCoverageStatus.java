@@ -40,7 +40,7 @@ public enum DeepCoverageStatus
 
     private final int badness;
 
-    private DeepCoverageStatus(final int badness)
+    DeepCoverageStatus(final int badness)
     {
         this.badness = badness;
 

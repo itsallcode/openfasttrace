@@ -72,7 +72,7 @@ class TestZipEntryInput
         }
     }
 
-    private ZipFile getZipFile() throws ZipException, IOException
+    private ZipFile getZipFile() throws IOException
     {
         this.zipOutputStream.close();
         return new ZipFile(this.zipFile);

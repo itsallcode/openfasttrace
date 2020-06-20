@@ -74,7 +74,7 @@ class TestCliArguments
 
     // [utest->dsn~cli.conversion.default-output-format~1]
     @Test
-    public void getStandardOutputFormatForExport()
+    void getStandardOutputFormatForExport()
     {
         this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
@@ -83,7 +83,7 @@ class TestCliArguments
 
     // [utest->dsn~cli.tracing.default-format~1]
     @Test
-    public void getStandardOutputFormatForReport()
+    void getStandardOutputFormatForReport()
     {
         this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),

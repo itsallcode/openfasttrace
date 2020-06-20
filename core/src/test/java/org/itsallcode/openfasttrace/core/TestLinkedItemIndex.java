@@ -64,7 +64,7 @@ class TestLinkedItemIndex
     }
 
     @Test
-    public void equalsSpecificationItemIdWithoutVersionContract()
+    void equalsSpecificationItemIdWithoutVersionContract()
     {
         EqualsVerifier.forClass(SpecificationItemIdWithoutVersion.class).verify();
     }

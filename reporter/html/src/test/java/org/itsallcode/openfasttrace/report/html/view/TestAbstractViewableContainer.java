@@ -54,7 +54,7 @@ class TestAbstractViewableContainer
     }
 
     @Test
-    public void add()
+    void add()
     {
         final ViewContainerStub expectedChild = new ViewContainerStub();
         this.viewableContainer.add(expectedChild);

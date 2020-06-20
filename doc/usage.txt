@@ -10,7 +10,7 @@ Commands:
 Tracing options:
   -o, --output-format          Report format, one of "plain", "html"
                                Defaults to "plain"
-  -v, --verbosity-level        Set how verbose the output is. Ranges from
+  -v, --report-verbosity       Set how verbose the output is. Ranges from
                                "quiet" to "all".
 
 Converting options:
@@ -21,8 +21,6 @@ Converting options:
 
 Common options: 
   -f, --file path              The output file. Defaults to STDOUT.
-  -i, --ignore-artifact-types  Define a comma-separated list of artifact types
-                               to be ignored during import.
   -n, --newline format         Newline format one of "unix", "windows", "oldmac"
   -a, --wanted-artifact-types  Import only specification items contained in the
                                comma-separated list

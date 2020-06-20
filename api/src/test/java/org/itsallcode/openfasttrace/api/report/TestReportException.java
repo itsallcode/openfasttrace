@@ -25,7 +25,6 @@ package org.itsallcode.openfasttrace.api.report;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.junit.jupiter.api.Test;
 
 class TestReportException

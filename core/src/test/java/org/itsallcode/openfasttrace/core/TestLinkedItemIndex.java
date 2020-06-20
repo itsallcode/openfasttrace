@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.core.LinkedItemIndex;
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

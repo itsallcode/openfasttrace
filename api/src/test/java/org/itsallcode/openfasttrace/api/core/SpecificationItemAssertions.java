@@ -27,10 +27,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.itsallcode.openfasttrace.api.core.DeepCoverageStatus;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-
 public final class SpecificationItemAssertions
 {
     private SpecificationItemAssertions()

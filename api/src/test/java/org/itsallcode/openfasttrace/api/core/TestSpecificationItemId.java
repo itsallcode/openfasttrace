@@ -30,7 +30,6 @@ import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.junit.jupiter.api.Test;
 

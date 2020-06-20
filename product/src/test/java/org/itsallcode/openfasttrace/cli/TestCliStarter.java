@@ -27,7 +27,6 @@ import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

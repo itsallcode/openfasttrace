@@ -34,7 +34,6 @@ import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.junit.jupiter.api.Test;
 
 class TestSpecificationListBuilder

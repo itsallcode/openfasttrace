@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 import org.itsallcode.openfasttrace.api.core.LinkStatus;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.core.Linker;
 import org.junit.jupiter.api.Test;
 
 class TestLinker

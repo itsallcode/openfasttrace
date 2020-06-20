@@ -28,8 +28,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.core.cli.ArgumentValidator;
-import org.itsallcode.openfasttrace.core.cli.CliArguments;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

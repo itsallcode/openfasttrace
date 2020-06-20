@@ -32,8 +32,6 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.core.cli.CliArguments;
-import org.itsallcode.openfasttrace.core.cli.StandardDirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;

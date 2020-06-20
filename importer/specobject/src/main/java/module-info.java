@@ -28,6 +28,6 @@ module org.itsallcode.openfasttrace.importer.specobject
     exports org.itsallcode.openfasttrace.importer.specobject.xml;
 
     requires java.logging;
-    requires java.xml;
-    requires org.itsallcode.openfasttrace.api;
+    requires transitive java.xml;
+    requires transitive org.itsallcode.openfasttrace.api;
 }

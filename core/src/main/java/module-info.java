@@ -30,5 +30,5 @@ module org.itsallcode.openfasttrace.core
     exports org.itsallcode.openfasttrace.core;
 
     requires java.logging;
-    requires org.itsallcode.openfasttrace.api;
+    requires transitive org.itsallcode.openfasttrace.api;
 }

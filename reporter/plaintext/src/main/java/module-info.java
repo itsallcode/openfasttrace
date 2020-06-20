@@ -23,5 +23,5 @@ module org.itsallcode.openfasttrace.report.plaintext
 {
     exports org.itsallcode.openfasttrace.report.plaintext;
 
-    requires org.itsallcode.openfasttrace.api;
+    requires transitive org.itsallcode.openfasttrace.api;
 }

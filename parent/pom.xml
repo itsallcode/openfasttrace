@@ -297,6 +297,14 @@
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
+                    <argLine>
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api=ALL-UNNAMED
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.report=ALL-UNNAMED
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.importer=ALL-UNNAMED
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.importer.input=ALL-UNNAMED
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.input=ALL-UNNAMED
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>

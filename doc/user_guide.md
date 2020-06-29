@@ -526,20 +526,30 @@ The ID of the implementation comes from the Tag Importer and is for it's most pa
 
 In the brackets you find the status of the link. Empty brackets are good, because they mean that the link is okay. Any other character indicates a broken link.
 
-| Symbol | Link Status       | Direction |
-|--------|-------------------|-----------|
-|        | Covered shallow   | in        |
-| +      | Covered unwanted  | in        |
-| >      | Covered predated  | in        |
-| <      | Covered outdated  | in        |
-|--------|-------------------|-----------|
-|        | Covers            | out       |
-| >      | Predated          | out       |
-| <      | Outdated          | out       |
-| +      | Unwanted          | out       |
-| /      | Orphaned          | out       |
-|--------|-------------------|-----------|
-| ?      | Duplicate         |           |
+The following incoming link statuses exist:
+
+| Symbol | Link Status       |
+|--------|-------------------|
+|        | Covered shallow   |
+| +      | Covered unwanted  |
+| >      | Covered predated  |
+| <      | Covered outdated  |
+
+Outgoing links can have one of the following statuses:
+
+| Symbol | Link Status       |
+|--------|-------------------|
+|        | Covers            |
+| >      | Predated          |
+| <      | Outdated          |
+| +      | Unwanted          |
+| /      | Orphaned          |
+
+Finally duplicate links can exist. They have no real direction. the closest match would be a bi-directional link.
+
+| Symbol | Link Status       |
+|--------|-------------------|
+| ?      | Duplicate         |
 
 ## OFT API
 

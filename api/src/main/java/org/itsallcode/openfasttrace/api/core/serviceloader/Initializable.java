@@ -35,5 +35,5 @@ public interface Initializable<C> {
 	 * @param context
 	 *            the context object with which to initialize the service object.
 	 */
-	public void init(C context);
+    void init(C context);
 }

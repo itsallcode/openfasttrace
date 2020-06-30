@@ -28,8 +28,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.itsallcode.openfasttrace.report.html.view.AbstractViewContainer;
-import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -56,7 +54,7 @@ class TestAbstractViewableContainer
     }
 
     @Test
-    public void add()
+    void add()
     {
         final ViewContainerStub expectedChild = new ViewContainerStub();
         this.viewableContainer.add(expectedChild);
@@ -117,13 +115,11 @@ class TestAbstractViewableContainer
         @Override
         protected void renderBeforeChildren(final int level)
         {
-            // TODO Auto-generated method stub
         }
 
         @Override
         protected void renderAfterChildren(final int level)
         {
-            // TODO Auto-generated method stub
         }
     }
 }

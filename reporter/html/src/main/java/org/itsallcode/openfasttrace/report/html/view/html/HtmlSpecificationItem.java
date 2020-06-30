@@ -155,8 +155,7 @@ public class HtmlSpecificationItem implements Viewable
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
     {
-        final Comparator<String> byTypeName = (a, b) -> a.replaceFirst("<(?:ins|del)>", "")
-                .compareTo(b.replaceFirst("<(?:ins|del)>", ""));
+        final Comparator<String> byTypeName = Comparator.comparing(a -> a.replaceFirst("<(?:ins|del)>", ""));
 
         final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
                 .map(x -> "<ins>" + x + "</ins>");
@@ -219,8 +218,7 @@ public class HtmlSpecificationItem implements Viewable
     protected List<TracedLink> sortLinkStreamById(final Stream<TracedLink> tracedLinkStream)
     {
         return tracedLinkStream //
-                .sorted((a, b) -> a.getOtherLinkEnd().getId().toString()
-                        .compareTo(b.getOtherLinkEnd().getId().toString())) //
+                .sorted(Comparator.comparing(a -> a.getOtherLinkEnd().getId().toString())) //
                 .collect(Collectors.toList());
     }
 

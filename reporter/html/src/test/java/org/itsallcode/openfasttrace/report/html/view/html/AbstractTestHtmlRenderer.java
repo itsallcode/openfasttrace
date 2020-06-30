@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
-import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractTestHtmlRenderer

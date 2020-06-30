@@ -100,7 +100,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     {
         final T factory = createFactory();
         factory.init(null);
-        assertThrows(NullPointerException.class, () -> factory.getContext(),
+        assertThrows(NullPointerException.class, factory::getContext,
                 "Context was not initialized");
     }
 

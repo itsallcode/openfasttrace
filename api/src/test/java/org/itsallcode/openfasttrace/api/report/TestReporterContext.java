@@ -26,7 +26,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.junit.jupiter.api.Test;
 
 class TestReporterContext

@@ -140,9 +140,7 @@ public class ITestOftAsReporter extends AbstractOftTest
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)
     {
         return trace.getItems().stream() //
-                .filter(item -> {
-                    return item.getArtifactType().equals(artifactType);
-                }) //
+                .filter(item -> item.getArtifactType().equals(artifactType)) //
                 .count();
     }
 }

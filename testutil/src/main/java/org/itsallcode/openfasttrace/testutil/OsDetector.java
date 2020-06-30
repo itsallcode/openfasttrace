@@ -46,6 +46,6 @@ public class OsDetector
 
     private static boolean runningOnWindows()
     {
-        return OS.indexOf("win") >= 0;
+        return OS.contains("win");
     }
 }

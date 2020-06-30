@@ -32,8 +32,6 @@ import java.nio.file.Paths;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.core.cli.CliArguments;
-import org.itsallcode.openfasttrace.core.cli.StandardDirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
@@ -76,7 +74,7 @@ class TestCliArguments
 
     // [utest->dsn~cli.conversion.default-output-format~1]
     @Test
-    public void getStandardOutputFormatForExport()
+    void getStandardOutputFormatForExport()
     {
         this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
@@ -85,7 +83,7 @@ class TestCliArguments
 
     // [utest->dsn~cli.tracing.default-format~1]
     @Test
-    public void getStandardOutputFormatForReport()
+    void getStandardOutputFormatForReport()
     {
         this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),

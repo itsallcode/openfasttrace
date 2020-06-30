@@ -27,7 +27,6 @@ import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,7 +80,7 @@ class TestCliStarter
     @Test
     void testNoArguments(@SysErr final Capturable err)
     {
-        assertExitWithError(() -> runCliStarter(), ExitStatus.CLI_ERROR, "oft: Missing command",
+        assertExitWithError(this::runCliStarter, ExitStatus.CLI_ERROR, "oft: Missing command",
                 err);
     }
 
@@ -115,12 +114,8 @@ class TestCliStarter
             final Capturable out) throws MultipleFailuresError
     {
         out.capture();
-        assertAll(() -> {
-            assertExitWithStatus(ExitStatus.OK.getCode(), runnable);
-        }, () -> assertOutputFileExists(false), //
-                () -> {
-                    assertThat(out.getCapturedData(), startsWith(outputStart));
-                });
+        assertAll(() -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), () -> assertOutputFileExists(false), //
+                () -> assertThat(out.getCapturedData(), startsWith(outputStart)));
     }
 
     @Test
@@ -318,8 +313,8 @@ class TestCliStarter
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
                 () -> assertOutputFileExists(true), //
-                () -> assertOutputFileContainsOldMacNewlines(), //
-                () -> assertOutputFileContainsNoUnixNewlines() //
+                this::assertOutputFileContainsOldMacNewlines, //
+                this::assertOutputFileContainsNoUnixNewlines //
         );
     }
 
@@ -347,8 +342,8 @@ class TestCliStarter
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
                 () -> assertOutputFileExists(true), //
-                () -> assertPlatformNewlines(), //
-                () -> assertNoOffendingNewlines() //
+                this::assertPlatformNewlines, //
+                this::assertNoOffendingNewlines //
         );
     }
 
@@ -403,7 +398,7 @@ class TestCliStarter
         final Path file = this.outputFile;
         try
         {
-            return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            return Files.readString(file);
         }
         catch (final IOException exception)
         {

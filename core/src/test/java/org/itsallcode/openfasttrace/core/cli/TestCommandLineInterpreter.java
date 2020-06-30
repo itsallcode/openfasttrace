@@ -30,8 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
-import org.itsallcode.openfasttrace.core.cli.CliException;
-import org.itsallcode.openfasttrace.core.cli.CommandLineInterpreter;
 import org.itsallcode.openfasttrace.core.cli.CommandLineArgumentsStub.StubEnum;
 import org.junit.jupiter.api.Test;
 

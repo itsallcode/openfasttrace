@@ -34,21 +34,21 @@ public interface ViewableContainer extends Viewable
      * 
      * @return unique ID through which the element can be referenced
      */
-    public String getId();
+    String getId();
 
     /**
      * Get the title of this view element
      * 
      * @return title of the view element
      */
-    public String getTitle();
+    String getTitle();
 
     /**
      * Check if the view element can be referenced
      * 
      * @return <code>true</code> if the view element can be referenced
      */
-    public boolean isReferenceable();
+    boolean isReferenceable();
 
     /**
      * Add a viewable element
@@ -56,12 +56,12 @@ public interface ViewableContainer extends Viewable
      * @param child
      *            contained viewable element
      */
-    public void add(Viewable child);
+    void add(Viewable child);
 
     /**
      * Get the list of children of the viewable container
      * 
      * @return list of children
      */
-    public List<Viewable> getChildren();
+    List<Viewable> getChildren();
 }

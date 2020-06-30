@@ -78,7 +78,7 @@ public enum MdPattern
 
     private final Pattern pattern;
 
-    private MdPattern(final String regularExpression)
+    MdPattern(final String regularExpression)
     {
         this.pattern = Pattern.compile(regularExpression);
     }

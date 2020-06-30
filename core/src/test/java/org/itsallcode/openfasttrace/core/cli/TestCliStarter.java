@@ -32,7 +32,6 @@ import java.util.List;
 import org.itsallcode.junit.sysextensions.AssertExit;
 import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
-import org.itsallcode.openfasttrace.core.cli.CliStarter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

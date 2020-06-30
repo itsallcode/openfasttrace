@@ -24,7 +24,6 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import org.itsallcode.openfasttrace.report.html.view.html.MarkdownConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

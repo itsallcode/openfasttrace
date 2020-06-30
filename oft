@@ -1,4 +1,6 @@
 #!/bin/sh
-readonly version=3.0.2
-readonly path="$HOME/lib/"
-java -jar "$path/openfasttrace-$version.jar" $@
+
+script_path=$(dirname "$(readlink -f "$0")")
+version=$(grep -zo '<revision>.*</revision>' parent/pom.xml | sed -e's/[^0-9.]//g')
+
+java -jar "$script_path/product/target/openfasttrace-$version.jar" $@

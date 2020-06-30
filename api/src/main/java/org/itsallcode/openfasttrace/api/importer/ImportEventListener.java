@@ -39,7 +39,7 @@ public interface ImportEventListener
      * {@link SpecificationItemId} must be defined using
      * {@link #setId(SpecificationItemId)}.
      */
-    public void beginSpecificationItem();
+    void beginSpecificationItem();
 
     /**
      * The importer found the ID of the specification item
@@ -47,7 +47,7 @@ public interface ImportEventListener
      * @param id
      *            the ID of the new item
      */
-    public void setId(final SpecificationItemId id);
+    void setId(final SpecificationItemId id);
 
     /**
      * The importer found the title of a specification item
@@ -55,7 +55,7 @@ public interface ImportEventListener
      * @param title
      *            the title
      */
-    public void setTitle(String title);
+    void setTitle(String title);
 
     /**
      * The importer found the status of the specification item
@@ -63,7 +63,7 @@ public interface ImportEventListener
      * @param status
      *            the status
      */
-    public void setStatus(ItemStatus status);
+    void setStatus(ItemStatus status);
 
     /**
      * Append a text block to an item description
@@ -71,7 +71,7 @@ public interface ImportEventListener
      * @param fragment
      *            the text to be appended to the description
      */
-    public void appendDescription(final String fragment);
+    void appendDescription(final String fragment);
 
     /**
      * Append a text block to the rationale
@@ -79,7 +79,7 @@ public interface ImportEventListener
      * @param fragment
      *            the text to be appended to the rationale
      */
-    public void appendRationale(final String fragment);
+    void appendRationale(final String fragment);
 
     /**
      * Append a text block to the comment
@@ -87,7 +87,7 @@ public interface ImportEventListener
      * @param fragment
      *            the text to be appended to the comment
      */
-    public void appendComment(final String fragment);
+    void appendComment(final String fragment);
 
     /**
      * The importer found a reference that indicates coverage of another
@@ -96,7 +96,7 @@ public interface ImportEventListener
      * @param id
      *            the ID of the item that is covered
      */
-    public void addCoveredId(final SpecificationItemId id);
+    void addCoveredId(final SpecificationItemId id);
 
     /**
      * Add the ID of a specification item that this item depends on
@@ -104,7 +104,7 @@ public interface ImportEventListener
      * @param id
      *            the ID of the item depends on
      */
-    public void addDependsOnId(final SpecificationItemId id);
+    void addDependsOnId(final SpecificationItemId id);
 
     /**
      * The importer detected that the current specification object needs to be
@@ -114,7 +114,7 @@ public interface ImportEventListener
      *            the type of specification item that is needed to provide
      *            coverage
      */
-    public void addNeededArtifactType(final String artifactType);
+    void addNeededArtifactType(final String artifactType);
 
     /**
      * Add a tag
@@ -122,7 +122,7 @@ public interface ImportEventListener
      * @param tag
      *            the tag
      */
-    public void addTag(String tag);
+    void addTag(String tag);
 
     /**
      * Set the location of the specification item in the imported file
@@ -132,12 +132,12 @@ public interface ImportEventListener
      * @param line
      *            the current line number
      */
-    public void setLocation(final String path, int line);
+    void setLocation(final String path, int line);
 
     /**
      * The importer detected the end of a specification item
      */
-    public void endSpecificationItem();
+    void endSpecificationItem();
 
     /**
      * Set the location of the specification item in the imported file
@@ -145,7 +145,7 @@ public interface ImportEventListener
      * @param location
      *            the location
      */
-    public void setLocation(Location location);
+    void setLocation(Location location);
 
     /**
      * Set to <code>true</code> if the specification item forwards needed
@@ -155,5 +155,5 @@ public interface ImportEventListener
      *            <code>true</code> if the specification item forwards needed
      *            coverage
      */
-    public void setForwards(boolean forwards);
+    void setForwards(boolean forwards);
 }

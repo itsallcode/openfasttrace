@@ -84,6 +84,6 @@ public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationI
             return IsEmptyIterable.emptyIterable();
         }
         return IsIterableContainingInAnyOrder
-                .<SpecificationItem> containsInAnyOrder(equalTo(items).toArray(new Matcher[0]));
+                .containsInAnyOrder(equalTo(items).toArray(new Matcher[0]));
     }
 }

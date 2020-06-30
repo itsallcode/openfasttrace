@@ -32,5 +32,5 @@ public interface Performable
      * 
      * @return <code>true</code> if the operation performed was successful.
      */
-    public boolean run();
+    boolean run();
 }

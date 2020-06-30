@@ -33,7 +33,7 @@ public enum Newline
     private static final Pattern ANY_NEWLINE_PATTERN = Pattern.compile(ANY_NEWLINE_REG_EX);
     private final String representation;
 
-    private Newline(final String representation)
+    Newline(final String representation)
     {
         this.representation = representation;
     }

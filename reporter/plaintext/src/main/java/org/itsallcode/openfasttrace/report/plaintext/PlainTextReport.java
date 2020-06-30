@@ -183,8 +183,7 @@ public class PlainTextReport implements Reportable
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
     {
-        final Comparator<String> byTypeName = (a, b) -> a.replaceFirst("[-+]", "")
-                .compareTo(b.replaceFirst("[-+]", ""));
+        final Comparator<String> byTypeName = Comparator.comparing(a -> a.replaceFirst("[-+]", ""));
 
         final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
                 .map(x -> "-" + x);
@@ -299,8 +298,7 @@ public class PlainTextReport implements Reportable
     {
         item.getTracedLinks() //
                 .stream() //
-                .sorted((a, b) -> a.getOtherLinkEnd().getId()
-                        .compareTo(b.getOtherLinkEnd().getId())) //
+                .sorted(Comparator.comparing(a -> a.getOtherLinkEnd().getId())) //
                 .forEachOrdered(link -> renderLink(report, link, showOrigin));
     }
 

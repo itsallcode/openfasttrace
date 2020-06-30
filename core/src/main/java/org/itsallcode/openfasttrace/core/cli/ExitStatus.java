@@ -29,7 +29,7 @@ public enum ExitStatus
 {
     OK(0), FAILURE(1), CLI_ERROR(2);
 
-    private int code;
+    private final int code;
 
     ExitStatus(final int code)
     {

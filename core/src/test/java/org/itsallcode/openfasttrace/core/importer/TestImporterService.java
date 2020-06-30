@@ -37,8 +37,6 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
-import org.itsallcode.openfasttrace.core.importer.ImporterServiceImpl;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -71,7 +71,7 @@ public class ITZipFileImporter
     private List<String> actualFileContent;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir) throws IOException
+    void beforeEach(@TempDir final Path tempDir)
     {
         MockitoAnnotations.initMocks(this);
         this.actualFileContent = new ArrayList<>();
@@ -98,7 +98,7 @@ public class ITZipFileImporter
     }
 
     @Test
-    void testImportNonPhysicalFile() throws IOException
+    void testImportNonPhysicalFile()
     {
         final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
@@ -180,7 +180,7 @@ public class ITZipFileImporter
         new ZipFileImporter(file, this.delegateImporterMock).runImport();
         if (expectedFileCount == 0)
         {
-            verifyZeroInteractions(this.delegateImporterMock);
+            verifyNoInteractions(this.delegateImporterMock);
             return emptyList();
         }
         verify(this.delegateImporterMock, times(expectedFileCount)).importFile(this.arg.capture());

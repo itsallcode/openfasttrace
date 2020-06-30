@@ -7,3 +7,5 @@
 doc/**/*.html
 /*.html
 .flattened-pom.xml
+/.idea/
+/**/*.iml

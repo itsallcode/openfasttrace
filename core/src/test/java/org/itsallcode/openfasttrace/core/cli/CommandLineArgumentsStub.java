@@ -27,9 +27,9 @@ import java.util.List;
 
 public class CommandLineArgumentsStub
 {
-    public static enum StubEnum
+    public enum StubEnum
     {
-        VALUE1, VALUE2;
+        VALUE1, VALUE2
     }
 
     private String a;

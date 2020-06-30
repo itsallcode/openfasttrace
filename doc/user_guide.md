@@ -501,20 +501,20 @@ In the brackets you find, which artifact types this item expects as coverage. If
 
 If it is not covered, the name is lead in by a minus:
 
-> ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**-impl**, utest)
+> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**-impl**, utest)
 
 If an artifact type provides coverage that is not requested, you find this indicated with a plus in front.
 
-> ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, **+itest**, utest)
+> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, **+itest**, utest)
 
-Everything after that line are details of the requirement. A bar symbol in the first position indicates this. Everything
+Everything after that line is details of the requirement. A bar symbol in the first position indicates this. Everything
 that does not start with an arrow symbol is part of the description.
 
     |
     | The CLI uses plain text as requirement tracing report format if none is given as a parameter.
     |
     
-The section with the arrows provides details about incoming and outgoing links. Arrows pointing to the bar (i.e. to the left) are incomming links, arrows pointing away from the bar are outgoing.
+The section with the arrows provides details about incoming and outgoing links. Arrows pointing to the bar (i.e. to the left) are incoming links, arrows pointing away from the bar are outgoing.
 
 The following line means that this design requirement is covered in the implementation.
 
@@ -524,7 +524,7 @@ The ID of the implementation comes from the Tag Importer and is for it's most pa
 
 >|<-- ( ) **`impl`**`~cli.tracing.default-format-`**`2215031703~0`**
 
-In the brackets you find the status of the link. Empty brackets are good, because they mean that the link is okay. Any other character indicates a broken link.
+In the brackets you find the status of the link. Empty brackets are good because they mean that the link is okay. Any other character indicates a broken link.
 
 The following incoming link statuses exist:
 

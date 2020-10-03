@@ -9,3 +9,4 @@ doc/**/*.html
 .flattened-pom.xml
 /.idea/
 /**/*.iml
+/**/.project

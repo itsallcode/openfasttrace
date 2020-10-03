@@ -7,7 +7,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [develop, coverity_scan, master]
+    branches: [develop, master]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [develop]
@@ -24,7 +24,7 @@ jobs:
       matrix:
         # Override automatic language detection by changing the below list
         # Supported options are ['csharp', 'cpp', 'go', 'java', 'javascript', 'python']
-        language: ['java', 'cpp']
+        language: ['java']
         # Learn more...
         # https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#overriding-automatic-language-detection
 

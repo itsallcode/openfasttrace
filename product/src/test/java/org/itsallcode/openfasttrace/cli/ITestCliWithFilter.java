@@ -44,7 +44,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 @ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
-public class ITestCliWithFilter extends AbstractFileBasedTest
+class ITestCliWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //

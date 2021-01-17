@@ -38,13 +38,14 @@ import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 // [utest->dsn~import.short-coverage-tag~1]
+@ExtendWith(MockitoExtension.class)
 class TestTagImporterFactoryWithConfig
 {
     private static final String PATH1 = "path1";
@@ -54,12 +55,6 @@ class TestTagImporterFactoryWithConfig
     private ImportEventListener listenerMock;
     @Mock
     private ImporterContext contextMock;
-
-    @BeforeEach
-    void beforeEach()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     void testFactoryWithEmptyPathConfigListSupportsNothing()

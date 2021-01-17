@@ -46,10 +46,15 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterService;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestOftRunner
 {
     private static final Path PATH = Paths.get("myPath");
@@ -81,7 +86,6 @@ class TestOftRunner
         importedItems = new ArrayList<>();
         linkedItems = new ArrayList<>();
 
-        MockitoAnnotations.initMocks(this);
         oftRunner = new OftRunner(serviceFactoryMock);
 
         when(serviceFactoryMock.createImporterService(any())).thenReturn(importerServiceMock);

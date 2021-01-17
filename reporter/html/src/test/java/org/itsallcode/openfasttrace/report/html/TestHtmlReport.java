@@ -32,21 +32,16 @@ import java.util.Arrays;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class TestHtmlReport
 {
     @Mock
     private Trace traceMock;
-
-    @BeforeEach
-    public void prepareTest()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     void testRenderEmptyTrace()

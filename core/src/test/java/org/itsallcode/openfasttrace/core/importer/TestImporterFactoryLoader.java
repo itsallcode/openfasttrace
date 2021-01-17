@@ -39,12 +39,17 @@ import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 /**
  * Test for {@link ImporterFactoryLoader}
  */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestImporterFactoryLoader
 {
     @Mock
@@ -64,8 +69,6 @@ class TestImporterFactoryLoader
     @BeforeEach
     void beforeEach()
     {
-        MockitoAnnotations.initMocks(this);
-
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
         this.file = RealFileInput.forPath(Paths.get("dir", "name"));
 

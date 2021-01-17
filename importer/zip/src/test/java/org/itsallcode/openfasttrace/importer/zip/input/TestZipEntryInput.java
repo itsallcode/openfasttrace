@@ -41,7 +41,6 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.MockitoAnnotations;
 
 class TestZipEntryInput
 {
@@ -53,7 +52,6 @@ class TestZipEntryInput
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws IOException
     {
-        MockitoAnnotations.initMocks(this);
         this.zipFile = tempDir.resolve(TEST_ZIP).toFile();
         this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
                 StandardCharsets.UTF_8);

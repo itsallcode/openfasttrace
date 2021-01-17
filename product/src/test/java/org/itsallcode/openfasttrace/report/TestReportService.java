@@ -43,12 +43,10 @@ import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,12 +55,6 @@ class TestReportService
 {
     @Mock
     Trace traceMock;
-
-    @BeforeEach
-    public void prepareTest()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     void testReportPlainText(@SysOut final Capturable out)

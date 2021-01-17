@@ -47,13 +47,10 @@ import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.*;
 
-@ExtendWith(TempDirectory.class)
-public class ITZipFileImporter
+class ITZipFileImporter
 {
     private static final String FILE_CONTENT_STRING = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
     private static final byte[] FILE_CONTENT = FILE_CONTENT_STRING.getBytes(StandardCharsets.UTF_8);

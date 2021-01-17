@@ -40,14 +40,11 @@ import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 // [utest->dsn~import.short-coverage-tag~1]
-@ExtendWith(TempDirectory.class)
 class TestTagImporterFactoryWithConfig
 {
     private static final String PATH1 = "path1";

@@ -1,6 +1,6 @@
 <head><link href="oft_spec.css" rel="stylesheet"></link></head>
 
-![oft-logo](../src/main/resources/openfasttrace_logo.svg)
+![oft-logo](../openfasttrace-core/src/main/resources/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 
@@ -454,6 +454,102 @@ The main importer of OFT accepts markdown files with the extensions `.md` and `.
 #### SpecObject
 
 Elektrobit's SpecObject format is read from SpecObject files with the `.xml` extension.
+
+## Console Tracing Report
+
+The Console Tracing Report is the standard report format of OFT. Its main purpose is to quickly debug broken tracing links. In this section you learn how to read this report.
+
+Below you see a typical example of a requirement from a design document.
+
+    ok - 0/2>0>0/1 - dsn~cli.tracing.default-format~1 (impl, utest)
+    |
+    | The CLI uses plain text as requirement tracing report format if none is given as a parameter.
+    |
+    |<-- ( ) impl~cli.tracing.default-format-2215031703~0
+    |--> ( ) req~cli.tracing.default-output-format~1
+    |<-- ( ) utest~cli.tracing.default-format-3750270139~0
+
+Let's go through its elements one by one.
+
+The first line is the summary.
+
+It starts with the status of the requirement &mdash; ok in this case.
+
+> **ok** - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
+
+Next we have a couple of numbers.
+
+The first pair shows how many of the broken incoming links this requirement has (zero), and how many in total (two).
+
+> ok - **0/2**>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
+
+The number in the middle tells you how many duplicates this requirement has (also zero).
+
+> ok - 0/2>**0**>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
+
+Consequently the next pair informs you how many (zero) of the overall (one) outgoing links are broken.
+
+> ok - 0/2>0>**0/1** - `dsn~cli.tracing.default-format~1` (impl, utest)
+
+The [Specification Item ID](#specification-item-id) in the middle is the unique technical ID of this requirement.
+
+> ok - 0/2>0>0/1 - **`dsn~cli.tracing.default-format~1`** (impl, utest)
+
+In the brackets you find, which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
+
+> ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**impl, utest**)
+
+If it is not covered, the name is lead in by a minus:
+
+> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**-impl**, utest)
+
+If an artifact type provides coverage that is not requested, you find this indicated with a plus in front.
+
+> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, **+itest**, utest)
+
+Everything after that line is details of the requirement. A bar symbol in the first position indicates this. Everything
+that does not start with an arrow symbol is part of the description.
+
+    |
+    | The CLI uses plain text as requirement tracing report format if none is given as a parameter.
+    |
+    
+The section with the arrows provides details about incoming and outgoing links. Arrows pointing to the bar (i.e. to the left) are incoming links, arrows pointing away from the bar are outgoing.
+
+The following line means that this design requirement is covered in the implementation.
+
+>|**<--** ( ) **`impl`**`~cli.tracing.default-format-2215031703~0`
+
+The ID of the implementation comes from the Tag Importer and is for it's most part auto-generated. The artifact type `dsn` is simply replaced by `impl` here and a number is attached for disambiguation.
+
+>|<-- ( ) **`impl`**`~cli.tracing.default-format-`**`2215031703~0`**
+
+In the brackets you find the status of the link. Empty brackets are good because they mean that the link is okay. Any other character indicates a broken link.
+
+The following incoming link statuses exist:
+
+| Symbol | Link Status       |
+|--------|-------------------|
+|        | Covered shallow   |
+| +      | Covered unwanted  |
+| >      | Covered predated  |
+| <      | Covered outdated  |
+
+Outgoing links can have one of the following statuses:
+
+| Symbol | Link Status       |
+|--------|-------------------|
+|        | Covers            |
+| >      | Predated          |
+| <      | Outdated          |
+| +      | Unwanted          |
+| /      | Orphaned          |
+
+Finally duplicate links can exist. They have no real direction. the closest match would be a bi-directional link.
+
+| Symbol | Link Status       |
+|--------|-------------------|
+| ?      | Duplicate         |
 
 ## OFT API
 

@@ -33,7 +33,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.kaklakariada</groupId>
+            <groupId>org.itsallcode</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
             <scope>compile</scope>
         </dependency>

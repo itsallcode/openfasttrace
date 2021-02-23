@@ -28,8 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Comparator;
 
+/**
+ * Provides static assertion methods that verify implementations of
+ * {@link Comparator} and {@link Comparable} are consistent with the contract.
+ */
 public class CompareAssertions
 {
+    private CompareAssertions()
+    {
+        // Not instantiable
+    }
+
     public static <T> void testComparatorConsistentWithEquals(Comparator<? super T> comparator, T o,
             T smaller, T equal, T greater, boolean nullValueSupported)
     {

@@ -27,7 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,13 +52,16 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
+    protected ImporterContext context;
+
     @Mock
-    protected ImporterContext contextMock;
+    private ImporterService importerServiceMock;
 
     @BeforeEach
     public void initMocks()
     {
-        when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
+        context = new ImporterContext(ImportSettings.createDefault());
+        context.setImporterService(importerServiceMock);
     }
 
     @Test
@@ -87,7 +89,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     private T createAndInitialize()
     {
         final T factory = createFactory();
-        factory.init(this.contextMock);
+        factory.init(this.context);
         return factory;
     }
 
@@ -95,8 +97,8 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     void testInit()
     {
         final T factory = createFactory();
-        factory.init(this.contextMock);
-        assertThat(factory.getContext(), sameInstance(this.contextMock));
+        factory.init(this.context);
+        assertThat(factory.getContext(), sameInstance(this.context));
     }
 
     @Test

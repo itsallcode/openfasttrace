@@ -45,8 +45,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
@@ -70,15 +73,16 @@ class TestMultiFileImporter
     {
         this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
+
+        when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
+        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
+        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
+                .thenReturn(this.importerMock);
     }
 
     @Test
     void testImportSingleFile()
     {
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
-                .thenReturn(this.importerMock);
-
         this.multiFileImporter.importFile(FILE1);
         verify(this.importerMock).runImport();
     }
@@ -86,10 +90,6 @@ class TestMultiFileImporter
     @Test
     void testImportAnySingleFile()
     {
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
-                .thenReturn(this.importerMock);
-
         this.multiFileImporter.importAny(asList(PATH1));
         verify(this.importerMock).runImport();
     }
@@ -104,11 +104,6 @@ class TestMultiFileImporter
     @Test
     void testImportAnyFolderFile()
     {
-        when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
-                .thenReturn(this.importerMock);
-
         this.multiFileImporter.importAny(asList(FOLDER));
         verify(this.importerMock, times(2)).runImport();
     }
@@ -117,11 +112,6 @@ class TestMultiFileImporter
     @Test
     void testRecursiveDir()
     {
-        when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
-        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
-                .thenReturn(this.importerMock);
-
         this.multiFileImporter.importRecursiveDir(FOLDER, "**/*.md");
         verify(this.importerMock, times(2)).runImport();
     }

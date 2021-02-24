@@ -40,9 +40,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 // [utest->dsn~linked-specification-item~1]
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestLinkedSpecificationItem
 {
     private LinkedSpecificationItem linkedItem;
@@ -58,6 +60,10 @@ class TestLinkedSpecificationItem
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
         this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
         this.otherLinkedItem = new LinkedSpecificationItem(this.otherItemMock);
+        when(this.itemMock.getStatus()).thenReturn(ItemStatus.APPROVED);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
+        when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
+        when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
     }
 
     @Test
@@ -77,7 +83,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetCoveredArtifactTypes()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         this.linkedItem.addCoveredArtifactType(UMAN);
         this.linkedItem.addCoveredArtifactType(REQ);
         assertItemHasCoveredArtifactTypes(this.linkedItem, UMAN, REQ);
@@ -86,7 +91,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetUncoveredArtifactTypes()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, REQ));
         this.linkedItem.addCoveredArtifactType(UMAN);
         assertItemHasUncoveredArtifactTypes(this.linkedItem, REQ);
@@ -95,7 +99,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetOverCoveredArtifactTypes()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         this.linkedItem.addOverCoveredArtifactType(REQ);
         assertItemHasOvercoveredArtifactTypes(this.linkedItem, REQ);
     }
@@ -103,7 +106,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_Ok()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
         this.linkedItem.addCoveredArtifactType(UMAN);
         this.linkedItem.addCoveredArtifactType(IMPL);
@@ -113,7 +115,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_NotOk_WrongCoverage()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
         this.linkedItem.addCoveredArtifactType(UMAN);
         this.linkedItem.addCoveredArtifactType(REQ);
@@ -123,7 +124,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_NotOk_MissingCoverage()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
         this.linkedItem.addCoveredArtifactType(UMAN);
         assertItemCoveredShallow(this.linkedItem, false);
@@ -133,7 +133,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetDeepCoverageStatus_Covered()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         prepareCoverThis();
         assertItemDeepCoverageStatus(this.linkedItem, DeepCoverageStatus.COVERED);
     }
@@ -142,6 +141,7 @@ class TestLinkedSpecificationItem
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
         this.linkedItem.addCoveredArtifactType(DSN);
+        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
         this.coveredLinkedItem.addCoveredArtifactType(IMPL);
         this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
@@ -151,8 +151,7 @@ class TestLinkedSpecificationItem
     @Test
     void testGetDeepCoverageStatus_MissingCoverage()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
-        when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
         this.linkedItem.addCoveredArtifactType(DSN);
         when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
         this.coveredLinkedItem.addCoveredArtifactType(IMPL);
@@ -164,7 +163,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsDefect_False()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         prepareCoverThis();
         prepareCoverOther();
         assertItemDefect(this.linkedItem, false);
@@ -180,7 +178,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsDefect_TrueBecauseOfDuplicates()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
         assertItemDefect(this.linkedItem, true);
     }
@@ -189,9 +186,6 @@ class TestLinkedSpecificationItem
     @Test
     void testIsDefect_TrueBecauseOfBadLink()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
-        when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
-
         for (final LinkStatus status : LinkStatus.values())
         {
             final LinkedSpecificationItem item = new LinkedSpecificationItem(this.itemMock);
@@ -207,7 +201,6 @@ class TestLinkedSpecificationItem
     void testIsDefect_FalseBecauseRejected()
     {
         final LinkedSpecificationItem item = new LinkedSpecificationItem(this.itemMock);
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         when(this.itemMock.getStatus()).thenReturn(ItemStatus.REJECTED);
         item.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERED_OUTDATED);
         assertItemDefect(item, false);
@@ -260,7 +253,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetDeepCoverageStatus_CylceIfSelfLink()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
         this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
@@ -269,9 +261,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetDeepCoverageStatus_DeepCycle()
     {
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
-        when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
-
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERED_SHALLOW);
         this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
         assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
@@ -282,6 +271,7 @@ class TestLinkedSpecificationItem
     {
         final String expectedReturn = "title";
         when(this.itemMock.getTitle()).thenReturn(expectedReturn);
+        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~wrong-return~1"));
         assertThat(this.linkedItem.getTitleWithFallback(), equalTo(expectedReturn));
     }
 

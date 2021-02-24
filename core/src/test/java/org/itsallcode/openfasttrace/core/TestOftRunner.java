@@ -50,8 +50,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestOftRunner
 {
     private static final Path PATH = Paths.get("myPath");
@@ -84,16 +87,26 @@ class TestOftRunner
         linkedItems = new ArrayList<>();
 
         oftRunner = new OftRunner(serviceFactoryMock);
-    }
 
-    @Test
-    void testImportItemsWithDefaultImportSettings()
-    {
         when(serviceFactoryMock.createImporterService(any())).thenReturn(importerServiceMock);
         when(importerServiceMock.createImporter()).thenReturn(multiFileImporterMock);
         when(multiFileImporterMock.importAny(any())).thenReturn(multiFileImporterMock);
         when(multiFileImporterMock.getImportedItems()).thenReturn(importedItems);
 
+        when(serviceFactoryMock.createLinker(same(importedItems))).thenReturn(linkerMock);
+        when(linkerMock.link()).thenReturn(linkedItems);
+
+        when(serviceFactoryMock.createTracer()).thenReturn(tracerMock);
+        when(tracerMock.trace(same(linkedItems))).thenReturn(traceMock);
+
+        when(serviceFactoryMock.createExporterService()).thenReturn(exporterServiceMock);
+
+        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
+    }
+
+    @Test
+    void testImportItemsWithDefaultImportSettings()
+    {
         assertThat(oftRunner.importItems(), sameInstance(importedItems));
 
         final ArgumentCaptor<ImportSettings> arg = ArgumentCaptor.forClass(ImportSettings.class);
@@ -111,11 +124,6 @@ class TestOftRunner
     @Test
     void testImportItemsWithCustomImportSettings()
     {
-        when(serviceFactoryMock.createImporterService(any())).thenReturn(importerServiceMock);
-        when(importerServiceMock.createImporter()).thenReturn(multiFileImporterMock);
-        when(multiFileImporterMock.importAny(any())).thenReturn(multiFileImporterMock);
-        when(multiFileImporterMock.getImportedItems()).thenReturn(importedItems);
-
         final ImportSettings importSettings = ImportSettings.createDefault();
         assertThat(oftRunner.importItems(importSettings), sameInstance(importedItems));
         verify(serviceFactoryMock).createImporterService(same(importSettings));
@@ -124,23 +132,18 @@ class TestOftRunner
     @Test
     void testLink()
     {
-        when(serviceFactoryMock.createLinker(same(importedItems))).thenReturn(linkerMock);
-        when(linkerMock.link()).thenReturn(linkedItems);
         assertThat(oftRunner.link(importedItems), sameInstance(linkedItems));
     }
 
     @Test
     void testTrace()
     {
-        when(serviceFactoryMock.createTracer()).thenReturn(tracerMock);
-        when(tracerMock.trace(same(linkedItems))).thenReturn(traceMock);
         assertThat(oftRunner.trace(linkedItems), sameInstance(traceMock));
     }
 
     @Test
     void testExportToPathListOfSpecificationItemPath()
     {
-        when(serviceFactoryMock.createExporterService()).thenReturn(exporterServiceMock);
         oftRunner.exportToPath(importedItems, PATH);
 
         final ArgumentCaptor<ExportSettings> arg = ArgumentCaptor.forClass(ExportSettings.class);
@@ -157,7 +160,6 @@ class TestOftRunner
     @Test
     void testExportToPathListOfSpecificationItemPathExportSettings()
     {
-        when(serviceFactoryMock.createExporterService()).thenReturn(exporterServiceMock);
         final ExportSettings settings = ExportSettings.createDefault();
         oftRunner.exportToPath(importedItems, PATH, settings);
 
@@ -167,7 +169,6 @@ class TestOftRunner
     @Test
     void testReportToStdOutTrace()
     {
-        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
         oftRunner.reportToStdOut(traceMock);
         verify(reportServiceMock).reportTraceToStdOut(same(traceMock), eq("plain"));
     }
@@ -175,7 +176,6 @@ class TestOftRunner
     @Test
     void testReportToStdOutTraceReportSettings()
     {
-        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
         final ReportSettings settings = ReportSettings.builder().outputFormat("myFormat")
                 .newline(Newline.OLDMAC).build();
         oftRunner.reportToStdOut(traceMock, settings);
@@ -185,7 +185,6 @@ class TestOftRunner
     @Test
     void testReportToPathTracePath()
     {
-        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
         oftRunner.reportToPath(traceMock, PATH);
         verify(reportServiceMock).reportTraceToPath(same(traceMock), same(PATH), eq("plain"));
     }
@@ -193,9 +192,9 @@ class TestOftRunner
     @Test
     void testReportToPathTracePathReportSettings()
     {
-        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
         final ReportSettings settings = ReportSettings.builder().outputFormat("myFormat").build();
         oftRunner.reportToPath(traceMock, PATH, settings);
         verify(reportServiceMock).reportTraceToPath(same(traceMock), same(PATH), eq("myFormat"));
     }
+
 }

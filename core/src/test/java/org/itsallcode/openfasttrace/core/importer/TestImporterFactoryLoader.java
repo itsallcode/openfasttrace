@@ -42,11 +42,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 /**
  * Test for {@link ImporterFactoryLoader}
  */
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestImporterFactoryLoader
 {
     @Mock
@@ -68,6 +71,10 @@ class TestImporterFactoryLoader
     {
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
         this.file = RealFileInput.forPath(Paths.get("dir", "name"));
+
+        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
+        when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);
+        when(this.unsupportedFactory.supportsFile(same(this.file))).thenReturn(false);
     }
 
     @Test
@@ -80,8 +87,6 @@ class TestImporterFactoryLoader
     @Test
     void testMatchingFactoryFoundOnlyOneAvailable()
     {
-        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
-
         simulateFactories(this.supportedFactory1);
         assertFactoryFound(this.supportedFactory1);
     }
@@ -89,28 +94,14 @@ class TestImporterFactoryLoader
     @Test
     void testMatchingFactoryFoundTwoAvailable()
     {
-        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
-        when(this.unsupportedFactory.supportsFile(same(this.file))).thenReturn(false);
         simulateFactories(this.supportedFactory1, this.unsupportedFactory);
         assertFactoryFound(this.supportedFactory1);
     }
 
     @Test
-    void testMultipleMatchingFactoriesSameInstanceFoundThrowsException()
-    {
-        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
-
-        simulateFactories(this.supportedFactory1, this.supportedFactory1);
-        assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
-    }
-
-    @Test
     void testMultipleMatchingFactoriesFoundThrowsException()
     {
-        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
-        when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);
-
-        simulateFactories(this.supportedFactory1, this.supportedFactory2);
+        simulateFactories(this.supportedFactory1, this.supportedFactory1);
         assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
     }
 

@@ -34,12 +34,16 @@ import java.util.Arrays;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.core.Trace;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestTracer
 {
     private static final SpecificationItemId ID_A = SpecificationItemId.parseId("req~a~1");
@@ -48,6 +52,14 @@ class TestTracer
 
     @Mock
     LinkedSpecificationItem aMock, bMock, cMock;
+
+    @BeforeEach
+    public void prepareTest()
+    {
+        when(this.aMock.getId()).thenReturn(ID_A);
+        when(this.bMock.getId()).thenReturn(ID_B);
+        when(this.cMock.getId()).thenReturn(ID_C);
+    }
 
     @Test
     void testNoneDefect_Ok()
@@ -72,8 +84,6 @@ class TestTracer
     @Test
     void testNoneDefect_NotOk()
     {
-        when(this.bMock.getId()).thenReturn(ID_B);
-
         when(this.aMock.isDefect()).thenReturn(false);
         when(this.bMock.isDefect()).thenReturn(true);
         final Trace trace = traceItems(this.aMock, this.bMock);

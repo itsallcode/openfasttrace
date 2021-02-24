@@ -30,14 +30,18 @@ import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestLinkedItemIndex
 {
     private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
@@ -52,6 +56,16 @@ class TestLinkedItemIndex
     @Mock
     private SpecificationItem duplicateIdItem1Mock, duplicateIdItem2Mock, uniqueIdItemMock,
             duplicateIdIgnoringVersionItemMock;
+
+    @BeforeEach
+    public void prepareTest()
+    {
+        when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
+        when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
+        when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
+        when(this.duplicateIdIgnoringVersionItemMock.getId())
+                .thenReturn(DUPLICATE_ID_INGORING_VERSION);
+    }
 
     @Test
     void equalsSpecificationItemIdWithoutVersionContract()
@@ -75,9 +89,6 @@ class TestLinkedItemIndex
     @Test
     void testNonEmptyIndex()
     {
-        when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
-        when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
-
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock, this.uniqueIdItemMock);
         assertThat(index.size(), equalTo(2));
         assertThat(index.getById(DUPLICATE_ID_1).getItem(),
@@ -88,9 +99,6 @@ class TestLinkedItemIndex
     @Test
     void testDuplicateId()
     {
-        when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
-        when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
-
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock,
                 this.duplicateIdItem2Mock);
         final LinkedSpecificationItem duplicateItem1 = index.getById(DUPLICATE_ID_1);
@@ -108,11 +116,6 @@ class TestLinkedItemIndex
     @Test
     void testDuplicateVersionId()
     {
-        when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
-        when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
-        when(this.duplicateIdIgnoringVersionItemMock.getId())
-                .thenReturn(DUPLICATE_ID_INGORING_VERSION);
-
         final LinkedItemIndex index = createIndex(this.duplicateIdItem1Mock,
                 this.duplicateIdIgnoringVersionItemMock, this.uniqueIdItemMock);
         assertThat(index.size(), equalTo(3));

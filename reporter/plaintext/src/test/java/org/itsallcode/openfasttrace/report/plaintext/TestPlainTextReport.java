@@ -49,7 +49,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;

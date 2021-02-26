@@ -42,12 +42,9 @@ import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 
-@ExtendWith(TempDirectory.class)
-public class ITestReporterWithFilter extends AbstractFileBasedTest
+class ITestReporterWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //

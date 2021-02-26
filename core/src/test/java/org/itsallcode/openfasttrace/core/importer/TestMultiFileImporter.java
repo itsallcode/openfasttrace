@@ -42,9 +42,14 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
@@ -66,7 +71,6 @@ class TestMultiFileImporter
     @BeforeEach
     void beforeEach()
     {
-        MockitoAnnotations.initMocks(this);
         this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
 

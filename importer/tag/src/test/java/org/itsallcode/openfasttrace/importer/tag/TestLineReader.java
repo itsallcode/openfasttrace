@@ -38,13 +38,12 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(TempDirectory.class)
+@ExtendWith(MockitoExtension.class)
 class TestLineReader
 {
     private static final Path DUMMY_FILE = Paths.get("dummy");
@@ -59,7 +58,6 @@ class TestLineReader
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir)
     {
-        MockitoAnnotations.initMocks(this);
         this.tempDir = tempDir;
     }
 

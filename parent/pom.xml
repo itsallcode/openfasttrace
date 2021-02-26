@@ -12,7 +12,7 @@
     <properties>
         <revision>3.0.3</revision>
         <java.version>11</java.version>
-        <junit.version>5.6.2</junit.version>
+        <junit.version>5.7.0</junit.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -74,11 +74,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit-pioneer</groupId>
-            <artifactId>junit-pioneer</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -194,12 +189,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.junit-pioneer</groupId>
-                <artifactId>junit-pioneer</artifactId>
-                <version>0.5.6</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-all</artifactId>
                 <version>1.3</version>
@@ -208,7 +197,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>3.3.3</version>
+                <version>3.7.7</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -226,7 +215,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.1.13</version>
+                <version>3.5.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -350,17 +339,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.9.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.3</version>
+                    <version>3.2.4</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -390,12 +379,12 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
+                    <version>0.8.6</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.2.2</version>
+                    <version>1.2.5</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
                         <flattenMode>resolveCiFriendliesOnly</flattenMode>
@@ -473,12 +462,12 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.6.0</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.5.1</version>
+                    <version>1.6.2</version>
                 </plugin>
                 <!--This plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
@@ -552,7 +541,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2019.4</version>
+                            <version>1.2021.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>

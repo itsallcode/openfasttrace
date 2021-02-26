@@ -30,8 +30,13 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class TestAbstractViewableContainer
 {
     private ViewContainerStub viewableContainer;
@@ -43,7 +48,6 @@ class TestAbstractViewableContainer
     @BeforeEach
     public void prepareEachTest()
     {
-        MockitoAnnotations.initMocks(this);
         this.viewableContainer = new ViewContainerStub();
     }
 

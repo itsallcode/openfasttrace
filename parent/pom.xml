@@ -10,7 +10,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.0.3</revision>
+        <revision>3.0.4-SNAPSHOT</revision>
         <java.version>11</java.version>
         <junit.version>5.7.0</junit.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
@@ -36,7 +36,7 @@
             <url>https://github.com/kaklakariada</url>
             <organization>itsallcode</organization>
             <organizationUrl>https://github.com/itsallcode</organizationUrl>
-            <email>github@chp1.net</email>
+            <email>kaklakariada@chp1.net</email>
         </developer>
     </developers>
     <scm>
@@ -44,20 +44,14 @@
         <developerConnection>scm:git:https://github.com/itsallcode/openfasttrace.git</developerConnection>
         <url>https://github.com/itsallcode/openfasttrace</url>
     </scm>
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <url>https://jcenter.bintray.com/</url>
-        </repository>
-    </repositories>
     <distributionManagement>
         <snapshotRepository>
-            <id>itsallcode-maven-repo-snapshots</id>
-            <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>itsallcode-maven-repo</id>
-            <url>https://api.bintray.com/maven/itsallcode/itsallcode/openfasttrace/;publish=0</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
     <dependencies>
@@ -92,7 +86,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.kaklakariada</groupId>
+            <groupId>org.itsallcode</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
             <scope>test</scope>
         </dependency>
@@ -207,9 +201,9 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.github.kaklakariada</groupId>
+                <groupId>org.itsallcode</groupId>
                 <artifactId>hamcrest-auto-matcher</artifactId>
-                <version>0.4.3</version>
+                <version>0.5.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -220,6 +214,27 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -259,6 +274,10 @@
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
                     <failOnWarnings>true</failOnWarnings>
+                    <verbose>false</verbose>
+                    <additionalJOptions>
+                        <additionalJOption>-html5</additionalJOption>
+                    </additionalJOptions>
                 </configuration>
             </plugin>
             <plugin>
@@ -299,10 +318,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -541,9 +556,34 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2021.0</version>
+                            <version>1.2021.1</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

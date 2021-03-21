@@ -125,18 +125,27 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
-    <servers>
-        <server>
-            <id>itsallcode-maven-repo</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-        <server>
-            <id>itsallcode-maven-repo-snapshots</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-    </servers>
+    <settings>
+        <servers>
+            <server>
+                <id>ossrh</id>
+                <username>your-jira-id</username>
+                <password>your-jira-pwd</password>
+            </server>
+        </servers>
+        <profiles>
+            <profile>
+                <id>ossrh</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                    <gpg.executable>gpg</gpg.executable>
+                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
+                </properties>
+            </profile>
+        </profiles>
+    </settings>
     ```
 
 1. Checkout the `develop` branch.
@@ -151,7 +160,9 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
-1. Sign in at [bintray.com](https://bintray.com)
-1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
-1. There should be a notice saying "You have 176 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/). This will take a few minutes.
-1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/).
+1. Release the artifacts at Maven Central:
+    1. Login at [oss.sonatype.org](https://oss.sonatype.org).
+    1. Go to the [staging repositories](https://oss.sonatype.org/#stagingRepositories).
+    1. Select repository named `orgitsallcode-*` and click the "Release" button.
+    1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/).
+

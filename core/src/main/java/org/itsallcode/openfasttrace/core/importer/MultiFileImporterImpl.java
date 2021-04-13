@@ -42,7 +42,7 @@ import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 /**
  * This class allows you to import and collect {@link SpecificationItem}s from
  * multiple files.
- * 
+ *
  * @see ImporterServiceImpl#createImporter()
  */
 public class MultiFileImporterImpl implements MultiFileImporter
@@ -69,6 +69,10 @@ public class MultiFileImporterImpl implements MultiFileImporter
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + itemCountImported + " items from '" + file + "'.");
         return this;
+    }
+
+    public boolean importFileCanBeLoader(final InputFile file) {
+        return isImporterAvailable(file);
     }
 
     @Override
@@ -138,5 +142,9 @@ public class MultiFileImporterImpl implements MultiFileImporter
         LOG.fine(() -> "Created importer of type '" + importer.getClass().getSimpleName()
                 + "' for file '" + file + "'");
         return importer;
+    }
+
+    private boolean isImporterAvailable(final InputFile file) {
+        return this.factoryLoader.isImporterFactoryAvailable(file);
     }
 }

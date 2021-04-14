@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
@@ -71,7 +72,7 @@ class TestMultiFileImporter
                 this.factoryLoaderMock);
 
         when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
+        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(Optional.of(this.importerFactoryMock));
         when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
                 .thenReturn(this.importerMock);
     }

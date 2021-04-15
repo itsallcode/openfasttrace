@@ -40,11 +40,8 @@ import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 
-@ExtendWith(TempDirectory.class)
 class TestHtmlReportCssInlining extends AbstractFileBasedTest
 {
     private static final String CSS = "* { font-family: helvetica; }";

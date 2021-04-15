@@ -33,9 +33,14 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
 {
     private static final SpecificationItemId ITEM_A_ID = SpecificationItemId
@@ -55,7 +60,6 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     public void prepareEachTest()
     {
         super.prepareEachTest();
-        MockitoAnnotations.initMocks(this);
         when(this.itemMockB.getId()).thenReturn(ITEM_B_ID);
         when(this.itemMockC.getId()).thenReturn(ITEM_C_ID);
     }

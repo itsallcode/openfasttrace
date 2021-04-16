@@ -156,6 +156,12 @@ public class ASpecReport implements Reportable {
         writeCoveredIds(writer, item.getCoveredIds());
         writeDependsOnIds(writer, item.getItem().getDependOnIds());
 
+        writer.writeStartElement("coverage");
+        writeElement(writer, "status", item.getDeepCoverageStatus().name());
+        writeCoveredTypes(writer,item.getCoveredArtifactTypes());
+        writeUncoveredTypes(writer,item.getUncoveredArtifactTypes());
+        writer.writeEndElement();
+
         writer.writeEndElement();
     }
 
@@ -214,6 +220,24 @@ public class ASpecReport implements Reportable {
         writer.writeStartElement("needscoverage");
         for (final String neededArtifactType : needsArtifactTypes) {
             writeElement(writer, "needsobj", neededArtifactType);
+        }
+        writer.writeEndElement();
+    }
+
+    private void writeCoveredTypes(final XMLStreamWriter writer,final Set<String> types ) throws XMLStreamException {
+        if(types.isEmpty()) return;
+        writer.writeStartElement("coveredTypes");
+        for( final String type : types ) {
+            writeElement(writer,"coveredType", type );
+        }
+        writer.writeEndElement();
+    }
+
+    private void writeUncoveredTypes(final XMLStreamWriter writer,final List<String> types ) throws XMLStreamException {
+        if(types.isEmpty()) return;
+        writer.writeStartElement("uncoveredTypes");
+        for( final String type : types ) {
+            writeElement(writer,"uncoveredType", type );
         }
         writer.writeEndElement();
     }

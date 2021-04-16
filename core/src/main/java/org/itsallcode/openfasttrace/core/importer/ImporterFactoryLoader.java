@@ -79,6 +79,18 @@ public class ImporterFactoryLoader
     }
 
     /**
+     * Validates if a matching {@link ImporterFactory} is available for the given file.
+     *
+     * @param file the file for which to search for an {@link ImporterFactory}
+     * @return true if exactly a single {@link ImporterFactory} is available
+     */
+    public boolean isImporterFactoryAvailable(final InputFile file)
+    {
+        final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
+        return matchingImporters.size() == 1;
+    }
+
+    /**
      * Check if any {@link ImporterFactory} supports importing the given
      * {@link InputFile}.
      * 

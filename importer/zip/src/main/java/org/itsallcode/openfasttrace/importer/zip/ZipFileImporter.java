@@ -24,6 +24,7 @@ package org.itsallcode.openfasttrace.importer.zip;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -65,6 +66,7 @@ public class ZipFileImporter implements Importer
             zip.stream() //
                     .filter(entry -> !entry.isDirectory()) //
                     .map(entry -> createInput(zip, entry)) //
+                    .filter(this.delegateImporter::importFileCanBeLoader)
                     .forEach(this.delegateImporter::importFile);
         }
         catch (final IOException e)

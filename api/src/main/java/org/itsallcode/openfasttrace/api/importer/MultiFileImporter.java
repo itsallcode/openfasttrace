@@ -22,6 +22,8 @@ package org.itsallcode.openfasttrace.api.importer;
  * #L%
  */
 
+
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
@@ -40,6 +42,14 @@ public interface MultiFileImporter {
 	 * @return <code>this</code> for fluent programming style.
 	 */
     MultiFileImporter importFile(InputFile file);
+
+	/**
+	 * identifies is for the given file a {@link Importer} is available.
+	 *
+	 * @param file the file to validate
+	 * @return true if exactly a single importer is available
+	 */
+	boolean importFileCanBeLoader(InputFile file);
 
 	/**
 	 * Import from the path, independently of whether it is represents a directory or a file.

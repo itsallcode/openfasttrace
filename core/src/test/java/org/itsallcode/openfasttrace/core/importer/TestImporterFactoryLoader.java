@@ -25,8 +25,7 @@ package org.itsallcode.openfasttrace.core.importer;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
 
@@ -83,7 +82,7 @@ class TestImporterFactoryLoader
     void testNoFactoryRegisteredReturnsNoImporter()
     {
         simulateFactories();
-        assertEquals(Optional.empty(),this.loader.getImporterFactory(this.file));
+        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
     }
 
     @Test
@@ -104,7 +103,7 @@ class TestImporterFactoryLoader
     void testMultipleMatchingFactoriesFoundReturnNoImporter()
     {
         simulateFactories(this.supportedFactory1, this.supportedFactory1);
-        assertEquals(Optional.empty(),this.loader.getImporterFactory(this.file));
+        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
     }
 
     private void assertFactoryFound(final ImporterFactory expectedFactory)

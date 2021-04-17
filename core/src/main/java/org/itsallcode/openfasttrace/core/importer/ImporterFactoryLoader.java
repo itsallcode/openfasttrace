@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
@@ -63,31 +64,20 @@ public class ImporterFactoryLoader
      * @throws ImporterException
      *             when no or more than one {@link ImporterFactory} is found.
      */
-    public ImporterFactory getImporterFactory(final InputFile file)
+    public Optional<ImporterFactory> getImporterFactory(final InputFile file)
     {
         final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
         switch (matchingImporters.size())
         {
         case 0:
-            throw new ImporterException("Found no matching importer for file '" + file + "'");
+            LOG.info("Found no matching importer for file '" + file + "'");
+            return Optional.empty();
         case 1:
-            return matchingImporters.get(0);
+            return Optional.of(matchingImporters.get(0));
         default:
-            throw new ImporterException(
-                    "Found more than one matching importer for file '" + file + "'");
+            LOG.info("Found more than one matching importer for file '" + file + "'");
+            return Optional.empty();
         }
-    }
-
-    /**
-     * Validates if a matching {@link ImporterFactory} is available for the given file.
-     *
-     * @param file the file for which to search for an {@link ImporterFactory}
-     * @return true if exactly a single {@link ImporterFactory} is available
-     */
-    public boolean isImporterFactoryAvailable(final InputFile file)
-    {
-        final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
-        return matchingImporters.size() == 1;
     }
 
     /**

@@ -37,8 +37,11 @@ import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 /**
  * Base class for {@link ImporterFactory} tests.
@@ -46,6 +49,8 @@ import org.mockito.MockitoAnnotations;
  * @param <T>
  *            type of the factory under test
  */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
     @Mock
@@ -54,7 +59,6 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @BeforeEach
     public void initMocks()
     {
-        MockitoAnnotations.initMocks(this);
         when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
 

@@ -30,9 +30,11 @@ import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class TestArgumentValidator
 {
 
@@ -43,7 +45,6 @@ class TestArgumentValidator
     @BeforeEach
     void setUp()
     {
-        MockitoAnnotations.initMocks(this);
         cliArgs = new CliArguments(directoryServiceMock);
     }
 

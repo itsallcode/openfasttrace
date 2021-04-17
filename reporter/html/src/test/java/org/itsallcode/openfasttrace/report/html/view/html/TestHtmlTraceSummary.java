@@ -28,11 +28,13 @@ import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
 {
     @Mock
@@ -43,7 +45,6 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     public void prepareEachTest()
     {
         super.prepareEachTest();
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -64,7 +65,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 50, 99 })
+    @ValueSource(ints =
+    { 0, 1, 50, 99 })
     void testRenderPercentagesNotOk(final int value)
     {
         final int maximum = 100;

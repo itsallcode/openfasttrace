@@ -32,18 +32,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.io.TempDir;
 
-@ExtendWith(TempDirectory.class)
 class TestZipEntryInput
 {
     private static final String TEST_ZIP = "test.zip";
@@ -54,7 +52,6 @@ class TestZipEntryInput
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws IOException
     {
-        MockitoAnnotations.initMocks(this);
         this.zipFile = tempDir.resolve(TEST_ZIP).toFile();
         this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
                 StandardCharsets.UTF_8);

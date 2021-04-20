@@ -33,7 +33,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.kaklakariada</groupId>
+            <groupId>org.itsallcode</groupId>
             <artifactId>hamcrest-auto-matcher</artifactId>
             <scope>compile</scope>
         </dependency>
@@ -50,6 +50,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <configuration>
+                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

@@ -41,23 +41,21 @@ import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
 
     @Mock
     private Trace traceMock;
-
-    @BeforeEach
-    public void prepareTest()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     void testOutputStreamClosed() throws IOException

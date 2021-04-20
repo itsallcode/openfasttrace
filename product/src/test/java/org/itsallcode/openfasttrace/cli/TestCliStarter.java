@@ -44,11 +44,9 @@ import org.itsallcode.openfasttrace.testutil.cli.FakeDirectoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
 
-@ExtendWith(TempDirectory.class)
 @ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
 @ExtendWith(SystemErrGuard.class)

@@ -35,12 +35,11 @@ import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(TempDirectory.class)
+@ExtendWith(MockitoExtension.class)
 class TestReportService
 {
     private static final String OUTPUT_FORMAT = "format";
@@ -59,7 +58,6 @@ class TestReportService
     @BeforeEach
     void setUp()
     {
-        MockitoAnnotations.initMocks(this);
         service = new ReportService(reporterFactoryLoaderMock);
         when(reporterFactoryLoaderMock.getReporterFactory(OUTPUT_FORMAT))
                 .thenReturn(reporterFactoryMock);

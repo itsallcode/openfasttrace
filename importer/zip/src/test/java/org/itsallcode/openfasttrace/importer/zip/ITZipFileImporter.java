@@ -48,12 +48,17 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
-import org.mockito.*;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-@ExtendWith(TempDirectory.class)
-public class ITZipFileImporter
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class ITZipFileImporter
 {
     private static final String FILE_CONTENT_STRING = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
     private static final byte[] FILE_CONTENT = FILE_CONTENT_STRING.getBytes(StandardCharsets.UTF_8);
@@ -73,7 +78,6 @@ public class ITZipFileImporter
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir)
     {
-        MockitoAnnotations.initMocks(this);
         this.actualFileContent = new ArrayList<>();
         this.zipFile = tempDir.resolve("test.zip").toFile();
         this.zipOutputStream = null;

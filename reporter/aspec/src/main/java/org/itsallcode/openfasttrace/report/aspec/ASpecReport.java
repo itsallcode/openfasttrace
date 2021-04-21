@@ -141,26 +141,36 @@ public class ASpecReport implements Reportable {
         final String description = processMultilineText(item.getDescription());
         final String rationale = processMultilineText(item.getItem().getRationale());
         final String comment = processMultilineText(item.getItem().getComment());
+
         writer.writeStartElement("specobject");
         writeElement(writer, "id", item.getName());
+        writeElement(writer, "version", item.getRevision());
         writeElementIfPresent(writer, "shortdesc", item.getTitle());
         writeElement(writer, "status", item.getStatus().toString());
-        writeElement(writer, "version", item.getRevision());
         writeLocation(writer, item.getLocation());
         writeElementIfPresent(writer, "description", description);
         writeElementIfPresent(writer, "rationale", rationale);
         writeElementIfPresent(writer, "comment", comment);
-
         writeTags(writer, item.getTags());
-        writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
-        writeCoveredIds(writer, item.getCoveredIds());
-        writeDependsOnIds(writer, item.getItem().getDependOnIds());
 
         writer.writeStartElement("coverage");
-        writeElement(writer, "status", item.getDeepCoverageStatus().name());
+        writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
+        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallow() ? "COVERD" : "UNCOVERED");
+        writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatus().name());
+        writer.writeStartElement( "coveringSpecObjects");
+        for(Map.Entry<LinkStatus,List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
+                .filter(entry -> entry.getKey().isOutgoing())
+                .collect(Collectors.toCollection(LinkedList::new))){
+            for( LinkedSpecificationItem coveringItem : entry.getValue() ) {
+                writeCoveringItem( writer, entry.getKey(), coveringItem );
+            }
+        }
         writeCoveredTypes(writer,item.getCoveredArtifactTypes());
         writeUncoveredTypes(writer,item.getUncoveredArtifactTypes());
         writer.writeEndElement();
+
+        writeCoveredIds(writer, item.getCoveredIds());
+        writeDependsOnIds(writer, item.getItem().getDependOnIds());
 
         writer.writeEndElement();
     }
@@ -184,6 +194,19 @@ public class ASpecReport implements Reportable {
         }
         writer.writeEndElement();
     }
+
+    private void writeCoveringItem( final XMLStreamWriter writer, final LinkStatus linkStatus, final LinkedSpecificationItem item ) throws XMLStreamException {
+        writer.writeStartElement("coveringSpecObject");
+
+        writeElement(writer, "id", item.getName());
+        writeElement(writer, "version", item.getRevision());
+        writeElement(writer, "status", item.getStatus().toString());
+        writeElement(writer, "ownCoverageStatus", linkStatus == LinkStatus.COVERS ? "COVERS" : linkStatus.name() );
+        writeElement(writer, "transitiveCoverageStatus", linkStatus == LinkStatus.COVERS ? item.getDeepCoverageStatus().name() : linkStatus.name() );
+
+        writer.writeEndElement();
+    }
+
 
     private void writeDependsOnIds(final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds)
             throws XMLStreamException {

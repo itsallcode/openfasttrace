@@ -143,6 +143,7 @@ public class ASpecReport implements Reportable {
         final String comment = processMultilineText(item.getItem().getComment());
 
         writer.writeStartElement("specobject");
+
         writeElement(writer, "id", item.getName());
         writeElement(writer, "version", item.getRevision());
         writeElementIfPresent(writer, "shortdesc", item.getTitle());
@@ -155,16 +156,18 @@ public class ASpecReport implements Reportable {
 
         writer.writeStartElement("coverage");
         writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
-        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallow() ? "COVERD" : "UNCOVERED");
-        writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatus().name());
+        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERD" : "UNCOVERED");
+        writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name());
         writer.writeStartElement( "coveringSpecObjects");
         for(Map.Entry<LinkStatus,List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
-                .filter(entry -> entry.getKey().isOutgoing())
+                .filter(entry -> entry.getKey().isIncoming())
                 .collect(Collectors.toCollection(LinkedList::new))){
             for( LinkedSpecificationItem coveringItem : entry.getValue() ) {
                 writeCoveringItem( writer, entry.getKey(), coveringItem );
             }
         }
+        writer.writeEndElement();
+
         writeCoveredTypes(writer,item.getCoveredArtifactTypes());
         writeUncoveredTypes(writer,item.getUncoveredArtifactTypes());
         writer.writeEndElement();
@@ -201,8 +204,16 @@ public class ASpecReport implements Reportable {
         writeElement(writer, "id", item.getName());
         writeElement(writer, "version", item.getRevision());
         writeElement(writer, "status", item.getStatus().toString());
-        writeElement(writer, "ownCoverageStatus", linkStatus == LinkStatus.COVERS ? "COVERS" : linkStatus.name() );
-        writeElement(writer, "transitiveCoverageStatus", linkStatus == LinkStatus.COVERS ? item.getDeepCoverageStatus().name() : linkStatus.name() );
+        if( linkStatus == LinkStatus.COVERED_SHALLOW ) {
+            writeElement(writer, "ownCoverageStatus", item.getStatus() == ItemStatus.APPROVED ? "COVERS" : "UNCOVERS" );
+            final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
+            writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
+                    "COVERS" :
+                    deepCoverageStatus.name() );
+        } else {
+            writeElement(writer, "ownCoverageStatus", linkStatus.name() );
+            writeElement(writer, "transitiveCoverageStatus", linkStatus.name() );
+        }
 
         writer.writeEndElement();
     }

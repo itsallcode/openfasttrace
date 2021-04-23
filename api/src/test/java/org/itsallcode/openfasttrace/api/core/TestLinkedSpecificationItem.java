@@ -83,8 +83,10 @@ class TestLinkedSpecificationItem
     @Test
     void testGetCoveredArtifactTypes()
     {
-        this.linkedItem.addCoveredArtifactType(UMAN);
-        this.linkedItem.addCoveredArtifactType(REQ);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(REQ);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
         assertItemHasCoveredArtifactTypes(this.linkedItem, UMAN, REQ);
     }
 
@@ -92,14 +94,16 @@ class TestLinkedSpecificationItem
     void testGetUncoveredArtifactTypes()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, REQ));
-        this.linkedItem.addCoveredArtifactType(UMAN);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
         assertItemHasUncoveredArtifactTypes(this.linkedItem, REQ);
     }
 
     @Test
     void testGetOverCoveredArtifactTypes()
     {
-        this.linkedItem.addOverCoveredArtifactType(REQ);
+        when(this.coveredLinkedItem.getArtifactType()).thenReturn(REQ);
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem,LinkStatus.COVERED_UNWANTED);
         assertItemHasOvercoveredArtifactTypes(this.linkedItem, REQ);
     }
 
@@ -107,8 +111,10 @@ class TestLinkedSpecificationItem
     void testIsCoveredShallow_Ok()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
-        this.linkedItem.addCoveredArtifactType(UMAN);
-        this.linkedItem.addCoveredArtifactType(IMPL);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(IMPL);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
         assertItemCoveredShallow(this.linkedItem, true);
     }
 
@@ -116,8 +122,10 @@ class TestLinkedSpecificationItem
     void testIsCoveredShallow_NotOk_WrongCoverage()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
-        this.linkedItem.addCoveredArtifactType(UMAN);
-        this.linkedItem.addCoveredArtifactType(REQ);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(REQ);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
         assertItemCoveredShallow(this.linkedItem, false);
     }
 
@@ -125,7 +133,8 @@ class TestLinkedSpecificationItem
     void testIsCoveredShallow_NotOk_MissingCoverage()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
-        this.linkedItem.addCoveredArtifactType(UMAN);
+        when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
         assertItemCoveredShallow(this.linkedItem, false);
     }
 
@@ -139,12 +148,9 @@ class TestLinkedSpecificationItem
 
     private void prepareCoverThis()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
-        this.linkedItem.addCoveredArtifactType(DSN);
-        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
-        this.coveredLinkedItem.addCoveredArtifactType(IMPL);
-        this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
-        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERS);
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
+        when(this.coveredItemMock.getArtifactType()).thenReturn(IMPL);
+        this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem,LinkStatus.COVERED_SHALLOW);
     }
 
     // [utest->dsn~tracing.deep-coverage~1]
@@ -152,9 +158,7 @@ class TestLinkedSpecificationItem
     void testGetDeepCoverageStatus_MissingCoverage()
     {
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
-        this.linkedItem.addCoveredArtifactType(DSN);
         when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
-        this.coveredLinkedItem.addCoveredArtifactType(IMPL);
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         assertItemDeepCoverageStatus(this.linkedItem, DeepCoverageStatus.UNCOVERED);
     }
@@ -164,14 +168,7 @@ class TestLinkedSpecificationItem
     void testIsDefect_False()
     {
         prepareCoverThis();
-        prepareCoverOther();
         assertItemDefect(this.linkedItem, false);
-    }
-
-    private void prepareCoverOther()
-    {
-        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERS);
-        this.coveredLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
     }
 
     // [utest->dsn~tracing.defect-items~2]

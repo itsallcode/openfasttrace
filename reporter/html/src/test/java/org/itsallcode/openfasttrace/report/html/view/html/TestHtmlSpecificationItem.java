@@ -24,9 +24,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITEST;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -126,11 +124,14 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .addNeedsArtifactType(IMPL) //
+                .addNeedsArtifactType(ITEST) //
                 .addNeedsArtifactType(UTEST) //
                 .build();
+        final SpecificationItem coveredItem = SpecificationItem.builder()
+                .id(ITEM_B_ID)
+                .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        linkedItem.addCoveredArtifactType(IMPL);
-        linkedItem.addOverCoveredArtifactType(ITEST);
+        //linkedItem.addLinkToItemWithStatus(new LinkedSpecificationItem(coveredItem),LinkStatus.COVERED_SHALLOW);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(0);
         assertOutputLines( //
@@ -139,7 +140,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
-                "    <h6>Needs: impl, <del>itest</del>, <ins>utest</ins></h6>", //
+                "    <h6>Needs: <ins>impl</ins>, <ins>itest</ins>, <ins>utest</ins></h6>", //
                 "  </details>", //
                 "</section>", //
                 "");

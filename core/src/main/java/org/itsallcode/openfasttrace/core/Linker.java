@@ -111,14 +111,12 @@ public class Linker
             {
                 covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
                 covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
-                covered.addCoveredArtifactType(coveringArtifactType);
             }
         }
         else
         {
             covering.addLinkToItemWithStatus(covered, LinkStatus.UNWANTED);
             covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_UNWANTED);
-            covered.addOverCoveredArtifactType(coveringArtifactType);
         }
     }
 

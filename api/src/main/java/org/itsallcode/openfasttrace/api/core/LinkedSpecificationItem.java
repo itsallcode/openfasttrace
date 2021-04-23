@@ -36,6 +36,7 @@ public class LinkedSpecificationItem
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
             LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
+    private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();
 
     /**
@@ -156,6 +157,17 @@ public class LinkedSpecificationItem
     {
         this.links.computeIfAbsent(status, key -> new ArrayList<>());
         this.links.get(status).add(item);
+        if(status == LinkStatus.COVERED_SHALLOW ) {
+            if( item.getStatus() == ItemStatus.APPROVED ) {
+                coveredArtifactTypesFromApprovedItems.add(item.getArtifactType());
+            }
+            coveredArtifactTypes.add(item.getArtifactType());
+        }
+
+        if(status == LinkStatus.COVERED_UNWANTED && item.getArtifactType() != null ) {
+            overCoveredArtifactTypes.add(item.getArtifactType());
+        }
+
     }
 
     /**
@@ -222,22 +234,6 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Add a covered artifact type.
-     *
-     * @param artifactType
-     *            covered artifact type.
-     */
-    public void addCoveredArtifactType(final String artifactType)
-    {
-        this.coveredArtifactTypes.add(artifactType);
-    }
-
-    public void addOverCoveredArtifactType(final String artifactType)
-    {
-        this.overCoveredArtifactTypes.add(artifactType);
-    }
-
-    /**
      * Get the artifact type which are covered.
      *
      * @return the list of covered artifact types.
@@ -245,6 +241,16 @@ public class LinkedSpecificationItem
     public Set<String> getCoveredArtifactTypes()
     {
         return this.coveredArtifactTypes;
+    }
+
+    /**
+     * Get artifact types which are covered by items with status Approved.
+     *
+     * @return approved covered attribute types
+     */
+    public Set<String> getCoveredApprovedAttributeTypes()
+    {
+        return this.coveredArtifactTypesFromApprovedItems;
     }
 
     /**
@@ -282,6 +288,15 @@ public class LinkedSpecificationItem
     }
 
     /**
+     *
+     * @return <code>true</code> if all needed attribute types are covered by approved items
+     */
+    public boolean isCoveredShallowWithApprovedItems()
+    {
+        return this.getCoveredApprovedAttributeTypes().containsAll(this.getNeedsArtifactTypes());
+    }
+
+    /**
      * Check if this item and all items providing coverage for it are covered.
      * 
      * @return covered, uncovered or ring.
@@ -290,14 +305,24 @@ public class LinkedSpecificationItem
     public DeepCoverageStatus getDeepCoverageStatus()
     {
         return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED);
+                DeepCoverageStatus.COVERED, false );
+    }
+
+    public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems() {
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+                DeepCoverageStatus.COVERED, true );
     }
 
     // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
-            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen)
+            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
+            final boolean onlyAcceptApprovedItemStatus)
     {
         DeepCoverageStatus status = worstStatusSeen;
+        if( onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED ) {
+            status = DeepCoverageStatus.UNCOVERED;
+        }
+
         for (final LinkedSpecificationItem incomingItem : getIncomingItems())
         {
             if (incomingItem.getId().equals(startId))
@@ -307,7 +332,7 @@ public class LinkedSpecificationItem
             else
             {
                 final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status);
+                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus );
                 if (otherStatus == DeepCoverageStatus.CYCLE)
                 {
                     return DeepCoverageStatus.CYCLE;

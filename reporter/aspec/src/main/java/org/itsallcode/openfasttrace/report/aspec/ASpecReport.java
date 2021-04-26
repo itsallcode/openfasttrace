@@ -204,15 +204,20 @@ public class ASpecReport implements Reportable {
         writeElement(writer, "id", item.getName());
         writeElement(writer, "version", item.getRevision());
         writeElement(writer, "status", item.getStatus().toString());
-        if( linkStatus == LinkStatus.COVERED_SHALLOW ) {
-            writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERS" : "UNCOVERS" );
-            final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
-            writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
-                    "COVERS" :
-                    deepCoverageStatus.name() );
-        } else {
-            writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERD" : "UNCOVERED" );
-            writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name() );
+        writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERS" : "UNCOVERS");
+        final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
+        writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
+                "COVERS" :
+                deepCoverageStatus.name());
+
+        if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED) {
+            writeElement(writer, "coveringStatus", "COVERING_ITEM");
+        } else if (linkStatus == LinkStatus.COVERED_SHALLOW) {
+            writeElement(writer, "coveringStatus", "UNCOVERED_ITEM");
+        } else if (linkStatus == LinkStatus.COVERED_PREDATED || linkStatus == LinkStatus.COVERED_OUTDATED) {
+            writeElement(writer, "coveringStatus", "COVERING_WRONG_VERSION");
+        } else if( linkStatus == LinkStatus.AMBIGUOUS || linkStatus == LinkStatus.COVERED_UNWANTED ) {
+            writeElement(writer, "coveringStatus", "UNEXPECTED_ITEM");
         }
 
         writer.writeEndElement();

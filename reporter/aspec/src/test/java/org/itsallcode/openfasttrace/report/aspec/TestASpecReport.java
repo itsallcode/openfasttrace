@@ -279,6 +279,83 @@ public class TestASpecReport {
     }
 
 
+    /**
+     * Writes report for requirements arch->dsn->impl,utest where impl refers front dsn version.
+     */
+    @Test
+    void testReportUncoveredTransientCoverageWithTwoLayersWrongVersionInDependencyOfItems()
+    {
+        final LinkedSpecificationItem archItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("arch", "arch-impl-wrong-version",1) )
+                .description("Valid Arch Requirement.")
+                .addNeedsArtifactType(DSN)
+        );
+        final LinkedSpecificationItem dsnItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("dsn", "dsn-uncovered-impl-wrong-version",1) )
+                .description("This design is uncovered as impl uses a wrong dsn version.")
+                .addNeedsArtifactType(UTEST)
+                .addNeedsArtifactType(IMPL)
+        );
+        archItem.addLinkToItemWithStatus( dsnItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem utestItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("utest", "utest-valid",1) )
+                .description("A valid utest requirement covering all dsn requirements.")
+        );
+        dsnItem.addLinkToItemWithStatus( utestItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem implItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("impl", "impl-wrong-dsn-version",1) )
+                .description("This impl refers to a wrong dsn version.")
+        );
+        dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_PREDATED );
+
+        final String reportString = renderToString();
+        System.out.println(reportString);
+        assertAll(
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "arch-impl-wrong-version"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.NEEDS_COVERAGE, DSN),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.COVERED_TYPES, DSN),
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-wrong-version", 1,ItemStatus.APPROVED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "dsn-uncovered-impl-wrong-version"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.NEEDS_COVERAGE, UTEST, IMPL),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.COVERED_TYPES, UTEST ),
+                        new Field(Field.Type.UNCOVERED_TYPES, IMPL),
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-dsn-version", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "utest-valid"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "impl-wrong-dsn-version"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED) // WIESO?
+                ))),
+                () -> assertThat(reportString, containsString( "<summary>\n" +
+                        "    <count>0</count>\n" +
+                        "    <countDefects>0</countDefects>\n" +
+                        "    <defects></defects>\n" +
+                        "  </summary>")),
+                () -> assertThat(reportString, endsWith("</specdocument>")));
+    }
+
+
     private SpecificationItem.Builder createItemBuilder()
     {
         return SpecificationItem.builder();

@@ -156,7 +156,7 @@ public class ASpecReport implements Reportable {
 
         writer.writeStartElement("coverage");
         writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
-        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERD" : "UNCOVERED");
+        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
         writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name() );
         writer.writeStartElement( "coveringSpecObjects");
         for(Map.Entry<LinkStatus,List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
@@ -204,10 +204,10 @@ public class ASpecReport implements Reportable {
         writeElement(writer, "id", item.getName());
         writeElement(writer, "version", item.getRevision());
         writeElement(writer, "status", item.getStatus().toString());
-        writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERS" : "UNCOVERS");
+        writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
         final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
         writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
-                "COVERS" :
+                "COVERED" :
                 deepCoverageStatus.name());
 
         if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED) {

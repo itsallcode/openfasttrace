@@ -484,7 +484,7 @@ public class TestASpecReport {
         public Field(final Type type, final DeepCoverageStatus value ) {
             this.type = type;
             if(this.type == Type.SHALLOW_COVERAGE ) {
-                values.add( value == DeepCoverageStatus.COVERED ? "COVERD" : "UNCOVERED" );
+                values.add( value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
             } else {
                 values.add( value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
             }
@@ -496,8 +496,8 @@ public class TestASpecReport {
             values.add( id );
             values.add( Integer.toString( version ) );
             values.add( status.toString() );
-            values.add( ownCoverage == DeepCoverageStatus.COVERED ? "COVERS" : "UNCOVERS" );
-            values.add( transitiveCoverage == DeepCoverageStatus.COVERED ? "COVERS" : "UNCOVERED" );
+            values.add( ownCoverage == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
+            values.add( transitiveCoverage == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
         }
 
         public List<String> getValues() {

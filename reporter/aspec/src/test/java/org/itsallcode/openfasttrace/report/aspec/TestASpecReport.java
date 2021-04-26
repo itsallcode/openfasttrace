@@ -1,5 +1,27 @@
 package org.itsallcode.openfasttrace.report.aspec;
 
+/*-
+ * #%L
+ * OpenFastTrace augmented specobject Reporter
+ * %%
+ * Copyright (C) 2016 - 2021 itsallcode.org
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.SubstringMatcher;
@@ -46,6 +68,9 @@ public class TestASpecReport {
     }
 
 
+    /**
+     * Tests an emphy APSpecReport.
+     */
     @Test
     void testEmptyReport()
     {
@@ -60,6 +85,10 @@ public class TestASpecReport {
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
+
+    /**
+     * Writes report for requirements for a single requirement.
+     */
     @Test
     void testReportWithItem()
     {
@@ -87,21 +116,35 @@ public class TestASpecReport {
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
+
+    /**
+     * Writes report for requirements arch->dsn->impl,utest where all requirements are correct.
+     */
     @Test
-    void testReportWithCoveredLinkedItem()
+    void testReportFullTransientCoverageWithTwoLayersOfItems()
     {
         final LinkedSpecificationItem archItem = createItem( createItemBuilder()
-                .id(SpecificationItemId.createId("arch", "arch-covered",1))
+                .id( SpecificationItemId.createId("arch", "arch-covered",1) )
                 .description("Valid Arch Requirement.")
                 .addNeedsArtifactType(DSN)
         );
         final LinkedSpecificationItem dsnItem = createItem( createItemBuilder()
-                .id(SpecificationItemId.createId("dsn", "dsn-covered",1))
+                .id( SpecificationItemId.createId("dsn", "dsn-covered",1) )
                 .description("This design is successfully covered.")
                 .addNeedsArtifactType(UTEST)
                 .addNeedsArtifactType(IMPL)
         );
-        archItem.addLinkToItemWithStatus(dsnItem,LinkStatus.COVERED_SHALLOW);
+        archItem.addLinkToItemWithStatus( dsnItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem utestItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("utest", "utest-valid",1) )
+                .description("A valid utest requirement covering all dsn requirements.")
+        );
+        dsnItem.addLinkToItemWithStatus( utestItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem implItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("impl", "impl-accepted",1) )
+                .description("This impl is valid.")
+        );
+        dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_SHALLOW );
 
         final String reportString = renderToString();
         System.out.println(reportString);
@@ -113,9 +156,9 @@ public class TestASpecReport {
                         new Field(Field.Type.DESCRIPTION, "Valid Arch Requirement."),
                         new Field(Field.Type.NEEDS_COVERAGE, DSN),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.COVERED_TYPES, DSN),
-                        new Field(Field.Type.COVERED_ITEMS, "dsn-covered", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.UNCOVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-covered", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "dsn-covered"),
@@ -123,9 +166,109 @@ public class TestASpecReport {
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.DESCRIPTION, "This design is successfully covered."),
                         new Field(Field.Type.NEEDS_COVERAGE, UTEST, IMPL),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.COVERED_TYPES, UTEST, IMPL),
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-accepted", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "utest-valid"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.DESCRIPTION, "A valid utest requirement covering all dsn requirements."),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "impl-accepted"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.DESCRIPTION, "This impl is valid."),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED)
+                        ))),
+                () -> assertThat(reportString, containsString( "<summary>\n" +
+                        "    <count>0</count>\n" +
+                        "    <countDefects>0</countDefects>\n" +
+                        "    <defects></defects>\n" +
+                        "  </summary>")),
+                () -> assertThat(reportString, endsWith("</specdocument>")));
+    }
+
+
+    /**
+     * Writes report for requirements arch->dsn->impl,utest where impl is not approved.
+     */
+    @Test
+    void testReportUncoveredTransientCoverageWithTwoLayersNonApprovedOfItems()
+    {
+        final LinkedSpecificationItem archItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("arch", "arch-impl-only-proposed",1) )
+                .description("Valid Arch Requirement.")
+                .addNeedsArtifactType(DSN)
+        );
+        final LinkedSpecificationItem dsnItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("dsn", "dsn-uncovered-impl-only-proposed",1) )
+                .description("This design is partly covered. The impl is only status proposed.")
+                .addNeedsArtifactType(UTEST)
+                .addNeedsArtifactType(IMPL)
+        );
+        archItem.addLinkToItemWithStatus( dsnItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem utestItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("utest", "utest-valid",1) )
+                .description("A valid utest requirement covering all dsn requirements.")
+        );
+        dsnItem.addLinkToItemWithStatus( utestItem, LinkStatus.COVERED_SHALLOW );
+        final LinkedSpecificationItem implItem = createItem( createItemBuilder()
+                .id( SpecificationItemId.createId("impl", "impl-wrong-status",1) )
+                .description("This impl has a non approved status.")
+                .status(ItemStatus.PROPOSED)
+        );
+        dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_SHALLOW );
+
+        final String reportString = renderToString();
+        System.out.println(reportString);
+        assertAll(
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "arch-impl-only-proposed"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.DESCRIPTION, "Valid Arch Requirement."),
+                        new Field(Field.Type.NEEDS_COVERAGE, DSN),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.COVERED_TYPES, DSN),
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-only-proposed", 1,ItemStatus.APPROVED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "dsn-uncovered-impl-only-proposed"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.DESCRIPTION, "This design is partly covered. The impl is only status proposed."),
+                        new Field(Field.Type.NEEDS_COVERAGE, UTEST, IMPL),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
-                        new Field(Field.Type.UNCOVERED_TYPES, UTEST, IMPL)
+                        new Field(Field.Type.COVERED_TYPES, UTEST ),
+                        new Field(Field.Type.UNCOVERED_TYPES, IMPL),
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-status", 1,ItemStatus.PROPOSED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "utest-valid"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.APPROVED),
+                        new Field(Field.Type.DESCRIPTION, "A valid utest requirement covering all dsn requirements."),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED)
+                ))),
+                () -> assertThat(reportString, containsRegexp( item(
+                        new Field(Field.Type.ID, "impl-wrong-status"),
+                        new Field(Field.Type.VERSION, 1),
+                        new Field(Field.Type.STATUS, ItemStatus.PROPOSED),
+                        new Field(Field.Type.DESCRIPTION, "This impl has a non approved status."),
+                        new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED),
+                        new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED) // WIESO?
                 ))),
                 () -> assertThat(reportString, containsString( "<summary>\n" +
                         "    <count>0</count>\n" +
@@ -276,7 +419,7 @@ public class TestASpecReport {
             values.add( id );
             values.add( Integer.toString( version ) );
             values.add( status.toString() );
-            values.add( ownCoverage == DeepCoverageStatus.COVERED ? "COVERS" : "UNCOVERED" );
+            values.add( ownCoverage == DeepCoverageStatus.COVERED ? "COVERS" : "UNCOVERS" );
             values.add( transitiveCoverage == DeepCoverageStatus.COVERED ? "COVERS" : "UNCOVERED" );
         }
 

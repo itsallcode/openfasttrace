@@ -211,13 +211,13 @@ public class ASpecReport implements Reportable {
                 deepCoverageStatus.name());
 
         if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED) {
-            writeElement(writer, "coveringStatus", "COVERING_ITEM");
+            writeElement(writer, "coveringStatus", CoveringStatus.COVERING.getLabel() );
         } else if (linkStatus == LinkStatus.COVERED_SHALLOW) {
-            writeElement(writer, "coveringStatus", "UNCOVERED_ITEM");
+            writeElement(writer, "coveringStatus", CoveringStatus.UNCOVERED.getLabel());
         } else if (linkStatus == LinkStatus.COVERED_PREDATED || linkStatus == LinkStatus.COVERED_OUTDATED) {
-            writeElement(writer, "coveringStatus", "COVERING_WRONG_VERSION");
+            writeElement(writer, "coveringStatus", CoveringStatus.OUTDATED.getLabel());
         } else if( linkStatus == LinkStatus.AMBIGUOUS || linkStatus == LinkStatus.COVERED_UNWANTED ) {
-            writeElement(writer, "coveringStatus", "UNEXPECTED_ITEM");
+            writeElement(writer, "coveringStatus", CoveringStatus.UNEXPECTED.getLabel());
         }
 
         writer.writeEndElement();
@@ -306,5 +306,21 @@ public class ASpecReport implements Reportable {
         }
     }
 
+    public enum CoveringStatus {
+        COVERING("COVERING"),
+        UNCOVERED("UNCOVERED"),
+        OUTDATED("COVERING_WRONG_VERSION"),
+        UNEXPECTED("UNEXPECTED");
+
+        private final String label;
+        private CoveringStatus( final String label )
+        {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
 
 }

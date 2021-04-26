@@ -158,7 +158,9 @@ public class TestASpecReport {
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.COVERED_TYPES, DSN),
-                        new Field(Field.Type.COVERED_ITEMS, "dsn-covered", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-covered", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.COVERING )
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "dsn-covered"),
@@ -169,8 +171,12 @@ public class TestASpecReport {
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.COVERED_TYPES, UTEST, IMPL),
-                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERED_ITEMS, "impl-accepted", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.COVERING),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-accepted", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.COVERING)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "utest-valid"),
@@ -239,7 +245,9 @@ public class TestASpecReport {
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.COVERED_TYPES, DSN),
-                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-only-proposed", 1,ItemStatus.APPROVED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-only-proposed", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
+                                ASpecReport.CoveringStatus.UNCOVERED)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "dsn-uncovered-impl-only-proposed"),
@@ -251,8 +259,12 @@ public class TestASpecReport {
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.COVERED_TYPES, UTEST ),
                         new Field(Field.Type.UNCOVERED_TYPES, IMPL),
-                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-status", 1,ItemStatus.PROPOSED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.COVERING),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-status", 1,ItemStatus.PROPOSED,
+                                DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
+                                ASpecReport.CoveringStatus.UNCOVERED)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "utest-valid"),
@@ -319,7 +331,9 @@ public class TestASpecReport {
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.COVERED_TYPES, DSN),
-                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-wrong-version", 1,ItemStatus.APPROVED, DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-wrong-version", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
+                                ASpecReport.CoveringStatus.UNCOVERED)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "dsn-uncovered-impl-wrong-version"),
@@ -330,8 +344,12 @@ public class TestASpecReport {
                         new Field(Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.COVERED_TYPES, UTEST ),
                         new Field(Field.Type.UNCOVERED_TYPES, IMPL),
-                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-dsn-version", 1,ItemStatus.APPROVED, DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED)
+                        new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.COVERING),
+                        new Field(Field.Type.COVERED_ITEMS, "impl-wrong-dsn-version", 1,ItemStatus.APPROVED,
+                                DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
+                                ASpecReport.CoveringStatus.OUTDATED)
                 ))),
                 () -> assertThat(reportString, containsRegexp( item(
                         new Field(Field.Type.ID, "utest-valid"),
@@ -446,6 +464,7 @@ public class TestASpecReport {
                 b.append(".*<status>").append(values.get(2)).append("</status>");
                 b.append(".*<ownCoverageStatus>").append(values.get(3)).append("</ownCoverageStatus>");
                 b.append(".*<transitiveCoverageStatus>").append(values.get(4)).append("</transitiveCoverageStatus>");
+                b.append(".*<coveringStatus>").append(values.get(5)).append("</coveringStatus>");
                 b.append(".*</").append(fieldName).append(">");
             }
             b.append(".*</").append(fieldWrapper).append(">");
@@ -490,7 +509,10 @@ public class TestASpecReport {
             }
         }
 
-        public Field( final Type type, final String id, final int version, ItemStatus status, final DeepCoverageStatus ownCoverage, final DeepCoverageStatus transitiveCoverage )
+        public Field(final Type type, final String id, final int version, ItemStatus status,
+                     final DeepCoverageStatus ownCoverage,
+                     final DeepCoverageStatus transitiveCoverage,
+                     final ASpecReport.CoveringStatus coveringStatus )
         {
             this.type = type;
             values.add( id );
@@ -498,6 +520,7 @@ public class TestASpecReport {
             values.add( status.toString() );
             values.add( ownCoverage == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
             values.add( transitiveCoverage == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED" );
+            values.add( coveringStatus.getLabel() );
         }
 
         public List<String> getValues() {

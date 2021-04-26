@@ -277,6 +277,19 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Get a list of all artifact types for which required coverage is missing only considering approved items.
+     *
+     * @return list of uncovered artifact types.
+     */
+    public List<String> getUncoveredApprovedArtifactTypes()
+    {
+        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
+        uncovered.removeAll(getCoveredApprovedAttributeTypes());
+        return uncovered;
+    }
+
+
+    /**
      * Check if the item is covered shallow (i.e. if for all needed artifact
      * types coverage exists without recursive search).
      *
@@ -293,7 +306,7 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallowWithApprovedItems()
     {
-        return this.getCoveredApprovedAttributeTypes().containsAll(this.getNeedsArtifactTypes());
+        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes().containsAll(this.getNeedsArtifactTypes());
     }
 
     /**

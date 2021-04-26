@@ -53,6 +53,7 @@ public class ASpecReport implements Reportable {
      * Create a new instance of an {@link ASpecReport}
      *
      * @param trace trace to be reported on
+     * @param context configuration options
      */
     public ASpecReport(final Trace trace, final ReporterContext context) {
         this.trace = trace;

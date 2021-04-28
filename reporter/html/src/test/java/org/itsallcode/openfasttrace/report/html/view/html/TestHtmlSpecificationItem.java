@@ -53,13 +53,18 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Mock
     private LinkedSpecificationItem itemMockC;
 
+    @Mock
+    private SpecificationItem itemMock;
+
     @Override
     @BeforeEach
     public void prepareEachTest()
     {
         super.prepareEachTest();
         when(this.itemMockB.getId()).thenReturn(ITEM_B_ID);
+        when(this.itemMockB.getItem() ).thenReturn( itemMock );
         when(this.itemMockC.getId()).thenReturn(ITEM_C_ID);
+        when(this.itemMockC.getItem() ).thenReturn( itemMock );
     }
 
     @Test

@@ -21,6 +21,7 @@ package org.itsallcode.openfasttrace.api.core;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -34,7 +35,7 @@ public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
-            LinkStatus.class);
+            LinkStatus.class );
     private final Set<String> coveredArtifactTypes = new HashSet<>();
     private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();
@@ -42,11 +43,10 @@ public class LinkedSpecificationItem
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
      *
-     * @param item
-     *            the actual specification item that is at the center of the
-     *            links
+     * @param item the actual specification item that is at the center of the
+     *             links
      */
-    public LinkedSpecificationItem(final SpecificationItem item)
+    public LinkedSpecificationItem( final SpecificationItem item )
     {
         this.item = item;
     }
@@ -73,21 +73,21 @@ public class LinkedSpecificationItem
 
     /**
      * Get the title or a fallback if the optional title is not specified
-     * 
+     *
      * @return title if exists, otherwise name part of the ID
      */
     public String getTitleWithFallback()
     {
         final String title = this.getTitle();
-        if (title != null && !title.isEmpty())
+        if( title != null && !title.isEmpty() )
         {
             return title;
         }
         final SpecificationItemId id = this.getId();
-        if (id != null)
+        if( id != null )
         {
             final String name = id.getName();
-            if (name != null && !name.isEmpty())
+            if( name != null && !name.isEmpty() )
             {
                 return name;
             }
@@ -117,7 +117,7 @@ public class LinkedSpecificationItem
 
     /**
      * Get the source location of the item.
-     * 
+     *
      * @return the location
      */
     public Location getLocation()
@@ -127,7 +127,7 @@ public class LinkedSpecificationItem
 
     /**
      * Get the tags associated with this item.
-     * 
+     *
      * @return list of tags
      */
     public List<String> getTags()
@@ -148,26 +148,42 @@ public class LinkedSpecificationItem
     /**
      * Add a link to another item with a status.
      *
-     * @param item
-     *            the item to be linked to
-     * @param status
-     *            the link status
+     * @param item   the item to be linked to
+     * @param status the link status
      */
-    public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
+    public void addLinkToItemWithStatus( final LinkedSpecificationItem item, final LinkStatus status )
     {
-        this.links.computeIfAbsent(status, key -> new ArrayList<>());
-        this.links.get(status).add(item);
-        if(status == LinkStatus.COVERED_SHALLOW ) {
-            if( item.getStatus() == ItemStatus.APPROVED ) {
-                coveredArtifactTypesFromApprovedItems.add(item.getArtifactType());
+        this.links.computeIfAbsent( status, key -> new ArrayList<>() );
+        this.links.get( status ).add( item );
+        if( status == LinkStatus.COVERED_SHALLOW )
+        {
+            if( item.getStatus() == ItemStatus.APPROVED )
+            {
+                coveredArtifactTypesFromApprovedItems.add( item.getArtifactType() );
             }
-            coveredArtifactTypes.add(item.getArtifactType());
+            coveredArtifactTypes.add( item.getArtifactType() );
+            if( item.getItem().coveredIds != null )
+            {
+                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
+            }
         }
 
-        if(status == LinkStatus.COVERED_UNWANTED && item.getArtifactType() != null ) {
-            overCoveredArtifactTypes.add(item.getArtifactType());
+        if( status == LinkStatus.COVERED_UNWANTED )
+        {
+            if( item.getArtifactType() != null )
+            {
+                overCoveredArtifactTypes.add( item.getArtifactType() );
+            }
+            if( item.getItem().coveredIds != null ) {
+                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
+            }
         }
-
+        if( status == LinkStatus.COVERED_OUTDATED || status == LinkStatus.COVERED_PREDATED )
+        {
+            if( item.getItem().coveredIds != null ) {
+                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
+            }
+        }
     }
 
     /**
@@ -182,32 +198,30 @@ public class LinkedSpecificationItem
 
     /**
      * Get all links to the item by item status.
-     * 
-     * @param status
-     *            link status
      *
+     * @param status link status
      * @return the covered items
      */
-    public List<LinkedSpecificationItem> getLinksByStatus(final LinkStatus status)
+    public List<LinkedSpecificationItem> getLinksByStatus( final LinkStatus status )
     {
-        final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
-        return (linksWithStatus == null) ? Collections.emptyList()
+        final List<LinkedSpecificationItem> linksWithStatus = this.links.get( status );
+        return ( linksWithStatus == null ) ? Collections.emptyList()
                 : linksWithStatus;
     }
 
     /**
      * Get a list of traced links (i.e. links including the tracing status)
-     * 
+     *
      * @return list of traced links
      */
     public List<TracedLink> getTracedLinks()
     {
         final List<TracedLink> tracedLinks = new ArrayList<>();
-        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet())
+        for( final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet() )
         {
-            for (final LinkedSpecificationItem other : entry.getValue())
+            for( final LinkedSpecificationItem other : entry.getValue() )
             {
-                tracedLinks.add(new TracedLink(other, entry.getKey()));
+                tracedLinks.add( new TracedLink( other, entry.getKey() ) );
             }
         }
         return tracedLinks;
@@ -220,7 +234,7 @@ public class LinkedSpecificationItem
      */
     public List<SpecificationItemId> getCoveredIds()
     {
-        return this.getItem().getCoveredIds();
+        return new ArrayList<>( this.getItem().getCoveredIds() );
     }
 
     /**
@@ -255,7 +269,7 @@ public class LinkedSpecificationItem
 
     /**
      * Get a list of all artifact types that have unwanted coverage.
-     * 
+     *
      * @return list of over-covered artifact types.
      */
     public Set<String> getOverCoveredArtifactTypes()
@@ -266,13 +280,13 @@ public class LinkedSpecificationItem
 
     /**
      * Get a list of all artifact types for which required coverage is missing.
-     * 
+     *
      * @return list of uncovered artifact types.
      */
     public List<String> getUncoveredArtifactTypes()
     {
-        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
-        uncovered.removeAll(getCoveredArtifactTypes());
+        final List<String> uncovered = new ArrayList<>( getNeedsArtifactTypes() );
+        uncovered.removeAll( getCoveredArtifactTypes() );
         return uncovered;
     }
 
@@ -283,8 +297,8 @@ public class LinkedSpecificationItem
      */
     public List<String> getUncoveredApprovedArtifactTypes()
     {
-        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
-        uncovered.removeAll(getCoveredApprovedAttributeTypes());
+        final List<String> uncovered = new ArrayList<>( getNeedsArtifactTypes() );
+        uncovered.removeAll( getCoveredApprovedAttributeTypes() );
         return uncovered;
     }
 
@@ -297,63 +311,64 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallow()
     {
-        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+        return this.getCoveredArtifactTypes().containsAll( this.getNeedsArtifactTypes() );
     }
 
     /**
-     *
      * @return <code>true</code> if all needed attribute types are covered by approved items
      */
     public boolean isCoveredShallowWithApprovedItems()
     {
-        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes().containsAll(this.getNeedsArtifactTypes());
+        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes().containsAll( this.getNeedsArtifactTypes() );
     }
 
     /**
      * Check if this item and all items providing coverage for it are covered.
-     * 
+     *
      * @return covered, uncovered or ring.
      */
     // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+        return getDeepCoverageStatusEndRecursionStartingAt( this.getId(),
                 DeepCoverageStatus.COVERED, false );
     }
 
-    public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems() {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+    public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
+    {
+        return getDeepCoverageStatusEndRecursionStartingAt( this.getId(),
                 DeepCoverageStatus.COVERED, true );
     }
 
     // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
             final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus)
+            final boolean onlyAcceptApprovedItemStatus )
     {
         DeepCoverageStatus status = worstStatusSeen;
-        if( onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED ) {
+        if( onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED )
+        {
             status = DeepCoverageStatus.UNCOVERED;
         }
 
-        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
+        for( final LinkedSpecificationItem incomingItem : getIncomingItems() )
         {
-            if (incomingItem.getId().equals(startId))
+            if( incomingItem.getId().equals( startId ) )
             {
                 return DeepCoverageStatus.CYCLE;
             }
             else
             {
                 final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus );
-                if (otherStatus == DeepCoverageStatus.CYCLE)
+                        .getDeepCoverageStatusEndRecursionStartingAt( startId, status, onlyAcceptApprovedItemStatus );
+                if( otherStatus == DeepCoverageStatus.CYCLE )
                 {
                     return DeepCoverageStatus.CYCLE;
                 }
-                status = DeepCoverageStatus.getWorst(status, otherStatus);
+                status = DeepCoverageStatus.getWorst( status, otherStatus );
             }
         }
-        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
+        if( status == DeepCoverageStatus.COVERED && !isCoveredShallow() )
         {
             return DeepCoverageStatus.UNCOVERED;
         }
@@ -367,16 +382,16 @@ public class LinkedSpecificationItem
     {
         return this.links.entrySet() //
                 .stream() //
-                .filter(entry -> entry.getKey().isIncoming()) //
-                .flatMap(entry -> entry.getValue().stream()) //
-                .collect(Collectors.toList());
+                .filter( entry -> entry.getKey().isIncoming() ) //
+                .flatMap( entry -> entry.getValue().stream() ) //
+                .collect( Collectors.toList() );
     }
 
     /**
      * Check if the item is defect.
-     * 
+     *
      * An item counts a defect if the following applies:
-     * 
+     *
      * <pre>
      * has duplicates
      * or (not rejected
@@ -392,9 +407,9 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || (getStatus() != ItemStatus.REJECTED) //
-                        && (hasBadLinks()
-                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+                || ( getStatus() != ItemStatus.REJECTED ) //
+                && ( hasBadLinks()
+                || ( getDeepCoverageStatus() != DeepCoverageStatus.COVERED ) );
     }
 
     /**
@@ -407,9 +422,9 @@ public class LinkedSpecificationItem
 
     private boolean hasBadLinks()
     {
-        for (final LinkStatus status : this.links.keySet())
+        for( final LinkStatus status : this.links.keySet() )
         {
-            if (status.isBad())
+            if( status.isBad() )
             {
                 return true;
             }
@@ -419,59 +434,59 @@ public class LinkedSpecificationItem
 
     /**
      * Count all outgoing links.
-     * 
+     *
      * @return total number of outgoing links.
      */
     public int countOutgoingLinks()
     {
-        return countLinksWithPredicate(entry -> entry.getKey().isOutgoing());
+        return countLinksWithPredicate( entry -> entry.getKey().isOutgoing() );
     }
 
     private int countLinksWithPredicate(
-            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate)
+            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate )
     {
-        return this.links.entrySet().stream().filter(predicate)
-                .mapToInt(entry -> entry.getValue().size()).sum();
+        return this.links.entrySet().stream().filter( predicate )
+                .mapToInt( entry -> entry.getValue().size() ).sum();
     }
 
     /**
      * Count all bad outgoing links.
-     * 
+     *
      * @return number of outgoing links that are bad.
      */
     public int countOutgoingBadLinks()
     {
-        return countLinksWithPredicate(entry -> entry.getKey().isBadOutgoing());
+        return countLinksWithPredicate( entry -> entry.getKey().isBadOutgoing() );
     }
 
     /**
      * Count all incoming links.
-     * 
+     *
      * @return total number of incoming links.
      */
     public int countIncomingLinks()
     {
-        return countLinksWithPredicate(entry -> entry.getKey().isIncoming());
+        return countLinksWithPredicate( entry -> entry.getKey().isIncoming() );
     }
 
     /**
      * Count all bad incoming links.
-     * 
+     *
      * @return number of incoming links that are bad.
      */
     public int countIncomingBadLinks()
     {
-        return countLinksWithPredicate(entry -> entry.getKey().isBadIncoming());
+        return countLinksWithPredicate( entry -> entry.getKey().isBadIncoming() );
     }
 
     /**
      * Count the duplicate links.
-     * 
+     *
      * @return the number of links that are duplicates.
      */
     public int countDuplicateLinks()
     {
-        return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
+        return countLinksWithPredicate( entry -> entry.getKey().isDuplicate() );
     }
 
     /**
@@ -484,7 +499,7 @@ public class LinkedSpecificationItem
 
     /**
      * Get the artifact type of the linked specification item
-     * 
+     *
      * @return artifact type
      */
     public String getArtifactType()
@@ -494,13 +509,13 @@ public class LinkedSpecificationItem
 
     /**
      * Get the name part of the linked specification item ID
-     * 
+     *
      * <p>
      * Not to be mixed up with the
      * {@link org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem#getTitle()}
      * of the linked specification item
      * </p>
-     * 
+     *
      * @return name part of the specification item ID
      */
     public String getName()
@@ -511,7 +526,7 @@ public class LinkedSpecificationItem
 
     /**
      * Get the revision of the specification item
-     * 
+     *
      * @return revision
      */
     public int getRevision()

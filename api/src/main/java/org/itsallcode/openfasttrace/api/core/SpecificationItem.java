@@ -38,7 +38,7 @@ public class SpecificationItem
     private final String comment;
     private final Location location;
     private final ItemStatus status;
-    private final List<SpecificationItemId> coveredIds;
+    protected final List<SpecificationItemId> coveredIds;
     private final List<SpecificationItemId> dependOnIds;
     private final List<String> needsArtifactTypes;
     private final List<String> tags;

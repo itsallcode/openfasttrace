@@ -245,7 +245,11 @@ public class ASpecReport implements Reportable
         writer.writeStartElement( "dependencies" );
         for( final SpecificationItemId dependsOnId : dependOnIds )
         {
-            writeElement( writer, "dependson", dependsOnId.toString() );
+            writer.writeStartElement( "dependsOnSpecObject" );
+            writeElement( writer, "id", dependsOnId.getName() );
+            writeElement( writer, "version", dependsOnId.getRevision() );
+            writeElement( writer, "doctype", dependsOnId.getArtifactType() );
+            writer.writeEndElement();
         }
         writer.writeEndElement();
     }

@@ -88,9 +88,11 @@ public class TestASpecReport
                 .id( SpecificationItemId.createId( "arch", "arch-requirement", 1 ) )
                 .description( "Sample arch requirement" )
                 .addNeedsArtifactType( ARCH )
+                .addDependOnId( SpecificationItemId.createId( "fea", "fea-feature", 1 ) )
         );
 
         final String reportString = renderToString();
+        System.out.println( reportString );
         assertAll( () -> assertThat( reportString, containsRegexp( item(
                 new Field( Field.Type.ID, "arch-requirement" ),
                 new Field( Field.Type.VERSION, 1 ),
@@ -98,7 +100,8 @@ public class TestASpecReport
                 new Field( Field.Type.DESCRIPTION, "Sample arch requirement" ),
                 new Field( Field.Type.NEEDS_COVERAGE, ARCH ),
                 new Field( Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED ),
-                new Field( Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED )
+                new Field( Field.Type.TRANSITIVE_COVERAGE, DeepCoverageStatus.UNCOVERED ),
+                new Field( Field.Type.DEPENDENCIES, "fea-feature", 1 )
                 ) ) ),
                 () -> assertThat( reportString, endsWith( "</specdocument>" ) ) );
     }
@@ -564,6 +567,10 @@ public class TestASpecReport
         {
             addItemList( fieldMap, result, Field.Type.COVERING_ITEMS, "coveredType", "covering" );
         }
+        if( fieldMap.containsKey( Field.Type.DEPENDENCIES ) )
+        {
+            addItemList( fieldMap, result, Field.Type.DEPENDENCIES, "dependsOnSpecObject", "dependencies" );
+        }
         result.append( ".*</specobject>.*" );
         System.out.println( result.toString() );
 
@@ -640,7 +647,8 @@ public class TestASpecReport
     {
         enum Type
         {
-            ID, VERSION, STATUS, DESCRIPTION, NEEDS_COVERAGE, SHALLOW_COVERAGE, TRANSITIVE_COVERAGE, COVERED_ITEMS, COVERED_TYPES, UNCOVERED_TYPES, COVERING_ITEMS
+            ID, VERSION, STATUS, DESCRIPTION, NEEDS_COVERAGE, SHALLOW_COVERAGE, TRANSITIVE_COVERAGE, COVERED_ITEMS,
+            COVERED_TYPES, UNCOVERED_TYPES, COVERING_ITEMS, DEPENDENCIES
         }
 
         private final Type type;

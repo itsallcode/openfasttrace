@@ -42,8 +42,9 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-public class ASpecReport implements Reportable {
-    private static final Logger LOG = Logger.getLogger(ASpecReport.class.getName());
+public class ASpecReport implements Reportable
+{
+    private static final Logger LOG = Logger.getLogger( ASpecReport.class.getName() );
 
     private final Trace trace;
     private final XMLOutputFactory xmlOutputFactory;
@@ -52,10 +53,11 @@ public class ASpecReport implements Reportable {
     /**
      * Create a new instance of an {@link ASpecReport}
      *
-     * @param trace trace to be reported on
+     * @param trace   trace to be reported on
      * @param context configuration options
      */
-    public ASpecReport(final Trace trace, final ReporterContext context) {
+    public ASpecReport( final Trace trace, final ReporterContext context )
+    {
         this.trace = trace;
         this.newline = context.getSettings().getNewline();
         this.xmlOutputFactory = XMLOutputFactory.newFactory();
@@ -63,263 +65,294 @@ public class ASpecReport implements Reportable {
 
 
     @Override
-    public void renderToStream(final OutputStream outputStream) {
-        final XMLStreamWriter xmlWriter = createXmlWriter(new OutputStreamWriter(outputStream));
-        final IndentingXMLStreamWriter indentingXmlWriter = new IndentingXMLStreamWriter(xmlWriter);
-        final Map<String, List<LinkedSpecificationItem>> items = groupByDoctype(this.trace.getItems().stream());
+    public void renderToStream( final OutputStream outputStream )
+    {
+        final XMLStreamWriter xmlWriter = createXmlWriter( new OutputStreamWriter( outputStream ) );
+        final IndentingXMLStreamWriter indentingXmlWriter = new IndentingXMLStreamWriter( xmlWriter );
+        final Map<String, List<LinkedSpecificationItem>> items = groupByDoctype( this.trace.getItems().stream() );
 
-        LOG.info( "aspec starting");
-        try (indentingXmlWriter) {
-            writeOutput(indentingXmlWriter, items);
-        } catch (final XMLStreamException e) {
-            throw new ExporterException("Generating document", e);
+        LOG.info( "aspec starting" );
+        try( indentingXmlWriter )
+        {
+            writeOutput( indentingXmlWriter, items );
+        } catch( final XMLStreamException e )
+        {
+            throw new ExporterException( "Generating document", e );
         }
     }
 
-    private XMLStreamWriter createXmlWriter(final Writer writer) {
-        try {
-            return this.xmlOutputFactory.createXMLStreamWriter(writer);
-        } catch (final XMLStreamException e) {
-            throw new ExporterException("Error creating xml stream writer for writer " + writer, e);
+    private XMLStreamWriter createXmlWriter( final Writer writer )
+    {
+        try
+        {
+            return this.xmlOutputFactory.createXMLStreamWriter( writer );
+        } catch( final XMLStreamException e )
+        {
+            throw new ExporterException( "Error creating xml stream writer for writer " + writer, e );
         }
     }
 
     private Map<String, List<LinkedSpecificationItem>> groupByDoctype(
-            final Stream<LinkedSpecificationItem> itemStream) {
+            final Stream<LinkedSpecificationItem> itemStream )
+    {
         return itemStream.collect(
-                groupingBy(LinkedSpecificationItem::getArtifactType, LinkedHashMap::new, toList()));
+                groupingBy( LinkedSpecificationItem::getArtifactType, LinkedHashMap::new, toList() ) );
     }
 
-    private void writeOutput(final XMLStreamWriter writer, Map<String, List<LinkedSpecificationItem>> items) throws XMLStreamException {
-        writer.writeStartDocument("UTF-8", "1.0");
-        writer.writeStartElement("specdocument");
+    private void writeOutput( final XMLStreamWriter writer, Map<String, List<LinkedSpecificationItem>> items ) throws XMLStreamException
+    {
+        writer.writeStartDocument( "UTF-8", "1.0" );
+        writer.writeStartElement( "specdocument" );
 
-        for (final Map.Entry<String, List<LinkedSpecificationItem>> entry : items.entrySet()) {
+        for( final Map.Entry<String, List<LinkedSpecificationItem>> entry : items.entrySet() )
+        {
             final String doctype = entry.getKey();
             final List<LinkedSpecificationItem> specItems = entry.getValue();
-            writeItems(writer, doctype, specItems);
+            writeItems( writer, doctype, specItems );
         }
 
-        writeStatistics(writer);
         writer.writeEndElement();
         writer.writeEndDocument();
     }
 
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
-            .comparing(LinkedSpecificationItem::getId);
+            .comparing( LinkedSpecificationItem::getId );
 
-    private void writeStatistics(final XMLStreamWriter writer) throws XMLStreamException {
-        writer.writeStartElement("summary");
-        writeElement(writer, "count", trace.count());
-        writeElement(writer, "countDefects", trace.countDefects());
-        writer.writeStartElement("defects");
-        for ( final LinkedSpecificationItem item : trace.getDefectItems().stream()
-                .sorted(LINKED_ITEM_BY_ID).collect(Collectors.toCollection(LinkedList::new)) ) {
-            printDefectItem(writer,item);
-        }
-        writer.writeEndElement();
-        writer.writeEndElement();
-    }
-
-    private void printDefectItem(final XMLStreamWriter writer, final LinkedSpecificationItem item) throws XMLStreamException {
-        writer.writeStartElement("defectobject");
-        writeElement(writer, "id", item.getId().toString());
-        writer.writeEndElement();
-    }
-
-    private void writeItems(final XMLStreamWriter writer, final String doctype, final List<LinkedSpecificationItem> specItems)
-            throws XMLStreamException {
-        LOG.finest(() -> "Writing " + specItems.size() + " items with doctype " + doctype);
-        writer.writeStartElement("specobjects");
-        writer.writeAttribute("doctype", doctype);
-        for (final LinkedSpecificationItem item : specItems) {
-            writeItem(writer, item);
+    private void writeItems( final XMLStreamWriter writer, final String doctype, final List<LinkedSpecificationItem> specItems )
+            throws XMLStreamException
+    {
+        LOG.finest( () -> "Writing " + specItems.size() + " items with doctype " + doctype );
+        writer.writeStartElement( "specobjects" );
+        writer.writeAttribute( "doctype", doctype );
+        for( final LinkedSpecificationItem item : specItems )
+        {
+            writeItem( writer, item );
         }
         writer.writeEndElement();
     }
 
-    private void writeItem(final XMLStreamWriter writer, final LinkedSpecificationItem item) throws XMLStreamException {
-        final String description = processMultilineText(item.getDescription());
-        final String rationale = processMultilineText(item.getItem().getRationale());
-        final String comment = processMultilineText(item.getItem().getComment());
+    private void writeItem( final XMLStreamWriter writer, final LinkedSpecificationItem item ) throws XMLStreamException
+    {
+        final String description = processMultilineText( item.getDescription() );
+        final String rationale = processMultilineText( item.getItem().getRationale() );
+        final String comment = processMultilineText( item.getItem().getComment() );
 
-        writer.writeStartElement("specobject");
+        writer.writeStartElement( "specobject" );
 
-        writeElement(writer, "id", item.getName());
-        writeElement(writer, "version", item.getRevision());
-        writeElementIfPresent(writer, "shortdesc", item.getTitle());
-        writeElement(writer, "status", item.getStatus().toString());
-        writeLocation(writer, item.getLocation());
-        writeElementIfPresent(writer, "description", description);
-        writeElementIfPresent(writer, "rationale", rationale);
-        writeElementIfPresent(writer, "comment", comment);
-        writeTags(writer, item.getTags());
+        writeElement( writer, "id", item.getName() );
+        writeElement( writer, "version", item.getRevision() );
+        writeElementIfPresent( writer, "shortdesc", item.getTitle() );
+        writeElement( writer, "status", item.getStatus().toString() );
+        writeLocation( writer, item.getLocation() );
+        writeElementIfPresent( writer, "description", description );
+        writeElementIfPresent( writer, "rationale", rationale );
+        writeElementIfPresent( writer, "comment", comment );
+        writeTags( writer, item.getTags() );
 
-        writer.writeStartElement("coverage");
-        writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
-        writeElement(writer,"shallowCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
-        writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name() );
-        writer.writeStartElement( "coveringSpecObjects");
-        for(Map.Entry<LinkStatus,List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
-                .filter(entry -> entry.getKey().isIncoming())
-                .collect(Collectors.toCollection(LinkedList::new))){
-            for( LinkedSpecificationItem coveringItem : entry.getValue() ) {
+        writer.writeStartElement( "coverage" );
+        writeNeedsArtifactTypes( writer, item.getNeedsArtifactTypes() );
+        writeElement( writer, "shallowCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED" );
+        writeElement( writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name() );
+        writer.writeStartElement( "coveringSpecObjects" );
+        for( Map.Entry<LinkStatus, List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
+                .filter( entry -> entry.getKey().isIncoming() )
+                .collect( Collectors.toCollection( LinkedList::new ) ) )
+        {
+            for( LinkedSpecificationItem coveringItem : entry.getValue() )
+            {
                 writeCoveringItem( writer, entry.getKey(), coveringItem );
             }
         }
         writer.writeEndElement();
 
-        writeCoveredTypes(writer,item.getCoveredApprovedAttributeTypes());
-        writeUncoveredTypes(writer,item.getUncoveredApprovedArtifactTypes());
+        writeCoveredTypes( writer, item.getCoveredApprovedAttributeTypes() );
+        writeUncoveredTypes( writer, item.getUncoveredApprovedArtifactTypes() );
         writer.writeEndElement();
 
-        writeCoveredIds(writer, item.getCoveredIds());
-        writeDependsOnIds(writer, item.getItem().getDependOnIds());
+        writeCoveredIds( writer, item.getCoveredIds() );
+        writeDependsOnIds( writer, item.getItem().getDependOnIds() );
 
         writer.writeEndElement();
     }
 
-    private String processMultilineText(final String text) {
-        return unifyNewlines(text);
+    private String processMultilineText( final String text )
+    {
+        return unifyNewlines( text );
     }
 
-    private String unifyNewlines(final String text) {
-        final Matcher matcher = Newline.anyNewlinePattern().matcher(text);
-        return matcher.replaceAll(this.newline.toString());
+    private String unifyNewlines( final String text )
+    {
+        final Matcher matcher = Newline.anyNewlinePattern().matcher( text );
+        return matcher.replaceAll( this.newline.toString() );
     }
 
-    private void writeTags(final XMLStreamWriter writer, final List<String> tags) throws XMLStreamException {
-        if (tags.isEmpty()) {
+    private void writeTags( final XMLStreamWriter writer, final List<String> tags ) throws XMLStreamException
+    {
+        if( tags.isEmpty() )
+        {
             return;
         }
-        writer.writeStartElement("tags");
-        for (final String tag : tags) {
-            writeElement(writer, "tag", tag);
+        writer.writeStartElement( "tags" );
+        for( final String tag : tags )
+        {
+            writeElement( writer, "tag", tag );
         }
         writer.writeEndElement();
     }
 
-    private void writeCoveringItem( final XMLStreamWriter writer, final LinkStatus linkStatus, final LinkedSpecificationItem item ) throws XMLStreamException {
-        writer.writeStartElement("coveringSpecObject");
+    private void writeCoveringItem( final XMLStreamWriter writer, final LinkStatus linkStatus, final LinkedSpecificationItem item ) throws XMLStreamException
+    {
+        writer.writeStartElement( "coveringSpecObject" );
 
-        writeElement(writer, "id", item.getName());
-        writeElement(writer, "version", item.getRevision());
-        writeElement(writer, "status", item.getStatus().toString());
-        writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
+        writeElement( writer, "id", item.getName() );
+        writeElement( writer, "version", item.getRevision() );
+        writeElement( writer, "doctype", item.getArtifactType() );
+        writeElement( writer, "status", item.getStatus().toString() );
+        writeElement( writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED" );
         final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
-        writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
+        writeElement( writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
                 "COVERED" :
-                deepCoverageStatus.name());
+                deepCoverageStatus.name() );
 
-        if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED) {
-            writeElement(writer, "coveringStatus", CoveringStatus.COVERING.getLabel() );
-        } else if (linkStatus == LinkStatus.COVERED_SHALLOW) {
-            writeElement(writer, "coveringStatus", CoveringStatus.UNCOVERED.getLabel());
-        } else if (linkStatus == LinkStatus.COVERED_PREDATED || linkStatus == LinkStatus.COVERED_OUTDATED) {
-            writeElement(writer, "coveringStatus", CoveringStatus.OUTDATED.getLabel());
-        } else if( linkStatus == LinkStatus.AMBIGUOUS || linkStatus == LinkStatus.COVERED_UNWANTED ) {
-            writeElement(writer, "coveringStatus", CoveringStatus.UNEXPECTED.getLabel());
+        if( linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED )
+        {
+            writeElement( writer, "coveringStatus", CoveringStatus.COVERING.getLabel() );
+        }
+        else if( linkStatus == LinkStatus.COVERED_SHALLOW )
+        {
+            writeElement( writer, "coveringStatus", CoveringStatus.UNCOVERED.getLabel() );
+        }
+        else if( linkStatus == LinkStatus.COVERED_PREDATED || linkStatus == LinkStatus.COVERED_OUTDATED )
+        {
+            writeElement( writer, "coveringStatus", CoveringStatus.OUTDATED.getLabel() );
+        }
+        else if( linkStatus == LinkStatus.AMBIGUOUS || linkStatus == LinkStatus.COVERED_UNWANTED )
+        {
+            writeElement( writer, "coveringStatus", CoveringStatus.UNEXPECTED.getLabel() );
         }
 
         writer.writeEndElement();
     }
 
 
-    private void writeDependsOnIds(final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds)
-            throws XMLStreamException {
-        if (dependOnIds.isEmpty()) {
+    private void writeDependsOnIds( final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds )
+            throws XMLStreamException
+    {
+        if( dependOnIds.isEmpty() )
+        {
             return;
         }
-        writer.writeStartElement("dependencies");
-        for (final SpecificationItemId dependsOnId : dependOnIds) {
-            writeElement(writer, "dependson", dependsOnId.toString());
+        writer.writeStartElement( "dependencies" );
+        for( final SpecificationItemId dependsOnId : dependOnIds )
+        {
+            writeElement( writer, "dependson", dependsOnId.toString() );
         }
         writer.writeEndElement();
     }
 
-    private void writeCoveredIds(final XMLStreamWriter writer, final List<SpecificationItemId> coveredIds)
-            throws XMLStreamException {
-        if (coveredIds.isEmpty()) {
+    private void writeCoveredIds( final XMLStreamWriter writer, final List<SpecificationItemId> coveredIds )
+            throws XMLStreamException
+    {
+        if( coveredIds.isEmpty() )
+        {
             return;
         }
-        writer.writeStartElement("providescoverage");
-        for (final SpecificationItemId coveredId : coveredIds) {
-            writer.writeStartElement("provcov");
-            writeElement(writer, "linksto", coveredId.getArtifactType() + ":" + coveredId.getName());
-            writeElement(writer, "dstversion", coveredId.getRevision());
+        writer.writeStartElement( "covering" );
+        for( final SpecificationItemId coveredId : coveredIds )
+        {
+            writer.writeStartElement( "coveredType" );
+            writeElement( writer, "id", coveredId.getName() );
+            writeElement( writer, "version", coveredId.getRevision() );
+            writeElement( writer, "doctype", coveredId.getArtifactType() );
             writer.writeEndElement();
         }
         writer.writeEndElement();
     }
 
-    private void writeNeedsArtifactTypes(final XMLStreamWriter writer, final List<String> needsArtifactTypes)
-            throws XMLStreamException {
-        if (needsArtifactTypes.isEmpty()) {
+    private void writeNeedsArtifactTypes( final XMLStreamWriter writer, final List<String> needsArtifactTypes )
+            throws XMLStreamException
+    {
+        if( needsArtifactTypes.isEmpty() )
+        {
             return;
         }
-        writer.writeStartElement("needscoverage");
-        for (final String neededArtifactType : needsArtifactTypes) {
-            writeElement(writer, "needsobj", neededArtifactType);
+        writer.writeStartElement( "needscoverage" );
+        for( final String neededArtifactType : needsArtifactTypes )
+        {
+            writeElement( writer, "needsobj", neededArtifactType );
         }
         writer.writeEndElement();
     }
 
-    private void writeCoveredTypes(final XMLStreamWriter writer,final Set<String> types ) throws XMLStreamException {
-        if(types.isEmpty()) return;
-        writer.writeStartElement("coveredTypes");
-        for( final String type : types ) {
-            writeElement(writer,"coveredType", type );
+    private void writeCoveredTypes( final XMLStreamWriter writer, final Set<String> types ) throws XMLStreamException
+    {
+        if( types.isEmpty() ) return;
+        writer.writeStartElement( "coveredTypes" );
+        for( final String type : types )
+        {
+            writeElement( writer, "coveredType", type );
         }
         writer.writeEndElement();
     }
 
-    private void writeUncoveredTypes(final XMLStreamWriter writer,final List<String> types ) throws XMLStreamException {
-        if(types.isEmpty()) return;
-        writer.writeStartElement("uncoveredTypes");
-        for( final String type : types ) {
-            writeElement(writer,"uncoveredType", type );
+    private void writeUncoveredTypes( final XMLStreamWriter writer, final List<String> types ) throws XMLStreamException
+    {
+        if( types.isEmpty() ) return;
+        writer.writeStartElement( "uncoveredTypes" );
+        for( final String type : types )
+        {
+            writeElement( writer, "uncoveredType", type );
         }
         writer.writeEndElement();
     }
 
-    private void writeElement(final XMLStreamWriter writer, final String elementName, final int content) throws XMLStreamException {
-        writeElement(writer, elementName, String.valueOf(content));
+    private void writeElement( final XMLStreamWriter writer, final String elementName, final int content ) throws XMLStreamException
+    {
+        writeElement( writer, elementName, String.valueOf( content ) );
     }
 
-    private void writeElementIfPresent(final XMLStreamWriter writer, final String elementName, final String content)
-            throws XMLStreamException {
-        if (content != null && !content.isEmpty()) {
-            writeElement(writer, elementName, content);
+    private void writeElementIfPresent( final XMLStreamWriter writer, final String elementName, final String content )
+            throws XMLStreamException
+    {
+        if( content != null && !content.isEmpty() )
+        {
+            writeElement( writer, elementName, content );
         }
     }
 
-    private void writeElement(final XMLStreamWriter writer, final String elementName, final String content)
-            throws XMLStreamException {
-        writer.writeStartElement(elementName);
-        writer.writeCharacters(content);
+    private void writeElement( final XMLStreamWriter writer, final String elementName, final String content )
+            throws XMLStreamException
+    {
+        writer.writeStartElement( elementName );
+        writer.writeCharacters( content );
         writer.writeEndElement();
     }
 
-    private void writeLocation(final XMLStreamWriter writer, final Location location) throws XMLStreamException {
-        if (location != null && location.getPath() != null && !location.getPath().isEmpty()) {
-            writeElement(writer, "sourcefile", location.getPath());
-            writeElement(writer, "sourceline", location.getLine());
+    private void writeLocation( final XMLStreamWriter writer, final Location location ) throws XMLStreamException
+    {
+        if( location != null && location.getPath() != null && !location.getPath().isEmpty() )
+        {
+            writeElement( writer, "sourcefile", location.getPath() );
+            writeElement( writer, "sourceline", location.getLine() );
         }
     }
 
-    public enum CoveringStatus {
-        COVERING("COVERING"),
-        UNCOVERED("UNCOVERED"),
-        OUTDATED("COVERING_WRONG_VERSION"),
-        UNEXPECTED("UNEXPECTED");
+    public enum CoveringStatus
+    {
+        COVERING( "COVERING" ),
+        UNCOVERED( "UNCOVERED" ),
+        OUTDATED( "COVERING_WRONG_VERSION" ),
+        UNEXPECTED( "UNEXPECTED" );
 
         private final String label;
+
         private CoveringStatus( final String label )
         {
             this.label = label;
         }
 
-        public String getLabel() {
+        public String getLabel()
+        {
             return label;
         }
     }

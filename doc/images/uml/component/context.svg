@@ -1,1 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="212px" preserveAspectRatio="none" style="width:397px;height:212px;" version="1.1" viewBox="0 0 397 212" width="397px" zoomAndPan="magnify"><defs><filter height="300%" id="fsnhlpx" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity quality_engineer--><ellipse cx="65" cy="18" fill="#FEFECE" filter="url(#fsnhlpx)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/><path d="M65,26 L65,53 M52,34 L78,34 M65,53 L52,68 M65,53 L78,68 " fill="#FEFECE" filter="url(#fsnhlpx)" style="stroke: #A80036; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="118" x="6" y="87.9951">Quality Engineer</text><!--entity developer--><ellipse cx="359" cy="18" fill="#FEFECE" filter="url(#fsnhlpx)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"/><path d="M359,26 L359,53 M346,34 L372,34 M359,53 L346,68 M359,53 L372,68 " fill="#FEFECE" filter="url(#fsnhlpx)" style="stroke: #A80036; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="74" x="322" y="87.9951">Developer</text><!--entity system--><rect fill="#FEFECE" filter="url(#fsnhlpx)" height="36.2969" style="stroke: #A80036; stroke-width: 1.5;" width="128" x="159" y="31.5"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="154" y="36.5"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="154" y="57.7969"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="108" x="169" y="54.4951">OpenFastTrace</text><!--entity continuous_integration--><rect fill="#FEFECE" filter="url(#fsnhlpx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="173" y="151"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168" y="156"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168" y="193.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="183" y="173.9951">Continuous</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="78" x="183" y="190.292">Integration</text><path d="M287.016,49.5 C298.638,49.5 310.261,49.5 321.883,49.5 " fill="none" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M124.25,49.5 C135.822,49.5 147.395,49.5 158.967,49.5 " fill="none" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M223,67.756 C223,89.188 223,125.9466 223,150.7253 " fill="none" style="stroke: #A80036; stroke-width: 1.0;"/></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="222px" preserveAspectRatio="none" style="width:412px;height:222px;" version="1.1" viewBox="0 0 412 222" width="412px" zoomAndPan="magnify"><defs><filter height="300%" id="f16yh1n0lqubzh" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[072c75424eeac85b8864bd0076d26c9b]
+entity quality_engineer--><ellipse cx="62" cy="14" fill="#FEFECE" filter="url(#f16yh1n0lqubzh)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><path d="M62,22 L62,49 M49,30 L75,30 M62,49 L49,64 M62,49 L75,64 " fill="none" filter="url(#f16yh1n0lqubzh)" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="6" y="82.4951">Quality Engineer</text><!--MD5=[23e4898078453906b079a6bea7d1245c]
+entity developer--><ellipse cx="370" cy="14" fill="#FEFECE" filter="url(#f16yh1n0lqubzh)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><path d="M370,22 L370,49 M357,30 L383,30 M370,49 L357,64 M370,49 L383,64 " fill="none" filter="url(#f16yh1n0lqubzh)" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="334.5" y="82.4951">Developer</text><!--MD5=[691a1726be306d84324876b17512fe90]
+entity system--><rect fill="#FEFECE" filter="url(#f16yh1n0lqubzh)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="146" x="153" y="22"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="279" y="27"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="277" y="29"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="277" y="33"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106" x="168" y="54.9951">OpenFastTrace</text><!--MD5=[8f6ee65c307a93b70d8f391166eedcf5]
+entity continuous_integration--><rect fill="#FEFECE" filter="url(#f16yh1n0lqubzh)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="120" x="166" y="145.5"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="266" y="150.5"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="264" y="152.5"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="264" y="156.5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="181" y="178.4951">Continuous</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="181" y="194.792">Integration</text><!--MD5=[6ea17f0aaa4e557f8d3cc5a1bc5f1d64]
+link system to developer--><path d="M299.12,45 C310.85,45 322.57,45 334.29,45 " fill="none" id="system-developer" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[9ee88fc1551db566ca9c94368040fcd1]
+link quality_engineer to system--><path d="M118.05,45 C129.58,45 141.11,45 152.63,45 " fill="none" id="quality_engineer-system" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[cafb2075300c591149fd1c64bf8b91bd]
+link system to continuous_integration--><path d="M226,68.05 C226,89.21 226,121.34 226,145.05 " fill="none" id="system-continuous_integration" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[a4078a131a1f85a84f4f76bcd740240c]
+@startuml Context
+!include ../../actors/quality_engineer.plantuml
+!include ../../actors/developer.plantuml
+!include ../../components/system.plantuml
+!include ../../components/continuous_integration.plantuml
+
+developer -left- system
+quality_engineer -right- system
+continuous_integration -up- system
+@enduml
+
+@startuml Context
+actor "Quality Engineer" as quality_engineer
+actor "Developer" as developer
+component "OpenFastTrace" as system
+component "Continuous\nIntegration" as continuous_integration
+
+developer -left- system
+quality_engineer -right- system
+continuous_integration -up- system
+@enduml
+
+PlantUML version 1.2021.5(Sun Apr 25 13:20:28 CEST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

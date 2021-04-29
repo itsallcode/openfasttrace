@@ -92,7 +92,6 @@ public class TestASpecReport
         );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll( () -> assertThat( reportString, containsRegexp( item(
                 new Field( Field.Type.ID, "arch-requirement" ),
                 new Field( Field.Type.VERSION, 1 ),
@@ -137,7 +136,6 @@ public class TestASpecReport
         dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_SHALLOW );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll(
                 () -> assertThat( reportString, containsRegexp( item(
                         new Field( Field.Type.ID, "arch-covered" ),
@@ -222,7 +220,6 @@ public class TestASpecReport
         dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_SHALLOW );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll(
                 () -> assertThat( reportString, containsRegexp( item(
                         new Field( Field.Type.ID, "arch-impl-only-proposed" ),
@@ -307,7 +304,6 @@ public class TestASpecReport
         dsnItem.addLinkToItemWithStatus( implItem, LinkStatus.COVERED_PREDATED );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll(
                 () -> assertThat( reportString, containsRegexp( item(
                         new Field( Field.Type.ID, "arch-impl-wrong-version" ),
@@ -383,7 +379,6 @@ public class TestASpecReport
         dsnItem.addLinkToItemWithStatus( utestItem, LinkStatus.COVERED_SHALLOW );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll(
                 () -> assertThat( reportString, containsRegexp( item(
                         new Field( Field.Type.ID, "arch-impl-missing-impl" ),
@@ -452,7 +447,6 @@ public class TestASpecReport
         dsnItem.addLinkToItemWithStatus( itestItem, LinkStatus.COVERED_UNWANTED );
 
         final String reportString = renderToString();
-        System.out.println( reportString );
         assertAll(
                 () -> assertThat( reportString, containsRegexp( item(
                         new Field( Field.Type.ID, "arch-impl-wrong-type" ),
@@ -572,7 +566,6 @@ public class TestASpecReport
             addItemList( fieldMap, result, Field.Type.DEPENDENCIES, "dependsOnSpecObject", "dependencies" );
         }
         result.append( ".*</specobject>.*" );
-        System.out.println( result.toString() );
 
         return result.toString();
     }

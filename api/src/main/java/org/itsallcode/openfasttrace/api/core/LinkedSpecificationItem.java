@@ -155,34 +155,39 @@ public class LinkedSpecificationItem
     {
         this.links.computeIfAbsent( status, key -> new ArrayList<>() );
         this.links.get( status ).add( item );
-        if( status == LinkStatus.COVERED_SHALLOW )
-        {
-            if( item.getStatus() == ItemStatus.APPROVED )
+        switch( status ) {
+            case COVERED_SHALLOW:
             {
-                coveredArtifactTypesFromApprovedItems.add( item.getArtifactType() );
+                if( item.getStatus() == ItemStatus.APPROVED )
+                {
+                    coveredArtifactTypesFromApprovedItems.add( item.getArtifactType() );
+                }
+                coveredArtifactTypes.add( item.getArtifactType() );
+                if( item.getItem().getCoveredIds() != null )
+                {
+                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
+                }
             }
-            coveredArtifactTypes.add( item.getArtifactType() );
-            if( item.getItem().coveredIds != null )
+            break;
+            case COVERED_UNWANTED:
             {
-                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
+                if( item.getArtifactType() != null )
+                {
+                    overCoveredArtifactTypes.add( item.getArtifactType() );
+                }
+                if( item.getItem().getCoveredIds() != null ) {
+                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
+                }
             }
-        }
-
-        if( status == LinkStatus.COVERED_UNWANTED )
-        {
-            if( item.getArtifactType() != null )
+            break;
+            case COVERED_OUTDATED:
+            case COVERED_PREDATED:
             {
-                overCoveredArtifactTypes.add( item.getArtifactType() );
+                if( item.getItem().getCoveredIds() != null ) {
+                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
+                }
             }
-            if( item.getItem().coveredIds != null ) {
-                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
-            }
-        }
-        if( status == LinkStatus.COVERED_OUTDATED || status == LinkStatus.COVERED_PREDATED )
-        {
-            if( item.getItem().coveredIds != null ) {
-                if( !item.getItem().coveredIds.contains( getId() ) ) item.getItem().coveredIds.add( getId() );
-            }
+            break;
         }
     }
 
@@ -234,7 +239,7 @@ public class LinkedSpecificationItem
      */
     public List<SpecificationItemId> getCoveredIds()
     {
-        return new ArrayList<>( this.getItem().getCoveredIds() );
+        return List.copyOf( this.getItem().getCoveredIds()) ;
     }
 
     /**

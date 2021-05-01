@@ -37,7 +37,6 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>1.16</version>
                 <configuration>
-                    <!-- <skip>true</skip> -->
                     <licenseName>gpl_v3</licenseName>
                     <organizationName>itsallcode.org</organizationName>
                     <inceptionYear>2016</inceptionYear>

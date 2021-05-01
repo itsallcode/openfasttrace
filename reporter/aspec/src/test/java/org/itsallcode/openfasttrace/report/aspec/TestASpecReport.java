@@ -24,12 +24,12 @@ package org.itsallcode.openfasttrace.report.aspec;
 
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
-import org.hamcrest.core.SubstringMatcher;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes;
+import org.itsallcode.openfasttrace.testutil.matcher.StringRegexpMatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +38,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -699,29 +698,10 @@ public class TestASpecReport
         }
     }
 
-    static class StringRegexp extends SubstringMatcher
-    {
-        public StringRegexp(String regexp)
-        {
-            super(regexp);
-        }
-
-        protected boolean evalSubstringOf(final String value)
-        {
-            return Pattern.matches(this.substring, value.replace("\n", ""));
-        }
-
-        protected String relationship()
-        {
-            return "contains regexp";
-        }
-
-    }
-
     @Factory
     public static Matcher<String> containsRegexp(final String regexp)
     {
-        return new StringRegexp(regexp);
+        return new StringRegexpMatcher(regexp);
     }
 
 }

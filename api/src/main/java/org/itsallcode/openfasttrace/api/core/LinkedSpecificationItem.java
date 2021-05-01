@@ -35,7 +35,7 @@ public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
     private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
-            LinkStatus.class );
+            LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
     private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();
@@ -46,7 +46,7 @@ public class LinkedSpecificationItem
      * @param item the actual specification item that is at the center of the
      *             links
      */
-    public LinkedSpecificationItem( final SpecificationItem item )
+    public LinkedSpecificationItem(final SpecificationItem item)
     {
         this.item = item;
     }
@@ -79,15 +79,15 @@ public class LinkedSpecificationItem
     public String getTitleWithFallback()
     {
         final String title = this.getTitle();
-        if( title != null && !title.isEmpty() )
+        if (title != null && !title.isEmpty())
         {
             return title;
         }
         final SpecificationItemId id = this.getId();
-        if( id != null )
+        if (id != null)
         {
             final String name = id.getName();
-            if( name != null && !name.isEmpty() )
+            if (name != null && !name.isEmpty())
             {
                 return name;
             }
@@ -151,43 +151,49 @@ public class LinkedSpecificationItem
      * @param item   the item to be linked to
      * @param status the link status
      */
-    public void addLinkToItemWithStatus( final LinkedSpecificationItem item, final LinkStatus status )
+    public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
-        this.links.computeIfAbsent( status, key -> new ArrayList<>() );
-        this.links.get( status ).add( item );
-        switch( status ) {
-            case COVERED_SHALLOW:
+        this.links.computeIfAbsent(status, key -> new ArrayList<>());
+        this.links.get(status).add(item);
+        switch (status)
+        {
+        case COVERED_SHALLOW:
+        {
+            if (item.getStatus() == ItemStatus.APPROVED)
             {
-                if( item.getStatus() == ItemStatus.APPROVED )
-                {
-                    coveredArtifactTypesFromApprovedItems.add( item.getArtifactType() );
-                }
-                coveredArtifactTypes.add( item.getArtifactType() );
-                if( item.getItem().getCoveredIds() != null )
-                {
-                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
-                }
+                coveredArtifactTypesFromApprovedItems.add(item.getArtifactType());
             }
-            break;
-            case COVERED_UNWANTED:
+            coveredArtifactTypes.add(item.getArtifactType());
+            if (item.getItem().getCoveredIds() != null)
             {
-                if( item.getArtifactType() != null )
-                {
-                    overCoveredArtifactTypes.add( item.getArtifactType() );
-                }
-                if( item.getItem().getCoveredIds() != null ) {
-                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
-                }
+                if (!item.getItem().getCoveredIds().contains(getId()))
+                    item.getItem().getCoveredIds().add(getId());
             }
-            break;
-            case COVERED_OUTDATED:
-            case COVERED_PREDATED:
+        }
+        break;
+        case COVERED_UNWANTED:
+        {
+            if (item.getArtifactType() != null)
             {
-                if( item.getItem().getCoveredIds() != null ) {
-                    if( !item.getItem().getCoveredIds().contains( getId() ) ) item.getItem().getCoveredIds().add( getId() );
-                }
+                overCoveredArtifactTypes.add(item.getArtifactType());
             }
-            break;
+            if (item.getItem().getCoveredIds() != null)
+            {
+                if (!item.getItem().getCoveredIds().contains(getId()))
+                    item.getItem().getCoveredIds().add(getId());
+            }
+        }
+        break;
+        case COVERED_OUTDATED:
+        case COVERED_PREDATED:
+        {
+            if (item.getItem().getCoveredIds() != null)
+            {
+                if (!item.getItem().getCoveredIds().contains(getId()))
+                    item.getItem().getCoveredIds().add(getId());
+            }
+        }
+        break;
         }
     }
 
@@ -207,10 +213,10 @@ public class LinkedSpecificationItem
      * @param status link status
      * @return the covered items
      */
-    public List<LinkedSpecificationItem> getLinksByStatus( final LinkStatus status )
+    public List<LinkedSpecificationItem> getLinksByStatus(final LinkStatus status)
     {
-        final List<LinkedSpecificationItem> linksWithStatus = this.links.get( status );
-        return ( linksWithStatus == null ) ? Collections.emptyList()
+        final List<LinkedSpecificationItem> linksWithStatus = this.links.get(status);
+        return (linksWithStatus == null) ? Collections.emptyList()
                 : linksWithStatus;
     }
 
@@ -222,11 +228,11 @@ public class LinkedSpecificationItem
     public List<TracedLink> getTracedLinks()
     {
         final List<TracedLink> tracedLinks = new ArrayList<>();
-        for( final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet() )
+        for (final Entry<LinkStatus, List<LinkedSpecificationItem>> entry : this.links.entrySet())
         {
-            for( final LinkedSpecificationItem other : entry.getValue() )
+            for (final LinkedSpecificationItem other : entry.getValue())
             {
-                tracedLinks.add( new TracedLink( other, entry.getKey() ) );
+                tracedLinks.add(new TracedLink(other, entry.getKey()));
             }
         }
         return tracedLinks;
@@ -239,7 +245,7 @@ public class LinkedSpecificationItem
      */
     public List<SpecificationItemId> getCoveredIds()
     {
-        return List.copyOf( this.getItem().getCoveredIds()) ;
+        return List.copyOf(this.getItem().getCoveredIds());
     }
 
     /**
@@ -290,8 +296,8 @@ public class LinkedSpecificationItem
      */
     public List<String> getUncoveredArtifactTypes()
     {
-        final List<String> uncovered = new ArrayList<>( getNeedsArtifactTypes() );
-        uncovered.removeAll( getCoveredArtifactTypes() );
+        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
+        uncovered.removeAll(getCoveredArtifactTypes());
         return uncovered;
     }
 
@@ -302,11 +308,10 @@ public class LinkedSpecificationItem
      */
     public List<String> getUncoveredApprovedArtifactTypes()
     {
-        final List<String> uncovered = new ArrayList<>( getNeedsArtifactTypes() );
-        uncovered.removeAll( getCoveredApprovedAttributeTypes() );
+        final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
+        uncovered.removeAll(getCoveredApprovedAttributeTypes());
         return uncovered;
     }
-
 
     /**
      * Check if the item is covered shallow (i.e. if for all needed artifact
@@ -316,7 +321,7 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallow()
     {
-        return this.getCoveredArtifactTypes().containsAll( this.getNeedsArtifactTypes() );
+        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
     }
 
     /**
@@ -324,7 +329,8 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallowWithApprovedItems()
     {
-        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes().containsAll( this.getNeedsArtifactTypes() );
+        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes()
+                .containsAll(this.getNeedsArtifactTypes());
     }
 
     /**
@@ -335,45 +341,45 @@ public class LinkedSpecificationItem
     // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt( this.getId(),
-                DeepCoverageStatus.COVERED, false );
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+                DeepCoverageStatus.COVERED, false);
     }
 
     public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt( this.getId(),
-                DeepCoverageStatus.COVERED, true );
+        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
+                DeepCoverageStatus.COVERED, true);
     }
 
     // [impl->dsn~tracing.link-cycle~1]
     private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
             final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus )
+            final boolean onlyAcceptApprovedItemStatus)
     {
         DeepCoverageStatus status = worstStatusSeen;
-        if( onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED )
+        if (onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED)
         {
             status = DeepCoverageStatus.UNCOVERED;
         }
 
-        for( final LinkedSpecificationItem incomingItem : getIncomingItems() )
+        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
         {
-            if( incomingItem.getId().equals( startId ) )
+            if (incomingItem.getId().equals(startId))
             {
                 return DeepCoverageStatus.CYCLE;
             }
             else
             {
                 final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt( startId, status, onlyAcceptApprovedItemStatus );
-                if( otherStatus == DeepCoverageStatus.CYCLE )
+                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus);
+                if (otherStatus == DeepCoverageStatus.CYCLE)
                 {
                     return DeepCoverageStatus.CYCLE;
                 }
-                status = DeepCoverageStatus.getWorst( status, otherStatus );
+                status = DeepCoverageStatus.getWorst(status, otherStatus);
             }
         }
-        if( status == DeepCoverageStatus.COVERED && !isCoveredShallow() )
+        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
         {
             return DeepCoverageStatus.UNCOVERED;
         }
@@ -387,9 +393,9 @@ public class LinkedSpecificationItem
     {
         return this.links.entrySet() //
                 .stream() //
-                .filter( entry -> entry.getKey().isIncoming() ) //
-                .flatMap( entry -> entry.getValue().stream() ) //
-                .collect( Collectors.toList() );
+                .filter(entry -> entry.getKey().isIncoming()) //
+                .flatMap(entry -> entry.getValue().stream()) //
+                .collect(Collectors.toList());
     }
 
     /**
@@ -412,9 +418,9 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || ( getStatus() != ItemStatus.REJECTED ) //
-                && ( hasBadLinks()
-                || ( getDeepCoverageStatus() != DeepCoverageStatus.COVERED ) );
+                || (getStatus() != ItemStatus.REJECTED) //
+                && (hasBadLinks()
+                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }
 
     /**
@@ -427,9 +433,9 @@ public class LinkedSpecificationItem
 
     private boolean hasBadLinks()
     {
-        for( final LinkStatus status : this.links.keySet() )
+        for (final LinkStatus status : this.links.keySet())
         {
-            if( status.isBad() )
+            if (status.isBad())
             {
                 return true;
             }
@@ -444,14 +450,14 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingLinks()
     {
-        return countLinksWithPredicate( entry -> entry.getKey().isOutgoing() );
+        return countLinksWithPredicate(entry -> entry.getKey().isOutgoing());
     }
 
     private int countLinksWithPredicate(
-            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate )
+            final Predicate<Map.Entry<LinkStatus, List<LinkedSpecificationItem>>> predicate)
     {
-        return this.links.entrySet().stream().filter( predicate )
-                .mapToInt( entry -> entry.getValue().size() ).sum();
+        return this.links.entrySet().stream().filter(predicate)
+                .mapToInt(entry -> entry.getValue().size()).sum();
     }
 
     /**
@@ -461,7 +467,7 @@ public class LinkedSpecificationItem
      */
     public int countOutgoingBadLinks()
     {
-        return countLinksWithPredicate( entry -> entry.getKey().isBadOutgoing() );
+        return countLinksWithPredicate(entry -> entry.getKey().isBadOutgoing());
     }
 
     /**
@@ -471,7 +477,7 @@ public class LinkedSpecificationItem
      */
     public int countIncomingLinks()
     {
-        return countLinksWithPredicate( entry -> entry.getKey().isIncoming() );
+        return countLinksWithPredicate(entry -> entry.getKey().isIncoming());
     }
 
     /**
@@ -481,7 +487,7 @@ public class LinkedSpecificationItem
      */
     public int countIncomingBadLinks()
     {
-        return countLinksWithPredicate( entry -> entry.getKey().isBadIncoming() );
+        return countLinksWithPredicate(entry -> entry.getKey().isBadIncoming());
     }
 
     /**
@@ -491,7 +497,7 @@ public class LinkedSpecificationItem
      */
     public int countDuplicateLinks()
     {
-        return countLinksWithPredicate( entry -> entry.getKey().isDuplicate() );
+        return countLinksWithPredicate(entry -> entry.getKey().isDuplicate());
     }
 
     /**

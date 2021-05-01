@@ -30,19 +30,20 @@ import org.itsallcode.openfasttrace.api.report.ReporterFactory;
  * A {@link ReporterFactory} for SpecObject reports. This supports the
  * <code>specobject</code> format.
  */
-public class ASpecReporterFactory extends ReporterFactory {
+public class ASpecReporterFactory extends ReporterFactory
+{
     private static final String ASPEC_REPORT_FORMAT = "aspec";
 
     @Override
-    public boolean supportsFormat(String format) {
+    public boolean supportsFormat(String format)
+    {
         return ASPEC_REPORT_FORMAT.equalsIgnoreCase(format);
     }
 
     @Override
-    public Reportable createImporter(Trace trace) {
+    public Reportable createImporter(Trace trace)
+    {
         return new ASpecReport(trace, getContext());
     }
-
-
 
 }

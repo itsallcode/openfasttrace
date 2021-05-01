@@ -10,12 +10,12 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -62,9 +62,9 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     {
         super.prepareEachTest();
         when(this.itemMockB.getId()).thenReturn(ITEM_B_ID);
-        when(this.itemMockB.getItem() ).thenReturn( itemMock );
+        when(this.itemMockB.getItem()).thenReturn(itemMock);
         when(this.itemMockC.getId()).thenReturn(ITEM_C_ID);
-        when(this.itemMockC.getItem() ).thenReturn( itemMock );
+        when(this.itemMockC.getItem()).thenReturn(itemMock);
     }
 
     @Test
@@ -235,7 +235,8 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "      <h6>In: 1</h6>", //
                 "      <ul>", //
                 "        <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID
-                        + "</a> <span class=\"origin\"><a href=\"http://example.org/foo.txt\">http://example.org/foo.txt</a>:3</span></li>", //
+                        + "</a> <span class=\"origin\"><a href=\"http://example.org/foo.txt\">http://example.org/foo.txt</a>:3</span></li>",
+                //
                 "      </ul>", //
                 "    </div>", //
                 "  </details>", //

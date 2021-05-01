@@ -39,8 +39,7 @@ public class Linker
     /**
      * Create a {@link Linker} for specification items.
      *
-     * @param items
-     *            the specification items to be linked.
+     * @param items the specification items to be linked.
      */
     public Linker(final List<SpecificationItem> items)
     {

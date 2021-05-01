@@ -676,7 +676,7 @@ requirement itself transitively successfully covers the enclosing requirement `c
 If the covering requirement does not cover the enclosing requirement `coveringStatus` reports `UNCOVERED`. If the
 covering requirement references the onclosing requirement with a wrong version `coveringStatus` reports 
 `COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
-a not expected requirement type) the `coveringStatus` is reported as `UNEXPECTED`.
+an unexpected requirement type) the `coveringStatus` is reported as `UNEXPECTED`.
 
 A requirement described by the XML element `specobject` lists all requirement which itself covers with the element
 `covering`:

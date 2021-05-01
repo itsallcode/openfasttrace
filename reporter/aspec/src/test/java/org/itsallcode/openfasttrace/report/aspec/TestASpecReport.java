@@ -66,7 +66,7 @@ public class TestASpecReport
 
 
     /**
-     * Tests an emphy APSpecReport.
+     * Tests an empty APSpecReport.
      */
     @Test
     void testEmptyReport()

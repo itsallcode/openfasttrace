@@ -67,6 +67,12 @@ If you want to build OFT:
 
 Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr; "Existing Maven Projects"*
 
+## Configure the `itsallcode style` formatter
+
+All sub-projects come with formatter and save actions configuration for Eclipse.
+
+If you use a different IDE like IntelliJ, please import the formatter configuration [itsallcode_formatter.xml](itsallcode_formatter.xml).
+
 ## Configure Logging
 
 We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:

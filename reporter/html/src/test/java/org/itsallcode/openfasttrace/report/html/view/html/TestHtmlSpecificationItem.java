@@ -136,7 +136,6 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 .id(ITEM_B_ID)
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        //linkedItem.addLinkToItemWithStatus(new LinkedSpecificationItem(coveredItem),LinkStatus.COVERED_SHALLOW);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(0);
         assertOutputLines( //

@@ -639,7 +639,7 @@ The `<coverage>` XML element has the following form:
         </uncoveredTypes>
     </coverage>
 
-The ` coverage` elements provides the following subelements:
+The `coverage` elements provides the following subelements:
 
 * `needscoverage`: List of requirement types that are required to cover the requirement
 * `shallowCoverageStatus`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 

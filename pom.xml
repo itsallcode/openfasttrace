@@ -11,6 +11,7 @@
         <module>api</module>
         <module>core</module>
         <module>product</module>
+        <module>exporter/common</module>
         <module>exporter/markdown</module>
         <module>exporter/specobject</module>
         <module>importer/markdown</module>

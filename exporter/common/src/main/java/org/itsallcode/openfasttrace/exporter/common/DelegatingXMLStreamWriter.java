@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.exporter.specobject;
+package org.itsallcode.openfasttrace.exporter.common;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-class DelegatingXMLStreamWriter implements XMLStreamWriter
+public class DelegatingXMLStreamWriter implements XMLStreamWriter
 {
     private final XMLStreamWriter writer;
 

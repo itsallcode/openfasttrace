@@ -15,7 +15,11 @@
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
-         <dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-exporter-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>

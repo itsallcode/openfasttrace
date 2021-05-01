@@ -26,6 +26,7 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.exporter.common.IndentingXMLStreamWriter;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -114,9 +115,6 @@ public class ASpecReport implements Reportable
         writer.writeEndElement();
         writer.writeEndDocument();
     }
-
-    private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
-            .comparing( LinkedSpecificationItem::getId );
 
     private void writeItems( final XMLStreamWriter writer, final String doctype, final List<LinkedSpecificationItem> specItems )
             throws XMLStreamException

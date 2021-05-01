@@ -34,6 +34,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.exporter.Exporter;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.exporter.common.IndentingXMLStreamWriter;
 
 /**
  * {@link ExporterFactory} for creating {@link Exporter}s that support writing

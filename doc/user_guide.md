@@ -616,7 +616,7 @@ A `<specobject>` entry has the following form:
 description of the requirement. `<sourcefile>` and `<sourceline>` provide name and line number of the original file from
 which the requirement has been imported. `<coverage>` provides more information about the coverage of the requirement
 and lists other requirements covering the requirement. `<covering>` provides requirements that have been marked as 
-dependency. If parts of the information describe above is not available the corresponding XML element will be
+dependency. If parts of the information described above is not available the corresponding XML element will be
 generated missing.
 
 The `<coverage>` XML element has the following form:

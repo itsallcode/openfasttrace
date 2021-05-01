@@ -616,7 +616,7 @@ A `<specobject>` entry has the following form:
 description of the requirement. `<sourcefile>` and `<sourceline>` provide name and line number of the original file from
 which the requirement has been imported. `<coverage>` provides more information about the coverage of the requirement
 and lists other requirements covering the requirement. `<covering>` provides requirements that have been marked as 
-dependency. If parts of the information describe above is not available the corresponding XML element will be
+dependency. If parts of the information described above is not available the corresponding XML element will be
 generated missing.
 
 The `<coverage>` XML element has the following form:
@@ -639,7 +639,7 @@ The `<coverage>` XML element has the following form:
         </uncoveredTypes>
     </coverage>
 
-The ` coverage` elements provides the following subelements:
+The `coverage` elements provides the following subelements:
 
 * `needscoverage`: List of requirement types that are required to cover the requirement
 * `shallowCoverageStatus`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 
@@ -676,7 +676,7 @@ requirement itself transitively successfully covers the enclosing requirement `c
 If the covering requirement does not cover the enclosing requirement `coveringStatus` reports `UNCOVERED`. If the
 covering requirement references the onclosing requirement with a wrong version `coveringStatus` reports 
 `COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
-a not expected requirement type) the `coveringStatus` is reported as `UNEXPECTED`.
+an unexpected requirement type) the `coveringStatus` is reported as `UNEXPECTED`.
 
 A requirement described by the XML element `specobject` lists all requirement which itself covers with the element
 `covering`:

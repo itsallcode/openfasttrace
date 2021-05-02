@@ -17,6 +17,7 @@ jobs:
       run: git fetch --prune --unshallow
     - uses: actions/setup-java@v2
       with:
+        distribution: 'adopt'
         java-version: 11
     - name: Cache local Maven repository
       uses: actions/cache@v2

@@ -590,8 +590,8 @@ The XML output roughly has the following structure
 </specdocument>
 
 `<specdocument>` is the toplevel XML element. Beneath the `<specdocument>` one `<specobjects>` entry can be found for 
-each requirement type found by OpenFastTrace. Beneath `<specobjects>` all requirements  matching the type named in
-`<specobjects>` can be found. Each requirement is wrapped into a `<specobject>` XML tag.
+each requirement type found by OpenFastTrace. The element `<specobjects>` contains all requirements  matching the type named in
+`<specobjects>`. A `<specobject>` XML tag wraps each requirement.
 
 A `<specobject>` entry has the following form:
 

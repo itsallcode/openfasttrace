@@ -158,42 +158,43 @@ public class LinkedSpecificationItem
         switch (status)
         {
         case COVERED_SHALLOW:
-        {
-            if (item.getStatus() == ItemStatus.APPROVED)
-            {
-                coveredArtifactTypesFromApprovedItems.add(item.getArtifactType());
-            }
+            cacheApprovedCoveredArtifactType(item);
             coveredArtifactTypes.add(item.getArtifactType());
-            if (item.getItem().getCoveredIds() != null)
-            {
-                if (!item.getItem().getCoveredIds().contains(getId()))
-                    item.getItem().getCoveredIds().add(getId());
-            }
-        }
-        break;
+            addMyItemIdToCoveringItem(item);
+            break;
         case COVERED_UNWANTED:
-        {
-            if (item.getArtifactType() != null)
-            {
-                overCoveredArtifactTypes.add(item.getArtifactType());
-            }
-            if (item.getItem().getCoveredIds() != null)
-            {
-                if (!item.getItem().getCoveredIds().contains(getId()))
-                    item.getItem().getCoveredIds().add(getId());
-            }
-        }
-        break;
+            cacheOverCoveredArtifactType(item);
+            addMyItemIdToCoveringItem(item);
+            break;
         case COVERED_OUTDATED:
         case COVERED_PREDATED:
-        {
-            if (item.getItem().getCoveredIds() != null)
-            {
-                if (!item.getItem().getCoveredIds().contains(getId()))
-                    item.getItem().getCoveredIds().add(getId());
-            }
+            addMyItemIdToCoveringItem(item);
+            break;
         }
-        break;
+    }
+
+    private void addMyItemIdToCoveringItem(LinkedSpecificationItem coveringItem)
+    {
+        if (coveringItem.getItem().getCoveredIds() != null)
+        {
+            if (!coveringItem.getItem().getCoveredIds().contains(getId()))
+                coveringItem.getItem().getCoveredIds().add(getId());
+        }
+    }
+
+    private void cacheApprovedCoveredArtifactType(final LinkedSpecificationItem coveringItem)
+    {
+        if (coveringItem.isApproved())
+        {
+            coveredArtifactTypesFromApprovedItems.add(coveringItem.getArtifactType());
+        }
+    }
+
+    private void cacheOverCoveredArtifactType(LinkedSpecificationItem overcoveringItem)
+    {
+        if (overcoveringItem.getArtifactType() != null)
+        {
+            overCoveredArtifactTypes.add(overcoveringItem.getArtifactType());
         }
     }
 
@@ -269,11 +270,11 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get artifact types which are covered by items with status Approved.
+     * Get artifact types which are covered by items with status "approved".
      *
      * @return approved covered attribute types
      */
-    public Set<String> getCoveredApprovedAttributeTypes()
+    public Set<String> getCoveredApprovedArtifactTypes()
     {
         return this.coveredArtifactTypesFromApprovedItems;
     }
@@ -309,7 +310,7 @@ public class LinkedSpecificationItem
     public List<String> getUncoveredApprovedArtifactTypes()
     {
         final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
-        uncovered.removeAll(getCoveredApprovedAttributeTypes());
+        uncovered.removeAll(getCoveredApprovedArtifactTypes());
         return uncovered;
     }
 
@@ -321,7 +322,7 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallow()
     {
-        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+        return areAllArtifactTypesCovered();
     }
 
     /**
@@ -329,8 +330,7 @@ public class LinkedSpecificationItem
      */
     public boolean isCoveredShallowWithApprovedItems()
     {
-        return getStatus() == ItemStatus.APPROVED && this.getCoveredApprovedAttributeTypes()
-                .containsAll(this.getNeedsArtifactTypes());
+        return isApproved() && areAllCoveredArtifactTypesApproved();
     }
 
     /**
@@ -357,10 +357,7 @@ public class LinkedSpecificationItem
             final boolean onlyAcceptApprovedItemStatus)
     {
         DeepCoverageStatus status = worstStatusSeen;
-        if (onlyAcceptApprovedItemStatus && status == DeepCoverageStatus.COVERED && getStatus() != ItemStatus.APPROVED)
-        {
-            status = DeepCoverageStatus.UNCOVERED;
-        }
+        status = adjustDeepCoverageStatusIfApprovedRequired(onlyAcceptApprovedItemStatus, status);
 
         for (final LinkedSpecificationItem incomingItem : getIncomingItems())
         {
@@ -387,6 +384,16 @@ public class LinkedSpecificationItem
         {
             return status;
         }
+    }
+
+    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(boolean onlyAcceptApprovedItemStatus,
+            DeepCoverageStatus deepCoveredStatus)
+    {
+        if (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
+        {
+            deepCoveredStatus = DeepCoverageStatus.UNCOVERED;
+        }
+        return deepCoveredStatus;
     }
 
     private List<LinkedSpecificationItem> getIncomingItems()
@@ -441,6 +448,21 @@ public class LinkedSpecificationItem
             }
         }
         return false;
+    }
+
+    private boolean areAllArtifactTypesCovered()
+    {
+        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+    }
+
+    private boolean areAllCoveredArtifactTypesApproved()
+    {
+        return this.getCoveredApprovedArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+    }
+
+    private boolean isApproved()
+    {
+        return getStatus() == ItemStatus.APPROVED;
     }
 
     /**

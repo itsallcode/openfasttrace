@@ -163,7 +163,7 @@ public class ASpecReport implements Reportable
         }
         writer.writeEndElement();
 
-        writeCoveredTypes( writer, item.getCoveredApprovedAttributeTypes() );
+        writeCoveredTypes( writer, item.getCoveredApprovedArtifactTypes() );
         writeUncoveredTypes( writer, item.getUncoveredApprovedArtifactTypes() );
         writer.writeEndElement();
 

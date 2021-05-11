@@ -615,11 +615,11 @@ A `<specobject>` entry has the following form:
     </specobject>
 
 `<id>` and` <version>` provide ID and version of the requirement. `<shortdesc>` and `<description>` provide title and
-description of the requirement. `<sourcefile>` and `<sourceline>` provide name and line number of the original file from
-which the requirement has been imported. `<coverage>` provides more information about the coverage of the requirement
-and lists other requirements covering the requirement. `<covering>` provides requirements that have been marked as 
-dependency. If parts of the information described above is not available the corresponding XML element will be
-generated missing.
+description of the requirement. `<sourcefile>` and `<sourceline>` are the name and line number of the original file from
+which the requirement has been imported. `<coverage>` contains more information about the coverage of the requirement
+and lists other requirements covering the requirement.
+
+`<covering>` contains requirements that have been marked as dependency. If parts of the information described above is not available the corresponding XML element is omitted in the generated report.
 
 The `<coverage>` XML element has the following form:
 

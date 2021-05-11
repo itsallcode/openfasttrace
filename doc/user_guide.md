@@ -629,7 +629,7 @@ The `<coverage>` XML element has the following form:
             ...
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <<transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
         <coveringSpecObjects>
             ...
         </coveringSpecObjects>

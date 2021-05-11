@@ -562,6 +562,7 @@ can be generated  by calling OpenFastTrace in the following way:
 
 ```bash
 java -jar openfasttrace.jar trace -o aspac -f requirements.xml requirements
+```
 
 OpenFastTrace needs to be executed  with the command `trace` to activate the reporter. The `aspec` report is selected 
 with that parameter `-o aspec`. `-f` allows to provide the name of the output file into which the XML report is 
@@ -588,129 +589,141 @@ The XML output roughly has the following structure
     </specobjects>
     ...
 </specdocument>
+```
 
 `<specdocument>` is the toplevel XML element. Beneath the `<specdocument>` one `<specobjects>` entry can be found for 
-each requirement type found by OpenFastTrace. The element `<specobjects>` contains all requirements  matching the type named in
-`<specobjects>`. A `<specobject>` XML tag wraps each requirement.
+each requirement type found by OpenFastTrace. The element `<specobjects>` contains all requirements  matching the type 
+named in `<specobjects>`. A `<specobject>` XML tag wraps each requirement.
 
 A `<specobject>` entry has the following form:
 
-    <specobject>
-        <id>arch-my-architecture-requirement</id>
-        <version>1</version>
-        <shortdesc>The title</shortdesc>
-        <status>approved</status>
-        <sourcefile>architecture.md</sourcefile>
-        <sourceline>134</sourceline>
-        <description>Yet another architecture</description>
-        <coverage>
-            ...
-        </coverage>
-        <covering>
-            ...
-        </covering>
-        <dependencies>
-            ...
-        </dependencies>
-    </specobject>
+```xml
+<specobject>
+    <id>arch-my-architecture-requirement</id>
+    <version>1</version>
+    <shortdesc>The title</shortdesc>
+    <status>approved</status>
+    <sourcefile>architecture.md</sourcefile>
+    <sourceline>134</sourceline>
+    <description>Yet another architecture</description>
+    <coverage>
+        ...
+    </coverage>
+    <covering>
+        ...
+    </covering>
+    <dependencies>
+        ...
+    </dependencies>
+</specobject>
+```
 
-`<id>` and` <version>` provide ID and version of the requirement. `<shortdesc>` and `<description>` provide title and
+`<id>` and `<version>` provide ID and version of the requirement. `<shortdesc>` and `<description>` provide title and
 description of the requirement. `<sourcefile>` and `<sourceline>` are the name and line number of the original file from
 which the requirement has been imported. `<coverage>` contains more information about the coverage of the requirement
 and lists other requirements covering the requirement.
 
-`<covering>` contains requirements that have been marked as dependency. If parts of the information described above is not available the corresponding XML element is omitted in the generated report.
+`<covering>` contains requirements that have been marked as dependency. If parts of the information described above is 
+not available the corresponding XML element is omitted in the generated report.
 
 The `<coverage>` XML element has the following form:
 
-    <coverage>
-        <needscoverage>
-            <needsobj>dsn</needsobj>
-            ...
-        </needscoverage>
-        <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
-        <coveringSpecObjects>
-            ...
-        </coveringSpecObjects>
-        <coveredTypes>
-            <coveredType>dsn</coveredType>
-        </coveredType>
-        <uncoveredTypes>
-            <uncoveredType>impl</uncoveredType>
-        </uncoveredTypes>
-    </coverage>
+```xml
+<coverage>
+    <needscoverage>
+        <needsobj>dsn</needsobj>
+        ...
+    </needscoverage>
+    <shallowCoverageStatus>COVERED</shallowCoverageStatus>
+    <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+    <coveringSpecObjects>
+        ...
+    </coveringSpecObjects>
+    <coveredTypes>
+        <coveredType>dsn</coveredType>
+    </coveredType>
+    <uncoveredTypes>
+        <uncoveredType>impl</uncoveredType>
+    </uncoveredTypes>
+</coverage>
+```
 
-The `coverage` elements provides the following subelements:
+The `<coverage>` elements provides the following sub elements:
 
-* `needscoverage`: List of requirement types that are required to cover the requirement
-* `shallowCoverageStatus`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 
+* `<needscoverage>`: List of requirement types that are required to cover the requirement
+* `<shallowCoverageStatus>`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 
    Valid in this case also means that the covering requirement has status `approved`.
   `UNCOVERED` if not all required requirement types covered successfully.
-* `transitiveCoverageStatus`: `COVERED` if all request requirement types are successfully covered by other requirements
+* `<transitiveCoverageStatus>`: `COVERED` if all request requirement types are successfully covered by other requirements
    that are themselves successfully covered transitive. `UNCOVERED` if the requirement is not successfully covered 
    transitive.
-* `coveringSpecObjects`: The `coveringspecobjects` element contains a subelement for each covering requirement.
-* `coveredTypes`: List of requirement types that are shallow covered.
-* `uncoveredTypes`: List of requirement types that are not shallow covered.
+* `<coveringSpecObjects>`: The `<coveringspecobjects>` element contains a sub element for each covering requirement.
+* `<coveredTypes>`: List of requirement types that are shallow covered.
+* `<uncoveredTypes>`: List of requirement types that are not shallow covered.
 
-The element `coveringSpecObjects` describes all covering requirements:
+The element `<coveringSpecObjects>` describes all covering requirements:
 
-    <coveringSpecObjects>
-        <coveringSpecObject>
-            <id>dsn-requirement</id>
-            <version>1</version>
-            <doctype>dsn</doctype>
-            <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</<transitiveCoverageStatus>
-            <coveringStatus>COVERING</coveringStatus>
-        </coveringSpecObject>
-            ...
-    </coveringSpecObjects>
-
-The element `coveringSpecObjects` describes each requirement that provides a coverage to the enclosing requirement. Each
-covering requirement is described via the element `coveringSpecObject`. `<id>` and `<version>` provide the requirement
-ID and version of the requirement. `doctype` provides the requirement type of the requirement. ` ownCoverageStatus`
-describes if the covering requirement is shallow covered. A shallow covered requirement is report by the value `COVERED`.
-An uncovered requirement is reported by the value `UNCOVERED`. `transitiveCoverageStatus>` reports a transitive
-covered requirement with value `COVERED` and an uncovered requirement with value `UNCOVERED`. If the covering
-requirement itself transitively successfully covers the enclosing requirement `coveringStatus` reports the value `COVERING`.
-If the covering requirement does not cover the enclosing requirement `coveringStatus` reports `UNCOVERED`. If the
-covering requirement references the onclosing requirement with a wrong version `coveringStatus` reports 
-`COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
-an unexpected requirement type) the `coveringStatus` is reported as `UNEXPECTED`.
-
-A requirement described by the XML element `specobject` lists all requirement which itself covers with the element
-`covering`:
-
-    <covering>
-        <coveredType>
-            <id>arch-requirement</id>
-            <version>1</version>
-            <doctype>arch</doctype>
-        </coveredType>
+```xml
+<coveringSpecObjects>
+    <coveringSpecObject>
+        <id>dsn-requirement</id>
+        <version>1</version>
+        <doctype>dsn</doctype>
+        <ownCoverageStatus>COVERED</ownCoverageStatus>
+        <transitiveCoverageStatus>COVERED</<transitiveCoverageStatus>
+        <coveringStatus>COVERING</coveringStatus>
+    </coveringSpecObject>
         ...
-    </covering>
+</coveringSpecObjects>
+```
 
-For each covered requirement `covering` includes a `coveredType` element. A `coveredType` lists the referenced 
-requirement ID with the element `id`, the requirement version with `version` and the requirement type with the
-element `doctype`.
+The element `<coveringSpecObjects>` describes each requirement that provides a coverage to the enclosing requirement. Each
+covering requirement is described via the element `<coveringSpecObject>`. `<id>` and `<version>` provide the requirement
+ID and version of the requirement. `<doctype>` provides the requirement type of the requirement. `<ownCoverageStatus>`
+describes if the covering requirement is shallow covered. A shallow covered requirement is report by the value `COVERED`.
+An uncovered requirement is reported by the value `UNCOVERED`. `<transitiveCoverageStatus>` reports a transitive
+covered requirement with value `COVERED` and an uncovered requirement with value `UNCOVERED`. If the covering
+requirement itself transitively successfully covers the enclosing requirement `<coveringStatus>` reports the value `COVERING`.
+If the covering requirement does not cover the enclosing requirement `<coveringStatus>` reports `UNCOVERED`. If the
+covering requirement references the enclosing requirement with a wrong version `coveringStatus` reports 
+`COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
+an unexpected requirement type) the `<coveringStatus>` is reported as `UNEXPECTED`.
+
+A requirement described by the XML element `<specobject>` lists all requirement which itself covers with the element
+`<covering>`:
+
+```xml
+<covering>
+    <coveredType>
+        <id>arch-requirement</id>
+        <version>1</version>
+        <doctype>arch</doctype>
+    </coveredType>
+    ...
+</covering>
+```
+
+For each covered requirement `<covering>` includes a `<coveredType>` element. A `<coveredType>` lists the referenced 
+requirement ID with the element `<id>`, the requirement version with `<version>` and the requirement type with the
+element `<doctype>`.
 
 If a requirement references other requirements without contributing to requirement coverage then all these references
-are described by the element `dependencies`:
+are described by the element `<dependencies>`:
 
-    <dependencies>
-        <dependsOnSpecObject>
-            <id>arch-requirement</id>
-            <version>1</version>
-            <doctype>arch</doctype>
-        </dependsOnSpecObject>
-        ...
-    </dependencies>
+```xml
+<dependencies>
+    <dependsOnSpecObject>
+        <id>arch-requirement</id>
+        <version>1</version>
+        <doctype>arch</doctype>
+    </dependsOnSpecObject>
+    ...
+</dependencies>
+```
 
-The `dependencies` element provides a `dependsOnSpecObject` element for each referenced requirement. The 
-`dependsOnSpecObject` element lists requirement ID with the element `id`, the requirement version with `version` 
-and the requirement type with the element `doctype`.
+The `<dependencies>` element provides a `<dependsOnSpecObject>` element for each referenced requirement. The 
+`<dependsOnSpecObject>` element lists requirement ID with the element `<id>`, the requirement version with `<version>` 
+and the requirement type with the element `<doctype>`.
 
 ## OFT API
 

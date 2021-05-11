@@ -577,16 +577,17 @@ The `aspec` reporter generates an entry per processed requirement:
 
 The XML output roughly has the following structure
 
-    <specdocument>
-        <specobjects doctype="arch">
-            <specobject>
-                <id>arch-my-architecture-requirement</id>
-                ...
-            </specobject>
+```xml
+<specdocument>
+    <specobjects doctype="arch">
+        <specobject>
+            <id>arch-my-architecture-requirement</id>
             ...
-        </specobjects>
+        </specobject>
         ...
-    </specdocument>
+    </specobjects>
+    ...
+</specdocument>
 
 `<specdocument>` is the toplevel XML element. Beneath the `<specdocument>` one `<specobjects>` entry can be found for 
 each requirement type found by OpenFastTrace. Beneath `<specobjects>` all requirements  matching the type named in

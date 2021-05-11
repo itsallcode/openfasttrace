@@ -571,7 +571,7 @@ The `aspec` reporter generates an entry per processed requirement:
 
 * all relevant parameters of the requirement
 * information if a requirement is successfully covered by other requirements
-* information if all requirements covering a requirement are itself successfully covered
+* information if all requirements covering a requirement are themselves successfully covered
 * list of requirements covering a requirement
 * list of requirements linked by a requirement
 

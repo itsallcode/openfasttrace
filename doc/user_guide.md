@@ -567,7 +567,7 @@ OpenFastTrace needs to be executed  with the command `trace` to activate the rep
 with that parameter `-o aspec`. `-f` allows to provide the name of the output file into which the XML report is 
 generated.
 
-The `aspec` reporter generates an entry per processed requirement reporting:
+The `aspec` reporter generates an entry per processed requirement:
 
 * all relevant parameters of the requirement
 * information if a requirement is successfully covered by other requirements

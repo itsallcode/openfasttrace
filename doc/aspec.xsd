@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="https://github.com/itsallcode/doc/aspec.xsd"
+        xmlns="https://github.com/itsallcode/doc/aspec.xsd"
+        elementFormDefault="qualified">
+
+    <xs:element
+            name="specdocument"
+            type="specdocument">
+        <xs:annotation>
+            <xs:documentation>
+                specdocument is the toplevel XML element.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="specdocument">
+        <xs:annotation>
+            <xs:documentation>
+                Beneath the specdocument one specobjects entry can be found for  each requirement type found 
+                by OpenFastTrace.                        
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element
+                    name="specobjects"
+                    type="specobjects"
+                    minOccurs="0"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="specobjects">
+        <xs:annotation>
+            <xs:documentation>
+                The element specobjects contains all requirements matching the doctype named in specobjects.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element
+                    name="specobject"
+                    type="specobject"
+                    minOccurs="1"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute
+                name="doctype"
+                type="xs:string"
+                use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="specobject">
+        <xs:annotation>
+            <xs:documentation>
+                A specobject describes a single requirement.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="itemBaseType">
+                <xs:sequence>
+                    <xs:element
+                            name="shortdesc"
+                            type="xs:string"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                shortdesc optionally provides a title for the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="status"
+                            type="statusValue">
+                        <xs:annotation>
+                            <xs:documentation>
+                                status describes if the requirement is accepted as a valid requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="sourcefile"
+                            type="xs:string"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                sourcefile is the name of the original file from which the requirement has been imported.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="sourceline"
+                            type="xs:nonNegativeInteger"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                sourceline is the line number in the original file of the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="description"
+                            type="xs:string"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                description provides thedescription of the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="rationale"
+                            type="xs:string"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                rationale provides a rationale for the description of the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="comment"
+                            type="xs:string"
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                comment provides additional comments for the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element
+                            name="coverage"
+                            type="coverage" />
+                    <xs:element
+                            name="covering"
+                            type="covering"
+                            minOccurs="0" />
+                    <xs:element
+                            name="dependencies"
+                            type="dependencies"
+                            minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="coverage">
+        <xs:sequence>
+            <xs:element
+                    name="needscoverage"
+                    type="needscoverage"
+                    minOccurs="0" />
+            <xs:element
+                    name="shallowCoverageStatus"
+                    type="coverageValue" />
+            <xs:element
+                    name="transitiveCoverageStatus"
+                    type="coverageValue" />
+            <xs:element
+                    name="coveringSpecObjects"
+                    type="coveringSpecObjects" />
+            <xs:element
+                    name="coveredTypes"
+                    type="coveredTypes"
+                    minOccurs="0" />
+            <xs:element
+                    name="uncoveredTypes"
+                    type="uncoveredTypes"
+                    minOccurs="0" />
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="needscoverage">
+        <xs:sequence>
+            <xs:element
+                    name="needsobj"
+                    type="xs:string"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="coveringSpecObjects">
+        <xs:sequence>
+            <xs:element
+                    name="coveringSpecObject"
+                    type="coveringSpecObject"
+                    minOccurs="0"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="coveringSpecObject">
+        <xs:complexContent>
+            <xs:extension base="coverType">
+                <xs:sequence>
+                    <xs:element
+                            name="status"
+                            type="statusValue" />
+                    <xs:element
+                            name="ownCoverageStatus"
+                            type="coverageValue" />
+                    <xs:element
+                            name="transitiveCoverageStatus"
+                            type="deepCoverageValue" />
+                    <xs:element
+                            name="coveringStatus"
+                            type="coveringStatusType" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="coveredTypes">
+        <xs:sequence>
+            <xs:element
+                    name="coveredType"
+                    type="xs:string"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="uncoveredTypes">
+        <xs:sequence>
+            <xs:element
+                    name="uncoveredType"
+                    type="xs:string"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="covering">
+        <xs:sequence>
+            <xs:element
+                    name="coveredType"
+                    type="coverType"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dependencies">
+        <xs:sequence>
+            <xs:element
+                    name="dependsOnSpecObject"
+                    type="coverType"
+                    maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="itemBaseType">
+        <xs:sequence>
+            <xs:element
+                    name="id"
+                    type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        id provides the ID of the requirement.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element
+                    name="version"
+                    type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>
+                        version provides the version of the requirement.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="coverType">
+        <xs:complexContent>
+            <xs:extension base="itemBaseType">
+                <xs:sequence>
+                    <xs:element
+                            name="doctype"
+                            type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The doctype describes the type (requirement, design, test...) of the requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType
+            name="statusValue"
+            final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="approved">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is correct and accepted.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="proposed">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is correct but not yet accepted.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="draft">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is not fully defined.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="rejected">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is rejected.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType
+            name="coverageValue"
+            final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COVERED">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is fully covered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNCOVERED">
+                <xs:annotation>
+                    <xs:documentation>
+                        some coverage for the requirement is missing.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType
+            name="deepCoverageValue"
+            final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COVERED">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement is fully covered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNCOVERED">
+                <xs:annotation>
+                    <xs:documentation>
+                        some coverage for the requirement is missing.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="CYCLE">
+                <xs:annotation>
+                    <xs:documentation>
+                        the coverage linkage of the requirement contains a circle.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType
+            name="coveringStatusType"
+            final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COVERING" />
+            <xs:enumeration value="UNCOVERED" />
+            <xs:enumeration value="COVERING_WRONG_VERSION" />
+            <xs:enumeration value="UNEXPECTED" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

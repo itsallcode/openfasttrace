@@ -134,15 +134,34 @@
                     </xs:element>
                     <xs:element
                             name="coverage"
-                            type="coverage" />
+                            type="coverage">
+                        <xs:annotation>
+                            <xs:documentation>
+                                coverage describes the coverage status of the requirment and lists all covering requirements.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element
                             name="covering"
                             type="covering"
-                            minOccurs="0" />
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                coverin lists all requirements covered by this requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element
                             name="dependencies"
                             type="dependencies"
-                            minOccurs="0" />
+                            minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                dependencies lists all requirements which are linked by this requirement with a dependency
+                                link.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -153,29 +172,72 @@
             <xs:element
                     name="needscoverage"
                     type="needscoverage"
-                    minOccurs="0" />
+                    minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        needscoverage lists all needed coverage types.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element
                     name="shallowCoverageStatus"
-                    type="coverageValue" />
+                    type="coverageValue">
+                <xs:annotation>
+                    <xs:documentation>
+                        shallowCoverageStatus indicates if for each listed needscoverage at least one covering requirement
+                        is linked.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element
                     name="transitiveCoverageStatus"
-                    type="coverageValue" />
+                    type="coverageValue">
+                <xs:annotation>
+                    <xs:documentation>
+                        transitiveCoverageStatus indicates of all covering requirements are itself fully covered and that
+                        all needed coverage types are covered by full covered requirement.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element
                     name="coveringSpecObjects"
-                    type="coveringSpecObjects" />
+                    type="coveringSpecObjects">
+                <xs:annotation>
+                    <xs:documentation>
+                        coveringSpecObjects lists all requirements covering this requirement.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element
                     name="coveredTypes"
                     type="coveredTypes"
-                    minOccurs="0" />
+                    minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        coveredTypes lists the covered requirement types.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element
                     name="uncoveredTypes"
                     type="uncoveredTypes"
-                    minOccurs="0" />
-
+                    minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        uncoveredTypes lists the uncovered requirement types.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="needscoverage">
+        <xs:annotation>
+            <xs:documentation>
+                needscoverage contains a list of requirement types that are required to be cover.
+            </xs:documentation>
+        </xs:annotation>
+
         <xs:sequence>
             <xs:element
                     name="needsobj"
@@ -185,6 +247,12 @@
     </xs:complexType>
 
     <xs:complexType name="coveringSpecObjects">
+        <xs:annotation>
+            <xs:documentation>
+                coveringspecobjects contains a coveringSpecObject for each covering requirement.
+            </xs:documentation>
+        </xs:annotation>
+
         <xs:sequence>
             <xs:element
                     name="coveringSpecObject"
@@ -195,21 +263,52 @@
     </xs:complexType>
 
     <xs:complexType name="coveringSpecObject">
+        <xs:annotation>
+            <xs:documentation>
+                coveringSpecObject describes a covering requirement.
+            </xs:documentation>
+        </xs:annotation>
+
         <xs:complexContent>
             <xs:extension base="coverType">
                 <xs:sequence>
                     <xs:element
                             name="status"
-                            type="statusValue" />
+                            type="statusValue">
+                        <xs:annotation>
+                            <xs:documentation>
+                                status describes if the requirement is accepted as a valid requirement.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element
                             name="ownCoverageStatus"
-                            type="coverageValue" />
+                            type="coverageValue">
+                        <xs:annotation>
+                            <xs:documentation>
+                                ownCoverageStatus describes if the covering requirement is shallow covered.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element
                             name="transitiveCoverageStatus"
-                            type="deepCoverageValue" />
+                            type="deepCoverageValue">
+                        <xs:annotation>
+                            <xs:documentation>
+                                transitiveCoverageStatus describes of a covering requirement is itself transitively 
+                                covered.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element
                             name="coveringStatus"
-                            type="coveringStatusType" />
+                            type="coveringStatusType">
+                        <xs:annotation>
+                            <xs:documentation>
+                                coveringStatus describes in detail if or if not a covering requirement provides coverage.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -220,7 +319,13 @@
             <xs:element
                     name="coveredType"
                     type="xs:string"
-                    maxOccurs="unbounded" />
+                    maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        coveredType lists a requirement type that is covered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -229,7 +334,13 @@
             <xs:element
                     name="uncoveredType"
                     type="xs:string"
-                    maxOccurs="unbounded" />
+                    maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        uncoveredType lists a requirement type that is not covered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -238,7 +349,13 @@
             <xs:element
                     name="coveredType"
                     type="coverType"
-                    maxOccurs="unbounded" />
+                    maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        coveredType lists a requirement that is covered by this requirement.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -247,7 +364,13 @@
             <xs:element
                     name="dependsOnSpecObject"
                     type="coverType"
-                    maxOccurs="unbounded" />
+                    maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        dependsOnSpecObject lists a requirement referenced by this requirement as a dependency.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -283,7 +406,7 @@
                             type="xs:string">
                         <xs:annotation>
                             <xs:documentation>
-                                The doctype describes the type (requirement, design, test...) of the requirement.
+                                The doctype describes the requirement type (design, test...) of the requirement.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -380,11 +503,41 @@
     <xs:simpleType
             name="coveringStatusType"
             final="restriction">
+        <xs:annotation>
+            <xs:documentation>
+                coveringStatusType describes if a correct coverage is provided.
+            </xs:documentation>
+        </xs:annotation>
+
         <xs:restriction base="xs:string">
-            <xs:enumeration value="COVERING" />
-            <xs:enumeration value="UNCOVERED" />
-            <xs:enumeration value="COVERING_WRONG_VERSION" />
-            <xs:enumeration value="UNEXPECTED" />
+            <xs:enumeration value="COVERING">
+                <xs:annotation>
+                    <xs:documentation>
+                        describes that the requirement sucessfully provides a coverage.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNCOVERED">
+                <xs:annotation>
+                    <xs:documentation>
+                        the covering requirement is itself uncovered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="COVERING_WRONG_VERSION">
+                <xs:annotation>
+                    <xs:documentation>
+                        the covering requirement references the covered requirement with a wrong requirement version.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNEXPECTED">
+                <xs:annotation>
+                    <xs:documentation>
+                        the requirement has an unneeded (not required) requirement type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

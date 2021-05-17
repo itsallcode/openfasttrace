@@ -66,9 +66,9 @@ public class SpecobjectExporterFactory extends ExporterFactory
         {
             return this.xmlOutputFactory.createXMLStreamWriter(writer);
         }
-        catch (final XMLStreamException e)
+        catch (final XMLStreamException exception)
         {
-            throw new ExporterException("Error creating xml stream writer for writer " + writer, e);
+            throw new ExporterException("Error creating XML stream writer for writer " + writer, exception);
         }
     }
 }

@@ -389,11 +389,9 @@ public class LinkedSpecificationItem
     private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(boolean onlyAcceptApprovedItemStatus,
             DeepCoverageStatus deepCoveredStatus)
     {
-        if (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
-        {
-            deepCoveredStatus = DeepCoverageStatus.UNCOVERED;
-        }
-        return deepCoveredStatus;
+        return ( onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved() ) ?
+                DeepCoverageStatus.UNCOVERED :
+                deepCoveredStatus;
     }
 
     private List<LinkedSpecificationItem> getIncomingItems()

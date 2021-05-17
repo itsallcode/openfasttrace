@@ -618,10 +618,11 @@ A `<specobject>` entry has the following form:
 </specobject>
 ```
 
-`<id>` and `<version>` provide ID and version of the requirement. `<shortdesc>` and `<description>` provide title and
-description of the requirement. `<sourcefile>` and `<sourceline>` are the name and line number of the original file from
-which the requirement has been imported. `<coverage>` contains more information about the coverage of the requirement
-and lists other requirements covering the requirement.
+`<id>` and `<version>` provide ID and version of the requirement. In OFT terminology the term revision is equal to 
+version used in the aspec report. `<shortdesc>` and `<description>` provide title and  description of the requirement. 
+`<sourcefile>` and `<sourceline>` are the name and line number of the original file from  which the requirement has been 
+imported. `<coverage>` contains more information about the coverage of the requirement and lists other requirements 
+covering the requirement.
 
 `<covering>` contains requirements that have been marked as dependency. If parts of the information described above is 
 not available the corresponding XML element is omitted in the generated report.
@@ -635,7 +636,7 @@ The `<coverage>` XML element has the following form:
         ...
     </needscoverage>
     <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-    <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+    <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
     <coveringSpecObjects>
         ...
     </coveringSpecObjects>
@@ -654,9 +655,9 @@ The `<coverage>` elements provides the following sub elements:
 * `<shallowCoverageStatus>`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 
    Valid in this case also means that the covering requirement has status `approved`.
   `UNCOVERED` if not all required requirement types covered successfully.
-* `<transitiveCoverageStatus>`: `COVERED` if all request requirement types are successfully covered by other requirements
-   that are themselves successfully covered transitive. `UNCOVERED` if the requirement is not successfully covered 
-   transitive.
+* `<deepCoverageStatus>`: `COVERED` if all request requirement types are successfully covered by other requirements
+   that are themselves successfully covered transitively. `UNCOVERED` if the requirement is not successfully covered 
+   transitively.
 * `<coveringSpecObjects>`: The `<coveringspecobjects>` element contains a sub element for each covering requirement.
 * `<coveredTypes>`: List of requirement types that are shallow covered.
 * `<uncoveredTypes>`: List of requirement types that are not shallow covered.
@@ -670,7 +671,7 @@ The element `<coveringSpecObjects>` describes all covering requirements:
         <version>1</version>
         <doctype>dsn</doctype>
         <ownCoverageStatus>COVERED</ownCoverageStatus>
-        <transitiveCoverageStatus>COVERED</<transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</<deepCoverageStatus>
         <coveringStatus>COVERING</coveringStatus>
     </coveringSpecObject>
         ...
@@ -680,16 +681,16 @@ The element `<coveringSpecObjects>` describes all covering requirements:
 The element `<coveringSpecObjects>` describes each requirement that provides a coverage to the enclosing requirement. Each
 covering requirement is described via the element `<coveringSpecObject>`. `<id>` and `<version>` provide the requirement
 ID and version of the requirement. `<doctype>` provides the requirement type of the requirement. `<ownCoverageStatus>`
-describes if the covering requirement is shallow covered. A shallow covered requirement is report by the value `COVERED`.
-An uncovered requirement is reported by the value `UNCOVERED`. `<transitiveCoverageStatus>` reports a transitive
+describes if the covering requirement is shallow covered. A shallowly covered requirement is marked as `COVERED`.
+An uncovered requirement is reported as `UNCOVERED`. `<deepCoverageStatus>` reports a transitive
 covered requirement with value `COVERED` and an uncovered requirement with value `UNCOVERED`. If the covering
-requirement itself transitively successfully covers the enclosing requirement `<coveringStatus>` reports the value `COVERING`.
+requirement itself transitively covers the enclosing requirement, `<coveringStatus>` reports the value `COVERING`.
 If the covering requirement does not cover the enclosing requirement `<coveringStatus>` reports `UNCOVERED`. If the
 covering requirement references the enclosing requirement with a wrong version `coveringStatus` reports 
 `COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
 an unexpected requirement type) the `<coveringStatus>` is reported as `UNEXPECTED`.
 
-A requirement described by the XML element `<specobject>` lists all requirement which itself covers with the element
+A requirement described by the XML element `<specobject>` lists all other requirements that it covers in the element
 `<covering>`:
 
 ```xml

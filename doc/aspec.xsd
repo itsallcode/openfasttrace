@@ -211,11 +211,11 @@
                 </xs:annotation>
             </xs:element>
             <xs:element
-                    name="transitiveCoverageStatus"
+                    name="deepCoverageStatus"
                     type="coverageValue">
                 <xs:annotation>
                     <xs:documentation>
-                        transitiveCoverageStatus indicates of all covering requirements are itself fully covered and that
+                        deepCoverageStatus indicates of all covering requirements are itself fully covered and that
                         all needed coverage types are covered by full covered requirement.
                     </xs:documentation>
                 </xs:annotation>
@@ -312,11 +312,11 @@
                         </xs:annotation>
                     </xs:element>
                     <xs:element
-                            name="transitiveCoverageStatus"
+                            name="deepCoverageStatus"
                             type="deepCoverageValue">
                         <xs:annotation>
                             <xs:documentation>
-                                transitiveCoverageStatus describes of a covering requirement is itself transitively 
+                                deepCoverageStatus describes of a covering requirement is itself transitively
                                 covered.
                             </xs:documentation>
                         </xs:annotation>

@@ -199,7 +199,7 @@ public class ASpecReport implements Reportable
         writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
         writeElement(writer, "shallowCoverageStatus",
                 item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
-        writeElement(writer, "transitiveCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name());
+        writeElement(writer, "deepCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name());
 
         writeCoveringSpecObjects(writer, item);
 
@@ -235,7 +235,7 @@ public class ASpecReport implements Reportable
         writeElement(writer, "status", item.getStatus().toString());
         writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
         final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
-        writeElement(writer, "transitiveCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
+        writeElement(writer, "deepCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
                 "COVERED" :
                 deepCoverageStatus.name());
 

@@ -12,7 +12,7 @@
       <sourceline>1</sourceline>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -33,7 +33,7 @@
       <description>This impl is valid.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -53,7 +53,7 @@
       <description>This impl reference a dsn requirement but uses a wrong version.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -78,7 +78,7 @@
       <description>This impl has a non approved status.</description>
       <coverage>
         <shallowCoverageStatus>UNCOVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -98,7 +98,7 @@
       <description>This impl is duplicate.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -118,7 +118,7 @@
       <description>This impl is duplicate.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -138,7 +138,7 @@
       <description>This impl is valid.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -157,7 +157,7 @@
       <sourceline>1</sourceline>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -183,7 +183,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-covered</id>
@@ -191,7 +191,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -212,7 +212,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-uncovered-impl-only-proposed</id>
@@ -220,7 +220,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>UNCOVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
             <coveringStatus>UNCOVERED</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -241,7 +241,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-covered-impl-duplicates</id>
@@ -249,7 +249,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -270,7 +270,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-uncovered-impl-wrong-version</id>
@@ -278,7 +278,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>UNCOVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
             <coveringStatus>UNCOVERED</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -299,7 +299,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-uncovered-no-imp</id>
@@ -307,7 +307,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>UNCOVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
             <coveringStatus>UNCOVERED</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -328,7 +328,7 @@
           <needsobj>dsn</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>dsn-covered-superflous-itest</id>
@@ -336,7 +336,7 @@
             <doctype>dsn</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -361,7 +361,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>impl-accepted</id>
@@ -369,7 +369,7 @@
             <doctype>impl</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -378,7 +378,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -408,7 +408,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>UNCOVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>impl-wrong-status</id>
@@ -416,7 +416,7 @@
             <doctype>impl</doctype>
             <status>proposed</status>
             <ownCoverageStatus>UNCOVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
             <coveringStatus>UNCOVERED</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -425,7 +425,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -457,7 +457,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>impl-duplicate1</id>
@@ -465,7 +465,7 @@
             <doctype>impl</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -474,7 +474,7 @@
             <doctype>impl</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -483,7 +483,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -513,7 +513,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>UNCOVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>utest-valid</id>
@@ -521,7 +521,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -530,7 +530,7 @@
             <doctype>impl</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING_WRONG_VERSION</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -562,7 +562,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>UNCOVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>UNCOVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>UNCOVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>utest-valid</id>
@@ -570,7 +570,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -602,7 +602,7 @@
           <needsobj>impl</needsobj>
         </needscoverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects>
           <coveringSpecObject>
             <id>impl-accepted-plus-unexpected</id>
@@ -610,7 +610,7 @@
             <doctype>impl</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -619,7 +619,7 @@
             <doctype>utest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>COVERING</coveringStatus>
           </coveringSpecObject>
           <coveringSpecObject>
@@ -628,7 +628,7 @@
             <doctype>itest</doctype>
             <status>approved</status>
             <ownCoverageStatus>COVERED</ownCoverageStatus>
-            <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+            <deepCoverageStatus>COVERED</deepCoverageStatus>
             <coveringStatus>UNEXPECTED</coveringStatus>
           </coveringSpecObject>
         </coveringSpecObjects>
@@ -656,7 +656,7 @@
       <description>An items that is not in the needs list of the dsn.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>
@@ -679,7 +679,7 @@
       <description>A valid utest requirement covering all dsn requirements.</description>
       <coverage>
         <shallowCoverageStatus>COVERED</shallowCoverageStatus>
-        <transitiveCoverageStatus>COVERED</transitiveCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringSpecObjects></coveringSpecObjects>
       </coverage>
       <covering>

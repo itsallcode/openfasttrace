@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added support for JVM languages: Clojure, Kotlin and Scala [#270](https://github.com/itsallcode/openfasttrace/issues/270) [#271](https://github.com/itsallcode/openfasttrace/issues/271)
+
 ## [3.0.2]
 
 ### Fixed

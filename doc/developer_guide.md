@@ -161,7 +161,7 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Run this command (will take up to 10 minutes)
 
     ```bash
-    mvn clean deploy
+    mvn clean deploy -Possrh
     ```
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
@@ -170,5 +170,5 @@ This currently only works for release version numbers, not SNAPSHOT versions.
     1. Login at [oss.sonatype.org](https://oss.sonatype.org).
     1. Go to the [staging repositories](https://oss.sonatype.org/#stagingRepositories).
     1. Select repository named `orgitsallcode-*` and click the "Release" button.
-    1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/).
+    1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
 

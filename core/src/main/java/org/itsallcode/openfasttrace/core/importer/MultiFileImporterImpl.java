@@ -111,10 +111,11 @@ public class MultiFileImporterImpl implements MultiFileImporter
                     .filter(matcher::matches) //
                     .map(path -> RealFileInput.forPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
-                    .map(file -> createImporterIfPossible(file, this.specItemBuilder)).forEach(importer -> {
-                        importer.ifPresent(Importer::runImport);
-                        fileCount.incrementAndGet();
-                    });
+                    .map(file -> createImporterIfPossible(file, this.specItemBuilder)).forEach(importer ->
+            {
+                importer.ifPresent(Importer::runImport);
+                fileCount.incrementAndGet();
+            });
         }
         catch (final IOException e)
         {
@@ -139,11 +140,10 @@ public class MultiFileImporterImpl implements MultiFileImporter
                 Optional.of(importerFactory.get().createImporter(file, builder)) :
                 Optional.empty();
 
-        LOG.fine(() -> ( importer.isPresent() ?
-                            "Created importer of type '" + importer.getClass().getSimpleName() :
-                            "No import" )
-                       + "' for file '" + file + "'");
+        LOG.fine(() -> (importer.isPresent() ?
+                "Created importer of type '" + importer.getClass().getSimpleName() :
+                "No import")
+                + "' for file '" + file + "'");
         return importer;
     }
-
 }

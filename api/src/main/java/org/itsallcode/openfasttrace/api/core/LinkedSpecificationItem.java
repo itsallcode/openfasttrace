@@ -386,10 +386,10 @@ public class LinkedSpecificationItem
         }
     }
 
-    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(boolean onlyAcceptApprovedItemStatus,
-            DeepCoverageStatus deepCoveredStatus)
+    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(final boolean onlyAcceptApprovedItemStatus,
+            final DeepCoverageStatus deepCoveredStatus)
     {
-        return ( onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved() ) ?
+        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved()) ?
                 DeepCoverageStatus.UNCOVERED :
                 deepCoveredStatus;
     }

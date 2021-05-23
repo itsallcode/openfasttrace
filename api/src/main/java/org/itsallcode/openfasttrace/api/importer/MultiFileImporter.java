@@ -10,19 +10,17 @@ package org.itsallcode.openfasttrace.api.importer;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -45,7 +43,7 @@ public interface MultiFileImporter {
 
 	/**
 	 * Import from the path, independently of whether it is represents a directory or a file.
-	 * 
+	 *
 	 * @param paths
 	 *            lists of paths to files or directories
 	 * @return <code>this</code> for fluent programming style.
@@ -67,7 +65,7 @@ public interface MultiFileImporter {
 
 	/**
 	 * Get all imported {@link SpecificationItem}s.
-	 * 
+	 *
 	 * @return all imported {@link SpecificationItem}s.
 	 */
     List<SpecificationItem> getImportedItems();

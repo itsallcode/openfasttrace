@@ -8,7 +8,7 @@ Commands:
   convert                      Convert to a different requirements format
 
 Tracing options:
-  -o, --output-format          Report format, one of "plain", "html"
+  -o, --output-format          Report format, one of "plain", "html", "aspec"
                                Defaults to "plain"
   -v, --report-verbosity       Set how verbose the output is. Ranges from
                                "quiet" to "all".

@@ -1,1 +1,156 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="651px" preserveAspectRatio="none" style="width:913px;height:651px;" version="1.1" viewBox="0 0 913 651" width="913px" zoomAndPan="magnify"><defs/><g><!--cluster ##113--><!--class HtmlSection--><rect fill="#F8F8F8" height="44.7734" style="stroke: #383838; stroke-width: 1.5;" width="225" x="38.5" y="442"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="75" x="113.5" y="458.1387">HtmlSection</text><line style="stroke: #383838; stroke-width: 1.5;" x1="39.5" x2="262.5" y1="465.9688" y2="465.9688"/><ellipse cx="49.5" cy="477.8711" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="199" x="58.5" y="480.1792">HtmlSection(id: String, title: String)</text><!--class HtmlSpecificationItem--><rect fill="#F8F8F8" height="44.7734" style="stroke: #383838; stroke-width: 1.5;" width="319" x="482.5" y="442"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="135" x="574.5" y="458.1387">HtmlSpecificationItem</text><line style="stroke: #383838; stroke-width: 1.5;" x1="483.5" x2="800.5" y1="465.9688" y2="465.9688"/><ellipse cx="493.5" cy="477.8711" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="293" x="502.5" y="480.1792">HtmlSpecificationItem(LinkedSpecificationItem item)</text><!--class HtmlView--><rect fill="#F8F8F8" height="44.7734" style="stroke: #383838; stroke-width: 1.5;" width="149" x="298.5" y="442"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="56" x="345" y="458.1387">HtmlView</text><line style="stroke: #383838; stroke-width: 1.5;" x1="299.5" x2="446.5" y1="465.9688" y2="465.9688"/><ellipse cx="309.5" cy="477.8711" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="123" x="318.5" y="480.1792">HtmlView(title: String)</text><!--class Viewable--><rect fill="#F8F8F8" height="71.5469" style="stroke: #383838; stroke-width: 1.5;" width="124" x="449" y="8"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="70" x="476" y="24.1387">«interface»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="56" x="483" y="38.1074">Viewable</text><line style="stroke: #383838; stroke-width: 1.5;" x1="450" x2="572" y1="45.9375" y2="45.9375"/><ellipse cx="460" cy="57.8398" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="46" x="469" y="60.1479">render()</text><ellipse cx="460" cy="70.6445" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="98" x="469" y="72.9526">render(level : int)</text><!--class ViewableContainer--><rect fill="#F8F8F8" height="97.1563" style="stroke: #383838; stroke-width: 1.5;" width="157" x="364.5" y="141"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="70" x="408" y="157.1387">«interface»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="117" x="384.5" y="171.1074">ViewableContainer</text><line style="stroke: #383838; stroke-width: 1.5;" x1="365.5" x2="520.5" y1="178.9375" y2="178.9375"/><ellipse cx="375.5" cy="190.8398" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="109" x="384.5" y="193.1479">add(Viewable child)</text><polygon fill="#EAEAEA" points="375.5,198.6445,379.5,202.6445,375.5,206.6445,371.5,202.6445" style="stroke: #8C8C8C; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="131" x="384.5" y="205.9526">renderBeforeChildren()</text><polygon fill="#EAEAEA" points="375.5,211.4492,379.5,215.4492,375.5,219.4492,371.5,215.4492" style="stroke: #8C8C8C; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="93" x="384.5" y="218.7573">renderChildren()</text><polygon fill="#EAEAEA" points="375.5,224.2539,379.5,228.2539,375.5,232.2539,371.5,228.2539" style="stroke: #8C8C8C; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="120" x="384.5" y="231.562">renderAfterChildren()</text><!--class AbstractViewContainer--><rect fill="#F8F8F8" height="79.5469" style="stroke: #383838; stroke-width: 1.5;" width="171" x="287.5" y="299"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="66" x="340" y="315.1387">«abstract»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="142" x="302" y="329.1074">AbstractViewContainer</text><line style="stroke: #383838; stroke-width: 1.5;" x1="288.5" x2="457.5" y1="336.9375" y2="336.9375"/><polygon fill="none" points="298.5,343.8398,302.5,347.8398,298.5,351.8398,294.5,347.8398" style="stroke: #8C8C8C; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="145" x="307.5" y="351.1479">children : List&lt;Viewable&gt;</text><line style="stroke: #383838; stroke-width: 1.5;" x1="288.5" x2="457.5" y1="357.7422" y2="357.7422"/><ellipse cx="298.5" cy="369.6445" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="109" x="307.5" y="371.9526">add(Viewable child)</text><!--class HtmlViewFactory--><rect fill="#F8F8F8" height="23.9688" style="stroke: #383838; stroke-width: 1.5;" width="108" x="319" y="596"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="102" x="322" y="612.1387">HtmlViewFactory</text><!--class AbstractViewFactory--><rect fill="#F8F8F8" height="84.3516" style="stroke: #383838; stroke-width: 1.5;" width="450" x="462" y="566"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="66" x="654" y="582.1387">«abstract»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="128" x="623" y="596.1074">AbstractViewFactory</text><line style="stroke: #383838; stroke-width: 1.5;" x1="463" x2="911" y1="603.9375" y2="603.9375"/><ellipse cx="473" cy="615.8398" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="250" x="482" y="618.1479">createView(title: String) : ViewableContainer</text><ellipse cx="473" cy="628.6445" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="326" x="482" y="630.9526">createSection(id: String, title: String) : ViewableContainer</text><ellipse cx="473" cy="641.4492" fill="#A6A6A6" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="424" x="482" y="643.7573">createSpecificationItem(item: LinkedSpecificationItem) : ViewableContainer</text><!--class ContentType--><rect fill="#F8F8F8" height="57.5781" style="stroke: #383838; stroke-width: 1.5;" width="91" x="608.5" y="15"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="79" x="614.5" y="31.1387">ContentType</text><line style="stroke: #383838; stroke-width: 1.5;" x1="609.5" x2="698.5" y1="38.9688" y2="38.9688"/><ellipse cx="619.5" cy="50.8711" fill="none" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="65" x="628.5" y="53.1792">PLAIN_TEXT</text><ellipse cx="619.5" cy="63.6758" fill="none" rx="3" ry="3" style="stroke: #545454; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="30" x="628.5" y="65.9839">HTML</text><path d="M485.5451,98.466 C479.0605,112.3411 472.1325,127.165 465.7904,140.7352 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="none" points="479.2065,95.4956,494.0161,80.3405,491.8898,101.4232,479.2065,95.4956" style="stroke: #383838; stroke-width: 1.0;"/><path d="M411.6061,256.5484 C404.8696,270.9357 397.953,285.7076 391.8688,298.7016 " fill="none" style="stroke: #383838; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="405.4525,253.1828,420.273,238.0384,418.1315,259.1195,405.4525,253.1828" style="stroke: #383838; stroke-width: 1.0;"/><path d="M373,399.0879 C373,414.3864 373,429.8963 373,441.9714 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="none" points="366.0001,399.0541,373,379.054,380.0001,399.054,366.0001,399.0541" style="stroke: #383838; stroke-width: 1.0;"/><path d="M284.4739,389.0452 C252.0324,407.3848 216.9179,427.2356 190.8513,441.9714 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="none" points="281.292,382.8028,302.1474,379.054,288.1818,394.9902,281.292,382.8028" style="stroke: #383838; stroke-width: 1.0;"/><path d="M528.2842,99.481 C557.3789,192.8727 614.9205,377.577 634.938,441.8316 " fill="none" style="stroke: #383838; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="521.5479,101.3925,522.2824,80.2155,534.9143,97.2283,521.5479,101.3925" style="stroke: #383838; stroke-width: 1.0;"/><path d="M427.2754,608 C432.0364,608 436.7974,608 441.5583,608 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="none" points="441.7701,600.9999,461.7701,608,441.77,614.9999,441.7701,600.9999" style="stroke: #383838; stroke-width: 1.0;"/><path d="M591.8622,489.4226 C551.8198,509.5448 494.4271,538.8748 445,566 C427.239,575.7471 407.3709,587.3944 393.0121,595.9484 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="#383838" points="596.6577,487.0151,586.8197,487.4782,592.1892,489.2584,590.409,494.6278,596.6577,487.0151" style="stroke: #383838; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="41" x="531" y="532.0669">create</text><path d="M373,492.4933 C373,523.869 373,573.3043 373,595.9477 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="#383838" points="373,487.238,369,496.238,373,492.238,377,496.238,373,487.238" style="stroke: #383838; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="41" x="374" y="532.0669">create</text><path d="M190.4574,490.0051 C238.7078,521.194 318.3835,572.6961 354.3546,595.9477 " fill="none" style="stroke: #383838; stroke-width: 1.0;"/><polygon fill="#383838" points="186.1766,487.238,191.5636,495.483,190.3757,489.9523,195.9065,488.7644,186.1766,487.238" style="stroke: #383838; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="41" x="256" y="532.0669">create</text></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="656px" preserveAspectRatio="none" style="width:887px;height:656px;" version="1.1" viewBox="0 0 887 656" width="887px" zoomAndPan="magnify"><defs/><g><!--MD5=[46ae0339bfba42c7a5e98991a49769f2]
+class HtmlSection--><rect codeLine="22" fill="#F8F8F8" height="44.7734" id="HtmlSection" style="stroke:#383838;stroke-width:1.5;" width="225" x="7" y="441"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="75" x="82" y="457.1387">HtmlSection</text><line style="stroke:#383838;stroke-width:1.5;" x1="8" x2="231" y1="464.9688" y2="464.9688"/><ellipse cx="18" cy="475.9688" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="199" x="27" y="479.1792">HtmlSection(id: String, title: String)</text><!--MD5=[e44639d3e1b03796718a18f4a2ccc735]
+class HtmlSpecificationItem--><rect codeLine="26" fill="#F8F8F8" height="44.7734" id="HtmlSpecificationItem" style="stroke:#383838;stroke-width:1.5;" width="319" x="451" y="441"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="135" x="543" y="457.1387">HtmlSpecificationItem</text><line style="stroke:#383838;stroke-width:1.5;" x1="452" x2="769" y1="464.9688" y2="464.9688"/><ellipse cx="462" cy="475.9688" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="293" x="471" y="479.1792">HtmlSpecificationItem(LinkedSpecificationItem item)</text><!--MD5=[c728287866a6a4d5698127d1b32edeca]
+class HtmlView--><rect codeLine="30" fill="#F8F8F8" height="44.7734" id="HtmlView" style="stroke:#383838;stroke-width:1.5;" width="149" x="267" y="441"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="56" x="313.5" y="457.1387">HtmlView</text><line style="stroke:#383838;stroke-width:1.5;" x1="268" x2="415" y1="464.9688" y2="464.9688"/><ellipse cx="278" cy="475.9688" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="123" x="287" y="479.1792">HtmlView(title: String)</text><!--MD5=[5b318aaa4ec6f0de86f7834277a5ef17]
+class Viewable--><rect codeLine="3" fill="#F8F8F8" height="71.5469" id="Viewable" style="stroke:#383838;stroke-width:1.5;" width="124" x="417.5" y="7"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="70" x="444.5" y="23.1387">«interface»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="56" x="451.5" y="37.1074">Viewable</text><line style="stroke:#383838;stroke-width:1.5;" x1="418.5" x2="540.5" y1="44.9375" y2="44.9375"/><ellipse cx="428.5" cy="55.9375" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="46" x="437.5" y="59.1479">render()</text><ellipse cx="428.5" cy="68.7422" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="98" x="437.5" y="71.9526">render(level : int)</text><!--MD5=[6bd055d908f3696ebee148bb11db729f]
+class ViewableContainer--><rect codeLine="8" fill="#F8F8F8" height="97.1563" id="ViewableContainer" style="stroke:#383838;stroke-width:1.5;" width="157" x="333" y="140"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="70" x="376.5" y="156.1387">«interface»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="117" x="353" y="170.1074">ViewableContainer</text><line style="stroke:#383838;stroke-width:1.5;" x1="334" x2="489" y1="177.9375" y2="177.9375"/><ellipse cx="344" cy="188.9375" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="109" x="353" y="192.1479">add(Viewable child)</text><polygon fill="#EAEAEA" points="344,196.7422,348,200.7422,344,204.7422,340,200.7422" style="stroke:#8C8C8C;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131" x="353" y="204.9526">renderBeforeChildren()</text><polygon fill="#EAEAEA" points="344,209.5469,348,213.5469,344,217.5469,340,213.5469" style="stroke:#8C8C8C;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="93" x="353" y="217.7573">renderChildren()</text><polygon fill="#EAEAEA" points="344,222.3516,348,226.3516,344,230.3516,340,226.3516" style="stroke:#8C8C8C;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="120" x="353" y="230.562">renderAfterChildren()</text><!--MD5=[0d35df950502548cdcaacf78f1e0d2d6]
+class AbstractViewContainer--><rect codeLine="15" fill="#F8F8F8" height="79.5469" id="AbstractViewContainer" style="stroke:#383838;stroke-width:1.5;" width="171" x="256" y="298"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="66" x="308.5" y="314.1387">«abstract»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="142" x="270.5" y="328.1074">AbstractViewContainer</text><line style="stroke:#383838;stroke-width:1.5;" x1="257" x2="426" y1="335.9375" y2="335.9375"/><polygon fill="none" points="267,341.9375,271,345.9375,267,349.9375,263,345.9375" style="stroke:#8C8C8C;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="145" x="276" y="350.1479">children : List&lt;Viewable&gt;</text><line style="stroke:#383838;stroke-width:1.5;" x1="257" x2="426" y1="356.7422" y2="356.7422"/><ellipse cx="267" cy="367.7422" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="109" x="276" y="370.9526">add(Viewable child)</text><!--MD5=[f2ac529a601d28ba34a27e4d3bda87b3]
+class HtmlViewFactory--><rect codeLine="35" fill="#F8F8F8" height="23.9688" id="HtmlViewFactory" style="stroke:#383838;stroke-width:1.5;" width="108" x="287.5" y="595"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102" x="290.5" y="611.1387">HtmlViewFactory</text><!--MD5=[b0ae02b67419a2545fe029771fc00256]
+class AbstractViewFactory--><rect codeLine="38" fill="#F8F8F8" height="84.3516" id="AbstractViewFactory" style="stroke:#383838;stroke-width:1.5;" width="450" x="430.5" y="565"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="66" x="622.5" y="581.1387">«abstract»</text><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="128" x="591.5" y="595.1074">AbstractViewFactory</text><line style="stroke:#383838;stroke-width:1.5;" x1="431.5" x2="879.5" y1="602.9375" y2="602.9375"/><ellipse cx="441.5" cy="613.9375" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="250" x="450.5" y="617.1479">createView(title: String) : ViewableContainer</text><ellipse cx="441.5" cy="626.7422" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="326" x="450.5" y="629.9526">createSection(id: String, title: String) : ViewableContainer</text><ellipse cx="441.5" cy="639.5469" fill="#A6A6A6" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="424" x="450.5" y="642.7573">createSpecificationItem(item: LinkedSpecificationItem) : ViewableContainer</text><!--MD5=[5455e93f1bbd4e3e47efb0328da2e262]
+class ContentType--><rect codeLine="44" fill="#F8F8F8" height="57.5781" id="ContentType" style="stroke:#383838;stroke-width:1.5;" width="91" x="577" y="14"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="79" x="583" y="30.1387">ContentType</text><line style="stroke:#383838;stroke-width:1.5;" x1="578" x2="667" y1="37.9688" y2="37.9688"/><ellipse cx="588" cy="48.9688" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;fill:none;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="65" x="597" y="52.1792">PLAIN_TEXT</text><ellipse cx="588" cy="61.7734" rx="3" ry="3" style="stroke:#545454;stroke-width:1.0;fill:none;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="30" x="597" y="64.9839">HTML</text><!--MD5=[3bec5a3521b42388bfb2a5dd5b060f43]
+reverse link Viewable to ViewableContainer--><path codeLine="49" d="M454.26,97.27 C447.66,111.2 440.58,126.13 434.12,139.76 " fill="none" id="Viewable-backto-ViewableContainer" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="none" points="447.98,94.18,462.87,79.1,460.63,100.18,447.98,94.18" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[75d42fda46ce301f923e2b5e63726d39]
+reverse link ViewableContainer to AbstractViewContainer--><path codeLine="50" d="M380.03,255.81 C373.23,270.13 366.26,284.83 360.14,297.72 " fill="none" id="ViewableContainer-backto-AbstractViewContainer" style="stroke:#383838;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="none" points="373.87,252.46,388.77,237.39,386.52,258.46,373.87,252.46" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[1713c7098d8eaf0835a134d823f7ac25]
+reverse link AbstractViewContainer to HtmlView--><path codeLine="51" d="M341.5,398.11 C341.5,413.42 341.5,428.95 341.5,440.92 " fill="none" id="AbstractViewContainer-backto-HtmlView" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="none" points="334.5,398.08,341.5,378.08,348.5,398.08,334.5,398.08" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[c1592ad5542688c7e787698d62479785]
+reverse link AbstractViewContainer to HtmlSection--><path codeLine="52" d="M253.76,387.81 C220.66,406.22 184.68,426.24 158.3,440.92 " fill="none" id="AbstractViewContainer-backto-HtmlSection" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="none" points="250.38,381.68,271.26,378.08,257.18,393.92,250.38,381.68" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[a8e557ae5c8f3b5bcb0c66a43f7e1e98]
+reverse link Viewable to HtmlSpecificationItem--><path codeLine="53" d="M496.56,98.5 C525.72,191.64 583.89,377.5 603.71,440.8 " fill="none" id="Viewable-backto-HtmlSpecificationItem" style="stroke:#383838;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="none" points="489.85,100.5,490.56,79.32,503.21,96.32,489.85,100.5" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[afce6166f88d0d81bc9bb9587ecd2efc]
+link HtmlViewFactory to AbstractViewFactory--><path codeLine="54" d="M395.78,607 C400.54,607 405.3,607 410.06,607 " fill="none" id="HtmlViewFactory-to-AbstractViewFactory" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="none" points="410.27,600,430.27,607,410.27,614,410.27,600" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[b4bf09e67ff4360acad009206238f235]
+reverse link HtmlSpecificationItem to HtmlViewFactory--><path codeLine="55" d="M561.98,488.48 C521.91,508.46 463.67,537.94 413.5,565 C395.27,574.83 374.77,586.58 360.32,594.97 " fill="none" id="HtmlSpecificationItem-backto-HtmlViewFactory" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="566.77,486.09,556.9307,486.5246,562.295,488.3203,560.4993,493.6846,566.77,486.09" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="41" x="500.5" y="531.0669">create</text><!--MD5=[6ead5535cc134abec56b11136be3cc7a]
+reverse link HtmlView to HtmlViewFactory--><path codeLine="56" d="M341.5,491.52 C341.5,522.7 341.5,572.55 341.5,594.72 " fill="none" id="HtmlView-backto-HtmlViewFactory" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="341.5,486.3,337.5,495.3,341.5,491.3,345.5,495.3,341.5,486.3" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="41" x="342.5" y="531.0669">create</text><!--MD5=[ea8907f748660fa2a0207faa56d86210]
+reverse link HtmlSection to HtmlViewFactory--><path codeLine="57" d="M158.02,489.05 C206.72,520.09 288.51,572.22 324.09,594.9 " fill="none" id="HtmlSection-backto-HtmlViewFactory" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="153.7,486.3,159.1401,494.5101,157.9165,488.9872,163.4395,487.7636,153.7,486.3" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="41" x="224.5" y="531.0669">create</text><!--MD5=[2b1be03c2687d5fa3d6291623b57a13d]
+@startuml
+!include ../clean.skin
+
+interface Viewable <<interface>> {
+  + render()
+  + render(level : int)
+}
+
+interface ViewableContainer <<interface>> {
+  + add(Viewable child)
+  # renderBeforeChildren()
+  # renderChildren()
+  # renderAfterChildren()
+}
+
+abstract class AbstractViewContainer <<abstract>> {
+  # children : List<Viewable>
+  + add(Viewable child)
+}
+
+
+together {
+    class HtmlSection {
+        + HtmlSection(id: String, title: String)
+    }
+    
+    class HtmlSpecificationItem {
+        + HtmlSpecificationItem(LinkedSpecificationItem item)
+    }
+    
+    class HtmlView {
+        + HtmlView(title: String)
+    }
+}
+
+class HtmlViewFactory{
+}
+
+abstract class AbstractViewFactory <<abstract>> {
+    + createView(title: String) : ViewableContainer
+    + createSection(id: String, title: String) : ViewableContainer
+    + createSpecificationItem(item: LinkedSpecificationItem) : ViewableContainer
+}
+
+enum ContentType {
+    + PLAIN_TEXT
+    + HTML
+}
+
+ViewableContainer -u-|> Viewable
+AbstractViewContainer .u.|> ViewableContainer
+HtmlView -u-|> AbstractViewContainer
+HtmlSection -u-|> AbstractViewContainer
+HtmlSpecificationItem .u.|> Viewable
+HtmlViewFactory -r-|> AbstractViewFactory
+HtmlViewFactory -u-> HtmlSpecificationItem : create
+HtmlViewFactory -u-> HtmlView : create
+HtmlViewFactory -u-> HtmlSection : create
+
+@enduml
+
+@startuml
+skinparam monochrome true
+skinparam style strictuml
+
+!pragma horizontalLineBetweenDifferentPackageAllowed
+
+hide empty methods
+hide empty attributes
+
+
+interface Viewable <<interface>> {
+  + render()
+  + render(level : int)
+}
+
+interface ViewableContainer <<interface>> {
+  + add(Viewable child)
+  # renderBeforeChildren()
+  # renderChildren()
+  # renderAfterChildren()
+}
+
+abstract class AbstractViewContainer <<abstract>> {
+  # children : List<Viewable>
+  + add(Viewable child)
+}
+
+
+together {
+    class HtmlSection {
+        + HtmlSection(id: String, title: String)
+    }
+    
+    class HtmlSpecificationItem {
+        + HtmlSpecificationItem(LinkedSpecificationItem item)
+    }
+    
+    class HtmlView {
+        + HtmlView(title: String)
+    }
+}
+
+class HtmlViewFactory{
+}
+
+abstract class AbstractViewFactory <<abstract>> {
+    + createView(title: String) : ViewableContainer
+    + createSection(id: String, title: String) : ViewableContainer
+    + createSpecificationItem(item: LinkedSpecificationItem) : ViewableContainer
+}
+
+enum ContentType {
+    + PLAIN_TEXT
+    + HTML
+}
+
+ViewableContainer -u-|> Viewable
+AbstractViewContainer .u.|> ViewableContainer
+HtmlView -u-|> AbstractViewContainer
+HtmlSection -u-|> AbstractViewContainer
+HtmlSpecificationItem .u.|> Viewable
+HtmlViewFactory -r-|> AbstractViewFactory
+HtmlViewFactory -u-> HtmlSpecificationItem : create
+HtmlViewFactory -u-> HtmlView : create
+HtmlViewFactory -u-> HtmlSection : create
+
+@enduml
+
+PlantUML version 1.2021.5(Sun Apr 25 13:20:28 CEST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

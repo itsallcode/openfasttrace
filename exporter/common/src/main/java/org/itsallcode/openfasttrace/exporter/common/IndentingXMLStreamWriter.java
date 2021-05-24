@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.exporter.specobject;
+package org.itsallcode.openfasttrace.exporter.common;
 
 /*-
  * #%L
@@ -22,13 +22,12 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  * #L%
  */
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
+public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter implements AutoCloseable
 {
     private enum State
     {
@@ -150,6 +149,12 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         super.writeEndElement();
     }
 
+    @Override
+    public void close() throws XMLStreamException
+    {
+        super.close();
+    }
+
     private void onEndElement() throws XMLStreamException
     {
         depth--;
@@ -188,4 +193,5 @@ class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter
         state = State.SEEN_DATA;
         super.writeCData(data);
     }
+
 }

@@ -34,6 +34,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.exporter.Exporter;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.exporter.common.IndentingXMLStreamWriter;
 
 /**
  * {@link ExporterFactory} for creating {@link Exporter}s that support writing
@@ -65,9 +66,9 @@ public class SpecobjectExporterFactory extends ExporterFactory
         {
             return this.xmlOutputFactory.createXMLStreamWriter(writer);
         }
-        catch (final XMLStreamException e)
+        catch (final XMLStreamException exception)
         {
-            throw new ExporterException("Error creating xml stream writer for writer " + writer, e);
+            throw new ExporterException("Error creating XML stream writer for writer " + writer, exception);
         }
     }
 }

@@ -10,12 +10,12 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,9 +24,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITEST;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.mockito.Mockito.when;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -55,13 +53,18 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Mock
     private LinkedSpecificationItem itemMockC;
 
+    @Mock
+    private SpecificationItem itemMock;
+
     @Override
     @BeforeEach
     public void prepareEachTest()
     {
         super.prepareEachTest();
         when(this.itemMockB.getId()).thenReturn(ITEM_B_ID);
+        when(this.itemMockB.getItem()).thenReturn(itemMock);
         when(this.itemMockC.getId()).thenReturn(ITEM_C_ID);
+        when(this.itemMockC.getItem()).thenReturn(itemMock);
     }
 
     @Test
@@ -126,11 +129,13 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .addNeedsArtifactType(IMPL) //
+                .addNeedsArtifactType(ITEST) //
                 .addNeedsArtifactType(UTEST) //
                 .build();
+        final SpecificationItem coveredItem = SpecificationItem.builder()
+                .id(ITEM_B_ID)
+                .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        linkedItem.addCoveredArtifactType(IMPL);
-        linkedItem.addOverCoveredArtifactType(ITEST);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(0);
         assertOutputLines( //
@@ -139,7 +144,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "    <summary title=\"dsn~name-a~1\">" + CROSS_MARK
                         + " <b>name-a</b><small>, rev. 1, dsn</small></summary>", //
                 "    <p class=\"id\">" + ITEM_A_ID + "</p>", //
-                "    <h6>Needs: impl, <del>itest</del>, <ins>utest</ins></h6>", //
+                "    <h6>Needs: <ins>impl</ins>, <ins>itest</ins>, <ins>utest</ins></h6>", //
                 "  </details>", //
                 "</section>", //
                 "");
@@ -230,7 +235,8 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "      <h6>In: 1</h6>", //
                 "      <ul>", //
                 "        <li><a href=\"#" + ITEM_B_ID + "\">" + ITEM_B_ID
-                        + "</a> <span class=\"origin\"><a href=\"http://example.org/foo.txt\">http://example.org/foo.txt</a>:3</span></li>", //
+                        + "</a> <span class=\"origin\"><a href=\"http://example.org/foo.txt\">http://example.org/foo.txt</a>:3</span></li>",
+                //
                 "      </ul>", //
                 "    </div>", //
                 "  </details>", //

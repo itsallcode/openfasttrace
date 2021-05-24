@@ -11,6 +11,7 @@
         <module>api</module>
         <module>core</module>
         <module>product</module>
+        <module>exporter/common</module>
         <module>exporter/markdown</module>
         <module>exporter/specobject</module>
         <module>importer/markdown</module>
@@ -19,6 +20,7 @@
         <module>importer/zip</module>
         <module>reporter/plaintext</module>
         <module>reporter/html</module>
+        <module>reporter/aspec</module>
         <module>testutil</module>
     </modules>
     <build>
@@ -36,7 +38,6 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>1.16</version>
                 <configuration>
-                    <skip>true</skip>
                     <licenseName>gpl_v3</licenseName>
                     <organizationName>itsallcode.org</organizationName>
                     <inceptionYear>2016</inceptionYear>

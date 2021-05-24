@@ -39,8 +39,7 @@ public class Linker
     /**
      * Create a {@link Linker} for specification items.
      *
-     * @param items
-     *            the specification items to be linked.
+     * @param items the specification items to be linked.
      */
     public Linker(final List<SpecificationItem> items)
     {
@@ -111,14 +110,12 @@ public class Linker
             {
                 covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
                 covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
-                covered.addCoveredArtifactType(coveringArtifactType);
             }
         }
         else
         {
             covering.addLinkToItemWithStatus(covered, LinkStatus.UNWANTED);
             covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_UNWANTED);
-            covered.addOverCoveredArtifactType(coveringArtifactType);
         }
     }
 

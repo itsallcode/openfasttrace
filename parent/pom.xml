@@ -118,6 +118,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-exporter-common</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-exporter-specobject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
@@ -155,6 +161,12 @@
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-reporter-html</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-reporter-aspec</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>

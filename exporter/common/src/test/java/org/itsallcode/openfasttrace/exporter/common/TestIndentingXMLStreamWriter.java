@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.exporter.specobject;
+package org.itsallcode.openfasttrace.exporter.common;
 
 /*-
  * #%L
@@ -22,17 +22,17 @@ package org.itsallcode.openfasttrace.exporter.specobject;
  * #L%
  */
 
-import static org.mockito.Mockito.inOrder;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import static org.mockito.Mockito.inOrder;
 
 @ExtendWith(MockitoExtension.class)
 class TestIndentingXMLStreamWriter

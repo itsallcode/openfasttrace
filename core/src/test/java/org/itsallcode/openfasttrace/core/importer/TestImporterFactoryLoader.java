@@ -25,11 +25,12 @@ package org.itsallcode.openfasttrace.core.importer;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
@@ -78,10 +79,10 @@ class TestImporterFactoryLoader
     }
 
     @Test
-    void testNoFactoryRegisteredThrowsException()
+    void testNoFactoryRegisteredReturnsNoImporter()
     {
         simulateFactories();
-        assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
+        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
     }
 
     @Test
@@ -99,15 +100,15 @@ class TestImporterFactoryLoader
     }
 
     @Test
-    void testMultipleMatchingFactoriesFoundThrowsException()
+    void testMultipleMatchingFactoriesFoundReturnNoImporter()
     {
         simulateFactories(this.supportedFactory1, this.supportedFactory1);
-        assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
+        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
     }
 
     private void assertFactoryFound(final ImporterFactory expectedFactory)
     {
-        assertThat(this.loader.getImporterFactory(this.file), sameInstance(expectedFactory));
+        assertThat(this.loader.getImporterFactory(this.file).get(), sameInstance(expectedFactory));
     }
 
     private void simulateFactories(final ImporterFactory... factories)

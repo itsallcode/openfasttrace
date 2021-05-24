@@ -22,6 +22,8 @@ package org.itsallcode.openfasttrace.api.importer;
  * #L%
  */
 
+
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;

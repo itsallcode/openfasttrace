@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
@@ -78,7 +79,7 @@ class TestImporterService
         this.file = RealFileInput.forPath(Paths.get("dir", "file"));
 
         when(this.factoryLoaderMock.getImporterFactory(any(InputFile.class)))
-                .thenReturn(this.importerFactoryMock);
+                .thenReturn(Optional.of(this.importerFactoryMock));
         when(this.importerFactoryMock.createImporter(any(), any())).thenReturn(this.importerMock);
     }
 

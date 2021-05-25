@@ -6,7 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.1.0]
+## [3.2.0] - 2021-05-24
+
+### Added
+
+- Aspec (augmented specobject) exporter [#260](https://github.com/itsallcode/openfasttrace/issues/260) [#261](https://github.com/itsallcode/openfasttrace/pull/261)
+
+### Changed
+
+- Importing of files for which no importer or more than one importer is found don't let the build fail [#258](https://github.com/itsallcode/openfasttrace/pull/258)
+
+
+## [3.1.0] - 2021-05-20
 
 ### Changed
 

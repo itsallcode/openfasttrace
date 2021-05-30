@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -66,7 +67,7 @@ public class ASpecReport implements Reportable
     @Override
     public void renderToStream(final OutputStream outputStream)
     {
-        final XMLStreamWriter xmlWriter = createXmlWriter(new OutputStreamWriter(outputStream));
+        final XMLStreamWriter xmlWriter = createXmlWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
         final IndentingXMLStreamWriter indentingXmlWriter = new IndentingXMLStreamWriter(xmlWriter);
 
         LOG.fine("aspec starting");

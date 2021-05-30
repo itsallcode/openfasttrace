@@ -158,7 +158,7 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`.
 1. Add changes in new version to `CHANGELOG.md`.
 1. Commit and push changes
-1. Run this command (will take up to 10 minutes)
+1. Run this command
 
     ```bash
     mvn clean deploy -Possrh
@@ -166,9 +166,5 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
-1. Release the artifacts at Maven Central:
-    1. Login at [oss.sonatype.org](https://oss.sonatype.org).
-    1. Go to the [staging repositories](https://oss.sonatype.org/#stagingRepositories).
-    1. Select repository named `orgitsallcode-*` and click the "Release" button.
-    1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
+1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
 

@@ -12,7 +12,7 @@
     <properties>
         <revision>3.2.0</revision>
         <java.version>11</java.version>
-        <junit.version>5.7.1</junit.version>
+        <junit.version>5.7.2</junit.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

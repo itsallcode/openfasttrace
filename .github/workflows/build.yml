@@ -49,3 +49,10 @@ jobs:
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Archive oft binary
+      uses: actions/upload-artifact@v2
+      if: ${{ env.DEFAULT_JAVA == matrix.java }}
+      with:
+        name: oft
+        path: product/target/openfasttrace-*.jar

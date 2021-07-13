@@ -53,10 +53,10 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.c
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-3.2.0.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-3.2.1.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.2.0/openfasttrace-3.2.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.2.0/openfasttrace-3.2.0.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.2.1/openfasttrace-3.2.1.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.2.1/openfasttrace-3.2.1.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 

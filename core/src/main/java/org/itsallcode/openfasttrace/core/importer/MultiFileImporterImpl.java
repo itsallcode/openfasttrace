@@ -135,14 +135,13 @@ public class MultiFileImporterImpl implements MultiFileImporter
     private Optional<Importer> createImporterIfPossible(final InputFile file, final SpecificationListBuilder builder)
     {
         final Optional<ImporterFactory> importerFactory = this.factoryLoader.getImporterFactory(file);
-        final Optional<Importer> importer = importerFactory.isPresent() ?
-                Optional.of(importerFactory.get().createImporter(file, builder)) :
-                Optional.empty();
+        final Optional<Importer> importer = importerFactory.isPresent()
+                ? Optional.of(importerFactory.get().createImporter(file, builder))
+                : Optional.empty();
 
-        LOG.fine(() -> ( importer.isPresent() ?
-                            "Created importer of type '" + importer.getClass().getSimpleName() :
-                            "No import" )
-                       + "' for file '" + file + "'");
+        LOG.fine(() -> (importer.isPresent() ? "Created importer of type '" + importer.getClass().getSimpleName()
+                : "No import")
+                + "' for file '" + file + "'");
         return importer;
     }
 

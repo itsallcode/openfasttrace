@@ -195,7 +195,7 @@ class TestLinkedSpecificationItem
     }
 
     @Test
-        // [utest->dsn~tracing.defect-items~2]
+    // [utest->dsn~tracing.defect-items~2]
     void testIsDefect_FalseBecauseRejected()
     {
         final LinkedSpecificationItem item = new LinkedSpecificationItem(this.itemMock);

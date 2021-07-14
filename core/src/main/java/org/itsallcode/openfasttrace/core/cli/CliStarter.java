@@ -38,7 +38,9 @@ public class CliStarter
 
     /**
      * Create a new cli starter.
-     * @param arguments the arguments for the starter.
+     * 
+     * @param arguments
+     *            the arguments for the starter.
      */
     public CliStarter(final CliArguments arguments)
     {

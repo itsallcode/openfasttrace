@@ -47,7 +47,8 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * 
      * @param id
      *            unique container ID
-     * @param title container title
+     * @param title
+     *            container title
      */
     public AbstractViewContainer(final String id, final String title)
     {

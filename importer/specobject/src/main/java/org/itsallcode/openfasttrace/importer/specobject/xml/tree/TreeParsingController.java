@@ -30,7 +30,9 @@ public interface TreeParsingController
 {
     /**
      * Set a new handler delegate.
-     * @param newDelegate the new delegate.
+     * 
+     * @param newDelegate
+     *            the new delegate.
      */
     void setDelegate(TreeContentHandler newDelegate);
 

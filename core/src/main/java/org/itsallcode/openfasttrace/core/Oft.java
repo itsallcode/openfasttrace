@@ -90,7 +90,7 @@ public interface Oft
      *            export settings
      */
     void exportToPath(final List<SpecificationItem> items, final Path path,
-                      ExportSettings settings);
+            ExportSettings settings);
 
     /**
      * Generate a report with default settings

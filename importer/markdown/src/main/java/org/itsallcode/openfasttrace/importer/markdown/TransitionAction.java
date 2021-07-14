@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
  * #L%
  */
 
-
 @FunctionalInterface
 interface TransitionAction
 {

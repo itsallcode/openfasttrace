@@ -29,9 +29,9 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
  * #L%
  */
 
- /**
-  * Configuration for an {@link Importer}.
-  */
+/**
+ * Configuration for an {@link Importer}.
+ */
 public class ImportSettings
 {
     private final List<Path> inputs;

@@ -31,7 +31,8 @@ import java.util.stream.Collectors;
 import org.itsallcode.openfasttrace.api.core.*;
 
 /**
- * Links a given list of {@link SpecificationItem}s and returns {@link LinkedSpecificationItem}s.
+ * Links a given list of {@link SpecificationItem}s and returns
+ * {@link LinkedSpecificationItem}s.
  */
 public class Linker
 {
@@ -42,7 +43,8 @@ public class Linker
     /**
      * Create a {@link Linker} for specification items.
      *
-     * @param items the specification items to be linked.
+     * @param items
+     *            the specification items to be linked.
      */
     public Linker(final List<SpecificationItem> items)
     {

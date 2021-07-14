@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.importer.specobject;
  * #L%
  */
 
-
 import static java.util.Arrays.asList;
 
 import java.util.List;

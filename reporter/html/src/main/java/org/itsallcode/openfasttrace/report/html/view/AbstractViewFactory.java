@@ -30,10 +30,17 @@ import java.io.PrintStream;
  */
 public abstract class AbstractViewFactory implements ViewFactory
 {
+    /** The output stream. */
     protected final PrintStream outputStream;
 
-    protected AbstractViewFactory(final PrintStream outputStream)
+    /**
+     * Create a new instance.
+     * 
+     * @param stream
+     *            the output stream.
+     */
+    protected AbstractViewFactory(final PrintStream stream)
     {
-        this.outputStream = outputStream;
+        this.outputStream = stream;
     }
 }

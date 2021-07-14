@@ -77,7 +77,7 @@ public class HtmlReport implements Reportable
         view.render();
     }
 
-    protected ViewableContainer createDetails(final ViewFactory factory)
+    private ViewableContainer createDetails(final ViewFactory factory)
     {
         final ViewableContainer details = factory.createReportDetails();
         final List<LinkedSpecificationItem> items = getSortedItems();
@@ -85,7 +85,7 @@ public class HtmlReport implements Reportable
         return details;
     }
 
-    protected List<LinkedSpecificationItem> getSortedItems()
+    private List<LinkedSpecificationItem> getSortedItems()
     {
         final List<LinkedSpecificationItem> items = this.trace.getItems();
         items.sort(Comparator.comparing(LinkedSpecificationItem::getArtifactType)
@@ -93,7 +93,7 @@ public class HtmlReport implements Reportable
         return items;
     }
 
-    protected void addSectionedItems(final ViewFactory factory, final ViewableContainer view,
+    private void addSectionedItems(final ViewFactory factory, final ViewableContainer view,
             final List<LinkedSpecificationItem> items)
     {
         String artifactType = "\0";
@@ -112,7 +112,7 @@ public class HtmlReport implements Reportable
         }
     }
 
-    protected ViewableContainer createSummary(final ViewableContainer view,
+    private ViewableContainer createSummary(final ViewableContainer view,
             final ViewFactory factory)
     {
         final ViewableContainer summary = factory.createReportSummary();

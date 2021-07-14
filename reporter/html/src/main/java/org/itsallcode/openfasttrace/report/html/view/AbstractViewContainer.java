@@ -30,9 +30,9 @@ import java.util.List;
  */
 public abstract class AbstractViewContainer implements ViewableContainer
 {
-    protected List<Viewable> children;
-    protected final String id;
-    protected final String title;
+    private List<Viewable> children;
+    private final String id;
+    private final String title;
 
     /**
      * Create a new instance of type {@link AbstractViewContainer}.

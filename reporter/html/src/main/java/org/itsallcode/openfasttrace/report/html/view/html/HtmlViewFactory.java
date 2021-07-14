@@ -36,17 +36,30 @@ import org.itsallcode.openfasttrace.report.html.view.AbstractViewFactory;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 
+/**
+ * Factory that creates an HTML OFT view (e.g. for reports) and provides an
+ * output stream.
+ */
 public class HtmlViewFactory extends AbstractViewFactory
 {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final URL cssUrl;
 
-    HtmlViewFactory(final PrintStream stream, final URL cssUrl)
+    private HtmlViewFactory(final PrintStream stream, final URL cssUrl)
     {
         super(stream);
         this.cssUrl = cssUrl;
     }
 
+    /**
+     * Create a new instance.
+     * 
+     * @param stream
+     *            the output stream.
+     * @param cssURL
+     *            the URL of the CSS file to include in the HTML report.
+     * @return a new {@link HtmlViewFactory}.
+     */
     public static HtmlViewFactory create(final OutputStream stream, final URL cssURL)
     {
         if (stream instanceof PrintStream)

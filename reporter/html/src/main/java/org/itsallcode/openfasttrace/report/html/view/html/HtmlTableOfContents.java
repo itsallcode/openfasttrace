@@ -27,13 +27,13 @@ import java.io.PrintStream;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 
-public class HtmlTableOfContents implements Viewable
+class HtmlTableOfContents implements Viewable
 {
 
     private final PrintStream stream;
     private final ViewableContainer from;
 
-    public HtmlTableOfContents(final PrintStream outputStream, final ViewableContainer from)
+    HtmlTableOfContents(final PrintStream outputStream, final ViewableContainer from)
     {
         this.stream = outputStream;
         this.from = from;

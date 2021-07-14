@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 
+/**
+ * Links a given list of {@link SpecificationItem}s and returns {@link LinkedSpecificationItem}s.
+ */
 public class Linker
 {
     private final List<LinkedSpecificationItem> linkedItems;

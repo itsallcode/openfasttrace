@@ -30,6 +30,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  */
 public class MarkdownImporterFactory extends RegexMatchingImporterFactory
 {
+    /** Creates a new instance. */
     public MarkdownImporterFactory()
     {
         super("(?i).*\\.markdown", "(?i).*\\.md");

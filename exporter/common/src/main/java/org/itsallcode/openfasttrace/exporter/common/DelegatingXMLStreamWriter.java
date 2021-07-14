@@ -26,7 +26,7 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-public class DelegatingXMLStreamWriter implements XMLStreamWriter
+class DelegatingXMLStreamWriter implements XMLStreamWriter
 {
     private final XMLStreamWriter writer;
 

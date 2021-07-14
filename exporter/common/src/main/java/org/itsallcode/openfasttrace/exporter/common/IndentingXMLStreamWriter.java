@@ -27,6 +27,10 @@ import javax.xml.stream.XMLStreamWriter;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * An {@link XMLStreamWriter} that wraps another {@link XMLStreamWriter} and
+ * indents the output.
+ */
 public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter implements AutoCloseable
 {
     private enum State
@@ -42,6 +46,12 @@ public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter implemen
 
     private int depth = 0;
 
+    /**
+     * Create an new instance wrapping a delegate.
+     * 
+     * @param writer
+     *            the delegate writer.
+     */
     public IndentingXMLStreamWriter(XMLStreamWriter writer)
     {
         super(writer);

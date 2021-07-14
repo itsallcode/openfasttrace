@@ -38,7 +38,7 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig;
 /**
  * {@link Matcher} for {@link SpecificationItemId}
  */
-class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId>
+public class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId>
 {
     private SpecificationItemIdMatcher(final SpecificationItemId expected)
     {
@@ -49,6 +49,14 @@ class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId
                 .build());
     }
 
+    /**
+     * Factory method for a matcher that matches a given
+     * {@link SpecificationItemId}.
+     *
+     * @param id
+     *            the expected id.
+     * @return a id matcher.
+     */
     @Factory
     public static Matcher<SpecificationItemId> equalTo(final SpecificationItemId id)
     {

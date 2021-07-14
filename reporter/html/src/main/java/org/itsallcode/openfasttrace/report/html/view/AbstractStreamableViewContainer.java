@@ -32,19 +32,24 @@ public abstract class AbstractStreamableViewContainer extends AbstractViewContai
 {
     protected final PrintStream stream;
 
-    public AbstractStreamableViewContainer(final PrintStream stream)
+    protected AbstractStreamableViewContainer(final PrintStream stream)
     {
-        super();
         this.stream = stream;
     }
 
-    public AbstractStreamableViewContainer(final PrintStream stream, final String id,
+    protected AbstractStreamableViewContainer(final PrintStream stream, final String id,
             final String title)
     {
         super(id, title);
         this.stream = stream;
     }
 
+    /**
+     * Render the container.
+     * 
+     * @param level
+     *            the indentation level.
+     */
     public void renderIndentation(final int level)
     {
         this.stream.print(IndentationHelper.createIndentationPrefix(level));

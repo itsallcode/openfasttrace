@@ -35,6 +35,9 @@ import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 
+/**
+ * An HTML report.
+ */
 public class HtmlReport implements Reportable
 {
     private final Trace trace;

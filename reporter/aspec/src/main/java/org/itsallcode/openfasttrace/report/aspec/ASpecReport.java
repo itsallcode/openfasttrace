@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-public class ASpecReport implements Reportable
+class ASpecReport implements Reportable
 {
     private static final Logger LOG = Logger.getLogger(ASpecReport.class.getName());
 
@@ -57,7 +57,7 @@ public class ASpecReport implements Reportable
      * @param trace   trace to be reported on
      * @param context configuration options
      */
-    public ASpecReport(final Trace trace, final ReporterContext context)
+    ASpecReport(final Trace trace, final ReporterContext context)
     {
         this.trace = trace;
         this.newline = context.getSettings().getNewline();

@@ -42,6 +42,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
  */
 public class CliArguments
 {
+    /** Filter in command line arguments matching items with no tags. */
     public static final String NO_TAGS_MARKER = "_";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
@@ -59,6 +60,13 @@ public class CliArguments
     private boolean showOrigin;
     private final DirectoryService directoryService;
 
+    /**
+     * Create new {@link CliArguments}.
+     * 
+     * @param directoryService
+     *            the directory service used for evaluating command line
+     *            arguments.
+     */
     public CliArguments(final DirectoryService directoryService)
     {
         this.directoryService = directoryService;

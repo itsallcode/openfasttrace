@@ -46,6 +46,12 @@ public class ImporterFactoryLoader
 
     private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
 
+    /**
+     * Creates a new loader.
+     * 
+     * @param serviceLoader
+     *            the loader used for locating importers.
+     */
     public ImporterFactoryLoader(
             final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
     {

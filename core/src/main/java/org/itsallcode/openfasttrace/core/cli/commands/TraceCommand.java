@@ -38,6 +38,7 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
  */
 public class TraceCommand extends AbstractCommand
 {
+    /** The command line action for running this command. */
     public static final String COMMAND_NAME = "trace";
 
     /**

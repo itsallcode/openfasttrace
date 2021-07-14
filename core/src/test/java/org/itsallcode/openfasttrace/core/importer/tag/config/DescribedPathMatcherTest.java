@@ -39,7 +39,7 @@ import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DescribedPathMatcherTest
+class DescribedPathMatcherTest
 {
     private DescribedPathMatcher matcher;
 

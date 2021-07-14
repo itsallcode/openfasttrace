@@ -1,5 +1,29 @@
 package org.itsallcode.openfasttrace.report.aspec;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.startsWith;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.testutil.matcher.StringRegexpMatcher;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 /*-
  * #%L
  * OpenFastTrace augmented specobject Reporter
@@ -21,32 +45,8 @@ package org.itsallcode.openfasttrace.report.aspec;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.itsallcode.openfasttrace.api.report.ReporterContext;
-import org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes;
-import org.itsallcode.openfasttrace.testutil.matcher.StringRegexpMatcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 @ExtendWith(MockitoExtension.class)
-public class TestASpecReport
+class TestASpecReport
 {
 
     private List<LinkedSpecificationItem> items;
@@ -54,7 +54,7 @@ public class TestASpecReport
     private ReporterContext reportContext;
 
     @BeforeEach
-    public void prepareEachTest()
+    void prepareEachTest()
     {
         final ReportSettings reportSettings = ReportSettings.builder()
                 .newline(Newline.UNIX)
@@ -488,7 +488,7 @@ public class TestASpecReport
     private String item(final Field... fields)
     {
         final StringBuilder result = new StringBuilder();
-        Map<Field.Type, List<Field>> fieldMap = new HashMap<>();
+        final Map<Field.Type, List<Field>> fieldMap = new HashMap<>();
         for (final Field field : fields)
         {
             final List<Field> value = fieldMap.containsKey(field.type) ? fieldMap.get(field.type) : new ArrayList<>();
@@ -560,7 +560,7 @@ public class TestASpecReport
         }
     }
 
-    public void addItemList(final Map<Field.Type, List<Field>> fields, final StringBuilder b, final Field.Type field,
+    void addItemList(final Map<Field.Type, List<Field>> fields, final StringBuilder b, final Field.Type field,
             final String fieldName, final String fieldWrapper)
     {
         if (fields.containsKey(field))
@@ -605,37 +605,31 @@ public class TestASpecReport
         private final Type type;
         private final List<String> values = new ArrayList<>();
 
-        public Field(final Type type, final String... value)
+        Field(final Type type, final String... value)
         {
             this.type = type;
             Collections.addAll(values, value);
         }
 
-        public Field(final Type type, final int value)
+        Field(final Type type, final int value)
         {
             this.type = type;
             values.add(Integer.toString(value));
         }
 
-        public Field(final Type type, final ItemStatus value)
+        Field(final Type type, final ItemStatus value)
         {
             this.type = type;
             values.add(value.toString());
         }
 
-        public Field(final Type type, final SampleArtifactTypes... value)
-        {
-            this.type = type;
-            Arrays.stream(value).forEach(entry -> values.add(entry.toString()));
-        }
-
-        public Field(final Type type, final DeepCoverageStatus value)
+        Field(final Type type, final DeepCoverageStatus value)
         {
             this.type = type;
             values.add(value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED");
         }
 
-        public Field(final Type type, final String id, final int version, ItemStatus status,
+        Field(final Type type, final String id, final int version, ItemStatus status,
                 final DeepCoverageStatus ownCoverage,
                 final DeepCoverageStatus deepCoverage,
                 final ASpecReport.CoveringStatus coveringStatus)
@@ -663,9 +657,8 @@ public class TestASpecReport
     }
 
     @Factory
-    public static Matcher<String> containsRegexp(final String regexp)
+    static Matcher<String> containsRegexp(final String regexp)
     {
         return new StringRegexpMatcher(regexp);
     }
-
 }

@@ -24,7 +24,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
-public class MarkdownTestConstants
+class MarkdownTestConstants
 {
     private MarkdownTestConstants()
     {

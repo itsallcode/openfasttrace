@@ -38,7 +38,7 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig;
 /**
  * {@link Matcher} for {@link SpecificationItemId}
  */
-public class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId>
+class SpecificationItemIdMatcher extends ConfigurableMatcher<SpecificationItemId>
 {
     private SpecificationItemIdMatcher(final SpecificationItemId expected)
     {

@@ -30,24 +30,42 @@ import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEv
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * A SAX content handler that forwards events from an {@link XMLReader} a
+ * {@link EventContentHandler}.
+ */
 public class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController
 {
     private static final Logger LOG = Logger.getLogger(ContentHandlerAdapter.class.getName());
 
-    private final String fileName;
+    private final String filePath;
     private final XMLReader xmlReader;
     private final EventContentHandler delegate;
     private Locator locator;
     private ContentHandler originalContentHandler;
 
-    public ContentHandlerAdapter(final String fileName, final XMLReader xmlReader,
+    /**
+     * Create a new instance.
+     * 
+     * @param filePath
+     *            the path of the parsed file.
+     * @param xmlReader
+     *            the {@link XMLReader}.
+     * @param delegate
+     *            the content handler to which the parsing events should be
+     *            forwared.
+     */
+    public ContentHandlerAdapter(final String filePath, final XMLReader xmlReader,
             final EventContentHandler delegate)
     {
-        this.fileName = fileName;
+        this.filePath = filePath;
         this.xmlReader = xmlReader;
         this.delegate = delegate;
     }
 
+    /**
+     * Initialize the delegate and register XML content handler.
+     */
     public void registerListener()
     {
         if (this.originalContentHandler != null)
@@ -89,7 +107,7 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
 
     private Location getCurrentLocation()
     {
-        return Location.create(this.fileName, this.locator.getLineNumber(),
+        return Location.create(this.filePath, this.locator.getLineNumber(),
                 this.locator.getColumnNumber());
     }
 

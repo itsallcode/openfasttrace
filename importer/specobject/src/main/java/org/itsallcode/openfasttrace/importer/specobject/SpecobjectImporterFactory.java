@@ -35,6 +35,9 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
 {
     private final SAXParserFactory saxParserFactory;
 
+    /**
+     * Create a new instance.
+     */
     public SpecobjectImporterFactory()
     {
         super("(?i).*\\.(xml|oreqm)");

@@ -28,7 +28,6 @@ class QNameFactory
 {
     private QNameFactory()
     {
-
     }
 
     static QName create(final String uri, final String localName, final String qName)

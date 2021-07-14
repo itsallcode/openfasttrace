@@ -28,7 +28,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 
-public class SingleSpecObjectsHandlerBuilder
+class SingleSpecObjectsHandlerBuilder
 {
     private final CallbackContentHandler handler;
     private final ImportEventListener listener;
@@ -37,7 +37,7 @@ public class SingleSpecObjectsHandlerBuilder
     private String containedFileName = null;
     private int containedLine = -1;
 
-    public SingleSpecObjectsHandlerBuilder(final ImportEventListener listener,
+    SingleSpecObjectsHandlerBuilder(final ImportEventListener listener,
             final SpecificationItemId.Builder idBuilder, final Location.Builder locationBuilder)
     {
         this.listener = listener;
@@ -46,7 +46,7 @@ public class SingleSpecObjectsHandlerBuilder
         this.handler = new CallbackContentHandler();
     }
 
-    public CallbackContentHandler build()
+    CallbackContentHandler build()
     {
         configureDataHandlers();
         configureSubTreeHanlders();

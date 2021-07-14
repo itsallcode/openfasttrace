@@ -166,7 +166,7 @@ public class Linker
             else
             {
                 throw new IllegalStateException("Used version-less match on a link to ID \"" + id
-                        + " but versions are identical.");
+                        + "\" but versions are identical.");
             }
         }
     }

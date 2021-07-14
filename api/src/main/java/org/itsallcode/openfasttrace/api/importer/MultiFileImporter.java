@@ -32,6 +32,9 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * Common interface for all importer implementations that support importing multiple files.
+ */
 public interface MultiFileImporter {
 
 	/**

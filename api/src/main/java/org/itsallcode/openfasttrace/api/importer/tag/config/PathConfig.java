@@ -52,11 +52,22 @@ public class PathConfig
         this.tagArtifactType = Objects.requireNonNull(builder.tagArtifactType, "tagArtifactType");
     }
 
+    /**
+     * @return the description of this path configuration.
+     */
     public String getDescription()
     {
         return this.pathMatcher.getDescription();
     }
 
+    /**
+     * Tells if given {@link InputFile} matches this path configuration.
+     * 
+     * @param file
+     *            the {@link InputFile} to match.
+     * @return {@code true} if, and only if, the {@link InputFile} matches this
+     *         matcher's pattern.
+     */
     public boolean matches(final InputFile file)
     {
         final boolean matches = this.pathMatcher.matches(file);
@@ -64,16 +75,25 @@ public class PathConfig
         return matches;
     }
 
+    /**
+     * @return the artifact type.
+     */
     public String getTagArtifactType()
     {
         return this.tagArtifactType;
     }
 
+    /**
+     * @return the artifact type used for covered items.
+     */
     public String getCoveredItemArtifactType()
     {
         return this.coveredItemArtifactType;
     }
 
+    /**
+     * @return the name prefix used for covered items.
+     */
     public String getCoveredItemNamePrefix()
     {
         return this.coveredItemNamePrefix;

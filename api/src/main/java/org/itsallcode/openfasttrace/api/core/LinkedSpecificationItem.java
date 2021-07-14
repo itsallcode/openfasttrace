@@ -43,8 +43,9 @@ public class LinkedSpecificationItem
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
      *
-     * @param item the actual specification item that is at the center of the
-     *             links
+     * @param item
+     *            the actual specification item that is at the center of the
+     *            links
      */
     public LinkedSpecificationItem(final SpecificationItem item)
     {
@@ -148,8 +149,10 @@ public class LinkedSpecificationItem
     /**
      * Add a link to another item with a status.
      *
-     * @param item   the item to be linked to
-     * @param status the link status
+     * @param item
+     *            the item to be linked to
+     * @param status
+     *            the link status
      */
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
@@ -211,7 +214,8 @@ public class LinkedSpecificationItem
     /**
      * Get all links to the item by item status.
      *
-     * @param status link status
+     * @param status
+     *            link status
      * @return the covered items
      */
     public List<LinkedSpecificationItem> getLinksByStatus(final LinkStatus status)
@@ -303,7 +307,8 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get a list of all artifact types for which required coverage is missing only considering approved items.
+     * Get a list of all artifact types for which required coverage is missing
+     * only considering approved items.
      *
      * @return list of uncovered artifact types.
      */
@@ -326,7 +331,8 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if all needed attribute types are covered by approved items
+     * @return <code>true</code> if all needed attribute types are covered by
+     *         approved items
      */
     public boolean isCoveredShallowWithApprovedItems()
     {
@@ -336,7 +342,7 @@ public class LinkedSpecificationItem
     /**
      * Check if this item and all items providing coverage for it are covered.
      *
-     * @return covered, uncovered or ring.
+     * @return covered, uncovered or cycle.
      */
     // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
@@ -345,6 +351,12 @@ public class LinkedSpecificationItem
                 DeepCoverageStatus.COVERED, false);
     }
 
+    /**
+     * Check if this item and all items providing coverage for it are covered,
+     * conly considering items with status {@link ItemStatus#APPROVED}.
+     *
+     * @return covered, uncovered or cycle.
+     */
     public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
     {
         return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
@@ -389,9 +401,9 @@ public class LinkedSpecificationItem
     private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(final boolean onlyAcceptApprovedItemStatus,
             final DeepCoverageStatus deepCoveredStatus)
     {
-        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved()) ?
-                DeepCoverageStatus.UNCOVERED :
-                deepCoveredStatus;
+        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
+                ? DeepCoverageStatus.UNCOVERED
+                : deepCoveredStatus;
     }
 
     private List<LinkedSpecificationItem> getIncomingItems()
@@ -424,8 +436,8 @@ public class LinkedSpecificationItem
     {
         return hasDuplicates() //
                 || (getStatus() != ItemStatus.REJECTED) //
-                && (hasBadLinks()
-                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+                        && (hasBadLinks()
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
     }
 
     /**

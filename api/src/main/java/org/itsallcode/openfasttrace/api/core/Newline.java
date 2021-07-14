@@ -24,16 +24,23 @@ package org.itsallcode.openfasttrace.api.core;
 
 import java.util.regex.Pattern;
 
-
+/**
+ * This enumeration represents the different types of newline.
+ */
 public enum Newline
 {
-    UNIX("\n"), WINDOWS("\r\n"), OLDMAC("\r");
+    /** Newline character used under Unix. */
+    UNIX("\n"),
+    /** Newline characters used under windows. */
+    WINDOWS("\r\n"),
+    /** Newline character used on old macs. */
+    OLDMAC("\r");
 
     private static final String ANY_NEWLINE_REG_EX = "\\r\\n|\\r|\\n";
     private static final Pattern ANY_NEWLINE_PATTERN = Pattern.compile(ANY_NEWLINE_REG_EX);
     private final String representation;
 
-    Newline(final String representation)
+    private Newline(final String representation)
     {
         this.representation = representation;
     }

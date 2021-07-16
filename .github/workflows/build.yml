@@ -10,15 +10,24 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [11]
+    env:
+      DEFAULT_JAVA: 11
 
     steps:
+
     - uses: actions/checkout@v2
+
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
+
     - uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: 11
+        java-version: ${{ matrix.java }}
+
     - name: Cache local Maven repository
       uses: actions/cache@v2
       with:
@@ -26,26 +35,38 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
     - name: Cache SonarQube packages
+      if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       uses: actions/cache@v2
       with:
         path: ~/.sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
+
     - name: Build with Maven
       run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install
       env:
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+
     - name: Sonar analysis
-      if: ${{ env.SONAR_TOKEN != null }}
+      if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: mvn --errors --batch-mode -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=itsallcode -Dsonar.login=$SONAR_TOKEN sonar:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
-    - name: Publish Test Report
+
+    - name: Publish Test Report for Java ${{ matrix.java }}
       uses: scacap/action-surefire-report@v1
-      if:  ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+      if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Archive oft binary
+      uses: actions/upload-artifact@v2
+      if: ${{ env.DEFAULT_JAVA == matrix.java }}
+      with:
+        name: oft
+        path: product/target/openfasttrace-*.jar

@@ -353,7 +353,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if this item and all items providing coverage for it are covered,
-     * conly considering items with status {@link ItemStatus#APPROVED}.
+     * only considering items with status {@link ItemStatus#APPROVED}.
      *
      * @return covered, uncovered or cycle.
      */

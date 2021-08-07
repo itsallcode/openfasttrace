@@ -25,11 +25,10 @@ package org.itsallcode.openfasttrace.importer.tag;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 
-public class ChecksumCalculator
+class ChecksumCalculator
 {
     private ChecksumCalculator()
     {
-
     }
 
     public static long calculateCrc32(final String value)

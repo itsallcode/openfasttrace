@@ -27,13 +27,12 @@ import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
-public class HtmlTraceSummary implements Viewable
+class HtmlTraceSummary implements Viewable
 {
-
     private final PrintStream stream;
     private final Trace trace;
 
-    public HtmlTraceSummary(final PrintStream stream, final Trace trace)
+    HtmlTraceSummary(final PrintStream stream, final Trace trace)
     {
         this.stream = stream;
         this.trace = trace;

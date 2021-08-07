@@ -22,14 +22,14 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  * #L%
  */
 
-public final class MarkdownSpanConverter
+final class MarkdownSpanConverter
 {
     // Prevent instantiation
     private MarkdownSpanConverter()
     {
     }
 
-    public static String convertLineContent(final String input)
+    static String convertLineContent(final String input)
     {
         String text = input;
         text = text.replaceAll("(    .*[\n])+", "<pre>$1</pre>");

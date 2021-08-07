@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.api.core;
  * #L%
  */
 
-public class SampleArtifactTypes
+class SampleArtifactTypes
 {
     private SampleArtifactTypes()
     {

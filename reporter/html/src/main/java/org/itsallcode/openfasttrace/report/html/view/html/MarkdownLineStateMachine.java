@@ -28,7 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-public class MarkdownLineStateMachine
+/**
+ * A state machine for converting markdown to HTML.
+ */
+public final class MarkdownLineStateMachine
 {
     private static final int INCLUDE_EMPTY_STRINGS = -1;
     private static final String P_ANY = ".*";
@@ -39,14 +42,14 @@ public class MarkdownLineStateMachine
     private static final String P_TERM = "^$";
     private final List<MarkdownLineTransition> transitions = new ArrayList<>();
 
-    public MarkdownLineStateMachine()
+    MarkdownLineStateMachine()
     {
         initializeTransitions();
     }
 
     // Duplicate strings help making this easier to understand.
     @SuppressWarnings("squid:S1192")
-    protected void initializeTransitions()
+    private void initializeTransitions()
     {
         // @formatter:off
         t(START         , PREFORMATTED  , P_PRE      , ""          , "<pre>"   , trimPre());
@@ -80,7 +83,7 @@ public class MarkdownLineStateMachine
         t(PARAGRAPH     , ORDERED_LIST  , P_OL_LI    , "</p>"      , "<ol><li>", trimEnum());
         t(PARAGRAPH     , PREFORMATTED  , P_PRE      , "</p>"      , "<pre>"   , String::trim);
         t(PARAGRAPH     , TERMINATOR    , P_TERM     , "</p>"      , ""        , empty());
-        t(PARAGRAPH     , PARAGRAPH     , P_ANY      , ""          , " "     , String::trim);
+        t(PARAGRAPH     , PARAGRAPH     , P_ANY      , ""          , " "       , String::trim);
         // @formatter:on
     }
 
@@ -91,7 +94,7 @@ public class MarkdownLineStateMachine
                 .add(new MarkdownLineTransition(from, to, pattern, prefix, postfix, conversion));
     }
 
-    public String run(final String input)
+    String run(final String input)
     {
         final StringBuilder builder = new StringBuilder();
         MarkdownLineState state = START;
@@ -115,7 +118,7 @@ public class MarkdownLineStateMachine
         return builder.toString();
     }
 
-    protected void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
+    private void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
     {
         switch (state)
         {
@@ -139,22 +142,22 @@ public class MarkdownLineStateMachine
         }
     }
 
-    protected UnaryOperator<String> empty()
+    private UnaryOperator<String> empty()
     {
         return s -> "";
     }
 
-    protected UnaryOperator<String> trimEnum()
+    private UnaryOperator<String> trimEnum()
     {
         return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
-    protected UnaryOperator<String> trimPre()
+    private UnaryOperator<String> trimPre()
     {
         return s -> s.substring(4);
     }
 
-    protected UnaryOperator<String> trimBullet()
+    private UnaryOperator<String> trimBullet()
     {
         return s -> s.replaceFirst("^ {0,3}[-+*]", "").trim();
     }

@@ -51,11 +51,24 @@ public class SpecificationListBuilder implements ImportEventListener
         this.filterSettings = filterSettings;
     }
 
+    /**
+     * Creates a new {@link SpecificationListBuilder}.
+     * 
+     * @return a new {@link SpecificationListBuilder}.
+     */
     public static SpecificationListBuilder create()
     {
         return new SpecificationListBuilder(new FilterSettings.Builder().build());
     }
 
+    /**
+     * Creates a new {@link SpecificationListBuilder} with the given
+     * {@link FilterSettings}.
+     * 
+     * @param filterSettings
+     *            the filter settings for the new builder.
+     * @return a new {@link SpecificationListBuilder}.
+     */
     public static SpecificationListBuilder createWithFilter(final FilterSettings filterSettings)
     {
         return new SpecificationListBuilder(filterSettings);
@@ -154,6 +167,9 @@ public class SpecificationListBuilder implements ImportEventListener
         return this.items;
     }
 
+    /**
+     * @return the total number of items.
+     */
     public int getItemCount()
     {
         return this.items.size();

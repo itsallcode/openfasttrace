@@ -30,12 +30,20 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
+/**
+ * Configures a SAX parser.
+ */
 public class SaxParserConfigurator
 {
     private SaxParserConfigurator()
     {
     }
 
+    /**
+     * Creates a new {@link SAXParserFactory} for secure processing.
+     * 
+     * @return the configured factory.
+     */
     public static SAXParserFactory createSaxParserFactory()
     {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();

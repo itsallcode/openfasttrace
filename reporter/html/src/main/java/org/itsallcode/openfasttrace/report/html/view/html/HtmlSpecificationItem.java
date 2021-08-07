@@ -35,14 +35,14 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
-public class HtmlSpecificationItem implements Viewable
+class HtmlSpecificationItem implements Viewable
 {
 
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
 
-    public HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item)
+    HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item)
     {
         this.stream = stream;
         this.item = item;

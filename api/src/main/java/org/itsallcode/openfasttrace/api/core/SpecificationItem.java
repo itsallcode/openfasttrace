@@ -28,6 +28,10 @@ import java.util.Objects;
 
 import javax.annotation.processing.Generated;
 
+/**
+ * A specification item that requires coverage from other items and provides
+ * coverage for other items.
+ */
 // [impl->dsn~specification-item~3]
 public class SpecificationItem
 {
@@ -85,8 +89,8 @@ public class SpecificationItem
      * 
      * <p>
      * Not to be mixed up with the
-     * {@link org.itsallcode.openfasttrace.api.core.SpecificationItem#getTitle()} of
-     * the specification item
+     * {@link org.itsallcode.openfasttrace.api.core.SpecificationItem#getTitle()}
+     * of the specification item
      * </p>
      * 
      * @return name part of the specification item ID
@@ -530,6 +534,13 @@ public class SpecificationItem
             return this;
         }
 
+        /**
+         * Set the status
+         * 
+         * @param status
+         *            the status
+         * @return this builder instance
+         */
         public Builder status(final ItemStatus status)
         {
             this.status = status;

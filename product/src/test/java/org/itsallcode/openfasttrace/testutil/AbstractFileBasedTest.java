@@ -36,6 +36,7 @@ import org.itsallcode.openfasttrace.core.cli.CliStarter;
 @SuppressWarnings("squid:S2187")
 public class AbstractFileBasedTest
 {
+    @SuppressWarnings("javadoc")
     protected void writeTextFile(final File file, final String content) throws IOException
     {
         final PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
@@ -43,6 +44,7 @@ public class AbstractFileBasedTest
         writer.close();
     }
 
+    @SuppressWarnings("javadoc")
     protected void runWithArguments(final String... args)
     {
         CliStarter.main(args);

@@ -30,21 +30,43 @@ import java.io.PrintStream;
  */
 public abstract class AbstractStreamableViewContainer extends AbstractViewContainer
 {
+    /** The output stream. */
     protected final PrintStream stream;
 
-    public AbstractStreamableViewContainer(final PrintStream stream)
+    /**
+     * Create a new instance.
+     * 
+     * @param stream
+     *            the output stream.
+     */
+    protected AbstractStreamableViewContainer(final PrintStream stream)
     {
-        super();
         this.stream = stream;
     }
 
-    public AbstractStreamableViewContainer(final PrintStream stream, final String id,
+    /**
+     * Create a new instance.
+     * 
+     * @param stream
+     *            the output stream.
+     * @param id
+     *            the id of the container.
+     * @param title
+     *            the title of the container.
+     */
+    protected AbstractStreamableViewContainer(final PrintStream stream, final String id,
             final String title)
     {
         super(id, title);
         this.stream = stream;
     }
 
+    /**
+     * Render the container.
+     * 
+     * @param level
+     *            the indentation level.
+     */
     public void renderIndentation(final int level)
     {
         this.stream.print(IndentationHelper.createIndentationPrefix(level));

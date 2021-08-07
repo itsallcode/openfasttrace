@@ -33,13 +33,13 @@ import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
 import org.junit.jupiter.api.BeforeEach;
 
-public class AbstractTestHtmlRenderer
+class AbstractTestHtmlRenderer
 {
     protected OutputStream outputStream;
     protected ViewFactory factory;
 
     @BeforeEach
-    public void prepareEachTest()
+    void prepareEachTest()
     {
         this.outputStream = new ByteArrayOutputStream();
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl());

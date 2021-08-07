@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-public class ASpecReport implements Reportable
+class ASpecReport implements Reportable
 {
     private static final Logger LOG = Logger.getLogger(ASpecReport.class.getName());
 
@@ -54,10 +54,12 @@ public class ASpecReport implements Reportable
     /**
      * Create a new instance of an {@link ASpecReport}
      *
-     * @param trace   trace to be reported on
-     * @param context configuration options
+     * @param trace
+     *            trace to be reported on
+     * @param context
+     *            configuration options
      */
-    public ASpecReport(final Trace trace, final ReporterContext context)
+    ASpecReport(final Trace trace, final ReporterContext context)
     {
         this.trace = trace;
         this.newline = context.getSettings().getNewline();
@@ -106,8 +108,8 @@ public class ASpecReport implements Reportable
     {
         writer.writeStartElement("specdocument");
 
-        for (final Map.Entry<String, List<LinkedSpecificationItem>> entry :
-                groupItemsByAttributeType(this.trace.getItems()).entrySet())
+        for (final Map.Entry<String, List<LinkedSpecificationItem>> entry : groupItemsByAttributeType(
+                this.trace.getItems()).entrySet())
         {
             final String doctype = entry.getKey();
             final List<LinkedSpecificationItem> specItems = entry.getValue();
@@ -236,16 +238,16 @@ public class ASpecReport implements Reportable
         writeElement(writer, "status", item.getStatus().toString());
         writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
         final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
-        writeElement(writer, "deepCoverageStatus", deepCoverageStatus == DeepCoverageStatus.COVERED ?
-                "COVERED" :
-                deepCoverageStatus.name());
+        writeElement(writer, "deepCoverageStatus",
+                deepCoverageStatus == DeepCoverageStatus.COVERED ? "COVERED" : deepCoverageStatus.name());
 
         writeCoveringStatus(writer, linkStatus, deepCoverageStatus);
 
         writer.writeEndElement();
     }
 
-    private void writeCoveringStatus(XMLStreamWriter writer, LinkStatus linkStatus, DeepCoverageStatus deepCoverageStatus)
+    private void writeCoveringStatus(XMLStreamWriter writer, LinkStatus linkStatus,
+            DeepCoverageStatus deepCoverageStatus)
             throws XMLStreamException
     {
         if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED)
@@ -377,10 +379,7 @@ public class ASpecReport implements Reportable
 
     public enum CoveringStatus
     {
-        COVERING("COVERING"),
-        UNCOVERED("UNCOVERED"),
-        OUTDATED("COVERING_WRONG_VERSION"),
-        UNEXPECTED("UNEXPECTED");
+        COVERING("COVERING"), UNCOVERED("UNCOVERED"), OUTDATED("COVERING_WRONG_VERSION"), UNEXPECTED("UNEXPECTED");
 
         private final String label;
 

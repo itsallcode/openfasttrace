@@ -30,7 +30,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
  * Patterns that describe tokens to be recognized within Markdown-style
  * specifications.
  */
-public enum MdPattern
+enum MdPattern
 {
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]

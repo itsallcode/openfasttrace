@@ -31,11 +31,20 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
 import org.itsallcode.openfasttrace.core.ExportSettings;
 
+/**
+ * This provides a convenient method for exporting {@link SpecificationItem}s to
+ * a file.
+ */
 public class ExporterService
 {
-
     private final ExporterFactoryLoader factoryLoader;
 
+    /**
+     * Creates a new service.
+     * 
+     * @param factoryLoader
+     *            the loader used for locating exporters.
+     */
     public ExporterService(final ExporterFactoryLoader factoryLoader)
     {
         this.factoryLoader = factoryLoader;

@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 
+/**
+ * Links a given list of {@link SpecificationItem}s and returns
+ * {@link LinkedSpecificationItem}s.
+ */
 public class Linker
 {
     private final List<LinkedSpecificationItem> linkedItems;
@@ -39,7 +43,8 @@ public class Linker
     /**
      * Create a {@link Linker} for specification items.
      *
-     * @param items the specification items to be linked.
+     * @param items
+     *            the specification items to be linked.
      */
     public Linker(final List<SpecificationItem> items)
     {
@@ -166,7 +171,7 @@ public class Linker
             else
             {
                 throw new IllegalStateException("Used version-less match on a link to ID \"" + id
-                        + " but versions are identical.");
+                        + "\" but versions are identical.");
             }
         }
     }

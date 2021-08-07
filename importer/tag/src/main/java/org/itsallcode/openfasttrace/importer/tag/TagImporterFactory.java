@@ -73,7 +73,7 @@ public class TagImporterFactory extends ImporterFactory
         return findConfig(path).isPresent();
     }
 
-    public boolean supportsDefaultFile(final InputFile file)
+    boolean supportsDefaultFile(final InputFile file)
     {
         final String path = file.getPath();
         final int lastDotPosition = path.lastIndexOf(".");

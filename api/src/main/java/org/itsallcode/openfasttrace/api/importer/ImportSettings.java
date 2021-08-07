@@ -29,13 +29,16 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
  * #L%
  */
 
+/**
+ * Configuration for an {@link Importer}.
+ */
 public class ImportSettings
 {
     private final List<Path> inputs;
     private final FilterSettings filter;
     private final List<PathConfig> pathConfigs;
 
-    protected ImportSettings(final Builder builder)
+    private ImportSettings(final Builder builder)
     {
         this.inputs = builder.inputs;
         this.filter = builder.filter;

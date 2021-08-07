@@ -29,10 +29,19 @@ import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.Performable;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 
+/**
+ * The main entry point class for the command line application.
+ */
 public class CliStarter
 {
     private final CliArguments arguments;
 
+    /**
+     * Create a new cli starter.
+     * 
+     * @param arguments
+     *            the arguments for the starter.
+     */
     public CliStarter(final CliArguments arguments)
     {
         this.arguments = arguments;
@@ -99,6 +108,9 @@ public class CliStarter
         System.err.println(message);
     }
 
+    /**
+     * Process the command line arguments and execute the commands.
+     */
     // [impl->dsn~cli.command-selection~1]
     public void run()
     {

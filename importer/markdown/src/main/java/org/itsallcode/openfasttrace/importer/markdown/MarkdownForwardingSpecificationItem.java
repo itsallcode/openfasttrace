@@ -34,8 +34,8 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
  */
 public class MarkdownForwardingSpecificationItem
 {
-    public static final String ORIGINAL_MARKER = ":";
-    public static final String FORWARD_MARKER = "-->";
+    static final String ORIGINAL_MARKER = ":";
+    static final String FORWARD_MARKER = "-->";
     private final String skippedArtifactType;
     private final SpecificationItemId originalId;
     private final SpecificationItemId skippedId;

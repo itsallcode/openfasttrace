@@ -24,9 +24,14 @@ package org.itsallcode.openfasttrace.api.core;
 
 import javax.annotation.processing.Generated;
 
+/**
+ * The location of a coverage item.
+ */
 public final class Location
 {
+    /** Value indicating an unknown line. */
     public static final int NO_LINE = -1;
+    /** Value indicating an unknown column. */
     public static final int NO_COLUMN = -1;
     private final String path;
     private final int line;
@@ -197,6 +202,10 @@ public final class Location
         return new Builder();
     }
 
+    /**
+     * A builder for {@link Location}. Use {@link Location#builder()} to create
+     * a new builder and call {@link #build()} to build a {@link Location}.
+     */
     public static class Builder
     {
         private String path;

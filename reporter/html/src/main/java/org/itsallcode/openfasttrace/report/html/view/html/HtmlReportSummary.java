@@ -27,15 +27,9 @@ import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
  * #L%
  */
 
-public class HtmlReportSummary extends AbstractStreamableViewContainer
+class HtmlReportSummary extends AbstractStreamableViewContainer
 {
-    /**
-     * Create a new instance of an {@link HtmlReportSummary}
-     * 
-     * @param stream
-     *            print stream
-     */
-    public HtmlReportSummary(final PrintStream stream)
+    HtmlReportSummary(final PrintStream stream)
     {
         super(stream);
     }

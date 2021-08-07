@@ -32,6 +32,10 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * Base class for {@link ImporterFactory}s that can import files matching a list
+ * of regexp patterns.
+ */
 public abstract class RegexMatchingImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger
@@ -39,14 +43,26 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
 
     private final Set<Pattern> supportedFilenamePatterns;
 
+    /**
+     * Create a new importer factory for the given filename patterns.
+     * 
+     * @param supportedFilenamePatterns
+     *            the filename patterns supported by the importer.
+     */
     protected RegexMatchingImporterFactory(final String... supportedFilenamePatterns)
     {
         this(asList(supportedFilenamePatterns));
     }
 
-    protected RegexMatchingImporterFactory(final Collection<String> supportedFileExtensions)
+    /**
+     * * Create a new importer factory for the given filename patterns.
+     * 
+     * @param supportedFilenamePatterns
+     *            the filename patterns supported by the importer.
+     */
+    protected RegexMatchingImporterFactory(final Collection<String> supportedFilenamePatterns)
     {
-        this.supportedFilenamePatterns = supportedFileExtensions.stream() //
+        this.supportedFilenamePatterns = supportedFilenamePatterns.stream() //
                 .map(Pattern::compile) //
                 .collect(toSet());
     }

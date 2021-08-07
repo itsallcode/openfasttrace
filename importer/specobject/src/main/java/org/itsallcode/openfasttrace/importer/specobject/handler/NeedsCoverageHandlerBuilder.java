@@ -26,18 +26,18 @@ import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
-public class NeedsCoverageHandlerBuilder
+class NeedsCoverageHandlerBuilder
 {
     private final ImportEventListener listener;
     private final CallbackContentHandler handler;
 
-    public NeedsCoverageHandlerBuilder(final ImportEventListener listener)
+    NeedsCoverageHandlerBuilder(final ImportEventListener listener)
     {
         this.listener = listener;
         this.handler = new CallbackContentHandler();
     }
 
-    public TreeContentHandler build()
+    TreeContentHandler build()
     {
         return this.handler.addCharacterDataListener("needsobj",
                 this.listener::addNeededArtifactType);

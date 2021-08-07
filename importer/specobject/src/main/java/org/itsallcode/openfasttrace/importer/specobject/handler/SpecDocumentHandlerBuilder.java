@@ -31,6 +31,9 @@ import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
+/**
+ * Register handlers for parsing an XML specobject document.
+ */
 public class SpecDocumentHandlerBuilder
 {
     private static final Logger LOG = Logger.getLogger(SpecDocumentHandlerBuilder.class.getName());
@@ -40,6 +43,14 @@ public class SpecDocumentHandlerBuilder
     private final InputFile file;
     private final ImportEventListener listener;
 
+    /**
+     * Create a new instance.
+     * 
+     * @param file
+     *            the parsed input file.
+     * @param listener
+     *            the listener receiving import events.
+     */
     public SpecDocumentHandlerBuilder(final InputFile file, final ImportEventListener listener)
     {
         this.file = file;
@@ -47,6 +58,11 @@ public class SpecDocumentHandlerBuilder
         this.handler = new CallbackContentHandler();
     }
 
+    /**
+     * Build the handler.
+     * 
+     * @return the content handler.
+     */
     public TreeContentHandler build()
     {
         this.handler.setDefaultStartElementListener(startElement -> {

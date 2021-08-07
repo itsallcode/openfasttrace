@@ -34,6 +34,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  */
 public class ZipFileImporterFactory extends RegexMatchingImporterFactory
 {
+    /** Creates a new instance. */
     public ZipFileImporterFactory()
     {
         super("(?i).*\\.(zip)");

@@ -27,6 +27,11 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * An implementation of the {@link ImporterService} interface. This service
+ * provides convenient methods for importing {@link SpecificationItem}s that
+ * automatically use the correct {@link Importer} based on the filename.
+ */
 public class ImporterServiceImpl implements ImporterService
 {
     private final ImporterFactoryLoader factoryLoader;

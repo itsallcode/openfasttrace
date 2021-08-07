@@ -29,6 +29,10 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 
+/**
+ * An idex for {@link LinkedSpecificationItem} that allows retrieving items by
+ * {@link SpecificationItemId}, optionally ignoring the revision.
+ */
 public class LinkedItemIndex
 {
     private final Map<SpecificationItemId, LinkedSpecificationItem> idIndex;
@@ -41,6 +45,13 @@ public class LinkedItemIndex
         this.idIndexIgnoringVersion = idIndexIgnoringVersion;
     }
 
+    /**
+     * Create a new index containing the given items.
+     * 
+     * @param items
+     *            the items to add to the new index.
+     * @return a new index.
+     */
     public static LinkedItemIndex create(final List<SpecificationItem> items)
     {
         return createFromWrappedItems(wrapItems(items));
@@ -51,6 +62,13 @@ public class LinkedItemIndex
         return items.stream().map(LinkedSpecificationItem::new).collect(Collectors.toList());
     }
 
+    /**
+     * Create a new index containing the given wrapped items.
+     * 
+     * @param wrappedItems
+     *            the items to add to the new index.
+     * @return a new index.
+     */
     public static LinkedItemIndex createFromWrappedItems(
             final List<LinkedSpecificationItem> wrappedItems)
     {
@@ -84,21 +102,41 @@ public class LinkedItemIndex
         return item1;
     }
 
+    /**
+     * @return the total number of items in this index.
+     */
     public int size()
     {
         return this.idIndex.size();
     }
 
+    /**
+     * Get an item by id.
+     * 
+     * @param id
+     *            the item id.
+     * @return the item with the given id or {@code null} if no item exists.
+     */
     public LinkedSpecificationItem getById(final SpecificationItemId id)
     {
         return this.idIndex.get(id);
     }
 
+    /**
+     * @return the number of IDs ignoring the version.
+     */
     public int sizeIgnoringVersion()
     {
         return this.idIndexIgnoringVersion.size();
     }
 
+    /**
+     * Get all items for the given ID, ignoring the version.
+     * 
+     * @param id
+     *            the item id.
+     * @return the item with the given id or {@code null} if no item exists.
+     */
     public List<LinkedSpecificationItem> getByIdIgnoringVersion(final SpecificationItemId id)
     {
         final List<LinkedSpecificationItem> items = this.idIndexIgnoringVersion

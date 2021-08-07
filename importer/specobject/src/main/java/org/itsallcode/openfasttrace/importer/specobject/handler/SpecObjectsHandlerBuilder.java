@@ -30,7 +30,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeElement;
 
-public class SpecObjectsHandlerBuilder
+class SpecObjectsHandlerBuilder
 {
     private final CallbackContentHandler handler;
     private final InputFile file;
@@ -40,7 +40,7 @@ public class SpecObjectsHandlerBuilder
     private final String defaultDoctype;
     private Location.Builder locationBuilder;
 
-    public SpecObjectsHandlerBuilder(final InputFile file, final String defaultDoctype,
+    SpecObjectsHandlerBuilder(final InputFile file, final String defaultDoctype,
             final ImportEventListener listener)
     {
         this.file = file;
@@ -49,7 +49,7 @@ public class SpecObjectsHandlerBuilder
         this.handler = new CallbackContentHandler();
     }
 
-    public CallbackContentHandler build()
+    CallbackContentHandler build()
     {
         this.handler.addElementListener("specobject", this::handleStartElement,
                 endElement -> handleEndElement());

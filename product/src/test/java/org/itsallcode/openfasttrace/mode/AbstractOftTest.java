@@ -32,7 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public abstract class AbstractOftTest
+abstract class AbstractOftTest
 {
     protected static final String NEWLINE = "\n";
     protected static final String CARRIAGE_RETURN = "\r";

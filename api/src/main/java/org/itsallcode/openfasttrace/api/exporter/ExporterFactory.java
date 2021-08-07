@@ -43,6 +43,13 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
 
     private ExporterContext context;
 
+    /**
+     * Creates a new {@link ExporterFactory}.
+     * 
+     * @param supportedOutputFormat
+     *            the format of the supported output format, e.g.
+     *            {@code "html"}.
+     */
     protected ExporterFactory(final String supportedOutputFormat)
     {
         this.supportedOutputFormat = supportedOutputFormat;

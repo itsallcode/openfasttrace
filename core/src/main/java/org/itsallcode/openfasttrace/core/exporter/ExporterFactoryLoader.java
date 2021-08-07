@@ -41,6 +41,12 @@ public class ExporterFactoryLoader
 {
     private final InitializingServiceLoader<ExporterFactory, ExporterContext> serviceLoader;
 
+    /**
+     * Create a new loader for the given context.
+     * 
+     * @param context
+     *            the context for the new loader.
+     */
     public ExporterFactoryLoader(final ExporterContext context)
     {
         this(InitializingServiceLoader.load(ExporterFactory.class, context));

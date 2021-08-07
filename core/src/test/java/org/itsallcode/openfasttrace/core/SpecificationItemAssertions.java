@@ -31,7 +31,7 @@ import org.itsallcode.openfasttrace.api.core.DeepCoverageStatus;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
-public final class SpecificationItemAssertions
+final class SpecificationItemAssertions
 {
     private SpecificationItemAssertions()
     {

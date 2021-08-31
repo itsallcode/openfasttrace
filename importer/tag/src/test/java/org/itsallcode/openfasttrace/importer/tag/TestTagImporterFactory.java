@@ -51,7 +51,8 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
                 "foo.conf", "foo.cpp", "foo.groovy", "foo.h", "foo.H", "foo.hh", "foo.h++",
                 "foo.htm", "foo.html", "foo.ini", "foo.js", "foo.json", "foo.lua", "foo.m",
                 "foo.mm", "foo.php", "foo.pl", "foo.pls", "foo.pm", "foo.py", "foo.sql", "foo.r",
-                "foo.rs", "foo.sh", "foo.yaml", "foo.xhtml", "foo.zsh", "foo.clj", "foo.kt", "foo.scala");
+                "foo.rs", "foo.sh", "foo.yaml", "foo.xhtml", "foo.zsh", "foo.clj", "foo.kt", "foo.scala",
+                "foo.pu", "foo.puml", "foo.plantuml", "foo.go");
     }
 
     @Override

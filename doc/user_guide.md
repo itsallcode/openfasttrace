@@ -1,10 +1,15 @@
-<head><link href="oft_spec.css" rel="stylesheet"></link></head>
-
-![oft-logo](../openfasttrace-core/src/main/resources/openfasttrace_logo.svg)
+![oft-logo](../core/src/main/resources/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 
 ## In a Nutshell
+
+OFT is a requirement tracing tool. It helps you make sure that all defined requirements are covered in your code. It
+also helps finding outdated code passages.
+
+1. Create requirement and specification documents in Markdown including OFT-readable specification items
+1. Put tags into your source code that mark the coverage of items from the specification
+1. Use OFT to trace the requirements from the source to the final implementation
 
 ## Introduction
 
@@ -418,15 +423,37 @@ Defaults to the platform standard if not given.
 
 ### Input Format Support
 
-#### Tags in Programming Language Files
+#### Tags in Programming Language or Markup Files
 
-OFT's Tag importer by default supports embedding tags into the source files of the following programming or markup languages:
+The Tag Importer is the most basic importer OFT offers. While it supports a wide variety of source formats, it does not
+really understand the surrounding format, but instead looks for certain patterns that define specification items.
+
+To avoid conflict with the formats actual contents, you embed these definitions in comments usually.
+
+Tags have the following format:
+
+```
+[ <covered-artifact-type> -> <specification-object-id> ]
+```
+
+Spaces above were only added for readability. They are optional. In fact usually people prefer a more compact form.
+Here is an example of a tag embedded into a Java comment:
+
+```java
+// [impl->dsn~validate-authentication-request~1]
+```
+
+The Tag Importer recognizes the supported format by the file extension. The following list shows the standard set of
+recognized file types:
+
+**Programming languages**
 
 * C (`.c`, `.h`)
 * C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
 * C# (`.c#`)
 * Database related (`.sql`, `.pls`)
 * Configuration files (`.cfg`, `.conf`, `.ini`)
+* [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
 * Java (`.java`)
 * JavaScript (`.js`)
@@ -440,10 +467,17 @@ OFT's Tag importer by default supports embedding tags into the source files of t
 * Rust (`.rs`)
 * Shell programming (`.sh`, `.bash`, `.zsh`)
 * Swift (`.swift`)
-* HTML (`.html`, `.htm`, `.xhtml`)
 * Windows batch files (`.bat`)
-* YAML (`.yaml`)
 * Z-Shell (`.zsh`)
+
+**Markup languages**
+
+* HTML (`.html`, `.htm`, `.xhtml`)
+* YAML (`.yaml`)
+
+**Modeling languages**
+
+* [PlantUML](https://plantuml.com) (`.pu`, `.puml`, `.plantuml`
 
 Note that XML is at the moment not yet supported by the Tag Importer, because it would collide with the SpecObj Importer. Once import fallback is implemented, XML will be supported too.
 

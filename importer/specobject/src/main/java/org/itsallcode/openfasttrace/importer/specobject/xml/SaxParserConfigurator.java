@@ -49,6 +49,7 @@ public class SaxParserConfigurator
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try
         {
+            parserFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         }
         catch (SAXNotRecognizedException | SAXNotSupportedException

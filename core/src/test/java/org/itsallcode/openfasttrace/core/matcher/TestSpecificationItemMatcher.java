@@ -29,9 +29,6 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.testutil.matcher.MatcherTestBase;
 import org.junit.jupiter.api.Test;
 
-/**
- * Unit test for {@link SpecificationItemMatcher}
- */
 class TestSpecificationItemMatcher extends MatcherTestBase<SpecificationItem>
 {
     private final static SpecificationItemId ID1 = new SpecificationItemId.Builder()

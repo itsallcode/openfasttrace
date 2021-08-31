@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [Go](https://golang.org/) support for Tag Importer [#294](https://github.com/itsallcode/openfasttrace/issues/294)
+- [PlantUML](https://plantuml.com) support for Tag Importer [#296](https://github.com/itsallcode/openfasttrace/issues/296)
+
 ### Fixed
 
 - Support building, testing and running with Java 16 [#287](https://github.com/itsallcode/openfasttrace/issues/287) / [#288](https://github.com/itsallcode/openfasttrace/issues/288)
 
 ## [3.2.1] - 2021-07-19
 
-### Upgrade dependencies:
+### Upgraded dependencies
+
 - Test dependencies
   - [JUnit](https://github.com/itsallcode/openfasttrace/pull/275)
   - [mockito-junit-jupiter](https://github.com/itsallcode/openfasttrace/pull/284)

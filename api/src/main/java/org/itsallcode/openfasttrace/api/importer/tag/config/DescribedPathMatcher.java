@@ -28,6 +28,9 @@ import java.util.Set;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * A wrapper for {@link PathMatcher} providing a description.
+ */
 public class DescribedPathMatcher
 {
     private static final String REGEX_PREFIX = "regex:";
@@ -42,6 +45,15 @@ public class DescribedPathMatcher
         this.matcher = matcher;
     }
 
+    /**
+     * Create a new {@link DescribedPathMatcher} for the given pattern.
+     * 
+     * @param pattern
+     *            the pattern for the new matcher. See
+     *            {@link FileSystem#getPathMatcher(String)} for the supported
+     *            syntax.
+     * @return a new {@link DescribedPathMatcher}.
+     */
     public static DescribedPathMatcher createPatternMatcher(final String pattern)
     {
         final String fullPattern = addMissingPatternPrefix(pattern);
@@ -49,6 +61,13 @@ public class DescribedPathMatcher
         return new DescribedPathMatcher(fullPattern, patternMatcher);
     }
 
+    /**
+     * Create a new {@link DescribedPathMatcher} for the given list of paths.
+     * 
+     * @param paths
+     *            the paths that the new matcher will match.
+     * @return a new {@link DescribedPathMatcher}.
+     */
     public static DescribedPathMatcher createPathListMatcher(final List<Path> paths)
     {
         final ListBasedPathMatcher listMatcher = new ListBasedPathMatcher(new HashSet<>(paths));
@@ -64,11 +83,23 @@ public class DescribedPathMatcher
         return GLOB_PREFIX + pattern;
     }
 
+    /**
+     * @return the description for this {@link DescribedPathMatcher}.
+     */
     public String getDescription()
     {
         return this.description;
     }
 
+    /**
+     * Tells if given {@link InputFile} matches this matcher's pattern.
+     * 
+     * @param path
+     *            the {@link InputFile} to match.
+     * @return {@code true} if, and only if, the {@link InputFile} matches this
+     *         matcher's pattern.
+     * @see PathMatcher#matches(Path)
+     */
     public boolean matches(final InputFile path)
     {
         return this.matcher.matches(Paths.get(path.getPath()));

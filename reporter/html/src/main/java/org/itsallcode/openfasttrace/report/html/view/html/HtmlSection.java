@@ -30,7 +30,7 @@ import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 /**
  * HTML variant of a report section
  */
-public class HtmlSection extends AbstractStreamableViewContainer
+class HtmlSection extends AbstractStreamableViewContainer
 {
     /**
      * Create a new instance of a {@link HtmlSection}
@@ -42,7 +42,7 @@ public class HtmlSection extends AbstractStreamableViewContainer
      * @param title
      *            section title
      */
-    public HtmlSection(final PrintStream stream, final String id, final String title)
+    HtmlSection(final PrintStream stream, final String id, final String title)
     {
         super(stream, id, title);
     }
@@ -54,13 +54,13 @@ public class HtmlSection extends AbstractStreamableViewContainer
         final String header = "h" + (level + 1);
         this.stream.print(indentation);
         this.stream.print("<section id=\"");
-        this.stream.print(this.id);
+        this.stream.print(this.getId());
         this.stream.println("\">");
         this.stream.print(indentation);
         this.stream.print("  <");
         this.stream.print(header);
         this.stream.print(">");
-        this.stream.print(this.title);
+        this.stream.print(this.getTitle());
         this.stream.print("</");
         this.stream.print(header);
         this.stream.println(">");

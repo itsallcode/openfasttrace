@@ -22,22 +22,65 @@ package org.itsallcode.openfasttrace.api.core;
  * #L%
  */
 
+/**
+ * This enumeration represents the different statuses of a coverage link between
+ * two items.
+ */
 public enum LinkStatus
 {
-    // Outgoing coverage link status
-    COVERS(" ", "covers"), PREDATED(">", "predated"), OUTDATED("<", "outdated"), AMBIGUOUS("?",
-            "ambiguous"), UNWANTED("+", "unwanted"), ORPHANED("/", "orphaned"), //
-    // Incoming coverage link status
-    COVERED_SHALLOW(" ", "covered shallow"), COVERED_UNWANTED("+",
-            "unwanted coverage"), COVERED_PREDATED(">",
-                    "predated coverage"), COVERED_OUTDATED("<", "outdated coverage"), //
-    // Duplicate link status
+    /**
+     * Outgoing coverage link status: item 1 covers item 2.
+     */
+    COVERS(" ", "covers"),
+    /**
+     * Outgoing coverage link status: item 1 covers a newer revision of item 2.
+     */
+    PREDATED(">", "predated"),
+    /**
+     * Outgoing coverage link status: item 1 covers an older revision of item 2.
+     */
+    OUTDATED("<", "outdated"),
+    /**
+     * Outgoing coverage link status: two items with the same id are covered by
+     * another item.
+     */
+    AMBIGUOUS("?", "ambiguous"),
+    /**
+     * Outgoing coverage link status: an item covers another item that does not
+     * require coverage.
+     */
+    UNWANTED("+", "unwanted"),
+    /** Outgoing coverage link status: an item covers a non-existing item. */
+    ORPHANED("/", "orphaned"),
+
+    /**
+     * Incoming coverage link status: an item is directly covered by another
+     * item.
+     */
+    COVERED_SHALLOW(" ", "covered shallow"),
+    /**
+     * Incoming coverage link status: an item is covered by another item
+     * although it does not require coverage.
+     */
+    COVERED_UNWANTED("+", "unwanted coverage"),
+    /**
+     * Incoming coverage link status: an item is covered by another item that
+     * specifies a newer revision.
+     */
+    COVERED_PREDATED(">", "predated coverage"),
+    /**
+     * Incoming coverage link status: an item is covered by another item that
+     * specifies an older revision.
+     */
+    COVERED_OUTDATED("<", "outdated coverage"),
+
+    /** Duplicate link status: two items have the same ID. */
     DUPLICATE("?", "duplicate");
 
     private final String shortTag;
     private final String text;
 
-    LinkStatus(final String shortTag, final String text)
+    private LinkStatus(final String shortTag, final String text)
     {
         this.shortTag = shortTag;
         this.text = text;

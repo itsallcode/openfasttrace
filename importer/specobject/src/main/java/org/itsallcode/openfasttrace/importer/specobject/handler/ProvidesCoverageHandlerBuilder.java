@@ -27,19 +27,19 @@ import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
-public class ProvidesCoverageHandlerBuilder
+class ProvidesCoverageHandlerBuilder
 {
     private final ImportEventListener listener;
     private final CallbackContentHandler handler;
     private Builder providesCoverageIdBuilder;
 
-    public ProvidesCoverageHandlerBuilder(final ImportEventListener listener)
+    ProvidesCoverageHandlerBuilder(final ImportEventListener listener)
     {
         this.listener = listener;
         this.handler = new CallbackContentHandler();
     }
 
-    public TreeContentHandler build()
+    TreeContentHandler build()
     {
         this.handler.addElementListener("provcov",
                 elem -> this.providesCoverageIdBuilder = new Builder(), //

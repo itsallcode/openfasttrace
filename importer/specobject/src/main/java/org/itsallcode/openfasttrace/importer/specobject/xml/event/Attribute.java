@@ -27,6 +27,9 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
+/**
+ * A simplified wrapper for SAX {@link Attributes}.
+ */
 public class Attribute
 {
     private final String qName;
@@ -38,16 +41,29 @@ public class Attribute
         this.value = value;
     }
 
+    /**
+     * @return {@link Attributes#getQName(int)}
+     */
     public String getQname()
     {
         return this.qName;
     }
 
+    /**
+     * @return {@link Attributes#getValue(int)}
+     */
     public String getValue()
     {
         return this.value;
     }
 
+    /**
+     * Converts the given {@link Attributes} to a {@link Map}.
+     * 
+     * @param attr
+     *            the attributes to wrap.
+     * @return the wrapped attributes.
+     */
     public static Map<String, Attribute> buildMap(final Attributes attr)
     {
         final Map<String, Attribute> attributes = new HashMap<>();

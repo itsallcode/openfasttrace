@@ -28,7 +28,7 @@ import java.io.LineNumberReader;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
-public class LineReader
+class LineReader
 {
     private final InputFile file;
 

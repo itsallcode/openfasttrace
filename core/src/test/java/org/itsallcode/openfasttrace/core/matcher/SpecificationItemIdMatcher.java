@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.core.matcher;
  * #L%
  */
 
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +49,14 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
                 .build());
     }
 
+    /**
+     * Factory method for a matcher that matches a given
+     * {@link SpecificationItemId}.
+     *
+     * @param id
+     *            the expected id.
+     * @return a id matcher.
+     */
     @Factory
     public static Matcher<SpecificationItemId> equalTo(final SpecificationItemId id)
     {

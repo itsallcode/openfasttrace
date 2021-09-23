@@ -26,9 +26,9 @@ import org.itsallcode.openfasttrace.report.html.view.AbstractStreamableViewConta
  * #L%
  */
 
-public class HtmlReportDetails extends AbstractStreamableViewContainer
+class HtmlReportDetails extends AbstractStreamableViewContainer
 {
-    public HtmlReportDetails(final PrintStream stream)
+    HtmlReportDetails(final PrintStream stream)
     {
         super(stream);
     }

@@ -22,7 +22,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  * #L%
  */
 
-public class CharacterConstants
+class CharacterConstants
 {
     private CharacterConstants()
     {

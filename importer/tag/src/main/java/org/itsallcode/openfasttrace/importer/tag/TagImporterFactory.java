@@ -45,6 +45,7 @@ public class TagImporterFactory extends ImporterFactory
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
             "c#", // C#
             "cfg", "conf", "ini", // configuration files
+            "go", // Go
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "yaml", // markup languages
             "java", // Java
@@ -55,6 +56,7 @@ public class TagImporterFactory extends ImporterFactory
             "php", // PHP
             "pl", "pm", // Perl
             "py", // Python
+            "pu", "puml", "plantuml", // PlantUML
             "r", // R Language
             "rs", // Rust
             "sh", "bash", "zsh", // Shell programming
@@ -73,7 +75,7 @@ public class TagImporterFactory extends ImporterFactory
         return findConfig(path).isPresent();
     }
 
-    public boolean supportsDefaultFile(final InputFile file)
+    boolean supportsDefaultFile(final InputFile file)
     {
         final String path = file.getPath();
         final int lastDotPosition = path.lastIndexOf(".");

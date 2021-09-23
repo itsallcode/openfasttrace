@@ -30,12 +30,21 @@ import org.itsallcode.openfasttrace.importer.specobject.xml.EventContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.event.EndElementEvent;
 import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
 
+/**
+ * A {@link EventContentHandler} that builds an XML element tree.
+ */
 public class TreeBuildingContentHandler implements EventContentHandler, TreeParsingController
 {
     private final Deque<TreeElement> stack = new ArrayDeque<>();
     private TreeContentHandler delegate;
     private ContentHandlerAdapterController contentHandlerAdapter;
 
+    /**
+     * Create a new instance.
+     * 
+     * @param delegate
+     *            the delegate.
+     */
     public TreeBuildingContentHandler(final TreeContentHandler delegate)
     {
         this.delegate = delegate;

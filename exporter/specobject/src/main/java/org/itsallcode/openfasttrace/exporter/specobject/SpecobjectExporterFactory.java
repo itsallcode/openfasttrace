@@ -42,9 +42,10 @@ import org.itsallcode.openfasttrace.exporter.common.IndentingXMLStreamWriter;
  */
 public class SpecobjectExporterFactory extends ExporterFactory
 {
-    public static final String SUPPORTED_FORMAT = "specobject";
+    private static final String SUPPORTED_FORMAT = "specobject";
     private final XMLOutputFactory xmlOutputFactory;
 
+    /** Creates a new instance. */
     public SpecobjectExporterFactory()
     {
         super(SUPPORTED_FORMAT);

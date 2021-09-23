@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.core.matcher;
  * #L%
  */
 
-
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -41,7 +40,7 @@ import com.github.hamstercommunity.matcher.config.MatcherConfig;
 /**
  * {@link Matcher} for {@link SpecificationItem}
  */
-public class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationItem>
+class SpecificationItemMatcher extends ConfigurableMatcher<SpecificationItem>
 {
     private SpecificationItemMatcher(final SpecificationItem expected)
     {

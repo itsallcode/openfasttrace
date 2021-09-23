@@ -22,11 +22,11 @@ package org.itsallcode.openfasttrace.report.html.view.html;
  * #L%
  */
 
-public class MarkdownConverter
+class MarkdownConverter
 {
     private final MarkdownLineStateMachine machine = new MarkdownLineStateMachine();
 
-    public String convert(final String input)
+    String convert(final String input)
     {
         return this.machine.run(input);
     }

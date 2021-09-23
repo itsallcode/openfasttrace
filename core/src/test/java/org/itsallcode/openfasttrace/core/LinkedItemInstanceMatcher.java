@@ -22,14 +22,13 @@ package org.itsallcode.openfasttrace.core;
  * #L%
  */
 
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
-public class LinkedItemInstanceMatcher extends TypeSafeMatcher<LinkedSpecificationItem>
+class LinkedItemInstanceMatcher extends TypeSafeMatcher<LinkedSpecificationItem>
 {
     private final SpecificationItem expectedItem;
 

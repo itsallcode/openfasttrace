@@ -41,16 +41,24 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
  */
 public abstract class AbstractCommand implements Performable
 {
+    /** The command line arguments given by the user. */
     protected CliArguments arguments;
+    /** The OFT instance for executing commands. */
     protected final Oft oft;
 
+    /**
+     * Creates a new instance.
+     * 
+     * @param arguments
+     *            the command line arguments.
+     */
     protected AbstractCommand(final CliArguments arguments)
     {
         this.arguments = arguments;
         this.oft = Oft.create();
     }
 
-    protected List<Path> toPaths(final List<String> inputs)
+    private List<Path> toPaths(final List<String> inputs)
     {
         final List<Path> inputsAsPaths = new ArrayList<>();
         for (final String input : inputs)
@@ -60,7 +68,7 @@ public abstract class AbstractCommand implements Performable
         return inputsAsPaths;
     }
 
-    protected FilterSettings createFilterSettingsFromArguments()
+    private FilterSettings createFilterSettingsFromArguments()
     {
         final FilterSettings.Builder builder = new FilterSettings.Builder();
         setAttributeTypeFilter(builder);
@@ -95,12 +103,17 @@ public abstract class AbstractCommand implements Performable
         }
     }
 
+    /**
+     * Import items using filter settings from command line arguments.
+     * 
+     * @return the imported items.
+     */
     protected List<SpecificationItem> importItems()
     {
-        final ImportSettings importSettings = ImportSettings //
-                .builder() //
-                .addInputs(this.toPaths(this.arguments.getInputs())) //
-                .filter(createFilterSettingsFromArguments()) //
+        final ImportSettings importSettings = ImportSettings
+                .builder()
+                .addInputs(this.toPaths(this.arguments.getInputs()))
+                .filter(createFilterSettingsFromArguments())
                 .build();
         return this.oft.importItems(importSettings);
     }

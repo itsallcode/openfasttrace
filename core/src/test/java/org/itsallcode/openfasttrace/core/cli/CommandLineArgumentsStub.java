@@ -22,10 +22,9 @@ package org.itsallcode.openfasttrace.core.cli;
  * #L%
  */
 
-
 import java.util.List;
 
-public class CommandLineArgumentsStub
+class CommandLineArgumentsStub
 {
     public enum StubEnum
     {

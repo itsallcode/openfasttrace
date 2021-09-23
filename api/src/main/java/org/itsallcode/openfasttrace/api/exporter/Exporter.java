@@ -22,9 +22,14 @@ package org.itsallcode.openfasttrace.api.exporter;
  * #L%
  */
 
-
+/**
+ * Interface for exporters.
+ */
 @FunctionalInterface
 public interface Exporter
 {
+    /**
+     * Start the export process.
+     */
     void runExport();
 }

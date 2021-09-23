@@ -28,6 +28,9 @@ import java.util.logging.Logger;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
+/**
+ * An {@link EntityResolver} that ignores all entities.
+ */
 public class IgnoringEntityResolver implements EntityResolver
 {
     private static final Logger LOG = Logger.getLogger(IgnoringEntityResolver.class.getName());

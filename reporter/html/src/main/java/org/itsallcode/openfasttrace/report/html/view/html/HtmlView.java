@@ -68,7 +68,7 @@ public class HtmlView extends AbstractStreamableViewContainer
         inlineCSS();
         this.stream.println("    </style>");
         this.stream.print("    <title>");
-        this.stream.print(this.title);
+        this.stream.print(this.getTitle());
         this.stream.println("</title>");
         this.stream.println("  </head>");
         this.stream.println("  <body>");

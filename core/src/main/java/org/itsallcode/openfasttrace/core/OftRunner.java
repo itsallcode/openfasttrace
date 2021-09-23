@@ -31,10 +31,14 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 
+/**
+ * Provides convenient methods for importing, tracing and reporting.
+ */
 public class OftRunner implements Oft
 {
     private final ServiceFactory serviceFactory;
 
+    /** Create a new instance. */
     public OftRunner()
     {
         this(new ServiceFactory());

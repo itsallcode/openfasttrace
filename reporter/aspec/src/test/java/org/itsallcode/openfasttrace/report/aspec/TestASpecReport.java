@@ -1,5 +1,29 @@
 package org.itsallcode.openfasttrace.report.aspec;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.startsWith;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.testutil.matcher.StringRegexpMatcher;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 /*-
  * #%L
  * OpenFastTrace augmented specobject Reporter
@@ -21,32 +45,8 @@ package org.itsallcode.openfasttrace.report.aspec;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.itsallcode.openfasttrace.api.report.ReporterContext;
-import org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes;
-import org.itsallcode.openfasttrace.testutil.matcher.StringRegexpMatcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 @ExtendWith(MockitoExtension.class)
-public class TestASpecReport
+class TestASpecReport
 {
 
     private List<LinkedSpecificationItem> items;
@@ -54,7 +54,7 @@ public class TestASpecReport
     private ReporterContext reportContext;
 
     @BeforeEach
-    public void prepareEachTest()
+    void prepareEachTest()
     {
         final ReportSettings reportSettings = ReportSettings.builder()
                 .newline(Newline.UNIX)
@@ -85,8 +85,7 @@ public class TestASpecReport
                 .id(SpecificationItemId.createId("arch", "arch-requirement", 1))
                 .description("Sample arch requirement")
                 .addNeedsArtifactType(ARCH)
-                .addDependOnId(SpecificationItemId.createId("fea", "fea-feature", 1))
-        );
+                .addDependOnId(SpecificationItemId.createId("fea", "fea-feature", 1)));
 
         final String reportString = renderToString();
         assertAll(() -> assertThat(reportString, containsRegexp(item(
@@ -97,13 +96,13 @@ public class TestASpecReport
                 new Field(Field.Type.NEEDS_COVERAGE, ARCH),
                 new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED),
                 new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.UNCOVERED),
-                new Field(Field.Type.DEPENDENCIES, "fea-feature", 1)
-                ))),
+                new Field(Field.Type.DEPENDENCIES, "fea-feature", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
     /**
-     * Writes report for requirements arch->dsn->impl,utest where all requirements are correct.
+     * Writes report for requirements arch->dsn->impl,utest where all
+     * requirements are correct.
      */
     @Test
     void testReportFullTransientCoverageWithTwoLayersOfItems()
@@ -111,24 +110,20 @@ public class TestASpecReport
         final LinkedSpecificationItem archItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("arch", "arch-covered", 1))
                 .description("Valid Arch Requirement.")
-                .addNeedsArtifactType(DSN)
-        );
+                .addNeedsArtifactType(DSN));
         final LinkedSpecificationItem dsnItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("dsn", "dsn-covered", 1))
                 .description("This design is successfully covered.")
                 .addNeedsArtifactType(UTEST)
-                .addNeedsArtifactType(IMPL)
-        );
+                .addNeedsArtifactType(IMPL));
         archItem.addLinkToItemWithStatus(dsnItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem utestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("utest", "utest-valid", 1))
-                .description("A valid utest requirement covering all dsn requirements.")
-        );
+                .description("A valid utest requirement covering all dsn requirements."));
         dsnItem.addLinkToItemWithStatus(utestItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem implItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("impl", "impl-accepted", 1))
-                .description("This impl is valid.")
-        );
+                .description("This impl is valid."));
         dsnItem.addLinkToItemWithStatus(implItem, LinkStatus.COVERED_SHALLOW);
 
         final String reportString = renderToString();
@@ -144,8 +139,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_TYPES, DSN),
                         new Field(Field.Type.COVERED_ITEMS, "dsn-covered", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
-                                ASpecReport.CoveringStatus.COVERING)
-                ))),
+                                ASpecReport.CoveringStatus.COVERING)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "dsn-covered"),
                         new Field(Field.Type.VERSION, 1),
@@ -161,8 +155,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_ITEMS, "impl-accepted", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
                                 ASpecReport.CoveringStatus.COVERING),
-                        new Field(Field.Type.COVERING_ITEMS, "arch-covered", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "arch-covered", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "utest-valid"),
                         new Field(Field.Type.VERSION, 1),
@@ -170,8 +163,7 @@ public class TestASpecReport
                         new Field(Field.Type.DESCRIPTION, "A valid utest requirement covering all dsn requirements."),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-covered", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-covered", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "impl-accepted"),
                         new Field(Field.Type.VERSION, 1),
@@ -179,13 +171,13 @@ public class TestASpecReport
                         new Field(Field.Type.DESCRIPTION, "This impl is valid."),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-covered", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-covered", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
     /**
-     * Writes report for requirements arch->dsn->impl,utest where impl is not approved.
+     * Writes report for requirements arch->dsn->impl,utest where impl is not
+     * approved.
      */
     @Test
     void testReportUncoveredTransientCoverageWithTwoLayersNonApprovedOfItems()
@@ -193,25 +185,21 @@ public class TestASpecReport
         final LinkedSpecificationItem archItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("arch", "arch-impl-only-proposed", 1))
                 .description("Valid Arch Requirement.")
-                .addNeedsArtifactType(DSN)
-        );
+                .addNeedsArtifactType(DSN));
         final LinkedSpecificationItem dsnItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("dsn", "dsn-uncovered-impl-only-proposed", 1))
                 .description("This design is partly covered. The impl is only status proposed.")
                 .addNeedsArtifactType(UTEST)
-                .addNeedsArtifactType(IMPL)
-        );
+                .addNeedsArtifactType(IMPL));
         archItem.addLinkToItemWithStatus(dsnItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem utestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("utest", "utest-valid", 1))
-                .description("A valid utest requirement covering all dsn requirements.")
-        );
+                .description("A valid utest requirement covering all dsn requirements."));
         dsnItem.addLinkToItemWithStatus(utestItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem implItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("impl", "impl-wrong-status", 1))
                 .description("This impl has a non approved status.")
-                .status(ItemStatus.PROPOSED)
-        );
+                .status(ItemStatus.PROPOSED));
         dsnItem.addLinkToItemWithStatus(implItem, LinkStatus.COVERED_SHALLOW);
 
         final String reportString = renderToString();
@@ -227,8 +215,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_TYPES, DSN),
                         new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-only-proposed", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
-                                ASpecReport.CoveringStatus.UNCOVERED)
-                ))),
+                                ASpecReport.CoveringStatus.UNCOVERED)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "dsn-uncovered-impl-only-proposed"),
                         new Field(Field.Type.VERSION, 1),
@@ -246,8 +233,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_ITEMS, "impl-wrong-status", 1, ItemStatus.PROPOSED,
                                 DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
                                 ASpecReport.CoveringStatus.UNCOVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-only-proposed", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-only-proposed", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "utest-valid"),
                         new Field(Field.Type.VERSION, 1),
@@ -255,8 +241,7 @@ public class TestASpecReport
                         new Field(Field.Type.DESCRIPTION, "A valid utest requirement covering all dsn requirements."),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-only-proposed", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-only-proposed", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "impl-wrong-status"),
                         new Field(Field.Type.VERSION, 1),
@@ -264,13 +249,13 @@ public class TestASpecReport
                         new Field(Field.Type.DESCRIPTION, "This impl has a non approved status."),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.UNCOVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.UNCOVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-only-proposed", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-only-proposed", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
     /**
-     * Writes report for requirements arch->dsn->impl,utest where impl refers wrong dsn version.
+     * Writes report for requirements arch->dsn->impl,utest where impl refers
+     * wrong dsn version.
      */
     @Test
     void testReportUncoveredTransientCoverageWithTwoLayersWrongVersionInDependencyOfItems()
@@ -278,24 +263,20 @@ public class TestASpecReport
         final LinkedSpecificationItem archItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("arch", "arch-impl-wrong-version", 1))
                 .description("Valid Arch Requirement.")
-                .addNeedsArtifactType(DSN)
-        );
+                .addNeedsArtifactType(DSN));
         final LinkedSpecificationItem dsnItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("dsn", "dsn-uncovered-impl-wrong-version", 1))
                 .description("This design is uncovered as impl uses a wrong dsn version.")
                 .addNeedsArtifactType(UTEST)
-                .addNeedsArtifactType(IMPL)
-        );
+                .addNeedsArtifactType(IMPL));
         archItem.addLinkToItemWithStatus(dsnItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem utestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("utest", "utest-valid", 1))
-                .description("A valid utest requirement covering all dsn requirements.")
-        );
+                .description("A valid utest requirement covering all dsn requirements."));
         dsnItem.addLinkToItemWithStatus(utestItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem implItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("impl", "impl-wrong-dsn-version", 1))
-                .description("This impl refers to a wrong dsn version.")
-        );
+                .description("This impl refers to a wrong dsn version."));
         dsnItem.addLinkToItemWithStatus(implItem, LinkStatus.COVERED_PREDATED);
 
         final String reportString = renderToString();
@@ -310,8 +291,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_TYPES, DSN),
                         new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-wrong-version", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
-                                ASpecReport.CoveringStatus.UNCOVERED)
-                ))),
+                                ASpecReport.CoveringStatus.UNCOVERED)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "dsn-uncovered-impl-wrong-version"),
                         new Field(Field.Type.VERSION, 1),
@@ -327,29 +307,27 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_ITEMS, "impl-wrong-dsn-version", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
                                 ASpecReport.CoveringStatus.OUTDATED),
-                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-wrong-version", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-wrong-version", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "utest-valid"),
                         new Field(Field.Type.VERSION, 1),
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-version", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-version", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "impl-wrong-dsn-version"),
                         new Field(Field.Type.VERSION, 1),
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-version", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-version", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
     /**
-     * Writes report for requirements arch->dsn->impl,utest where impl is missing.
+     * Writes report for requirements arch->dsn->impl,utest where impl is
+     * missing.
      */
     @Test
     void testReportUncoveredTransientCoverageWithTwoLayersMissingImplOfItems()
@@ -357,19 +335,16 @@ public class TestASpecReport
         final LinkedSpecificationItem archItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("arch", "arch-impl-missing-impl", 1))
                 .description("Valid Arch Requirement.")
-                .addNeedsArtifactType(DSN)
-        );
+                .addNeedsArtifactType(DSN));
         final LinkedSpecificationItem dsnItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("dsn", "dsn-uncovered-missing-impl", 1))
                 .description("This design is uncovered as impl is missing.")
                 .addNeedsArtifactType(UTEST)
-                .addNeedsArtifactType(IMPL)
-        );
+                .addNeedsArtifactType(IMPL));
         archItem.addLinkToItemWithStatus(dsnItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem utestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("utest", "utest-valid", 1))
-                .description("A valid utest requirement covering all dsn requirements.")
-        );
+                .description("A valid utest requirement covering all dsn requirements."));
         dsnItem.addLinkToItemWithStatus(utestItem, LinkStatus.COVERED_SHALLOW);
 
         final String reportString = renderToString();
@@ -384,8 +359,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_TYPES, DSN),
                         new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-missing-impl", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
-                                ASpecReport.CoveringStatus.UNCOVERED)
-                ))),
+                                ASpecReport.CoveringStatus.UNCOVERED)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "dsn-uncovered-missing-impl"),
                         new Field(Field.Type.VERSION, 1),
@@ -398,21 +372,20 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_ITEMS, "utest-valid", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
                                 ASpecReport.CoveringStatus.COVERING),
-                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-missing-impl", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-missing-impl", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "utest-valid"),
                         new Field(Field.Type.VERSION, 1),
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-missing-impl", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-missing-impl", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
     /**
-     * Writes report for requirements arch->dsn->impl,utest where impl has wrong type.
+     * Writes report for requirements arch->dsn->impl,utest where impl has wrong
+     * type.
      */
     @Test
     void testReportUncoveredTransientCoverageWithTwoLayersWrongTypeOfItems()
@@ -420,24 +393,20 @@ public class TestASpecReport
         final LinkedSpecificationItem archItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("arch", "arch-impl-wrong-type", 1))
                 .description("Valid Arch Requirement.")
-                .addNeedsArtifactType(DSN)
-        );
+                .addNeedsArtifactType(DSN));
         final LinkedSpecificationItem dsnItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("dsn", "dsn-uncovered-impl-wrong-type", 1))
                 .description("This design is covered with unwanted type item.")
                 .addNeedsArtifactType(UTEST)
-                .addNeedsArtifactType(IMPL)
-        );
+                .addNeedsArtifactType(IMPL));
         archItem.addLinkToItemWithStatus(dsnItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem utestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("utest", "utest-valid", 1))
-                .description("A valid utest requirement covering all dsn requirements.")
-        );
+                .description("A valid utest requirement covering all dsn requirements."));
         dsnItem.addLinkToItemWithStatus(utestItem, LinkStatus.COVERED_SHALLOW);
         final LinkedSpecificationItem itestItem = createItem(createItemBuilder()
                 .id(SpecificationItemId.createId("itest", "itest-wrong-type", 1))
-                .description("This impl has wrong type (itest instead of impl).")
-        );
+                .description("This impl has wrong type (itest instead of impl)."));
         dsnItem.addLinkToItemWithStatus(itestItem, LinkStatus.COVERED_UNWANTED);
 
         final String reportString = renderToString();
@@ -452,8 +421,7 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_TYPES, DSN),
                         new Field(Field.Type.COVERED_ITEMS, "dsn-uncovered-impl-wrong-type", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.UNCOVERED, DeepCoverageStatus.UNCOVERED,
-                                ASpecReport.CoveringStatus.UNCOVERED)
-                ))),
+                                ASpecReport.CoveringStatus.UNCOVERED)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "dsn-uncovered-impl-wrong-type"),
                         new Field(Field.Type.VERSION, 1),
@@ -469,24 +437,21 @@ public class TestASpecReport
                         new Field(Field.Type.COVERED_ITEMS, "itest-wrong-type", 1, ItemStatus.APPROVED,
                                 DeepCoverageStatus.COVERED, DeepCoverageStatus.COVERED,
                                 ASpecReport.CoveringStatus.UNEXPECTED),
-                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-wrong-type", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "arch-impl-wrong-type", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "utest-valid"),
                         new Field(Field.Type.VERSION, 1),
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-type", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-type", 1)))),
                 () -> assertThat(reportString, containsRegexp(item(
                         new Field(Field.Type.ID, "itest-wrong-type"),
                         new Field(Field.Type.VERSION, 1),
                         new Field(Field.Type.STATUS, ItemStatus.APPROVED),
                         new Field(Field.Type.SHALLOW_COVERAGE, DeepCoverageStatus.COVERED),
                         new Field(Field.Type.DEEP_COVERAGE, DeepCoverageStatus.COVERED),
-                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-type", 1)
-                ))),
+                        new Field(Field.Type.COVERING_ITEMS, "dsn-uncovered-impl-wrong-type", 1)))),
                 () -> assertThat(reportString, endsWith("</specdocument>")));
     }
 
@@ -523,7 +488,7 @@ public class TestASpecReport
     private String item(final Field... fields)
     {
         final StringBuilder result = new StringBuilder();
-        Map<Field.Type, List<Field>> fieldMap = new HashMap<>();
+        final Map<Field.Type, List<Field>> fieldMap = new HashMap<>();
         for (final Field field : fields)
         {
             final List<Field> value = fieldMap.containsKey(field.type) ? fieldMap.get(field.type) : new ArrayList<>();
@@ -595,7 +560,7 @@ public class TestASpecReport
         }
     }
 
-    public void addItemList(final Map<Field.Type, List<Field>> fields, final StringBuilder b, final Field.Type field,
+    void addItemList(final Map<Field.Type, List<Field>> fields, final StringBuilder b, final Field.Type field,
             final String fieldName, final String fieldWrapper)
     {
         if (fields.containsKey(field))
@@ -634,44 +599,37 @@ public class TestASpecReport
     {
         enum Type
         {
-            ID, VERSION, STATUS, DESCRIPTION, NEEDS_COVERAGE, SHALLOW_COVERAGE, DEEP_COVERAGE, COVERED_ITEMS,
-            COVERED_TYPES, UNCOVERED_TYPES, COVERING_ITEMS, DEPENDENCIES
+            ID, VERSION, STATUS, DESCRIPTION, NEEDS_COVERAGE, SHALLOW_COVERAGE, DEEP_COVERAGE, COVERED_ITEMS, COVERED_TYPES, UNCOVERED_TYPES, COVERING_ITEMS, DEPENDENCIES
         }
 
         private final Type type;
         private final List<String> values = new ArrayList<>();
 
-        public Field(final Type type, final String... value)
+        Field(final Type type, final String... value)
         {
             this.type = type;
             Collections.addAll(values, value);
         }
 
-        public Field(final Type type, final int value)
+        Field(final Type type, final int value)
         {
             this.type = type;
             values.add(Integer.toString(value));
         }
 
-        public Field(final Type type, final ItemStatus value)
+        Field(final Type type, final ItemStatus value)
         {
             this.type = type;
             values.add(value.toString());
         }
 
-        public Field(final Type type, final SampleArtifactTypes... value)
-        {
-            this.type = type;
-            Arrays.stream(value).forEach(entry -> values.add(entry.toString()));
-        }
-
-        public Field(final Type type, final DeepCoverageStatus value)
+        Field(final Type type, final DeepCoverageStatus value)
         {
             this.type = type;
             values.add(value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED");
         }
 
-        public Field(final Type type, final String id, final int version, ItemStatus status,
+        Field(final Type type, final String id, final int version, ItemStatus status,
                 final DeepCoverageStatus ownCoverage,
                 final DeepCoverageStatus deepCoverage,
                 final ASpecReport.CoveringStatus coveringStatus)
@@ -699,9 +657,8 @@ public class TestASpecReport
     }
 
     @Factory
-    public static Matcher<String> containsRegexp(final String regexp)
+    static Matcher<String> containsRegexp(final String regexp)
     {
         return new StringRegexpMatcher(regexp);
     }
-
 }

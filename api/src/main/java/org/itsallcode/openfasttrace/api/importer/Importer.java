@@ -22,7 +22,6 @@ package org.itsallcode.openfasttrace.api.importer;
  * #L%
  */
 
-
 /**
  * Common interface for all importer implementations
  */

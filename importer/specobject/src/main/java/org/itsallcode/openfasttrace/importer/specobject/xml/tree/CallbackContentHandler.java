@@ -34,6 +34,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterException;
 public class CallbackContentHandler implements TreeContentHandler
 {
     private static final Logger LOG = Logger.getLogger(CallbackContentHandler.class.getName());
+    public static final String OPENFASTTRACE_XML_NAMESPACE = "https://github.com/itsallcode/openfasttrace";
 
     private final Map<String, Consumer<TreeElement>> startElementListeners = new HashMap<>();
 
@@ -69,7 +70,8 @@ public class CallbackContentHandler implements TreeContentHandler
             throw new IllegalArgumentException(
                     "Listener already registered for start element " + elementName);
         }
-        this.startElementListeners.put(elementName, startElement -> {
+        this.startElementListeners.put(elementName, startElement ->
+        {
             if (endElementConsumer != null)
             {
                 startElement.setEndElementListener(endElementConsumer);
@@ -89,6 +91,12 @@ public class CallbackContentHandler implements TreeContentHandler
     public void startElement(final TreeElement treeElement)
     {
         LOG.finest(() -> "Start element: " + treeElement);
+        final String namespaceURI = treeElement.getElement().getName().getNamespaceURI();
+        if (!"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI))
+        {
+            LOG.finest(() -> "custom XML element with namespace " + namespaceURI);
+            return;
+        }
         final Consumer<TreeElement> consumer = this.startElementListeners.getOrDefault(
                 treeElement.getElement().getName().getLocalPart(),
                 this.defaultStartElementListener);
@@ -129,7 +137,8 @@ public class CallbackContentHandler implements TreeContentHandler
     public CallbackContentHandler addIntDataListener(final String elementName,
             final IntConsumer listener)
     {
-        addCharacterDataListener(elementName, data -> {
+        addCharacterDataListener(elementName, data ->
+        {
             if (data == null || data.isEmpty())
             {
                 throw new IllegalStateException("No string data found for element " + elementName);
@@ -143,7 +152,9 @@ public class CallbackContentHandler implements TreeContentHandler
     public CallbackContentHandler addCharacterDataListener(final String elementName,
             final Consumer<String> listener)
     {
-        addElementListener(elementName, startElement -> {},
+        addElementListener(elementName, startElement ->
+                {
+                },
                 endElement -> listener.accept(endElement.getCharacterData()));
         return this;
     }

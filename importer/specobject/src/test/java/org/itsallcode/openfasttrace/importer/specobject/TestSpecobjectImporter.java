@@ -10,18 +10,20 @@ package org.itsallcode.openfasttrace.importer.specobject;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -29,6 +31,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.*;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -37,8 +43,12 @@ import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.logging.LogRecordListener;
+import org.junit.platform.commons.logging.LoggerFactory;
+import org.mockito.internal.debugging.LoggingListener;
 
 class TestSpecobjectImporter
 {
@@ -299,4 +309,105 @@ class TestSpecobjectImporter
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
+
+    @Test
+    void testCustomTagsWithoutNamespacesLogsWarning()
+    {
+        final RecordingLogHandler logHandler = RecordingLogHandler.registerRecordingLogHandler();
+        importFromString(
+                "<specdocument>" //
+                        + "  <specobjects doctype=\"req\">\n" //
+                        + "    <specobject>\n" //
+                        + "      <id>minimal</id>\n" //
+                        + "      <version>1</version>\n" //
+                        + "    </specobject>\n" //
+                        + "  </specobjects>\n" //
+                        + "  <extension>\n" //
+                        + "  </extension>\n" //
+                        + "</specdocument>");
+        assertThat(logHandler.getLogRecords().filter((logRecord) -> logRecord.getLevel() == Level.WARNING).count(),
+                equalTo(1L));
+    }
+
+    @Test
+    void testCustomTagsWithNamespacesLogsNoWarning()
+    {
+        final RecordingLogHandler logHandler = RecordingLogHandler.registerRecordingLogHandler();
+        importFromString(
+                "<specdocument xmlns:x=\"http://extension\">" //
+                        + "  <specobjects doctype=\"req\">\n" //
+                        + "    <specobject>\n" //
+                        + "      <id>minimal</id>\n" //
+                        + "      <version>1</version>\n" //
+                        + "      <x:extension>\n" //
+                        + "      </x:extension>\n" //
+                        + "    </specobject>\n" //
+                        + "  </specobjects>\n" //
+                        + "  <x:extension>\n" //
+                        + "  </x:extension>\n" //
+                        + "</specdocument>");
+        assertThat(logHandler.getLogRecords().count(), equalTo(0L));
+    }
+
+    @Test
+    void testCustomTagsWithNamespacesPlusOftNamespaceLogsNoWarning()
+    {
+        final RecordingLogHandler logHandler = RecordingLogHandler.registerRecordingLogHandler();
+        importFromString(
+                "<specdocument xmlns=\"https://github.com/itsallcode/openfasttrace\"\n" //
+                        + "         xmlns:x=\"http://extension\">" //
+                        + "  <specobjects doctype=\"req\">\n" //
+                        + "    <specobject>\n" //
+                        + "      <id>minimal</id>\n" //
+                        + "      <version>1</version>\n" //
+                        + "    </specobject>\n" //
+                        + "  </specobjects>\n" //
+                        + "  <x:extension>\n" //
+                        + "  </x:extension>\n" //
+                        + "</specdocument>");
+        assertThat(logHandler.getLogRecords().count(), equalTo(0L));
+    }
+
+    private static class RecordingLogHandler extends ConsoleHandler
+    {
+
+        private final List<LogRecord> logRecords = new ArrayList<>();
+
+        public static RecordingLogHandler registerRecordingLogHandler()
+        {
+            final RecordingLogHandler logHandler = new RecordingLogHandler();
+            final Logger rootLogger = Logger.getLogger("");
+            rootLogger.setLevel(Level.WARNING);
+            rootLogger.addHandler(logHandler);
+
+            return logHandler;
+        }
+
+        public RecordingLogHandler()
+        {
+            super();
+        }
+
+        @Override public void publish(LogRecord record)
+        {
+            logRecords.add(record);
+            super.publish(record);
+        }
+
+        public Stream<LogRecord> getLogRecords()
+        {
+            return logRecords.stream();
+        }
+
+    }
+
+    private Stream<LogRecord> getLogStream(Class<?> listenedClass)
+    {
+        final LogRecordListener listener = new LogRecordListener();
+        LoggerFactory.addListener(listener);
+        LoggerFactory.getLogger(listenedClass);
+        return listener.stream();
+
+    }
+
 }

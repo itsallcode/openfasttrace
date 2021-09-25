@@ -55,7 +55,6 @@ class SpecobjectImporter implements Importer
     {
         this.file = file;
         this.saxParserFactory = saxParserFactory;
-        this.saxParserFactory.setNamespaceAware(true);
         this.listener = listener;
     }
 

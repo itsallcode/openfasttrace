@@ -49,6 +49,7 @@ public class SaxParserConfigurator
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try
         {
+            parserFactory.setNamespaceAware(true);
             parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         }
         catch (SAXNotRecognizedException | SAXNotSupportedException

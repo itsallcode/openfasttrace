@@ -115,7 +115,6 @@ public class CallbackContentHandler implements TreeContentHandler
         }
         this.startElementListeners.put(elementName, startElement -> {
             if (endElementListener != null)
-
             {
                 startElement.addEndElementListener(endElementListener);
             }
@@ -135,7 +134,7 @@ public class CallbackContentHandler implements TreeContentHandler
     {
         LOG.finest(() -> "Start element: " + treeElement);
         final String namespaceURI = treeElement.getElement().getName().getNamespaceURI();
-        if (!"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI))
+        if (isCustomXMLNamespace(namespaceURI))
         {
             LOG.finest(() -> "custom XML element with namespace " + namespaceURI);
             return;
@@ -157,6 +156,11 @@ public class CallbackContentHandler implements TreeContentHandler
             throw new ImporterException("Error handling " + treeElement + " with consumer "
                     + consumer + ": " + e.getMessage(), e);
         }
+    }
+
+    private boolean isCustomXMLNamespace(String namespaceURI)
+    {
+        return !"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI);
     }
 
     @Override

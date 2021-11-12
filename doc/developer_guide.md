@@ -147,6 +147,7 @@ This currently only works for release version numbers, not SNAPSHOT versions.
                 </activation>
                 <properties>
                     <gpg.executable>gpg</gpg.executable>
+                    <gpg.keyname>key_id</gpg.keyname>
                     <gpg.passphrase>the_pass_phrase</gpg.passphrase>
                 </properties>
             </profile>

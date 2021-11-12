@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2021-11-12
+
 ### Added
 
 - [Go](https://golang.org/) support for Tag Importer [#294](https://github.com/itsallcode/openfasttrace/issues/294)

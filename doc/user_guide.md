@@ -849,6 +849,29 @@ if (trace.hasNoDefects())
 }
 ```
 
+#### Reporting Formats
+
+There are various reporting formats for OFT and one can set it using the ReportSettings object.
+
+```JAVA
+ReportSettings reportSettings = ReportSettings.builder().outputFormat("html").build();
+```
+
+The ReportSettings builder has other functions as well that allow you to set verbosity etc.
+
+OFT allows you to report directly to the standard output or to a file
+
+```JAVA
+//Reporting to a file
+oft.reportToPath(trace, reportPath, reportSettings);
+```
+
+```JAVA
+//Reporting to stdout
+oft.reportToStdOut(trace);
+```
+
+
 #### Configuring the Steps
 
 Import, export and report each have a overloaded variant that can be configured using the following classes

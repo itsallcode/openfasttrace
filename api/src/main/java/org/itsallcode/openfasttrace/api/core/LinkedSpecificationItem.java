@@ -173,6 +173,8 @@ public class LinkedSpecificationItem
         case COVERED_PREDATED:
             addMyItemIdToCoveringItem(item);
             break;
+        default:
+            // ignore
         }
     }
 
@@ -181,7 +183,9 @@ public class LinkedSpecificationItem
         if (coveringItem.getItem().getCoveredIds() != null)
         {
             if (!coveringItem.getItem().getCoveredIds().contains(getId()))
+            {
                 coveringItem.getItem().getCoveredIds().add(getId());
+            }
         }
     }
 

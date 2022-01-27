@@ -262,6 +262,7 @@ class TestTagImporter
         assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->\n" + ID1_TEXT + "]");
     }
 
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
     @Test
     void tagWithSingleRequiredCoverage()
     {
@@ -269,6 +270,7 @@ class TestTagImporter
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1, List.of(NEEDED_COVERAGE1)));
     }
 
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
     @Test
     void tagWithMultipleRequiredCoverage()
     {

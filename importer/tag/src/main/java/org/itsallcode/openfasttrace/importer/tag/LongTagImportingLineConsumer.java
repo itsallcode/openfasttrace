@@ -36,6 +36,7 @@ import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 // [impl->dsn~import.full-coverage-tag~1]
+// [impl->dsn~import.full-coverage-tag-with-needed-coverage~1]
 class LongTagImportingLineConsumer extends RegexLineConsumer
 {
     private static final Logger LOG = Logger

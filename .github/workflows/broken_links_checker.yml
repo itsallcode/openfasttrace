@@ -2,11 +2,9 @@ name: Broken Links Checker
 
 on:
   push:
-    branches:
-      - develop
-  schedule:
-    - cron: "0 5 * * *"
+    branches: [ master, develop ]
   pull_request:
+    branches: [ master, develop ]
 
 jobs:
   linkChecker:

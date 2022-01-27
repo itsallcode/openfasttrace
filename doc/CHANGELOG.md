@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.4.0] - 2022-01-27
+## [3.4.0] - 2022-01-??
 
 ### Added
 
 - Optionally require coverage in Tag importer [#306](https://github.com/itsallcode/openfasttrace/issues/306) / [PR #307](https://github.com/itsallcode/openfasttrace/pull/307)
+
+### Updated
+
+- Upgrade dependencies [#310](https://github.com/itsallcode/openfasttrace/issues/310)
 
 ## [3.3.0] - 2021-11-12
 

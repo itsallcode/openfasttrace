@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [11, 16]
+        java: [11, 17]
     env:
       DEFAULT_JAVA: 11
 

@@ -38,8 +38,8 @@ Sonarcloud status:
 * [Developer Guide](doc/developer_guide.md)
 * [Contributing guide](CONTRIBUTING.md)
 * [Command Line Usage](doc/usage.txt)
-* [Design](doc/design.md)
-* [System Requirements](doc/system_requirements.md)
+* [Design](doc/spec/design.md)
+* [System Requirements](doc/spec/system_requirements.md)
 
 ## Using OpenFastTrace
 

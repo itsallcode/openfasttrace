@@ -775,7 +775,7 @@ and the requirement type with the element `<doctype>`.
 
 If you are a software developer planning to integrate OFT into one of your programs or scripts, you will probably want to use the OFT API.
 
-Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interface [org.itsallcode.openfasttrace.Oft](../src/main/java/org/itsallcoded/openfasttrace/Oft.java) in the source code.
+Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interface [org.itsallcode.openfasttrace.core.Oft](../core/src/main/java/org/itsallcode/openfasttrace/core/Oft.java) in the source code.
 
 ### Using OFT From Java
 
@@ -864,9 +864,9 @@ if (trace.hasNoDefects())
 
 Import, export and report each have a overloaded variant that can be configured using the following classes
 
-* [org.itsallcode.openfasttrace.ImportSettings](../src/main/java/org/itsallcoded/openfasttrace/ImportSettings.java)
-* [org.itsallcode.openfasttrace.ExportSettings](../src/main/java/org/itsallcoded/openfasttrace/ExportSettings.java)
-* [org.itsallcode.openfasttrace.ReportSettings](../src/main/java/org/itsallcoded/openfasttrace/ReportSettings.java)
+* [org.itsallcode.openfasttrace.api.importer.ImportSettings](../api/src/main/java/org/itsallcode/openfasttrace/api/importer/ImportSettings.java)
+* [org.itsallcode.openfasttrace.core.ExportSettings](../core/src/main/java/org/itsallcode/openfasttrace/core/ExportSettings.java)
+* [org.itsallcode.openfasttrace.api.ReportSettings](../api/src/main/java/org/itsallcode/openfasttrace/api/ReportSettings.java)
 
 Each of those classes comes with a builder which is called like this:
 

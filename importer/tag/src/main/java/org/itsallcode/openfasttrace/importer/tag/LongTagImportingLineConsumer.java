@@ -46,7 +46,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "([\\p{Alpha},\\s]+)";
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" +OPTIONAL_WHITESPACE + "," + OPTIONAL_WHITESPACE +  "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //

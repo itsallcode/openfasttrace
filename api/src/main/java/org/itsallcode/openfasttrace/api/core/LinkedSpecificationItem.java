@@ -174,7 +174,7 @@ public class LinkedSpecificationItem
             addMyItemIdToCoveringItem(item);
             break;
         default:
-            // ignore
+            // Intentionally left empty.
         }
     }
 

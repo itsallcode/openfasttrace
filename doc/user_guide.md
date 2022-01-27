@@ -443,6 +443,18 @@ Here is an example of a tag embedded into a Java comment:
 // [impl->dsn~validate-authentication-request~1]
 ```
 
+When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:
+
+```
+[ <covered-artifact-type> -> <specification-object-id> >> <list-of-needed-artifcat-types> ]
+```
+
+Example:
+
+```plantuml
+' [dsn->req~1password-login~1>>impl,test]
+```
+
 The Tag Importer recognizes the supported format by the file extension. The following list shows the standard set of
 recognized file types:
 
@@ -468,7 +480,6 @@ recognized file types:
 * Shell programming (`.sh`, `.bash`, `.zsh`)
 * Swift (`.swift`)
 * Windows batch files (`.bat`)
-* Z-Shell (`.zsh`)
 
 **Markup languages**
 
@@ -477,7 +488,7 @@ recognized file types:
 
 **Modeling languages**
 
-* [PlantUML](https://plantuml.com) (`.pu`, `.puml`, `.plantuml`
+* [PlantUML](https://plantuml.com) (`.pu`, `.puml`, `.plantuml`)
 
 Note that XML is at the moment not yet supported by the Tag Importer, because it would collide with the SpecObj Importer. Once import fallback is implemented, XML will be supported too.
 

@@ -24,6 +24,7 @@ package org.itsallcode.openfasttrace.api.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -46,9 +47,10 @@ class SpecificationItemIdTest
     void parsingValidIdsSucceeds(String id, String expectedType, String expectedName, int expectedRevision)
     {
         final SpecificationItemId parsedId = parseId(id);
-        assertThat(parsedId.getArtifactType(), equalTo(expectedType));
-        assertThat(parsedId.getName(), equalTo(expectedName));
-        assertThat(parsedId.getRevision(), equalTo(expectedRevision));
+        assertAll(
+                () -> assertThat(parsedId.getArtifactType(), equalTo(expectedType)),
+                () -> assertThat(parsedId.getName(), equalTo(expectedName)),
+                () -> assertThat(parsedId.getRevision(), equalTo(expectedRevision)));
     }
 
     @ParameterizedTest(name = "Parsing of id ''{0}'' fails")

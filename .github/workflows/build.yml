@@ -70,3 +70,6 @@ jobs:
       with:
         name: oft
         path: product/target/openfasttrace-*.jar
+
+    - name: Trace requirements
+      run: ./oft-self-trace.sh

@@ -1,0 +1,24 @@
+name: Broken Links Checker
+
+on:
+  push:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 5 * * *"
+  pull_request:
+
+jobs:
+  linkChecker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure broken links checker
+        run: |
+          mkdir -p ./target
+          echo '{ "aliveStatusCodes": [429, 200] }' > ./target/broken_links_checker.json
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          use-verbose-mode: 'yes'
+          config-file: ./target/broken_links_checker.json

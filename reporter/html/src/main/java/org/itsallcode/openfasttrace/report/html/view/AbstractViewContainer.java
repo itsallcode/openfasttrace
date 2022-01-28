@@ -30,14 +30,14 @@ import java.util.List;
  */
 public abstract class AbstractViewContainer implements ViewableContainer
 {
-    private List<Viewable> children;
+    private final List<Viewable> children;
     private final String id;
     private final String title;
 
     /**
      * Create a new instance of type {@link AbstractViewContainer}.
      */
-    public AbstractViewContainer()
+    protected AbstractViewContainer()
     {
         this(null, null);
     }
@@ -50,7 +50,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * @param title
      *            container title
      */
-    public AbstractViewContainer(final String id, final String title)
+    protected AbstractViewContainer(final String id, final String title)
     {
         this.id = id;
         this.title = title;

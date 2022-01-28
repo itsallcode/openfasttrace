@@ -45,6 +45,12 @@ import static java.util.stream.Collectors.toList;
 
 class ASpecReport implements Reportable
 {
+    private static final String ELEMENT_VERSION = "version";
+    private static final String ELEMENT_COVERING_STATUS = "coveringStatus";
+    private static final String VALUE_UNCOVERED = "UNCOVERED";
+    private static final String VALUE_COVERED = "COVERED";
+    private static final String ATTRIBUTE_DOCTYPE = "doctype";
+
     private static final Logger LOG = Logger.getLogger(ASpecReport.class.getName());
 
     private final Trace trace;
@@ -132,7 +138,7 @@ class ASpecReport implements Reportable
     {
         LOG.finest(() -> "Writing " + specItems.size() + " items with doctype " + doctype);
         writer.writeStartElement("specobjects");
-        writer.writeAttribute("doctype", doctype);
+        writer.writeAttribute(ATTRIBUTE_DOCTYPE, doctype);
         for (final LinkedSpecificationItem item : specItems)
         {
             writeItem(writer, item);
@@ -161,7 +167,7 @@ class ASpecReport implements Reportable
         final String comment = processMultilineText(item.getItem().getComment());
 
         writeElement(writer, "id", item.getName());
-        writeElement(writer, "version", item.getRevision());
+        writeElement(writer, ELEMENT_VERSION, item.getRevision());
         writeElementIfPresent(writer, "shortdesc", item.getTitle());
         writeElement(writer, "status", item.getStatus().toString());
         writeLocation(writer, item.getLocation());
@@ -201,7 +207,7 @@ class ASpecReport implements Reportable
         writer.writeStartElement("coverage");
         writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());
         writeElement(writer, "shallowCoverageStatus",
-                item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
+                item.isCoveredShallowWithApprovedItems() ? VALUE_COVERED : VALUE_UNCOVERED);
         writeElement(writer, "deepCoverageStatus", item.getDeepCoverageStatusOnlyAcceptApprovedItems().name());
 
         writeCoveringSpecObjects(writer, item);
@@ -215,11 +221,11 @@ class ASpecReport implements Reportable
             throws XMLStreamException
     {
         writer.writeStartElement("coveringSpecObjects");
-        for (Map.Entry<LinkStatus, List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
+        for (final Map.Entry<LinkStatus, List<LinkedSpecificationItem>> entry : item.getLinks().entrySet().stream()
                 .filter(entry -> entry.getKey().isIncoming())
                 .collect(Collectors.toCollection(LinkedList::new)))
         {
-            for (LinkedSpecificationItem coveringItem : entry.getValue())
+            for (final LinkedSpecificationItem coveringItem : entry.getValue())
             {
                 writeCoveringSpecObject(writer, entry.getKey(), coveringItem);
             }
@@ -233,13 +239,14 @@ class ASpecReport implements Reportable
         writer.writeStartElement("coveringSpecObject");
 
         writeElement(writer, "id", item.getName());
-        writeElement(writer, "version", item.getRevision());
-        writeElement(writer, "doctype", item.getArtifactType());
+        writeElement(writer, ELEMENT_VERSION, item.getRevision());
+        writeElement(writer, ATTRIBUTE_DOCTYPE, item.getArtifactType());
         writeElement(writer, "status", item.getStatus().toString());
-        writeElement(writer, "ownCoverageStatus", item.isCoveredShallowWithApprovedItems() ? "COVERED" : "UNCOVERED");
+        writeElement(writer, "ownCoverageStatus",
+                item.isCoveredShallowWithApprovedItems() ? VALUE_COVERED : VALUE_UNCOVERED);
         final DeepCoverageStatus deepCoverageStatus = item.getDeepCoverageStatusOnlyAcceptApprovedItems();
         writeElement(writer, "deepCoverageStatus",
-                deepCoverageStatus == DeepCoverageStatus.COVERED ? "COVERED" : deepCoverageStatus.name());
+                deepCoverageStatus == DeepCoverageStatus.COVERED ? VALUE_COVERED : deepCoverageStatus.name());
 
         writeCoveringStatus(writer, linkStatus, deepCoverageStatus);
 
@@ -252,19 +259,19 @@ class ASpecReport implements Reportable
     {
         if (linkStatus == LinkStatus.COVERED_SHALLOW && deepCoverageStatus == DeepCoverageStatus.COVERED)
         {
-            writeElement(writer, "coveringStatus", CoveringStatus.COVERING.getLabel());
+            writeElement(writer, ELEMENT_COVERING_STATUS, CoveringStatus.COVERING.getLabel());
         }
         else if (linkStatus == LinkStatus.COVERED_SHALLOW)
         {
-            writeElement(writer, "coveringStatus", CoveringStatus.UNCOVERED.getLabel());
+            writeElement(writer, ELEMENT_COVERING_STATUS, CoveringStatus.UNCOVERED.getLabel());
         }
         else if (linkStatus == LinkStatus.COVERED_PREDATED || linkStatus == LinkStatus.COVERED_OUTDATED)
         {
-            writeElement(writer, "coveringStatus", CoveringStatus.OUTDATED.getLabel());
+            writeElement(writer, ELEMENT_COVERING_STATUS, CoveringStatus.OUTDATED.getLabel());
         }
         else if (linkStatus == LinkStatus.AMBIGUOUS || linkStatus == LinkStatus.COVERED_UNWANTED)
         {
-            writeElement(writer, "coveringStatus", CoveringStatus.UNEXPECTED.getLabel());
+            writeElement(writer, ELEMENT_COVERING_STATUS, CoveringStatus.UNEXPECTED.getLabel());
         }
     }
 
@@ -280,8 +287,8 @@ class ASpecReport implements Reportable
         {
             writer.writeStartElement("dependsOnSpecObject");
             writeElement(writer, "id", dependsOnId.getName());
-            writeElement(writer, "version", dependsOnId.getRevision());
-            writeElement(writer, "doctype", dependsOnId.getArtifactType());
+            writeElement(writer, ELEMENT_VERSION, dependsOnId.getRevision());
+            writeElement(writer, ATTRIBUTE_DOCTYPE, dependsOnId.getArtifactType());
             writer.writeEndElement();
         }
         writer.writeEndElement();
@@ -299,8 +306,8 @@ class ASpecReport implements Reportable
         {
             writer.writeStartElement("coveredType");
             writeElement(writer, "id", coveredId.getName());
-            writeElement(writer, "version", coveredId.getRevision());
-            writeElement(writer, "doctype", coveredId.getArtifactType());
+            writeElement(writer, ELEMENT_VERSION, coveredId.getRevision());
+            writeElement(writer, ATTRIBUTE_DOCTYPE, coveredId.getArtifactType());
             writer.writeEndElement();
         }
         writer.writeEndElement();
@@ -324,7 +331,9 @@ class ASpecReport implements Reportable
     private void writeCoveredTypes(final XMLStreamWriter writer, final Set<String> types) throws XMLStreamException
     {
         if (types.isEmpty())
+        {
             return;
+        }
         writer.writeStartElement("coveredTypes");
         for (final String type : types)
         {
@@ -336,7 +345,9 @@ class ASpecReport implements Reportable
     private void writeUncoveredTypes(final XMLStreamWriter writer, final List<String> types) throws XMLStreamException
     {
         if (types.isEmpty())
+        {
             return;
+        }
         writer.writeStartElement("uncoveredTypes");
         for (final String type : types)
         {
@@ -379,7 +390,7 @@ class ASpecReport implements Reportable
 
     public enum CoveringStatus
     {
-        COVERING("COVERING"), UNCOVERED("UNCOVERED"), OUTDATED("COVERING_WRONG_VERSION"), UNEXPECTED("UNEXPECTED");
+        COVERING("COVERING"), UNCOVERED(VALUE_UNCOVERED), OUTDATED("COVERING_WRONG_VERSION"), UNEXPECTED("UNEXPECTED");
 
         private final String label;
 

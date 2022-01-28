@@ -32,7 +32,7 @@ import java.util.logging.LogRecord;
 public class NoOpLoggingHandler extends Handler
 {
     @Override
-    public void publish(final LogRecord record)
+    public void publish(final LogRecord logRecord)
     {
         // empty on purpose
     }

@@ -174,18 +174,17 @@ public class LinkedSpecificationItem
             addMyItemIdToCoveringItem(item);
             break;
         default:
-            // Intentionally left empty.
+            // ignore
+            break;
         }
     }
 
     private void addMyItemIdToCoveringItem(LinkedSpecificationItem coveringItem)
     {
-        if (coveringItem.getItem().getCoveredIds() != null)
+        if (coveringItem.getItem().getCoveredIds() != null
+                && !coveringItem.getItem().getCoveredIds().contains(getId()))
         {
-            if (!coveringItem.getItem().getCoveredIds().contains(getId()))
-            {
-                coveringItem.getItem().getCoveredIds().add(getId());
-            }
+            coveringItem.getItem().getCoveredIds().add(getId());
         }
     }
 

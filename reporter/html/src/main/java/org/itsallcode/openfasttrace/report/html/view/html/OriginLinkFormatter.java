@@ -35,7 +35,7 @@ import org.itsallcode.openfasttrace.api.core.Location;
 public final class OriginLinkFormatter
 {
     private static final Pattern PROTOCOL_PREFIX_PATTERN = Pattern
-            .compile("^file://|ftp://|mailto:|https?://.*");
+            .compile("^(?:file://|ftp://|mailto:|https?://).*");
 
     private OriginLinkFormatter()
     {
@@ -138,6 +138,6 @@ public final class OriginLinkFormatter
 
     private static String unWindowsify(final String path)
     {
-        return path.replaceAll("\\\\", "/");
+        return path.replace("\\\\", "/");
     }
 }

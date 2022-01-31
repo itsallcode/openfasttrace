@@ -159,12 +159,6 @@ public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter implemen
         super.writeEndElement();
     }
 
-    @Override
-    public void close() throws XMLStreamException
-    {
-        super.close();
-    }
-
     private void onEndElement() throws XMLStreamException
     {
         depth--;

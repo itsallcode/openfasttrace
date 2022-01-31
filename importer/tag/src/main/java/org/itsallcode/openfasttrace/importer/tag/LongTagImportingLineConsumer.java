@@ -21,6 +21,13 @@ package org.itsallcode.openfasttrace.importer.tag;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
@@ -29,22 +36,32 @@ import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 // [impl->dsn~import.full-coverage-tag~1]
+// [impl->dsn~import.full-coverage-tag-with-needed-coverage~1]
 class LongTagImportingLineConsumer extends RegexLineConsumer
 {
     private static final Logger LOG = Logger
             .getLogger(LongTagImportingLineConsumer.class.getName());
 
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
+    private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String TAG_REGEX = TAG_PREFIX //
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
+            + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
+    private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
-            + "->" //
+            + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
             + "(" + SpecificationItemId.ID_PATTERN + ")" //
+            + OPTIONAL_WHITESPACE + optional(NEEDS_COVERAGE + OPTIONAL_WHITESPACE) //
             + TAG_SUFFIX;
 
     private final InputFile file;
     private final ImportEventListener listener;
+
+    private static String optional(String regex)
+    {
+        return "(?:" + regex + ")?";
+    }
 
     LongTagImportingLineConsumer(final InputFile file, final ImportEventListener listener)
     {
@@ -63,11 +80,35 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
                 generatedName, 0);
 
-        LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                + "' covering id '" + coveredId + "'");
+        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(6));
+
+        if (neededArtifactTypes.isEmpty())
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId);
+        }
+        else
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId + "', needs artifact types " + neededArtifactTypes);
+        }
         this.listener.setId(generatedId);
         this.listener.addCoveredId(coveredId);
+        neededArtifactTypes.forEach(listener::addNeededArtifactType);
         this.listener.endSpecificationItem();
+    }
+
+    private List<String> parseCommaSeparatedList(String input)
+    {
+        if (input == null)
+        {
+            return emptyList();
+        }
+
+        return Arrays.stream(input.split(","))
+                .map(String::trim)
+                .filter(Predicate.not(String::isEmpty))
+                .collect(toList());
     }
 
     private String generateName(final SpecificationItemId coveredId, final int lineNumber,

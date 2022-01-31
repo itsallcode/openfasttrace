@@ -290,11 +290,9 @@ class TestTagImporter
     }
 
     @Test
-    void requiredCoverageWithSpace()
+    void requiredCoverageWithSpaceIgnored()
     {
-        assertItems(
-                "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> tag with space ]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1, List.of("tag with space")));
+        assertItems("[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> tag with space ]");
     }
 
     private String tag(final String coveringArtifactType, final String coveredId)

@@ -46,7 +46,8 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "([\\p{Alpha},\\s]+)";
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
+            + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
@@ -81,8 +82,16 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
 
         final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(6));
 
-        LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                + "' covering id '" + coveredId + "', needs artifact types " + neededArtifactTypes);
+        if (neededArtifactTypes.isEmpty())
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId);
+        }
+        else
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId + "', needs artifact types " + neededArtifactTypes);
+        }
         this.listener.setId(generatedId);
         this.listener.addCoveredId(coveredId);
         neededArtifactTypes.forEach(listener::addNeededArtifactType);

@@ -700,13 +700,14 @@ Needs: impl, utest
 
 OFT imports coverage tags in the full tag format with a list of required/needed artifact types:
 
-    full-tag-with-needed-coverage = "[" *WSP reference "->" requirement-id ">>" artifact-type *("," *WSP artifact-type) "]"
+    full-tag-with-needed-coverage = "[" *WSP reference *WSP "->" *WSP requirement-id
+    *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
 
 Rationale:
 
-The Tag importer is the catch all solution for all file formats that don't have a dedicated importer. Currently specification items imported via Tag importer can only be leaves in the specification tree. That means they can only cover but not require coverage.
+The Tag importer is the catch all solution for all file formats that don't have a dedicated importer. We want to allow specification items imported via Tag importer to be intermediate nodes in the specification tree, instead of limiting them to leaves in the specification tree. Because leaves can only cover other specification items, but not require coverage.
 
-Especially when used for design document files like UML models, requiring coverage would be very useful.
+Especially when used for design document files like UML models, requiring coverage is useful.
 
 Covers:
 

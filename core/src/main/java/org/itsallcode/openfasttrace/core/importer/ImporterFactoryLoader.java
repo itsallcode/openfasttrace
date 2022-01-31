@@ -76,12 +76,12 @@ public class ImporterFactoryLoader
         switch (matchingImporters.size())
         {
         case 0:
-            LOG.info("Found no matching importer for file '" + file + "'");
+            LOG.info(() -> "Found no matching importer for file '" + file + "'");
             return Optional.empty();
         case 1:
             return Optional.of(matchingImporters.get(0));
         default:
-            LOG.info("Found more than one matching importer for file '" + file + "'");
+            LOG.info(() -> "Found more than one matching importer for file '" + file + "'");
             return Optional.empty();
         }
     }

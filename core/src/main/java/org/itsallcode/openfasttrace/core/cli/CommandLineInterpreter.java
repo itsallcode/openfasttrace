@@ -74,7 +74,7 @@ public class CommandLineInterpreter
         final Class<?> receiverClass = argumentsReceiver.getClass();
         final Stream<Method> methods = Arrays.stream(receiverClass.getMethods());
         final Map<String, Method> setterMethods = methods
-                .filter(method -> method.getName().startsWith(SETTER_PREFIX)) //
+                .filter(method -> method.getName().startsWith(SETTER_PREFIX))
                 .collect(toMap(CommandLineInterpreter::getSetterName, Function.identity()));
         LOG.finest(() -> "Found setter methods " + setterMethods.keySet()
                 + " for argument receiver " + argumentsReceiver.getClass());
@@ -83,8 +83,8 @@ public class CommandLineInterpreter
 
     private static String getSetterName(final Method method)
     {
-        return method.getName() //
-                .substring(SETTER_PREFIX.length()) //
+        return method.getName()
+                .substring(SETTER_PREFIX.length())
                 .toLowerCase();
     }
 
@@ -150,7 +150,7 @@ public class CommandLineInterpreter
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
             throws CliException
     {
-        final String argumentName = argument.replaceAll("-", "").toLowerCase();
+        final String argumentName = argument.replace("-", "").toLowerCase();
         if (this.setters.containsKey(argumentName))
         {
             handleExpectedNamedArgument(iterator, argumentName);

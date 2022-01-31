@@ -700,7 +700,8 @@ Needs: impl, utest
 
 OFT imports coverage tags in the full tag format with a list of required/needed artifact types:
 
-    full-tag-with-needed-coverage = "[" *WSP reference "->" requirement-id ">>" artifact-type *("," *WSP artifact-type) "]"
+    full-tag-with-needed-coverage = "[" *WSP reference *WSP "->" *WSP requirement-id
+    *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
 
 Rationale:
 

@@ -38,7 +38,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterException;
 public class CallbackContentHandler implements TreeContentHandler
 {
     private static final Logger LOG = Logger.getLogger(CallbackContentHandler.class.getName());
-    public static final String OPENFASTTRACE_XML_NAMESPACE = "https://github.com/itsallcode/openfasttrace";
+    private static final String OPENFASTTRACE_XML_NAMESPACE = "https://github.com/itsallcode/openfasttrace";
 
     private final Map<String, Consumer<TreeElement>> startElementListeners = new HashMap<>();
 

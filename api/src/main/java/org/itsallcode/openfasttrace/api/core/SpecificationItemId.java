@@ -46,7 +46,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     public static final String UNKNOWN_ARTIFACT_TYPE = "unknown";
     private static final String ITEM_REVISION_PATTERN = "(\\d+)";
     /** Regexp pattern for item names. */
-    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
+    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
     /** Separator between artifact type and name in an item ID. */

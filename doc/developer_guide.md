@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>3.2.1</version>
+        <version>3.4.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:3.2.1"
+    compile "org.itsallcode.openfasttrace:openfasttrace:3.4.0"
 }
 ```
 
@@ -147,6 +147,7 @@ This currently only works for release version numbers, not SNAPSHOT versions.
                 </activation>
                 <properties>
                     <gpg.executable>gpg</gpg.executable>
+                    <gpg.keyname>key_id</gpg.keyname>
                     <gpg.passphrase>the_pass_phrase</gpg.passphrase>
                 </properties>
             </profile>

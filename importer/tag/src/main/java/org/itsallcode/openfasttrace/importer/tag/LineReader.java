@@ -78,6 +78,15 @@ class LineReader
     @FunctionalInterface
     public interface LineConsumer
     {
+        /**
+         * Process a single line from the input.
+         * 
+         * @param line
+         *            current line.
+         * @param lineNumber
+         *            number of the current line, starting with {@code 1}
+         *            for the first line.
+         */
         void readLine(int lineNumber, String line);
     }
 }

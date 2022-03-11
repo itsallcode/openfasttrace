@@ -857,7 +857,7 @@ There are various reporting formats for OFT and one can set it using the ReportS
 ReportSettings reportSettings = ReportSettings.builder().outputFormat("html").build();
 ```
 
-The ReportSettings builder has other functions as well that allow you to set verbosity etc.
+The `ReportSettings` builder has other functions as well that allow you to set verbosity etc.
 
 OFT allows you to report directly to the standard output or to a file
 

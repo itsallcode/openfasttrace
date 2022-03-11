@@ -76,11 +76,9 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         this.listener.beginSpecificationItem();
         this.listener.setLocation(this.file.getPath(), lineNumber);
         final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
-        final String generatedName = generateName(coveredId, lineNumber, lineMatchCount);
-        final SpecificationItemId generatedId = SpecificationItemId.createId(matcher.group(1),
-                generatedName, 0);
-
         final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(6));
+        final SpecificationItemId generatedId = generateItemId(lineNumber, lineMatchCount, coveredId, matcher.group(1),
+                neededArtifactTypes);
 
         if (neededArtifactTypes.isEmpty())
         {
@@ -111,7 +109,25 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
                 .collect(toList());
     }
 
-    private String generateName(final SpecificationItemId coveredId, final int lineNumber,
+    private SpecificationItemId generateItemId(final int lineNumber, final int lineMatchCount,
+            final SpecificationItemId coveredId, String artifactType, List<String> neededArtifactTypes)
+    {
+        final String name = getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
+        return SpecificationItemId.createId(artifactType, name, 0);
+    }
+
+    // [impl->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
+    private String getItemName(final int lineNumber, final int lineMatchCount, final SpecificationItemId coveredId,
+            List<String> neededArtifactTypes)
+    {
+        if (neededArtifactTypes.isEmpty())
+        {
+            return generateUniqueName(coveredId, lineNumber, lineMatchCount);
+        }
+        return coveredId.getName();
+    }
+
+    private String generateUniqueName(final SpecificationItemId coveredId, final int lineNumber,
             final int counter)
     {
         final String uniqueName = new StringBuilder() //

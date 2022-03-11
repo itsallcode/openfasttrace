@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `help` command that prints CLI usage instructions [PR #317](https://github.com/itsallcode/openfasttrace/pull/317)
 
+### Documentation
+
+- Added info about reportsettings and reportToPath to user guide [PR #305](https://github.com/itsallcode/openfasttrace/pull/305), thanks to [jonathanvijayakumar](https://github.com/jonathanvijayakumar) for his contribution!
+
 ## [3.4.0] - 2022-01-31
 
 ### Added

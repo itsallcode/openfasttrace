@@ -132,8 +132,8 @@ public class CliStarter
             break;
         default:
             new HelpCommand().run();
-            throw new IllegalStateException(
-                    "Unknown command '" + command.get() + "' trying to execute OFT mode.");
+            exit(ExitStatus.CLI_ERROR);
+            return;
         }
         if (performable.run())
         {

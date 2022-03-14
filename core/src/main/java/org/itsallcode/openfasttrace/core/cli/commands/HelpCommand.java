@@ -51,7 +51,7 @@ public class HelpCommand implements Performable
         }
         catch (IOException exception)
         {
-            throw new UncheckedIOException("Error loading resource", exception);
+            throw new UncheckedIOException("Unable to load CLI usage from resource file. This is a software bug. Please report.", exception);
         }
     }
 
@@ -60,7 +60,7 @@ public class HelpCommand implements Performable
         final URL url = this.getClass().getResource(resourceName);
         if (url == null)
         {
-            throw new IllegalStateException("Resource '" + resourceName + "' not found");
+            throw new IllegalStateException("Unable to locate CLI usage text resource '" + resourceName + "'. This is a software bug. Please report.");
         }
         return url;
     }

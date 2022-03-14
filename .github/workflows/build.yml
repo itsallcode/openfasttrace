@@ -11,8 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [11, 17]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-java-${{ matrix.java }}
+      cancel-in-progress: true
+    name: "Build with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
 

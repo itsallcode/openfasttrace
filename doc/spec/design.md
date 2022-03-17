@@ -715,6 +715,21 @@ Covers:
 
 Needs: impl, utest
 
+#### Coverage Tag With Needed Coverage Generates Readable Names
+`dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1`
+
+OFT generates readable names without hash code ID for tags with needed coverage.
+
+Rationale:
+
+When you need to cover these items it's important that the name is predictable and does not change e.g. when the file changes.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
 #### Short Coverage Tag Format
 `dsn~import.short-coverage-tag~1`
 

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.0] - 2022-03-??
+
+### Updated
+
+- Use readable names for imported tags with needed coverage [#315](https://github.com/itsallcode/openfasttrace/issues/315) / [PR #316](https://github.com/itsallcode/openfasttrace/pull/316)
+
 ## [3.4.0] - 2022-01-31
 
 ### Added

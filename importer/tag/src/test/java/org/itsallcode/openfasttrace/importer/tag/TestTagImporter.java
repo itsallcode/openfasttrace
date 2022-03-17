@@ -263,21 +263,24 @@ class TestTagImporter
     }
 
     // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
     @Test
     void tagWithSingleRequiredCoverage()
     {
         assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + "]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1, List.of(NEEDED_COVERAGE1)));
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1)));
     }
 
     // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
     @Test
     void tagWithMultipleRequiredCoverage()
     {
         assertItems(
-                "[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + "," + NEEDED_COVERAGE2
+                "[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + ","
+                        + NEEDED_COVERAGE2
                         + "]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
     }
 
     @Test
@@ -286,7 +289,13 @@ class TestTagImporter
         assertItems(
                 "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> " + NEEDED_COVERAGE1 + " , "
                         + NEEDED_COVERAGE2 + " ]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
+    }
+
+    @Test
+    void requiredCoverageIndicatorWithMissingTagIgnored()
+    {
+        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>]");
     }
 
     @Test
@@ -314,6 +323,19 @@ class TestTagImporter
             final int counter, final SpecificationItemId coveredId)
     {
         return item(artifactType, lineNumber, counter, coveredId, emptyList());
+    }
+
+    private static SpecificationItem itemWithReadableName(final String artifactType, final int lineNumber,
+            final SpecificationItemId coveredId, List<String> neededArtifactTypes)
+    {
+        final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
+                coveredId.getName(), 0);
+        final Builder itemBuilder = SpecificationItem.builder() //
+                .id(generatedId) //
+                .addCoveredId(coveredId) //
+                .location(FILENAME, lineNumber);
+        neededArtifactTypes.forEach(itemBuilder::addNeedsArtifactType);
+        return itemBuilder.build();
     }
 
     private static SpecificationItem item(final String artifactType, final int lineNumber,

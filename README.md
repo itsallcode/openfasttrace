@@ -37,7 +37,7 @@ Sonarcloud status:
 * [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
 * [Developer Guide](doc/developer_guide.md)
 * [Contributing guide](CONTRIBUTING.md)
-* [Command Line Usage](doc/usage.txt)
+* [Command Line Usage](core/src/main/resources/usage.txt)
 * [Design](doc/spec/design.md)
 * [System Requirements](doc/spec/system_requirements.md)
 

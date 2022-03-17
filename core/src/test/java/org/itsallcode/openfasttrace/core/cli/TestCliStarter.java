@@ -27,8 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
-
 import org.itsallcode.junit.sysextensions.AssertExit;
 import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
@@ -41,14 +39,14 @@ class TestCliStarter
     @Test
     void testRunWithoutArguments()
     {
-        AssertExit.assertExitWithStatus(2, () -> run(asList()));
+        AssertExit.assertExitWithStatus(2, () -> run());
     }
 
     @Test
     void testRunThrowingException()
     {
         final ExporterException exception = assertThrows(ExporterException.class,
-                () -> run(asList("trace")));
+                () -> run("trace"));
         assertThat(exception.getMessage(),
                 equalTo("Found no matching reporter for output format 'plain'"));
     }
@@ -56,11 +54,17 @@ class TestCliStarter
     @Test
     void testRunWithUnknownCommand()
     {
-        AssertExit.assertExitWithStatus(2, () -> run(asList("unknownCommand")));
+        AssertExit.assertExitWithStatus(2, () -> run("unknownCommand"));
     }
 
-    private void run(List<String> args)
+    @Test
+    void testRunWithHelpCommand()
     {
-        CliStarter.main(args.toArray(new String[0]));
+        AssertExit.assertExitWithStatus(0, () -> run("help"));
+    }
+
+    private void run(String... args)
+    {
+        CliStarter.main(args);
     }
 }

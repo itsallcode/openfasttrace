@@ -25,9 +25,7 @@ package org.itsallcode.openfasttrace.core.cli;
 import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
-import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
-import org.itsallcode.openfasttrace.core.cli.commands.Performable;
-import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.*;
 
 /**
  * The main entry point class for the command line application.
@@ -114,12 +112,13 @@ public class CliStarter
     // [impl->dsn~cli.command-selection~1]
     public void run()
     {
-        Performable performable = null;
         final Optional<String> command = this.arguments.getCommand();
         if (!command.isPresent())
         {
+            new HelpCommand().run();
             throw new IllegalStateException("Command missing trying to execute OFT mode.");
         }
+        final Performable performable;
         switch (command.get())
         {
         case ConvertCommand.COMMAND_NAME:
@@ -128,9 +127,13 @@ public class CliStarter
         case TraceCommand.COMMAND_NAME:
             performable = new TraceCommand(this.arguments);
             break;
+        case HelpCommand.COMMAND_NAME:
+            performable = new HelpCommand();
+            break;
         default:
-            throw new IllegalStateException(
-                    "Unknown command '" + command.get() + "' trying to execute OFT mode.");
+            new HelpCommand().run();
+            exit(ExitStatus.CLI_ERROR);
+            return;
         }
         if (performable.run())
         {

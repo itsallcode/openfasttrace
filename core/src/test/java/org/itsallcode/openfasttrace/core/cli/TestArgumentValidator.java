@@ -51,7 +51,7 @@ class TestArgumentValidator
     @Test
     void testNoCommandGivenIsInvalid()
     {
-        assertValidatorResult("Missing command", "Add one of 'convert','trace'");
+        assertValidatorResult("Missing command", "Add one of 'help','convert','trace'");
     }
 
     @Test
@@ -93,7 +93,7 @@ class TestArgumentValidator
     {
         cliArgs.setUnnamedValues(asList("unknownCommand"));
         assertValidatorResult("'unknownCommand' is not an OFT command.",
-                "Choose one of 'convert','trace'.");
+                "Choose one of 'help','convert','trace'.");
     }
 
     private void assertValidatorResult(String expectedError, String expectedSuggestion)

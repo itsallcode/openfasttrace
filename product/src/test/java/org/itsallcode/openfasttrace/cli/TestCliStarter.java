@@ -27,15 +27,11 @@ import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import org.itsallcode.io.Capturable;
-import org.itsallcode.junit.sysextensions.ExitGuard;
-import org.itsallcode.junit.sysextensions.SystemErrGuard;
+import org.itsallcode.junit.sysextensions.*;
 import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
-import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
@@ -56,6 +52,7 @@ class TestCliStarter
     private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
+    private static final String HELP_COMMAND = "help";
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
@@ -100,12 +97,17 @@ class TestCliStarter
                 "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.", err);
     }
 
+    @Test
+    void testHelpPrintsUsage(@SysOut final Capturable out)
+    {
+        assertExitOkWithStdOutStart(() -> runCliStarter(HELP_COMMAND), "OpenFastTrace\n\nUsage:", out);
+    }
+
     // [itest->dsn~cli.command-selection~1]
     @Test
     void testConvertWithoutExplicitInputs(@SysOut final Capturable out)
     {
         assertExitOkWithStdOutStart(() -> runCliStarter(CONVERT_COMMAND), SPECOBJECT_PREAMBLE, out);
-
     }
 
     private void assertExitOkWithStdOutStart(final Runnable runnable, final String outputStart,

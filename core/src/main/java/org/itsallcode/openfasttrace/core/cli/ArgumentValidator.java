@@ -29,8 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
-import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
 
 /**
@@ -39,7 +38,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
  */
 public class ArgumentValidator
 {
-    private static final List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
+    private static final List<String> AVAILABLE_COMMANDS = asList(HelpCommand.COMMAND_NAME, ConvertCommand.COMMAND_NAME,
             TraceCommand.COMMAND_NAME);
 
     private final CliArguments arguments;
@@ -67,6 +66,10 @@ public class ArgumentValidator
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
+        }
+        else if (HelpCommand.COMMAND_NAME.equals(command.get()))
+        {
+            ok = true;
         }
         else if (TraceCommand.COMMAND_NAME.equals(command.get()))
         {

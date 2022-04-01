@@ -34,7 +34,7 @@ jobs:
         java-version: ${{ matrix.java }}
 
     - name: Cache local Maven repository
-      uses: actions/cache@v2
+      uses: actions/cache@v3.0.1
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -43,7 +43,7 @@ jobs:
 
     - name: Cache SonarQube packages
       if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
-      uses: actions/cache@v2
+      uses: actions/cache@v3.0.1
       with:
         path: ~/.sonar/cache
         key: ${{ runner.os }}-sonar

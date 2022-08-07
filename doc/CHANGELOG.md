@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Added support for C# files with postfix `.cs` [#326](https://github.com/itsallcode/openfasttrace/issues/315) / [PR #316](https://github.com/itsallcode/openfasttrace/pull/326)
+
 ## [3.5.0] - 2022-03-17
 
 ### Updated

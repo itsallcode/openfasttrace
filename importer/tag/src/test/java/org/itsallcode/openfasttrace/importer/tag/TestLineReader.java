@@ -101,6 +101,9 @@ class TestLineReader
         assertLinesRead("line1");
     }
 
+    // Using separate tests instead of parametrized tests to get readable test
+    // names
+    @SuppressWarnings("java:S5976")
     @Test
     void testReadLinesTwoLinesWithCR()
     {

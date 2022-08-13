@@ -74,8 +74,8 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     @Test
     void testFactoryThrowsExceptionWhenContextMissing()
     {
-        assertThrows(NullPointerException.class,
-                () -> new ZipFileImporterFactory().createImporter(null, null),
+        final ZipFileImporterFactory factory = new ZipFileImporterFactory();
+        assertThrows(NullPointerException.class, () -> factory.createImporter(null, null),
                 "Context was not initialized");
     }
 }

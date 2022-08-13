@@ -30,9 +30,17 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -106,8 +114,9 @@ class ITZipFileImporter
     {
         final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
+        final ZipFileImporter importer = new ZipFileImporter(file, this.delegateImporterMock);
         assertThrows(UnsupportedOperationException.class,
-                () -> new ZipFileImporter(file, this.delegateImporterMock).runImport());
+                () -> importer.runImport());
     }
 
     @Test

@@ -63,8 +63,8 @@ class TestStreamInput
     void testToPathUnsupported() throws IOException
     {
         final Path path = Paths.get("blah");
-        assertThrows(UnsupportedOperationException.class,
-                () -> StreamInput.forReader(path, null).toPath());
+        final InputFile input = StreamInput.forReader(path, null);
+        assertThrows(UnsupportedOperationException.class, () -> input.toPath());
     }
 
     @Test

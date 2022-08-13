@@ -71,7 +71,7 @@ jobs:
       uses: actions/upload-artifact@v3
       if: ${{ env.DEFAULT_JAVA == matrix.java }}
       with:
-        name: oft
+        name: openfasttrace-binaries
         path: product/target/openfasttrace-*.jar
 
     - name: Run self-trace

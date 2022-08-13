@@ -74,12 +74,5 @@ jobs:
         name: oft
         path: product/target/openfasttrace-*.jar
 
-    - name: Run self-trace
+    - name: Trace requirements
       run: ./oft-self-trace.sh
-
-    - name: Upload self-tracing report
-      uses: actions/upload-artifact@v3
-      with:
-        name: self-tracing-report
-        path: target/self-trace-report.html
-        if-no-files-found: error

@@ -261,7 +261,7 @@ The `Status` keyword takes a single value from `draft`, `proposed`, `approved` t
 
 ##### `Covers`
 
-The `Covers` keyword states which items are covered by the current specification item. It is followed by a list of items that are covered, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
+The `Covers` keyword states which items are covered by the current specification item. It is followed by a list of items that are covered, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
 
 Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement that covers that feature, could be written as
 
@@ -278,7 +278,7 @@ Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement 
 
 ##### `Depends`
 
-The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (). This has no effect on the coverage of specification items.
+The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used. This has no effect on the coverage of specification items.
 
     ### Depending specification item
     `req~depending-item~1`

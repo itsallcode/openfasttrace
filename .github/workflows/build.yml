@@ -35,7 +35,7 @@ jobs:
         cache: 'maven'
 
     - name: Cache SonarQube packages
-      if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
+      if: ${{ env.DEFAULT_JAVA == matrix.java }}
       uses: actions/cache@v3
       with:
         path: ~/.sonar/cache

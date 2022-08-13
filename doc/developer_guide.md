@@ -81,15 +81,6 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
-## License File Header
-
-* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
-* To update files with correct license headers and generate file `LICENSE.txt`, run command
-
-```bash
-mvn license:update-file-header
-```
-
 ## Check for updated dependencies / plugins
 
 ```bash

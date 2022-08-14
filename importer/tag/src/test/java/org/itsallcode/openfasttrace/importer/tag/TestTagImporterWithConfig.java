@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;

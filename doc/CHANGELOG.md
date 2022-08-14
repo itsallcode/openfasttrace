@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Refactoring
 
+- Fixed static code analysis warnings in unit tests [PR #329](https://github.com/itsallcode/openfasttrace/pull/329)
 - Upgrade test and build dependencies [PR #330](https://github.com/itsallcode/openfasttrace/pull/330)
 - Removed license headers from sources and license-maven-plugin [PR #331](https://github.com/itsallcode/openfasttrace/pull/331)
 

@@ -13,6 +13,5 @@ module org.itsallcode.openfasttrace.api
     exports org.itsallcode.openfasttrace.api.exporter;
     exports org.itsallcode.openfasttrace.api.report;
 
-    requires java.compiler;
     requires java.logging;
 }

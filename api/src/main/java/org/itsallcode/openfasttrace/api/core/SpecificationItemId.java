@@ -1,11 +1,8 @@
 package org.itsallcode.openfasttrace.api.core;
 
 import java.util.logging.Logger;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.processing.Generated;
 
 /**
  * Specification item ID
@@ -92,7 +89,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    @Generated(value = "org.eclipse.Eclipse")
     public final int hashCode()
     {
         final int prime = 31;
@@ -104,7 +100,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    @Generated(value = "org.eclipse.Eclipse")
     public final boolean equals(final Object obj)
     {
         if (this == obj)

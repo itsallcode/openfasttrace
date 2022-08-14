@@ -1,8 +1,7 @@
 package org.itsallcode.openfasttrace.api;
+
 import java.util.Collections;
 import java.util.Set;
-
-import javax.annotation.processing.Generated;
 
 /**
  * Settings for import filtering
@@ -78,7 +77,6 @@ public final class FilterSettings
         return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
     }
 
-    @Generated("org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -91,7 +89,6 @@ public final class FilterSettings
         return result;
     }
 
-    @Generated("org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

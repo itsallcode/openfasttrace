@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.processing.Generated;
-
 /**
  * A specification item that requires coverage from other items and provides
  * coverage for other items.
@@ -222,7 +220,6 @@ public class SpecificationItem
         return this.forwards;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final int hashCode()
     {
@@ -244,7 +241,6 @@ public class SpecificationItem
         return result;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final boolean equals(final Object obj)
     {

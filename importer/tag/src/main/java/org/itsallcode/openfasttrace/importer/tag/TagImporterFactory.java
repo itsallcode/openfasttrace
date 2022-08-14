@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.importer.tag;
-
+
+
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
@@ -34,6 +35,7 @@ public class TagImporterFactory extends ImporterFactory
             "php", // PHP
             "pl", "pm", // Perl
             "py", // Python
+            "robot", // Robot Framework
             "pu", "puml", "plantuml", // PlantUML
             "r", // R Language
             "rs", // Rust

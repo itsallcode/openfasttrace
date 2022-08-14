@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support for C# files with postfix `.cs` [#326](https://github.com/itsallcode/openfasttrace/issues/326) / [PR #327](https://github.com/itsallcode/openfasttrace/pull/327)
+- Added support for Robot Framework with postfix `.robot` [#302](https://github.com/itsallcode/openfasttrace/issues/302) / [PR #332](https://github.com/itsallcode/openfasttrace/pull/332)
 
 ### Refactoring
 

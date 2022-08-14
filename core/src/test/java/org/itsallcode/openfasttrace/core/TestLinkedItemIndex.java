@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.core;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,11 +10,16 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestLinkedItemIndex
 {
     private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
@@ -55,7 +38,6 @@ class TestLinkedItemIndex
     @BeforeEach
     public void prepareTest()
     {
-        MockitoAnnotations.initMocks(this);
         when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
         when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
         when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);

@@ -12,10 +12,7 @@ Below you see a screenshot of of a HTML tracing report where OFT traces itself. 
 
 ## Project Information
 
-[![Build Status](https://travis-ci.org/itsallcode/openfasttrace.svg)](https://travis-ci.org/itsallcode/openfasttrace)
-[![codecov](https://codecov.io/gh/itsallcode/openfasttrace/branch/develop/graph/badge.svg)](https://codecov.io/gh/itsallcode/openfasttrace)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/14936/badge.svg)](https://scan.coverity.com/projects/itsallcode-openfasttrace)
-[![Download](https://api.bintray.com/packages/itsallcode/itsallcode/openfasttrace/images/download.svg)](https://bintray.com/itsallcode/itsallcode/openfasttrace/_latestVersion)
+[![Build](https://github.com/itsallcode/openfasttrace/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/openfasttrace/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/org.itsallcode.openfasttrace/openfasttrace.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.itsallcode.openfasttrace%22%20a%3A%22openfasttrace%22)
 
 Sonarcloud status:
@@ -40,9 +37,9 @@ Sonarcloud status:
 * [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
 * [Developer Guide](doc/developer_guide.md)
 * [Contributing guide](CONTRIBUTING.md)
-* [Command Line Usage](doc/usage.txt)
-* [Design](doc/design.md)
-* [System Requirements](doc/system_requirements.md)
+* [Command Line Usage](core/src/main/resources/usage.txt)
+* [Design](doc/spec/design.md)
+* [System Requirements](doc/spec/system_requirements.md)
 
 ## Using OpenFastTrace
 
@@ -56,11 +53,10 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.c
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-2.3.5.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-3.5.0.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/2.3.5/openfasttrace-2.3.5.jar)
-* [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/openfasttrace/2.3.5/openfasttrace-2.3.5.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/2.3.5/openfasttrace-2.3.5.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.5.0/openfasttrace-3.5.0.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.5.0/openfasttrace-3.5.0.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 

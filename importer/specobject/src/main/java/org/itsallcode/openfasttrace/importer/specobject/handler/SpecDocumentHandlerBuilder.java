@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
@@ -31,6 +9,9 @@ import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
 
+/**
+ * Register handlers for parsing an XML specobject document.
+ */
 public class SpecDocumentHandlerBuilder
 {
     private static final Logger LOG = Logger.getLogger(SpecDocumentHandlerBuilder.class.getName());
@@ -40,6 +21,14 @@ public class SpecDocumentHandlerBuilder
     private final InputFile file;
     private final ImportEventListener listener;
 
+    /**
+     * Create a new instance.
+     * 
+     * @param file
+     *            the parsed input file.
+     * @param listener
+     *            the listener receiving import events.
+     */
     public SpecDocumentHandlerBuilder(final InputFile file, final ImportEventListener listener)
     {
         this.file = file;
@@ -47,6 +36,11 @@ public class SpecDocumentHandlerBuilder
         this.handler = new CallbackContentHandler();
     }
 
+    /**
+     * Build the handler.
+     * 
+     * @return the content handler.
+     */
     public TreeContentHandler build()
     {
         this.handler.setDefaultStartElementListener(startElement -> {

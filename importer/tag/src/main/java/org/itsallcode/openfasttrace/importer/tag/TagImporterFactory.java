@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.importer.tag;
-
-/*-
- * #%L
- * OpenFastTrace Tag Importer
- * %%
- * Copyright (C) 2016 - 2020 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
+
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
@@ -43,17 +21,20 @@ public class TagImporterFactory extends ImporterFactory
     private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList( //
             "bat", // Windows batch files
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
-            "c#", // C#
+            "c#", "cs", // C#
             "cfg", "conf", "ini", // configuration files
+            "go", // Go
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "yaml", // markup languages
             "java", // Java
+            "clj", "kt", "scala", // JVM languages
             "js", // Java script
             "lua", // Lua
             "m", "mm", // Objective C
             "php", // PHP
             "pl", "pm", // Perl
             "py", // Python
+            "pu", "puml", "plantuml", // PlantUML
             "r", // R Language
             "rs", // Rust
             "sh", "bash", "zsh", // Shell programming
@@ -72,7 +53,7 @@ public class TagImporterFactory extends ImporterFactory
         return findConfig(path).isPresent();
     }
 
-    public boolean supportsDefaultFile(final InputFile file)
+    boolean supportsDefaultFile(final InputFile file)
     {
         final String path = file.getPath();
         final int lastDotPosition = path.lastIndexOf(".");

@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.api.importer;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 
@@ -32,6 +10,10 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * Base class for {@link ImporterFactory}s that can import files matching a list
+ * of regexp patterns.
+ */
 public abstract class RegexMatchingImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger
@@ -39,14 +21,26 @@ public abstract class RegexMatchingImporterFactory extends ImporterFactory
 
     private final Set<Pattern> supportedFilenamePatterns;
 
+    /**
+     * Create a new importer factory for the given filename patterns.
+     * 
+     * @param supportedFilenamePatterns
+     *            the filename patterns supported by the importer.
+     */
     protected RegexMatchingImporterFactory(final String... supportedFilenamePatterns)
     {
         this(asList(supportedFilenamePatterns));
     }
 
-    protected RegexMatchingImporterFactory(final Collection<String> supportedFileExtensions)
+    /**
+     * * Create a new importer factory for the given filename patterns.
+     * 
+     * @param supportedFilenamePatterns
+     *            the filename patterns supported by the importer.
+     */
+    protected RegexMatchingImporterFactory(final Collection<String> supportedFilenamePatterns)
     {
-        this.supportedFilenamePatterns = supportedFileExtensions.stream() //
+        this.supportedFilenamePatterns = supportedFilenamePatterns.stream() //
                 .map(Pattern::compile) //
                 .collect(toSet());
     }

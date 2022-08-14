@@ -1,26 +1,4 @@
 package org.itsallcode.openfasttrace.api.importer.tag.config;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.util.List;
@@ -52,11 +30,22 @@ public class PathConfig
         this.tagArtifactType = Objects.requireNonNull(builder.tagArtifactType, "tagArtifactType");
     }
 
+    /**
+     * @return the description of this path configuration.
+     */
     public String getDescription()
     {
         return this.pathMatcher.getDescription();
     }
 
+    /**
+     * Tells if given {@link InputFile} matches this path configuration.
+     * 
+     * @param file
+     *            the {@link InputFile} to match.
+     * @return {@code true} if, and only if, the {@link InputFile} matches this
+     *         matcher's pattern.
+     */
     public boolean matches(final InputFile file)
     {
         final boolean matches = this.pathMatcher.matches(file);
@@ -64,16 +53,25 @@ public class PathConfig
         return matches;
     }
 
+    /**
+     * @return the artifact type.
+     */
     public String getTagArtifactType()
     {
         return this.tagArtifactType;
     }
 
+    /**
+     * @return the artifact type used for covered items.
+     */
     public String getCoveredItemArtifactType()
     {
         return this.coveredItemArtifactType;
     }
 
+    /**
+     * @return the name prefix used for covered items.
+     */
     public String getCoveredItemNamePrefix()
     {
         return this.coveredItemNamePrefix;

@@ -2,34 +2,16 @@ package org.itsallcode.openfasttrace.core;
 
 import java.util.HashMap;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 
+/**
+ * Links a given list of {@link SpecificationItem}s and returns
+ * {@link LinkedSpecificationItem}s.
+ */
 public class Linker
 {
     private final List<LinkedSpecificationItem> linkedItems;
@@ -111,14 +93,12 @@ public class Linker
             {
                 covering.addLinkToItemWithStatus(covered, LinkStatus.COVERS);
                 covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_SHALLOW);
-                covered.addCoveredArtifactType(coveringArtifactType);
             }
         }
         else
         {
             covering.addLinkToItemWithStatus(covered, LinkStatus.UNWANTED);
             covered.addLinkToItemWithStatus(covering, LinkStatus.COVERED_UNWANTED);
-            covered.addOverCoveredArtifactType(coveringArtifactType);
         }
     }
 
@@ -169,7 +149,7 @@ public class Linker
             else
             {
                 throw new IllegalStateException("Used version-less match on a link to ID \"" + id
-                        + " but versions are identical.");
+                        + "\" but versions are identical.");
             }
         }
     }

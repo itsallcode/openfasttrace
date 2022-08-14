@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 
 import java.util.List;
@@ -29,8 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
-import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
 
 /**
@@ -39,7 +16,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
  */
 public class ArgumentValidator
 {
-    private static final List<String> AVAILABLE_COMMANDS = asList(ConvertCommand.COMMAND_NAME,
+    private static final List<String> AVAILABLE_COMMANDS = asList(HelpCommand.COMMAND_NAME, ConvertCommand.COMMAND_NAME,
             TraceCommand.COMMAND_NAME);
 
     private final CliArguments arguments;
@@ -67,6 +44,10 @@ public class ArgumentValidator
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
+        }
+        else if (HelpCommand.COMMAND_NAME.equals(command.get()))
+        {
+            ok = true;
         }
         else if (TraceCommand.COMMAND_NAME.equals(command.get()))
         {

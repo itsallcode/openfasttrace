@@ -1,26 +1,4 @@
 package org.itsallcode.openfasttrace.importer.tag;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import static org.mockito.Mockito.inOrder;
 
 import java.io.BufferedReader;
@@ -38,13 +16,12 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(TempDirectory.class)
+@ExtendWith(MockitoExtension.class)
 class TestLineReader
 {
     private static final Path DUMMY_FILE = Paths.get("dummy");
@@ -59,7 +36,6 @@ class TestLineReader
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir)
     {
-        MockitoAnnotations.initMocks(this);
         this.tempDir = tempDir;
     }
 
@@ -103,6 +79,9 @@ class TestLineReader
         assertLinesRead("line1");
     }
 
+    // Using separate tests instead of parametrized tests to get readable test
+    // names
+    @SuppressWarnings("java:S5976")
     @Test
     void testReadLinesTwoLinesWithCR()
     {

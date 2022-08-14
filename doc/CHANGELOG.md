@@ -6,6 +6,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for C# files with postfix `.cs` [#326](https://github.com/itsallcode/openfasttrace/issues/326) / [PR #327](https://github.com/itsallcode/openfasttrace/pull/327)
+
+### Refactoring
+
+- Fixed static code analysis warnings in unit tests [PR #329](https://github.com/itsallcode/openfasttrace/pull/329)
+- Upgrade test and build dependencies [PR #330](https://github.com/itsallcode/openfasttrace/pull/330)
+- Removed license headers from sources and license-maven-plugin [PR #331](https://github.com/itsallcode/openfasttrace/pull/331)
+
+## [3.5.0] - 2022-03-17
+
+### Updated
+
+- Use readable names for imported tags with needed coverage [#315](https://github.com/itsallcode/openfasttrace/issues/315) / [PR #316](https://github.com/itsallcode/openfasttrace/pull/316)
+
+### Added
+
+- Added `help` command that prints CLI usage instructions [PR #317](https://github.com/itsallcode/openfasttrace/pull/317)
+
+### Documentation
+
+- Added info about reportsettings and reportToPath to user guide [PR #305](https://github.com/itsallcode/openfasttrace/pull/305), thanks to [jonathanvijayakumar](https://github.com/jonathanvijayakumar) for his contribution!
+
+## [3.4.0] - 2022-01-31
+
+### Added
+
+- Optionally require coverage in Tag importer [#306](https://github.com/itsallcode/openfasttrace/issues/306) / [PR #307](https://github.com/itsallcode/openfasttrace/pull/307)
+
+### Updated
+
+- Upgrade dependencies [#310](https://github.com/itsallcode/openfasttrace/issues/310)
+
+## [3.3.0] - 2021-11-12
+
+### Added
+
+- [Go](https://golang.org/) support for Tag Importer [#294](https://github.com/itsallcode/openfasttrace/issues/294)
+- [PlantUML](https://plantuml.com) support for Tag Importer [#296](https://github.com/itsallcode/openfasttrace/issues/296)
+
+### Fixed
+
+- Support building, testing and running with Java 16 [#287](https://github.com/itsallcode/openfasttrace/issues/287) / [#288](https://github.com/itsallcode/openfasttrace/issues/288)
+
+## [3.2.1] - 2021-07-19
+
+### Upgraded dependencies
+
+- Test dependencies
+  - [JUnit](https://github.com/itsallcode/openfasttrace/pull/275)
+  - [mockito-junit-jupiter](https://github.com/itsallcode/openfasttrace/pull/284)
+  - [equalsverifier](https://github.com/itsallcode/openfasttrace/pull/285)
+- Build dependencies
+  - [license-maven-plugin](https://github.com/itsallcode/openfasttrace/pull/276)
+  - [flatten-maven-plugin](https://github.com/itsallcode/openfasttrace/pull/278)
+  - [maven-javadoc-plugin](https://github.com/itsallcode/openfasttrace/pull/279)
+  - [plantuml](https://github.com/itsallcode/openfasttrace/pull/81)
+  - [pitest-maven](https://github.com/itsallcode/openfasttrace/pull/282)
+  - [maven-deploy-plugin](https://github.com/itsallcode/openfasttrace/pull/283)
+
+## [3.2.0] - 2021-05-30
+
+### Added
+
+- Aspec (augmented specobject) exporter [#260](https://github.com/itsallcode/openfasttrace/issues/260) [#261](https://github.com/itsallcode/openfasttrace/pull/261)
+
+### Changed
+
+- Importing of files for which no importer or more than one importer is found don't let the build fail [#258](https://github.com/itsallcode/openfasttrace/pull/258)
+
+
+## [3.1.0] - 2021-05-20
+
+### Changed
+
+- Added support for JVM languages: Clojure, Kotlin and Scala [#270](https://github.com/itsallcode/openfasttrace/issues/270) [#271](https://github.com/itsallcode/openfasttrace/issues/271)
+
 ## [3.0.2]
 
 ### Fixed

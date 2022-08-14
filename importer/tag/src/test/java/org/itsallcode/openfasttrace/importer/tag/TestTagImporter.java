@@ -1,28 +1,7 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
@@ -35,6 +14,7 @@ import java.util.List;
 import java.util.zip.CRC32;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
@@ -58,6 +38,9 @@ class TestTagImporter
 
     private static final String COVERING_ARTIFACT_TYPE1 = "coveringArtifactTypeX";
     private static final String COVERING_ARTIFACT_TYPE2 = "coveringArtifactTypeY";
+
+    private static final String NEEDED_COVERAGE1 = "impl";
+    private static final String NEEDED_COVERAGE2 = "test";
 
     private static final String UNIX_NEWLINE = "\n";
     private static final String CARRIAGE_RETURN = "\r";
@@ -235,6 +218,70 @@ class TestTagImporter
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE2, 1, 1, ID2));
     }
 
+    @Test
+    void tagWithExtraSpaces()
+    {
+        assertItems(
+                "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " ]", //
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
+    }
+
+    @Test
+    void tagWithTabRecognized()
+    {
+        assertItems(
+                "[" + COVERING_ARTIFACT_TYPE1 + "\t-> " + ID1_TEXT + "]", //
+                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
+    }
+
+    @Test
+    void tagWithNewlineNotRecognized()
+    {
+        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->\n" + ID1_TEXT + "]");
+    }
+
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
+    @Test
+    void tagWithSingleRequiredCoverage()
+    {
+        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + "]", //
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1)));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
+    @Test
+    void tagWithMultipleRequiredCoverage()
+    {
+        assertItems(
+                "[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + ","
+                        + NEEDED_COVERAGE2
+                        + "]", //
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
+    }
+
+    @Test
+    void tagWithMultipleRequiredCoverageWithSpaces()
+    {
+        assertItems(
+                "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> " + NEEDED_COVERAGE1 + " , "
+                        + NEEDED_COVERAGE2 + " ]", //
+                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
+    }
+
+    @Test
+    void requiredCoverageIndicatorWithMissingTagIgnored()
+    {
+        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>]");
+    }
+
+    @Test
+    void requiredCoverageWithSpaceIgnored()
+    {
+        assertItems("[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> tag with space ]");
+    }
+
     private String tag(final String coveringArtifactType, final String coveredId)
     {
         return "[" + coveringArtifactType + "->" + coveredId + "]";
@@ -253,13 +300,33 @@ class TestTagImporter
     private static SpecificationItem item(final String artifactType, final int lineNumber,
             final int counter, final SpecificationItemId coveredId)
     {
+        return item(artifactType, lineNumber, counter, coveredId, emptyList());
+    }
+
+    private static SpecificationItem itemWithReadableName(final String artifactType, final int lineNumber,
+            final SpecificationItemId coveredId, List<String> neededArtifactTypes)
+    {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
-                generateName(coveredId, lineNumber, counter), 0);
-        return SpecificationItem.builder() //
+                coveredId.getName(), 0);
+        final Builder itemBuilder = SpecificationItem.builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
-                .location(FILENAME, lineNumber) //
-                .build();
+                .location(FILENAME, lineNumber);
+        neededArtifactTypes.forEach(itemBuilder::addNeedsArtifactType);
+        return itemBuilder.build();
+    }
+
+    private static SpecificationItem item(final String artifactType, final int lineNumber,
+            final int counter, final SpecificationItemId coveredId, List<String> neededArtifactTypes)
+    {
+        final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
+                generateName(coveredId, lineNumber, counter), 0);
+        final Builder itemBuilder = SpecificationItem.builder() //
+                .id(generatedId) //
+                .addCoveredId(coveredId) //
+                .location(FILENAME, lineNumber);
+        neededArtifactTypes.forEach(itemBuilder::addNeedsArtifactType);
+        return itemBuilder.build();
     }
 
     private static String generateName(final SpecificationItemId coveredId, final int lineNumber,

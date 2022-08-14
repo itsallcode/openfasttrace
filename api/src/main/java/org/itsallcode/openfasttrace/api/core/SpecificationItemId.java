@@ -2,28 +2,6 @@ package org.itsallcode.openfasttrace.api.core;
 
 import java.util.logging.Logger;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,14 +17,21 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     private static final Logger LOG = Logger.getLogger(SpecificationItemId.class.getName());
 
+    /**
+     * Value for an unknown artifact type in case the type could not be
+     * determined for a legacy item ID.
+     */
     public static final String UNKNOWN_ARTIFACT_TYPE = "unknown";
-    public static final String ITEM_REVISION_PATTERN = "(\\d+)";
-    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*)";
+    private static final String ITEM_REVISION_PATTERN = "(\\d+)";
+    /** Regexp pattern for item names. */
+    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
+    /** Separator between artifact type and name in an item ID. */
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
+    /** Separator between name and revision in an item ID. */
     public static final String REVISION_SEPARATOR = "~";
-    public static final int REVISION_WILDCARD = Integer.MIN_VALUE;
+    static final int REVISION_WILDCARD = Integer.MIN_VALUE;
     // [impl->dsn~md.specification-item-id-format~2]
     private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
@@ -59,15 +44,17 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     private static final int ARTIFACT_TYPE_MATCHING_GROUP = 1;
     private static final int NAME_MATCHING_GROUP = 2;
     private static final int REVISION_MATCHING_GROUP = 3;
+    /** Regexp pattern for item IDs: {@code <type>~<name>~<revision>} */
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
-    public static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
+    private static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
+    /** Regexp pattern for legacy item IDs: {@code <name>, v<revision>}. */
     public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
 
     private final String name;
     private final int revision;
     private final String artifactType;
 
-    protected SpecificationItemId(final String name, final String artifactType, final int revision)
+    private SpecificationItemId(final String name, final String artifactType, final int revision)
     {
         this.name = name;
         this.artifactType = artifactType;
@@ -174,6 +161,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         return builder.toString();
     }
 
+    /**
+     * @return a copy of this ID with a wildcard as revision.
+     */
     public SpecificationItemId toRevisionWildcard()
     {
         return new Builder().artifactType(this.artifactType).name(this.name).revisionWildcard()

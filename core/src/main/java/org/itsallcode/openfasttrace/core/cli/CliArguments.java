@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 
 import java.nio.file.Path;
@@ -42,6 +20,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
  */
 public class CliArguments
 {
+    /** Filter in command line arguments matching items with no tags. */
     public static final String NO_TAGS_MARKER = "_";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
@@ -59,6 +38,13 @@ public class CliArguments
     private boolean showOrigin;
     private final DirectoryService directoryService;
 
+    /**
+     * Create new {@link CliArguments}.
+     * 
+     * @param directoryService
+     *            the directory service used for evaluating command line
+     *            arguments.
+     */
     public CliArguments(final DirectoryService directoryService)
     {
         this.directoryService = directoryService;

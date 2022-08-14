@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.core.importer;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
@@ -35,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
@@ -42,9 +21,14 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
@@ -66,12 +50,11 @@ class TestMultiFileImporter
     @BeforeEach
     void beforeEach()
     {
-        MockitoAnnotations.initMocks(this);
         this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
 
         when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(this.importerFactoryMock);
+        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(Optional.of(this.importerFactoryMock));
         when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
                 .thenReturn(this.importerMock);
     }

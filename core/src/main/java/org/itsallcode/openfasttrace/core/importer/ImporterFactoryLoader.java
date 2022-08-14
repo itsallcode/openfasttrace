@@ -1,31 +1,10 @@
 package org.itsallcode.openfasttrace.core.importer;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.stream.Collectors.toList;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
@@ -45,6 +24,12 @@ public class ImporterFactoryLoader
 
     private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
 
+    /**
+     * Creates a new loader.
+     * 
+     * @param serviceLoader
+     *            the loader used for locating importers.
+     */
     public ImporterFactoryLoader(
             final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
     {
@@ -63,18 +48,19 @@ public class ImporterFactoryLoader
      * @throws ImporterException
      *             when no or more than one {@link ImporterFactory} is found.
      */
-    public ImporterFactory getImporterFactory(final InputFile file)
+    public Optional<ImporterFactory> getImporterFactory(final InputFile file)
     {
         final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
         switch (matchingImporters.size())
         {
         case 0:
-            throw new ImporterException("Found no matching importer for file '" + file + "'");
+            LOG.info(() -> "Found no matching importer for file '" + file + "'");
+            return Optional.empty();
         case 1:
-            return matchingImporters.get(0);
+            return Optional.of(matchingImporters.get(0));
         default:
-            throw new ImporterException(
-                    "Found more than one matching importer for file '" + file + "'");
+            LOG.info(() -> "Found more than one matching importer for file '" + file + "'");
+            return Optional.empty();
         }
     }
 

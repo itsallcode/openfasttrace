@@ -1,39 +1,16 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
-
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import java.io.PrintStream;
 
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
-public class HtmlTraceSummary implements Viewable
+class HtmlTraceSummary implements Viewable
 {
-
     private final PrintStream stream;
     private final Trace trace;
 
-    public HtmlTraceSummary(final PrintStream stream, final Trace trace)
+    HtmlTraceSummary(final PrintStream stream, final Trace trace)
     {
         this.stream = stream;
         this.trace = trace;

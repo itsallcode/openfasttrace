@@ -2,28 +2,6 @@ package org.itsallcode.openfasttrace.api.importer;
 
 import java.util.Collections;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,11 +29,24 @@ public class SpecificationListBuilder implements ImportEventListener
         this.filterSettings = filterSettings;
     }
 
+    /**
+     * Creates a new {@link SpecificationListBuilder}.
+     * 
+     * @return a new {@link SpecificationListBuilder}.
+     */
     public static SpecificationListBuilder create()
     {
         return new SpecificationListBuilder(new FilterSettings.Builder().build());
     }
 
+    /**
+     * Creates a new {@link SpecificationListBuilder} with the given
+     * {@link FilterSettings}.
+     * 
+     * @param filterSettings
+     *            the filter settings for the new builder.
+     * @return a new {@link SpecificationListBuilder}.
+     */
     public static SpecificationListBuilder createWithFilter(final FilterSettings filterSettings)
     {
         return new SpecificationListBuilder(filterSettings);
@@ -154,6 +145,9 @@ public class SpecificationListBuilder implements ImportEventListener
         return this.items;
     }
 
+    /**
+     * @return the total number of items.
+     */
     public int getItemCount()
     {
         return this.items.size();

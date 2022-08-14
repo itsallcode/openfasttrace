@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.report.html.view;
 
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +8,14 @@ import java.util.List;
  */
 public abstract class AbstractViewContainer implements ViewableContainer
 {
-    protected List<Viewable> children;
-    protected final String id;
-    protected final String title;
+    private final List<Viewable> children;
+    private final String id;
+    private final String title;
 
     /**
      * Create a new instance of type {@link AbstractViewContainer}.
      */
-    public AbstractViewContainer()
+    protected AbstractViewContainer()
     {
         this(null, null);
     }
@@ -47,9 +25,10 @@ public abstract class AbstractViewContainer implements ViewableContainer
      * 
      * @param id
      *            unique container ID
-     * @param title container title
+     * @param title
+     *            container title
      */
-    public AbstractViewContainer(final String id, final String title)
+    protected AbstractViewContainer(final String id, final String title)
     {
         this.id = id;
         this.title = title;

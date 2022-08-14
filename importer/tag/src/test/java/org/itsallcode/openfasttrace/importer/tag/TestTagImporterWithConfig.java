@@ -1,27 +1,6 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
@@ -38,11 +17,16 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 // [utest->dsn~import.short-coverage-tag~1]
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TestTagImporterWithConfig
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";
@@ -62,7 +46,6 @@ class TestTagImporterWithConfig
     @BeforeEach
     void beforeEach()
     {
-        MockitoAnnotations.initMocks(this);
         this.inOrderListener = inOrder(this.listenerMock);
         when(this.configMock.getCoveredItemArtifactType()).thenReturn(COVERED_ITEM_TYPE);
         when(this.configMock.getCoveredItemNamePrefix()).thenReturn(null);

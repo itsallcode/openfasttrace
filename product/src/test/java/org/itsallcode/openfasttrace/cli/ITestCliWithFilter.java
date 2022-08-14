@@ -3,28 +3,6 @@ package org.itsallcode.openfasttrace.cli;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.hamcrest.core.StringContains.containsString;
 import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
 
@@ -40,13 +18,11 @@ import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
+import org.junit.jupiter.api.io.TempDir;
 
-@ExtendWith(TempDirectory.class)
 @ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
-public class ITestCliWithFilter extends AbstractFileBasedTest
+class ITestCliWithFilter extends AbstractFileBasedTest
 {
     public static final String SPECIFICATION = String.join(System.lineSeparator(), //
             "`feat~a~1`", //

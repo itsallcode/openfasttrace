@@ -2,28 +2,6 @@ package org.itsallcode.openfasttrace.testutil.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,8 +15,11 @@ import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 /**
  * Base class for {@link ImporterFactory} tests.
@@ -46,6 +27,8 @@ import org.mockito.MockitoAnnotations;
  * @param <T>
  *            type of the factory under test
  */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
     @Mock
@@ -54,7 +37,6 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @BeforeEach
     public void initMocks()
     {
-        MockitoAnnotations.initMocks(this);
         when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
 

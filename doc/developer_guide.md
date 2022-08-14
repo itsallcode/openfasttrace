@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>2.3.5</version>
+        <version>3.5.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:2.3.5"
+    compile "org.itsallcode.openfasttrace:openfasttrace:3.5.0"
 }
 ```
 
@@ -67,6 +67,12 @@ If you want to build OFT:
 
 Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr; "Existing Maven Projects"*
 
+## Configure the `itsallcode style` formatter
+
+All sub-projects come with formatter and save actions configuration for Eclipse.
+
+If you use a different IDE like IntelliJ, please import the formatter configuration [itsallcode_formatter.xml](itsallcode_formatter.xml).
+
 ## Configure Logging
 
 We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:
@@ -75,23 +81,10 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
-## License File Header
-
-* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
-* To update files with correct license headers and generate file `LICENSE.txt`, run command
-
-```bash
-mvn license:update-file-header
-```
-
 ## Check for updated dependencies / plugins
 
 ```bash
-mvn versions:display-dependency-updates
-```
-
-```bash
-mvn versions:display-plugin-updates
+mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 ## Run local sonar analysis
@@ -125,33 +118,40 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Add the following to your `~/.m2/settings.xml`:
 
     ```xml
-    <servers>
-        <server>
-            <id>itsallcode-maven-repo</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-        <server>
-            <id>itsallcode-maven-repo-snapshots</id>
-            <username>[bintray-username]</username>
-            <password>[bintray-api-key]</password>
-        </server>
-    </servers>
+    <settings>
+        <servers>
+            <server>
+                <id>ossrh</id>
+                <username>your-jira-id</username>
+                <password>your-jira-pwd</password>
+            </server>
+        </servers>
+        <profiles>
+            <profile>
+                <id>ossrh</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                    <gpg.executable>gpg</gpg.executable>
+                    <gpg.keyname>key_id</gpg.keyname>
+                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
+                </properties>
+            </profile>
+        </profiles>
+    </settings>
     ```
 
 1. Checkout the `develop` branch.
 1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`.
 1. Add changes in new version to `CHANGELOG.md`.
 1. Commit and push changes
-1. Run this command (will take up to 10 minutes)
+1. Run this command
 
     ```bash
-    mvn clean deploy
+    mvn clean deploy -Possrh
     ```
 1. Merge to `master` branch
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
-1. Sign in at [bintray.com](https://bintray.com)
-1. Go to the [Bintray project page](https://bintray.com/itsallcode/itsallcode/openfasttrace)
-1. There should be a notice saying "You have 176 unpublished item(s) for this package". Click the "Publish" link. Binaries will be available for download at [JCenter](https://jcenter.bintray.com/org/itsallcode/openfasttrace/). This will take a few minutes.
-1. Publish to Maven Central by clicking the "Sync" button at https://bintray.com/itsallcode/itsallcode/openfasttrace#central. After some time the new version will appear at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/).
+1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).

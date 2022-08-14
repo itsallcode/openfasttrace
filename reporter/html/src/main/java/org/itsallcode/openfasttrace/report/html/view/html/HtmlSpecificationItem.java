@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
-/*-
- * #%L
- * OpenFastTrace HTML Reporter
- * %%
- * Copyright (C) 2016 - 2019 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
 
@@ -35,14 +13,14 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
-public class HtmlSpecificationItem implements Viewable
+class HtmlSpecificationItem implements Viewable
 {
 
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
 
-    public HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item)
+    HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item)
     {
         this.stream = stream;
         this.item = item;

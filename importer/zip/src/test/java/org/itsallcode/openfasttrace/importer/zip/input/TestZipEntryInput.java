@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.importer.zip.input;
 
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,18 +10,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.zip.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.TempDirectory;
-import org.junitpioneer.jupiter.TempDirectory.TempDir;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.io.TempDir;
 
-@ExtendWith(TempDirectory.class)
 class TestZipEntryInput
 {
     private static final String TEST_ZIP = "test.zip";
@@ -54,7 +30,6 @@ class TestZipEntryInput
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws IOException
     {
-        MockitoAnnotations.initMocks(this);
         this.zipFile = tempDir.resolve(TEST_ZIP).toFile();
         this.zipOutputStream = new ZipOutputStream(new FileOutputStream(this.zipFile),
                 StandardCharsets.UTF_8);
@@ -83,8 +58,9 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
+            final InputFile input = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
             assertThrows(UnsupportedOperationException.class,
-                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("file")).toPath());
+                    () -> input.toPath());
         }
     }
 
@@ -93,8 +69,9 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
+            final ZipEntry entry = new ZipEntry("dir/");
             assertThrows(IllegalArgumentException.class,
-                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("dir/")));
+                    () -> ZipEntryInput.forZipEntry(zip, entry));
         }
     }
 

@@ -1,5 +1,13 @@
 #!/bin/sh
+
 script_path=$(dirname "$(readlink -f "$0")")
 version=$(grep -zo '<revision>.*</revision>' parent/pom.xml | sed -e's/[^0-9.]//g')
+jar_file="$script_path/product/target/openfasttrace-$version.jar"
 
-java -jar "$script_path/product/target/openfasttrace-$version.jar" $@
+if [ ! -f "$jar_file" ]; then
+    echo "JAR file $jar_file not found."
+    echo "Build it by running 'mvn package'"
+    exit 1
+fi
+
+java -jar "$jar_file" $@

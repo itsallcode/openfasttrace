@@ -1,34 +1,15 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
-/*-
- * #%L
- * OpenFastTrace HTML Reporter
- * %%
- * Copyright (C) 2016 - 2019 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.itsallcode.openfasttrace.report.html.view.html.MarkdownLineState.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-public class MarkdownLineStateMachine
+/**
+ * A state machine for converting markdown to HTML.
+ */
+public final class MarkdownLineStateMachine
 {
     private static final int INCLUDE_EMPTY_STRINGS = -1;
     private static final String P_ANY = ".*";
@@ -39,14 +20,14 @@ public class MarkdownLineStateMachine
     private static final String P_TERM = "^$";
     private final List<MarkdownLineTransition> transitions = new ArrayList<>();
 
-    public MarkdownLineStateMachine()
+    MarkdownLineStateMachine()
     {
         initializeTransitions();
     }
 
     // Duplicate strings help making this easier to understand.
     @SuppressWarnings("squid:S1192")
-    protected void initializeTransitions()
+    private void initializeTransitions()
     {
         // @formatter:off
         t(START         , PREFORMATTED  , P_PRE      , ""          , "<pre>"   , trimPre());
@@ -80,7 +61,7 @@ public class MarkdownLineStateMachine
         t(PARAGRAPH     , ORDERED_LIST  , P_OL_LI    , "</p>"      , "<ol><li>", trimEnum());
         t(PARAGRAPH     , PREFORMATTED  , P_PRE      , "</p>"      , "<pre>"   , String::trim);
         t(PARAGRAPH     , TERMINATOR    , P_TERM     , "</p>"      , ""        , empty());
-        t(PARAGRAPH     , PARAGRAPH     , P_ANY      , ""          , " "     , String::trim);
+        t(PARAGRAPH     , PARAGRAPH     , P_ANY      , ""          , " "       , String::trim);
         // @formatter:on
     }
 
@@ -91,7 +72,7 @@ public class MarkdownLineStateMachine
                 .add(new MarkdownLineTransition(from, to, pattern, prefix, postfix, conversion));
     }
 
-    public String run(final String input)
+    String run(final String input)
     {
         final StringBuilder builder = new StringBuilder();
         MarkdownLineState state = START;
@@ -115,7 +96,7 @@ public class MarkdownLineStateMachine
         return builder.toString();
     }
 
-    protected void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
+    private void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
     {
         switch (state)
         {
@@ -139,22 +120,22 @@ public class MarkdownLineStateMachine
         }
     }
 
-    protected UnaryOperator<String> empty()
+    private UnaryOperator<String> empty()
     {
         return s -> "";
     }
 
-    protected UnaryOperator<String> trimEnum()
+    private UnaryOperator<String> trimEnum()
     {
         return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
-    protected UnaryOperator<String> trimPre()
+    private UnaryOperator<String> trimPre()
     {
         return s -> s.substring(4);
     }
 
-    protected UnaryOperator<String> trimBullet()
+    private UnaryOperator<String> trimBullet()
     {
         return s -> s.replaceFirst("^ {0,3}[-+*]", "").trim();
     }

@@ -1,28 +1,6 @@
 
 package org.itsallcode.openfasttrace.core.cli.commands;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -41,16 +19,24 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
  */
 public abstract class AbstractCommand implements Performable
 {
+    /** The command line arguments given by the user. */
     protected CliArguments arguments;
+    /** The OFT instance for executing commands. */
     protected final Oft oft;
 
+    /**
+     * Creates a new instance.
+     * 
+     * @param arguments
+     *            the command line arguments.
+     */
     protected AbstractCommand(final CliArguments arguments)
     {
         this.arguments = arguments;
         this.oft = Oft.create();
     }
 
-    protected List<Path> toPaths(final List<String> inputs)
+    private List<Path> toPaths(final List<String> inputs)
     {
         final List<Path> inputsAsPaths = new ArrayList<>();
         for (final String input : inputs)
@@ -60,7 +46,7 @@ public abstract class AbstractCommand implements Performable
         return inputsAsPaths;
     }
 
-    protected FilterSettings createFilterSettingsFromArguments()
+    private FilterSettings createFilterSettingsFromArguments()
     {
         final FilterSettings.Builder builder = new FilterSettings.Builder();
         setAttributeTypeFilter(builder);
@@ -95,12 +81,17 @@ public abstract class AbstractCommand implements Performable
         }
     }
 
+    /**
+     * Import items using filter settings from command line arguments.
+     * 
+     * @return the imported items.
+     */
     protected List<SpecificationItem> importItems()
     {
-        final ImportSettings importSettings = ImportSettings //
-                .builder() //
-                .addInputs(this.toPaths(this.arguments.getInputs())) //
-                .filter(createFilterSettingsFromArguments()) //
+        final ImportSettings importSettings = ImportSettings
+                .builder()
+                .addInputs(this.toPaths(this.arguments.getInputs()))
+                .filter(createFilterSettingsFromArguments())
                 .build();
         return this.oft.importItems(importSettings);
     }

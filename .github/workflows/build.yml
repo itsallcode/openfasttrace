@@ -32,17 +32,10 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
-
-    - name: Cache local Maven repository
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+        cache: 'maven'
 
     - name: Cache SonarQube packages
-      if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
+      if: ${{ env.DEFAULT_JAVA == matrix.java }}
       uses: actions/cache@v3
       with:
         path: ~/.sonar/cache
@@ -56,7 +49,12 @@ jobs:
 
     - name: Sonar analysis
       if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
-      run: mvn --errors --batch-mode -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=itsallcode -Dsonar.login=$SONAR_TOKEN sonar:sonar
+      run: |
+        mvn --errors --batch-mode \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=itsallcode \
+            -Dsonar.login=$SONAR_TOKEN \
+            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

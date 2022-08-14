@@ -11,8 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
+import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.matcher.SpecificationItemIdMatcher;
 import org.junit.jupiter.api.Test;
 
@@ -209,7 +212,8 @@ class TestSpecificationItem
     @Test
     void testBuildingWithOutIdThrowsExepction()
     {
-        assertThrows(IllegalStateException.class, () -> SpecificationItem.builder().build());
+        final Builder builder = SpecificationItem.builder();
+        assertThrows(IllegalStateException.class, () -> builder.build());
     }
 
     // [utest->dsn~specification-item~3]

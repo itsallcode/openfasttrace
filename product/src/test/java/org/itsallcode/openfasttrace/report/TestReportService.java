@@ -63,14 +63,12 @@ class TestReportService
     {
         final ReportSettings settings = ReportSettings //
                 .builder() //
-                .outputFormat("invalid") //
                 .verbosity(ReportVerbosity.QUIET) //
                 .build();
+        final ReportService service = createService(settings);
         final ExporterException exception = assertThrows(ExporterException.class,
-                () -> createService(settings).reportTraceToStdOut(this.traceMock,
-                        settings.getOutputFormat()));
-        assertThat(exception.getMessage(), equalTo("Found no matching reporter for output format '"
-                + settings.getOutputFormat() + "'"));
+                () -> service.reportTraceToStdOut(this.traceMock, "invalid"));
+        assertThat(exception.getMessage(), equalTo("Found no matching reporter for output format 'invalid'"));
     }
 
     @Test
@@ -85,9 +83,12 @@ class TestReportService
                     .builder() //
                     .verbosity(ReportVerbosity.QUIET) //
                     .build();
-            assertThrows(ReportException.class,
-                    () -> createService(settings).reportTraceToPath(this.traceMock,
-                            readOnlyFilePath, settings.getOutputFormat()));
+            final ReportService service = createService(settings);
+            final String outputFormat = settings.getOutputFormat();
+            final ReportException exception = assertThrows(ReportException.class,
+                    () -> service.reportTraceToPath(this.traceMock,
+                            readOnlyFilePath, outputFormat));
+            assertThat(exception.getMessage(), equalTo("Error generating stream to output path " + readOnlyFilePath));
         }
         finally
         {
@@ -95,7 +96,7 @@ class TestReportService
         }
     }
 
-    private ReportService createService(ReportSettings settings)
+    private ReportService createService(final ReportSettings settings)
     {
         return new ReportService(new ReporterFactoryLoader(new ReporterContext(settings)));
     }

@@ -1,3 +1,6 @@
+/**
+ * This provides an exporter for the SpecObject XML format.
+ */
 module org.itsallcode.openfasttrace.exporter.specobject
 {
     exports org.itsallcode.openfasttrace.exporter.specobject;

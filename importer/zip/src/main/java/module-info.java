@@ -1,3 +1,6 @@
+/**
+ * This provides an importer for the ZIP files.
+ */
 module org.itsallcode.openfasttrace.importer.zip
 {
     exports org.itsallcode.openfasttrace.importer.zip;

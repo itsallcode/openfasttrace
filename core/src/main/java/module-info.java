@@ -10,4 +10,8 @@ module org.itsallcode.openfasttrace.core
 
     requires java.logging;
     requires transitive org.itsallcode.openfasttrace.api;
+
+    uses org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
+    uses org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+    uses org.itsallcode.openfasttrace.api.report.ReporterFactory;
 }

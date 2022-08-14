@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-exporter-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
         </dependency>
         <dependency>
@@ -107,10 +111,6 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <includeDependencySources>true</includeDependencySources>
-                    <!-- This fixes JavaDoc warning: "The code being documented uses packages in the unnamed module,
-                        but the packages defined in https://github.com/itsallcode/openfasttrace/openfasttrace-api/apidocs/
-                        are in named modules." -->
-                    <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
             </plugin>
         </plugins>

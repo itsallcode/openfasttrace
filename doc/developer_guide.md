@@ -93,7 +93,7 @@ mvn license:update-file-header
 ## Check for updated dependencies / plugins
 
 ```bash
-mvn versions:display-dependency-updates versions:display-plugin-updates
+mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 ## Run local sonar analysis

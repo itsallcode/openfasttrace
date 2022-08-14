@@ -1,10 +1,19 @@
-#!/bin/sh
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
 
 script_path=$(dirname "$(readlink -f "$0")")
 base_dir="$script_path"
 oft_script="$base_dir/oft"
+report_file=$base_dir/target/self-trace-report.html
 
-$oft_script trace "$base_dir/doc/spec" \
+mkdir -p $(dirname "$report_file")
+
+$oft_script trace \
+    --output-format html -f "$report_file" \
+    "$base_dir/doc/spec" \
     "$base_dir/importer/markdown/src" \
     "$base_dir/importer/specobject/src" \
     "$base_dir/importer/zip/src" \

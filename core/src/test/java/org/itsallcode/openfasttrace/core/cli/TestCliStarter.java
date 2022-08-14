@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +40,7 @@ class TestCliStarter
         AssertExit.assertExitWithStatus(0, () -> run("help"));
     }
 
-    private void run(String... args)
+    private void run(final String... args)
     {
         CliStarter.main(args);
     }

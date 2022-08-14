@@ -250,7 +250,7 @@ Keywords are followed by a colon that separates the keyword from the content. De
 
 ##### `Status`
 
-The `Status` keyword takes a single value from `draft`, `proposed`, `approved` to set the status of the item. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (see [XML Tracing Report](xml-tracing-report)). Has to occur before the `Description`, `Rationale` or `Comment`. 
+The `Status` keyword takes a single value from `draft`, `proposed`, `approved` to set the status of the item. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (see [XML Tracing Report](#xml-tracing-report)). Has to occur before the `Description`, `Rationale` or `Comment`. 
 
     ### A draft spec items
     `req~draft-item~1`

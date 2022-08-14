@@ -58,8 +58,9 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
+            final InputFile input = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
             assertThrows(UnsupportedOperationException.class,
-                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("file")).toPath());
+                    () -> input.toPath());
         }
     }
 
@@ -68,8 +69,9 @@ class TestZipEntryInput
     {
         try (final ZipFile zip = getZipFile())
         {
+            final ZipEntry entry = new ZipEntry("dir/");
             assertThrows(IllegalArgumentException.class,
-                    () -> ZipEntryInput.forZipEntry(zip, new ZipEntry("dir/")));
+                    () -> ZipEntryInput.forZipEntry(zip, entry));
         }
     }
 

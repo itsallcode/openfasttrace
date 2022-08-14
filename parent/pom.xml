@@ -318,10 +318,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
             </plugin>
@@ -441,48 +437,6 @@
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>2.0.0</version>
-                    <configuration>
-                        <verbose>false</verbose>
-                        <detail>true</detail>
-                        <licenseName>gpl_v3</licenseName>
-                        <organizationName>itsallcode.org</organizationName>
-                        <inceptionYear>2016</inceptionYear>
-                        <excludes>
-                            <exclude>
-                                test/resources/specobject/*.xml
-                            </exclude>
-                            <exclude>**/*.css</exclude>
-                            <exclude>**/*.html</exclude>
-                        </excludes>
-                        <failOnMissingHeader>true</failOnMissingHeader>
-                        <failIfWarning>true</failIfWarning>
-                        <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                        <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
-                        <encoding>UTF-8</encoding>
-                        <dryRun>false</dryRun>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>check-file-header</id>
-                            <goals>
-                                <goal>check-file-header</goal>
-                            </goals>
-                            <phase>validate</phase>
-                        </execution>
-                        <execution>
-                            <id>add-third-party-licenses</id>
-                            <goals>
-                                <goal>add-third-party</goal>
-                                <goal>third-party-report</goal>
-                                <goal>download-licenses</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
                 <!-- Self trace. -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -503,28 +457,6 @@
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            license-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.8,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>
-                                                check-file-header
-                                            </goal>
-                                            <goal>add-third-party</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>

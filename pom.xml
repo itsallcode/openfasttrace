@@ -33,16 +33,6 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <licenseName>gpl_v3</licenseName>
-                    <organizationName>itsallcode.org</organizationName>
-                    <inceptionYear>2016</inceptionYear>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>

@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import javax.annotation.processing.Generated;
-
 /**
  * This class represents a link that had its status evaluated during a trace
  * run.
@@ -61,7 +59,6 @@ public final class TracedLink
         return this.status.isOutgoing();
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -72,7 +69,6 @@ public final class TracedLink
         return result;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

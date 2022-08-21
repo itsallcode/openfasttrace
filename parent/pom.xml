@@ -315,6 +315,15 @@
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
+                    <useModulePath>true</useModulePath>
+                    <argLine>
+                        --illegal-access=deny
+                        <!-- Required to fix failing EqualsVerifier test:
+                            TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
+                            -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
+                            module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>

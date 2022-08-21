@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import javax.annotation.processing.Generated;
-
 /**
  * The location of a coverage item.
  */
@@ -111,7 +109,6 @@ public final class Location
         return this.column;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -123,7 +120,6 @@ public final class Location
         return result;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {

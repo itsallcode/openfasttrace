@@ -29,6 +29,7 @@ import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Answers;
@@ -38,6 +39,9 @@ class TestAllServicesAvailable
     private static List<ImporterFactory> importerFactories;
     private static List<ExporterFactory> exporterFactories;
     private static List<ReporterFactory> reporterFactories;
+
+    @TempDir
+    static Path tempDir;
 
     @BeforeAll
     static void loadFactories()
@@ -109,7 +113,8 @@ class TestAllServicesAvailable
         {
             fail("No exporter found for format '" + format + "'");
         }
-        final Exporter exporter = factory.get().createExporter(Path.of("file"), format, StandardCharsets.UTF_8,
+        final Exporter exporter = factory.get().createExporter(tempDir.resolve("file." + format), format,
+                StandardCharsets.UTF_8,
                 Newline.UNIX, Stream.empty());
         assertNotNull(exporter);
     }

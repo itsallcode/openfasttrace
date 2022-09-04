@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `provides`  tags to `module-info.java` files required by ServiceLoader [#336](https://github.com/itsallcode/openfasttrace/issues/336) / [PR 337#](https://github.com/itsallcode/openfasttrace/pull/337)
+
 ## [3.6.0] - 2022-08-21
 
 ### Added

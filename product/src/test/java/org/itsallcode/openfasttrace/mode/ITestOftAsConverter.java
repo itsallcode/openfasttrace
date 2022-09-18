@@ -20,7 +20,7 @@ class ITestOftAsConverter extends AbstractOftTest
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput(tempDir);
+        prepareOutput(tempDir);
         this.oft = Oft.create();
     }
 
@@ -36,6 +36,6 @@ class ITestOftAsConverter extends AbstractOftTest
     private void assertStandardFileExportResult() throws IOException
     {
         assertOutputFileExists(true);
-        assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"dsn\">");
+        assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"");
     }
 }

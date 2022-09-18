@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-script_path=$(dirname "$(readlink -f "$0")")
+script_path="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 base_dir="$script_path"
 oft_script="$base_dir/oft"
 report_file=$base_dir/target/self-trace-report.html

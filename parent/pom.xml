@@ -323,6 +323,9 @@
                             -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
                             module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
                         --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
+                        <!-- Required to fix failing tests in TestCliStarter:
+                            UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
+                        -Djava.security.manager=allow
                     </argLine>
                 </configuration>
             </plugin>

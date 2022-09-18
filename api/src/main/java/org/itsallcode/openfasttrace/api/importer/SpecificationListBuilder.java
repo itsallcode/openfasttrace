@@ -1,9 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer;
 
-import java.util.Collections;
-
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.*;
@@ -36,7 +33,7 @@ public class SpecificationListBuilder implements ImportEventListener
      */
     public static SpecificationListBuilder create()
     {
-        return new SpecificationListBuilder(new FilterSettings.Builder().build());
+        return new SpecificationListBuilder(FilterSettings.builder().build());
     }
 
     /**
@@ -146,6 +143,7 @@ public class SpecificationListBuilder implements ImportEventListener
     }
 
     /**
+     * Get the total number of items.
      * @return the total number of items.
      */
     public int getItemCount()

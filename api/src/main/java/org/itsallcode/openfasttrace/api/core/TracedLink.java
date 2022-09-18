@@ -44,7 +44,9 @@ public final class TracedLink
     }
 
     /**
-     * @return <code>true</code> if the link originates at the other end
+     * Check if this is an incoming link.
+     * 
+     * @return {@code true} if the link originates at the other end
      */
     public boolean isIncoming()
     {
@@ -52,7 +54,9 @@ public final class TracedLink
     }
 
     /**
-     * @return <code>true</code> if the link points towards the other end
+     * Check if this is an outgoing link.
+     * 
+     * @return {@code true} if the link points towards the other end
      */
     public boolean isOutgoing()
     {

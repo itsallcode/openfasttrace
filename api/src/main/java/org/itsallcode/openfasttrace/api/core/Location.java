@@ -243,7 +243,7 @@ public final class Location
         /**
          * Is the location complete enough to be useful?
          * 
-         * @return <code>true</code> if the location is complete enough
+         * @return {@code true} if the location is complete enough
          */
         public boolean isCompleteEnough()
         {

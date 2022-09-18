@@ -19,6 +19,8 @@ public class Trace
     }
 
     /**
+     * Check if this result has no defects.
+     * 
      * @return {@code true} if and only if no defects where found during
      *         tracing.
      */
@@ -27,13 +29,18 @@ public class Trace
         return this.defectItems.isEmpty();
     }
 
-    /** @return all defect items found during tracing. */
+    /**
+     * Get all defect items.
+     * 
+     * @return all defect items found during tracing.
+     */
     public List<LinkedSpecificationItem> getDefectItems()
     {
         return this.defectItems;
     }
 
     /**
+     * Get all items.
      * 
      * @return all items found during tracing.
      */
@@ -43,6 +50,8 @@ public class Trace
     }
 
     /**
+     * Get IDs of the defect items.
+     * 
      * @return the IDs of the defect items.
      */
     public List<SpecificationItemId> getDefectIds()
@@ -53,6 +62,8 @@ public class Trace
     }
 
     /**
+     * Get the number of defect items.
+     * 
      * @return the number of defect items found.
      */
     public int countDefects()
@@ -61,6 +72,8 @@ public class Trace
     }
 
     /**
+     * Get the total number of items.
+     * 
      * @return the total number of items found.
      */
     public int count()

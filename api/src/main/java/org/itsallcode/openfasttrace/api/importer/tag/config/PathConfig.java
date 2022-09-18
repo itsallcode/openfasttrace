@@ -1,4 +1,5 @@
 package org.itsallcode.openfasttrace.api.importer.tag.config;
+
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.util.List;
@@ -31,6 +32,8 @@ public class PathConfig
     }
 
     /**
+     * Get the description of this path configuration.
+     * 
      * @return the description of this path configuration.
      */
     public String getDescription()
@@ -54,7 +57,9 @@ public class PathConfig
     }
 
     /**
-     * @return the artifact type.
+     * Get the artifact type for tags.
+     * 
+     * @return the artifact type for tags.
      */
     public String getTagArtifactType()
     {
@@ -62,6 +67,8 @@ public class PathConfig
     }
 
     /**
+     * Get the artifact type for covered items.
+     * 
      * @return the artifact type used for covered items.
      */
     public String getCoveredItemArtifactType()
@@ -70,6 +77,8 @@ public class PathConfig
     }
 
     /**
+     * Get the name prefix for covered items.
+     * 
      * @return the name prefix used for covered items.
      */
     public String getCoveredItemNamePrefix()
@@ -87,8 +96,10 @@ public class PathConfig
     }
 
     /**
-     * @return a new {@link Builder} that allows creating a {@link PathConfig}
-     *         object.
+     * Create a new {@link Builder} that allows creating a {@link PathConfig}
+     * object.
+     * 
+     * @return a new {@link Builder}.
      */
     public static Builder builder()
     {
@@ -110,10 +121,13 @@ public class PathConfig
         }
 
         /**
+         * Set the pattern for the path.
+         * 
          * @param pattern
          *            the pattern for the path, see
          *            {@link FileSystem#getPathMatcher(String)} for supported
          *            syntax.
+         * 
          * @return this builder instance.
          */
         public Builder patternPathMatcher(final String pattern)
@@ -123,9 +137,11 @@ public class PathConfig
         }
 
         /**
+         * Set the paths that the {@link PathConfig} should match.
+         * 
          * @param paths
-         *            a {@link List} of {@link Path}s that match should be
-         *            matched for the {@link PathConfig}.
+         *            a {@link List} of {@link Path}s that the
+         *            {@link PathConfig} should matched.
          * @return this builder instance.
          */
         public Builder pathListMatcher(final List<Path> paths)
@@ -135,6 +151,8 @@ public class PathConfig
         }
 
         /**
+         * Set the name prefix for imported items.
+         * 
          * @param coveredItemNamePrefix
          *            the common name prefix for the item covered by the
          *            imported {@link SpecificationItem}.
@@ -147,6 +165,8 @@ public class PathConfig
         }
 
         /**
+         * Set the artifact type for imported items.
+         * 
          * @param coveredItemArtifactType
          *            the artifact type covered by the imported
          *            {@link SpecificationItem}s.
@@ -159,6 +179,8 @@ public class PathConfig
         }
 
         /**
+         * Set the artifact type for imported items.
+         * 
          * @param tagArtifactType
          *            artifact type of the imported {@link SpecificationItem}s.
          * 
@@ -171,6 +193,8 @@ public class PathConfig
         }
 
         /**
+         * Creates a new {@link PathConfig}.
+         * 
          * @return the new {@link PathConfig}.
          */
         public PathConfig build()

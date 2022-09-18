@@ -10,5 +10,10 @@ import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 @SuppressWarnings("squid:S2094")
 public class ExporterContext
 {
-
+    /**
+     * Creates a new {@link ExporterContext} instance.
+     */
+    public ExporterContext() {
+        // Empty by intention
+    }
 }

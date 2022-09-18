@@ -3,9 +3,7 @@ package org.itsallcode.openfasttrace.core.cli.commands;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
@@ -48,7 +46,7 @@ public abstract class AbstractCommand implements Performable
 
     private FilterSettings createFilterSettingsFromArguments()
     {
-        final FilterSettings.Builder builder = new FilterSettings.Builder();
+        final FilterSettings.Builder builder = FilterSettings.builder();
         setAttributeTypeFilter(builder);
         setTagFilter(builder);
         return builder.build();

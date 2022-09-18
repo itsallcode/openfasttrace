@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.mode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -94,7 +93,7 @@ class ITestOftAsReporter extends AbstractOftTest
         final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         assertThat("Number of items with type \"dsn\" in regular trace",
                 countItemsOfArtifactTypeInTrace("dsn", this.trace), greaterThan(0L));
-        final FilterSettings filterSettings = new FilterSettings.Builder()
+        final FilterSettings filterSettings = FilterSettings.builder()
                 .artifactTypes(artifactTypes).build();
         final Trace filteredTrace = traceWithFilters(filterSettings);
         assertThat("Number of items with ignored type \"dsn\" in filtered trace",

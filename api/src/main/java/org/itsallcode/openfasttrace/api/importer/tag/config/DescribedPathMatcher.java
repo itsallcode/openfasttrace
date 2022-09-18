@@ -1,8 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer.tag.config;
 import java.nio.file.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
@@ -62,6 +60,7 @@ public class DescribedPathMatcher
     }
 
     /**
+     * Get the description for this {@link DescribedPathMatcher}.
      * @return the description for this {@link DescribedPathMatcher}.
      */
     public String getDescription()

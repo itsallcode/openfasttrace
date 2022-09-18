@@ -22,8 +22,28 @@ public class OsDetector
         assumeFalse(OsDetector::runningOnWindows, "not running on unix");
     }
 
+    public static void assumeRunningOnLinux()
+    {
+        assumeTrue(OsDetector::runningOnLinux, "not running on linux");
+    }
+
+    public static void assumeRunningOnMacOs()
+    {
+        assumeTrue(OsDetector::runningOnMac, "not running on macOS");
+    }
+
     private static boolean runningOnWindows()
     {
         return OS.contains("win");
+    }
+
+    private static boolean runningOnLinux()
+    {
+        return OS.contains("linux");
+    }
+
+    private static boolean runningOnMac()
+    {
+        return OS.contains("mac");
     }
 }

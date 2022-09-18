@@ -65,8 +65,7 @@ class ITestSelfTrace
     {
         final Path baseDir = Paths.get(new StandardDirectoryService().getCurrent()).resolve("..");
         return ImportSettings.builder() //
-                .addInputs(baseDir.resolve("doc/design.md")) //
-                .addInputs(baseDir.resolve("doc/system_requirements.md")) //
+                .addInputs(baseDir.resolve("doc/spec/")) //
                 .addInputs(findInputDirectories(baseDir)) //
                 .build();
     }

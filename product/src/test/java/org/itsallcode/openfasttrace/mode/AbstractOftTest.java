@@ -20,7 +20,7 @@ abstract class AbstractOftTest
     protected final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     protected final ByteArrayOutputStream error = new ByteArrayOutputStream();
 
-    protected void perpareOutput(final Path outputDir) throws UnsupportedEncodingException
+    protected void prepareOutput(final Path outputDir) throws UnsupportedEncodingException
     {
         this.docDir = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
         this.outputFile = outputDir.resolve("stream.txt");

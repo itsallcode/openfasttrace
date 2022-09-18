@@ -20,7 +20,7 @@ class ITestOftAsConverter extends AbstractOftTest
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput(tempDir);
+        prepareOutput(tempDir);
         this.oft = Oft.create();
     }
 

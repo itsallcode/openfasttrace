@@ -40,7 +40,7 @@ public class ArgumentValidator
     {
         final Optional<String> command = this.arguments.getCommand();
         boolean ok = false;
-        if (!command.isEmpty())
+        if (command.isEmpty())
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();

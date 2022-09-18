@@ -1,11 +1,11 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.core.Newline;
@@ -55,7 +55,7 @@ class TestCliArguments
     @Test
     void getStandardOutputFormatForExport()
     {
-        this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
+        this.arguments.setUnnamedValues(List.of(ConvertCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
                 equalTo(ExporterConstants.DEFAULT_OUTPUT_FORMAT));
     }
@@ -64,7 +64,7 @@ class TestCliArguments
     @Test
     void getStandardOutputFormatForReport()
     {
-        this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
+        this.arguments.setUnnamedValues(List.of(TraceCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
                 equalTo(ReportConstants.DEFAULT_REPORT_FORMAT));
     }
@@ -234,6 +234,8 @@ class TestCliArguments
         assertThat(this.arguments.getShowOrigin(), is(true));
     }
 
+    // [dsn~reporting.plain-text.ansi-color~1]
+    // [dsn~reporting.plain-text.ansi-font-style~1]
     @Test
     void testSetColorScheme()
     {
@@ -241,7 +243,8 @@ class TestCliArguments
         assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
     }
 
-
+    // [dsn~reporting.plain-text.ansi-color~1]
+    // [dsn~reporting.plain-text.ansi-font-style~1]
     @Test
     void testSetC()
     {

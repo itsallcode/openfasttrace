@@ -166,13 +166,13 @@ public class PlainTextReport implements Reportable
         final Comparator<String> byTypeName = Comparator.comparing(a -> a.replaceFirst("[-+]", ""));
 
         final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
-                .map(x -> "-" + x);
+                .map(x -> this.formatter.formatNotOk("-" + x));
         return "(" + Stream.concat( //
                 Stream.concat( //
                         uncoveredStream, //
                         item.getCoveredArtifactTypes().stream() //
                 ), //
-                item.getOverCoveredArtifactTypes().stream().map(x -> "+" + x) //
+                item.getOverCoveredArtifactTypes().stream().map(x -> this.formatter.formatNotOk("+" + x)) //
         ) //
                 .sorted(byTypeName) //
                 .collect(Collectors.joining(", ")) + ")";
@@ -180,15 +180,20 @@ public class PlainTextReport implements Reportable
 
     private void renderItemLinkCounts(final PrintStream report, final LinkedSpecificationItem item)
     {
-        report.print(item.countIncomingBadLinks());
+        report.print(formatFailureCount(item.countIncomingBadLinks()));
         report.print("/");
         report.print(item.countIncomingLinks());
         report.print(">");
-        report.print(item.countDuplicateLinks());
+        report.print(formatFailureCount(item.countDuplicateLinks()));
         report.print(">");
         report.print(item.countOutgoingBadLinks());
         report.print("/");
-        report.print(item.countOutgoingLinks());
+        report.print(formatFailureCount(item.countOutgoingLinks()));
+    }
+
+    private String formatFailureCount(final int count) {
+        return (count == 0) ? this.formatter.formatOk(String.valueOf(count))
+                : this.formatter.formatNotOk(String.valueOf(count));
     }
 
     private void renderMaturity(final PrintStream report, final LinkedSpecificationItem item)
@@ -310,7 +315,7 @@ public class PlainTextReport implements Reportable
         {
             renderEmptyItemDetailsLine(report);
             report.print("| #: ");
-            report.print(tags.stream().collect(Collectors.joining(", ")));
+            report.print(String.join(", ", tags));
             report.print(this.settings.getNewline());
             ++this.nonEmptySections;
         }

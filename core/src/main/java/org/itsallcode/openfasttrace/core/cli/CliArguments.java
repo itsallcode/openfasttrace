@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -113,7 +111,7 @@ public class CliArguments
     {
         if (this.unnamedValues == null || this.unnamedValues.size() <= 1)
         {
-            return asList(this.directoryService.getCurrent());
+            return List.of(this.directoryService.getCurrent());
         }
         return this.unnamedValues.subList(1, this.unnamedValues.size());
     }

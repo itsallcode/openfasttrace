@@ -19,6 +19,6 @@ final class ConsoleColorFormatter implements TextFormatter {
 
     @Override
     public String formatStrong(final String text) {
-        return BOLD + text + RESET;
+        return BOLD + CYAN + text + RESET;
     }
 }

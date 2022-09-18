@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade test and build dependencies [PR #330](https://github.com/itsallcode/openfasttrace/pull/330)
 - Removed license headers from sources and license-maven-plugin [PR #331](https://github.com/itsallcode/openfasttrace/pull/331)
 
+### Bugfixes
+
+- Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / (PR #339)[https://github.com/itsallcode/openfasttrace/pull/339]
+  - Also fixed Jacoco code coverage and integration tests
+
 ## [3.5.0] - 2022-03-17
 
 ### Updated

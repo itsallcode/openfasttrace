@@ -92,16 +92,14 @@ public final class OriginLinkFormatter
 
     private static URI convertPathWithProtocolToUri(final String path)
     {
-        URI uri;
         try
         {
-            uri = URI.create(path);
+            return URI.create(path);
         }
         catch (final IllegalArgumentException e)
         {
-            uri = null;
+            return null;
         }
-        return uri;
     }
 
     private static URI convertPathWithoutProtocolToUri(final String path)

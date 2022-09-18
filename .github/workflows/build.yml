@@ -12,13 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [11, 17]
+        java: [11]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        exclude:
-          - os: macos-latest
+        include:
+          - os: ubuntu-latest
             java: 17
-          - os: windows-latest
-            java: 17
+          - os: ubuntu-latest
+            java: 19
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-os-${{ matrix.os }}-java-${{ matrix.java }}

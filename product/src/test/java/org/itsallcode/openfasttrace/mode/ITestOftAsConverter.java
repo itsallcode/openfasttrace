@@ -36,6 +36,6 @@ class ITestOftAsConverter extends AbstractOftTest
     private void assertStandardFileExportResult() throws IOException
     {
         assertOutputFileExists(true);
-        assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"dsn\">");
+        assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"");
     }
 }

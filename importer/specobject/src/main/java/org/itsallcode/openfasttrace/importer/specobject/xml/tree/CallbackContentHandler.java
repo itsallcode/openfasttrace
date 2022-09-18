@@ -2,9 +2,7 @@ package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
@@ -21,6 +19,14 @@ public class CallbackContentHandler implements TreeContentHandler
 
     private Consumer<TreeElement> defaultStartElementListener;
     private TreeParsingController treeParsingController;
+
+    /**
+     * Create a new {@link CallbackContentHandler}.
+     */
+    public CallbackContentHandler()
+    {
+        // empty by intention
+    }
 
     /**
      * Sets the default start element listener that is called when no other

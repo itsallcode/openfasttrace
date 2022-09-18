@@ -12,6 +12,14 @@ public class ASpecReporterFactory extends ReporterFactory
 {
     private static final String ASPEC_REPORT_FORMAT = "aspec";
 
+    /**
+     * Create a new {@link ASpecReporterFactory}.
+     */
+    public ASpecReporterFactory()
+    {
+        // empty by intention
+    }
+
     @Override
     public boolean supportsFormat(String format)
     {

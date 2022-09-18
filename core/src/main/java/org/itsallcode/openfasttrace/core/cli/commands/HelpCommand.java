@@ -12,6 +12,14 @@ public class HelpCommand implements Performable
     /** The command line action for running this command. */
     public static final String COMMAND_NAME = "help";
 
+    /**
+     * Create a new {@link HelpCommand}.
+     */
+    public HelpCommand()
+    {
+        // empty by intention
+    }
+
     @Override
     @SuppressWarnings("java:S106") // Using System.out by intention
     public boolean run()
@@ -21,24 +29,26 @@ public class HelpCommand implements Performable
         return true;
     }
 
-    private String loadResource(String resourceName)
+    private String loadResource(final String resourceName)
     {
         try (InputStream stream = getResource(resourceName).openStream())
         {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }
-        catch (IOException exception)
+        catch (final IOException exception)
         {
-            throw new UncheckedIOException("Unable to load CLI usage from resource file. This is a software bug. Please report.", exception);
+            throw new UncheckedIOException(
+                    "Unable to load CLI usage from resource file. This is a software bug. Please report.", exception);
         }
     }
 
-    private URL getResource(String resourceName)
+    private URL getResource(final String resourceName)
     {
         final URL url = this.getClass().getResource(resourceName);
         if (url == null)
         {
-            throw new IllegalStateException("Unable to locate CLI usage text resource '" + resourceName + "'. This is a software bug. Please report.");
+            throw new IllegalStateException("Unable to locate CLI usage text resource '" + resourceName
+                    + "'. This is a software bug. Please report.");
         }
         return url;
     }

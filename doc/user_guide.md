@@ -5,7 +5,7 @@
 ## In a Nutshell
 
 OFT is a requirement tracing tool. It helps you make sure that all defined requirements are covered in your code. It
-also helps finding outdated code passages.
+also helps you find outdated code passages.
 
 1. Create requirement and specification documents in Markdown including OFT-readable specification items
 1. Put tags into your source code that mark the coverage of items from the specification
@@ -491,6 +491,21 @@ Newline format, one of
 
 Defaults to the platform standard if not given.
 
+You can change the output color scheme.
+
+    -c, --color=<color scheme>
+
+The available color schemes are
+
+`black-and-white`
+: Plain black and white. On the console this also means no font styles used.
+
+`monochrome`
+: Black, white and shades of grey. Also enables font style on the console.
+
+`color`
+: Color output. Also enables font style on the console.
+
 ### Input Format Support
 
 #### Tags in Programming Language or Markup Files
@@ -951,7 +966,6 @@ oft.reportToPath(trace, reportPath, reportSettings);
 //Reporting to stdout
 oft.reportToStdOut(trace);
 ```
-
 
 #### Configuring the Steps
 

@@ -71,6 +71,7 @@ public class TraceCommand extends AbstractCommand
                 .verbosity(this.arguments.getReportVerbosity()) //
                 .newline(this.arguments.getNewline()) //
                 .showOrigin(this.arguments.getShowOrigin()) //
+                .colorScheme(this.arguments.getColorScheme()) //
                 .build();
     }
 }

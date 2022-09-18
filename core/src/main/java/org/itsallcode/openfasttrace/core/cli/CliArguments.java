@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
@@ -37,6 +38,7 @@ public class CliArguments
     // [impl->dsn~reporting.html.linked-specification-item-origin~1]
     private boolean showOrigin;
     private final DirectoryService directoryService;
+    private ColorScheme colorScheme;
 
     /**
      * Create new {@link CliArguments}.
@@ -294,6 +296,25 @@ public class CliArguments
     }
 
     /**
+     * Get the color scheme.
+     * <p>
+     * Defaults to {@link ColorScheme#COLOR}. The switch <code>-f</code> overrides this setting, so that the color
+     * scheme is always {@link ColorScheme#BLACK_AND_WHITE}.
+     * </p>
+     *
+     * @return the color scheme
+     */
+    public ColorScheme getColorScheme()
+    {
+        if (this.getOutputPath() == null) {
+            return (this.colorScheme == null) ? ColorScheme.COLOR : this.colorScheme;
+        }
+        else {
+            return ColorScheme.BLACK_AND_WHITE;
+        }
+    }
+
+    /**
      * Set a list of tags to be applied as filter during import
      * 
      * @param tags
@@ -348,5 +369,25 @@ public class CliArguments
     public void setS(final boolean showOrigin)
     {
         setShowOrigin(showOrigin);
+    }
+
+    /**
+     * Choose the color scheme.
+     *
+     * @param colorScheme color scheme to use for console output
+     */
+    public void setColorScheme(final ColorScheme colorScheme)
+    {
+        this.colorScheme = colorScheme;
+    }
+
+    /**
+     * Choose the color scheme.
+     *
+     * @param colorScheme color scheme to use for console output
+     */
+    public void setC(final ColorScheme colorScheme)
+    {
+        this.setColorScheme(colorScheme);
     }
 }

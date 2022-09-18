@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -146,7 +147,7 @@ class TestCliArguments
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    void testSetIngnoreArtifactTypes()
+    void testSetIgnoreArtifactTypes()
     {
         final String value = "impl,utest";
         this.arguments.setWantedArtifactTypes(value);
@@ -183,7 +184,7 @@ class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testSetd()
+    void testSetD()
     {
         final String value = "client,server";
         this.arguments.setT(value);
@@ -231,5 +232,43 @@ class TestCliArguments
     {
         this.arguments.setS(true);
         assertThat(this.arguments.getShowOrigin(), is(true));
+    }
+
+    @Test
+    void testSetColorScheme()
+    {
+        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
+    }
+
+
+    @Test
+    void testSetC()
+    {
+        this.arguments.setC(ColorScheme.MONOCHROME);
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
+    }
+
+
+    @Test
+    void testColorSchemeDefaultsToColor()
+    {
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.COLOR));
+    }
+
+
+    @Test
+    void testSetOutputColorScheme()
+    {
+        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
+    }
+
+    @Test
+    void testSetOutputFileOverridesColorSchemeSetting()
+    {
+        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
+        this.arguments.setOutputFile("something");
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.BLACK_AND_WHITE));
     }
 }

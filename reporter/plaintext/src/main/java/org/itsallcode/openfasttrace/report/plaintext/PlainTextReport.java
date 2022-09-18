@@ -27,6 +27,7 @@ public class PlainTextReport implements Reportable
             .comparing(LinkedSpecificationItem::getId);
     private int nonEmptySections = 0;
     private final ReportSettings settings;
+    private final TextFormatter formatter;
 
     /**
      * Create a new instance of {@link PlainTextReport}
@@ -41,6 +42,7 @@ public class PlainTextReport implements Reportable
     {
         this.trace = trace;
         this.settings = settings;
+        this.formatter = TextFormatterFactory.createFormatter(settings.getColorScheme());
     }
 
     @Override
@@ -109,7 +111,7 @@ public class PlainTextReport implements Reportable
 
     private String translateStatus(final boolean ok)
     {
-        return ok ? "ok" : "not ok";
+        return ok ? this.formatter.formatOk("ok") : this.formatter.formatNotOk("not ok");
     }
 
     // [impl->dsn~reporting.plain-text.summary~2]
@@ -152,7 +154,7 @@ public class PlainTextReport implements Reportable
         report.print(" - ");
         renderItemLinkCounts(report, item);
         report.print(" - ");
-        report.print(item.getId().toString());
+        report.print(this.formatter.formatStrong(item.getId().toString()));
         report.print(" ");
         renderMaturity(report, item);
         report.print(translateArtifactTypeCoverage(item));

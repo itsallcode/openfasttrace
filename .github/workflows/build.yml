@@ -17,8 +17,6 @@ jobs:
         include:
           - os: ubuntu-latest
             java: 17
-          - os: ubuntu-latest
-            java: 18
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-os-${{ matrix.os }}-java-${{ matrix.java }}

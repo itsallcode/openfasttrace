@@ -9,17 +9,24 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        java: [11, 17]
+        java: [11]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            java: 17
+
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-java-${{ matrix.java }}
+      group: ${{ github.workflow }}-${{ github.ref }}-os-${{ matrix.os }}-java-${{ matrix.java }}
       cancel-in-progress: true
-    name: "Build with Java ${{ matrix.java }}"
+
+    runs-on: ${{ matrix.os }}
+    name: "Build on ${{ matrix.os }} with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
+      DEFAULT_OS: ubuntu-latest
 
     steps:
 
@@ -35,7 +42,7 @@ jobs:
         cache: 'maven'
 
     - name: Cache SonarQube packages
-      if: ${{ env.DEFAULT_JAVA == matrix.java }}
+      if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
       uses: actions/cache@v3
       with:
         path: ~/.sonar/cache
@@ -48,7 +55,7 @@ jobs:
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 
     - name: Sonar analysis
-      if: ${{ env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
+      if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
         mvn --errors --batch-mode \
             -Dsonar.host.url=https://sonarcloud.io \
@@ -60,7 +67,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 
-    - name: Publish Test Report for Java ${{ matrix.java }}
+    - name: Publish Test Report for Java ${{ matrix.java }} on ${{ matrix.os }}
       uses: scacap/action-surefire-report@v1
       if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
       with:
@@ -69,16 +76,18 @@ jobs:
 
     - name: Archive oft binary
       uses: actions/upload-artifact@v3
-      if: ${{ env.DEFAULT_JAVA == matrix.java }}
+      if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
       with:
         name: openfasttrace-binaries
         path: product/target/openfasttrace-*.jar
 
     - name: Run self-trace
+      if: ${{ matrix.os != 'macos-latest' }}
       run: ./oft-self-trace.sh
 
     - name: Upload self-tracing report
       uses: actions/upload-artifact@v3
+      if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
       with:
         name: self-tracing-report
         path: target/self-trace-report.html

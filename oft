@@ -1,6 +1,6 @@
 #!/bin/sh
 
-script_path=$(dirname "$(readlink -f "$0")")
+script_path="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 version=$(grep -zo '<revision>.*</revision>' parent/pom.xml | sed -e's/[^0-9.]//g')
 jar_file="$script_path/product/target/openfasttrace-$version.jar"
 

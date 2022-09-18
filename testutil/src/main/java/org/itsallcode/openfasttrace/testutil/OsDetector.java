@@ -7,7 +7,7 @@ import org.itsallcode.openfasttrace.testutil.OsCheck.OSType;
 
 public class OsDetector
 {
-    private static OsCheck OS_CHECK = new OsCheck();
+    private static final OsCheck OS_CHECK = new OsCheck();
 
     private OsDetector()
     {

@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-importer-specoboject</artifactId>
+            <artifactId>openfasttrace-importer-specobject</artifactId>
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>

@@ -134,7 +134,7 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
-                <artifactId>openfasttrace-importer-specoboject</artifactId>
+                <artifactId>openfasttrace-importer-specobject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>

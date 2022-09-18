@@ -29,6 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added builds for macOS and Windows [#340](https://github.com/itsallcode/openfasttrace/issues/340)
 
+### Bugfixes
+
+- Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / [PR #339](https://github.com/itsallcode/openfasttrace/pull/339)
+  - Also fixed Jacoco code coverage and integration tests
+
 ## [3.5.0] - 2022-03-17
 
 ### Updated

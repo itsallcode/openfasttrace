@@ -78,7 +78,8 @@ class TestCliStarter
     @Test
     void testHelpPrintsUsage(@SysOut final Capturable out)
     {
-        assertExitOkWithStdOutStart(() -> runCliStarter(HELP_COMMAND), "OpenFastTrace\n\nUsage:", out);
+        final String nl = System.lineSeparator();
+        assertExitOkWithStdOutStart(() -> runCliStarter(HELP_COMMAND), "OpenFastTrace" + nl + nl + "Usage:", out);
     }
 
     // [itest->dsn~cli.command-selection~1]

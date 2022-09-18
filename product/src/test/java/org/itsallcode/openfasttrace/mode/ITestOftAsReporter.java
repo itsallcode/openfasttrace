@@ -29,7 +29,7 @@ class ITestOftAsReporter extends AbstractOftTest
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput(tempDir);
+        prepareOutput(tempDir);
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         this.oft = Oft.create();
         final List<SpecificationItem> items = this.oft.importItems(settings);

@@ -14,7 +14,6 @@
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jacoco.version>0.8.8</jacoco.version>
     </properties>
     <licenses>
         <license>

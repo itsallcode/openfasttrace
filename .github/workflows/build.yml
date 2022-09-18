@@ -82,7 +82,7 @@ jobs:
         path: product/target/openfasttrace-*.jar
 
     - name: Run self-trace
-      if: ${{ matrix.os != "macos-latest" }}
+      if: ${{ matrix.os != 'macos-latest' }}
       run: ./oft-self-trace.sh
 
     - name: Upload self-tracing report

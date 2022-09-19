@@ -144,6 +144,7 @@ public class SpecificationListBuilder implements ImportEventListener
 
     /**
      * Get the total number of items.
+     *
      * @return the total number of items.
      */
     public int getItemCount()

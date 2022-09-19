@@ -61,6 +61,7 @@ public class DescribedPathMatcher
 
     /**
      * Get the description for this {@link DescribedPathMatcher}.
+     *
      * @return the description for this {@link DescribedPathMatcher}.
      */
     public String getDescription()

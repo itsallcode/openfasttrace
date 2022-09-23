@@ -14,6 +14,8 @@
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Empty default value for Java version < 18 -->
+        <test.args></test.args>
     </properties>
     <licenses>
         <license>
@@ -244,6 +246,17 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>java18</id>
+            <activation>
+                <jdk>18</jdk>
+            </activation>
+            <properties>
+                <!-- Required to fix failing tests in TestCliStarter:
+                    UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
+                <test.args>-Djava.security.manager=allow</test.args>
+            </properties>
+        </profile>
     </profiles>
     <build>
         <plugins>
@@ -327,16 +340,16 @@
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
+                        <!-- Required for Jacoco coverage -->
                         @{argLine}
+                        <!-- Required for Java 18 -->
+                        ${test.args}
                         --illegal-access=deny
                         <!-- Required to fix failing EqualsVerifier test:
                             TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
                             -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
                             module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
                         --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
-                        <!-- Required to fix failing tests in TestCliStarter:
-                            UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
-                        -Djava.security.manager=allow
                     </argLine>
                 </configuration>
             </plugin>

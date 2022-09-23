@@ -363,7 +363,10 @@
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
+                        <!-- Required for Jacoco coverage -->
                         @{argLine}
+                        <!-- Required for Java 18 -->
+                        ${test.args}
                         --illegal-access=deny
                         <!-- Required to fix failing EqualsVerifier test:
                             TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.

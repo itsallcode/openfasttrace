@@ -239,6 +239,76 @@ Requirements should be accompanied by a rationale in all cases where the reason 
     the details are up to the detailed design.
     
     Needs: dsn 
+    
+
+
+`Needs`, `Rationale` and `Comment` are OpenFastTrace keywords that tell OpenFastTrace how to process the following content. There are other keywords in the context of specification items written in Markdown described in the following sections.
+
+#### Keywords
+
+Keywords are followed by a colon that separates the keyword from the content. Depending on the keyword, the content may start on the next line.
+
+##### `Status`
+
+The `Status` keyword takes a single value from `draft`, `proposed`, `approved` to set the status of the item. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (see [XML Tracing Report](#xml-tracing-report)). Has to occur before the `Description`, `Rationale` or `Comment`. 
+
+    ### A draft spec items
+    `req~draft-item~1`
+    Status: draft
+    
+    This spec item is in the draft state and thus not considered final.
+   
+
+##### `Covers`
+
+The `Covers` keyword states which items are covered by the current specification item. It is followed by a list of items that are covered, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
+
+Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement that covers that feature, could be written as
+
+    ### Rubber ducky is made from latex
+    `req~rubber-ducky-made-from-latex~1`
+    
+    The rubber ducky should be made from latex.
+    
+    Rationale:
+    We'd like to avoid using materials made from crude oil and therefor use latex instead, because it is made from sustainable, regrowable resources.
+    
+    Covers:
+    - feat~rubber-ducky~1
+
+##### `Depends`
+
+The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used. This has no effect on the coverage of specification items.
+
+    ### Depending specification item
+    `req~depending-item~1`
+    
+    This item depends on two others. 
+    
+    Depends:
+    - req~dependency-1~1
+    - req~dependency-2~1
+
+##### `Description`
+ 
+This keyword is *optional*. Starts the text passage that describes a specification item. The description is automatically started with any non-empty text that does not start with another keyword. Has to occur before `Comment` or `Rationale`. The specification item 
+
+    ### Specification item
+    `feat~specification-item~1`
+    
+    Description:
+    This is the description.
+    
+is functionally equivalent to
+
+    ### Specification item
+    `feat~specification-item~1`
+    
+    This is the description.
+
+##### `Tags`
+
+Tags are described in detail later in this document.
 
 ### Delegating Requirement Coverage
 
@@ -462,13 +532,14 @@ recognized file types:
 
 * C (`.c`, `.h`)
 * C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
-* C# (`.c#`)
+* C# (`.c#`, `cs`)
 * Database related (`.sql`, `.pls`)
 * Configuration files (`.cfg`, `.conf`, `.ini`)
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
 * Java (`.java`)
 * JavaScript (`.js`)
+* TypeScript (`.ts`)
 * JSON (`.json`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
@@ -870,6 +941,29 @@ if (trace.hasNoDefects())
     // ... do something
 }
 ```
+
+#### Reporting Formats
+
+There are various reporting formats for OFT and one can set it using the ReportSettings object.
+
+```JAVA
+ReportSettings reportSettings = ReportSettings.builder().outputFormat("html").build();
+```
+
+The `ReportSettings` builder has other functions as well that allow you to set verbosity etc.
+
+OFT allows you to report directly to the standard output or to a file
+
+```JAVA
+//Reporting to a file
+oft.reportToPath(trace, reportPath, reportSettings);
+```
+
+```JAVA
+//Reporting to stdout
+oft.reportToStdOut(trace);
+```
+
 
 #### Configuring the Steps
 

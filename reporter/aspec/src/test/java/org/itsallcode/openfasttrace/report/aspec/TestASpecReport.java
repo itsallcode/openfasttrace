@@ -1,9 +1,7 @@
 package org.itsallcode.openfasttrace.report.aspec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -24,27 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-/*-
- * #%L
- * OpenFastTrace augmented specobject Reporter
- * %%
- * Copyright (C) 2016 - 2021 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 @ExtendWith(MockitoExtension.class)
 class TestASpecReport
 {
@@ -470,9 +447,16 @@ class TestASpecReport
     private String renderToString()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new ASpecReport(getTrace(), reportContext);
+        final Reportable report = createFactory().createImporter(getTrace());
         report.renderToStream(outputStream);
         return outputStream.toString();
+    }
+
+    private ASpecReporterFactory createFactory()
+    {
+        final ASpecReporterFactory factory = new ASpecReporterFactory();
+        factory.init(this.reportContext);
+        return factory;
     }
 
     private Trace getTrace()
@@ -629,7 +613,7 @@ class TestASpecReport
             values.add(value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED");
         }
 
-        Field(final Type type, final String id, final int version, ItemStatus status,
+        Field(final Type type, final String id, final int version, final ItemStatus status,
                 final DeepCoverageStatus ownCoverage,
                 final DeepCoverageStatus deepCoverage,
                 final ASpecReport.CoveringStatus coveringStatus)

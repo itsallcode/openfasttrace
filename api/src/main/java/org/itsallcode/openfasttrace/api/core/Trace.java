@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +19,8 @@ public class Trace
     }
 
     /**
+     * Check if this result has no defects.
+     * 
      * @return {@code true} if and only if no defects where found during
      *         tracing.
      */
@@ -49,13 +29,18 @@ public class Trace
         return this.defectItems.isEmpty();
     }
 
-    /** @return all defect items found during tracing. */
+    /**
+     * Get all defect items.
+     * 
+     * @return all defect items found during tracing.
+     */
     public List<LinkedSpecificationItem> getDefectItems()
     {
         return this.defectItems;
     }
 
     /**
+     * Get all items.
      * 
      * @return all items found during tracing.
      */
@@ -65,6 +50,8 @@ public class Trace
     }
 
     /**
+     * Get IDs of the defect items.
+     * 
      * @return the IDs of the defect items.
      */
     public List<SpecificationItemId> getDefectIds()
@@ -75,6 +62,8 @@ public class Trace
     }
 
     /**
+     * Get the number of defect items.
+     * 
      * @return the number of defect items found.
      */
     public int countDefects()
@@ -83,6 +72,8 @@ public class Trace
     }
 
     /**
+     * Get the total number of items.
+     * 
      * @return the total number of items found.
      */
     public int count()

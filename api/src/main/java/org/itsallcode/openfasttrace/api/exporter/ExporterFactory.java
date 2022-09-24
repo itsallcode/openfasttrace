@@ -1,26 +1,4 @@
 package org.itsallcode.openfasttrace.api.exporter;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -73,12 +51,12 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
     }
 
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory} supports
+     * Returns {@code true} if this {@link ExporterFactory} supports
      * exporting the given output format.
      *
      * @param format
      *            the output type to check.
-     * @return <code>true</code> if the given type is supported for exporting.
+     * @return {@code true} if the given type is supported for exporting.
      */
     public boolean supportsFormat(final String format)
     {

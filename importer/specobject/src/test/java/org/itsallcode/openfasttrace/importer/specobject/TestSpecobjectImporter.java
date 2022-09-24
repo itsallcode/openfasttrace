@@ -1,59 +1,26 @@
 package org.itsallcode.openfasttrace.importer.specobject;
 
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.*;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.xml.SaxParserConfigurator;
-import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.logging.LogRecordListener;
-import org.junit.platform.commons.logging.LoggerFactory;
-import org.mockito.internal.debugging.LoggingListener;
 
 class TestSpecobjectImporter
 {
@@ -396,7 +363,7 @@ class TestSpecobjectImporter
             rootLogger.addHandler(this);
         }
 
-        @Override public void publish(LogRecord record)
+        @Override public void publish(final LogRecord record)
         {
             logRecords.add(record);
             super.publish(record);
@@ -415,5 +382,4 @@ class TestSpecobjectImporter
             super.close();
         }
     }
-
 }

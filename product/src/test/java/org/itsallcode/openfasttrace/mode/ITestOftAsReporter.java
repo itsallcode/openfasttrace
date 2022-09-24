@@ -1,29 +1,6 @@
 package org.itsallcode.openfasttrace.mode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -52,7 +29,7 @@ class ITestOftAsReporter extends AbstractOftTest
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
     {
-        perpareOutput(tempDir);
+        prepareOutput(tempDir);
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         this.oft = Oft.create();
         final List<SpecificationItem> items = this.oft.importItems(settings);
@@ -116,7 +93,7 @@ class ITestOftAsReporter extends AbstractOftTest
         final Set<String> artifactTypes = new HashSet<>(Arrays.asList("feat", "req"));
         assertThat("Number of items with type \"dsn\" in regular trace",
                 countItemsOfArtifactTypeInTrace("dsn", this.trace), greaterThan(0L));
-        final FilterSettings filterSettings = new FilterSettings.Builder()
+        final FilterSettings filterSettings = FilterSettings.builder()
                 .artifactTypes(artifactTypes).build();
         final Trace filteredTrace = traceWithFilters(filterSettings);
         assertThat("Number of items with ignored type \"dsn\" in filtered trace",

@@ -1,33 +1,8 @@
 package org.itsallcode.openfasttrace.api.core;
 
 import java.util.logging.Logger;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.processing.Generated;
 
 /**
  * Specification item ID
@@ -114,7 +89,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    @Generated(value = "org.eclipse.Eclipse")
     public final int hashCode()
     {
         final int prime = 31;
@@ -126,7 +100,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    @Generated(value = "org.eclipse.Eclipse")
     public final boolean equals(final Object obj)
     {
         if (this == obj)
@@ -184,6 +157,8 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     /**
+     * Get this item with a wildcard as revision.
+     * 
      * @return a copy of this ID with a wildcard as revision.
      */
     public SpecificationItemId toRevisionWildcard()

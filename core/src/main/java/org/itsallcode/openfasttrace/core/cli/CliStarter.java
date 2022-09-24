@@ -1,33 +1,9 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-/*-
- * #%L
- * OpenFastTrace Core
- * %%
- * Copyright (C) 2016 - 2019 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
-import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
-import org.itsallcode.openfasttrace.core.cli.commands.Performable;
-import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.*;
 
 /**
  * The main entry point class for the command line application.
@@ -114,12 +90,13 @@ public class CliStarter
     // [impl->dsn~cli.command-selection~1]
     public void run()
     {
-        Performable performable = null;
         final Optional<String> command = this.arguments.getCommand();
         if (!command.isPresent())
         {
+            new HelpCommand().run();
             throw new IllegalStateException("Command missing trying to execute OFT mode.");
         }
+        final Performable performable;
         switch (command.get())
         {
         case ConvertCommand.COMMAND_NAME:
@@ -128,9 +105,13 @@ public class CliStarter
         case TraceCommand.COMMAND_NAME:
             performable = new TraceCommand(this.arguments);
             break;
+        case HelpCommand.COMMAND_NAME:
+            performable = new HelpCommand();
+            break;
         default:
-            throw new IllegalStateException(
-                    "Unknown command '" + command.get() + "' trying to execute OFT mode.");
+            new HelpCommand().run();
+            exit(ExitStatus.CLI_ERROR);
+            return;
         }
         if (performable.run())
         {

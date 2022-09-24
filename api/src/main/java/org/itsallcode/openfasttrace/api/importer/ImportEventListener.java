@@ -1,30 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer;
 
-/*-
- * #%L
- * OpenFastTrace API
- * %%
- * Copyright (C) 2016 - 2019 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 
 /**
  * Interface for listeners of requirement import events
@@ -148,11 +124,11 @@ public interface ImportEventListener
     void setLocation(Location location);
 
     /**
-     * Set to <code>true</code> if the specification item forwards needed
+     * Set to {@code true} if the specification item forwards needed
      * coverage
      * 
      * @param forwards
-     *            <code>true</code> if the specification item forwards needed
+     *            {@code true} if the specification item forwards needed
      *            coverage
      */
     void setForwards(boolean forwards);

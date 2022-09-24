@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true,
+        "source.generate.finalModifiers": true,
+    },
+    "java.saveActions.organizeImports": true,
+    "java.sources.organizeImports.starThreshold": 3,
+    "java.sources.organizeImports.staticStarThreshold": 3,
+}

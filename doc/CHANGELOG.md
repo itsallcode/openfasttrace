@@ -6,6 +6,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `provides`  tags to `module-info.java` files required by ServiceLoader [#336](https://github.com/itsallcode/openfasttrace/issues/336) / [PR 337#](https://github.com/itsallcode/openfasttrace/pull/337)
+
+## [3.6.0] - 2022-08-21
+
+### Added
+
+- Added support for C# files with postfix `.cs` [#326](https://github.com/itsallcode/openfasttrace/issues/326) / [PR #327](https://github.com/itsallcode/openfasttrace/pull/327)
+- Added support for Robot Framework with postfix `.robot` [#302](https://github.com/itsallcode/openfasttrace/issues/302) / [PR #332](https://github.com/itsallcode/openfasttrace/pull/332)
+- Upload self-tracing report to GitHub Action result [#246](https://github.com/itsallcode/openfasttrace/issues/246) / [PR #333](https://github.com/itsallcode/openfasttrace/pull/333)
+- Added `module-info.java` files to support Java modules [#334](https://github.com/itsallcode/openfasttrace/pull/334)
+
+### Refactoring
+
+- Fixed static code analysis warnings in unit tests [PR #329](https://github.com/itsallcode/openfasttrace/pull/329)
+- Upgrade test and build dependencies [PR #330](https://github.com/itsallcode/openfasttrace/pull/330)
+- Removed license headers from sources and license-maven-plugin [PR #331](https://github.com/itsallcode/openfasttrace/pull/331)
+- Added support for Java 18 [PR #344](https://github.com/itsallcode/openfasttrace/pull/344)
+  - Added support for tracing TypeScript files (`.ts`)
+
+### Continuous Integration Build
+
+- Added builds for macOS and Windows [#340](https://github.com/itsallcode/openfasttrace/issues/340)
+
+### Bugfixes
+
+- Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / [PR #339](https://github.com/itsallcode/openfasttrace/pull/339)
+  - Also fixed Jacoco code coverage and integration tests
+
+## [3.5.0] - 2022-03-17
+
+### Updated
+
+- Use readable names for imported tags with needed coverage [#315](https://github.com/itsallcode/openfasttrace/issues/315) / [PR #316](https://github.com/itsallcode/openfasttrace/pull/316)
+
+### Added
+
+- Added `help` command that prints CLI usage instructions [PR #317](https://github.com/itsallcode/openfasttrace/pull/317)
+
+### Documentation
+
+- Added info about reportsettings and reportToPath to user guide [PR #305](https://github.com/itsallcode/openfasttrace/pull/305), thanks to [jonathanvijayakumar](https://github.com/jonathanvijayakumar) for his contribution!
+
 ## [3.4.0] - 2022-01-31
 
 ### Added

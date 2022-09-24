@@ -1,26 +1,5 @@
 package org.itsallcode.openfasttrace.api.importer.tag.config;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.util.List;
@@ -53,6 +32,8 @@ public class PathConfig
     }
 
     /**
+     * Get the description of this path configuration.
+     * 
      * @return the description of this path configuration.
      */
     public String getDescription()
@@ -76,7 +57,9 @@ public class PathConfig
     }
 
     /**
-     * @return the artifact type.
+     * Get the artifact type for tags.
+     * 
+     * @return the artifact type for tags.
      */
     public String getTagArtifactType()
     {
@@ -84,6 +67,8 @@ public class PathConfig
     }
 
     /**
+     * Get the artifact type for covered items.
+     * 
      * @return the artifact type used for covered items.
      */
     public String getCoveredItemArtifactType()
@@ -92,6 +77,8 @@ public class PathConfig
     }
 
     /**
+     * Get the name prefix for covered items.
+     * 
      * @return the name prefix used for covered items.
      */
     public String getCoveredItemNamePrefix()
@@ -109,8 +96,10 @@ public class PathConfig
     }
 
     /**
-     * @return a new {@link Builder} that allows creating a {@link PathConfig}
-     *         object.
+     * Create a new {@link Builder} that allows creating a {@link PathConfig}
+     * object.
+     * 
+     * @return a new {@link Builder}.
      */
     public static Builder builder()
     {
@@ -132,10 +121,13 @@ public class PathConfig
         }
 
         /**
+         * Set the pattern for the path.
+         * 
          * @param pattern
          *            the pattern for the path, see
          *            {@link FileSystem#getPathMatcher(String)} for supported
          *            syntax.
+         * 
          * @return this builder instance.
          */
         public Builder patternPathMatcher(final String pattern)
@@ -145,9 +137,11 @@ public class PathConfig
         }
 
         /**
+         * Set the paths that the {@link PathConfig} should match.
+         * 
          * @param paths
-         *            a {@link List} of {@link Path}s that match should be
-         *            matched for the {@link PathConfig}.
+         *            a {@link List} of {@link Path}s that the
+         *            {@link PathConfig} should matched.
          * @return this builder instance.
          */
         public Builder pathListMatcher(final List<Path> paths)
@@ -157,6 +151,8 @@ public class PathConfig
         }
 
         /**
+         * Set the name prefix for imported items.
+         * 
          * @param coveredItemNamePrefix
          *            the common name prefix for the item covered by the
          *            imported {@link SpecificationItem}.
@@ -169,6 +165,8 @@ public class PathConfig
         }
 
         /**
+         * Set the artifact type for imported items.
+         * 
          * @param coveredItemArtifactType
          *            the artifact type covered by the imported
          *            {@link SpecificationItem}s.
@@ -181,6 +179,8 @@ public class PathConfig
         }
 
         /**
+         * Set the artifact type for imported items.
+         * 
          * @param tagArtifactType
          *            artifact type of the imported {@link SpecificationItem}s.
          * 
@@ -193,6 +193,8 @@ public class PathConfig
         }
 
         /**
+         * Creates a new {@link PathConfig}.
+         * 
          * @return the new {@link PathConfig}.
          */
         public PathConfig build()

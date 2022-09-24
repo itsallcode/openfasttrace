@@ -2,38 +2,13 @@ package org.itsallcode.openfasttrace.api.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static org.hamcrest.Matchers.equalTo;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.junit.jupiter.api.Test;
 
 class TestSpecificationListBuilder
@@ -103,7 +78,7 @@ class TestSpecificationListBuilder
     private SpecificationListBuilder createListBuilderFilteringByArtifactTypes(
             final String... artifactTypes)
     {
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .artifactTypes(new HashSet<>(Arrays.asList(artifactTypes))) //
                 .build();
         return SpecificationListBuilder.createWithFilter(filterSettings);
@@ -182,7 +157,7 @@ class TestSpecificationListBuilder
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");
         wantedTags.add("server");
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(wantedTags) //
                 .withoutTags(false) //
                 .build();
@@ -217,7 +192,7 @@ class TestSpecificationListBuilder
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");
         wantedTags.add("server");
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(wantedTags) //
                 .build();
         final SpecificationListBuilder builder = SpecificationListBuilder

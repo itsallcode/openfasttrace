@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 /**
  * This enumeration represents the different statuses of a coverage link between
  * two items.
@@ -89,7 +67,7 @@ public enum LinkStatus
     /**
      * Check if this is a bad link status.
      * 
-     * @return <code>true</code> if the link status is bad.
+     * @return {@code true} if the link status is bad.
      */
     public boolean isBad()
     {
@@ -99,7 +77,7 @@ public enum LinkStatus
     /**
      * Check if the link is an outgoing link.
      * 
-     * @return <code>true</code> if the link is outgoing.
+     * @return {@code true} if the link is outgoing.
      */
     public boolean isOutgoing()
     {
@@ -109,7 +87,7 @@ public enum LinkStatus
     /**
      * Check if the link is a bad outgoing link.
      * 
-     * @return <code>true</code> if the link is outgoing and has an unclean
+     * @return {@code true} if the link is outgoing and has an unclean
      *         status.
      */
     public boolean isBadOutgoing()
@@ -121,7 +99,7 @@ public enum LinkStatus
     /**
      * Check if the link is an incoming link.
      * 
-     * @return <code>true</code> if the link is incoming.
+     * @return {@code true} if the link is incoming.
      */
     public boolean isIncoming()
     {
@@ -131,7 +109,7 @@ public enum LinkStatus
     /**
      * Check if the link is a bad incoming link.
      * 
-     * @return <code>true</code> if the link is incoming and has an unclean
+     * @return {@code true} if the link is incoming and has an unclean
      *         status.
      */
     public boolean isBadIncoming()
@@ -143,7 +121,7 @@ public enum LinkStatus
     /**
      * Check if the link status indicates a duplicate.
      * 
-     * @return <code>true</code> if the link points to duplicate.
+     * @return {@code true} if the link points to duplicate.
      */
     public boolean isDuplicate()
     {

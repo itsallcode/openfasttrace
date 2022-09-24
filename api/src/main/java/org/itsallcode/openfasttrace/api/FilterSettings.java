@@ -1,30 +1,7 @@
 package org.itsallcode.openfasttrace.api;
 
-/*-
- * #%L
- * OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import java.util.Collections;
 import java.util.Set;
-
-import javax.annotation.processing.Generated;
 
 /**
  * Settings for import filtering
@@ -63,7 +40,9 @@ public final class FilterSettings
     }
 
     /**
-     * @return <code>true</code> if the filter allows items with no tags
+     * Check if the filter allows items with no tags.
+     * 
+     * @return {@code true} if the filter allows items with no tags
      */
     public boolean withoutTags()
     {
@@ -73,7 +52,7 @@ public final class FilterSettings
     /**
      * Check if the artifact type filter is set.
      * 
-     * @return <code>true</code> if the artifact type filter is set
+     * @return {@code true} if the artifact type filter is set
      */
     public boolean isArtifactTypeCriteriaSet()
     {
@@ -83,7 +62,7 @@ public final class FilterSettings
     /**
      * Check if the tag filter is set.
      * 
-     * @return <code>true</code> if the tag filter is set
+     * @return {@code true} if the tag filter is set
      */
     public boolean isTagCriteriaSet()
     {
@@ -93,14 +72,13 @@ public final class FilterSettings
     /**
      * Check if any kind of filter criteria is set.
      * 
-     * @return <code>true</code> if any filter criteria is set
+     * @return {@code true} if any filter criteria is set
      */
     public boolean isAnyCriteriaSet()
     {
         return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
     }
 
-    @Generated("org.eclipse.Eclipse")
     @Override
     public int hashCode()
     {
@@ -113,7 +91,6 @@ public final class FilterSettings
         return result;
     }
 
-    @Generated("org.eclipse.Eclipse")
     @Override
     public boolean equals(final Object obj)
     {
@@ -167,7 +144,17 @@ public final class FilterSettings
      */
     public static FilterSettings createAllowingEverything()
     {
-        return new FilterSettings.Builder().build();
+        return FilterSettings.builder().build();
+    }
+
+    /**
+     * Create a new {@link Builder} for creating {@link FilterSettings}.
+     * 
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder()
+    {
+        return new Builder();
     }
 
     /**
@@ -178,6 +165,11 @@ public final class FilterSettings
         private Set<String> artifactTypes = Collections.emptySet();
         private Set<String> tags = Collections.emptySet();
         private boolean withoutTags = true;
+
+        private Builder()
+        {
+            // empty by intention
+        }
 
         /**
          * Set the list of artifact types that the filter matches.
@@ -209,7 +201,7 @@ public final class FilterSettings
          * Configure if filter allows items that have no tags.
          * 
          * @param noTags
-         *            <code>true</code> to match items without any tags
+         *            {@code true} to match items without any tags
          * @return <code>this</code> for fluent programming
          */
         public Builder withoutTags(final boolean noTags)

@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-exporter-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
         </dependency>
         <dependency>
@@ -28,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-importer-specoboject</artifactId>
+            <artifactId>openfasttrace-importer-specobject</artifactId>
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>

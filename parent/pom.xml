@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode.openfasttrace</groupId>
     <artifactId>openfasttrace-parent</artifactId>
@@ -10,12 +8,14 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.4.0</revision>
+        <revision>3.6.0</revision>
         <java.version>11</java.version>
-        <junit.version>5.8.2</junit.version>
-        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+        <junit.version>5.9.0</junit.version>
+        <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Empty default value for Java version < 18 -->
+        <test.args></test.args>
     </properties>
     <licenses>
         <license>
@@ -136,7 +136,7 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
-                <artifactId>openfasttrace-importer-specoboject</artifactId>
+                <artifactId>openfasttrace-importer-specobject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
@@ -203,7 +203,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>4.3.1</version>
+                <version>4.6.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -221,7 +221,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.8.3</version>
+                <version>3.10.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -246,12 +246,24 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>java18</id>
+            <activation>
+                <jdk>18</jdk>
+            </activation>
+            <properties>
+                <!-- Required to fix failing tests in TestCliStarter:
+                    UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
+                <test.args>-Djava.security.manager=allow</test.args>
+            </properties>
+        </profile>
     </profiles>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.9.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -295,15 +307,23 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
+                        <id>prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>report</id>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -313,19 +333,57 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
+                    <useModulePath>true</useModulePath>
+                    <argLine>
+                        <!-- Required for Jacoco coverage -->
+                        @{argLine}
+                        <!-- Required for Java 18 -->
+                        ${test.args}
+                        --illegal-access=deny
+                        <!-- Required to fix failing EqualsVerifier test:
+                            TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
+                            -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
+                            module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
+                    </systemPropertyVariables>
+                    <useModulePath>true</useModulePath>
+                    <argLine>
+                        <!-- Required for Jacoco coverage -->
+                        @{argLine}
+                        <!-- Required for Java 18 -->
+                        ${test.args}
+                        --illegal-access=deny
+                        <!-- Required to fix failing EqualsVerifier test:
+                            TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
+                            -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
+                            module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
+                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -334,6 +392,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -343,7 +402,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.5.4</version>
+                                    <version>3.6.3</version>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -356,12 +415,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -371,7 +430,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.10.0</version>
+                    <version>3.12.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -380,18 +439,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.9.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.2.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven.surefire.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -402,11 +451,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.3.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -436,65 +480,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.0.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>2.0.0</version>
-                    <configuration>
-                        <verbose>false</verbose>
-                        <detail>true</detail>
-                        <licenseName>gpl_v3</licenseName>
-                        <organizationName>itsallcode.org</organizationName>
-                        <inceptionYear>2016</inceptionYear>
-                        <excludes>
-                            <exclude>
-                                test/resources/specobject/*.xml
-                            </exclude>
-                            <exclude>**/*.css</exclude>
-                            <exclude>**/*.html</exclude>
-                        </excludes>
-                        <failOnMissingHeader>true</failOnMissingHeader>
-                        <failIfWarning>true</failIfWarning>
-                        <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                        <addJavaLicenseAfterPackage>true</addJavaLicenseAfterPackage>
-                        <encoding>UTF-8</encoding>
-                        <dryRun>false</dryRun>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>check-file-header</id>
-                            <goals>
-                                <goal>check-file-header</goal>
-                            </goals>
-                            <phase>validate</phase>
-                        </execution>
-                        <execution>
-                            <id>add-third-party-licenses</id>
-                            <goals>
-                                <goal>add-third-party</goal>
-                                <goal>third-party-report</goal>
-                                <goal>download-licenses</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <!-- Self trace. -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.0.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-maven</artifactId>
-                    <version>1.7.3</version>
                 </plugin>
                 <!--This plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
@@ -505,28 +497,6 @@
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            license-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.8,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>
-                                                check-file-header
-                                            </goal>
-                                            <goal>add-third-party</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>
@@ -568,14 +538,14 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2022.0</version>
+                            <version>1.2022.6</version>
                         </dependency>
                     </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.8</version>
+                    <version>1.6.13</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>

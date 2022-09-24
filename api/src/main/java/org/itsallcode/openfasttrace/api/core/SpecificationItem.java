@@ -1,32 +1,6 @@
 package org.itsallcode.openfasttrace.api.core;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.processing.Generated;
+import java.util.*;
 
 /**
  * A specification item that requires coverage from other items and provides
@@ -187,7 +161,7 @@ public class SpecificationItem
      *
      * @param artifactType
      *            the artifact type for which needed coverage is evaluated.
-     * @return <code>true</code> if this item needs to be covered by the given
+     * @return {@code true} if this item needs to be covered by the given
      *         artifact type.
      */
     public boolean needsCoverageByArtifactType(final String artifactType)
@@ -198,7 +172,7 @@ public class SpecificationItem
     /**
      * Check if the item needs any coverage
      *
-     * @return <code>true</code> if the item needs coverage
+     * @return {@code true} if the item needs coverage
      */
     public boolean needsCoverage()
     {
@@ -236,15 +210,15 @@ public class SpecificationItem
     }
 
     /**
-     * @return <code>true</code> if this specification item forwards needed
-     *         coverage
+     * Check if this item forwards coverage.
+     * 
+     * @return {@code true} if this specification item forwards needed coverage
      */
     public boolean isForwarding()
     {
         return this.forwards;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final int hashCode()
     {
@@ -266,7 +240,6 @@ public class SpecificationItem
         return result;
     }
 
-    @Generated(value = "org.eclipse.Eclipse")
     @Override
     public final boolean equals(final Object obj)
     {
@@ -684,12 +657,12 @@ public class SpecificationItem
         }
 
         /**
-         * Set to <code>true</code> if this specification item forwards needed
+         * Set to {@code true} if this specification item forwards needed
          * coverage
          *
          * @param forwards
-         *            <code>true</code> if the specification item forwards
-         *            needed coverage
+         *            {@code true} if the specification item forwards needed
+         *            coverage
          * @return this builder instance
          */
         public Builder forwards(final boolean forwards)

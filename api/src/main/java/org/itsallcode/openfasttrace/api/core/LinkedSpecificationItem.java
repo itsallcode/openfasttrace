@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.api.core;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -179,7 +157,7 @@ public class LinkedSpecificationItem
         }
     }
 
-    private void addMyItemIdToCoveringItem(LinkedSpecificationItem coveringItem)
+    private void addMyItemIdToCoveringItem(final LinkedSpecificationItem coveringItem)
     {
         if (coveringItem.getItem().getCoveredIds() != null
                 && !coveringItem.getItem().getCoveredIds().contains(getId()))
@@ -196,7 +174,7 @@ public class LinkedSpecificationItem
         }
     }
 
-    private void cacheOverCoveredArtifactType(LinkedSpecificationItem overcoveringItem)
+    private void cacheOverCoveredArtifactType(final LinkedSpecificationItem overcoveringItem)
     {
         if (overcoveringItem.getArtifactType() != null)
         {
@@ -326,7 +304,7 @@ public class LinkedSpecificationItem
      * Check if the item is covered shallow (i.e. if for all needed artifact
      * types coverage exists without recursive search).
      *
-     * @return <code>true</code> if the item is covered
+     * @return {@code true} if the item is covered
      */
     public boolean isCoveredShallow()
     {
@@ -334,7 +312,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if all needed attribute types are covered by
+     * Check if all needed attribute types are covered by approved items.
+     * 
+     * @return {@code true} if all needed attribute types are covered by
      *         approved items
      */
     public boolean isCoveredShallowWithApprovedItems()
@@ -432,7 +412,7 @@ public class LinkedSpecificationItem
      *    )
      * </pre>
      *
-     * @return <code>true</code> if the item is defect.
+     * @return {@code true} if the item is defect.
      */
     // [impl->dsn~tracing.defect-items~2]
     public boolean isDefect()
@@ -444,7 +424,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if the item has one or more links
+     * Check if the item has one or more links.
+     * 
+     * @return {@code true} if the item has one or more links
      */
     public boolean hasLinks()
     {
@@ -536,7 +518,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if this item has one ore more duplicates.
+     * Check if this item has one ore more duplicates.
+     * 
+     * @return {@code true} if this item has one ore more duplicates.
      */
     public boolean hasDuplicates()
     {

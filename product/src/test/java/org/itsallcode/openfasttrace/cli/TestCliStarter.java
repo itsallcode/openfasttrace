@@ -1,41 +1,15 @@
 package org.itsallcode.openfasttrace.cli;
-
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2017 itsallcode.org
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import org.itsallcode.io.Capturable;
-import org.itsallcode.junit.sysextensions.ExitGuard;
-import org.itsallcode.junit.sysextensions.SystemErrGuard;
+import org.itsallcode.junit.sysextensions.*;
 import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
-import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
@@ -56,6 +30,7 @@ class TestCliStarter
     private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
+    private static final String HELP_COMMAND = "help";
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
@@ -100,12 +75,18 @@ class TestCliStarter
                 "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.", err);
     }
 
+    @Test
+    void testHelpPrintsUsage(@SysOut final Capturable out)
+    {
+        final String nl = System.lineSeparator();
+        assertExitOkWithStdOutStart(() -> runCliStarter(HELP_COMMAND), "OpenFastTrace" + nl + nl + "Usage:", out);
+    }
+
     // [itest->dsn~cli.command-selection~1]
     @Test
     void testConvertWithoutExplicitInputs(@SysOut final Capturable out)
     {
         assertExitOkWithStdOutStart(() -> runCliStarter(CONVERT_COMMAND), SPECOBJECT_PREAMBLE, out);
-
     }
 
     private void assertExitOkWithStdOutStart(final Runnable runnable, final String outputStart,

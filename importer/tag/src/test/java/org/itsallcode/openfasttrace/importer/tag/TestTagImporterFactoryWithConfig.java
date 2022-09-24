@@ -1,27 +1,5 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-/*-
- * #%L
- \* OpenFastTrace
- * %%
- * Copyright (C) 2016 - 2018 hamstercommunity
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -34,7 +12,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.importer.Importer;
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
@@ -89,8 +71,10 @@ class TestTagImporterFactoryWithConfig
     @Test
     void testFactoryForUnsupportedFileThrowsException()
     {
+        final ImportSettings settings = configure(glob(PATH1));
+        final Path path = Paths.get(PATH2);
         assertThrows(ImporterException.class,
-                () -> createImporter(configure(glob(PATH1)), Paths.get(PATH2)));
+                () -> createImporter(settings, path));
     }
 
     @Test

@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>3.4.0</version>
+        <version>3.6.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:3.4.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:3.6.0"
 }
 ```
 
@@ -81,23 +81,10 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
-## License File Header
-
-* We use [license-maven-plugin](http://www.mojohaus.org/license-maven-plugin) to check in `verify` phase that all files have the correct license header. The build will fail if there are any files with missing/outdated headers.
-* To update files with correct license headers and generate file `LICENSE.txt`, run command
-
-```bash
-mvn license:update-file-header
-```
-
 ## Check for updated dependencies / plugins
 
 ```bash
-mvn versions:display-dependency-updates
-```
-
-```bash
-mvn versions:display-plugin-updates
+mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 ## Run local sonar analysis
@@ -168,4 +155,3 @@ This currently only works for release version numbers, not SNAPSHOT versions.
 1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
 1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
 1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
-

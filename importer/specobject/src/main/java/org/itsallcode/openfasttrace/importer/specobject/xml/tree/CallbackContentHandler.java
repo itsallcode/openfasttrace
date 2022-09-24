@@ -14,6 +14,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterException;
 public class CallbackContentHandler implements TreeContentHandler
 {
     private static final Logger LOG = Logger.getLogger(CallbackContentHandler.class.getName());
+    private static final String OPENFASTTRACE_XML_NAMESPACE = "https://github.com/itsallcode/openfasttrace";
 
     private final Map<String, Consumer<TreeElement>> startElementListeners = new HashMap<>();
 
@@ -31,7 +32,7 @@ public class CallbackContentHandler implements TreeContentHandler
     /**
      * Sets the default start element listener that is called when no other
      * listener matches.
-     * 
+     *
      * @param defaultStartElementListener
      *            the default start element listener.
      */
@@ -44,7 +45,7 @@ public class CallbackContentHandler implements TreeContentHandler
     /**
      * Adds a {@link TreeContentHandler} that will process the elements in the
      * sub tree.
-     * 
+     *
      * @param elementName
      *            the element name for which to register the listener.
      * @param supplier
@@ -61,7 +62,7 @@ public class CallbackContentHandler implements TreeContentHandler
     /**
      * Adds a start element listener for elements with a given name. The
      * listener will be called when an element with the given name is found.
-     * 
+     *
      * @param elementName
      *            the element name for which to register the listener.
      * @param startElementEventListener
@@ -78,7 +79,7 @@ public class CallbackContentHandler implements TreeContentHandler
     /**
      * Adds start and end element listener for elements with a given name. The
      * listener will be called when an element with the given name is found.
-     * 
+     *
      * @param elementName
      *            the element name for which to register the listener.
      * @param startElementListener
@@ -116,6 +117,12 @@ public class CallbackContentHandler implements TreeContentHandler
     public void startElement(final TreeElement treeElement)
     {
         LOG.finest(() -> "Start element: " + treeElement);
+        final String namespaceURI = treeElement.getElement().getName().getNamespaceURI();
+        if (isCustomXMLNamespace(namespaceURI))
+        {
+            LOG.finest(() -> "custom XML element with namespace " + namespaceURI);
+            return;
+        }
         final Consumer<TreeElement> consumer = this.startElementListeners.getOrDefault(
                 treeElement.getElement().getName().getLocalPart(),
                 this.defaultStartElementListener);
@@ -135,6 +142,11 @@ public class CallbackContentHandler implements TreeContentHandler
         }
     }
 
+    private boolean isCustomXMLNamespace(String namespaceURI)
+    {
+        return !"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI);
+    }
+
     @Override
     public void endElement(final TreeElement closedElement)
     {
@@ -151,7 +163,7 @@ public class CallbackContentHandler implements TreeContentHandler
 
     /**
      * Pushes the given {@link TreeContentHandler} as a delegate.
-     * 
+     *
      * @param delegate
      *            the new delegate.
      */
@@ -164,7 +176,7 @@ public class CallbackContentHandler implements TreeContentHandler
 
     /**
      * Add a listener for elements with integer content.
-     * 
+     *
      * @param elementName
      *            the element name.
      * @param listener
@@ -187,7 +199,7 @@ public class CallbackContentHandler implements TreeContentHandler
 
     /**
      * Add a listener for elements with string content.
-     * 
+     *
      * @param elementName
      *            the element name.
      * @param listener

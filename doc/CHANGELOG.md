@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `provides`  tags to `module-info.java` files required by ServiceLoader [#336](https://github.com/itsallcode/openfasttrace/issues/336) / [PR 337#](https://github.com/itsallcode/openfasttrace/pull/337)
+- Added XML namespace support to specobject importer [#299](https://github.com/itsallcode/openfasttrace/issues/299) / [PR #300](https://github.com/itsallcode/openfasttrace/pull/300), thanks to [@poldi2015](https://github.com/poldi2015)!
 
 ## [3.6.0] - 2022-08-21
 

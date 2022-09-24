@@ -21,15 +21,14 @@ public class ASpecReporterFactory extends ReporterFactory
     }
 
     @Override
-    public boolean supportsFormat(String format)
+    public boolean supportsFormat(final String format)
     {
         return ASPEC_REPORT_FORMAT.equalsIgnoreCase(format);
     }
 
     @Override
-    public Reportable createImporter(Trace trace)
+    public Reportable createImporter(final Trace trace)
     {
         return new ASpecReport(trace, getContext());
     }
-
 }

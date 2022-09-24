@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.report.html;
 
-import static org.hamcrest.MatcherAssert.assertThat;import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +34,7 @@ class TestHtmlReport
     protected String renderToString()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new HtmlReport(this.traceMock);
+        final Reportable report = new HtmlReporterFactory().createImporter(traceMock);
         report.renderToStream(outputStream);
         final String outputAsString = outputStream.toString();
         return outputAsString;

@@ -12,6 +12,14 @@ public class HtmlReporterFactory extends ReporterFactory
 {
     private static final String HTML_REPORT_FORMAT = "html";
 
+    /**
+     * Create a new {@link HtmlReporterFactory}.
+     */
+    public HtmlReporterFactory()
+    {
+        // empty by intention
+    }
+
     @Override
     public boolean supportsFormat(String format)
     {

@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
-import org.itsallcode.openfasttrace.api.report.ReportException;
-import org.itsallcode.openfasttrace.api.report.ReporterContext;
-import org.itsallcode.openfasttrace.api.report.ReporterFactory;
+import org.itsallcode.openfasttrace.api.report.*;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 
 /**
@@ -77,7 +75,7 @@ public class ReporterFactoryLoader
      * 
      * @param format
      *            the requested exporter format
-     * @return <code>true</code> if the format is supported
+     * @return {@code true} if the format is supported
      */
     public boolean isFormatSupported(final String format)
     {

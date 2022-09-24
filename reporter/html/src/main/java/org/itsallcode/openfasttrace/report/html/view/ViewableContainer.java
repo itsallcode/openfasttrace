@@ -24,7 +24,7 @@ public interface ViewableContainer extends Viewable
     /**
      * Check if the view element can be referenced
      * 
-     * @return <code>true</code> if the view element can be referenced
+     * @return {@code true} if the view element can be referenced
      */
     boolean isReferenceable();
 

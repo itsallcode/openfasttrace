@@ -12,6 +12,14 @@ public class PlaintextReporterFactory extends ReporterFactory
 {
     private static final String PLAIN_REPORT_FORMAT = "plain";
 
+    /**
+     * Create a new {@link PlaintextReporterFactory}.
+     */
+    public PlaintextReporterFactory()
+    {
+        // empty by intention
+    }
+
     @Override
     public boolean supportsFormat(String format)
     {

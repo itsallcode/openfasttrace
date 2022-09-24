@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
-import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 
@@ -70,7 +68,7 @@ public class ImporterFactoryLoader
      * 
      * @param file
      *            the file for which to check if an importer exists.
-     * @return <code>true</code> if an importer exists, else <code>false</code>.
+     * @return {@code true} if an importer exists, else {@code false}.
      */
     public boolean supportsFile(final InputFile file)
     {

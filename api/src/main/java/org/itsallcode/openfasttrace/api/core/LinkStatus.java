@@ -67,7 +67,7 @@ public enum LinkStatus
     /**
      * Check if this is a bad link status.
      * 
-     * @return <code>true</code> if the link status is bad.
+     * @return {@code true} if the link status is bad.
      */
     public boolean isBad()
     {
@@ -77,7 +77,7 @@ public enum LinkStatus
     /**
      * Check if the link is an outgoing link.
      * 
-     * @return <code>true</code> if the link is outgoing.
+     * @return {@code true} if the link is outgoing.
      */
     public boolean isOutgoing()
     {
@@ -87,7 +87,7 @@ public enum LinkStatus
     /**
      * Check if the link is a bad outgoing link.
      * 
-     * @return <code>true</code> if the link is outgoing and has an unclean
+     * @return {@code true} if the link is outgoing and has an unclean
      *         status.
      */
     public boolean isBadOutgoing()
@@ -99,7 +99,7 @@ public enum LinkStatus
     /**
      * Check if the link is an incoming link.
      * 
-     * @return <code>true</code> if the link is incoming.
+     * @return {@code true} if the link is incoming.
      */
     public boolean isIncoming()
     {
@@ -109,7 +109,7 @@ public enum LinkStatus
     /**
      * Check if the link is a bad incoming link.
      * 
-     * @return <code>true</code> if the link is incoming and has an unclean
+     * @return {@code true} if the link is incoming and has an unclean
      *         status.
      */
     public boolean isBadIncoming()
@@ -121,7 +121,7 @@ public enum LinkStatus
     /**
      * Check if the link status indicates a duplicate.
      * 
-     * @return <code>true</code> if the link points to duplicate.
+     * @return {@code true} if the link points to duplicate.
      */
     public boolean isDuplicate()
     {

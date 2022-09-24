@@ -539,6 +539,7 @@ recognized file types:
 * Groovy (`.groovy`)
 * Java (`.java`)
 * JavaScript (`.js`)
+* TypeScript (`.ts`)
 * JSON (`.json`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)

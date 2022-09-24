@@ -106,7 +106,7 @@ public class ArgumentValidator
     /**
      * Check if the command line arguments are valid
      * 
-     * @return <code>true</code> if the command line arguments are valid
+     * @return {@code true} if the command line arguments are valid
      */
     public boolean isValid()
     {

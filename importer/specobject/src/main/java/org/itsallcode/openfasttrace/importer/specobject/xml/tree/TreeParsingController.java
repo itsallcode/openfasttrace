@@ -15,6 +15,8 @@ public interface TreeParsingController
     void setDelegate(TreeContentHandler newDelegate);
 
     /**
+     * Get the currently parsed element node.
+     * 
      * @return the currently parsed element node.
      */
     TreeElement getCurrentElement();

@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for Java 18 [PR #344](https://github.com/itsallcode/openfasttrace/pull/344)
   - Added support for tracing TypeScript files (`.ts`)
 
+### Refactoring
+
+- Renamed `develop` branch to `main` and deleted `master` [#341](https://github.com/itsallcode/openfasttrace/issues/341)
+
 ### Continuous Integration Build
 
 - Added builds for macOS and Windows [#340](https://github.com/itsallcode/openfasttrace/issues/340)
@@ -21,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / [PR #339](https://github.com/itsallcode/openfasttrace/pull/339)
   - Also fixed Jacoco code coverage and integration tests
-  
+
 ## [3.6.0] - 2022-08-21
 
 ### Added

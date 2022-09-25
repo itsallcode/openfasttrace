@@ -61,7 +61,7 @@ If you want to build OFT:
 * `git clone https://github.com/itsallcode/openfasttrace.git`
 * Run `mvn test` to run unit tests.
 * Run `mvn verify` to run integration tests.
-* Run `mvn exec:java@trace` to run requirements tracing.
+* Run `./oft-self-trace.sh` to run requirements tracing.
 
 ## Using Eclipse
 

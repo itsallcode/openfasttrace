@@ -6,7 +6,7 @@ If you want to know more about how to contribute to OFT, please check out our [C
 
 ## Getting the OpenFastTrace Library
 
-#### Getting OFT via Maven
+### Getting OFT via Maven
 
 To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) project add this to your `pom.xml`:
 
@@ -43,7 +43,6 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 | [JUnit](https://junit.org/junit5)                                            | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](http://site.mockito.org/)                                          | Mocking framework                                      | MIT License                   |
 | [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls    | Eclipse Public License 2.0     |
-| [Pitest](http://pitest.org/)                                                 | Mutation testing                                       | Apache License 2.0            |
 
 ## Preparations
 
@@ -61,7 +60,8 @@ If you want to build OFT:
 
 * `git clone https://github.com/itsallcode/openfasttrace.git`
 * Run `mvn test` to run unit tests.
-* Run `mvn exec:java@trace` to run requirements tracing.
+* Run `mvn verify` to run integration tests.
+* Run `./oft-self-trace.sh` to run requirements tracing.
 
 ## Using Eclipse
 
@@ -96,62 +96,67 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.login=[token]
 ```
 
-See analysis results at https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace
+See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace).
 
-## Run [mutation testing](http://pitest.org)
+## Creating a Release
 
-```bash
-mvn org.pitest:pitest-maven:mutationCoverage
-# speed up repeated analysis with history
-mvn -DwithHistory org.pitest:pitest-maven:mutationCoverage
+**NOTE**: This currently only works for release version numbers, not SNAPSHOT versions.
+
+### One-time Setup
+
+Add the following to your `~/.m2/settings.xml`:
+
+```xml
+<settings>
+    <servers>
+        <server>
+            <id>ossrh</id>
+            <username>your-jira-id</username>
+            <password>your-jira-pwd</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.keyname>key_id</gpg.keyname>
+                <gpg.passphrase>the_pass_phrase</gpg.passphrase>
+            </properties>
+        </profile>
+    </profiles>
+</settings>
 ```
 
-## Publishing to JCenter
+### Prepare the Release
 
----
-**NOTE**
+1. Checkout the `main` branch.
+1. Create a new "prepare-release" branch.
+1. Update version in
+  * `openfasttrace-parent/pom.xml` (`revision` property)
+  * `README.md`
+  * `doc/developer_guide.md`
+1. Add changes in new version to `CHANGELOG.md` and update the release date.
+1. Verify that build runs successfully:
 
-This currently only works for release version numbers, not SNAPSHOT versions.
-
----
-
-1. Add the following to your `~/.m2/settings.xml`:
-
-    ```xml
-    <settings>
-        <servers>
-            <server>
-                <id>ossrh</id>
-                <username>your-jira-id</username>
-                <password>your-jira-pwd</password>
-            </server>
-        </servers>
-        <profiles>
-            <profile>
-                <id>ossrh</id>
-                <activation>
-                    <activeByDefault>true</activeByDefault>
-                </activation>
-                <properties>
-                    <gpg.executable>gpg</gpg.executable>
-                    <gpg.keyname>key_id</gpg.keyname>
-                    <gpg.passphrase>the_pass_phrase</gpg.passphrase>
-                </properties>
-            </profile>
-        </profiles>
-    </settings>
+    ```bash
+    mvn clean verify
     ```
+1. Commit and push changes.
+1. Create a new Pull Request, have it reviewed and merged.
 
-1. Checkout the `develop` branch.
-1. Update version in `openfasttrace-parent/pom.xml` (`revision` property), `README.md` and `doc/developer_guide.md`.
-1. Add changes in new version to `CHANGELOG.md`.
-1. Commit and push changes
+### Perform the Release
+
+1. Checkout `main` and get the latest changes.
 1. Run this command
 
     ```bash
     mvn clean deploy -Possrh
     ```
-1. Merge to `master` branch
-1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `master` branch on GitHub.
+1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `main` branch on GitHub.
+1. Copy the changelog entries for the new version to the GitHub release.
 1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
 1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).

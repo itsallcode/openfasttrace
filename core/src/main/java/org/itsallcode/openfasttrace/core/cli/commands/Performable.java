@@ -8,7 +8,7 @@ public interface Performable
     /**
      * Run an OpenFastTrace command
      * 
-     * @return <code>true</code> if the operation performed was successful.
+     * @return {@code true} if the operation performed was successful.
      */
     boolean run();
 }

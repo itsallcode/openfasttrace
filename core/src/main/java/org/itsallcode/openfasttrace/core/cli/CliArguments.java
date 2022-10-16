@@ -337,7 +337,7 @@ public class CliArguments
     /**
      * Check if origin information should be shown in reports.
      * 
-     * @return <code>true</code> if origin information should be shown in
+     * @return {@code true} if origin information should be shown in
      *         reports.
      */
     public boolean getShowOrigin()
@@ -349,7 +349,7 @@ public class CliArguments
      * Choose whether to show origin information in reports.
      * 
      * @param showOrigin
-     *            <code>true</code> if origin information should be shown in
+     *            {@code true} if origin information should be shown in
      *            reports
      */
     public void setShowOrigin(final boolean showOrigin)
@@ -361,7 +361,7 @@ public class CliArguments
      * Choose whether to show origin information in reports.
      * 
      * @param showOrigin
-     *            <code>true</code> if origin information should be shown in
+     *            {@code true} if origin information should be shown in
      *            reports
      */
     public void setS(final boolean showOrigin)

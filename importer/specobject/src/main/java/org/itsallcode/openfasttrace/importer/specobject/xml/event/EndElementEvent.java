@@ -41,6 +41,8 @@ public class EndElementEvent
     }
 
     /**
+     * Get the {@link QName} of the element.
+     * 
      * @return the {@link QName} of the element.
      */
     public QName getName()
@@ -49,6 +51,8 @@ public class EndElementEvent
     }
 
     /**
+     * Get the {@link Location} of the element.
+     * 
      * @return the {@link Location} of the element.
      */
     public Location getLocation()

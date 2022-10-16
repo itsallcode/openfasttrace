@@ -51,12 +51,12 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
     }
 
     /**
-     * Returns <code>true</code> if this {@link ExporterFactory} supports
+     * Returns {@code true} if this {@link ExporterFactory} supports
      * exporting the given output format.
      *
      * @param format
      *            the output type to check.
-     * @return <code>true</code> if the given type is supported for exporting.
+     * @return {@code true} if the given type is supported for exporting.
      */
     public boolean supportsFormat(final String format)
     {

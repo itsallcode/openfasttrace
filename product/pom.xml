@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-importer-specoboject</artifactId>
+            <artifactId>openfasttrace-importer-specobject</artifactId>
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
@@ -87,24 +87,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Self trace. -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>trace</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>org.itsallcode.openfasttrace.core.cli.CliStarter</mainClass>
-                    <commandlineArgs>trace -s doc src/main/java
-                        src/test/java</commandlineArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.api;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsEmptyIterable.emptyIterableOf;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
@@ -60,7 +59,7 @@ class TestImportSettings
     void testBuildWithFilter()
     {
         final String[] expectedTags = { "a", "b" };
-        final FilterSettings filter = new FilterSettings.Builder()
+        final FilterSettings filter = FilterSettings.builder()
                 .tags(new HashSet<>(Arrays.asList(expectedTags))).build();
         assertThat(ImportSettings.builder().filter(filter).build().getFilters().getTags(),
                 containsInAnyOrder(expectedTags));

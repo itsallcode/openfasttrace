@@ -157,7 +157,7 @@ public class LinkedSpecificationItem
         }
     }
 
-    private void addMyItemIdToCoveringItem(LinkedSpecificationItem coveringItem)
+    private void addMyItemIdToCoveringItem(final LinkedSpecificationItem coveringItem)
     {
         if (coveringItem.getItem().getCoveredIds() != null
                 && !coveringItem.getItem().getCoveredIds().contains(getId()))
@@ -174,7 +174,7 @@ public class LinkedSpecificationItem
         }
     }
 
-    private void cacheOverCoveredArtifactType(LinkedSpecificationItem overcoveringItem)
+    private void cacheOverCoveredArtifactType(final LinkedSpecificationItem overcoveringItem)
     {
         if (overcoveringItem.getArtifactType() != null)
         {
@@ -304,7 +304,7 @@ public class LinkedSpecificationItem
      * Check if the item is covered shallow (i.e. if for all needed artifact
      * types coverage exists without recursive search).
      *
-     * @return <code>true</code> if the item is covered
+     * @return {@code true} if the item is covered
      */
     public boolean isCoveredShallow()
     {
@@ -312,7 +312,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if all needed attribute types are covered by
+     * Check if all needed attribute types are covered by approved items.
+     * 
+     * @return {@code true} if all needed attribute types are covered by
      *         approved items
      */
     public boolean isCoveredShallowWithApprovedItems()
@@ -410,7 +412,7 @@ public class LinkedSpecificationItem
      *    )
      * </pre>
      *
-     * @return <code>true</code> if the item is defect.
+     * @return {@code true} if the item is defect.
      */
     // [impl->dsn~tracing.defect-items~2]
     public boolean isDefect()
@@ -422,7 +424,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if the item has one or more links
+     * Check if the item has one or more links.
+     * 
+     * @return {@code true} if the item has one or more links
      */
     public boolean hasLinks()
     {
@@ -514,7 +518,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * @return <code>true</code> if this item has one ore more duplicates.
+     * Check if this item has one ore more duplicates.
+     * 
+     * @return {@code true} if this item has one ore more duplicates.
      */
     public boolean hasDuplicates()
     {

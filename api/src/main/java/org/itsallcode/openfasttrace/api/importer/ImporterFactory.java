@@ -1,4 +1,5 @@
 package org.itsallcode.openfasttrace.api.importer;
+
 import java.util.Objects;
 
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
@@ -12,12 +13,20 @@ public abstract class ImporterFactory implements Initializable<ImporterContext>
     private ImporterContext context;
 
     /**
-     * Returns <code>true</code> if this {@link ImporterFactory} supports
+     * Create a new {@link ImporterFactory}.
+     */
+    protected ImporterFactory()
+    {
+        // empty by intention
+    }
+
+    /**
+     * Returns {@code true} if this {@link ImporterFactory} supports
      * importing the given file based on its file extension.
      *
      * @param file
      *            the file to check.
-     * @return <code>true</code> if the given file is supported for importing.
+     * @return {@code true} if the given file is supported for importing.
      */
     public abstract boolean supportsFile(final InputFile file);
 

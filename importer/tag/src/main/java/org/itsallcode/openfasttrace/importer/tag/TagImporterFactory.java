@@ -1,11 +1,8 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-
 import static java.util.stream.Collectors.toList;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.importer.*;
@@ -29,7 +26,8 @@ public class TagImporterFactory extends ImporterFactory
             "json", "htm", "html", "xhtml", "yaml", // markup languages
             "java", // Java
             "clj", "kt", "scala", // JVM languages
-            "js", // Java script
+            "js", // JavaScript
+            "ts", // TypeScript
             "lua", // Lua
             "m", "mm", // Objective C
             "php", // PHP
@@ -43,6 +41,14 @@ public class TagImporterFactory extends ImporterFactory
             "swift", // Swift
             "sql", "pls" // Database related
     );
+
+    /**
+     * Create a new {@link TagImporterFactory}.
+     */
+    public TagImporterFactory()
+    {
+        // empty by intention
+    }
 
     @Override
     public boolean supportsFile(final InputFile path)

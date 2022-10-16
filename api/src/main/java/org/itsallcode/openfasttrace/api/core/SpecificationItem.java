@@ -1,8 +1,6 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A specification item that requires coverage from other items and provides
@@ -163,7 +161,7 @@ public class SpecificationItem
      *
      * @param artifactType
      *            the artifact type for which needed coverage is evaluated.
-     * @return <code>true</code> if this item needs to be covered by the given
+     * @return {@code true} if this item needs to be covered by the given
      *         artifact type.
      */
     public boolean needsCoverageByArtifactType(final String artifactType)
@@ -174,7 +172,7 @@ public class SpecificationItem
     /**
      * Check if the item needs any coverage
      *
-     * @return <code>true</code> if the item needs coverage
+     * @return {@code true} if the item needs coverage
      */
     public boolean needsCoverage()
     {
@@ -212,8 +210,9 @@ public class SpecificationItem
     }
 
     /**
-     * @return <code>true</code> if this specification item forwards needed
-     *         coverage
+     * Check if this item forwards coverage.
+     * 
+     * @return {@code true} if this specification item forwards needed coverage
      */
     public boolean isForwarding()
     {
@@ -658,12 +657,12 @@ public class SpecificationItem
         }
 
         /**
-         * Set to <code>true</code> if this specification item forwards needed
+         * Set to {@code true} if this specification item forwards needed
          * coverage
          *
          * @param forwards
-         *            <code>true</code> if the specification item forwards
-         *            needed coverage
+         *            {@code true} if the specification item forwards needed
+         *            coverage
          * @return this builder instance
          */
         public Builder forwards(final boolean forwards)

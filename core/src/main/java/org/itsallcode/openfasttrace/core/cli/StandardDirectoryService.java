@@ -7,6 +7,14 @@ import org.itsallcode.openfasttrace.api.cli.DirectoryService;
  */
 public class StandardDirectoryService implements DirectoryService
 {
+    /**
+     * Create a new {@link StandardDirectoryService}.
+     */
+    public StandardDirectoryService()
+    {
+        // empty by intention
+    }
+
     @Override
     public String getCurrent()
     {

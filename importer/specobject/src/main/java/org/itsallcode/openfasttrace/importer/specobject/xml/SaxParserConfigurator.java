@@ -27,6 +27,7 @@ public class SaxParserConfigurator
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try
         {
+            parserFactory.setNamespaceAware(true);
             forbidDoctypeDeclaration(parserFactory);
             enableSecureProcessing(parserFactory);
         }

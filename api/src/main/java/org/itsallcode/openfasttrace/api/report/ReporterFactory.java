@@ -1,4 +1,5 @@
 package org.itsallcode.openfasttrace.api.report;
+
 import java.util.Objects;
 
 import org.itsallcode.openfasttrace.api.core.Trace;
@@ -12,13 +13,21 @@ public abstract class ReporterFactory implements Initializable<ReporterContext>
     private ReporterContext context;
 
     /**
+     * Creates a new {@link ReporterFactory}.
+     */
+    protected ReporterFactory()
+    {
+        // empty by intention
+    }
+
+    /**
      * Check if this {@link ReporterFactory} supports creating
      * {@link Reportable}s for the given format.
      * 
      * @param format
      *            the format to check.
-     * @return <code>true</code> if this {@link ReporterFactory} supports the
-     *         given format.
+     * @return {@code true} if this {@link ReporterFactory} supports the given
+     *         format.
      */
     public abstract boolean supportsFormat(final String format);
 

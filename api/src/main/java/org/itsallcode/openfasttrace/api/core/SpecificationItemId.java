@@ -157,6 +157,8 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     /**
+     * Get this item with a wildcard as revision.
+     * 
      * @return a copy of this ID with a wildcard as revision.
      */
     public SpecificationItemId toRevisionWildcard()

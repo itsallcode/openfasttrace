@@ -2,16 +2,13 @@ package org.itsallcode.openfasttrace.api.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-
 import static org.hamcrest.Matchers.equalTo;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.junit.jupiter.api.Test;
 
 class TestSpecificationListBuilder
@@ -81,7 +78,7 @@ class TestSpecificationListBuilder
     private SpecificationListBuilder createListBuilderFilteringByArtifactTypes(
             final String... artifactTypes)
     {
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .artifactTypes(new HashSet<>(Arrays.asList(artifactTypes))) //
                 .build();
         return SpecificationListBuilder.createWithFilter(filterSettings);
@@ -160,7 +157,7 @@ class TestSpecificationListBuilder
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");
         wantedTags.add("server");
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(wantedTags) //
                 .withoutTags(false) //
                 .build();
@@ -195,7 +192,7 @@ class TestSpecificationListBuilder
         final Set<String> wantedTags = new HashSet<>();
         wantedTags.add("client");
         wantedTags.add("server");
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(wantedTags) //
                 .build();
         final SpecificationListBuilder builder = SpecificationListBuilder

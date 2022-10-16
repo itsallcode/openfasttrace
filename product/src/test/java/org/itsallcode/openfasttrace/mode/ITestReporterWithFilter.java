@@ -1,20 +1,15 @@
 package org.itsallcode.openfasttrace.mode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
@@ -55,7 +50,7 @@ class ITestReporterWithFilter extends AbstractFileBasedTest
     @Test
     void testFilterWithAtLeastOneMatchingTag()
     {
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(new HashSet<>(Arrays.asList("tag1", "tag2"))) //
                 .withoutTags(false) //
                 .build();
@@ -83,7 +78,7 @@ class ITestReporterWithFilter extends AbstractFileBasedTest
     @Test
     void testFilterWithAtLeastOneMatchingTagOrNoTags()
     {
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings = FilterSettings.builder() //
                 .tags(new HashSet<>(Arrays.asList("tag1", "tag2"))) //
                 .build();
         final List<String> filteredIds = getIdsFromTraceWithFilterSettings(filterSettings);

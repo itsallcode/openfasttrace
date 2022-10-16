@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `provides`  tags to `module-info.java` files required by ServiceLoader [#336](https://github.com/itsallcode/openfasttrace/issues/336) / [PR 337#](https://github.com/itsallcode/openfasttrace/pull/337)
+- Added XML namespace support to specobject importer [#299](https://github.com/itsallcode/openfasttrace/issues/299) / [PR #300](https://github.com/itsallcode/openfasttrace/pull/300), thanks to [@poldi2015](https://github.com/poldi2015)!
+- Added support for Java 18 [PR #344](https://github.com/itsallcode/openfasttrace/pull/344)
+  - Added support for tracing TypeScript files (`.ts`)
+
+### Refactoring
+
+- Renamed `develop` branch to `main` and deleted `master` [#341](https://github.com/itsallcode/openfasttrace/issues/341)
+
+### Continuous Integration Build
+
+- Added builds for macOS and Windows [#340](https://github.com/itsallcode/openfasttrace/issues/340)
+
+### Bugfixes
+
+- Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / [PR #339](https://github.com/itsallcode/openfasttrace/pull/339)
+  - Also fixed Jacoco code coverage and integration tests
 
 ## [3.6.0] - 2022-08-21
 
@@ -24,11 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed static code analysis warnings in unit tests [PR #329](https://github.com/itsallcode/openfasttrace/pull/329)
 - Upgrade test and build dependencies [PR #330](https://github.com/itsallcode/openfasttrace/pull/330)
 - Removed license headers from sources and license-maven-plugin [PR #331](https://github.com/itsallcode/openfasttrace/pull/331)
-
-### Bugfixes
-
-- Fixed running unit tests under macOS [#308](https://github.com/itsallcode/openfasttrace/issues/308) / [PR #339](https://github.com/itsallcode/openfasttrace/pull/339)
-  - Also fixed Jacoco code coverage and integration tests
 
 ## [3.5.0] - 2022-03-17
 

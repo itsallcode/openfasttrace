@@ -5,20 +5,15 @@ import static java.util.stream.Collectors.joining;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.io.*;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -94,9 +89,17 @@ class TestPlainTextReport
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final ReportSettings settings = ReportSettings.builder().verbosity(verbosity)
                 .newline(newline).showOrigin(showOrigin).build();
-        final Reportable report = new PlainTextReport(this.traceMock, settings);
+        final PlaintextReporterFactory factory = createFactory(settings);
+        final Reportable report = factory.createImporter(this.traceMock);
         report.renderToStream(outputStream);
         return outputStream.toString(StandardCharsets.UTF_8);
+    }
+
+    private PlaintextReporterFactory createFactory(final ReportSettings settings)
+    {
+        final PlaintextReporterFactory factory = new PlaintextReporterFactory();
+        factory.init(new ReporterContext(settings));
+        return factory;
     }
 
     @Test

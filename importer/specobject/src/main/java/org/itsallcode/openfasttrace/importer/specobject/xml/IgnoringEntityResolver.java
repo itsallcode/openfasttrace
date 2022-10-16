@@ -13,6 +13,14 @@ public class IgnoringEntityResolver implements EntityResolver
 {
     private static final Logger LOG = Logger.getLogger(IgnoringEntityResolver.class.getName());
 
+    /**
+     * Create a new {@link IgnoringEntityResolver}.
+     */
+    public IgnoringEntityResolver()
+    {
+        // empty by default
+    }
+
     @Override
     public InputSource resolveEntity(final String publicId, final String systemId)
     {

@@ -8,8 +8,8 @@ OFT is a requirement tracing tool. It helps you make sure that all defined requi
 also helps you find outdated code passages.
 
 1. Create requirement and specification documents in Markdown including OFT-readable specification items
-1. Put tags into your source code that mark the coverage of items from the specification
-1. Use OFT to trace the requirements from the source to the final implementation
+2. Put tags into your source code that mark the coverage of items from the specification
+3. Use OFT to trace the requirements from the source to the final implementation
 
 ## Introduction
 
@@ -36,7 +36,7 @@ Of course requirement engineering and tracing are useful outside the software do
 
 ### What is Requirement Tracing?
 
-OpenFastTrace is a requirement tracing suite. Requirement tracing helps you keeping track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you getting rid of them.
+OpenFastTrace is a requirement tracing suite. Requirement tracing helps you to keep track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
 The foundation of all requirement tracing are links between documents, implementation, test, reports and whatever other artifacts your product consists of.
 
@@ -133,11 +133,11 @@ If on the other hand you only added a missing period at the end of a sentence, t
 
 #### Informative Passages
 
-Informative passages of a specification provide explanations and context that is necessary for understanding the subject matter. They do not require coverage though.
+Informative passages of a specification provide explanations and context that is necessary for understanding the subject. They do not require coverage though.
 
 #### Normative Passages
 
-Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item). Unlike [informative passages](#informative-passages) they require that someone details, implements or verifies the contained specification items.
+Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item)). Unlike [informative passages](#informative-passages) they require that someone details, implements or verifies the contained specification items.
 
 #### Coverage
 
@@ -176,7 +176,7 @@ Let's start with a minimal requirement:
     
     This is the description of the requirement.
 
-Simple as this. This is already a valid and complete OFT requirement. Of course you can enrich the requirement with other information but at the heart of it every requirement is an ID and a description.
+Simple as this. This is already a valid and complete OFT requirement. Of course, you can enrich the requirement with other information but at the heart of it every requirement is an ID and a description.
 
 It is mostly a matter of taste whether you prefer your specification items to have a title or not. The same requirement above with a title looks like this:
 
@@ -200,7 +200,7 @@ At the moment the specification item above is a [terminating item](#terminating-
 
 Now the item must be covered in the design ("dsn") and user manual ("uman"). Remember you can introduce your own artifact types depending on the needs of your project.
 
-Of course you can embed specification items into normal Markdown text. This adds the necessary [informative](#informative-passages) context that is required to understand the [normative passages](#normative-passages).
+Of course, you can embed specification items into normal Markdown text. This adds the necessary [informative](#informative-passages) context that is required to understand the [normative passages](#normative-passages).
 
     # ACME portable hole
        
@@ -314,7 +314,7 @@ Tags are described in detail later in this document.
 
 Consider a situation where you are responsible for the high-level software architecture of your project. You define the component breakdown, the interfaces and the interworking of the components. You get your requirements from a system requirement specification, but it turns out many of those incoming requirements are at a detail level that does not require design decisions on inter-component-level but rather affects the internals of a single component.
 
-In those cases it would be a waste of time to repeat the original requirement in your architecture just to hand them down to the detailed design of a component. Instead what you need is a fast way to express "yes, I read that requirement and I am sure it does not need design decisions in the high-level architecture."
+In those cases it would be a waste of time to repeat the original requirement in your architecture just to hand them down to the detailed design of a component. Instead, what you need is a fast way to express "yes, I read that requirement, and I am sure it does not need design decisions in the high-level architecture."
 
 To achieve this OFT features a shorthand notation for delegating the job of covering a specification item to one or more different artifact types.
 
@@ -324,7 +324,7 @@ In the following example a requirement in the system requirement specification (
 
 ### Distributing the Detailing Work
 
-In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside of the specification, at least the specification can prepare criteria on which to split the work.
+In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
@@ -397,7 +397,7 @@ oft trace doc src/main/java src/test/java
 
 The first variant is better suited for integration into scripts where you usually want to avoid changing the directory.
 
-By default this will produce a plain text trace that displays details of all defect specification items and a summary.
+By default, this will produce a plain text trace that displays details of all defect specification items and a summary.
 
 See also:
 * [Tracing Options](#tracing-options) for controlling the tracing output
@@ -591,95 +591,71 @@ The Console Tracing Report is the standard report format of OFT. Its main purpos
 
 Below you see a typical example of a requirement from a design document.
 
-    ok - 0/2>0>0/1 - dsn~cli.tracing.default-format~1 (impl, utest)
-    |
-    | The CLI uses plain text as requirement tracing report format if none is given as a parameter.
-    |
-    |<-- ( ) impl~cli.tracing.default-format-2215031703~0
-    |--> ( ) req~cli.tracing.default-output-format~1
-    |<-- ( ) utest~cli.tracing.default-format-3750270139~0
+    ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (impl, utest)
+    
+      The CLI uses plain text as requirement tracing report format if none is given as a parameter.
+    
+      [covered shallow  ] ← impl~cli.tracing.default-format-2215031703~0
+      [covers           ] → req~cli.tracing.default-output-format~1
+      [covered shallow  ] ← utest~cli.tracing.default-format-3750270139~0
 
 Let's go through its elements one by one.
 
 The first line is the summary.
 
-It starts with the status of the requirement &mdash; ok in this case.
+It starts with the status of the requirement &mdash; OK in this case.
 
-> **ok** - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
+> **ok** [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (impl, utest)
 
 Next we have a couple of numbers.
 
-The first pair shows how many of the broken incoming links this requirement has (zero), and how many in total (two).
+The first pair shows how many of the incoming good links this requirement has (two), and how many in total (two).
 
-> ok - **0/2**>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
+> ok [ **in:  2 /  2 ✔** | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (impl, utest)
 
-The number in the middle tells you how many duplicates this requirement has (also zero).
+Consequently, the next pair informs you how many (one) of the overall (one) outgoing links are good.
 
-> ok - 0/2>**0**>0/1 - `dsn~cli.tracing.default-format~1` (impl, utest)
-
-Consequently the next pair informs you how many (zero) of the overall (one) outgoing links are broken.
-
-> ok - 0/2>0>**0/1** - `dsn~cli.tracing.default-format~1` (impl, utest)
+>  ok [ in:  2 /  2 ✔ | **out:  1 /  1 ✔** ] dsn~cli.tracing.default-format~1 (impl, utest)
 
 The [Specification Item ID](#specification-item-id) in the middle is the unique technical ID of this requirement.
 
-> ok - 0/2>0>0/1 - **`dsn~cli.tracing.default-format~1`** (impl, utest)
+>  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] **dsn~cli.tracing.default-format~1** (impl, utest)
 
 In the brackets you find, which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
 
-> ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**impl, utest**)
+>  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (**impl, utest***)
 
 If it is not covered, the name is lead in by a minus:
 
-> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (**-impl**, utest)
+>  **not ok** ...  (**-impl**, utest)
+
+Please also note that in this case the number of incoming links changed and that a cross-mark indicates that at least one 
 
 If an artifact type provides coverage that is not requested, you find this indicated with a plus in front.
 
 > not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, **+itest**, utest)
 
-Everything after that line is details of the requirement. A bar symbol in the first position indicates this. Everything
-that does not start with an arrow symbol is part of the description.
+If there were any other spec objects defined with the same id, you would see the following at the end of the summary line:
 
-    |
-    | The CLI uses plain text as requirement tracing report format if none is given as a parameter.
-    |
-    
-The section with the arrows provides details about incoming and outgoing links. Arrows pointing to the bar (i.e. to the left) are incoming links, arrows pointing away from the bar are outgoing.
+> [has 3 duplicates]
+
+Everything after that line is details of the requirement. Indented text indicates this. The first part of the details is the description.
+
+    The CLI uses plain text as requirement tracing report format if none is given as a parameter.
+
+The section with the arrows provides details about incoming and outgoing links. Arrows pointing to the left are incoming links, arrows pointing to the right are outgoing. You can easily remember this, since the arrows either point towards the ID of the connected specification item or away from it.
 
 The following line means that this design requirement is covered in the implementation.
 
->|**<--** ( ) **`impl`**`~cli.tracing.default-format-2215031703~0`
+> [covered shallow  ] ← impl~cli.tracing.default-format-2215031703~0
 
-The ID of the implementation comes from the Tag Importer and is for it's most part auto-generated. The artifact type `dsn` is simply replaced by `impl` here and a number is attached for disambiguation.
+The ID of the implementation comes from the Tag Importer and is for its most part auto-generated. The artifact type `dsn` is simply replaced by `impl` here and a number is attached for disambiguation.
 
->|<-- ( ) **`impl`**`~cli.tracing.default-format-`**`2215031703~0`**
+> [covered shallow  ] ← **impl**~cli.tracing.default-format-**2215031703**~0
 
-In the brackets you find the status of the link. Empty brackets are good because they mean that the link is okay. Any other character indicates a broken link.
+In the square brackets you find the status of the link.
 
-The following incoming link statuses exist:
-
-| Symbol | Link Status       |
-|--------|-------------------|
-|        | Covered shallow   |
-| +      | Covered unwanted  |
-| >      | Covered predated  |
-| <      | Covered outdated  |
-
-Outgoing links can have one of the following statuses:
-
-| Symbol | Link Status       |
-|--------|-------------------|
-|        | Covers            |
-| >      | Predated          |
-| <      | Outdated          |
-| +      | Unwanted          |
-| /      | Orphaned          |
-
-Finally duplicate links can exist. They have no real direction. the closest match would be a bi-directional link.
-
-| Symbol | Link Status       |
-|--------|-------------------|
-| ?      | Duplicate         |
+Just in case you are wondering about the extra spaces in some places of the report, those exist as padding to align multiple similar items in lists. 
 
 ## XML Tracing Report
 
@@ -801,7 +777,7 @@ The element `<coveringSpecObjects>` describes all covering requirements:
         <version>1</version>
         <doctype>dsn</doctype>
         <ownCoverageStatus>COVERED</ownCoverageStatus>
-        <deepCoverageStatus>COVERED</<deepCoverageStatus>
+        <deepCoverageStatus>COVERED</deepCoverageStatus>
         <coveringStatus>COVERING</coveringStatus>
     </coveringSpecObject>
         ...
@@ -876,7 +852,7 @@ or run a report.
 
 #### Converting File from Java
 
-The following example code use a OFT as a converter that scans the current working directory recursively (default import setting) and exports the found artifacts with the standard settings to a ReqM2 file. 
+The following example code use OFT as a converter that scans the current working directory recursively (default import setting) and exports the found artifacts with the standard settings to a ReqM2 file. 
 
 ```JAVA
 import org.itsallcode.openfasttrace.Oft;
@@ -969,7 +945,7 @@ oft.reportToStdOut(trace);
 
 #### Configuring the Steps
 
-Import, export and report each have a overloaded variant that can be configured using the following classes
+Import, export and report each have an overloaded variant that can be configured using the following classes
 
 * [org.itsallcode.openfasttrace.api.importer.ImportSettings](../api/src/main/java/org/itsallcode/openfasttrace/api/importer/ImportSettings.java)
 * [org.itsallcode.openfasttrace.core.ExportSettings](../core/src/main/java/org/itsallcode/openfasttrace/core/ExportSettings.java)
@@ -995,10 +971,11 @@ The OFT command line interface returns the following exit codes:
 
 The following editors and integrated development environments are well suited for authoring OFT documents. The list is not exhaustive, any editor with Markdown capabilities can be used.
 
-Editor / IDE                                             | Syntax highl. | Preview | Outline | HTML export
----------------------------------------------------------|---------------|---------|---------|------------
-[Gedit](https://wiki.gnome.org/Apps/Gedit)               | y             |         |         |
-[Eclipse](https://eclipse.org) with WikiText plug-in     | y             | y       | y       | y
-[Eclipse](https://eclipse.org) with GMF plug-in          |               | y       |         |
-[Vim](https://www.vim.org/)                              | y             |         |         |
-[Visual Studio Code](https://code.visualstudio.com/)     | y             | y       | y       |
+| Editor / IDE                                           | Syntax highl. | Preview | Outline | HTML export |
+|--------------------------------------------------------|---------------|---------|---------|-------------|
+| [Gedit](https://wiki.gnome.org/Apps/Gedit)             | y             |         |         |             |
+| [Eclipse](https://eclipse.org) with WikiText plug-in   | y             | y       | y       | y           |
+| [Eclipse](https://eclipse.org) with GMF plug-in        |               | y       |         |             |
+| [IntelliJ](https://www.jetbrains.com/idea/)            | y             | y       | y       | y           |
+| [Vim](https://www.vim.org/)                            | y             |         |         |             |
+| [Visual Studio Code](https://code.visualstudio.com/)   | y             | y       | y       |             |

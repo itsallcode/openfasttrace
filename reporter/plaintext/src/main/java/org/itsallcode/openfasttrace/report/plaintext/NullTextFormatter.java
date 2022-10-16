@@ -7,6 +7,13 @@ package org.itsallcode.openfasttrace.report.plaintext;
  * </p>
  */
 class NullTextFormatter implements TextFormatter {
+    /**
+     * Create a new instance of a {@link NullTextFormatter}.
+     */
+    public NullTextFormatter() {
+        // Added for JavaDoc.
+    }
+
     @Override
     public String formatOk(final String text) {
         return text;

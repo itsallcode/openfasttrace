@@ -7,6 +7,13 @@ import static org.itsallcode.openfasttrace.report.plaintext.AnsiSequence.*;
  */
 // [impl->dsn~reporting.plain-text.ansi-color~1]
 final class ConsoleColorFormatter implements TextFormatter {
+    /**
+     * Create a new instance of a {@link ConsoleColorFormatter}.
+     */
+    public ConsoleColorFormatter() {
+        // Added for JavaDoc.
+    }
+
     @Override
     public String formatOk(final String text) {
         return GREEN + text + RESET;

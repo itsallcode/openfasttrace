@@ -11,6 +11,13 @@ import static org.itsallcode.openfasttrace.report.plaintext.AnsiSequence.*;
  */
 // [impl->dsn~reporting.plain-text.ansi-font-style~1]
 public class MonochromeTextFormatter implements TextFormatter {
+    /**
+     * Create a new instance of a {@link MonochromeTextFormatter}.
+     */
+    public MonochromeTextFormatter() {
+        // Added for JavaDoc.
+    }
+
     @Override
     public String formatOk(final String text) {
         return text;

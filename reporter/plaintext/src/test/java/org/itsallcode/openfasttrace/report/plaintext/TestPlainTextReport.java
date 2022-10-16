@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.report.plaintext;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.mockito.Mockito.mock;
@@ -13,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
@@ -91,12 +91,12 @@ class TestPlainTextReport
     private String getReportOutputWithNewline(final ReportVerbosity verbosity,
             final Newline newline, final boolean showOrigin)
     {
-        final OutputStream outputStream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final ReportSettings settings = ReportSettings.builder().verbosity(verbosity)
                 .newline(newline).showOrigin(showOrigin).build();
         final Reportable report = new PlainTextReport(this.traceMock, settings);
         report.renderToStream(outputStream);
-        return outputStream.toString();
+        return outputStream.toString(StandardCharsets.UTF_8);
     }
 
     @Test
@@ -339,7 +339,7 @@ class TestPlainTextReport
         when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
 
         assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator, false), //
-                equalTo("ok [ in:  0 /  0   | out:  0 /  0   ] a~a~1 (dsn)" + separator//
+                matchesAllLines("ok [ in:  0 /  0   | out:  0 /  0   ] a~a~1 (dsn)" + separator//
                         + "" + separator //
                         + "  This is" + separator //
                         + "  a multiline description" + separator //

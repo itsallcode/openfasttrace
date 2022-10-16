@@ -2,7 +2,6 @@ package org.itsallcode.openfasttrace.report.plaintext;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -13,7 +12,6 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.api.report.Reportable;
 
 /**
@@ -49,13 +47,9 @@ public class PlainTextReport implements Reportable
     public void renderToStream(final OutputStream outputStream)
     {
         final Charset charset = StandardCharsets.UTF_8;
-        try (final PrintStream report = new PrintStream(outputStream, false, charset.displayName()))
+        try (final PrintStream report = new PrintStream(outputStream, false, charset))
         {
             renderToPrintStream(report);
-        }
-        catch (final UnsupportedEncodingException e)
-        {
-            throw new ReportException("Encoding charset '" + charset + "' not supported", e);
         }
     }
 

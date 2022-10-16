@@ -366,11 +366,11 @@ Needs: impl, utest
 
 The plain text report uses ANSI escape sequences to color the output.
 
-Needs: impl, utest
-
 Covers:
 
 * `req~colored-plain-text-report~1`
+
+Needs: impl, utest
 
 ### Plain Text Report ANSI Font Style
 `dsn~reporting.plain-text.ansi-font-style~1`
@@ -380,6 +380,8 @@ The plain text report uses ANSI escape sequences to modify the font style of the
 Covers:
 
 * `req~colored-plain-text-report~1`
+
+Needs: impl, utest
 
 ### HTML Report
 

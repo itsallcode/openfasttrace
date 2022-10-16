@@ -532,7 +532,7 @@ Needs: dsn
 
 ##### Monochrome Plain Text Report With Font Style
 
-`req~colored-plain-text-report~1`
+`List.of`
 
 The plain text report supports different font styles to visually separate report elements.
 

@@ -3,6 +3,8 @@ package org.itsallcode.openfasttrace.report.plaintext;
 /**
  * ANSI console font effect sequences
  */
+// [impl->dsn~reporting.plain-text.ansi-color~1]
+// [impl-> dsn~reporting.plain-text.ansi-font-style~1]
 enum AnsiSequence {
     /** Reset all font effects */
     RESET(0),

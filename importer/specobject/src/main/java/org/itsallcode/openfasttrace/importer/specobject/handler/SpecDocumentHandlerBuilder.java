@@ -46,11 +46,10 @@ public class SpecDocumentHandlerBuilder
         this.handler.setDefaultStartElementListener(startElement -> {
             if (startElement.isRootElement())
             {
-                LOG.info(() -> "Found unknown root element " + startElement + ": skip file");
+                LOG.fine(() -> "Found unknown root element '" + startElement + "': skip file");
                 this.handler.stopParsing();
             }
             LOG.warning(() -> "Found unknown element " + startElement);
-            return;
         });
 
         this.handler.addElementListener("specdocument", elem -> {

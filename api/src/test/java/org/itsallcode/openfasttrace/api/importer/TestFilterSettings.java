@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -18,14 +17,14 @@ class TestFilterSettings
     @Test
     void testFilterUnsetIfEmpty()
     {
-        assertFilterSet(new FilterSettings.Builder().build(), false);
+        assertFilterSet(FilterSettings.builder().build(), false);
     }
 
     @Test
     void testBuilder()
     {
         final String[] expectedArtifactTypes = { "foo", "bar" };
-        final FilterSettings filterSettings = new FilterSettings.Builder() //
+        final FilterSettings filterSettings =  FilterSettings.builder() //
                 .artifactTypes(new HashSet<>(Arrays.asList(expectedArtifactTypes))) //
                 .build();
         assertThat(filterSettings.getArtifactTypes(), containsInAnyOrder(expectedArtifactTypes));

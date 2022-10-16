@@ -1,8 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -81,6 +79,8 @@ public class LinkedItemIndex
     }
 
     /**
+     * Get the total number of items in this index.
+     * 
      * @return the total number of items in this index.
      */
     public int size()
@@ -101,6 +101,8 @@ public class LinkedItemIndex
     }
 
     /**
+     * Get number of IDs ignoring the version.
+     * 
      * @return the number of IDs ignoring the version.
      */
     public int sizeIgnoringVersion()

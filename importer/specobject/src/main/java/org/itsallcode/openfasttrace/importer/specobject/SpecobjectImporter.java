@@ -6,18 +6,14 @@ import java.io.Reader;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.Importer;
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.handler.SpecDocumentHandlerBuilder;
 import org.itsallcode.openfasttrace.importer.specobject.xml.ContentHandlerAdapter;
 import org.itsallcode.openfasttrace.importer.specobject.xml.IgnoringEntityResolver;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeBuildingContentHandler;
 import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
 /**
  * Importer for xml files in specobject format.

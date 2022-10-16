@@ -30,14 +30,14 @@ public interface InputFile
     /**
      * Check if this {@link InputFile} is based on a real file on disk.
      * 
-     * @return <code>true</code> if this {@link InputFile} is based on a real
+     * @return {@code true} if this {@link InputFile} is based on a real
      *         file.
      */
     boolean isRealFile();
 
     /**
      * Get the {@link Path} to the file when {@link #isRealFile()} is
-     * <code>true</code>. Else throws an {@link UnsupportedOperationException}.
+     * {@code true}. Else throws an {@link UnsupportedOperationException}.
      * 
      * @return the {@link Path} to the file
      * @throws UnsupportedOperationException

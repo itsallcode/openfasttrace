@@ -1,9 +1,7 @@
 package org.itsallcode.openfasttrace.report.aspec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -23,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 @ExtendWith(MockitoExtension.class)
 class TestASpecReport
 {
@@ -448,9 +447,16 @@ class TestASpecReport
     private String renderToString()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new ASpecReport(getTrace(), reportContext);
+        final Reportable report = createFactory().createImporter(getTrace());
         report.renderToStream(outputStream);
         return outputStream.toString();
+    }
+
+    private ASpecReporterFactory createFactory()
+    {
+        final ASpecReporterFactory factory = new ASpecReporterFactory();
+        factory.init(this.reportContext);
+        return factory;
     }
 
     private Trace getTrace()
@@ -607,7 +613,7 @@ class TestASpecReport
             values.add(value == DeepCoverageStatus.COVERED ? "COVERED" : "UNCOVERED");
         }
 
-        Field(final Type type, final String id, final int version, ItemStatus status,
+        Field(final Type type, final String id, final int version, final ItemStatus status,
                 final DeepCoverageStatus ownCoverage,
                 final DeepCoverageStatus deepCoverage,
                 final ASpecReport.CoveringStatus coveringStatus)

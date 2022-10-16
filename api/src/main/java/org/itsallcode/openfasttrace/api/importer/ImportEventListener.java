@@ -1,8 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 
 /**
  * Interface for listeners of requirement import events
@@ -126,11 +124,11 @@ public interface ImportEventListener
     void setLocation(Location location);
 
     /**
-     * Set to <code>true</code> if the specification item forwards needed
+     * Set to {@code true} if the specification item forwards needed
      * coverage
      * 
      * @param forwards
-     *            <code>true</code> if the specification item forwards needed
+     *            {@code true} if the specification item forwards needed
      *            coverage
      */
     void setForwards(boolean forwards);

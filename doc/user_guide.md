@@ -554,6 +554,7 @@ recognized file types:
 * Groovy (`.groovy`)
 * Java (`.java`)
 * JavaScript (`.js`)
+* TypeScript (`.ts`)
 * JSON (`.json`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
@@ -584,6 +585,17 @@ The main importer of OFT accepts markdown files with the extensions `.md` and `.
 #### SpecObject
 
 Elektrobit's SpecObject format is read from SpecObject files with the `.xml` extension.
+
+The SpecObject format is extended with support of namespaces to allow adding custom XML elements, e.g.:
+
+```xml
+<specdocument xmlns:ext="http://extension">
+    <specobjects doctype="req">
+    </specobjects>
+    <ext:extension>
+    </ext:extension>
+</specdocument>
+```
 
 ## Console Tracing Report
 

@@ -13,6 +13,14 @@ import org.itsallcode.openfasttrace.api.core.Trace;
 public class Tracer
 {
     /**
+     * Creates a new {@link Tracer}.
+     */
+    public Tracer()
+    {
+        // empty by intention
+    }
+
+    /**
      * Traces the given items.
      * 
      * @param items

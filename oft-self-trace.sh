@@ -4,14 +4,14 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-script_path=$(dirname "$(readlink -f "$0")")
+script_path="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 base_dir="$script_path"
 oft_script="$base_dir/oft"
 report_file=$base_dir/target/self-trace-report.html
 
 mkdir -p $(dirname "$report_file")
 
-$oft_script trace \
+if $oft_script trace \
     --output-format html -f "$report_file" \
     "$base_dir/doc/spec" \
     "$base_dir/importer/markdown/src" \
@@ -27,4 +27,11 @@ $oft_script trace \
     "$base_dir/api/src" \
     "$base_dir/exporter/specobject/src" \
     "$base_dir/exporter/common/src" \
-    "$base_dir/testutil/src"
+    "$base_dir/testutil/src"; then
+  echo "Self-trace successful, see report at $report_file"
+  exit 0
+else
+  status=$?
+  echo "Self-trace failed with status $status, see report at $report_file"
+  exit $status
+fi

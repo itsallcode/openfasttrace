@@ -40,7 +40,9 @@ public final class FilterSettings
     }
 
     /**
-     * @return <code>true</code> if the filter allows items with no tags
+     * Check if the filter allows items with no tags.
+     * 
+     * @return {@code true} if the filter allows items with no tags
      */
     public boolean withoutTags()
     {
@@ -50,7 +52,7 @@ public final class FilterSettings
     /**
      * Check if the artifact type filter is set.
      * 
-     * @return <code>true</code> if the artifact type filter is set
+     * @return {@code true} if the artifact type filter is set
      */
     public boolean isArtifactTypeCriteriaSet()
     {
@@ -60,7 +62,7 @@ public final class FilterSettings
     /**
      * Check if the tag filter is set.
      * 
-     * @return <code>true</code> if the tag filter is set
+     * @return {@code true} if the tag filter is set
      */
     public boolean isTagCriteriaSet()
     {
@@ -70,7 +72,7 @@ public final class FilterSettings
     /**
      * Check if any kind of filter criteria is set.
      * 
-     * @return <code>true</code> if any filter criteria is set
+     * @return {@code true} if any filter criteria is set
      */
     public boolean isAnyCriteriaSet()
     {
@@ -142,7 +144,17 @@ public final class FilterSettings
      */
     public static FilterSettings createAllowingEverything()
     {
-        return new FilterSettings.Builder().build();
+        return FilterSettings.builder().build();
+    }
+
+    /**
+     * Create a new {@link Builder} for creating {@link FilterSettings}.
+     * 
+     * @return a new {@link Builder}.
+     */
+    public static Builder builder()
+    {
+        return new Builder();
     }
 
     /**
@@ -153,6 +165,11 @@ public final class FilterSettings
         private Set<String> artifactTypes = Collections.emptySet();
         private Set<String> tags = Collections.emptySet();
         private boolean withoutTags = true;
+
+        private Builder()
+        {
+            // empty by intention
+        }
 
         /**
          * Set the list of artifact types that the filter matches.
@@ -184,7 +201,7 @@ public final class FilterSettings
          * Configure if filter allows items that have no tags.
          * 
          * @param noTags
-         *            <code>true</code> to match items without any tags
+         *            {@code true} to match items without any tags
          * @return <code>this</code> for fluent programming
          */
         public Builder withoutTags(final boolean noTags)

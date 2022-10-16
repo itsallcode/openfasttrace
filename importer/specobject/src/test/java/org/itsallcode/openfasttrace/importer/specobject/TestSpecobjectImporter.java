@@ -1,20 +1,24 @@
 package org.itsallcode.openfasttrace.importer.specobject;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Paths;
+import java.util.*;
+import java.util.logging.*;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.specobject.xml.SaxParserConfigurator;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +46,7 @@ class TestSpecobjectImporter
     private ImportEventListener importFromString(final String text)
     {
         final ImportEventListener listenerMock = mock(ImportEventListener.class);
-        final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        final SAXParserFactory saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
         final StringReader stringReader = new StringReader(text);
         final InputFile file = StreamInput.forReader(Paths.get(PSEUDO_FILENAME),
                 new BufferedReader(stringReader));
@@ -276,5 +280,106 @@ class TestSpecobjectImporter
         verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-b~2"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    void testCustomTagsWithoutNamespacesLogsWarning()
+    {
+        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        {
+            importFromString(
+                    "<specdocument>" //
+                            + "  <specobjects doctype=\"req\">\n" //
+                            + "    <specobject>\n" //
+                            + "      <id>minimal</id>\n" //
+                            + "      <version>1</version>\n" //
+                            + "    </specobject>\n" //
+                            + "  </specobjects>\n" //
+                            + "  <extension>\n" //
+                            + "  </extension>\n" //
+                            + "</specdocument>");
+            final Optional<LogRecord> firstRecord = logHandler.getLogRecords()
+                    .filter((logRecord) -> logRecord.getLevel() == Level.WARNING)
+                    .findFirst();
+            assertTrue(firstRecord.isPresent());
+            assertThat(firstRecord.get().getMessage(), containsString("Found unknown"));
+        }
+    }
+
+    @Test
+    void testCustomTagsWithNamespacesLogsNoWarning()
+    {
+        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        {
+            importFromString(
+                    "<specdocument xmlns:x=\"http://extension\">" //
+                            + "  <specobjects doctype=\"req\">\n" //
+                            + "    <specobject>\n" //
+                            + "      <id>minimal</id>\n" //
+                            + "      <version>1</version>\n" //
+                            + "      <x:extension>\n" //
+                            + "      </x:extension>\n" //
+                            + "    </specobject>\n" //
+                            + "  </specobjects>\n" //
+                            + "  <x:extension>\n" //
+                            + "  </x:extension>\n" //
+                            + "</specdocument>");
+            assertThat(logHandler.getLogRecords().count(), equalTo(0L));
+        }
+    }
+
+    @Test
+    void testCustomTagsWithNamespacesPlusOftNamespaceLogsNoWarning()
+    {
+        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        {
+            importFromString(
+                    "<specdocument xmlns=\"https://github.com/itsallcode/openfasttrace\"\n" //
+                            + "         xmlns:x=\"http://extension\">" //
+                            + "  <specobjects doctype=\"req\">\n" //
+                            + "    <specobject>\n" //
+                            + "      <id>minimal</id>\n" //
+                            + "      <version>1</version>\n" //
+                            + "    </specobject>\n" //
+                            + "  </specobjects>\n" //
+                            + "  <x:extension>\n" //
+                            + "  </x:extension>\n" //
+                            + "</specdocument>");
+            assertThat(logHandler.getLogRecords().count(), equalTo(0L));
+        }
+    }
+
+    private static class RecordingLogHandler extends ConsoleHandler implements AutoCloseable
+    {
+
+        private final Logger rootLogger;
+        private final List<LogRecord> logRecords = new ArrayList<>();
+
+        public RecordingLogHandler()
+        {
+            super();
+            rootLogger = Logger.getLogger("");
+            rootLogger.setLevel(Level.WARNING);
+            rootLogger.addHandler(this);
+        }
+
+        @Override public void publish(final LogRecord record)
+        {
+            logRecords.add(record);
+            super.publish(record);
+        }
+
+        public Stream<LogRecord> getLogRecords()
+        {
+            return logRecords.stream();
+        }
+
+        @Override public void close()
+        {
+            Arrays.stream(rootLogger.getHandlers())
+                    .filter((handler -> handler instanceof RecordingLogHandler))
+                    .forEach(handler -> rootLogger.removeHandler(handler) );
+            super.close();
+        }
     }
 }

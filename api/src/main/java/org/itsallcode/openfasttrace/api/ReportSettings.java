@@ -40,7 +40,7 @@ public class ReportSettings
     /**
      * Should the origin of a specification item be shown in the report?
      * 
-     * @return <code>true</code> if the origin should be shown
+     * @return {@code true} if the origin should be shown
      */
     public boolean showOrigin()
     {
@@ -140,7 +140,7 @@ public class ReportSettings
          * the report
          * 
          * @param showOrigin
-         *            set to <code>true</code> if the origin should be shown
+         *            set to {@code true} if the origin should be shown
          * @return <code>this</code> for fluent programming
          */
         public Builder showOrigin(final boolean showOrigin)

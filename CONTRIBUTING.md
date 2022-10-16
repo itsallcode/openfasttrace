@@ -9,7 +9,7 @@ If you are looking for general information about what OpenFastTrace is, please m
 # What Kind of Contributions can I Make?
 
 ## Contributing Code
-If you are a programmer and want to help us improve the implementation, test cases or design of OFT please create a branch of the current `develop` branch of OFT using [git](https://git-scm.com/) and make your changes on that branch.
+If you are a programmer and want to help us improve the implementation, test cases or design of OFT please create a branch of the current `main` branch of OFT using [git](https://git-scm.com/) and make your changes on that branch.
 
 Then please create a pull request and ask for a review by one of the core team members (e.g. `redcatbear` or `kaklakariada`).
 The reviewers will either ask you to work in review findings or if there are none, merge your branch.

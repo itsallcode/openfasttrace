@@ -20,6 +20,8 @@ public class Attribute
     }
 
     /**
+     * Get the qualified name of this attribute.
+     * 
      * @return {@link Attributes#getQName(int)}
      */
     public String getQname()
@@ -28,6 +30,8 @@ public class Attribute
     }
 
     /**
+     * Get the attribute value.
+     * 
      * @return {@link Attributes#getValue(int)}
      */
     public String getValue()

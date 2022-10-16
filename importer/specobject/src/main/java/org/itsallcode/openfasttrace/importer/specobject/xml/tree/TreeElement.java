@@ -25,6 +25,8 @@ public class TreeElement
     }
 
     /**
+     * Get the {@link StartElementEvent}.
+     * 
      * @return the {@link StartElementEvent}.
      */
     public StartElementEvent getElement()
@@ -33,6 +35,8 @@ public class TreeElement
     }
 
     /**
+     * Get the character data content of the element.
+     * 
      * @return the character data content of the element.
      */
     public String getCharacterData()
@@ -41,6 +45,8 @@ public class TreeElement
     }
 
     /**
+     * Check if this is the root element.
+     * 
      * @return {@code true} if this is the root element.
      */
     public boolean isRootElement()
@@ -78,6 +84,8 @@ public class TreeElement
     }
 
     /**
+     * Get the {@link Location} of the start element.
+     * 
      * @return the {@link Location} of the start element.
      */
     public Location getLocation()

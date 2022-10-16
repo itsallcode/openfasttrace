@@ -151,13 +151,12 @@ public class PlainTextReport implements Reportable
     private void renderItemSummary(final PrintStream report, final LinkedSpecificationItem item)
     {
         report.print(translateStatus(!item.isDefect()));
-        report.print(" - ");
         renderItemLinkCounts(report, item);
-        report.print(" - ");
         report.print(this.formatter.formatStrong(item.getId().toString()));
         report.print(" ");
         renderMaturity(report, item);
         report.print(translateArtifactTypeCoverage(item));
+        renderDuplicatesCount(report, item);
         report.print(this.settings.getNewline());
     }
 
@@ -170,7 +169,7 @@ public class PlainTextReport implements Reportable
         return "(" + Stream.concat( //
                 Stream.concat( //
                         uncoveredStream, //
-                        item.getCoveredArtifactTypes().stream() //
+                        item.getCoveredArtifactTypes().stream().map(this.formatter::formatOk) //
                 ), //
                 item.getOverCoveredArtifactTypes().stream().map(x -> this.formatter.formatNotOk("+" + x)) //
         ) //
@@ -180,20 +179,36 @@ public class PlainTextReport implements Reportable
 
     private void renderItemLinkCounts(final PrintStream report, final LinkedSpecificationItem item)
     {
-        report.print(formatFailureCount(item.countIncomingBadLinks()));
-        report.print("/");
-        report.print(item.countIncomingLinks());
-        report.print(">");
-        report.print(formatFailureCount(item.countDuplicateLinks()));
-        report.print(">");
-        report.print(item.countOutgoingBadLinks());
-        report.print("/");
-        report.print(formatFailureCount(item.countOutgoingLinks()));
+        final int incomingLinks = item.countIncomingLinks();
+        final int incomingBadLinks = item.countIncomingBadLinks();
+        final int incomingGoodLinks = incomingLinks - incomingBadLinks;
+        final int outgoingLinks = item.countOutgoingLinks();
+        final int outgoingBadLinks = item.countOutgoingBadLinks();
+        final int outgoingGoodLinks = outgoingLinks - outgoingBadLinks;
+        report.print(" [ in: ");
+        report.print(formatCountXofY(incomingGoodLinks, incomingLinks));
+        report.print(" | out: ");
+        report.print(formatCountXofY(outgoingGoodLinks, outgoingLinks));
+        report.print(" ] ");
     }
 
-    private String formatFailureCount(final int count) {
-        return (count == 0) ? this.formatter.formatOk(String.valueOf(count))
-                : this.formatter.formatNotOk(String.valueOf(count));
+    private void renderDuplicatesCount(final PrintStream report, final LinkedSpecificationItem item) {
+        final int duplicateLinks = item.countDuplicateLinks();
+        if(duplicateLinks != 0) {
+            report.print(" [has ");
+            report.print(this.formatter.formatNotOk(duplicateLinks + " duplicate" + (duplicateLinks > 1 ? "s" : "")));
+            report.print("]");
+        }
+    }
+
+    private String formatCountXofY(final int countGood, final int count) {
+        if((countGood == 0) && (count == 0)) {
+            return " 0 /  0  ";
+        } else {
+            return (countGood == count)
+                    ? this.formatter.formatOk(String.format("%2d / %2d ✔", countGood, count))
+                    : this.formatter.formatNotOk(String.format("%2d / %2d ✘", countGood, count));
+        }
     }
 
     private void renderMaturity(final PrintStream report, final LinkedSpecificationItem item)
@@ -246,7 +261,6 @@ public class PlainTextReport implements Reportable
 
     private void renderEmptyItemDetailsLine(final PrintStream report)
     {
-        report.print("|");
         report.print(this.settings.getNewline());
     }
 
@@ -258,7 +272,7 @@ public class PlainTextReport implements Reportable
             renderEmptyItemDetailsLine(report);
             for (final String line : description.split(Newline.anyNewlineReqEx()))
             {
-                report.print("| ");
+                report.print("  ");
                 report.print(line);
                 report.print(this.settings.getNewline());
             }
@@ -291,9 +305,14 @@ public class PlainTextReport implements Reportable
             final boolean showOrigin)
     {
         final LinkStatus status = link.getStatus();
-        report.print(status.isIncoming() ? "|<-- (" : "|--> (");
-        report.print(status.getShortTag());
-        report.print(") ");
+        report.print("  [");
+        if(status == LinkStatus.COVERS || (status == LinkStatus.COVERED_SHALLOW)) {
+            report.print(formatter.formatOk(padStatus(status)));
+        } else {
+            report.print(formatter.formatNotOk(padStatus(status)));
+        }
+        report.print("] ");
+        report.print(status.isIncoming() ? "← " : "→ ");
         report.print(link.getOtherLinkEnd().getId());
         report.print(this.settings.getNewline());
         if (showOrigin)
@@ -301,11 +320,15 @@ public class PlainTextReport implements Reportable
             final Location location = link.getOtherLinkEnd().getLocation();
             if (location != null)
             {
-                report.print("|        ");
+                report.print("         ");
                 renderOrigin(report, location);
                 report.print(this.settings.getNewline());
             }
         }
+    }
+
+    private static String padStatus(final LinkStatus status) {
+        return String.format("%-17s", status.toString().toLowerCase());
     }
 
     private void renderTags(final PrintStream report, final LinkedSpecificationItem item)
@@ -314,7 +337,7 @@ public class PlainTextReport implements Reportable
         if (tags != null && !tags.equals(Collections.emptyList()))
         {
             renderEmptyItemDetailsLine(report);
-            report.print("| #: ");
+            report.print("  #: ");
             report.print(String.join(", ", tags));
             report.print(this.settings.getNewline());
             ++this.nonEmptySections;
@@ -327,7 +350,7 @@ public class PlainTextReport implements Reportable
         if (location != null)
         {
             renderEmptyItemDetailsLine(report);
-            report.print("| (");
+            report.print("  (");
             report.print(location.getPath());
             report.print(":");
             report.print(location.getLine());

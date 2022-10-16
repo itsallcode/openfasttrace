@@ -14,11 +14,11 @@ final class ConsoleColorFormatter implements TextFormatter {
 
     @Override
     public String formatNotOk(final String text) {
-        return RED + text + RESET;
+        return BRIGHT_RED + text + RESET;
     }
 
     @Override
     public String formatStrong(final String text) {
-        return BOLD + CYAN + text + RESET;
+        return AnsiSequence.combine(BOLD, CYAN) + text + RESET;
     }
 }

@@ -323,7 +323,7 @@ The possible results are:
   2. Outdated:  link points to a specification item which has a higher revision number
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
-  5. Unwanted:  coverage provider has an artifact type the provider does not want
+  5. Unwanted:  coverage provider has an artifact type the requester does not want
   6. Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:

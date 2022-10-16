@@ -15,11 +15,11 @@ class ConsoleColorFormatterTest {
 
     @Test
     void testFormatNotOk() {
-        assertThat(FORMATTER.formatNotOk("not ok"), equalTo("\u001B[31mnot ok\u001B[0m"));
+        assertThat(FORMATTER.formatNotOk("not ok"), equalTo("\u001B[91mnot ok\u001B[0m"));
     }
 
     @Test
     void testFormatStrong() {
-        assertThat(FORMATTER.formatStrong("strong"), equalTo("\u001B[1m\u001B[36mstrong\u001B[0m"));
+        assertThat(FORMATTER.formatStrong("strong"), equalTo("\u001B[1;36mstrong\u001B[0m"));
     }
 }

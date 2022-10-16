@@ -85,8 +85,7 @@ class TestPlainTextReport
 
     private String getReportOutput(final ReportVerbosity verbosity, final boolean showOrigin)
     {
-        final Newline newline = NEWLINE_SEPARATOR;
-        return getReportOutputWithNewline(verbosity, newline, showOrigin);
+        return getReportOutputWithNewline(verbosity, NEWLINE_SEPARATOR, showOrigin);
     }
 
     private String getReportOutputWithNewline(final ReportVerbosity verbosity,
@@ -155,10 +154,10 @@ class TestPlainTextReport
         prepareFailedItemDetails();
 
         assertReportOutput(ReportVerbosity.FAILURE_SUMMARIES, //
-                "not ok - 0/0>0>2/4 - dsn~bar~1 [proposed] (impl, -uman, utest)", //
-                "not ok - 0/3>1>0/2 - req~foo~1 (dsn)", //
-                "not ok - 3/7>1>2/3 - req~zoo~1 [rejected] (-impl, -utest)", //
-                "not ok - 1/6>0>0/0 - req~zoo~2 [draft] (dsn, +utest)", //
+                "not ok [ in:  0 /  0   | out:  2 /  4 ✘ ] dsn~bar~1 [proposed] (impl, -uman, utest)", //
+                "not ok [ in:  3 /  3 ✔ | out:  2 /  2 ✔ ] req~foo~1 (dsn) [has 1 duplicate]", //
+                "not ok [ in:  4 /  7 ✘ | out:  1 /  3 ✘ ] req~zoo~1 [rejected] (-impl, -utest) [has 1 duplicate]", //
+                "not ok [ in:  5 /  6 ✘ | out:  0 /  0   ] req~zoo~2 [draft] (dsn, +utest)", //
                 "", //
                 "not ok - 6 total, 4 defect");
     }
@@ -176,16 +175,16 @@ class TestPlainTextReport
         final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1",
                 ItemStatus.REJECTED, "desc D1", 3, 7, 1, 2, 3);
 
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
-        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UTEST)));
-        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UMAN));
-        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
-        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(UTEST)));
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UTEST)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UMAN));
+        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(UTEST)));
         when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
-        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(asList(IMPL, UTEST));
+        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(List.of(IMPL, UTEST));
         when(this.traceMock.getDefectItems())
-                .thenReturn(asList(itemAMock, itemBMock, itemCMock, itemDMock));
+                .thenReturn(List.of(itemAMock, itemBMock, itemCMock, itemDMock));
         when(itemAMock.getLocation()).thenReturn(Location.create("/tmp/foo.md", 1));
         when(itemBMock.getLocation()).thenReturn(Location.create("/tmp/bar.md", 2));
         when(itemCMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 13));
@@ -201,17 +200,17 @@ class TestPlainTextReport
         prepareMixedItemDetails();
 
         assertReportOutput(ReportVerbosity.FAILURE_DETAILS, //
-                "not ok - 0/1>3>2/4 - dsn~failure~0 (impl, uman, -utest)", //
-                "|", //
-                "| This is a failure.", //
-                "|", //
-                "|<-- ( ) imp~failure~0", //
-                "|--> ( ) req~bar~1", //
-                "|--> (+) req~baz~1", //
-                "|--> ( ) req~foo~1", //
-                "|--> (<) req~zoo~1", //
-                "|--> (/) req~zoo~2", //
-                "|", //
+                "not ok [ in:  1 /  1 ✔ | out:  2 /  4 ✘ ] dsn~failure~0 (impl, uman, -utest) [has 3 duplicates]", //
+                "", //
+                "  This is a failure.", //
+                "", //
+                "  [covered shallow  ] ← imp~failure~0", //
+                "  [covers           ] → req~bar~1", //
+                "  [unwanted         ] → req~baz~1", //
+                "  [covers           ] → req~foo~1", //
+                "  [outdated         ] → req~zoo~1", //
+                "  [orphaned         ] → req~zoo~2", //
+                "", //
                 "", //
                 "not ok - 2 total, 1 defect");
     }
@@ -225,23 +224,23 @@ class TestPlainTextReport
         prepareMixedItemDetails();
 
         assertReportOutput(ReportVerbosity.ALL, //
-                "not ok - 0/1>3>2/4 - dsn~failure~0 (impl, uman, -utest)", //
-                "|", //
-                "| This is a failure.", //
-                "|", //
-                "|<-- ( ) imp~failure~0", //
-                "|--> ( ) req~bar~1", //
-                "|--> (+) req~baz~1", //
-                "|--> ( ) req~foo~1", //
-                "|--> (<) req~zoo~1", //
-                "|--> (/) req~zoo~2", //
-                "|", //
-                "ok - 0/0>0>0/0 - req~success~20170126 (dsn)", //
-                "|", //
-                "| This is a success.", //
-                "|", //
-                "| #: tag, another tag", //
-                "|", //
+                "not ok [ in:  1 /  1 ✔ | out:  2 /  4 ✘ ] dsn~failure~0 (impl, uman, -utest) [has 3 duplicates]", //
+                "", //
+                "  This is a failure.", //
+                "", //
+                "  [covered shallow  ] ← imp~failure~0", //
+                "  [covers           ] → req~bar~1", //
+                "  [unwanted         ] → req~baz~1", //
+                "  [covers           ] → req~foo~1", //
+                "  [outdated         ] → req~zoo~1", //
+                "  [orphaned         ] → req~zoo~2", //
+                "", //
+                "ok [ in:  0 /  0   | out:  0 /  0   ] req~success~20170126 (dsn)", //
+                "", //
+                "  This is a success.", //
+                "", //
+                "  #: tag, another tag", //
+                "", //
                 "", //
                 "not ok - 2 total, 1 defect");
     }
@@ -255,14 +254,14 @@ class TestPlainTextReport
                 "This is a failure.", //
                 0, 1, 3, 2, 4);
 
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
-        when(itemAMock.getTags()).thenReturn(asList("tag", "another tag"));
-        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL, UMAN)));
-        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(asList(UTEST));
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        when(itemAMock.getTags()).thenReturn(List.of("tag", "another tag"));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UMAN)));
+        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UTEST));
         prepareLinks(itemBMock);
-        when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
-        when(this.traceMock.getDefectItems()).thenReturn(asList(itemBMock));
+        when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
+        when(this.traceMock.getDefectItems()).thenReturn(List.of(itemBMock));
     }
 
     private void prepareLinks(final LinkedSpecificationItem itemMock)
@@ -333,24 +332,24 @@ class TestPlainTextReport
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("b~b~2", //
                 "Yet another" + separator + "multiline text", //
                 0, 0, 0, 0, 0);
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
-        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(IMPL)));
+        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
         when(this.traceMock.hasNoDefects()).thenReturn(true);
-        when(this.traceMock.getItems()).thenReturn(asList(itemAMock, itemBMock));
+        when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
 
         assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator, false), //
-                equalTo("ok - 0/0>0>0/0 - a~a~1 (dsn)" + separator//
-                        + "|" + separator //
-                        + "| This is" + separator //
-                        + "| a multiline description" + separator //
-                        + "|" + separator //
-                        + "ok - 0/0>0>0/0 - b~b~2 (impl)" + separator //
-                        + "|" + separator //
-                        + "| Yet another" + separator //
-                        + "| multiline text" + separator //
-                        + "|" + separator //
+                equalTo("ok [ in:  0 /  0   | out:  0 /  0   ] a~a~1 (dsn)" + separator//
                         + "" + separator //
+                        + "  This is" + separator //
+                        + "  a multiline description" + separator //
+                        + separator //
+                        + "ok [ in:  0 /  0   | out:  0 /  0   ] b~b~2 (impl)" + separator //
+                        + "" + separator //
+                        + "  Yet another" + separator //
+                        + "  multiline text" + separator //
+                        + separator //
+                        + separator //
                         + "ok - 2 total" + separator));
 
     }
@@ -362,8 +361,8 @@ class TestPlainTextReport
     {
         final LinkedSpecificationItem itemMock = createLinkedItemMock("req~item.with-source~77",
                 "Description", 0, 1, 0, 0, 0);
-        when(itemMock.getNeedsArtifactTypes()).thenReturn(asList(DSN));
-        when(itemMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(asList(DSN)));
+        when(itemMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        when(itemMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
         final LinkedSpecificationItem other = createOtherItemMock("dsn~the-other~1");
         when(other.getLocation()).thenReturn(Location.create("baz/zoo", 10));
         final List<TracedLink> links = new ArrayList<>();
@@ -374,17 +373,17 @@ class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(1);
         when(this.traceMock.countDefects()).thenReturn(0);
         when(this.traceMock.hasNoDefects()).thenReturn(true);
-        when(this.traceMock.getItems()).thenReturn(asList(itemMock));
+        when(this.traceMock.getItems()).thenReturn(List.of(itemMock));
         assertReportOutputWithOrigin(ReportVerbosity.ALL, //
-                "ok - 0/1>0>0/0 - req~item.with-source~77 (dsn)", //
-                "|", //
-                "| Description", //
-                "|", //
-                "| (/foo/bar:42)", //
-                "|", //
-                "|<-- ( ) dsn~the-other~1", //
-                "|        (baz/zoo:10)", //
-                "|", //
+                "ok [ in:  1 /  1 ✔ | out:  0 /  0   ] req~item.with-source~77 (dsn)", //
+                "", //
+                "  Description", //
+                "", //
+                "  (/foo/bar:42)", //
+                "", //
+                "  [covered shallow  ] ← dsn~the-other~1", //
+                "         (baz/zoo:10)", //
+                "", //
                 "", //
                 "ok - 1 total");
     }

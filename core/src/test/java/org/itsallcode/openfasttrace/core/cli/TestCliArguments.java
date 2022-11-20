@@ -259,14 +259,6 @@ class TestCliArguments
         assertThat(this.arguments.getColorScheme(), is(ColorScheme.COLOR));
     }
 
-
-    @Test
-    void testSetOutputColorScheme()
-    {
-        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
-        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
-    }
-
     @Test
     void testSetOutputFileOverridesColorSchemeSetting()
     {

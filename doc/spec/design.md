@@ -380,6 +380,7 @@ The plain text report uses ANSI escape sequences to modify the font style of the
 Covers:
 
 * `req~colored-plain-text-report~1`
+* `req~monochrome-plain-text-report-with-font-style~1`
 
 Needs: impl, utest
 

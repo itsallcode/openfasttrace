@@ -9,7 +9,7 @@ enum AnsiSequence {
     /** Reset all font effects */
     RESET(0),
     /** Bold font */
-    BOLD (1),
+    BOLD(1),
     /** Italic font */
     ITALIC(3),
     /** Underlined */

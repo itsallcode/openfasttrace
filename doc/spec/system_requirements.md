@@ -121,7 +121,7 @@ A tracing report is a representation of the results of the requirement tracing O
 
 #### Console Reports
 
-#### Plain Text Report
+##### Plain Text Report
 `feat~plain-text-report~1`
 
 OFT produces a tracing report in plain text.
@@ -531,21 +531,19 @@ Covers:
 Needs: dsn
 
 ##### Monochrome Plain Text Report With Font Style
-
-`List.of`
+`req~monochrome-plain-text-report-with-font-style~1`
 
 The plain text report supports different font styles to visually separate report elements.
 
 Rationale:
 
-This make the report easier to read and works for people who are colorblind.
+This makes the report easier to read and works for people who are colorblind.
 
 Covers:
 
 * [feat~plain-text-report~1](#plain-text-report)
 
 Needs: dsn
-
 
 ##### Colored Plain Text Report
 `req~colored-plain-text-report~1`
@@ -554,7 +552,7 @@ The plain text report supports color to visually separate report elements.
 
 Rationale:
 
-This make the report easier to read.
+This makes the report easier to read.
 
 Covers:
 

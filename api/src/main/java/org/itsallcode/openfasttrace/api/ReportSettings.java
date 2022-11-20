@@ -24,7 +24,7 @@ public class ReportSettings
         this.showOrigin = builder.showOrigin;
         this.outputFormat = builder.outputFormat;
         this.newline = builder.newline;
-        this.colorScheme = builder.colorScheme;
+        this.colorScheme = Objects.requireNonNull(builder.colorScheme);
     }
 
     /**
@@ -178,7 +178,7 @@ public class ReportSettings
         /**
          * Set the desired color scheme
          *
-         * @param colorScheme set to true to get a colored report
+         * @param colorScheme color scheme to use
          * @return <code>this</code> for fluent programming
          */
         public Builder colorScheme(final ColorScheme colorScheme) {

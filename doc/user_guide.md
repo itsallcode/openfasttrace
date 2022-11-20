@@ -526,6 +526,9 @@ Here is an example of a tag embedded into a Java comment:
 
 ```java
 // [impl->dsn~validate-authentication-request~1]
+private validate(final AuthenticationRequest request){
+    // ...
+}
 ```
 
 When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:
@@ -536,8 +539,9 @@ When using UML models as design document files like UML models it is useful to a
 
 Example:
 
-```plantuml
+```
 ' [dsn->req~1password-login~1>>impl,test]
+user -> system : login(token: OAuthToken)
 ```
 
 The Tag Importer recognizes the supported format by the file extension. The following list shows the standard set of
@@ -627,6 +631,8 @@ The first pair shows how many of the incoming good links this requirement has (t
 
 Consequently, the next pair informs you how many (one) of the overall (one) outgoing links are good.
 
+Please note that OFT cannot predict the exact number of required incoming links, because often we are talking about one-to-many relations. So OFT does not try to. The checkmark and crossmark in the square brackets are only a quick indicator of if the existing links are okay. This goes so far that in case of zero links, no mark is displayed at all.
+
 >  ok [ in:  2 /  2 ✔ | **out:  1 /  1 ✔** ] dsn~cli.tracing.default-format~1 (impl, utest)
 
 The [Specification Item ID](#specification-item-id) in the middle is the unique technical ID of this requirement.
@@ -635,23 +641,21 @@ The [Specification Item ID](#specification-item-id) in the middle is the unique 
 
 In the brackets you find, which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
 
->  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (**impl, utest***)
+>  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (**impl, utest**)
 
 If it is not covered, the name is lead in by a minus:
 
->  **not ok** ...  (**-impl**, utest)
-
-Please also note that in this case the number of incoming links changed and that a cross-mark indicates that at least one 
-
+>  **not ok** &hellip;  (**-impl**, utest)
+ 
 If an artifact type provides coverage that is not requested, you find this indicated with a plus in front.
 
-> not ok - 0/2>0>0/1 - `dsn~cli.tracing.default-format~1` (impl, **+itest**, utest)
+> **not ok** &hellip; (impl, **+itest**, utest)
 
-If there were any other spec objects defined with the same id, you would see the following at the end of the summary line:
+If there were any other specification objects defined with the same ID, you would see the following at the end of the summary line:
 
 > [has 3 duplicates]
 
-Everything after that line is details of the requirement. Indented text indicates this. The first part of the details is the description.
+Everything after that line are details of the requirement. Indented text indicates this. The first part of the details is the description.
 
     The CLI uses plain text as requirement tracing report format if none is given as a parameter.
 

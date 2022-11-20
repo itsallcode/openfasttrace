@@ -12,7 +12,7 @@ interface TextFormatter {
     public String formatOk(final String text);
 
     /**
-     * Format a text span that represents a good result.
+     * Format a text span that represents a bad result.
      *
      * @param text text span to be formatted
      * @return formatted text

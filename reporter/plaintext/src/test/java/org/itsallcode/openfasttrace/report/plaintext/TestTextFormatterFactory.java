@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.itsallcode.openfasttrace.api.ColorScheme.*;
 import static org.itsallcode.openfasttrace.report.plaintext.TextFormatterFactory.createFormatter;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestTextFormatterFactory {
     @Test
@@ -22,5 +23,10 @@ class TestTextFormatterFactory {
     @Test
     void testCreateConsoleColorFormatter() {
         assertThat(createFormatter(COLOR), instanceOf(ConsoleColorFormatter.class));
+    }
+
+    @Test
+    void testCreateDefaultFormatter() {
+        assertThat(createFormatter(null), instanceOf(NullTextFormatter.class));
     }
 }

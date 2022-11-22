@@ -119,7 +119,9 @@ Needs: req
 
 A tracing report is a representation of the results of the requirement tracing OFT performs. Depending on their use, reports can be designed to be human readable, machine readable or both.
 
-#### Plain Text Report
+#### Console Reports
+
+##### Plain Text Report
 `feat~plain-text-report~1`
 
 OFT produces a tracing report in plain text.
@@ -321,7 +323,7 @@ The possible results are:
   2. Outdated:  link points to a specification item which has a higher revision number
   3. Predated:  link points to a specification item which has a lower revision number
   4. Ambiguous: link points to a specification item that has duplicates
-  5. Unwanted:  coverage provider has an artifact type the provider does not want
+  5. Unwanted:  coverage provider has an artifact type the requester does not want
   6. Orphaned:  link is broken - there is no matching coverage requester
 
 Covers:
@@ -521,6 +523,36 @@ The link detail section shows for all links of a specification item:
   1. Incoming / Outgoing
   2. Link status
   3. ID of the specification item on the other end of the link
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+##### Monochrome Plain Text Report With Font Style
+`req~monochrome-plain-text-report-with-font-style~1`
+
+The plain text report supports different font styles to visually separate report elements.
+
+Rationale:
+
+This makes the report easier to read and works for people who are colorblind.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+##### Colored Plain Text Report
+`req~colored-plain-text-report~1`
+
+The plain text report supports color to visually separate report elements.
+
+Rationale:
+
+This makes the report easier to read.
 
 Covers:
 

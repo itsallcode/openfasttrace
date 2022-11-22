@@ -4,6 +4,8 @@ import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 
+import java.util.Objects;
+
 /**
  * This class implements a parameter object to control the settings of OFT's
  * report mode.
@@ -14,6 +16,7 @@ public class ReportSettings
     private final boolean showOrigin;
     private final String outputFormat;
     private final Newline newline;
+    private final ColorScheme colorScheme;
 
     private ReportSettings(final Builder builder)
     {
@@ -21,6 +24,7 @@ public class ReportSettings
         this.showOrigin = builder.showOrigin;
         this.outputFormat = builder.outputFormat;
         this.newline = builder.newline;
+        this.colorScheme = Objects.requireNonNull(builder.colorScheme);
     }
 
     /**
@@ -64,6 +68,15 @@ public class ReportSettings
     }
 
     /**
+     * Get the color scheme
+     *
+     * @return color scheme
+     */
+    public ColorScheme getColorScheme() {
+        return this.colorScheme;
+    }
+
+    /**
      * Create default report settings
      * 
      * @return default settings
@@ -92,6 +105,7 @@ public class ReportSettings
         private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
         private boolean showOrigin = false;
         private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
+        private ColorScheme colorScheme = ColorScheme.BLACK_AND_WHITE;
 
         private Builder()
         {
@@ -158,6 +172,17 @@ public class ReportSettings
         public Builder newline(final Newline newline)
         {
             this.newline = newline;
+            return this;
+        }
+
+        /**
+         * Set the desired color scheme
+         *
+         * @param colorScheme color scheme to use
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder colorScheme(final ColorScheme colorScheme) {
+            this.colorScheme = Objects.requireNonNull(colorScheme);
             return this;
         }
     }

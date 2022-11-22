@@ -40,7 +40,7 @@ public class ArgumentValidator
     {
         final Optional<String> command = this.arguments.getCommand();
         boolean ok = false;
-        if (!command.isPresent())
+        if (command.isEmpty())
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
@@ -72,7 +72,7 @@ public class ArgumentValidator
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
                 && this.arguments.getOutputPath() != null)
         {
-            this.error = "combining stream verbosity 'quiet' and ouput to file is not supported.";
+            this.error = "combining stream verbosity 'quiet' and output to file is not supported.";
             this.suggestion = "remove output file parameter.";
         }
         else
@@ -132,5 +132,4 @@ public class ArgumentValidator
     {
         return this.suggestion;
     }
-
 }

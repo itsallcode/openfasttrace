@@ -37,6 +37,7 @@ class TestCliStarter
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
     private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
+    private static final String COLOR_SCHEME_PARAMETER = "--color-scheme";
     private static final String CARRIAGE_RETURN = "\r";
     private static final String NEWLINE = "\n";
 
@@ -115,7 +116,8 @@ class TestCliStarter
         final Runnable runnable = () -> runCliStarter( //
                 CONVERT_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "specobject", //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString());
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
+                COLOR_SCHEME_PARAMETER, "BLACK_AND_WHITE");
         assertExitOkWithOutputFileStart(runnable,
                 SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"");
     }
@@ -356,8 +358,7 @@ class TestCliStarter
         final Runnable runnable = () -> runCliStarter( //
                 TRACE_COMMAND, this.DOC_DIR.toString(), //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
-                WANTED_ARTIFACT_TYPES_PARAMETER, "feat,req"
-        //
+                WANTED_ARTIFACT_TYPES_PARAMETER, "feat,req" //
         );
         assertExitOkWithOutputFileStart(runnable, "ok - 3 total");
     }
@@ -381,7 +382,7 @@ class TestCliStarter
         }
         catch (final IOException exception)
         {
-            // Need to convert this to an unchecked exception. Otherwise we get
+            // Need to convert this to an unchecked exception. Otherwise, we get
             // stuck with the checked exceptions in the assertion lambdas.
             throw new RuntimeException(exception);
         }

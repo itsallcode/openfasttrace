@@ -361,6 +361,29 @@ Covers:
 
 Needs: impl, utest
 
+### Plain Text Report ANSI Color
+`dsn~reporting.plain-text.ansi-color~1`
+
+The plain text report uses ANSI escape sequences to color the output.
+
+Covers:
+
+* `req~colored-plain-text-report~1`
+
+Needs: impl, utest
+
+### Plain Text Report ANSI Font Style
+`dsn~reporting.plain-text.ansi-font-style~1`
+
+The plain text report uses ANSI escape sequences to modify the font style of the output.
+
+Covers:
+
+* `req~colored-plain-text-report~1`
+* `req~monochrome-plain-text-report-with-font-style~1`
+
+Needs: impl, utest
+
 ### HTML Report
 
 #### HTML Report Inlines CSS

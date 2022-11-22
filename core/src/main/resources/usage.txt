@@ -20,10 +20,14 @@ Converting options:
                                (e.g. file and line number)             
 
 Common options: 
-  -f, --file path              The output file. Defaults to STDOUT.
-  -n, --newline format         Newline format one of "unix", "windows", "oldmac"
   -a, --wanted-artifact-types  Import only specification items contained in the
                                comma-separated list
+  -c, --color-scheme scheme    Color scheme for output. One of "black-and-white",
+                               "monochrome", "color". Defaults to "color".
+                               Note that this option is ignored when -f is also
+                               set.
+  -f, --file path              The output file. Defaults to STDOUT.
+  -n, --newline format         Newline format. One of "unix", "windows", "oldmac"
   -t, --wanted-tags            Import only specification items that have at
                                least one tag contained in the comma-separated
                                list. Add a single underscore as first item in

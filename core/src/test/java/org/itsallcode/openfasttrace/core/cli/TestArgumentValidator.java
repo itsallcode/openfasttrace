@@ -54,7 +54,7 @@ class TestArgumentValidator
         cliArgs.setV(ReportVerbosity.QUIET);
         cliArgs.setOutputFile("outputFile");
         assertValidatorResult(
-                "combining stream verbosity 'quiet' and ouput to file is not supported.",
+                "combining stream verbosity 'quiet' and output to file is not supported.",
                 "remove output file parameter.");
     }
 

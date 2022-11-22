@@ -1,12 +1,13 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 
+import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -54,7 +55,7 @@ class TestCliArguments
     @Test
     void getStandardOutputFormatForExport()
     {
-        this.arguments.setUnnamedValues(asList(ConvertCommand.COMMAND_NAME));
+        this.arguments.setUnnamedValues(List.of(ConvertCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
                 equalTo(ExporterConstants.DEFAULT_OUTPUT_FORMAT));
     }
@@ -63,7 +64,7 @@ class TestCliArguments
     @Test
     void getStandardOutputFormatForReport()
     {
-        this.arguments.setUnnamedValues(asList(TraceCommand.COMMAND_NAME));
+        this.arguments.setUnnamedValues(List.of(TraceCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
                 equalTo(ReportConstants.DEFAULT_REPORT_FORMAT));
     }
@@ -146,7 +147,7 @@ class TestCliArguments
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
     @Test
-    void testSetIngnoreArtifactTypes()
+    void testSetIgnoreArtifactTypes()
     {
         final String value = "impl,utest";
         this.arguments.setWantedArtifactTypes(value);
@@ -183,7 +184,7 @@ class TestCliArguments
 
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testSetd()
+    void testSetD()
     {
         final String value = "client,server";
         this.arguments.setT(value);
@@ -231,5 +232,38 @@ class TestCliArguments
     {
         this.arguments.setS(true);
         assertThat(this.arguments.getShowOrigin(), is(true));
+    }
+
+    // [dsn~reporting.plain-text.ansi-color~1]
+    // [dsn~reporting.plain-text.ansi-font-style~1]
+    @Test
+    void testSetColorScheme()
+    {
+        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
+    }
+
+    // [dsn~reporting.plain-text.ansi-color~1]
+    // [dsn~reporting.plain-text.ansi-font-style~1]
+    @Test
+    void testSetC()
+    {
+        this.arguments.setC(ColorScheme.MONOCHROME);
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
+    }
+
+
+    @Test
+    void testColorSchemeDefaultsToColor()
+    {
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.COLOR));
+    }
+
+    @Test
+    void testSetOutputFileOverridesColorSchemeSetting()
+    {
+        this.arguments.setColorScheme(ColorScheme.MONOCHROME);
+        this.arguments.setOutputFile("something");
+        assertThat(this.arguments.getColorScheme(), is(ColorScheme.BLACK_AND_WHITE));
     }
 }

@@ -70,7 +70,8 @@ jobs:
 
     - name: Publish Test Report for Java ${{ matrix.java }} on ${{ matrix.os }}
       uses: scacap/action-surefire-report@v1
-      if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+      # Deactivated on macos-latest because of https://github.com/ScaCap/action-surefire-report/issues/95
+      if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' && matrix.os != 'macos-latest' }}
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -68,14 +68,6 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 
-    - name: Publish Test Report for Java ${{ matrix.java }} on ${{ matrix.os }}
-      uses: scacap/action-surefire-report@v1
-      # Deactivated on macos-latest because of https://github.com/ScaCap/action-surefire-report/issues/95
-      if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' && matrix.os != 'macos-latest' }}
-      with:
-        report_paths: '**/target/surefire-reports/TEST-*.xml'
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Archive oft binary
       uses: actions/upload-artifact@v3
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}

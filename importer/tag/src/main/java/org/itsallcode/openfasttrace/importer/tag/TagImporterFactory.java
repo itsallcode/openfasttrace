@@ -39,6 +39,7 @@ public class TagImporterFactory extends ImporterFactory
             "rs", // Rust
             "sh", "bash", "zsh", // Shell programming
             "swift", // Swift
+            "tf", "tfvars", // Terraform
             "sql", "pls" // Database related
     );
 

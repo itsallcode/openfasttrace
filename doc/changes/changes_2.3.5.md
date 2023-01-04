@@ -1,4 +1,4 @@
-# OpenFastTrace 2.3.0, released 2019-04-14
+# OpenFastTrace 2.3.5, released 2019-04-14
 
 Code name: New project structure
 

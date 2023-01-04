@@ -13,7 +13,7 @@ The new change log now has one file per version to make maintaining and reading 
 
 ## Features
 
-* #338: Improve console report 
+* #338: Improved console report 
 
 ## Bugfixes
 

@@ -4,4 +4,4 @@ Code name: Unreleased on GitHub
 
 ## Bugfixes
 
-* Fix deployment to maven central: attributes in pom.xml where missing.
+* Fix deployment to Maven Central: attributes in pom.xml where missing.

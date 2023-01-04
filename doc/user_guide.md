@@ -569,6 +569,7 @@ recognized file types:
 * Rust (`.rs`)
 * Shell programming (`.sh`, `.bash`, `.zsh`)
 * Swift (`.swift`)
+* Terraform (`.tf`, `.tfvars`)
 * Windows batch files (`.bat`)
 
 **Markup languages**

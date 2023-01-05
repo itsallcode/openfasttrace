@@ -6,23 +6,23 @@
 <!-- Magnification: 1.050 -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="9.4in"
    height="3.3in"
    viewBox="2744 2980 11282 3960"
    version="1.1"
    id="svg20"
-   sodipodi:docname="openfasttrace_logo.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="openfasttrace_logo2.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    inkscape:export-filename="/home/sebastian/git/openfasttrace/src/main/resources/openfasttrace_logo.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata26">
     <rdf:RDF>
@@ -45,22 +45,24 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2493"
-     inkscape:window-height="1545"
+     inkscape:window-width="3366"
+     inkscape:window-height="1376"
      id="namedview22"
      showgrid="false"
      inkscape:zoom="0.42331562"
-     inkscape:cx="-316.54868"
-     inkscape:cy="158.4"
-     inkscape:window-x="67"
+     inkscape:cx="-317.72983"
+     inkscape:cy="159.45549"
+     inkscape:window-x="74"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg20" />
-  <polygon
+     inkscape:current-layer="svg20"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="in" />
+  <path
      id="polygon4"
-     style="fill:#58c8fd;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     points="4015,6377 3307,5433 4251,3543 6141,3543 6614,4488 5669,6377 "
-     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
+     style="fill:#58c8fd;fill-opacity:1;stroke:#0a5ddd;stroke-width:10.4278;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 92.480469 15.082031 L 10.109375 206.24023 L 71.888672 301.71875 L 216.21289 301.71875 L 298.67188 110.66016 L 257.39844 15.082031 L 92.480469 15.082031 z M 133.75391 110.66016 L 216.21289 110.66016 L 174.93945 206.24023 L 92.480469 206.24023 L 133.75391 110.66016 z "
+     transform="matrix(12.502217,0,0,12.502217,2744,2979.6489)" />
   <polygon
      id="polygon6"
      style="fill:#ffffff;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -75,11 +77,6 @@
      id="polyline10"
      style="fill:none;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      points="7559,4488 8503,4488 "
-     transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
-  <polygon
-     id="polygon12"
-     style="fill:#ffffff;fill-opacity:1;stroke:#0a5ddd;stroke-width:111;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     points="4251,5433 5196,5433 5669,4488 4724,4488 "
      transform="matrix(1.090922,0,0,1.2645031,-737.28966,-1311.9354)" />
   <polygon
      id="polygon14"

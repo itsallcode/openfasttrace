@@ -13,7 +13,8 @@ The new change log now has one file per version to make maintaining and reading 
 
 ## Features
 
-* #338: Improved console report 
+* #338: Improved console report
+* #351: Added support for importing tags from Terraform files, thanks to [g-psantos](https://github.com/g-psantos)!
 
 ## Bugfixes
 

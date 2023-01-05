@@ -8,14 +8,13 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.7.0</revision>
+        <revision>3.7.1</revision>
         <java.version>11</java.version>
         <junit.version>5.9.0</junit.version>
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Empty default value for Java version < 18 -->
-        <test.args></test.args>
+        <test.args><!-- Empty default value for Java version < 18 --></test.args>
     </properties>
     <licenses>
         <license>
@@ -294,7 +293,7 @@
                 </executions>
                 <configuration>
                     <charset>UTF-8</charset>
-                    <doclint></doclint>
+                    <doclint><!-- Intentionally empty --></doclint>
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
                     <failOnWarnings>true</failOnWarnings>
@@ -507,7 +506,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore><!-- Intentionally empty --></ignore>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -532,7 +531,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2022.6</version>
+                            <version>1.2022.14</version>
                         </dependency>
                     </dependencies>
                 </plugin>

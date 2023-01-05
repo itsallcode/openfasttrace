@@ -11,3 +11,4 @@ This release fixes a couple of little bugs:
 ## Bugfixes
 
 * #359: Fixed transparency in the "O" of the OFT logo
+* #356: Fixed warning in CI build

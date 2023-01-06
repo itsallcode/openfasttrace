@@ -12,3 +12,7 @@ This release fixes a couple of little bugs:
 
 * #359: Fixed transparency in the "O" of the OFT logo
 * #356: Fixed warning in CI build
+
+## Refactoring
+
+* #256: Refactored unit tests to avoid lenient mocks where possible

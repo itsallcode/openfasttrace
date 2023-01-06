@@ -21,12 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 // [utest->dsn~import.short-coverage-tag~1]
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestTagImporterWithConfig
 {
     private static final String COVERED_ITEM_NAME1 = "covered_name1";
@@ -47,10 +44,10 @@ class TestTagImporterWithConfig
     void beforeEach()
     {
         this.inOrderListener = inOrder(this.listenerMock);
-        when(this.configMock.getCoveredItemArtifactType()).thenReturn(COVERED_ITEM_TYPE);
-        when(this.configMock.getCoveredItemNamePrefix()).thenReturn(null);
-        when(this.configMock.getTagArtifactType()).thenReturn(COVERING_ITEM_TYPE);
-        when(this.configMock.getCoveredItemNamePrefix()).thenReturn(null);
+        lenient().when(this.configMock.getCoveredItemArtifactType()).thenReturn(COVERED_ITEM_TYPE);
+        lenient().when(this.configMock.getCoveredItemNamePrefix()).thenReturn(null);
+        lenient().when(this.configMock.getTagArtifactType()).thenReturn(COVERING_ITEM_TYPE);
+        lenient().when(this.configMock.getCoveredItemNamePrefix()).thenReturn(null);
     }
 
     @Test

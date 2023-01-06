@@ -5,23 +5,19 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestTracer
 {
     private static final SpecificationItemId ID_A = SpecificationItemId.parseId("req~a~1");
@@ -34,9 +30,9 @@ class TestTracer
     @BeforeEach
     public void prepareTest()
     {
-        when(this.aMock.getId()).thenReturn(ID_A);
-        when(this.bMock.getId()).thenReturn(ID_B);
-        when(this.cMock.getId()).thenReturn(ID_C);
+        lenient().when(this.aMock.getId()).thenReturn(ID_A);
+        lenient().when(this.bMock.getId()).thenReturn(ID_B);
+        lenient().when(this.cMock.getId()).thenReturn(ID_C);
     }
 
     @Test

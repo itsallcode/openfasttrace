@@ -1,14 +1,12 @@
 package org.itsallcode.openfasttrace.core;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,9 +15,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-import org.itsallcode.openfasttrace.api.importer.ImporterService;
-import org.itsallcode.openfasttrace.api.importer.MultiFileImporter;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.core.exporter.ExporterService;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +24,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestOftRunner
 {
     private static final Path PATH = Paths.get("myPath");
@@ -66,20 +59,20 @@ class TestOftRunner
 
         oftRunner = new OftRunner(serviceFactoryMock);
 
-        when(serviceFactoryMock.createImporterService(any())).thenReturn(importerServiceMock);
-        when(importerServiceMock.createImporter()).thenReturn(multiFileImporterMock);
-        when(multiFileImporterMock.importAny(any())).thenReturn(multiFileImporterMock);
-        when(multiFileImporterMock.getImportedItems()).thenReturn(importedItems);
+        lenient().when(serviceFactoryMock.createImporterService(any())).thenReturn(importerServiceMock);
+        lenient().when(importerServiceMock.createImporter()).thenReturn(multiFileImporterMock);
+        lenient().when(multiFileImporterMock.importAny(any())).thenReturn(multiFileImporterMock);
+        lenient().when(multiFileImporterMock.getImportedItems()).thenReturn(importedItems);
 
-        when(serviceFactoryMock.createLinker(same(importedItems))).thenReturn(linkerMock);
-        when(linkerMock.link()).thenReturn(linkedItems);
+        lenient().when(serviceFactoryMock.createLinker(same(importedItems))).thenReturn(linkerMock);
+        lenient().when(linkerMock.link()).thenReturn(linkedItems);
 
-        when(serviceFactoryMock.createTracer()).thenReturn(tracerMock);
-        when(tracerMock.trace(same(linkedItems))).thenReturn(traceMock);
+        lenient().when(serviceFactoryMock.createTracer()).thenReturn(tracerMock);
+        lenient().when(tracerMock.trace(same(linkedItems))).thenReturn(traceMock);
 
-        when(serviceFactoryMock.createExporterService()).thenReturn(exporterServiceMock);
+        lenient().when(serviceFactoryMock.createExporterService()).thenReturn(exporterServiceMock);
 
-        when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
+        lenient().when(serviceFactoryMock.createReportService(any())).thenReturn(reportServiceMock);
     }
 
     @Test
@@ -92,7 +85,7 @@ class TestOftRunner
         assertDefaultSettings(arg.getValue());
     }
 
-    private void assertDefaultSettings(ImportSettings actual)
+    private void assertDefaultSettings(final ImportSettings actual)
     {
         assertThat(actual.getFilters().isAnyCriteriaSet(), is(false));
         assertThat(actual.getFilters().isArtifactTypeCriteriaSet(), is(false));
@@ -129,7 +122,7 @@ class TestOftRunner
         assertDefaultExportSettings(arg.getValue());
     }
 
-    private void assertDefaultExportSettings(ExportSettings settings)
+    private void assertDefaultExportSettings(final ExportSettings settings)
     {
         assertThat(settings.getNewline(), equalTo(Newline.UNIX));
         assertThat(settings.getOutputFormat(), equalTo("specobject"));

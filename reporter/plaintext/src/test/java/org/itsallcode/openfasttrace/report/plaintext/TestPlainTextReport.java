@@ -7,8 +7,8 @@ import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.mockito.Mockito.*;
 
-import java.nio.charset.StandardCharsets;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
@@ -18,11 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestPlainTextReport
 {
     private static final Newline NEWLINE_SEPARATOR = Newline.UNIX;
@@ -43,7 +40,6 @@ class TestPlainTextReport
     @Test
     void testReportLevel_Quiet_Ok()
     {
-        when(this.traceMock.hasNoDefects()).thenReturn(true);
         assertReportOutput(ReportVerbosity.QUIET);
     }
 
@@ -131,8 +127,6 @@ class TestPlainTextReport
     @Test
     void testReport_LevelFailures_Ok()
     {
-        when(this.traceMock.hasNoDefects()).thenReturn(true);
-        when(this.traceMock.count()).thenReturn(1);
         assertReportOutput(ReportVerbosity.FAILURES);
     }
 
@@ -178,20 +172,20 @@ class TestPlainTextReport
         final LinkedSpecificationItem itemDMock = createLinkedItemMock("req~zoo~1",
                 ItemStatus.REJECTED, "desc D1", 3, 7, 1, 2, 3);
 
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
-        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UTEST)));
-        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UMAN));
-        when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
-        when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(UTEST)));
-        when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
-        when(itemDMock.getUncoveredArtifactTypes()).thenReturn(List.of(IMPL, UTEST));
-        when(this.traceMock.getDefectItems())
+        lenient().when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        lenient().when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        lenient().when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UTEST)));
+        lenient().when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UMAN));
+        lenient().when(itemCMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        lenient().when(itemCMock.getOverCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(UTEST)));
+        lenient().when(itemDMock.getCoveredArtifactTypes()).thenReturn(Collections.emptySet());
+        lenient().when(itemDMock.getUncoveredArtifactTypes()).thenReturn(List.of(IMPL, UTEST));
+        lenient().when(this.traceMock.getDefectItems())
                 .thenReturn(List.of(itemAMock, itemBMock, itemCMock, itemDMock));
-        when(itemAMock.getLocation()).thenReturn(Location.create("/tmp/foo.md", 1));
-        when(itemBMock.getLocation()).thenReturn(Location.create("/tmp/bar.md", 2));
-        when(itemCMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 13));
-        when(itemDMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 17));
+        lenient().when(itemAMock.getLocation()).thenReturn(Location.create("/tmp/foo.md", 1));
+        lenient().when(itemBMock.getLocation()).thenReturn(Location.create("/tmp/bar.md", 2));
+        lenient().when(itemCMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 13));
+        lenient().when(itemDMock.getLocation()).thenReturn(Location.create("/tmp/zoo.xml", 17));
     }
 
     // [utest->dsn~reporting.plain-text.link-details~1]
@@ -257,14 +251,14 @@ class TestPlainTextReport
                 "This is a failure.", //
                 0, 1, 3, 2, 4);
 
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
-        when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
-        when(itemAMock.getTags()).thenReturn(List.of("tag", "another tag"));
-        when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UMAN)));
-        when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UTEST));
+        lenient().when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+        lenient().when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
+        lenient().when(itemAMock.getTags()).thenReturn(List.of("tag", "another tag"));
+        lenient().when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL, UMAN)));
+        lenient().when(itemBMock.getUncoveredArtifactTypes()).thenReturn(List.of(UTEST));
         prepareLinks(itemBMock);
-        when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
-        when(this.traceMock.getDefectItems()).thenReturn(List.of(itemBMock));
+        lenient().when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
+        lenient().when(this.traceMock.getDefectItems()).thenReturn(List.of(itemBMock));
     }
 
     private void prepareLinks(final LinkedSpecificationItem itemMock)
@@ -300,16 +294,16 @@ class TestPlainTextReport
     {
         final SpecificationItemId id = SpecificationItemId.parseId(idAsText);
         final LinkedSpecificationItem linkedItemMock = mock(LinkedSpecificationItem.class);
-        when(linkedItemMock.getDescription()).thenReturn(description);
-        when(linkedItemMock.getId()).thenReturn(id);
-        when(linkedItemMock.getStatus()).thenReturn(status);
-        when(linkedItemMock.isDefect())
+        lenient().when(linkedItemMock.getDescription()).thenReturn(description);
+        lenient().when(linkedItemMock.getId()).thenReturn(id);
+        lenient().when(linkedItemMock.getStatus()).thenReturn(status);
+        lenient().when(linkedItemMock.isDefect())
                 .thenReturn(incomingBadLinks + outgoingBadLinks + duplicates > 0);
-        when(linkedItemMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
-        when(linkedItemMock.countIncomingLinks()).thenReturn(incomingLinks);
-        when(linkedItemMock.countDuplicateLinks()).thenReturn(duplicates);
-        when(linkedItemMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
-        when(linkedItemMock.countOutgoingLinks()).thenReturn(outgoingLinks);
+        lenient().when(linkedItemMock.countIncomingBadLinks()).thenReturn(incomingBadLinks);
+        lenient().when(linkedItemMock.countIncomingLinks()).thenReturn(incomingLinks);
+        lenient().when(linkedItemMock.countDuplicateLinks()).thenReturn(duplicates);
+        lenient().when(linkedItemMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
+        lenient().when(linkedItemMock.countOutgoingLinks()).thenReturn(outgoingLinks);
         return linkedItemMock;
     }
 
@@ -335,7 +329,6 @@ class TestPlainTextReport
         final LinkedSpecificationItem itemBMock = createLinkedItemMock("b~b~2", //
                 "Yet another" + separator + "multiline text", //
                 0, 0, 0, 0, 0);
-        when(itemAMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -364,7 +357,7 @@ class TestPlainTextReport
     {
         final LinkedSpecificationItem itemMock = createLinkedItemMock("req~item.with-source~77",
                 "Description", 0, 1, 0, 0, 0);
-        when(itemMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+
         when(itemMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
         final LinkedSpecificationItem other = createOtherItemMock("dsn~the-other~1");
         when(other.getLocation()).thenReturn(Location.create("baz/zoo", 10));

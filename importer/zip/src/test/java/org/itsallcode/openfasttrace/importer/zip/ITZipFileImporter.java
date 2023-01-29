@@ -52,7 +52,7 @@ class ITZipFileImporter
         this.actualFileContent = new ArrayList<>();
         this.zipFile = tempDir.resolve("test.zip").toFile();
         this.zipOutputStream = null;
-        when(this.delegateImporterMock.importFile(any())).thenAnswer(invocation -> {
+        lenient().when(this.delegateImporterMock.importFile(any())).thenAnswer(invocation -> {
             final InputFile inputFile = invocation.getArgument(0);
             this.actualFileContent.add(inputFile.createReader().lines().collect(joining("\n")));
             return null;

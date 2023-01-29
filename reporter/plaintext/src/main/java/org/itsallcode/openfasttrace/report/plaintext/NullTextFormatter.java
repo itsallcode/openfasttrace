@@ -10,7 +10,7 @@ class NullTextFormatter implements TextFormatter {
     /**
      * Create a new instance of a {@link NullTextFormatter}.
      */
-    public NullTextFormatter() {
+    NullTextFormatter() {
         // Added for JavaDoc.
     }
 

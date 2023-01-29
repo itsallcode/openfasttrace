@@ -10,7 +10,7 @@ final class ConsoleColorFormatter implements TextFormatter {
     /**
      * Create a new instance of a {@link ConsoleColorFormatter}.
      */
-    public ConsoleColorFormatter() {
+    ConsoleColorFormatter() {
         // Added for JavaDoc.
     }
 

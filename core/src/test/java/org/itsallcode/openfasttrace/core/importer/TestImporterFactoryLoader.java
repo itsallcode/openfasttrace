@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
@@ -19,14 +20,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 /**
  * Test for {@link ImporterFactoryLoader}
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestImporterFactoryLoader
 {
     @Mock
@@ -49,9 +47,9 @@ class TestImporterFactoryLoader
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
         this.file = RealFileInput.forPath(Paths.get("dir", "name"));
 
-        when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
-        when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);
-        when(this.unsupportedFactory.supportsFile(same(this.file))).thenReturn(false);
+        lenient().when(this.supportedFactory1.supportsFile(same(this.file))).thenReturn(true);
+        lenient().when(this.supportedFactory2.supportsFile(same(this.file))).thenReturn(true);
+        lenient().when(this.unsupportedFactory.supportsFile(same(this.file))).thenReturn(false);
     }
 
     @Test

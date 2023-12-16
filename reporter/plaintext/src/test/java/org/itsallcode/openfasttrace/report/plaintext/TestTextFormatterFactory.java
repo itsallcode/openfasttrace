@@ -1,13 +1,12 @@
 package org.itsallcode.openfasttrace.report.plaintext;
 
-import org.itsallcode.openfasttrace.api.ColorScheme;
-import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.itsallcode.openfasttrace.api.ColorScheme.*;
 import static org.itsallcode.openfasttrace.report.plaintext.TextFormatterFactory.createFormatter;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 class TestTextFormatterFactory {
     @Test

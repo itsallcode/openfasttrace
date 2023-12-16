@@ -1,11 +1,10 @@
 package org.itsallcode.openfasttrace.testutil.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 /**
  * Base class for {@link ImporterFactory} tests.
@@ -28,7 +25,6 @@ import org.mockito.quality.Strictness;
  *            type of the factory under test
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
     @Mock
@@ -37,7 +33,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @BeforeEach
     public void initMocks()
     {
-        when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
+        lenient().when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
 
     @Test

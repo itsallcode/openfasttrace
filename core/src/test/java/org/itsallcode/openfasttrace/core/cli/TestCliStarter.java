@@ -7,12 +7,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.itsallcode.junit.sysextensions.AssertExit;
 import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
+import org.itsallcode.openfasttrace.testutil.TestAssumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(ExitGuard.class)
 class TestCliStarter
 {
+    @BeforeAll
+    static void assumeSecurityManagerSupported()
+    {
+        TestAssumptions.assumeSecurityManagerSupported();
+    }
+
     @Test
     void testRunWithoutArguments()
     {

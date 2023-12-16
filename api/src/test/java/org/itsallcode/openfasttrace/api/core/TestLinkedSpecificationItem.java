@@ -7,8 +7,7 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.itsallcode.openfasttrace.api.core.SampleArtifactTypes.*;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 // [utest->dsn~linked-specification-item~1]
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestLinkedSpecificationItem
 {
     private LinkedSpecificationItem linkedItem;
@@ -39,10 +35,10 @@ class TestLinkedSpecificationItem
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
         this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);
         this.otherLinkedItem = new LinkedSpecificationItem(this.otherItemMock);
-        when(this.itemMock.getStatus()).thenReturn(ItemStatus.APPROVED);
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
-        when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
-        when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
+        lenient().when(this.itemMock.getStatus()).thenReturn(ItemStatus.APPROVED);
+        lenient().when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("a~item~1"));
+        lenient().when(this.coveredItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~covered~1"));
+        lenient().when(this.otherItemMock.getId()).thenReturn(SpecificationItemId.parseId("a~other~1"));
     }
 
     @Test
@@ -136,7 +132,6 @@ class TestLinkedSpecificationItem
     @Test
     void testGetDeepCoverageStatus_MissingCoverage()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(DSN));
         when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
         this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         assertItemDeepCoverageStatus(this.linkedItem, DeepCoverageStatus.UNCOVERED);
@@ -247,7 +242,6 @@ class TestLinkedSpecificationItem
     {
         final String expectedReturn = "title";
         when(this.itemMock.getTitle()).thenReturn(expectedReturn);
-        when(this.itemMock.getId()).thenReturn(SpecificationItemId.parseId("foo~wrong-return~1"));
         assertThat(this.linkedItem.getTitleWithFallback(), equalTo(expectedReturn));
     }
 

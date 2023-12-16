@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     @BeforeEach
     public void configureMock()
     {
-        when(this.contextMock.getImporterService()).thenReturn(this.importerServiceMock);
+        lenient().when(this.contextMock.getImporterService()).thenReturn(this.importerServiceMock);
     }
 
     @Test

@@ -1,10 +1,9 @@
 package org.itsallcode.openfasttrace.core;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWithoutVersion;
@@ -13,13 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestLinkedItemIndex
 {
     private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
@@ -38,10 +34,10 @@ class TestLinkedItemIndex
     @BeforeEach
     public void prepareTest()
     {
-        when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
-        when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
-        when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
-        when(this.duplicateIdIgnoringVersionItemMock.getId())
+        lenient().when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
+        lenient().when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
+        lenient().when(this.uniqueIdItemMock.getId()).thenReturn(UNIQUE_ID);
+        lenient().when(this.duplicateIdIgnoringVersionItemMock.getId())
                 .thenReturn(DUPLICATE_ID_INGORING_VERSION);
     }
 

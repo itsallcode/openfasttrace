@@ -1,4 +1,4 @@
-# OpenFastTrace 3.7.1, released 2023-01-05
+# OpenFastTrace 3.7.1, released 2023-12-16
 
 Code name: Bugfixes on top of 3.7.0
 

@@ -10,11 +10,13 @@
     <properties>
         <revision>3.7.1</revision>
         <java.version>11</java.version>
-        <junit.version>5.9.1</junit.version>
+        <junit.version>5.10.1</junit.version>
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <test.args><!-- Empty default value for Java version < 18 --></test.args>
+        <sonar.organization>itsallcode</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <licenses>
         <license>
@@ -202,7 +204,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>4.11.0</version>
+                <version>5.9.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -220,7 +222,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.12.3</version>
+                <version>3.15.6</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -259,6 +261,25 @@
     </profiles>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>${java.version}</version>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

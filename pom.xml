@@ -6,6 +6,10 @@
     <artifactId>openfasttrace-root</artifactId>
     <name>OpenFastTrace Root Project</name>
     <packaging>pom</packaging>
+    <properties>
+        <sonar.organization>itsallcode</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
     <modules>
         <module>parent</module>
         <module>api</module>

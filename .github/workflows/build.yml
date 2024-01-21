@@ -41,8 +41,8 @@ jobs:
         distribution: 'temurin'
         java-version: |
           11
-          21
           17
+          21
         cache: 'maven'
 
     - name: Cache SonarQube packages

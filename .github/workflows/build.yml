@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  matrix-build:
 
     strategy:
       fail-fast: true
@@ -87,3 +87,10 @@ jobs:
         name: self-tracing-report
         path: target/self-trace-report.html
         if-no-files-found: error
+
+
+  build:
+    needs: matrix-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successful"

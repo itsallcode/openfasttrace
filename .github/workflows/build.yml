@@ -54,7 +54,7 @@ jobs:
         restore-keys: ${{ runner.os }}-sonar
 
     - name: Build with Java ${{ matrix.java }}
-      run: mvn --batch-mode -Djava.version=${{ matrix.java }} clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+      run: mvn --batch-mode "-Djava.version=${{ matrix.java }}" clean org.jacoco:jacoco-maven-plugin:prepare-agent install
 
     - name: Sonar analysis
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}

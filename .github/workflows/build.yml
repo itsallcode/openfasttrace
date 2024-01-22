@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  matrix-build:
 
     strategy:
       fail-fast: true
@@ -17,7 +17,7 @@ jobs:
           - os: ubuntu-latest
             java: 17
           - os: ubuntu-latest
-            java: 19
+            java: 21
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-os-${{ matrix.os }}-java-${{ matrix.java }}
@@ -39,34 +39,35 @@ jobs:
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: ${{ matrix.java }}
+        java-version: |
+          11
+          17
+          21
         cache: 'maven'
 
     - name: Cache SonarQube packages
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
 
-    - name: Build with Maven
-      run: mvn --errors --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install
-      env:
-        MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+    - name: Build with Java ${{ matrix.java }}
+      shell: bash
+      run: |
+        mvn --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
+            -Djava.version=${{ matrix.java }}
 
     - name: Sonar analysis
+      shell: bash
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
-        mvn --errors --batch-mode \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=itsallcode \
-            -Dsonar.login=$SONAR_TOKEN \
-            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.token=$SONAR_TOKEN
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 
     - name: Archive oft binary
       uses: actions/upload-artifact@v4
@@ -86,3 +87,10 @@ jobs:
         name: self-tracing-report
         path: target/self-trace-report.html
         if-no-files-found: error
+
+
+  build:
+    needs: matrix-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successful"

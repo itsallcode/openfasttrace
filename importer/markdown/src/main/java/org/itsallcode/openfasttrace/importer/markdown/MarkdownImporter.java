@@ -326,9 +326,9 @@ class MarkdownImporter implements Importer
     private void addTag()
     {
         final String tags = this.stateMachine.getLastToken();
-        for (final String tag : tags.split(",\\s*"))
+        for (final String tag : tags.split(","))
         {
-            this.listener.addTag(tag);
+            this.listener.addTag(tag.trim());
         }
     }
 

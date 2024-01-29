@@ -301,9 +301,9 @@ class MarkdownImporter implements Importer
     private void addNeeds()
     {
         final String artifactTypes = this.stateMachine.getLastToken();
-        for (final String artifactType : artifactTypes.split(",\\s*"))
+        for (final String artifactType : artifactTypes.split(","))
         {
-            this.listener.addNeededArtifactType(artifactType);
+            this.listener.addNeededArtifactType(artifactType.trim());
         }
     }
 

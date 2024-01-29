@@ -86,7 +86,7 @@ class TestMarkdownImporter
                 + COMMENT_LINE1 + "\n" //
                 + COMMENT_LINE2 + "\n" //
                 + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
-                + ", " + NEEDS_ARTIFACT_TYPE2;
+                + " , " + NEEDS_ARTIFACT_TYPE2 + " ";
     }
 
     private void runImporterOnText(final String text)

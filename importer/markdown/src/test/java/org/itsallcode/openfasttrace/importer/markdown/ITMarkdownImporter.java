@@ -25,6 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class ITMarkdownImporter
 {
+    private static final String NL = System.lineSeparator();
     private static final String TAG2 = "Tag2";
     private static final String TAG1 = "Tag1";
     private static final String FILENAME = "file name";
@@ -34,9 +35,9 @@ class ITMarkdownImporter
     {
         assertThat(runImporterOnText(createCompleteSpecificationItemInMarkdownFormat()),
                 AutoMatcher.contains(SpecificationItem.builder().id(ID1).title("Requirement Title")
-                        .comment("Comment\nMore comment")
-                        .description("Description\n\nMore description")
-                        .rationale("Rationale\nMore rationale")
+                        .comment("Comment" + NL + "More comment")
+                        .description("Description" + NL + NL + "More description")
+                        .rationale("Rationale" + NL + "More rationale")
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
                         .addCoveredId(SpecificationItemId.parseId(COVERED_ID1))
                         .addCoveredId(SpecificationItemId.parseId(COVERED_ID2))
@@ -118,9 +119,9 @@ class ITMarkdownImporter
                 AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId(LEGACY_ID))
                         .title("Requirement Title")
                         .status(ItemStatus.PROPOSED)
-                        .comment("Comment\nMore comment")
-                        .description("Description\n\nMore description")
-                        .rationale("Rationale\nMore rationale")
+                        .comment("Comment" + NL + "More comment")
+                        .description("Description" + NL + NL + "More description")
+                        .rationale("Rationale" + NL + "More rationale")
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
                         .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID1))
                         .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID2))
@@ -242,6 +243,5 @@ class ITMarkdownImporter
                 Arguments.of("Tags:\n * req\n * dsn\n", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req \n\t* dsn ", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")));
-
     }
 }

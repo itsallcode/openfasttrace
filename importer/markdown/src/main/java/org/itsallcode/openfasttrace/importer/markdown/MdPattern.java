@@ -37,7 +37,7 @@ enum MdPattern
             + SpecificationItemId.ID_PATTERN
             + ").*?"),
     ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
-    NEEDS_INT("Needs:\\s*(\\w+(?:,\\s*\\w+)*)"),
+    NEEDS_INT("Needs:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     NEEDS("Needs:\\s*"),
     NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "(?:.*\\W)?" //
@@ -46,7 +46,7 @@ enum MdPattern
     NOT_EMPTY("([^\n\r]+)"),
     RATIONALE("Rationale:\\s*"),
     STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
-    TAGS_INT("Tags:\\s*(\\w+(?:,\\s*\\w+)*)"),
+    TAGS_INT("Tags:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     TAGS("Tags:\\s*"),
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "\\s*" //

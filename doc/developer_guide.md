@@ -134,19 +134,19 @@ Add the following to your `~/.m2/settings.xml`:
 ### Prepare the Release
 
 1. Checkout the `main` branch.
-1. Create a new "prepare-release" branch.
-1. Update version in
-  * `openfasttrace-parent/pom.xml` (`revision` property)
-  * `README.md`
-  * `doc/developer_guide.md`
-1. Add changes in new version to `CHANGELOG.md` and update the release date.
-1. Verify that build runs successfully:
+2. Create a new "prepare-release" branch.
+3. Update version in
+    * `openfasttrace-parent/pom.xml` (`revision` property)
+    * `README.md`
+    * `doc/developer_guide.md`
+4. Add changes in new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
+5. Verify that build runs successfully:
 
     ```bash
     mvn clean verify
     ```
-1. Commit and push changes.
-1. Create a new Pull Request, have it reviewed and merged.
+6. Commit and push changes.
+7. Create a new Pull Request, have it reviewed and merged.
 
 ### Perform the Release
 

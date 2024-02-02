@@ -3,13 +3,10 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMismatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.*;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
@@ -41,18 +38,33 @@ class TestMarkdownImporter
     @Test
     void testIdentifyId()
     {
-        assertMatch(MdPattern.ID, "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
-                "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
-                "`req~test1~1`arbitrary text");
-        assertMismatch(MdPattern.ID, "test~1", "req-test~1", "req~4test~1");
+        assertAll(
+                () -> assertMatch(MdPattern.ID, "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
+                        "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
+                        "`req~test1~1`arbitrary text"),
+                () -> assertMismatch(MdPattern.ID, "test~1", "req-test~1", "req~4test~1"));
     }
 
     // [utest->dsn~md.specification-item-title~1]
     @Test
     void testIdentifyTitle()
     {
-        assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title");
-        assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title");
+        assertAll(() -> assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title"),
+                () -> assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title"));
+    }
+
+    @Test
+    void testIdentifyNeeds()
+    {
+        assertAll(() -> assertMatch(MdPattern.NEEDS_INT, "Needs: req, dsn", "Needs:req,dsn", "Needs:  \treq , dsn "),
+                () -> assertMismatch(MdPattern.NEEDS_INT, "Needs:"));
+    }
+
+    @Test
+    void testIdentifyTags()
+    {
+        assertAll(() -> assertMatch(MdPattern.TAGS_INT, "Tags: req, dsn", "Tags:req,dsn", "Tags:  \treq , dsn "),
+                () -> assertMismatch(MdPattern.TAGS_INT, "Tags:"));
     }
 
     @Test
@@ -86,7 +98,7 @@ class TestMarkdownImporter
                 + COMMENT_LINE1 + "\n" //
                 + COMMENT_LINE2 + "\n" //
                 + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
-                + ", " + NEEDS_ARTIFACT_TYPE2;
+                + " , " + NEEDS_ARTIFACT_TYPE2 + " ";
     }
 
     private void runImporterOnText(final String text)

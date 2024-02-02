@@ -3,25 +3,21 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.List;
 
 import javax.xml.stream.*;
 
+import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 class TestSpecobjectExportImport
 {
@@ -32,7 +28,7 @@ class TestSpecobjectExportImport
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .description("the description") //
-                .location(Location.create("dummy.xml", 4)) //
+                .location(location(4)) //
                 .build();
         assertExportAndImport(item);
     }
@@ -51,7 +47,7 @@ class TestSpecobjectExportImport
                 .addDependOnId("req", "depend-on", 1) //
                 .addNeedsArtifactType("impl") //
                 .addTag("the tag") //
-                .location(Location.create("dummy.xml", 4)) //
+                .location(location(4)) //
                 .build();
         assertExportAndImport(item);
     }
@@ -65,7 +61,7 @@ class TestSpecobjectExportImport
                 .description("the description") //
                 .rationale("the rationale") //
                 .comment("the comment") //
-                .location(Location.create("dummy.xml", 4)) //
+                .location(location(4)) //
                 .build();
         final SpecificationItem itemB = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("baz", "zoo", 2)) //
@@ -73,9 +69,14 @@ class TestSpecobjectExportImport
                 .description("another\ndescription") //
                 .rationale("another\nrationale") //
                 .comment("another\ncomment") //
-                .location(Location.create("dummy.xml", 5)) //
+                .location(location(5)) //
                 .build();
         assertExportAndImport(itemA, itemB);
+    }
+
+    private org.itsallcode.openfasttrace.api.core.Location location(final int line)
+    {
+        return org.itsallcode.openfasttrace.api.core.Location.create("dummy.xml", line);
     }
 
     private void assertExportAndImport(final SpecificationItem... items)

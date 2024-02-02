@@ -5,15 +5,12 @@ import static java.util.stream.Collectors.toList;
 import java.util.Collection;
 import java.util.stream.StreamSupport;
 
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.hamcrest.*;
 import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
+import org.itsallcode.matcher.config.ConfigurableMatcher;
+import org.itsallcode.matcher.config.MatcherConfig;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-
-import com.github.hamstercommunity.matcher.config.ConfigurableMatcher;
-import com.github.hamstercommunity.matcher.config.MatcherConfig;
 
 /**
  * {@link Matcher} for {@link SpecificationItem}

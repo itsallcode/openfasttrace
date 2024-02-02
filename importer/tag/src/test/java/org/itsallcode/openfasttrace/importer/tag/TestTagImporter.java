@@ -2,7 +2,6 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -13,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.zip.CRC32;
 
+import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -21,8 +21,6 @@ import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 // [utest->dsn~import.full-coverage-tag~1]
 class TestTagImporter
@@ -304,7 +302,7 @@ class TestTagImporter
     }
 
     private static SpecificationItem itemWithReadableName(final String artifactType, final int lineNumber,
-            final SpecificationItemId coveredId, List<String> neededArtifactTypes)
+            final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 coveredId.getName(), 0);
@@ -317,7 +315,7 @@ class TestTagImporter
     }
 
     private static SpecificationItem item(final String artifactType, final int lineNumber,
-            final int counter, final SpecificationItemId coveredId, List<String> neededArtifactTypes)
+            final int counter, final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 generateName(coveredId, lineNumber, counter), 0);

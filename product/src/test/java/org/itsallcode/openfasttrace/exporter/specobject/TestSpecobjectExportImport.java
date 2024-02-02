@@ -3,25 +3,22 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.List;
 
 import javax.xml.stream.*;
+import javax.xml.stream.Location;
 
+import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.itsallcode.openfasttrace.testutil.xml.IndentingXMLStreamWriter;
 import org.junit.jupiter.api.Test;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 class TestSpecobjectExportImport
 {

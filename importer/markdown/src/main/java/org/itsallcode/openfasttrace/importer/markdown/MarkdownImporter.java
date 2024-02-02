@@ -8,9 +8,7 @@ import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.Importer;
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 class MarkdownImporter implements Importer
@@ -42,10 +40,10 @@ class MarkdownImporter implements Importer
         transition(SPEC_ITEM  , DEPENDS    , MdPattern.DEPENDS    , () -> {}                                              ),
         transition(SPEC_ITEM  , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                                        ),
         transition(SPEC_ITEM  , NEEDS      , MdPattern.NEEDS      , () -> {}                                              ),
-        transition(SPEC_ITEM  , DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                                ),
-        transition(SPEC_ITEM  , DESCRIPTION, MdPattern.NOT_EMPTY  , this::beginDescription                                ),
         transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS_INT   , this::addTag                                          ),
         transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS       , () -> {}                                              ),
+        transition(SPEC_ITEM  , DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                                ),
+        transition(SPEC_ITEM  , DESCRIPTION, MdPattern.NOT_EMPTY  , this::beginDescription                                ),
     
         transition(DESCRIPTION, SPEC_ITEM  , MdPattern.ID         , () -> {endDescription(); beginItem();}                ),
         transition(DESCRIPTION, TITLE      , MdPattern.TITLE      , () -> {endDescription(); endItem(); rememberTitle(); }),

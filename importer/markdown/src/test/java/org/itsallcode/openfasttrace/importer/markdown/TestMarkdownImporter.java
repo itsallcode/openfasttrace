@@ -3,13 +3,9 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMismatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.file.Paths;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
@@ -53,6 +49,20 @@ class TestMarkdownImporter
     {
         assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title");
         assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title");
+    }
+
+    @Test
+    void testIdentifyNeeds()
+    {
+        assertMatch(MdPattern.NEEDS_INT, "Needs: req, dsn", "Needs:req,dsn", "Needs:  \treq , dsn ");
+        assertMismatch(MdPattern.NEEDS_INT, "Needs:");
+    }
+
+    @Test
+    void testIdentifyTags()
+    {
+        assertMatch(MdPattern.TAGS_INT, "Tags: req, dsn", "Tags:req,dsn", "Tags:  \treq , dsn ");
+        assertMismatch(MdPattern.TAGS_INT, "Tags:");
     }
 
     @Test

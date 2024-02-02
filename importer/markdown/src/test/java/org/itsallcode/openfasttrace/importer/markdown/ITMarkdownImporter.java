@@ -159,10 +159,6 @@ class ITMarkdownImporter
                 + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
                 + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
                 + "\nTags: " + TAG1 + ", " + TAG2;
-
-        // + "\nTags:\n" //
-        // + " * " + TAG1 + "\n" //
-        // + " + " + TAG2 + "";
     }
 
     // [utest->dsn~md.artifact-forwarding-notation~1]

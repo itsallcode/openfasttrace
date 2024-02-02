@@ -137,11 +137,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         {
             return false;
         }
-        if ((other.revision != REVISION_WILDCARD) && (this.revision != other.revision))
-        {
-            return false;
-        }
-        return true;
+        return (other.revision == REVISION_WILDCARD) || (this.revision == other.revision);
     }
 
     @Override

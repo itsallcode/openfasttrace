@@ -100,10 +100,6 @@ public final class TracedLink
         {
             return false;
         }
-        if (this.status != other.status)
-        {
-            return false;
-        }
-        return true;
+        return this.status == other.status;
     }
 }

@@ -40,6 +40,13 @@ Sonarcloud status:
 * [Command Line Usage](core/src/main/resources/usage.txt)
 * [Design](doc/spec/design.md)
 * [System Requirements](doc/spec/system_requirements.md)
+* Demo scripts for presenting OpenFastTrace and it's features
+  * Elevator pitch
+    > Requirements define your product. They ensure that the user needs are met.
+    >
+    > OFT verifies the integrity of your product's requirement structure, thus avoiding the costs of common mistakes like forgetting to implement requirements or to remove obsolete ones.
+  * [OpenFastTrace Presentation](https://github.com/itsallcode/openfasttrace-demo/blob/main/OpenFastTrace_in_20_minutes.odp) (LibreOffice, 20 minutes)
+  * [OpenFastTrace Live Demo Script](https://github.com/itsallcode/openfasttrace-demo/blob/main/oft-live-demo-medium.md) (Markdown, 1 hour)
 
 ## Using OpenFastTrace
 

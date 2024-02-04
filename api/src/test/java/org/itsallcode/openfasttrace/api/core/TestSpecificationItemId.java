@@ -5,10 +5,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -58,7 +59,7 @@ class TestSpecificationItemId
     }
 
     @Test
-    void testParseId_umautName()
+    void testParseId_umlautName()
     {
         final SpecificationItemId id = parseId("feat~änderung~1");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
@@ -84,49 +85,20 @@ class TestSpecificationItemId
                 "Error parsing version number from specification item ID: \"feat~foo~999999999999999999999999999999999999999\""));
     }
 
-    @Test
-    void testParseIdFailsForWildcardRevision()
+    @ParameterizedTest
+    @CsvSource(
+    { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1", "req~1foo~1", "req~.foo~1", "req~foo~-1",
+            // Wildcard revision:
+            "feat~foo~-2147483648" })
+    void testParseId_mustFailForIllegalIds(final String illegalId)
     {
+
         final IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> parseId("feat~foo~" + SpecificationItemId.REVISION_WILDCARD));
+                () -> parseId(illegalId));
         assertThat(exception.getMessage(),
-                equalTo("String \"feat~foo~-2147483648\" cannot be parsed to a specification item ID"));
+                equalTo("String \"" + illegalId + "\" cannot be parsed to a specification item ID"));
     }
 
-    @Test
-    void testParseIdFailsForNegativeRevision()
-    {
-        final IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> parseId("feat~foo~-1"));
-        assertThat(exception.getMessage(),
-                equalTo("String \"feat~foo~-1\" cannot be parsed to a specification item ID"));
-    }
-
-    @Test
-    void testParseId_mustFailForIllegalIds()
-    {
-        final String[] negatives = { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1",
-                "req~1foo~1", "req~.foo~1", "req~foo~-1" };
-
-        for (final String sample : negatives)
-        {
-            assertParsingExceptionOnIllegalSpecificationItemId(sample);
-        }
-    }
-
-    private void assertParsingExceptionOnIllegalSpecificationItemId(final String sample)
-    {
-        try
-        {
-            parseId(sample);
-            fail("Expected exception trying to parse \"" + sample
-                    + "\" into a specification item ID");
-        }
-        catch (final IllegalStateException exception)
-        {
-            // this block intentionally left empty
-        }
-    }
 
     @Test
     void testToRevisionWildcard()

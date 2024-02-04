@@ -510,22 +510,12 @@
                             <pluginExecutions>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            flatten-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.1.0,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>flatten</goal>
-                                        </goals>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-toolchains-plugin</artifactId>
+                                        <versionRange>*</versionRange>
+                                        <goals><goal>toolchain</goal></goals>
                                     </pluginExecutionFilter>
-                                    <action>
-                                        <ignore><!-- Intentionally empty --></ignore>
-                                    </action>
+                                    <action><ignore/></action>
                                 </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>

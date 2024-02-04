@@ -22,7 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-
 class ITMarkdownImporter
 {
     private static final String NL = System.lineSeparator();
@@ -239,5 +238,21 @@ class ITMarkdownImporter
                 Arguments.of("Tags:\n * req\n * dsn\n", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req \n\t* dsn ", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")));
+    }
+
+    @Test
+    void testItemIdSupportsUmlauts()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "`### Die Implementierung muss den Zustand einzelner Zellen ändern.\n"
+                        + "`req~zellzustandsänderung~1`\n"
+                        + "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.\n"
+                        + "Needs: arch");
+        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+                .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
+                .description(
+                        "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.")
+                .location("file name", 2).addNeedsArtifactType("arch")
+                .build()));
     }
 }

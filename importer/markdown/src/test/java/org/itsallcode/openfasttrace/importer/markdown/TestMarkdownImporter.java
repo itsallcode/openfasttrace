@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMismatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
@@ -17,6 +16,8 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,36 +36,76 @@ class TestMarkdownImporter
     Reader readerMock;
 
     // [utest~md.specification_item_id_format~1]
-    @Test
-    void testIdentifyId()
+    @ParameterizedTest
+    @CsvSource(
+    { "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
+            "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
+            "`req~test1~1`arbitrary text",
+            // See https://github.com/itsallcode/openfasttrace/issues/366
+            "req~zellzustandsänderung~1", "req~öäüßÖÄ~1"
+    })
+    void testIdentifyId(final String text)
     {
-        assertAll(
-                () -> assertMatch(MdPattern.ID, "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
-                        "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
-                        "`req~test1~1`arbitrary text"),
-                () -> assertMismatch(MdPattern.ID, "test~1", "req-test~1", "req~4test~1"));
+        assertMatch(MdPattern.ID, text);
+    }
+
+    // [utest~md.specification_item_id_format~1]
+    @ParameterizedTest
+    @CsvSource(
+    { "test~1", "req-test~1", "req~4test~1", "räq~test~1" })
+    void testIdentifyNonId(final String text)
+    {
+        assertMismatch(MdPattern.ID, text);
     }
 
     // [utest->dsn~md.specification-item-title~1]
-    @Test
-    void testIdentifyTitle()
+    @ParameterizedTest
+    @CsvSource(
+    { "#Title", "# Title", "###### Title", "#   Title", "# Änderung" })
+    void testIdentifyTitle(final String text)
     {
-        assertAll(() -> assertMatch(MdPattern.TITLE, "#Title", "# Title", "###### Title", "#   Title"),
-                () -> assertMismatch(MdPattern.TITLE, "Title", "Title #", " # Title"));
+        assertMatch(MdPattern.TITLE, text);
     }
 
-    @Test
-    void testIdentifyNeeds()
+    // [utest->dsn~md.specification-item-title~1]
+    @ParameterizedTest
+    @CsvSource(
+    { "Title", "Title #", "' # Title'" })
+    void testIdentifyNonTitle(final String text)
     {
-        assertAll(() -> assertMatch(MdPattern.NEEDS_INT, "Needs: req, dsn", "Needs:req,dsn", "Needs:  \treq , dsn "),
-                () -> assertMismatch(MdPattern.NEEDS_INT, "Needs:"));
+        assertMismatch(MdPattern.TITLE, text);
     }
 
-    @Test
-    void testIdentifyTags()
+    @ParameterizedTest
+    @CsvSource(
+    { "Needs: req, dsn", "Needs:req,dsn", "'Needs:  \treq , dsn '" })
+    void testIdentifyNeeds(final String text)
     {
-        assertAll(() -> assertMatch(MdPattern.TAGS_INT, "Tags: req, dsn", "Tags:req,dsn", "Tags:  \treq , dsn "),
-                () -> assertMismatch(MdPattern.TAGS_INT, "Tags:"));
+        assertMatch(MdPattern.NEEDS_INT, text);
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+    { "Needs:", "#Needs: abc", "' Needs: abc'", "Needs: önderung" })
+    void testIdentifyNonNeeds(final String text)
+    {
+        assertMismatch(MdPattern.NEEDS_INT, text);
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+    { "Tags: req, dsn", "Tags:req,dsn", "'Tags:  \treq , dsn '" })
+    void testIdentifyTags(final String text)
+    {
+        assertMatch(MdPattern.TAGS_INT, text);
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung" })
+    void testIdentifyNonTags(final String text)
+    {
+        assertMismatch(MdPattern.TAGS_INT, text);
     }
 
     @Test

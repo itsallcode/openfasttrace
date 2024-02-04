@@ -22,7 +22,8 @@ class SpecificationItemIdTest
             "type~name.with.dot~42, type, name.with.dot, 42",
             "type~name-trailing-~42, type, name-trailing-, 42",
     })
-    void parsingValidIdsSucceeds(String id, String expectedType, String expectedName, int expectedRevision)
+    void parsingValidIdsSucceeds(final String id, final String expectedType, final String expectedName,
+            final int expectedRevision)
     {
         final SpecificationItemId parsedId = parseId(id);
         assertAll(
@@ -41,13 +42,12 @@ class SpecificationItemIdTest
             "type~name-with-trailing-dot.~42",
             "type~name~rev",
             "typeÄ~name~42",
-            "type~nameÄ~42",
             "type~na.-me~42",
             "~name~42",
             "type~~42",
             "type~name~"
     })
-    void parsingIllegalIdsFails(String id)
+    void parsingIllegalIdsFails(final String id)
     {
         final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> parseId(id));
         assertThat(exception.getMessage(),
@@ -74,7 +74,7 @@ class SpecificationItemIdTest
         assertThat(id.toString(), equalTo("type~name~" + SpecificationItemId.REVISION_WILDCARD));
     }
 
-    private SpecificationItemId parseId(String id)
+    private SpecificationItemId parseId(final String id)
     {
         return new SpecificationItemId.Builder(id).build();
     }

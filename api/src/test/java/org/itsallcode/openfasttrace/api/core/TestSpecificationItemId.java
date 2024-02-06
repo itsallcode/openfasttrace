@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * [utest->dsn~md.specification-item-id-format~2]
+ * [utest->dsn~md.specification-item-id-format~3]
  */
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId

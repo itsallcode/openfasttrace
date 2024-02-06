@@ -92,7 +92,7 @@ Examples:
     dsn~html5-exporter~1
     utest~html5-exporter~4
 
-The name part of the ID must be a character string consisting of ASCII letters and or numbers separated by underscore ("_"), hyphen ("-") or dot ("."). Whitespaces are not allowed.
+The name part of the ID must be a character string consisting of Unicode letters and or numbers separated by underscore ("_"), hyphen ("-") or dot ("."). Whitespaces are not allowed.
 
 The revision number is a positive integer number that can be started at zero but out of convention usually is started at one.
 

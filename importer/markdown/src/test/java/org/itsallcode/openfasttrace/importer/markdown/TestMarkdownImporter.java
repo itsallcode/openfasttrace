@@ -35,7 +35,7 @@ class TestMarkdownImporter
     @Mock
     Reader readerMock;
 
-    // [utest~md.specification_item_id_format~1]
+    // [utest->dsn~md.specification-item-id-format~3]
     @ParameterizedTest
     @CsvSource(
     { "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
@@ -49,7 +49,7 @@ class TestMarkdownImporter
         assertMatch(MdPattern.ID, text);
     }
 
-    // [utest~md.specification_item_id_format~1]
+    // [utest->dsn~md.specification-item-id-format~3]
     @ParameterizedTest
     @CsvSource(
     { "test~1", "req-test~1", "req~4test~1", "räq~test~1" })

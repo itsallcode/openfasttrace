@@ -20,10 +20,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
      */
     public static final String UNKNOWN_ARTIFACT_TYPE = "unknown";
     private static final String ITEM_REVISION_PATTERN = "(\\d+)";
-    /**
-     * Regexp pattern for item names.
-     * [impl->dsn~md.specification-item-id-format~3]
-     */
+    /** Regexp pattern for item names. */
     public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;

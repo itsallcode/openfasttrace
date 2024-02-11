@@ -29,24 +29,32 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 
-**Quick Links**
+**User Guides**
 
-* [Blog](https://blog.itsallcode.org/)
-* [User Guide](doc/user_guide.md)
-* [Changelog](doc/changes/changes.md)
-* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
-* [Developer Guide](doc/developer_guide.md)
-* [Contributing guide](CONTRIBUTING.md)
-* [Command Line Usage](core/src/main/resources/usage.txt)
-* [Design](doc/spec/design.md)
-* [System Requirements](doc/spec/system_requirements.md)
-* Demo scripts for presenting OpenFastTrace and it's features
-  * Elevator pitch
-    > Requirements define your product. They ensure that the user needs are met.
-    >
-    > OFT verifies the integrity of your product's requirement structure, thus avoiding the costs of common mistakes like forgetting to implement requirements or to remove obsolete ones.
-  * [OpenFastTrace Presentation](https://github.com/itsallcode/openfasttrace-demo/blob/main/OpenFastTrace_in_20_minutes.odp) (LibreOffice, 20 minutes)
-  * [OpenFastTrace Live Demo Script](https://github.com/itsallcode/openfasttrace-demo/blob/main/oft-live-demo-medium.md) (Markdown, 1 hour)
+* [📖 User Guide](doc/user_guide.md)
+* [💲 Command Line Usage](core/src/main/resources/usage.txt)
+
+**News and Discussions**
+
+* [📢 Blog](https://blog.itsallcode.org/)
+* [➕ Changelog](doc/changes/changes.md)
+* [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
+* [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
+* [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+
+**Information for Contributors**
+
+* [🎟️ Project Board](https://github.com/orgs/itsallcode/projects/3/views/1)
+* [🦮 Developer Guide](doc/developer_guide.md)
+* [🎁 Contributing Guide](CONTRIBUTING.md)
+* [💡 System Requirements](doc/spec/system_requirements.md)
+* [👜 Design](doc/spec/design.md)
+
+**Demos and Presentations**
+
+* [🛗 Elevator pitch](https://github.com/itsallcode/openfasttrace-demo/tree/main?tab=readme-ov-file#elevator-pitch)
+* [📽️ OpenFastTrace Presentation](https://github.com/itsallcode/openfasttrace-demo/blob/main/OpenFastTrace_in_20_minutes.odp) (LibreOffice, 20 minutes)
+* [🎬 OpenFastTrace Live Demo Script](https://github.com/itsallcode/openfasttrace-demo/blob/main/oft-live-demo-medium.md) (Markdown, 1 hour)
 
 ## Using OpenFastTrace
 

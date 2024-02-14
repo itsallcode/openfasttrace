@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ITMarkdownImporter
 {
@@ -46,8 +47,6 @@ class ITMarkdownImporter
                         .build()));
 
     }
-
-
 
     // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
@@ -249,25 +248,27 @@ class ITMarkdownImporter
                 "`### Die Implementierung muss den Zustand einzelner Zellen ändern.\n"
                         + "`req~zellzustandsänderung~1`\n"
                         + "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
-                        +" in jeder Generation.\n"
+                        + " in jeder Generation.\n"
                         + "Needs: arch");
         assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
                 .description(
                         "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
-                                +  " in jeder Generation.")
+                                + " in jeder Generation.")
                 .location("file name", 2).addNeedsArtifactType("arch")
                 .build()));
     }
 
-    @Test
-    void testRecognizeItemTitleWithUnderlines()
+    @ParameterizedTest
+    @ValueSource(strings =
+    { "---------------------------------", "---", "===", "======" })
+    void testRecognizeItemTitleWithUnderlines(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
-                "This is a title with an underline\n" + //
-                "---------------------------------\n" + //
-                "`extra~support-underlined-headers~1`\n" + //
-                "Body text.\n");
+                "This is a title with an underline\n" //
+                        + underline + "\n" //
+                        + "`extra~support-underlined-headers~1`\n" //
+                        + "Body text.\n");
         assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
                 .title("This is a title with an underline")
@@ -276,14 +277,15 @@ class ITMarkdownImporter
                 .build()));
     }
 
-
-    @Test
-    void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle()
+    @ParameterizedTest
+    @ValueSource(strings =
+    { "---------------------------------", "---", "===", "======" })
+    void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
                 "# This must be ignored.\n" //
-                        + "This is a title with an underline\n"  //
-                        + "---------------------------------\n"  //
+                        + "This is a title with an underline\n" //
+                        + underline + "\n" //
                         + "`extra~support-underlined-headers~1`\n" //
                         + "Body text.\n");
         assertThat(items, AutoMatcher.contains(SpecificationItem.builder()

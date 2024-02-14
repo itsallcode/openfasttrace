@@ -956,19 +956,19 @@ Exchanging the CLI later takes considerable effort.
 ## How do we Clean Imported Multi-line Text Elements
 `dsn~cleaning-imported-multi-line-text-elements~1`
 
-It is the responsibility of `ImportEventListener`s do the following clean-up steps in multi-line text elements like the description:
+The `ImportEventListener`s do the following clean-up steps in multi-line text elements like the description:
 
 * Trimming (removing leading and trailing spaces of the whole text -- no individual lines.)
 
 Rationale:
 
-The reason for this is that we then do it in a central place and don't produce code duplication. Extra clean-up in the importers is still possible, but basics like trimming need to be handled in common code.
+This way we do cleanup in a central place and don't produce code duplication. Extra clean-up in the importers is still possible, but basics like trimming need to be handled in common code.
 
 Needs: impl, utest
 
 ### Why is This Architecture Relevant?
 
-Authors of importers need to be able to relly on these cleanups being done centrally, so that they don't have to implement them themselves. 
+Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves. 
 
 ### Alternatives Considered
 

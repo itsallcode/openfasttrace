@@ -1,8 +1,11 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMismatch;
 import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
@@ -12,6 +15,7 @@ import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
@@ -334,5 +338,16 @@ class TestMarkdownImporter
         inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("a~b~1"));
         inOrder.verify(this.listenerMock).setTitle("Title");
         inOrder.verify(this.listenerMock).endSpecificationItem();
+    }
+
+    @Test
+    void testRunImportHandlesIOException(@Mock final InputFile fileMock, @Mock final ImportEventListener listenerMock,
+                                        @Mock final BufferedReader readerMock) throws IOException {
+        when(fileMock.getPath()).thenReturn("/the/file");
+        when(fileMock.createReader()).thenReturn(readerMock);
+        when(readerMock.readLine()).thenThrow(new IOException("Dummy exception"));
+        final MarkdownImporter importer = new MarkdownImporter(fileMock, listenerMock);
+        final ImporterException exception = assertThrows(ImporterException.class, importer::runImport);
+        assertThat(exception.getMessage(), equalTo("Error reading \"/the/file\" at line 0"));
     }
 }

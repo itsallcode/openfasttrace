@@ -281,14 +281,16 @@ class MarkdownImporter implements Importer
         }
     }
 
+    private  void rememberPreviousLineAsTitle() {
+        this.lastTitle = this.lastLine;
+    }
+
     // [impl->dsn~md.specification-item-title~1]
     private void rememberTitle()
     {
         this.lastTitle = this.stateMachine.getLastToken();
     }
 
-
-    private  void rememberPreviousLineAsTitle() { this.lastTitle = this.lastLine; }
 
     private void resetTitle()
     {

@@ -73,7 +73,7 @@ OFT imports specification items from Markdown files.
 
 Rationale:
 
-Markdown is a clean a simple format that:
+Markdown is a clean and simple format that:
 
 * is viewable with any text editor
 * focuses on content instead of layout

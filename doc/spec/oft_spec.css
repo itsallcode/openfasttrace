@@ -7,8 +7,9 @@ body {
   line-height: 1.5;
   padding-top: 10px;
   padding-bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
   background-color: white;
-  padding: 30px;
   color: #333;
 }
 

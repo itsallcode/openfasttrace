@@ -1,4 +1,7 @@
-<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+<head>
+    <link href="oft_spec.css" rel="stylesheet"/>
+    <title>System Requirement Specification OpenFastTrace</title>
+</head>
 
 # System Requirement Specification OpenFastTrace
 
@@ -210,6 +213,10 @@ The "Needs" section list all artifact item types in which coverage for this item
 
 Tags are a way to label an artifact intended for grouping.
 
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
 Needs: dsn
 
 #### Forwarding Needed Coverage
@@ -223,7 +230,7 @@ Often a system requirement does not affect the high-level architecture. In this 
 
 Covers:
 
-* [feat~markdown-import~1](#markdown-import)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -272,7 +279,7 @@ Needs: dsn
 ##### Support for EB Markdown Requirements
 `req~eb-markdown~1`
 
-In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elektrobit's variant.
+In addition to OFT's requirement-enhanced Markdown syntax OFT also supports Elektrobit's variant.
 
 Rationale:
 

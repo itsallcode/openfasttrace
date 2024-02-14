@@ -1,4 +1,7 @@
-<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+<head>
+    <link href="oft_spec.css" rel="stylesheet" />
+    <title>OpenFastTrace Design</title>
+</head>
 
 # Introduction
 

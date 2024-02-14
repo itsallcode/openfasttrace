@@ -47,6 +47,8 @@ class ITMarkdownImporter
 
     }
 
+
+
     // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
@@ -246,13 +248,49 @@ class ITMarkdownImporter
         final List<SpecificationItem> items = runImporterOnText(
                 "`### Die Implementierung muss den Zustand einzelner Zellen ändern.\n"
                         + "`req~zellzustandsänderung~1`\n"
-                        + "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.\n"
+                        + "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
+                        +" in jeder Generation.\n"
                         + "Needs: arch");
         assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
                 .description(
-                        "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.")
+                        "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
+                                +  " in jeder Generation.")
                 .location("file name", 2).addNeedsArtifactType("arch")
+                .build()));
+    }
+
+    @Test
+    void testRecognizeItemTitleWithUnderlines()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "This is a title with an underline\n" + //
+                "---------------------------------\n" + //
+                "`extra~support-underlined-headers~1`\n" + //
+                "Body text.\n");
+        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+                .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
+                .title("This is a title with an underline")
+                .description("Body text.")
+                .location("file name", 3)
+                .build()));
+    }
+
+
+    @Test
+    void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "# This must be ignored.\n" //
+                        + "This is a title with an underline\n"  //
+                        + "---------------------------------\n"  //
+                        + "`extra~support-underlined-headers~1`\n" //
+                        + "Body text.\n");
+        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+                .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
+                .title("This is a title with an underline")
+                .description("Body text.")
+                .location("file name", 4)
                 .build()));
     }
 }

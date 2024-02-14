@@ -70,7 +70,7 @@ OFT imports specification items from Markdown files.
 
 Rationale:
 
-Markdown is a clean an simple format that:
+Markdown is a clean a simple format that:
 
 * is viewable with any text editor
 * focuses on content instead of layout
@@ -81,6 +81,22 @@ For those reasons Markdown is a suitable candidate for writing specification tha
 maintained over a long time.
 
 Needs: req
+
+### ReStructured Text (RST) Import
+`feat~rst-import~1`
+
+OFT imports specification items from ReStructured Text (RST) files.
+
+Rationale:
+
+RST is a text-based documentation format with non-invasive structure elements. It originated in the Python world and has become the standard for documentation there.
+
+The same benefits as for [Markdown](#markdown-import) apply:
+
+* is viewable with any text editor
+* focuses on content instead of layout
+* is portable across platforms
+* easy to process with text manipulation tools
 
 ### ReqM2 Import
 `feat~reqm2-import~1`
@@ -241,7 +257,7 @@ Needs: dsn
 ##### Markdown Outline Readable
 `req~markdown-outline-readable~1`
 
-The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
+The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human-readable.
 
 Rationale:
 

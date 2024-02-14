@@ -32,9 +32,6 @@ class TestMarkdownImporter
     @Mock
     ImportEventListener listenerMock;
 
-    @Mock
-    Reader readerMock;
-
     // [utest->dsn~md.specification-item-id-format~3]
     @ParameterizedTest
     @CsvSource(
@@ -161,19 +158,21 @@ class TestMarkdownImporter
         inOrder.verify(this.listenerMock).setId(ID1);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
-        inOrder.verify(this.listenerMock)
-                .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
-                        + System.lineSeparator() + DESCRIPTION_LINE3);
-        inOrder.verify(this.listenerMock)
-                .appendRationale(RATIONALE_LINE1 + System.lineSeparator() + RATIONALE_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
+        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE3);
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
         inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID1));
         inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID2));
         inOrder.verify(this.listenerMock)
                 .addDependsOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID1));
         inOrder.verify(this.listenerMock)
                 .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID2));
-        inOrder.verify(this.listenerMock)
-                .appendComment(COMMENT_LINE1 + System.lineSeparator() + COMMENT_LINE2);
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
@@ -265,7 +264,7 @@ class TestMarkdownImporter
                 + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
                 + "\nTags:\n" //
                 + " * " + TAG1 + "\n" //
-                + "   + " + TAG2 + "";
+                + "   + " + TAG2;
     }
 
     private void assertAllImporterEventsForLegacyItemCalled()
@@ -276,17 +275,21 @@ class TestMarkdownImporter
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
         inOrder.verify(this.listenerMock).setTitle(TITLE);
         inOrder.verify(this.listenerMock).setStatus(ItemStatus.PROPOSED);
-        inOrder.verify(this.listenerMock)
-                .appendDescription(DESCRIPTION_LINE1 + System.lineSeparator() + DESCRIPTION_LINE2
-                        + System.lineSeparator() + DESCRIPTION_LINE3);
-        inOrder.verify(this.listenerMock)
-                .appendRationale(RATIONALE_LINE1 + System.lineSeparator() + RATIONALE_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
+        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE3);
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
+        inOrder.verify(this.listenerMock).appendRationale(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
         inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID1);
         inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID2);
         inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID1);
         inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID2);
-        inOrder.verify(this.listenerMock)
-                .appendComment(COMMENT_LINE1 + System.lineSeparator() + COMMENT_LINE2);
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
+        inOrder.verify(this.listenerMock).appendComment(System.lineSeparator());
+        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
         inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
         inOrder.verify(this.listenerMock).addTag(TAG1);

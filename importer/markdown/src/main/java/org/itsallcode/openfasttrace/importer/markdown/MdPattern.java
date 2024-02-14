@@ -44,6 +44,7 @@ enum MdPattern
             + "(\\p{Alpha}+)" //
             + "(?:\\W.*)?"),
     NOT_EMPTY("([^\n\r]+)"),
+    POT_TITLE("(\\p{Alnum}.*)"),
     RATIONALE("Rationale:\\s*"),
     STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
     TAGS_INT("Tags:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
@@ -51,7 +52,8 @@ enum MdPattern
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "\\s*" //
             + "(.*)"),
-    TITLE("#+\\s*(.*)");
+    TITLE("#+\\s*(.*)"),
+    UNDERLINE("([=-]{3,})");
     // @formatter:on
 
     private final Pattern pattern;

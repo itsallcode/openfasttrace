@@ -72,6 +72,26 @@ class TestReportSettings
     }
 
     @Test
+    void testBuildColorSchemeDefault()
+    {
+        assertThat(this.builder.build().getColorScheme(),
+                equalTo(ColorScheme.BLACK_AND_WHITE));
+    }
+
+    @Test
+    void testSetColorSchemeNullNotAllowed()
+    {
+        assertThrows(NullPointerException.class, () -> this.builder.colorScheme(null));
+    }
+
+    @Test
+    void testBuildColorSchemeCustom()
+    {
+        assertThat(this.builder.colorScheme(ColorScheme.COLOR).build().getColorScheme(),
+                equalTo(ColorScheme.COLOR));
+    }
+
+    @Test
     void testBuildDetailsFoldingStatusDefault()
     {
         assertThat(this.builder.build().getDetailsSectionFolding(),

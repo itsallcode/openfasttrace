@@ -18,5 +18,6 @@ The test coverage for the Markdown importer is now at 100%, and we were able to 
 
 ## Bugfixes
 
-* #373: Ignore spaces after items in "Needs:" and "Tags:" lists (thanks to [@sambishop](https://github.com/sambishop) for his contribution!)
 * #366: Allow all unicode characters in names of specification ID names (thanks to [@sebastianohl](https://github.com/sebastianohl) for the bug report!)
+* #373: Ignore spaces after items in "Needs:" and "Tags:" lists (thanks to [@sambishop](https://github.com/sambishop) for his contribution!)
+* #378: Merged integration test coverage with unit test coverage for representative overall figure

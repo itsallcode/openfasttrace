@@ -251,7 +251,7 @@
                 <jdk>21</jdk>
             </activation>
             <properties>
-                <!-- java.security.manager is equired to fix failing tests in TestCliStarter:
+                <!-- java.security.manager is required to fix failing tests in TestCliStarter:
                     UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
                 <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito danyamically loading a Java agent -->
                 <test.args>-Djava.security.manager=allow -XX:+EnableDynamicAgentLoading</test.args>
@@ -329,16 +329,22 @@
                 <version>0.8.11</version>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>merge-results</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>prepare-agent</goal>
+                            <goal>merge</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}/</directory>
+                                    <includes>
+                                        <include>jacoco*.exec</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                            <destFile>${project.build.directory}/aggregate.exec</destFile>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
@@ -346,6 +352,9 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/aggregate.exec</dataFile>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -378,6 +387,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
+                        <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>

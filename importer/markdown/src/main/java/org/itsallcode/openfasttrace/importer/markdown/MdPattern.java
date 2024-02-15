@@ -51,7 +51,8 @@ enum MdPattern
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "\\s*" //
             + "(.*)"),
-    TITLE("#+\\s*(.*)");
+    TITLE("#+\\s*(.*)"),
+    UNDERLINE("([=-]{3,})");
     // @formatter:on
 
     private final Pattern pattern;

@@ -469,6 +469,14 @@ The verbosity of the tracing report.
 
 Defaults to `failure_details`.
 
+
+    --details-section-folding <status>
+
+Status of the details section in the HTML report
+
+* `HIDE_DETAILS` - hide details (default)
+* `SHOW_DETAILS` - show details
+
 #### Converting Options
 
     -o, --output-format <format>

@@ -13,6 +13,7 @@ mkdir -p $(dirname "$report_file")
 
 if $oft_script trace \
     --output-format html -f "$report_file" \
+    --details-section-folding HIDE_DETAILS \
     "$base_dir/doc/spec" \
     "$base_dir/importer/markdown/src" \
     "$base_dir/importer/specobject/src" \

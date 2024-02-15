@@ -409,7 +409,7 @@ Covers:
 
 * `req~reporting.html.details-folding~1`
 
-Needs: impl, utest, itest
+Needs: impl, utest
 
 ## Requirement Format Conversion
 

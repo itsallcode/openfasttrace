@@ -212,8 +212,9 @@ public class CommandLineInterpreter
         }
         catch (final IllegalArgumentException e)
         {
-            throw new CliException(
-                    "Cannot convert value '" + stringValue + "' to enum " + type.getName(), e);
+            final List<T> availableValues = asList(type.getEnumConstants());
+            throw new CliException("Cannot convert value '" + stringValue + "' to enum " + type.getName()
+                    + ". Allowed values: " + availableValues, e);
         }
     }
 

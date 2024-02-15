@@ -9,8 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,7 +36,9 @@ class TestHtmlReport
     protected String renderToString()
     {
         final OutputStream outputStream = new ByteArrayOutputStream();
-        final Reportable report = new HtmlReporterFactory().createImporter(traceMock);
+        final HtmlReporterFactory htmlReporterFactory = new HtmlReporterFactory();
+        htmlReporterFactory.init(new ReporterContext(ReportSettings.createDefault()));
+        final Reportable report = htmlReporterFactory.createImporter(traceMock);
         report.renderToStream(outputStream);
         final String outputAsString = outputStream.toString();
         return outputAsString;

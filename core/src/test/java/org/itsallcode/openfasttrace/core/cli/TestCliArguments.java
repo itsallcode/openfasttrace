@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
+import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -234,8 +235,8 @@ class TestCliArguments
         assertThat(this.arguments.getShowOrigin(), is(true));
     }
 
-    // [dsn~reporting.plain-text.ansi-color~1]
-    // [dsn~reporting.plain-text.ansi-font-style~1]
+    // [utest->dsn~reporting.plain-text.ansi-color~1]
+    // [utest->dsn~reporting.plain-text.ansi-font-style~1]
     @Test
     void testSetColorScheme()
     {
@@ -243,8 +244,8 @@ class TestCliArguments
         assertThat(this.arguments.getColorScheme(), is(ColorScheme.MONOCHROME));
     }
 
-    // [dsn~reporting.plain-text.ansi-color~1]
-    // [dsn~reporting.plain-text.ansi-font-style~1]
+    // [utest->dsn~reporting.plain-text.ansi-color~1]
+    // [utest->dsn~reporting.plain-text.ansi-font-style~1]
     @Test
     void testSetC()
     {
@@ -265,5 +266,28 @@ class TestCliArguments
         this.arguments.setColorScheme(ColorScheme.MONOCHROME);
         this.arguments.setOutputFile("something");
         assertThat(this.arguments.getColorScheme(), is(ColorScheme.BLACK_AND_WHITE));
+    }
+
+    // [utest->dsn~reporting.html.details-folding~1]
+    @Test
+    void testDetailsSectionFoldingDefaultsToHidden()
+    {
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.HIDE_DETAILS));
+    }
+
+    // [utest->dsn~reporting.html.details-folding~1]
+    @Test
+    void testDetailsSectionFoldingNullDefaultsToHidden()
+    {
+        this.arguments.setDetailsSectionFolding(null);
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.HIDE_DETAILS));
+    }
+
+    // [utest->dsn~reporting.html.details-folding~1]
+    @Test
+    void testDetailsSectionFoldingCustomValue()
+    {
+        this.arguments.setDetailsSectionFolding(DetailsSectionFolding.SHOW_DETAILS);
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.SHOW_DETAILS));
     }
 }

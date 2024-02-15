@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
+import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
@@ -37,6 +38,9 @@ public class CliArguments
     private boolean showOrigin;
     private final DirectoryService directoryService;
     private ColorScheme colorScheme;
+
+    // [impl->dsn~reporting.html.details-folding~1]
+    private DetailsSectionFolding detailsSectionFolding;
 
     /**
      * Create new {@link CliArguments}.
@@ -313,6 +317,19 @@ public class CliArguments
     }
 
     /**
+     * Get the default folding status of HTML report details sections.
+     * <p>
+     * Defaults to {@link DetailsSectionFolding#HIDE_DETAILS}.
+     * </p>
+     * 
+     * @return folding status
+     */
+    public DetailsSectionFolding getDetailsSectionFolding()
+    {
+        return detailsSectionFolding == null ? DetailsSectionFolding.HIDE_DETAILS : detailsSectionFolding;
+    }
+
+    /**
      * Set a list of tags to be applied as filter during import
      * 
      * @param tags
@@ -387,5 +404,16 @@ public class CliArguments
     public void setC(final ColorScheme colorScheme)
     {
         this.setColorScheme(colorScheme);
+    }
+
+    /**
+     * Choose the details folding status.
+     *
+     * @param detailsSectionFolding
+     *            folding status
+     */
+    public void setDetailsSectionFolding(final DetailsSectionFolding detailsSectionFolding)
+    {
+        this.detailsSectionFolding = detailsSectionFolding;
     }
 }

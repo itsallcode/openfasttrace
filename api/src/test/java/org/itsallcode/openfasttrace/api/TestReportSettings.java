@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.api;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.itsallcode.openfasttrace.api.ReportSettings.Builder;
 import org.itsallcode.openfasttrace.api.core.Newline;
@@ -68,5 +69,27 @@ class TestReportSettings
     {
         assertThat(this.builder.newline(Newline.OLDMAC).build().getNewline(),
                 equalTo(Newline.OLDMAC));
+    }
+
+    @Test
+    void testBuildDetailsFoldingStatusDefault()
+    {
+        assertThat(this.builder.build().getDetailsSectionFolding(),
+                equalTo(DetailsSectionFolding.HIDE_DETAILS));
+    }
+
+    @Test
+    void testBuildDetailsFoldingStatusNullNotAllowed()
+    {
+        assertThrows(NullPointerException.class, () -> this.builder.detailsSectionFolding(null));
+    }
+
+    @Test
+    void testBuildDetailsFoldingStatusCustom()
+    {
+        assertThat(
+                this.builder.detailsSectionFolding(DetailsSectionFolding.SHOW_DETAILS).build()
+                        .getDetailsSectionFolding(),
+                equalTo(DetailsSectionFolding.SHOW_DETAILS));
     }
 }

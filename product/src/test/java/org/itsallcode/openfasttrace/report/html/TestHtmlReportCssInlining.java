@@ -1,17 +1,15 @@
 package org.itsallcode.openfasttrace.report.html;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
+import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
 import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
@@ -31,7 +29,8 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
         final File cssFile = tempDir.resolve("test.css").toFile();
         writeTextFile(cssFile, CSS);
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        final HtmlViewFactory factory = HtmlViewFactory.create(stream, cssFile.toURI().toURL());
+        final HtmlViewFactory factory = HtmlViewFactory.create(stream, cssFile.toURI().toURL(),
+                DetailsSectionFolding.HIDE_DETAILS);
         final ViewableContainer view = factory.createView("foo", "bar");
         view.render();
         assertThat(stream.toString(), containsString(CSS));
@@ -41,7 +40,7 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
     void testInliningNonExistentCssThrowsException() throws MalformedURLException
     {
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
-                new URL("file:///this_file_does_not_exist.css"));
+                new URL("file:///this_file_does_not_exist.css"), DetailsSectionFolding.HIDE_DETAILS);
         final ViewableContainer view = factory.createView("foo", "bar");
         assertThrows(ReportException.class, () -> view.render());
     }
@@ -52,7 +51,8 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
         OsDetector.assumeRunningOnUnix();
         final File cssFile = tempDir.resolve("test.css").toFile();
         cssFile.setReadable(false);
-        final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL());
+        final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL(),
+                DetailsSectionFolding.HIDE_DETAILS);
         final ViewableContainer view = factory.createView("foo", "bar");
         assertThrows(ReportException.class, () -> view.render());
     }

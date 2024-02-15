@@ -569,7 +569,22 @@ OFT creates the HTML Report as a single file.
 
 Rationale:
 
-It makes exchanging reports with other people easier if everything is contained in a single file.  
+It makes exchanging reports with other people easier if everything is contained in a single file.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
+##### HTML Report Renders Details Opened or Closed by Default
+`req~reporting.html.details-folding~1`
+
+OFT allows configuring the folding status of specification item details to open or closed by default.
+
+Rationale:
+
+Allowing the details section to be opened and visible allows rendering the HTML report to a PDF document that contains all details.
 
 Covers:
 

@@ -397,6 +397,17 @@ Covers:
 
 Needs: impl, itest
 
+#### HTML Reports Allows Configuring Details Folding Status
+`dsn~reporting.html.details-folding~1`
+
+OFT allows configuring the specification item detail section folding status (open or closed). Default is closed.
+
+Covers:
+
+* `req~reporting.html.details-folding~1`
+
+Needs: impl, utest, itest
+
 ## Requirement Format Conversion
 
 ### ReqM2 Export

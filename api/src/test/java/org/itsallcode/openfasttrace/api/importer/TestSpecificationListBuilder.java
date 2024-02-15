@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.api.importer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 class TestSpecificationListBuilder
 {
-
     private static final String DESCRIPTION = "description";
     private static final String TITLE = "title";
     private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
@@ -204,5 +204,25 @@ class TestSpecificationListBuilder
         final List<SpecificationItem> items = builder.build();
         assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
                 containsInAnyOrder("in-A", "in-B", "in-D"));
+    }
+
+    // [utest->dsn~cleaning-imported-multi-line-text-elements~1]
+    @Test
+    void testMultilineTextFieldsGetTrimmed()
+    {
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+        builder.beginSpecificationItem();
+        builder.setId(SpecificationItemId.createId("foo", "bar", 1));
+        builder.appendComment(" a comment ");
+        builder.appendDescription("   a description\t \t");
+        builder.appendRationale("\n\na   rationale\n  \n");
+        builder.endSpecificationItem();
+        final List<SpecificationItem> items = builder.build();
+        final SpecificationItem item = items.get(0);
+        assertAll(
+                () -> assertThat(item.getComment(), equalTo("a comment")),
+                () -> assertThat(item.getDescription(), equalTo("a description")),
+                () -> assertThat(item.getRationale(), equalTo("a   rationale"))
+        );
     }
 }

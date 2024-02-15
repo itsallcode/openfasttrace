@@ -1,4 +1,7 @@
-<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+<head>
+    <link href="oft_spec.css" rel="stylesheet" />
+    <title>OpenFastTrace Design</title>
+</head>
 
 # Introduction
 
@@ -949,6 +952,27 @@ Exchanging the CLI later takes considerable effort.
 
 * No CLI (plain argument list) - not flexible enough
 * External CLI - breaks design goal
+
+## How do we Clean Imported Multi-line Text Elements
+`dsn~cleaning-imported-multi-line-text-elements~1`
+
+The `ImportEventListener`s do the following clean-up steps in multi-line text elements like the description:
+
+* Trimming (removing leading and trailing spaces of the whole text -- no individual lines.)
+
+Rationale:
+
+This way we do cleanup in a central place and don't produce code duplication. Extra clean-up in the importers is still possible, but basics like trimming need to be handled in common code.
+
+Needs: impl, utest
+
+### Why is This Architecture Relevant?
+
+Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves. 
+
+### Alternatives Considered
+
+Clean-up in every importer individually. That was the case up to and including OFT 3.7.1 which turned out to make the importer more complex than necessary.
 
 # Bibliography
 

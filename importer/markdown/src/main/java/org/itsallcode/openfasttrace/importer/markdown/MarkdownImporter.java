@@ -16,12 +16,12 @@ class MarkdownImporter implements Importer
     private static final Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
 
     // @formatter:off
-    private final  Transition[] transitions = {
+    private final Transition[] transitions = {
         transition(START      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
         transition(START      , TITLE      , MdPattern.TITLE      , this::rememberTitle                                   ),
         transition(START      , OUTSIDE    , MdPattern.FORWARD    , this::forward                                         ),
         transition(START      , OUTSIDE    , MdPattern.EVERYTHING , () -> {}                                              ),
-    
+
         transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
         transition(TITLE      , TITLE      , MdPattern.TITLE      , this::rememberTitle                                   ),
         transition(TITLE      , TITLE      , MdPattern.EMPTY      , () -> {}                                              ),
@@ -30,7 +30,8 @@ class MarkdownImporter implements Importer
         transition(OUTSIDE    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
         transition(OUTSIDE    , OUTSIDE    , MdPattern.FORWARD    , this::forward                                         ),
         transition(OUTSIDE    , TITLE      , MdPattern.TITLE      , this::rememberTitle                                   ),
-    
+        transition(OUTSIDE    , TITLE      , MdPattern.UNDERLINE  , this::rememberPreviousLineAsTitle                     ),
+
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
         transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , this::setStatus                                       ),
         transition(SPEC_ITEM  , TITLE      , MdPattern.TITLE      , () -> {endItem(); rememberTitle();}                   ),
@@ -45,37 +46,37 @@ class MarkdownImporter implements Importer
         transition(SPEC_ITEM  , DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription                                ),
         transition(SPEC_ITEM  , DESCRIPTION, MdPattern.NOT_EMPTY  , this::beginDescription                                ),
     
-        transition(DESCRIPTION, SPEC_ITEM  , MdPattern.ID         , () -> {endDescription(); beginItem();}                ),
-        transition(DESCRIPTION, TITLE      , MdPattern.TITLE      , () -> {endDescription(); endItem(); rememberTitle(); }),
-        transition(DESCRIPTION, RATIONALE  , MdPattern.RATIONALE  , () -> {endDescription(); beginRationale();}           ),
-        transition(DESCRIPTION, COMMENT    , MdPattern.COMMENT    , () -> {endDescription(); beginComment();}             ),
-        transition(DESCRIPTION, COVERS     , MdPattern.COVERS     , this::endDescription                                  ),
-        transition(DESCRIPTION, DEPENDS    , MdPattern.DEPENDS    , this::endDescription                                  ),
-        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS_INT  , () -> {endDescription(); addNeeds();}                 ),
-        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , this::endDescription                                  ),
+        transition(DESCRIPTION, SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
+        transition(DESCRIPTION, TITLE      , MdPattern.TITLE      , () -> {endItem(); rememberTitle();}                   ),
+        transition(DESCRIPTION, RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                                  ),
+        transition(DESCRIPTION, COMMENT    , MdPattern.COMMENT    , this::beginComment                                    ),
+        transition(DESCRIPTION, COVERS     , MdPattern.COVERS     , () -> {}                                              ),
+        transition(DESCRIPTION, DEPENDS    , MdPattern.DEPENDS    , () -> {}                                              ),
+        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                                        ),
+        transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , () -> {}                                              ),
         transition(DESCRIPTION, TAGS       , MdPattern.TAGS_INT   , this::addTag                                          ),
         transition(DESCRIPTION, TAGS       , MdPattern.TAGS       , () -> {}                                              ),
         transition(DESCRIPTION, DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription                               ),
 
     
-        transition(RATIONALE  , SPEC_ITEM  , MdPattern.ID         , () -> {endRationale(); beginItem();}                  ),
-        transition(RATIONALE  , TITLE      , MdPattern.TITLE      , () -> {endRationale(); endItem(); rememberTitle(); }  ),
-        transition(RATIONALE  , COMMENT    , MdPattern.COMMENT    , () -> {endRationale(); beginComment();}               ),
-        transition(RATIONALE  , COVERS     , MdPattern.COVERS     , this::endRationale                                    ),
-        transition(RATIONALE  , DEPENDS    , MdPattern.DEPENDS    , this::endRationale                                    ),
-        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS_INT  , () -> {endRationale(); addNeeds();}                   ),
-        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , this::endRationale                                    ),
+        transition(RATIONALE  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
+        transition(RATIONALE  , TITLE      , MdPattern.TITLE      , () -> {endItem(); rememberTitle();}                   ),
+        transition(RATIONALE  , COMMENT    , MdPattern.COMMENT    , this::beginComment                                    ),
+        transition(RATIONALE  , COVERS     , MdPattern.COVERS     , () -> {}                                              ),
+        transition(RATIONALE  , DEPENDS    , MdPattern.DEPENDS    , () -> {}                                              ),
+        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                                        ),
+        transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , () -> {}                                              ),
         transition(RATIONALE  , TAGS       , MdPattern.TAGS_INT   , this::addTag                                          ),
         transition(RATIONALE  , TAGS       , MdPattern.TAGS       , () -> {}                                              ),
         transition(RATIONALE  , RATIONALE  , MdPattern.EVERYTHING , this::appendRationale                                 ),
     
-        transition(COMMENT    , SPEC_ITEM  , MdPattern.ID         , () -> {endComment(); beginItem();}                    ),
-        transition(COMMENT    , TITLE      , MdPattern.TITLE      , () -> {endComment(); endItem(); rememberTitle(); }    ),
-        transition(COMMENT    , COVERS     , MdPattern.COVERS     , this::endComment                                      ),
-        transition(COMMENT    , DEPENDS    , MdPattern.DEPENDS    , this::endComment                                      ),
-        transition(COMMENT    , NEEDS      , MdPattern.NEEDS_INT  , () -> {endComment(); addNeeds();}                     ),
-        transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , this::endComment                                      ),
-        transition(COMMENT    , RATIONALE  , MdPattern.RATIONALE  , () -> {endComment(); beginRationale();}               ),
+        transition(COMMENT    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                                       ),
+        transition(COMMENT    , TITLE      , MdPattern.TITLE      , () -> {endItem(); rememberTitle();}                   ),
+        transition(COMMENT    , COVERS     , MdPattern.COVERS     , () -> {}                                              ),
+        transition(COMMENT    , DEPENDS    , MdPattern.DEPENDS    , () -> {}                                              ),
+        transition(COMMENT    , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                                        ),
+        transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , () -> {}                                              ),
+        transition(COMMENT    , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale                                  ),
         transition(COMMENT    , TAGS       , MdPattern.TAGS_INT   , this::addTag                                          ),
         transition(COMMENT    , TAGS       , MdPattern.TAGS       , () -> {}                                              ),
         transition(COMMENT    , COMMENT    , MdPattern.EVERYTHING , this::appendComment                                   ),
@@ -141,10 +142,8 @@ class MarkdownImporter implements Importer
     private final ImportEventListener listener;
     private final MarkdownImporterStateMachine stateMachine;
     private String lastTitle = null;
+    private String lastLine = null;
     private boolean inSpecificationItem;
-    private StringBuilder lastDescription;
-    private StringBuilder lastRationale;
-    private StringBuilder lastComment;
     private int lineNumber = 0;
 
     MarkdownImporter(final InputFile fileName, final ImportEventListener listener)
@@ -166,6 +165,7 @@ class MarkdownImporter implements Importer
             {
                 ++this.lineNumber;
                 this.stateMachine.step(line);
+                this.lastLine = line;
             }
         }
         catch (final IOException exception)
@@ -186,7 +186,7 @@ class MarkdownImporter implements Importer
         }
     }
 
-    private static final Transition transition(final State from, final State to,
+    private static Transition transition(final State from, final State to,
             final MdPattern pattern, final TransitionAction action)
     {
         return new Transition(from, to, pattern, action);
@@ -234,59 +234,35 @@ class MarkdownImporter implements Importer
 
     private void beginDescription()
     {
-        this.lastDescription = new StringBuilder(this.stateMachine.getLastToken());
+        this.listener.appendDescription(this.stateMachine.getLastToken());
     }
 
     private void appendDescription()
     {
-        this.lastDescription.append(System.lineSeparator())
-                .append(this.stateMachine.getLastToken());
-    }
-
-    private void endDescription()
-    {
-        this.listener.appendDescription(this.lastDescription.toString().trim());
-        this.lastDescription = null;
+        this.listener.appendDescription(System.lineSeparator());
+        this.listener.appendDescription(this.stateMachine.getLastToken());
     }
 
     private void beginRationale()
     {
-        this.lastRationale = new StringBuilder();
+        this.listener.appendRationale(System.lineSeparator());
     }
 
     private void appendRationale()
     {
-        if (this.lastRationale.length() > 0)
-        {
-            this.lastRationale.append(System.lineSeparator());
-        }
-        this.lastRationale.append(this.stateMachine.getLastToken());
-    }
-
-    private void endRationale()
-    {
-        this.listener.appendRationale(this.lastRationale.toString().trim());
-        this.lastRationale = null;
+        this.listener.appendRationale(System.lineSeparator());
+        this.listener.appendRationale(this.stateMachine.getLastToken());
     }
 
     private void beginComment()
     {
-        this.lastComment = new StringBuilder();
+        this.listener.appendComment(this.stateMachine.getLastToken());
     }
 
     private void appendComment()
     {
-        if (this.lastComment.length() > 0)
-        {
-            this.lastComment.append(System.lineSeparator());
-        }
-        this.lastComment.append(this.stateMachine.getLastToken());
-    }
-
-    private void endComment()
-    {
-        this.listener.appendComment(this.lastComment.toString().trim());
-        this.lastComment = null;
+        this.listener.appendComment(System.lineSeparator());
+        this.listener.appendComment(this.stateMachine.getLastToken());
     }
 
     private void addDependency()
@@ -305,11 +281,16 @@ class MarkdownImporter implements Importer
         }
     }
 
+    private  void rememberPreviousLineAsTitle() {
+        this.lastTitle = this.lastLine;
+    }
+
     // [impl->dsn~md.specification-item-title~1]
     private void rememberTitle()
     {
         this.lastTitle = this.stateMachine.getLastToken();
     }
+
 
     private void resetTitle()
     {

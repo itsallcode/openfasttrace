@@ -378,6 +378,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
+                        <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>

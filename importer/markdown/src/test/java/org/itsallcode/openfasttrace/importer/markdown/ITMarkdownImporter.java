@@ -279,7 +279,7 @@ class ITMarkdownImporter
 
     @ParameterizedTest
     @ValueSource(strings =
-    { "---------------------------------", "---", "===", "======" })
+    { "---------------------------------", "---", "===", "======", "================================================" })
     void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
@@ -293,6 +293,19 @@ class ITMarkdownImporter
                 .title("This is a title with an underline")
                 .description("Body text.")
                 .location("file name", 4)
+                .build()));
+    }
+
+    @Test
+    void testLessThenTwoUnderliningCharactersAreNotDetectedAsTitleUnderlines()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "This is not a title since the underline is too short\n"
+                        + "--\n"
+                        + "req~too-short~111");
+        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+                .id(SpecificationItemId.createId("req", "too-short", 111))
+                .location("file name", 3)
                 .build()));
     }
 }

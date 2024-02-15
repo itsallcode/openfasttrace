@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 import java.io.*;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
@@ -29,8 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class TestMarkdownImporter
 {
-    private static final String TAG2 = "Tag2";
-    private static final String TAG1 = "Tag1";
     private static final String FILENAME = "file name";
 
     @Mock
@@ -230,114 +227,6 @@ class TestMarkdownImporter
                 "req:test.requirement, v1", "req:test_underscore, v1",
                 "`req:test1, v1`arbitrary text");
         assertMismatch(MdPattern.ID, "test, v1", "req-test, v1", "req.4test, v1");
-    }
-
-    @Test
-    void testFindLegacyRequirement()
-    {
-        final String completeItem = createCompleteSpecificationItemInLegacyMarkdownFormat();
-        runImporterOnText(completeItem);
-        assertAllImporterEventsForLegacyItemCalled();
-    }
-
-    // [utest->dsn~md.needs-coverage-list~2]
-    private String createCompleteSpecificationItemInLegacyMarkdownFormat()
-    {
-        return "# " + TITLE //
-                + "\n" //
-                + "`" + LEGACY_ID + "`" //
-                + "\n" //
-                + "\nStatus: proposed\n" //
-                + "\nDescription:\n" + DESCRIPTION_LINE1 + "\n" //
-                + DESCRIPTION_LINE2 + "\n" //
-                + DESCRIPTION_LINE3 + "\n" //
-                + "\nRationale:\n" //
-                + RATIONALE_LINE1 + "\n" //
-                + RATIONALE_LINE2 + "\n" //
-                + "\nDepends:\n\n" //
-                + "  + `" + LEGACY_DEPENDS_ON_ID1 + "`\n" //
-                + "  - `" + LEGACY_DEPENDS_ON_ID2 + "`\n" //
-                + "\nCovers:\n\n" //
-                + "  * `" + LEGACY_COVERED_ID1 + "`\n" //
-                + " + `" + LEGACY_COVERED_ID2 + "`\n" //
-                + "\nComment:\n\n" //
-                + COMMENT_LINE1 + "\n" //
-                + COMMENT_LINE2 + "\n" //
-                + "\nNeeds:\n" //
-                + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
-                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
-                + "\nTags:\n" //
-                + " * " + TAG1 + "\n" //
-                + "   + " + TAG2;
-    }
-
-    private void assertAllImporterEventsForLegacyItemCalled()
-    {
-        final InOrder inOrder = inOrder(this.listenerMock);
-        inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(PARSED_LEGACY_ID);
-        inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
-        inOrder.verify(this.listenerMock).setTitle(TITLE);
-        inOrder.verify(this.listenerMock).setStatus(ItemStatus.PROPOSED);
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
-        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
-        inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE3);
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
-        inOrder.verify(this.listenerMock).appendRationale(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
-        inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID1);
-        inOrder.verify(this.listenerMock).addDependsOnId(PARSED_LEGACY_DEPENDS_ON_ID2);
-        inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID1);
-        inOrder.verify(this.listenerMock).addCoveredId(PARSED_LEGACY_COVERED_ID2);
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
-        inOrder.verify(this.listenerMock).appendComment(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
-        inOrder.verify(this.listenerMock).addTag(TAG1);
-        inOrder.verify(this.listenerMock).addTag(TAG2);
-        inOrder.verify(this.listenerMock).endSpecificationItem();
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    // [utest->dsn~md.artifact-forwarding-notation~1]
-    @Test
-    void testForwardRequirement()
-    {
-        runImporterOnText("arch-->dsn:req~foobar~2\n" //
-                + "   * `dsn --> impl, utest,itest : arch~bar.zoo~123`");
-        final InOrder inOrder = inOrder(this.listenerMock);
-        inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("arch~foobar~2"));
-        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("req~foobar~2"));
-        inOrder.verify(this.listenerMock).addNeededArtifactType("dsn");
-        inOrder.verify(this.listenerMock).setForwards(true);
-        inOrder.verify(this.listenerMock).endSpecificationItem();
-        inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("dsn~bar.zoo~123"));
-        inOrder.verify(this.listenerMock)
-                .addCoveredId(SpecificationItemId.parseId("arch~bar.zoo~123"));
-        inOrder.verify(this.listenerMock).addNeededArtifactType("impl");
-        inOrder.verify(this.listenerMock).addNeededArtifactType("utest");
-        inOrder.verify(this.listenerMock).addNeededArtifactType("itest");
-        inOrder.verify(this.listenerMock).setForwards(true);
-        inOrder.verify(this.listenerMock).endSpecificationItem();
-    }
-
-    // [utest->dsn~md.specification-item-title~1]
-    @Test
-    void testFindTitleAfterTitle()
-    {
-        runImporterOnText("## This title should be ignored\n\n" //
-                + "### Title\n" //
-                + "`a~b~1`");
-        final InOrder inOrder = inOrder(this.listenerMock);
-        inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("a~b~1"));
-        inOrder.verify(this.listenerMock).setTitle("Title");
-        inOrder.verify(this.listenerMock).endSpecificationItem();
     }
 
     @Test

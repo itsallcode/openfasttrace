@@ -185,6 +185,14 @@ It is mostly a matter of taste whether you prefer your specification items to ha
     
     This is the description of the requirement.
 
+Since version 3.8.0 OFT also supports titles with underlines. Since Markdown only allows first level (H1) and second level (H2) titles to be underlined with '=' and '-' respectively and requirements are usually nested deeper into a document, we recommend sticking to the hash mark style of titles though. Underlined titles are mainly supported for compatibility with ReStructured Text (RST). 
+
+    A Requirement Title With an Underline
+    -------------------------------------
+    `req~this-is-the-id~1`
+    
+    This is the description of the requirement.
+
 The upside of giving requirements a title is that they appear in Markdown outline views. The downside is that they introduce redundancy in your specification and therefore have the tendency to become inconsistent with the content of the specification item. If you think in software design terms, the titles violate the ["Don't Repeat Yourself" principle (DRY)](https://en.wikipedia.org/wiki/Don't_repeat_yourself).
 
 The number of hash marks in front of the title must adhere to the rules of Markdown, meaning that if you want to put a [specification item](#specification-item) inside a section with a level two header, the item title must start with three hash marks.

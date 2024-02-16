@@ -1,14 +1,14 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-class Transition
+public class Transition
 {
-    private final State from;
-    private final State to;
-    private final MdPattern markdownPattern;
+    private final LineParserState from;
+    private final LineParserState to;
+    private final LinePattern markdownPattern;
     private final TransitionAction transitionAction;
 
-    public Transition(final State from, final State to, final MdPattern markdownPattern,
-            final TransitionAction transitionAction)
+    public Transition(final LineParserState from, final LineParserState to, final LinePattern markdownPattern,
+                      final TransitionAction transitionAction)
     {
         this.from = from;
         this.to = to;
@@ -16,17 +16,17 @@ class Transition
         this.transitionAction = transitionAction;
     }
 
-    public State getFrom()
+    public LineParserState getFrom()
     {
         return this.from;
     }
 
-    public State getTo()
+    public LineParserState getTo()
     {
         return this.to;
     }
 
-    public MdPattern getMarkdownPattern()
+    public LinePattern getMarkdownPattern()
     {
         return this.markdownPattern;
     }

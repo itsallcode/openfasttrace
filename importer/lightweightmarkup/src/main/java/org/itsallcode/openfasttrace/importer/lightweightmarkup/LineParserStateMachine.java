@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import java.util.logging.Logger;
 
@@ -15,23 +15,23 @@ import java.util.regex.Matcher;
  * decides on resulting state and action depending on the configuration provided
  * in the transition table.
  */
-public class MarkdownImporterStateMachine
+public class LineParserStateMachine
 {
     private static final Logger LOG = Logger
-            .getLogger(MarkdownImporterStateMachine.class.getName());
+            .getLogger(LineParserStateMachine.class.getName());
 
-    private State state = State.START;
+    private LineParserState state = LineParserState.START;
     private String lastToken = "";
     private final Transition[] transitions;
 
     /**
-     * Create a new instance of the {@link MarkdownImporterStateMachine}
+     * Create a new instance of the {@link LineParserStateMachine}
      *
      * @param transitions
      *            the transition table that serves as configuration for the
      *            state machine
      */
-    public MarkdownImporterStateMachine(final Transition[] transitions)
+    public LineParserStateMachine(final Transition[] transitions)
     {
         this.transitions = transitions;
     }

@@ -1,6 +1,6 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-enum State
+public enum LineParserState
 {
     START, OUTSIDE, SPEC_ITEM, DESCRIPTION, COVERS, DEPENDS, RATIONALE, COMMENT, NEEDS, EOF, TITLE, TAGS
 }

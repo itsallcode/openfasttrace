@@ -3,13 +3,13 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
 
 /**
  * Patterns that describe tokens to be recognized within Markdown-style
  * specifications.
  */
-enum MdPattern
-{
+enum MdPattern implements LinePattern {
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
 
@@ -67,6 +67,7 @@ enum MdPattern
      *
      * @return the pattern
      */
+    @Override
     public Pattern getPattern()
     {
         return this.pattern;

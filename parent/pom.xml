@@ -129,6 +129,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-markdown</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>

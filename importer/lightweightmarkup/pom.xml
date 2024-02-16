@@ -2,8 +2,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>openfasttrace-importer-markdown</artifactId>
-    <name>OpenFastTrace Markdown Importer</name>
+    <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+    <name>OpenFastTrace Lightweight Markup Importer Base</name>
     <parent>
         <relativePath>../../parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>
@@ -11,14 +11,6 @@
         <version>${revision}</version>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>

@@ -19,6 +19,7 @@
         <module>exporter/common</module>
         <module>exporter/markdown</module>
         <module>exporter/specobject</module>
+        <module>importer/lightweightmarkup</module>
         <module>importer/markdown</module>
         <module>importer/specobject</module>
         <module>importer/tag</module>

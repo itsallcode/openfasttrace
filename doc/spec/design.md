@@ -400,15 +400,15 @@ Covers:
 
 Needs: impl, itest
 
-#### HTML Reports Allows Configuring Details Folding Status
-`dsn~reporting.html.details-folding~1`
+#### HTML Reports Allows Configuring Details Display Status
+`dsn~reporting.html.details-display~1`
 
-OFT allows configuring the specification item detail section folding status (expanded or collapsed). Default is collapsed.  
+OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
 
 
 Covers:
 
-* `req~reporting.html.details-folding~1`
+* `req~reporting.html.details-display~1`
 
 Needs: impl, utest
 

@@ -35,14 +35,14 @@ public class HtmlViewFactory extends AbstractViewFactory
      *            the output stream.
      * @param cssURL
      *            the URL of the CSS file to include in the HTML report.
-     * @param foldingStatus
-     *            the folding status of the {@code &lt;details&gt;} element.
+     * @param displayStatus
+     *            the display status of the {@code &lt;details&gt;} element.
      * @return a new {@link HtmlViewFactory}.
      */
     public static HtmlViewFactory create(final OutputStream stream, final URL cssURL,
-            final DetailsSectionDisplay foldingStatus)
+            final DetailsSectionDisplay displayStatus)
     {
-        return new HtmlViewFactory(createPrintStream(stream), cssURL, foldingStatus);
+        return new HtmlViewFactory(createPrintStream(stream), cssURL, displayStatus);
     }
 
     private static PrintStream createPrintStream(final OutputStream stream)

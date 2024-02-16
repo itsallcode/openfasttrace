@@ -71,14 +71,14 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "");
     }
 
-    // [utest->dsn~reporting.html.details-folding~1]
+    // [utest->dsn~reporting.html.details-display~1]
     @ParameterizedTest
     @CsvSource(nullValues = "NULL", value =
-    { "NULL, <details>", "HIDE_DETAILS, <details>", "SHOW_DETAILS, <details open>" })
-    void testRenderDetailsDefaultValue(final DetailsSectionDisplay foldingStatus, final String expectedDetailsElement)
+    { "NULL, <details>", "COLLAPSE, <details>", "EXPAND, <details open>" })
+    void testRenderDetailsDefaultValue(final DetailsSectionDisplay displayStatus, final String expectedDetailsElement)
     {
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
-                foldingStatus);
+                displayStatus);
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(ITEM_A_ID) //
                 .title("Item A title") //

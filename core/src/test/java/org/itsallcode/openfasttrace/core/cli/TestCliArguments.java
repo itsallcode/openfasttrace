@@ -268,24 +268,24 @@ class TestCliArguments
         assertThat(this.arguments.getColorScheme(), is(ColorScheme.BLACK_AND_WHITE));
     }
 
-    // [utest->dsn~reporting.html.details-folding~1]
+    // [utest->dsn~reporting.html.details-display~1]
     @Test
-    void testDetailsSectionFoldingDefaultsToHidden()
+    void testDetailsSectionDisplayDefaultsToHidden()
     {
         assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
-    // [utest->dsn~reporting.html.details-folding~1]
+    // [utest->dsn~reporting.html.details-display~1]
     @Test
-    void testDetailsSectionFoldingNullDefaultsToHidden()
+    void testDetailsSectionDisplayNullDefaultsToHidden()
     {
         this.arguments.setDetailsSectionDisplay(null);
         assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
-    // [utest->dsn~reporting.html.details-folding~1]
+    // [utest->dsn~reporting.html.details-display~1]
     @Test
-    void testDetailsSectionFoldingCustomValue()
+    void testDetailsSectionDisplayCustomValue()
     {
         this.arguments.setDetailsSectionDisplay(DetailsSectionDisplay.EXPAND);
         assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.EXPAND));

@@ -92,20 +92,20 @@ class TestReportSettings
     }
 
     @Test
-    void testBuildDetailsFoldingStatusDefault()
+    void testBuildDetailsDisplayStatusDefault()
     {
         assertThat(this.builder.build().getDetailsSectionDisplay(),
                 equalTo(DetailsSectionDisplay.COLLAPSE));
     }
 
     @Test
-    void testBuildDetailsFoldingStatusNullNotAllowed()
+    void testBuildDetailsDisplayStatusNullNotAllowed()
     {
         assertThrows(NullPointerException.class, () -> this.builder.detailsSectionDisplay(null));
     }
 
     @Test
-    void testBuildDetailsFoldingStatusCustom()
+    void testBuildDetailsDisplayStatusCustom()
     {
         assertThat(
                 this.builder.detailsSectionDisplay(DetailsSectionDisplay.EXPAND).build()

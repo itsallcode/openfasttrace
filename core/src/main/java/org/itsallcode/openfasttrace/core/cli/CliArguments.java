@@ -39,7 +39,7 @@ public class CliArguments
     private final DirectoryService directoryService;
     private ColorScheme colorScheme;
 
-    // [impl->dsn~reporting.html.details-folding~1]
+    // [impl->dsn~reporting.html.details-display~1]
     private DetailsSectionDisplay detailsSectionDisplay;
 
     /**

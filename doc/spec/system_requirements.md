@@ -601,9 +601,9 @@ Covers:
 Needs: dsn
 
 ##### HTML Report Renders Details Expanded or Collapsed Initially as Configured
-`req~reporting.html.details-folding~1`
+`req~reporting.html.details-display~1`
 
-OFT allows configuring the folding status of specification item details to expanded or collapsed by default.
+OFT allows configuring the display status of specification item details to expanded or collapsed by default.
 
 Rationale:
 

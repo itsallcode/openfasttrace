@@ -20,14 +20,14 @@ class HtmlSpecificationItem implements Viewable
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
-    private final DetailsSectionDisplay detailsFolding;
+    private final DetailsSectionDisplay detailsDisplay;
 
     HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item,
-            final DetailsSectionDisplay detailsFolding)
+            final DetailsSectionDisplay detailsDisplay)
     {
         this.stream = stream;
         this.item = item;
-        this.detailsFolding = detailsFolding;
+        this.detailsDisplay = detailsDisplay;
     }
 
     @Override
@@ -59,7 +59,7 @@ class HtmlSpecificationItem implements Viewable
 
     private String detailsAttributes()
     {
-        return (detailsFolding == DetailsSectionDisplay.EXPAND) ? " open" : "";
+        return (detailsDisplay == DetailsSectionDisplay.EXPAND) ? " open" : "";
     }
 
     private void renderId(final String indentation, final SpecificationItemId id)

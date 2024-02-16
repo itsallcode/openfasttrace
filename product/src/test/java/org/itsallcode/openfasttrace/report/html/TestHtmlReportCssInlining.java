@@ -5,8 +5,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
@@ -37,10 +36,10 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
     }
 
     @Test
-    void testInliningNonExistentCssThrowsException() throws MalformedURLException
+    void testInliningNonExistentCssThrowsException() throws URISyntaxException, MalformedURLException
     {
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
-                new URL("file:///this_file_does_not_exist.css"), DetailsSectionDisplay.COLLAPSE);
+                new URI("file:///this_file_does_not_exist.css").toURL(), DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
         assertThrows(ReportException.class, () -> view.render());
     }

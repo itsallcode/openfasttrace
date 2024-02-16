@@ -84,6 +84,19 @@
                                     <mainClass>org.itsallcode.openfasttrace.core.cli.CliStarter</mainClass>
                                 </transformer>
                             </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!-- Suppress warning "Discovered module-info.class. Shading will break its strong encapsulation." -->
+                                        <exclude>module-info.class</exclude>
+                                        <!-- Suppress warning "Warning: *-sources.jar define 1 overlapping resource: module-info.java"-->
+                                        <exclude>module-info.java</exclude>
+                                        <!-- Suppress warning "Warning: *.jar define 1 overlapping resource: META-INF/MANIFEST.MF" -->
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>

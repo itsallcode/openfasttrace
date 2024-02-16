@@ -42,6 +42,20 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <!-- Suppress warnings "interface DirectoryService in module org.itsallcode.openfasttrace.api is not indirectly exported using requires transitive" -->
+                        <arg>-Xlint:-exports</arg>
+                        <!-- Suppress warnings "testutil/src/main/java/module-info.java:[14,21] requires directive for an automatic module" -->
+                        <arg>-Xlint:-requires-automatic</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>

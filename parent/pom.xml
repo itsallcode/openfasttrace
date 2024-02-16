@@ -339,23 +339,19 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <append>true</append>
+                        </configuration>
                     </execution>
                     <execution>
-                        <id>merge-results</id>
-                        <phase>verify</phase>
+                        <id>report</id>
                         <goals>
-                            <goal>merge</goal>
+                          <goal>report</goal>
                         </goals>
                         <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}/</directory>
-                                    <includes>
-                                        <include>jacoco*.exec</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <destFile>${project.build.directory}/aggregate.exec</destFile>
+                          <formats>
+                            <format>XML</format>
+                          </formats>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,37 +1,68 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
+/**
+ * Transition in the line parser statemachine.
+ */
 public class Transition
 {
     private final LineParserState from;
     private final LineParserState to;
-    private final LinePattern markdownPattern;
+    private final LinePattern linePattern;
     private final TransitionAction transitionAction;
 
-    public Transition(final LineParserState from, final LineParserState to, final LinePattern markdownPattern,
+    /**
+     * Create a new instance of a {@link Transition}.
+     *
+     * @param from state the statemachine comes from
+     * @param to state the machine will switch to if the pattern matches
+     * @param linePattern pattern the line must match for the transition to happen
+     * @param transitionAction action that will be executed as result of the transition
+     */
+    public Transition(final LineParserState from, final LineParserState to, final LinePattern linePattern,
                       final TransitionAction transitionAction)
     {
         this.from = from;
         this.to = to;
-        this.markdownPattern = markdownPattern;
+        this.linePattern = linePattern;
         this.transitionAction = transitionAction;
     }
 
+    /**
+     * Get the origin state of this transition.
+     *
+     * @return origin state
+     */
     public LineParserState getFrom()
     {
         return this.from;
     }
 
+    /**
+     * Get the target state of this transition.
+     *
+     * @return target state
+     */
     public LineParserState getTo()
     {
         return this.to;
     }
 
-    public LinePattern getMarkdownPattern()
+    /**
+     * Get the regular expression pattern that needs to be matched in order for the transition to happen.
+     *
+     * @return line pattern to be matched
+     */
+    public LinePattern getLinePattern()
     {
-        return this.markdownPattern;
+        return this.linePattern;
     }
 
-    public TransitionAction getTransition()
+    /**
+     * Get the action that is executed when the transition happens.
+     *
+     * @return action that is executed as result of the transition
+     */
+    public TransitionAction getTransitionAction()
     {
         return this.transitionAction;
     }
@@ -40,6 +71,6 @@ public class Transition
     public String toString()
     {
         return "Transition [from=" + this.from + ", to=" + this.to + ", markdownPattern="
-                + this.markdownPattern + "]";
+                + this.linePattern + "]";
     }
 }

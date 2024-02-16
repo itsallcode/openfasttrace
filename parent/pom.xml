@@ -375,14 +375,9 @@
                     <useModulePath>true</useModulePath>
                     <argLine>
                         <!-- Required for Jacoco coverage -->
-                        @{argLine}
+                        <!-- @{argLine} -->
                         <!-- Required for Java 18 -->
                         ${test.args}
-                        <!-- Required to fix failing EqualsVerifier test:
-                            TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
-                            -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
-                            module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
-                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>
@@ -398,14 +393,9 @@
                     <useModulePath>true</useModulePath>
                     <argLine>
                         <!-- Required for Jacoco coverage -->
-                        @{argLine}
+                        <!-- @{argLine} -->
                         <!-- Required for Java 18 -->
                         ${test.args}
-                        <!-- Required to fix failing EqualsVerifier test:
-                            TestTracedLink.testEqualsAndHashContract:22 EqualsVerifier found a problem in class org.itsallcode.openfasttrace.api.core.TracedLink.
-                            -> Unable to make field private final org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem org.itsallcode.openfasttrace.api.core.TracedLink.otherLinkEnd accessible:
-                            module org.itsallcode.openfasttrace.api does not "opens org.itsallcode.openfasttrace.api.core" to unnamed module @48ae9b55 -->
-                        --add-opens org.itsallcode.openfasttrace.api/org.itsallcode.openfasttrace.api.core=ALL-UNNAMED
                     </argLine>
                 </configuration>
                 <executions>

@@ -12,6 +12,10 @@ Tracing options:
                                Defaults to "plain"
   -v, --report-verbosity       Set how verbose the output is. Ranges from
                                "quiet" to "all".
+  --details-section-display status
+                               Initial display status of the details section
+                               in the HTML report. One of "collapse" or "expand".
+                               Defaults to "collapse"
 
 Converting options:
   -o, --output-format format   Requirements format, one of "specobject"

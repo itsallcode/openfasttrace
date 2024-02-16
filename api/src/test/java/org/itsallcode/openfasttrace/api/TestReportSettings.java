@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.api;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.itsallcode.openfasttrace.api.ReportSettings.Builder;
 import org.itsallcode.openfasttrace.api.core.Newline;
@@ -68,5 +69,47 @@ class TestReportSettings
     {
         assertThat(this.builder.newline(Newline.OLDMAC).build().getNewline(),
                 equalTo(Newline.OLDMAC));
+    }
+
+    @Test
+    void testBuildColorSchemeDefault()
+    {
+        assertThat(this.builder.build().getColorScheme(),
+                equalTo(ColorScheme.BLACK_AND_WHITE));
+    }
+
+    @Test
+    void testSetColorSchemeNullNotAllowed()
+    {
+        assertThrows(NullPointerException.class, () -> this.builder.colorScheme(null));
+    }
+
+    @Test
+    void testBuildColorSchemeCustom()
+    {
+        assertThat(this.builder.colorScheme(ColorScheme.COLOR).build().getColorScheme(),
+                equalTo(ColorScheme.COLOR));
+    }
+
+    @Test
+    void testBuildDetailsDisplayStatusDefault()
+    {
+        assertThat(this.builder.build().getDetailsSectionDisplay(),
+                equalTo(DetailsSectionDisplay.COLLAPSE));
+    }
+
+    @Test
+    void testBuildDetailsDisplayStatusNullNotAllowed()
+    {
+        assertThrows(NullPointerException.class, () -> this.builder.detailsSectionDisplay(null));
+    }
+
+    @Test
+    void testBuildDetailsDisplayStatusCustom()
+    {
+        assertThat(
+                this.builder.detailsSectionDisplay(DetailsSectionDisplay.EXPAND).build()
+                        .getDetailsSectionDisplay(),
+                equalTo(DetailsSectionDisplay.EXPAND));
     }
 }

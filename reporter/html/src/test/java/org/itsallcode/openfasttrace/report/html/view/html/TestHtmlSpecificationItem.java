@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
@@ -7,11 +9,15 @@ import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITE
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.mockito.Mockito.lenient;
 
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -63,6 +69,23 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "    </details>", //
                 "  </section>", //
                 "");
+    }
+
+    // [utest->dsn~reporting.html.details-display~1]
+    @ParameterizedTest
+    @CsvSource(nullValues = "NULL", value =
+    { "NULL, <details>", "COLLAPSE, <details>", "EXPAND, <details open>" })
+    void testRenderDetailsDefaultValue(final DetailsSectionDisplay displayStatus, final String expectedDetailsElement)
+    {
+        this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
+                displayStatus);
+        final SpecificationItem item = SpecificationItem.builder() //
+                .id(ITEM_A_ID) //
+                .title("Item A title") //
+                .description("Single line description") //
+                .build();
+        renderItemOnIndentationLevel(item, 1);
+        assertThat(this.outputStream.toString(), containsString(expectedDetailsElement));
     }
 
     @Test

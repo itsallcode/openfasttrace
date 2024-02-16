@@ -29,6 +29,6 @@ public class HtmlReporterFactory extends ReporterFactory
     @Override
     public Reportable createImporter(Trace trace)
     {
-        return new HtmlReport(trace);
+        return new HtmlReport(trace, getContext().getSettings());
     }
 }

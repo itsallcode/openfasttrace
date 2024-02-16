@@ -5,12 +5,11 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
-import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
-import org.itsallcode.openfasttrace.report.html.view.Viewable;
-import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
+import org.itsallcode.openfasttrace.report.html.view.*;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 
 /**
@@ -20,16 +19,20 @@ public class HtmlReport implements Reportable
 {
     private final Trace trace;
     private static final String REPORT_CSS_FILE = "/css/report.css";
+    private final ReportSettings settings;
 
     /**
      * Create a new instance of an {@link HtmlReport}
      * 
      * @param trace
      *            trace to be reported on
+     * @param settings
+     *            report settings to use
      */
-    public HtmlReport(final Trace trace)
+    public HtmlReport(final Trace trace, final ReportSettings settings)
     {
         this.trace = trace;
+        this.settings = settings;
     }
 
     /**
@@ -45,7 +48,8 @@ public class HtmlReport implements Reportable
     @Override
     public void renderToStream(final OutputStream outputStream)
     {
-        final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl());
+        final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl(),
+                settings.getDetailsSectionDisplay());
         final ViewableContainer view = factory.createView("",
                 "Specification items by artifact type");
         final ViewableContainer details = createDetails(factory);

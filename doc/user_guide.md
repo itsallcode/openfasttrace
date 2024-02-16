@@ -469,7 +469,6 @@ The verbosity of the tracing report.
 
 Defaults to `failure_details`.
 
-
     --details-section-display <status>
 
 Initial display status of the details section in the HTML report

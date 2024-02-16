@@ -335,6 +335,12 @@
                 <version>0.8.11</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>merge-results</id>
                         <phase>verify</phase>
                         <goals>
@@ -352,16 +358,6 @@
                             <destFile>${project.build.directory}/aggregate.exec</destFile>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/aggregate.exec</dataFile>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -375,7 +371,7 @@
                     <useModulePath>true</useModulePath>
                     <argLine>
                         <!-- Required for Jacoco coverage -->
-                        <!-- @{argLine} -->
+                        @{argLine}
                         <!-- Required for Java 18 -->
                         ${test.args}
                     </argLine>
@@ -393,8 +389,8 @@
                     <useModulePath>true</useModulePath>
                     <argLine>
                         <!-- Required for Jacoco coverage -->
-                        <!-- @{argLine} -->
-                        <!-- Required for Java 18 -->
+                        @{argLine}
+                        <!-- Required for Java >= 18 -->
                         ${test.args}
                     </argLine>
                 </configuration>

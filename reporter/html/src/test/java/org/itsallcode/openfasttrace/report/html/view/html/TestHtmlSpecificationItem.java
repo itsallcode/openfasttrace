@@ -9,7 +9,7 @@ import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITE
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.mockito.Mockito.lenient;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
@@ -75,7 +75,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @ParameterizedTest
     @CsvSource(nullValues = "NULL", value =
     { "NULL, <details>", "HIDE_DETAILS, <details>", "SHOW_DETAILS, <details open>" })
-    void testRenderDetailsDefaultValue(final DetailsSectionFolding foldingStatus, final String expectedDetailsElement)
+    void testRenderDetailsDefaultValue(final DetailsSectionDisplay foldingStatus, final String expectedDetailsElement)
     {
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
                 foldingStatus);

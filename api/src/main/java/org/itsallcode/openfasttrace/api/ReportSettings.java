@@ -17,7 +17,7 @@ public class ReportSettings
     private final String outputFormat;
     private final Newline newline;
     private final ColorScheme colorScheme;
-    private final DetailsSectionFolding detailsSectionFolding;
+    private final DetailsSectionDisplay detailsSectionDisplay;
 
     private ReportSettings(final Builder builder)
     {
@@ -26,7 +26,7 @@ public class ReportSettings
         this.outputFormat = builder.outputFormat;
         this.newline = builder.newline;
         this.colorScheme = Objects.requireNonNull(builder.colorScheme, "colorScheme");
-        this.detailsSectionFolding = Objects.requireNonNull(builder.detailsSectionFolding, "detailsSectionFolding");
+        this.detailsSectionDisplay = Objects.requireNonNull(builder.detailsSectionDisplay, "detailsSectionDisplay");
     }
 
     /**
@@ -80,13 +80,13 @@ public class ReportSettings
     }
 
     /**
-     * Get the details section folding status.
+     * Get the details section display status.
      * 
-     * @return folding status
+     * @return display status
      */
-    public DetailsSectionFolding getDetailsSectionFolding()
+    public DetailsSectionDisplay getDetailsSectionDisplay()
     {
-        return detailsSectionFolding;
+        return detailsSectionDisplay;
     }
 
     /**
@@ -114,7 +114,7 @@ public class ReportSettings
      */
     public static class Builder
     {
-        private DetailsSectionFolding detailsSectionFolding = DetailsSectionFolding.HIDE_DETAILS;
+        private DetailsSectionDisplay detailsSectionDisplay = DetailsSectionDisplay.COLLAPSE;
         private Newline newline = Newline.UNIX;
         private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
         private boolean showOrigin = false;
@@ -206,16 +206,16 @@ public class ReportSettings
         }
 
         /**
-         * Set the desired details section folding status. Default:
-         * {@link DetailsSectionFolding#HIDE_DETAILS}.
+         * Set the desired details section display status. Default:
+         * {@link DetailsSectionDisplay#COLLAPSE}.
          *
-         * @param detailsSectionFolding
-         *            folding status to use
+         * @param detailsSectionDisplay
+         *            display status to use
          * @return {@code this} for fluent programming
          */
-        public Builder detailsSectionFolding(final DetailsSectionFolding detailsSectionFolding)
+        public Builder detailsSectionDisplay(final DetailsSectionDisplay detailsSectionDisplay)
         {
-            this.detailsSectionFolding = Objects.requireNonNull(detailsSectionFolding, "detailsSectionFolding");
+            this.detailsSectionDisplay = Objects.requireNonNull(detailsSectionDisplay, "detailsSectionDisplay");
             return this;
         }
     }

@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ class AbstractTestHtmlRenderer
     {
         this.outputStream = new ByteArrayOutputStream();
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
-                DetailsSectionFolding.HIDE_DETAILS);
+                DetailsSectionDisplay.COLLAPSE);
     }
 
     protected void assertOutputLines(final String... lines)

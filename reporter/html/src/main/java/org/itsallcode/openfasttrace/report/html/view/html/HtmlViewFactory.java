@@ -5,7 +5,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
@@ -19,9 +19,9 @@ public class HtmlViewFactory extends AbstractViewFactory
 {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final URL cssUrl;
-    private final DetailsSectionFolding foldingStatus;
+    private final DetailsSectionDisplay foldingStatus;
 
-    private HtmlViewFactory(final PrintStream stream, final URL cssUrl, final DetailsSectionFolding foldingStatus)
+    private HtmlViewFactory(final PrintStream stream, final URL cssUrl, final DetailsSectionDisplay foldingStatus)
     {
         super(stream);
         this.cssUrl = cssUrl;
@@ -40,7 +40,7 @@ public class HtmlViewFactory extends AbstractViewFactory
      * @return a new {@link HtmlViewFactory}.
      */
     public static HtmlViewFactory create(final OutputStream stream, final URL cssURL,
-            final DetailsSectionFolding foldingStatus)
+            final DetailsSectionDisplay foldingStatus)
     {
         return new HtmlViewFactory(createPrintStream(stream), cssURL, foldingStatus);
     }

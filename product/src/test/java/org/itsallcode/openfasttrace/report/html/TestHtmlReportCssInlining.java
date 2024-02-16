@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
@@ -30,7 +30,7 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
         writeTextFile(cssFile, CSS);
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         final HtmlViewFactory factory = HtmlViewFactory.create(stream, cssFile.toURI().toURL(),
-                DetailsSectionFolding.HIDE_DETAILS);
+                DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
         view.render();
         assertThat(stream.toString(), containsString(CSS));
@@ -40,7 +40,7 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
     void testInliningNonExistentCssThrowsException() throws MalformedURLException
     {
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
-                new URL("file:///this_file_does_not_exist.css"), DetailsSectionFolding.HIDE_DETAILS);
+                new URL("file:///this_file_does_not_exist.css"), DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
         assertThrows(ReportException.class, () -> view.render());
     }
@@ -52,7 +52,7 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
         final File cssFile = tempDir.resolve("test.css").toFile();
         cssFile.setReadable(false);
         final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL(),
-                DetailsSectionFolding.HIDE_DETAILS);
+                DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
         assertThrows(ReportException.class, () -> view.render());
     }

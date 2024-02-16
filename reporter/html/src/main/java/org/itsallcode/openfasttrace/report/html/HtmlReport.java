@@ -49,7 +49,7 @@ public class HtmlReport implements Reportable
     public void renderToStream(final OutputStream outputStream)
     {
         final ViewFactory factory = HtmlViewFactory.create(outputStream, getCssUrl(),
-                settings.getDetailsSectionFolding());
+                settings.getDetailsSectionDisplay());
         final ViewableContainer view = factory.createView("",
                 "Specification items by artifact type");
         final ViewableContainer details = createDetails(factory);

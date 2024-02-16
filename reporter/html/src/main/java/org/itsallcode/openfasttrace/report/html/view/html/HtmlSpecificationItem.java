@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
@@ -20,10 +20,10 @@ class HtmlSpecificationItem implements Viewable
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
-    private final DetailsSectionFolding detailsFolding;
+    private final DetailsSectionDisplay detailsFolding;
 
     HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item,
-            final DetailsSectionFolding detailsFolding)
+            final DetailsSectionDisplay detailsFolding)
     {
         this.stream = stream;
         this.item = item;
@@ -59,7 +59,7 @@ class HtmlSpecificationItem implements Viewable
 
     private String detailsAttributes()
     {
-        if (detailsFolding == DetailsSectionFolding.SHOW_DETAILS)
+        if (detailsFolding == DetailsSectionDisplay.EXPAND)
         {
             return " open";
         }

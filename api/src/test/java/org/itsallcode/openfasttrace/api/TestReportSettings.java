@@ -94,22 +94,22 @@ class TestReportSettings
     @Test
     void testBuildDetailsFoldingStatusDefault()
     {
-        assertThat(this.builder.build().getDetailsSectionFolding(),
-                equalTo(DetailsSectionFolding.HIDE_DETAILS));
+        assertThat(this.builder.build().getDetailsSectionDisplay(),
+                equalTo(DetailsSectionDisplay.COLLAPSE));
     }
 
     @Test
     void testBuildDetailsFoldingStatusNullNotAllowed()
     {
-        assertThrows(NullPointerException.class, () -> this.builder.detailsSectionFolding(null));
+        assertThrows(NullPointerException.class, () -> this.builder.detailsSectionDisplay(null));
     }
 
     @Test
     void testBuildDetailsFoldingStatusCustom()
     {
         assertThat(
-                this.builder.detailsSectionFolding(DetailsSectionFolding.SHOW_DETAILS).build()
-                        .getDetailsSectionFolding(),
-                equalTo(DetailsSectionFolding.SHOW_DETAILS));
+                this.builder.detailsSectionDisplay(DetailsSectionDisplay.EXPAND).build()
+                        .getDetailsSectionDisplay(),
+                equalTo(DetailsSectionDisplay.EXPAND));
     }
 }

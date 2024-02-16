@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
@@ -26,14 +26,14 @@ class TestHtmlViewFactory
     {
         this.outputStream = new ByteArrayOutputStream();
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
-                DetailsSectionFolding.HIDE_DETAILS);
+                DetailsSectionDisplay.COLLAPSE);
     }
 
     @Test
     void testCreateFactoryWithPrintStream() throws UnsupportedEncodingException
     {
         factory = HtmlViewFactory.create(new PrintStream(outputStream, true, StandardCharsets.UTF_8),
-                HtmlReport.getCssUrl(), DetailsSectionFolding.HIDE_DETAILS);
+                HtmlReport.getCssUrl(), DetailsSectionDisplay.COLLAPSE);
         assertThat(factory, notNullValue());
     }
 

@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
@@ -40,7 +40,7 @@ public class CliArguments
     private ColorScheme colorScheme;
 
     // [impl->dsn~reporting.html.details-folding~1]
-    private DetailsSectionFolding detailsSectionFolding;
+    private DetailsSectionDisplay detailsSectionFolding;
 
     /**
      * Create new {@link CliArguments}.
@@ -319,14 +319,14 @@ public class CliArguments
     /**
      * Get the default folding status of HTML report details sections.
      * <p>
-     * Defaults to {@link DetailsSectionFolding#HIDE_DETAILS}.
+     * Defaults to {@link DetailsSectionDisplay#COLLAPSE}.
      * </p>
      * 
      * @return folding status
      */
-    public DetailsSectionFolding getDetailsSectionFolding()
+    public DetailsSectionDisplay getDetailsSectionFolding()
     {
-        return detailsSectionFolding == null ? DetailsSectionFolding.HIDE_DETAILS : detailsSectionFolding;
+        return detailsSectionFolding == null ? DetailsSectionDisplay.COLLAPSE : detailsSectionFolding;
     }
 
     /**
@@ -412,7 +412,7 @@ public class CliArguments
      * @param detailsSectionFolding
      *            folding status
      */
-    public void setDetailsSectionFolding(final DetailsSectionFolding detailsSectionFolding)
+    public void setDetailsSectionFolding(final DetailsSectionDisplay detailsSectionFolding)
     {
         this.detailsSectionFolding = detailsSectionFolding;
     }

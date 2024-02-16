@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
-import org.itsallcode.openfasttrace.api.DetailsSectionFolding;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -272,7 +272,7 @@ class TestCliArguments
     @Test
     void testDetailsSectionFoldingDefaultsToHidden()
     {
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.HIDE_DETAILS));
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
     // [utest->dsn~reporting.html.details-folding~1]
@@ -280,14 +280,14 @@ class TestCliArguments
     void testDetailsSectionFoldingNullDefaultsToHidden()
     {
         this.arguments.setDetailsSectionFolding(null);
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.HIDE_DETAILS));
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
     // [utest->dsn~reporting.html.details-folding~1]
     @Test
     void testDetailsSectionFoldingCustomValue()
     {
-        this.arguments.setDetailsSectionFolding(DetailsSectionFolding.SHOW_DETAILS);
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionFolding.SHOW_DETAILS));
+        this.arguments.setDetailsSectionFolding(DetailsSectionDisplay.EXPAND);
+        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.EXPAND));
     }
 }

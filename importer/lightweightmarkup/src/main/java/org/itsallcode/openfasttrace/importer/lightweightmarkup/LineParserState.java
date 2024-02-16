@@ -23,10 +23,10 @@ public enum LineParserState
     COMMENT,
     /** Inside a section defining the required coverage */
     NEEDS,
-    /** Reached the end of the file */
-    EOF,
     /** Found a title */
     TITLE,
     /** Found tags */
-    TAGS
+    TAGS,
+    /** Reached the end of the file */
+    EOF
 }

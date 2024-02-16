@@ -1,7 +1,7 @@
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 
 /**
- * This provides an importer for the MarkDown format.
+ * This provides an importer for the Markdown format.
  * 
  * @provides org.itsallcode.openfasttrace.api.importer.ImporterFactory
  */

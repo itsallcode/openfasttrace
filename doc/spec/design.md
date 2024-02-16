@@ -403,7 +403,8 @@ Needs: impl, itest
 #### HTML Reports Allows Configuring Details Folding Status
 `dsn~reporting.html.details-folding~1`
 
-OFT allows configuring the specification item detail section folding status (open or closed). Default is closed.
+OFT allows configuring the specification item detail section folding status (expanded or collapsed). Default is collapsed.  
+
 
 Covers:
 

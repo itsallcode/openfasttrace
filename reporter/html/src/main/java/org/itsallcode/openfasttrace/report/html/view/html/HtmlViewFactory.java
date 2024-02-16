@@ -19,13 +19,13 @@ public class HtmlViewFactory extends AbstractViewFactory
 {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final URL cssUrl;
-    private final DetailsSectionDisplay foldingStatus;
+    private final DetailsSectionDisplay sectionDisplay;
 
-    private HtmlViewFactory(final PrintStream stream, final URL cssUrl, final DetailsSectionDisplay foldingStatus)
+    private HtmlViewFactory(final PrintStream stream, final URL cssUrl, final DetailsSectionDisplay sectionDisplay)
     {
         super(stream);
         this.cssUrl = cssUrl;
-        this.foldingStatus = foldingStatus;
+        this.sectionDisplay = sectionDisplay;
     }
 
     /**
@@ -90,7 +90,7 @@ public class HtmlViewFactory extends AbstractViewFactory
     @Override
     public Viewable createSpecificationItem(final LinkedSpecificationItem item)
     {
-        return new HtmlSpecificationItem(this.outputStream, item, foldingStatus);
+        return new HtmlSpecificationItem(this.outputStream, item, sectionDisplay);
     }
 
     @Override

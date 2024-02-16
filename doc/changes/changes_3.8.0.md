@@ -12,7 +12,7 @@ Also, the Markdown parser now ignores whitespace in `Needs` and `Tags` entries a
 
 The test coverage for the Markdown importer is now at 100%, and we were able to remove tests that were done with mocks in favor or more robust low-level integration tests.
 
-The HTML report now allows expanding all details sections with command line option `--details-section-folding SHOW_DETAILS`.
+The HTML report now allows expanding all details sections with command line option `--details-section expand`.
 
 ## Features
 

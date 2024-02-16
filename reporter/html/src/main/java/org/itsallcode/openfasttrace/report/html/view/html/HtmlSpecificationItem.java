@@ -59,11 +59,7 @@ class HtmlSpecificationItem implements Viewable
 
     private String detailsAttributes()
     {
-        if (detailsFolding == DetailsSectionDisplay.EXPAND)
-        {
-            return " open";
-        }
-        return "";
+        return (detailsFolding == DetailsSectionDisplay.EXPAND) ? " open" : "";
     }
 
     private void renderId(final String indentation, final SpecificationItemId id)

@@ -272,22 +272,22 @@ class TestCliArguments
     @Test
     void testDetailsSectionFoldingDefaultsToHidden()
     {
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.COLLAPSE));
+        assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
     // [utest->dsn~reporting.html.details-folding~1]
     @Test
     void testDetailsSectionFoldingNullDefaultsToHidden()
     {
-        this.arguments.setDetailsSectionFolding(null);
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.COLLAPSE));
+        this.arguments.setDetailsSectionDisplay(null);
+        assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.COLLAPSE));
     }
 
     // [utest->dsn~reporting.html.details-folding~1]
     @Test
     void testDetailsSectionFoldingCustomValue()
     {
-        this.arguments.setDetailsSectionFolding(DetailsSectionDisplay.EXPAND);
-        assertThat(this.arguments.getDetailsSectionFolding(), is(DetailsSectionDisplay.EXPAND));
+        this.arguments.setDetailsSectionDisplay(DetailsSectionDisplay.EXPAND);
+        assertThat(this.arguments.getDetailsSectionDisplay(), is(DetailsSectionDisplay.EXPAND));
     }
 }

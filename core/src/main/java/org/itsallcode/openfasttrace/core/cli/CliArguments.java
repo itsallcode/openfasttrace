@@ -40,7 +40,7 @@ public class CliArguments
     private ColorScheme colorScheme;
 
     // [impl->dsn~reporting.html.details-folding~1]
-    private DetailsSectionDisplay detailsSectionFolding;
+    private DetailsSectionDisplay detailsSectionDisplay;
 
     /**
      * Create new {@link CliArguments}.
@@ -317,16 +317,16 @@ public class CliArguments
     }
 
     /**
-     * Get the default folding status of HTML report details sections.
+     * Get the default display status of HTML report details sections.
      * <p>
      * Defaults to {@link DetailsSectionDisplay#COLLAPSE}.
      * </p>
      * 
-     * @return folding status
+     * @return display status
      */
-    public DetailsSectionDisplay getDetailsSectionFolding()
+    public DetailsSectionDisplay getDetailsSectionDisplay()
     {
-        return detailsSectionFolding == null ? DetailsSectionDisplay.COLLAPSE : detailsSectionFolding;
+        return detailsSectionDisplay == null ? DetailsSectionDisplay.COLLAPSE : detailsSectionDisplay;
     }
 
     /**
@@ -407,13 +407,13 @@ public class CliArguments
     }
 
     /**
-     * Choose the details folding status.
+     * Choose the details display status.
      *
-     * @param detailsSectionFolding
-     *            folding status
+     * @param detailsSectionDisplay
+     *            display status
      */
-    public void setDetailsSectionFolding(final DetailsSectionDisplay detailsSectionFolding)
+    public void setDetailsSectionDisplay(final DetailsSectionDisplay detailsSectionDisplay)
     {
-        this.detailsSectionFolding = detailsSectionFolding;
+        this.detailsSectionDisplay = detailsSectionDisplay;
     }
 }

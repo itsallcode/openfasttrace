@@ -70,7 +70,7 @@ public class TraceCommand extends AbstractCommand
                 .newline(this.arguments.getNewline()) //
                 .showOrigin(this.arguments.getShowOrigin()) //
                 .colorScheme(this.arguments.getColorScheme()) //
-                .detailsSectionDisplay(this.arguments.getDetailsSectionFolding()) //
+                .detailsSectionDisplay(this.arguments.getDetailsSectionDisplay()) //
                 .build();
     }
 }

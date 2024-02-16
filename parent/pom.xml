@@ -111,12 +111,6 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
-                <artifactId>openfasttrace-exporter-markdown</artifactId>
-                <version>${revision}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-exporter-common</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>

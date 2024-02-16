@@ -247,7 +247,9 @@
             <properties>
                 <!-- java.security.manager is required to fix failing tests in TestCliStarter:
                     UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
-                <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito danyamically loading a Java agent -->
+                <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito dynamically loading a Java agent:
+                    WARNING: A Java agent has been loaded dynamically (~/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.11/byte-buddy-agent-1.14.11.jar)
+                    Dynamic loading of agents will be disallowed by default in a future release -->
                 <test.args>-Djava.security.manager=allow -XX:+EnableDynamicAgentLoading</test.args>
             </properties>
         </profile>
@@ -366,6 +368,10 @@
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
+                    <argLine>
+                        <!-- Required for Java >= 18 -->
+                        ${test.args}
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -378,6 +384,10 @@
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
+                    <argLine>
+                        <!-- Required for Java >= 18 -->
+                        ${test.args}
+                    </argLine>
                 </configuration>
                 <executions>
                     <execution>

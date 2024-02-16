@@ -83,9 +83,6 @@ class TestSpecobjectExportImport
     {
         final String exportedItems = exportToString(items);
         final List<SpecificationItem> importedItems = importItems(exportedItems);
-        System.out.println(importedItems);
-        System.out.println(asList(items));
-
         assertThat(importedItems, AutoMatcher.contains(items));
     }
 

@@ -5,9 +5,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.itsallcode.openfasttrace.core.cli.CliArguments;
 
@@ -72,6 +70,7 @@ public class TraceCommand extends AbstractCommand
                 .newline(this.arguments.getNewline()) //
                 .showOrigin(this.arguments.getShowOrigin()) //
                 .colorScheme(this.arguments.getColorScheme()) //
+                .detailsSectionDisplay(this.arguments.getDetailsSectionDisplay()) //
                 .build();
     }
 }

@@ -400,6 +400,18 @@ Covers:
 
 Needs: impl, itest
 
+#### HTML Reports Allows Configuring Details Display Status
+`dsn~reporting.html.details-display~1`
+
+OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
+
+
+Covers:
+
+* `req~reporting.html.details-display~1`
+
+Needs: impl, utest
+
 ## Requirement Format Conversion
 
 ### ReqM2 Export

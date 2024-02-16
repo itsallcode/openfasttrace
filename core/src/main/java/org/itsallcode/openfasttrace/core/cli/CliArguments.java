@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
@@ -37,6 +38,9 @@ public class CliArguments
     private boolean showOrigin;
     private final DirectoryService directoryService;
     private ColorScheme colorScheme;
+
+    // [impl->dsn~reporting.html.details-display~1]
+    private DetailsSectionDisplay detailsSectionDisplay;
 
     /**
      * Create new {@link CliArguments}.
@@ -313,6 +317,19 @@ public class CliArguments
     }
 
     /**
+     * Get the default display status of HTML report details sections.
+     * <p>
+     * Defaults to {@link DetailsSectionDisplay#COLLAPSE}.
+     * </p>
+     * 
+     * @return display status
+     */
+    public DetailsSectionDisplay getDetailsSectionDisplay()
+    {
+        return detailsSectionDisplay == null ? DetailsSectionDisplay.COLLAPSE : detailsSectionDisplay;
+    }
+
+    /**
      * Set a list of tags to be applied as filter during import
      * 
      * @param tags
@@ -387,5 +404,16 @@ public class CliArguments
     public void setC(final ColorScheme colorScheme)
     {
         this.setColorScheme(colorScheme);
+    }
+
+    /**
+     * Choose the details display status.
+     *
+     * @param detailsSectionDisplay
+     *            display status
+     */
+    public void setDetailsSectionDisplay(final DetailsSectionDisplay detailsSectionDisplay)
+    {
+        this.detailsSectionDisplay = detailsSectionDisplay;
     }
 }

@@ -90,7 +90,7 @@ class TestCommandLineInterpreter
     void testInvalidEnumParamter()
     {
         expectParseException(new CommandLineArgumentsStub(), asList("-c", "INVALID_VALUE"),
-                "Cannot convert value 'INVALID_VALUE' to enum org.itsallcode.openfasttrace.cli.CommandLineArgumentsStub$StubEnum");
+                "Cannot convert value 'INVALID_VALUE' to enum org.itsallcode.openfasttrace.core.cli.CommandLineArgumentsStub$StubEnum. Allowed values: [VALUE1, VALUE2]");
     }
 
     @Test
@@ -112,7 +112,7 @@ class TestCommandLineInterpreter
     void testSetterWithoutArgument()
     {
         expectParseException(new CliArgsWithNoArgSetter(), asList("--invalid"),
-                "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
+                "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.core.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
                         + " Only one argument is allowed.");
     }
 
@@ -120,7 +120,7 @@ class TestCommandLineInterpreter
     void testSetterWithTooManyArguments()
     {
         expectParseException(new CliArgsMultiArgSetter(), asList("--invalid"),
-                "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
+                "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.core.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
                         + " Only one argument is allowed.");
     }
 
@@ -191,11 +191,10 @@ class TestCommandLineInterpreter
     private void expectParseException(final Object argumentsReceiver, final List<String> arguments,
             final String expectedExceptionMessage)
     {
-        assertThrows(CliException.class,
+        final CliException exception = assertThrows(CliException.class,
                 () -> new CommandLineInterpreter(arguments.toArray(new String[0]),
-                        argumentsReceiver).parse(),
-                expectedExceptionMessage);
-
+                        argumentsReceiver).parse());
+        assertThat(exception.getMessage(), equalTo(expectedExceptionMessage));
     }
 
     private static class CliArgsWithoutUnnamedParameters

@@ -16,7 +16,6 @@ import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
 class HtmlSpecificationItem implements Viewable
 {
-
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();

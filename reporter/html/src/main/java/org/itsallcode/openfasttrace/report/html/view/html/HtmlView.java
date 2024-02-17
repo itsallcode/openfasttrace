@@ -60,10 +60,10 @@ class HtmlView extends AbstractStreamableViewContainer
                 this.stream.write(buffer, 0, n);
             }
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
             throw new ReportException("Unable to copy CSS content \"" + this.cssURL.toString()
-                    + "\" trying to generate HTML view.", e);
+                    + "\" trying to generate HTML view.", exception);
         }
     }
 

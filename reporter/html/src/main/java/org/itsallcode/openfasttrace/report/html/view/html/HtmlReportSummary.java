@@ -21,6 +21,7 @@ class HtmlReportSummary extends AbstractStreamableViewContainer
     @Override
     protected void renderAfterChildren(final int level)
     {
+        this.renderIndentation(level);
         this.stream.println("</nav>");
     }
 }

@@ -80,6 +80,19 @@
                                     <mainClass>org.itsallcode.openfasttrace.core.cli.CliStarter</mainClass>
                                 </transformer>
                             </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!-- Suppress warning "Discovered module-info.class. Shading will break its strong encapsulation." -->
+                                        <exclude>module-info.class</exclude>
+                                        <!-- Suppress warning "Warning: *-sources.jar define 1 overlapping resource: module-info.java"-->
+                                        <exclude>module-info.java</exclude>
+                                        <!-- Suppress warning "Warning: *.jar define 1 overlapping resource: META-INF/MANIFEST.MF" -->
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -89,6 +102,18 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <includeDependencySources>true</includeDependencySources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <!-- Suppress warning "bad path element "/Users/chp/private/git/openfasttrace/product/target/classes": no such file or directory" -->
+                        <arg>-Xlint:-path</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

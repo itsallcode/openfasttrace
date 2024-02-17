@@ -1,9 +1,6 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.io.PrintStream;
+import java.io.*;
 import java.net.URL;
 
 import org.itsallcode.openfasttrace.api.report.ReportException;
@@ -12,7 +9,7 @@ import org.itsallcode.openfasttrace.report.html.view.AbstractStreamableViewConta
 /**
  * Single HTML page view
  */
-public class HtmlView extends AbstractStreamableViewContainer
+class HtmlView extends AbstractStreamableViewContainer
 {
     private final URL cssURL;
 
@@ -21,7 +18,6 @@ public class HtmlView extends AbstractStreamableViewContainer
      * 
      * @param stream
      *            the stream to write to
-     * 
      * @param id
      *            view ID
      * @param title
@@ -29,7 +25,7 @@ public class HtmlView extends AbstractStreamableViewContainer
      * @param cssURL
      *            URL of the CSS stylesheet to be used in the HTML view
      */
-    public HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
+    HtmlView(final PrintStream stream, final String id, final String title, final URL cssURL)
     {
         super(stream, id, title);
         this.cssURL = cssURL;
@@ -64,10 +60,10 @@ public class HtmlView extends AbstractStreamableViewContainer
                 this.stream.write(buffer, 0, n);
             }
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
             throw new ReportException("Unable to copy CSS content \"" + this.cssURL.toString()
-                    + "\" trying to generate HTML view.", e);
+                    + "\" trying to generate HTML view.", exception);
         }
     }
 

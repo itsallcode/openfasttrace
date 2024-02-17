@@ -9,10 +9,11 @@ base_dir="$script_path"
 oft_script="$base_dir/oft"
 report_file=$base_dir/target/self-trace-report.html
 
-mkdir -p $(dirname "$report_file")
+mkdir -p "$(dirname "$report_file")"
 
 if $oft_script trace \
-    --output-format html -f "$report_file" \
+    --output-file "$report_file" \
+    --output-format html \
     "$base_dir/doc/spec" \
     "$base_dir/importer/markdown/src" \
     "$base_dir/importer/specobject/src" \

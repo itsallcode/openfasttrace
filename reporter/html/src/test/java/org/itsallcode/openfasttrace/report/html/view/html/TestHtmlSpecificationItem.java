@@ -1,7 +1,7 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
@@ -9,6 +9,7 @@ import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITE
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
 import static org.mockito.Mockito.lenient;
 
+import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
@@ -239,5 +240,48 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
                 "  </details>", //
                 "</section>", //
                 "");
+    }
+
+    // [utest->dsn~reporting.html.escape-html~1]
+    @Test
+    void testRenderEscapesHtmlElementsInTitle()
+    {
+        assertRender(defaultItem().title("Title<tag>"),
+                allOf(containsString("Title&lt;tag&gt;"), not(containsString("<tag>"))));
+    }
+
+    // [utest->dsn~reporting.html.escape-html~1]
+    @Test
+    void testRenderEscapesHtmlElementsInDescription()
+    {
+        assertRender(defaultItem().description("Description<tag>"),
+                allOf(containsString("Description&lt;tag&gt;"), not(containsString("<tag>"))));
+    }
+
+    // [utest->dsn~reporting.html.escape-html~1]
+    @Test
+    void testRenderEscapesHtmlElementsInComment()
+    {
+        assertRender(defaultItem().comment("Comment<tag>"),
+                allOf(containsString("Comment&lt;tag&gt;"), not(containsString("<tag>"))));
+    }
+
+    // [utest->dsn~reporting.html.escape-html~1]
+    @Test
+    void testRenderEscapesHtmlElementsInRationale()
+    {
+        assertRender(defaultItem().rationale("Rationale<tag>"),
+                allOf(containsString("Rationale&lt;tag&gt;"), not(containsString("<tag>"))));
+    }
+
+    private SpecificationItem.Builder defaultItem()
+    {
+        return SpecificationItem.builder().id(ITEM_A_ID);
+    }
+
+    private void assertRender(final SpecificationItem.Builder itemBuilder, final Matcher<String> matcher)
+    {
+        renderItemOnIndentationLevel(itemBuilder.build(), 0);
+        assertOutput(matcher);
     }
 }

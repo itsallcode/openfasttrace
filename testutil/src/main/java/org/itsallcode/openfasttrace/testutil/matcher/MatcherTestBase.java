@@ -1,14 +1,11 @@
 package org.itsallcode.openfasttrace.testutil.matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.*;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -20,6 +17,11 @@ import org.junit.jupiter.api.Test;
  */
 public abstract class MatcherTestBase<T>
 {
+    protected MatcherTestBase()
+    {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
+    }
+
     @Test
     void testNullObject()
     {

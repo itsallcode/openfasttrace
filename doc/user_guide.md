@@ -489,7 +489,7 @@ Defaults to `specobject`.
 
 #### Common Options
 
-    -f, --file <path>
+    -f, --output-file <path>
 
 The output file or in case the output consists of more than one file, the output path. Defaults to STDOUT if not given.
 

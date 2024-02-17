@@ -10,7 +10,7 @@
     <properties>
         <revision>3.8.0</revision>
         <java.version>11</java.version>
-        <junit.version>5.10.1</junit.version>
+        <junit.version>5.10.2</junit.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -106,12 +106,6 @@
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-core</artifactId>
-                <version>${revision}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.itsallcode.openfasttrace</groupId>
-                <artifactId>openfasttrace-exporter-markdown</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>
@@ -259,7 +253,9 @@
             <properties>
                 <!-- java.security.manager is required to fix failing tests in TestCliStarter:
                     UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
-                <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito danyamically loading a Java agent -->
+                <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito dynamically loading a Java agent:
+                    WARNING: A Java agent has been loaded dynamically (~/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.11/byte-buddy-agent-1.14.11.jar)
+                    Dynamic loading of agents will be disallowed by default in a future release -->
                 <test.args>-Djava.security.manager=allow -XX:+EnableDynamicAgentLoading</test.args>
             </properties>
         </profile>
@@ -292,6 +288,11 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -462,7 +463,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.1</version>
+                    <version>4.0.0-M13</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -554,7 +555,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2024.2</version>
+                            <version>1.2024.3</version>
                         </dependency>
                     </dependencies>
                 </plugin>

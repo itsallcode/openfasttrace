@@ -30,6 +30,11 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @Mock
     protected ImporterContext contextMock;
 
+    protected ImporterFactoryTestBase()
+    {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
+    }
+
     @BeforeEach
     public void initMocks()
     {

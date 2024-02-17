@@ -14,6 +14,11 @@ import java.util.Locale;
  */
 public class OsCheck
 {
+    public OsCheck()
+    {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
+    }
+
     /**
      * Types of Operating Systems
      */

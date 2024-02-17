@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;
@@ -19,11 +20,14 @@ class HtmlSpecificationItem implements Viewable
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
+    private final DetailsSectionDisplay detailsDisplay;
 
-    HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item)
+    HtmlSpecificationItem(final PrintStream stream, final LinkedSpecificationItem item,
+            final DetailsSectionDisplay detailsDisplay)
     {
         this.stream = stream;
         this.item = item;
+        this.detailsDisplay = detailsDisplay;
     }
 
     @Override
@@ -50,7 +54,12 @@ class HtmlSpecificationItem implements Viewable
         this.stream.print(id);
         this.stream.println("\">");
         this.stream.print(indentation);
-        this.stream.println("  <details>");
+        this.stream.println("  <details" + detailsAttributes() + ">");
+    }
+
+    private String detailsAttributes()
+    {
+        return (detailsDisplay == DetailsSectionDisplay.EXPAND) ? " open" : "";
     }
 
     private void renderId(final String indentation, final SpecificationItemId id)

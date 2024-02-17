@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
@@ -17,8 +18,6 @@ import org.itsallcode.openfasttrace.core.Linker;
 import org.itsallcode.openfasttrace.core.Tracer;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
-
-import com.github.hamstercommunity.matcher.auto.AutoMatcher;
 
 class TestSpecobjectImportExport
 {

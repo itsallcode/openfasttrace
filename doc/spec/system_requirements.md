@@ -1,4 +1,7 @@
-<head><link href="oft_spec.css" rel="stylesheet"></link></head>
+<head>
+    <link href="oft_spec.css" rel="stylesheet"/>
+    <title>System Requirement Specification OpenFastTrace</title>
+</head>
 
 # System Requirement Specification OpenFastTrace
 
@@ -70,7 +73,7 @@ OFT imports specification items from Markdown files.
 
 Rationale:
 
-Markdown is a clean an simple format that:
+Markdown is a clean and simple format that:
 
 * is viewable with any text editor
 * focuses on content instead of layout
@@ -81,6 +84,22 @@ For those reasons Markdown is a suitable candidate for writing specification tha
 maintained over a long time.
 
 Needs: req
+
+### ReStructured Text (RST) Import
+`feat~rst-import~1`
+
+OFT imports specification items from ReStructured Text (RST) files.
+
+Rationale:
+
+RST is a text-based documentation format with non-invasive structure elements. It originated in the Python world and has become the standard for documentation there.
+
+The same benefits as for [Markdown](#markdown-import) apply:
+
+* is viewable with any text editor
+* focuses on content instead of layout
+* is portable across platforms
+* easy to process with text manipulation tools
 
 ### ReqM2 Import
 `feat~reqm2-import~1`
@@ -194,6 +213,10 @@ The "Needs" section list all artifact item types in which coverage for this item
 
 Tags are a way to label an artifact intended for grouping.
 
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
 Needs: dsn
 
 #### Forwarding Needed Coverage
@@ -207,7 +230,7 @@ Often a system requirement does not affect the high-level architecture. In this 
 
 Covers:
 
-* [feat~markdown-import~1](#markdown-import)
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 
@@ -241,7 +264,7 @@ Needs: dsn
 ##### Markdown Outline Readable
 `req~markdown-outline-readable~1`
 
-The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human readable.
+The Markdown outline -- a table of contents created from the heading structure by various Markdown editors -- must be human-readable.
 
 Rationale:
 
@@ -256,7 +279,7 @@ Needs: dsn
 ##### Support for EB Markdown Requirements
 `req~eb-markdown~1`
 
-In addition to OFT's requirement-enhanced markdown syntax OFT also supports Elektrobit's variant.
+In addition to OFT's requirement-enhanced Markdown syntax OFT also supports Elektrobit's variant.
 
 Rationale:
 
@@ -569,7 +592,22 @@ OFT creates the HTML Report as a single file.
 
 Rationale:
 
-It makes exchanging reports with other people easier if everything is contained in a single file.  
+It makes exchanging reports with other people easier if everything is contained in a single file.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
+##### HTML Report Renders Details Expanded or Collapsed Initially as Configured
+`req~reporting.html.details-display~1`
+
+OFT allows configuring the display status of specification item details to expanded or collapsed by default.
+
+Rationale:
+
+Allowing the details section to be expanded and visible allows rendering the HTML report to a PDF document that contains all details.
 
 Covers:
 

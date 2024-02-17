@@ -1,20 +1,20 @@
 package org.itsallcode.openfasttrace.api.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * [utest->dsn~md.specification-item-id-format~2]
+ * [utest->dsn~md.specification-item-id-format~3]
  */
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId
@@ -48,12 +48,22 @@ class TestSpecificationItemId
         assertThat(id.getRevision(), equalTo(1));
     }
 
+
     @Test
     void testParseId_multipleFragmentName()
     {
         final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz-narf~1");
         assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
         assertThat(id.getName(), equalTo("foo.bar_zoo.baz-narf"));
+        assertThat(id.getRevision(), equalTo(1));
+    }
+
+    @Test
+    void testParseId_umlautName()
+    {
+        final SpecificationItemId id = parseId("feat~änderung~1");
+        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
+        assertThat(id.getName(), equalTo("änderung"));
         assertThat(id.getRevision(), equalTo(1));
     }
 
@@ -69,42 +79,26 @@ class TestSpecificationItemId
     @Test
     void testParseId_IllegalNumberFormat()
     {
-        assertThrows(IllegalArgumentException.class,
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> parseId("feat~foo~999999999999999999999999999999999999999"));
+        assertThat(exception.getMessage(), equalTo(
+                "Error parsing version number from specification item ID: \"feat~foo~999999999999999999999999999999999999999\""));
     }
 
-    @Test
-    void testParseIdFailsForWildcardRevision()
+    @ParameterizedTest
+    @CsvSource(
+    { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1", "req~1foo~1", "req~.foo~1", "req~foo~-1",
+            // Wildcard revision:
+            "feat~foo~-2147483648" })
+    void testParseId_mustFailForIllegalIds(final String illegalId)
     {
-        assertThrows(IllegalStateException.class,
-                () -> parseId("feat~foo~" + SpecificationItemId.REVISION_WILDCARD));
+
+        final IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> parseId(illegalId));
+        assertThat(exception.getMessage(),
+                equalTo("String \"" + illegalId + "\" cannot be parsed to a specification item ID"));
     }
 
-    @Test
-    void testParseId_mustFailForIllegalIds()
-    {
-        final String[] negatives = { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1",
-                "req~1foo~1", "req~.foo~1", "req~foo~-1" };
-
-        for (final String sample : negatives)
-        {
-            assertParsingExceptionOnIllegalSpecificationItemId(sample);
-        }
-    }
-
-    private void assertParsingExceptionOnIllegalSpecificationItemId(final String sample)
-    {
-        try
-        {
-            parseId(sample);
-            fail("Expected exception trying to parse \"" + sample
-                    + "\" into a specification item ID");
-        }
-        catch (final IllegalStateException exception)
-        {
-            // this block intentionally left empty
-        }
-    }
 
     @Test
     void testToRevisionWildcard()

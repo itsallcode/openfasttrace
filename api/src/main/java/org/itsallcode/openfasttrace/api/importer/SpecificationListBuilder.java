@@ -185,13 +185,14 @@ public class SpecificationListBuilder implements ImportEventListener
         resetState();
     }
 
+    // [impl->dsn~cleaning-imported-multi-line-text-elements~1]
     private SpecificationItem createNewSpecificationItem()
     {
         return this.itemBuilder //
                 .id(this.id) //
-                .description(this.description.toString()) //
-                .rationale(this.rationale.toString()) //
-                .comment(this.comment.toString()) //
+                .description(this.description.toString().trim()) //
+                .rationale(this.rationale.toString().trim()) //
+                .comment(this.comment.toString().trim()) //
                 .location(this.location) //
                 .build();
     }

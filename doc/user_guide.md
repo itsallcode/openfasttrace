@@ -92,7 +92,7 @@ Examples:
     dsn~html5-exporter~1
     utest~html5-exporter~4
 
-The name part of the ID must be a character string consisting of ASCII letters and or numbers separated by underscore ("_"), hyphen ("-") or dot ("."). Whitespaces are not allowed.
+The name part of the ID must be a character string consisting of Unicode letters and or numbers separated by underscore ("_"), hyphen ("-") or dot ("."). Whitespaces are not allowed.
 
 The revision number is a positive integer number that can be started at zero but out of convention usually is started at one.
 
@@ -181,6 +181,14 @@ Simple as this. This is already a valid and complete OFT requirement. Of course,
 It is mostly a matter of taste whether you prefer your specification items to have a title or not. The same requirement above with a title looks like this:
 
     ### The Requirement Title
+    `req~this-is-the-id~1`
+    
+    This is the description of the requirement.
+
+Since version 3.8.0 OFT also supports titles with underlines. Since Markdown only allows first level (H1) and second level (H2) titles to be underlined with '=' and '-' respectively and requirements are usually nested deeper into a document, we recommend sticking to the hash mark style of titles though. Underlined titles are mainly supported for compatibility with ReStructured Text (RST). 
+
+    A Requirement Title With an Underline
+    -------------------------------------
     `req~this-is-the-id~1`
     
     This is the description of the requirement.
@@ -461,6 +469,13 @@ The verbosity of the tracing report.
 
 Defaults to `failure_details`.
 
+    --details-section-display <status>
+
+Initial display status of the details section in the HTML report
+
+* `collapse` - hide details (default)
+* `expand` - show details
+
 #### Converting Options
 
     -o, --output-format <format>
@@ -474,7 +489,7 @@ Defaults to `specobject`.
 
 #### Common Options
 
-    -f, --file <path>
+    -f, --output-file <path>
 
 The output file or in case the output consists of more than one file, the output path. Defaults to STDOUT if not given.
 

@@ -9,6 +9,11 @@ import java.util.logging.LogRecord;
  */
 public class NoOpLoggingHandler extends Handler
 {
+    public NoOpLoggingHandler()
+    {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
+    }
+
     @Override
     public void publish(final LogRecord logRecord)
     {

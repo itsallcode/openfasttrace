@@ -1,10 +1,10 @@
 package org.itsallcode.openfasttrace.api;
 
+import java.util.Objects;
+
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-
-import java.util.Objects;
 
 /**
  * This class implements a parameter object to control the settings of OFT's
@@ -17,6 +17,7 @@ public class ReportSettings
     private final String outputFormat;
     private final Newline newline;
     private final ColorScheme colorScheme;
+    private final DetailsSectionDisplay detailsSectionDisplay;
 
     private ReportSettings(final Builder builder)
     {
@@ -24,7 +25,8 @@ public class ReportSettings
         this.showOrigin = builder.showOrigin;
         this.outputFormat = builder.outputFormat;
         this.newline = builder.newline;
-        this.colorScheme = Objects.requireNonNull(builder.colorScheme);
+        this.colorScheme = Objects.requireNonNull(builder.colorScheme, "colorScheme");
+        this.detailsSectionDisplay = Objects.requireNonNull(builder.detailsSectionDisplay, "detailsSectionDisplay");
     }
 
     /**
@@ -72,8 +74,19 @@ public class ReportSettings
      *
      * @return color scheme
      */
-    public ColorScheme getColorScheme() {
+    public ColorScheme getColorScheme()
+    {
         return this.colorScheme;
+    }
+
+    /**
+     * Get the details section display status.
+     * 
+     * @return display status
+     */
+    public DetailsSectionDisplay getDetailsSectionDisplay()
+    {
+        return detailsSectionDisplay;
     }
 
     /**
@@ -101,6 +114,7 @@ public class ReportSettings
      */
     public static class Builder
     {
+        private DetailsSectionDisplay detailsSectionDisplay = DetailsSectionDisplay.COLLAPSE;
         private Newline newline = Newline.UNIX;
         private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
         private boolean showOrigin = false;
@@ -109,7 +123,7 @@ public class ReportSettings
 
         private Builder()
         {
-
+            // empty by intention
         }
 
         /**
@@ -123,11 +137,12 @@ public class ReportSettings
         }
 
         /**
-         * Set the report verbosity
+         * Set the report verbosity. Default:
+         * {@link ReportVerbosity#FAILURE_DETAILS}.
          * 
          * @param verbosity
          *            report verbosity
-         * @return <code>this</code> for fluent programming
+         * @return {@code this} for fluent programming
          */
         public Builder verbosity(final ReportVerbosity verbosity)
         {
@@ -137,11 +152,11 @@ public class ReportSettings
 
         /**
          * Set the whether the origin of specification items should be shown in
-         * the report
+         * the report. Default: {@code false}.
          * 
          * @param showOrigin
          *            set to {@code true} if the origin should be shown
-         * @return <code>this</code> for fluent programming
+         * @return {@code this} for fluent programming
          */
         public Builder showOrigin(final boolean showOrigin)
         {
@@ -150,11 +165,12 @@ public class ReportSettings
         }
 
         /**
-         * Set the output format
+         * Set the output format. Default:
+         * {@link ReportConstants#DEFAULT_REPORT_FORMAT}.
          * 
          * @param outputFormat
          *            output format
-         * @return <code>this</code> for fluent programming
+         * @return {@code this} for fluent programming
          */
         public Builder outputFormat(final String outputFormat)
         {
@@ -163,11 +179,11 @@ public class ReportSettings
         }
 
         /**
-         * Set the newline format
+         * Set the newline format. Default: {@link Newline#UNIX}.
          * 
          * @param newline
          *            newline format
-         * @return <code>this</code> for fluent programming
+         * @return {@code this} for fluent programming
          */
         public Builder newline(final Newline newline)
         {
@@ -176,13 +192,30 @@ public class ReportSettings
         }
 
         /**
-         * Set the desired color scheme
+         * Set the desired color scheme. Default:
+         * {@link ColorScheme#BLACK_AND_WHITE}.
          *
-         * @param colorScheme color scheme to use
-         * @return <code>this</code> for fluent programming
+         * @param colorScheme
+         *            color scheme to use
+         * @return {@code this} for fluent programming
          */
-        public Builder colorScheme(final ColorScheme colorScheme) {
-            this.colorScheme = Objects.requireNonNull(colorScheme);
+        public Builder colorScheme(final ColorScheme colorScheme)
+        {
+            this.colorScheme = Objects.requireNonNull(colorScheme, "colorScheme");
+            return this;
+        }
+
+        /**
+         * Set the desired details section display status. Default:
+         * {@link DetailsSectionDisplay#COLLAPSE}.
+         *
+         * @param detailsSectionDisplay
+         *            display status to use
+         * @return {@code this} for fluent programming
+         */
+        public Builder detailsSectionDisplay(final DetailsSectionDisplay detailsSectionDisplay)
+        {
+            this.detailsSectionDisplay = Objects.requireNonNull(detailsSectionDisplay, "detailsSectionDisplay");
             return this;
         }
     }

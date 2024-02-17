@@ -5,15 +5,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
@@ -24,11 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class TestMultiFileImporter
 {
     private static final Path FOLDER = Paths.get("src/test/resources/markdown");
@@ -53,9 +46,10 @@ class TestMultiFileImporter
         this.multiFileImporter = new MultiFileImporterImpl(this.specItemBuilderMock,
                 this.factoryLoaderMock);
 
-        when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
-        when(this.factoryLoaderMock.getImporterFactory(any())).thenReturn(Optional.of(this.importerFactoryMock));
-        when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
+        lenient().when(this.factoryLoaderMock.supportsFile(any())).thenReturn(true);
+        lenient().when(this.factoryLoaderMock.getImporterFactory(any()))
+                .thenReturn(Optional.of(this.importerFactoryMock));
+        lenient().when(this.importerFactoryMock.createImporter(any(), same(this.specItemBuilderMock)))
                 .thenReturn(this.importerMock);
     }
 

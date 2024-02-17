@@ -2,13 +2,13 @@ package org.itsallcode.openfasttrace.cli;
 
 import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.openfasttrace.core.cli.*;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.testutil.TestAssumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -19,6 +19,12 @@ class TestCliExit
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";
     private static final String SAMPLE_SYSTEM_REQUIREMENTS = TEST_RESOURCES_MARKDOWN
             + "/sample_system_requirements.md";
+
+    @BeforeAll
+    static void assumeSecurityManagerSupported()
+    {
+        TestAssumptions.assumeSecurityManagerSupported();
+    }
 
     @Test
     void testCliExitCode_Ok()

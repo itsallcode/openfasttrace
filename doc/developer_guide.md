@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>3.7.0</version>
+        <version>3.7.1</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:3.7.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:3.7.1"
 }
 ```
 
@@ -41,7 +41,7 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                          | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher)       | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
 | [JUnit](https://junit.org/junit5)                                                  | Unit testing framework                                 | Eclipse Public License 1.0    |
-| [Mockito](http://site.mockito.org/)                                                | Mocking framework                                      | MIT License                   |
+| [Mockito](https://github.com/mockito/mockito)                                      | Mocking framework                                      | MIT License                   |
 | [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls    | Eclipse Public License 2.0     |
 
 ## Preparations
@@ -134,19 +134,19 @@ Add the following to your `~/.m2/settings.xml`:
 ### Prepare the Release
 
 1. Checkout the `main` branch.
-1. Create a new "prepare-release" branch.
-1. Update version in
-  * `openfasttrace-parent/pom.xml` (`revision` property)
-  * `README.md`
-  * `doc/developer_guide.md`
-1. Add changes in new version to `CHANGELOG.md` and update the release date.
-1. Verify that build runs successfully:
+2. Create a new "prepare-release" branch.
+3. Update version in
+    * `openfasttrace-parent/pom.xml` (`revision` property)
+    * `README.md`
+    * `doc/developer_guide.md`
+4. Add changes in new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
+5. Verify that build runs successfully:
 
     ```bash
     mvn clean verify
     ```
-1. Commit and push changes.
-1. Create a new Pull Request, have it reviewed and merged.
+6. Commit and push changes.
+7. Create a new Pull Request, have it reviewed and merged.
 
 ### Perform the Release
 

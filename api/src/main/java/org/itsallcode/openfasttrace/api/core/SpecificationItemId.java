@@ -21,7 +21,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     public static final String UNKNOWN_ARTIFACT_TYPE = "unknown";
     private static final String ITEM_REVISION_PATTERN = "(\\d+)";
     /** Regexp pattern for item names. */
-    public static final String ITEM_NAME_PATTERN = "(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
+    public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
     /** Separator between artifact type and name in an item ID. */
@@ -29,7 +29,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     /** Separator between name and revision in an item ID. */
     public static final String REVISION_SEPARATOR = "~";
     static final int REVISION_WILDCARD = Integer.MIN_VALUE;
-    // [impl->dsn~md.specification-item-id-format~2]
+    // [impl->dsn~md.specification-item-id-format~3]
     private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
             + ITEM_NAME_PATTERN //
@@ -137,11 +137,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         {
             return false;
         }
-        if ((other.revision != REVISION_WILDCARD) && (this.revision != other.revision))
-        {
-            return false;
-        }
-        return true;
+        return (other.revision == REVISION_WILDCARD) || (this.revision == other.revision);
     }
 
     @Override
@@ -217,7 +213,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
      */
     public static class Builder
     {
-        // [impl->dsn~md.specification-item-id-format~2]
+        // [impl->dsn~md.specification-item-id-format~3]
         private final String id;
         private String artifactType;
         private String name;

@@ -29,17 +29,32 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 
-**Quick Links**
+**User Guides**
 
-* [Blog](https://blog.itsallcode.org/)
-* [User Guide](doc/user_guide.md)
-* [Changelog](doc/changes/changes.md)
-* [OpenFastTrace stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
-* [Developer Guide](doc/developer_guide.md)
-* [Contributing guide](CONTRIBUTING.md)
-* [Command Line Usage](core/src/main/resources/usage.txt)
-* [Design](doc/spec/design.md)
-* [System Requirements](doc/spec/system_requirements.md)
+* [📖 User Guide](doc/user_guide.md)
+* [💲 Command Line Usage](core/src/main/resources/usage.txt)
+
+**News and Discussions**
+
+* [📢 Blog](https://blog.itsallcode.org/)
+* [➕ Changelog](doc/changes/changes.md)
+* [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
+* [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
+* [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+
+**Information for Contributors**
+
+* [🎟️ Project Board](https://github.com/orgs/itsallcode/projects/3/views/1)
+* [🦮 Developer Guide](doc/developer_guide.md)
+* [🎁 Contributing Guide](CONTRIBUTING.md)
+* [💡 System Requirements](doc/spec/system_requirements.md)
+* [👜 Design](doc/spec/design.md)
+
+**Demos and Presentations**
+
+* [🛗 Elevator pitch](https://github.com/itsallcode/openfasttrace-demo/tree/main?tab=readme-ov-file#elevator-pitch)
+* [📽️ OpenFastTrace Presentation](https://github.com/itsallcode/openfasttrace-demo/blob/main/OpenFastTrace_in_20_minutes.odp) (LibreOffice, 20 minutes)
+* [🎬 OpenFastTrace Live Demo Script](https://github.com/itsallcode/openfasttrace-demo/blob/main/oft-live-demo-medium.md) (Markdown, 1 hour)
 
 ## Using OpenFastTrace
 
@@ -53,10 +68,10 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.c
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-3.7.0.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-3.7.1.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.7.0/openfasttrace-3.7.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.7.0/openfasttrace-3.7.0.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.7.1/openfasttrace-3.7.1.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.7.1/openfasttrace-3.7.1.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
@@ -79,7 +94,7 @@ If you just want to run OFT:
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```bash
-java -jar product/target/openfasttrace-3.7.0.jar trace /path/to/directory/being/traced
+java -jar product/target/openfasttrace-3.7.1.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).

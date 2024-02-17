@@ -405,10 +405,30 @@ Needs: impl, itest
 
 OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
 
+Covers:
+
+* [`req~reporting.html.details-display~1`](system_requirements.md#html-report-renders-details-expanded-or-collapsed-initially-as-configured)
+
+Needs: impl, utest
+
+#### HTML Report Escapes HTML Tags
+`dsn~reporting.html.escape-html~1`
+
+OFT escapes characters `<` and `>` when rendering the following parts of a specification item to report:
+
+* Title
+* Description
+* Rationale
+* Comment
+
+Rationale:
+
+* This avoids generating invalid HTML when the Markdown contains text like `<section>`.
+* Other parts of a specification item (e.g. item ID) don't allow these characters and don't need escaping.
 
 Covers:
 
-* `req~reporting.html.details-display~1`
+* [`req~reporting.html.valid-html~1`](system_requirements.md#html-report-renders-valid-html)
 
 Needs: impl, utest
 

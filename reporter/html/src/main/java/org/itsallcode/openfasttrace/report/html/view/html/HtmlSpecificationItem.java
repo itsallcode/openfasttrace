@@ -77,12 +77,18 @@ class HtmlSpecificationItem implements Viewable
         this.stream.print("\">");
         this.stream.print(this.item.isDefect() ? CROSS_MARK : CHECK_MARK);
         this.stream.print(" <b>");
-        this.stream.print(this.item.getTitleWithFallback());
+        this.stream.print(escapedTitle());
         this.stream.print("</b><small>, rev. ");
         this.stream.print(id.getRevision());
         this.stream.print(", ");
         this.stream.print(id.getArtifactType());
         this.stream.println("</small></summary>");
+    }
+
+    // [impl->dsn~reporting.html.escape-html~1]
+    private String escapedTitle()
+    {
+        return MarkdownSpanConverter.escapeHtml(this.item.getTitleWithFallback());
     }
 
     protected void renderDescription(final String indentation)

@@ -615,6 +615,21 @@ Covers:
 
 Needs: dsn
 
+##### HTML Report Renders Valid HTML
+`req~reporting.html.valid-html~1`
+
+OFT generates valid HTML format for the HTML report.
+
+Rationale:
+
+This ensures correct and consistent rendering of the HTML report.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
 ### Requirement Format Conversion
 OFT supports conversion from one requirement format into another for example from Markdown to ReqM2.
 

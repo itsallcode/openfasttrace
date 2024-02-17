@@ -63,9 +63,9 @@ public class HtmlViewFactory extends AbstractViewFactory
         {
             return new PrintStream(stream, false, charset.name());
         }
-        catch (final UnsupportedEncodingException e)
+        catch (final UnsupportedEncodingException exception)
         {
-            throw new ExporterException("Error creating print stream for charset " + charset, e);
+            throw new ExporterException("Error creating print stream for charset " + charset, exception);
         }
     }
 

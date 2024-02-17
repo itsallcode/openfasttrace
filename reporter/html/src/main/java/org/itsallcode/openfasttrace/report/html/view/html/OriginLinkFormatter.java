@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.api.core.Location;
 /**
  * This class renders {@link Location} object as HTML spans or blocks.
  */
-public final class OriginLinkFormatter
+final class OriginLinkFormatter
 {
     private static final Pattern PROTOCOL_PREFIX_PATTERN = Pattern
             .compile("^(?:file://|ftp://|mailto:|https?://).*");
@@ -28,7 +28,7 @@ public final class OriginLinkFormatter
      * @return a string representing an HTML span containing a link to the
      *         origin
      */
-    public static String formatAsSpan(final Location location)
+    static String formatAsSpan(final Location location)
     {
         return format(location, true);
     }
@@ -41,7 +41,7 @@ public final class OriginLinkFormatter
      * @return a string representing an HTML block containing a link to the
      *         origin
      */
-    public static String formatAsBlock(final Location location)
+    static String formatAsBlock(final Location location)
     {
         return format(location, false);
     }

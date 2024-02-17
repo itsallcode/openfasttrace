@@ -55,7 +55,7 @@ jobs:
     - name: Build with Java ${{ matrix.java }}
       shell: bash
       run: |
-        mvn --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
+        mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
             -Djava.version=${{ matrix.java }}
 
     - name: Sonar analysis

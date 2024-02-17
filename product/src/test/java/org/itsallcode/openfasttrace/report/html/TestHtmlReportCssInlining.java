@@ -1,12 +1,12 @@
 package org.itsallcode.openfasttrace.report.html;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.nio.file.Path;
 
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
@@ -37,12 +37,14 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
     }
 
     @Test
-    void testInliningNonExistentCssThrowsException() throws MalformedURLException
+    void testInliningNonExistentCssThrowsException() throws URISyntaxException, MalformedURLException
     {
-        final HtmlViewFactory factory = HtmlViewFactory.create(System.out,
-                new URL("file:///this_file_does_not_exist.css"), DetailsSectionDisplay.COLLAPSE);
+        final HtmlViewFactory factory = HtmlViewFactory.create(new ByteArrayOutputStream(),
+                new URI("file:///this_file_does_not_exist.css").toURL(), DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
-        assertThrows(ReportException.class, () -> view.render());
+        final ReportException exception = assertThrows(ReportException.class, view::render);
+        assertThat(exception.getMessage(), equalTo(
+                "Unable to copy CSS content \"file:/this_file_does_not_exist.css\" trying to generate HTML view."));
     }
 
     @Test
@@ -51,9 +53,11 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
         OsDetector.assumeRunningOnUnix();
         final File cssFile = tempDir.resolve("test.css").toFile();
         cssFile.setReadable(false);
-        final HtmlViewFactory factory = HtmlViewFactory.create(System.out, cssFile.toURI().toURL(),
+        final HtmlViewFactory factory = HtmlViewFactory.create(new ByteArrayOutputStream(), cssFile.toURI().toURL(),
                 DetailsSectionDisplay.COLLAPSE);
         final ViewableContainer view = factory.createView("foo", "bar");
-        assertThrows(ReportException.class, () -> view.render());
+        final ReportException exception = assertThrows(ReportException.class, view::render);
+        assertThat(exception.getMessage(), equalTo(
+                "Unable to copy CSS content \"file:" + cssFile + "\" trying to generate HTML view."));
     }
 }

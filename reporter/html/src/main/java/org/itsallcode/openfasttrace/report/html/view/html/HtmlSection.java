@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 import java.io.PrintStream;
 
 import org.itsallcode.openfasttrace.report.html.view.AbstractStreamableViewContainer;
-import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 
 /**
  * HTML variant of a report section
@@ -28,13 +27,12 @@ class HtmlSection extends AbstractStreamableViewContainer
     @Override
     protected void renderBeforeChildren(final int level)
     {
-        final String indentation = IndentationHelper.createIndentationPrefix(level);
         final String header = "h" + (level + 1);
-        this.stream.print(indentation);
+        this.renderIndentation(level);
         this.stream.print("<section id=\"");
         this.stream.print(this.getId());
         this.stream.println("\">");
-        this.stream.print(indentation);
+        this.renderIndentation(level);
         this.stream.print("  <");
         this.stream.print(header);
         this.stream.print(">");
@@ -47,8 +45,7 @@ class HtmlSection extends AbstractStreamableViewContainer
     @Override
     protected void renderAfterChildren(final int level)
     {
-        final String indentation = IndentationHelper.createIndentationPrefix(level);
-        this.stream.print(indentation);
+        this.renderIndentation(level);
         this.stream.println("</section>");
     }
 }

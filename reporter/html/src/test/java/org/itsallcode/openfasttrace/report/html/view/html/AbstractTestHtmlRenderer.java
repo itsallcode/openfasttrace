@@ -28,8 +28,7 @@ class AbstractTestHtmlRenderer
 
     protected void assertOutputLines(final String... lines)
     {
-        final Matcher<String> matcher = matchesAllLines(lines);
-        assertOutput(matcher);
+        assertOutput(matchesAllLines(lines));
     }
 
     protected void assertOutput(final Matcher<String> matcher)

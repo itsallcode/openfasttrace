@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,11 +6,11 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
 /**
- * The {@link MarkdownForwardingSpecificationItem} splits the textual
+ * The {@link ForwardingSpecificationItem} splits the textual
  * representation of a specification item that forwards needed artifact coverage
  * into is components.
  */
-public class MarkdownForwardingSpecificationItem
+public class ForwardingSpecificationItem
 {
     static final String ORIGINAL_MARKER = ":";
     static final String FORWARD_MARKER = "-->";
@@ -20,12 +20,12 @@ public class MarkdownForwardingSpecificationItem
     private final List<String> targetArtifactTypes;
 
     /**
-     * Create an instance of {@link MarkdownForwardingSpecificationItem}
+     * Create an instance of {@link ForwardingSpecificationItem}
      * 
      * @param forward
      *            the textual representation
      */
-    public MarkdownForwardingSpecificationItem(final String forward)
+    public ForwardingSpecificationItem(final String forward)
     {
         final int posForwardMarker = forward.indexOf(FORWARD_MARKER);
         final int posOriginalMarker = forward.indexOf(ORIGINAL_MARKER);

@@ -315,7 +315,7 @@ class MarkdownImporter implements Importer
     // [impl->dsn~md.artifact-forwarding-notation~1]
     private void forward()
     {
-        final MarkdownForwardingSpecificationItem forward = new MarkdownForwardingSpecificationItem(
+        final ForwardingSpecificationItem forward = new ForwardingSpecificationItem(
                 this.stateMachine.getLastToken());
         this.listener.beginSpecificationItem();
         this.listener.setId(forward.getSkippedId());

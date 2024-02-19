@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
 
 /**
@@ -25,14 +26,14 @@ enum MdPattern implements LinePattern {
     FORWARD(".*?("
             + PatternConstants.ARTIFACT_TYPE
             + "\\s*"
-            + MarkdownForwardingSpecificationItem.FORWARD_MARKER
+            + ForwardingSpecificationItem.FORWARD_MARKER
             + "\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + "(?:,\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + ")*"
             + "\\s*"
-            + MarkdownForwardingSpecificationItem.ORIGINAL_MARKER
+            + ForwardingSpecificationItem.ORIGINAL_MARKER
             + "\\s*"
             + SpecificationItemId.ID_PATTERN
             + ").*?"),

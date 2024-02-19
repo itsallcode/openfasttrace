@@ -14,10 +14,13 @@ The test coverage for the Markdown importer is now at 100%, and we were able to 
 
 The HTML report now allows expanding all details sections with command line option `--details-section-display expand`.
 
+Now you can also specify a revision for coverage tags instead of the default revision `0`, e.g. `[impl~~42->req~example_name~17]`.
+
 ## Features
 
 * #378: Added an RST importer
 * #377: Allow expanding the details sections in the HTML report
+* #379: Allow specifying a revision for coverage tags
 
 ## Bugfixes
 

@@ -7,11 +7,12 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
-/**
- * Configures a SAX parser.
- */
-public class SaxParserConfigurator {
-    private SaxParserConfigurator() {
+public class XmlParserFactory {
+
+    private final SAXParserFactory parserFactory = createSaxParserFactory();
+
+    public XmlParser createParser() {
+        return new XmlParser(parserFactory);
     }
 
     /**
@@ -19,7 +20,7 @@ public class SaxParserConfigurator {
      * 
      * @return the configured factory.
      */
-    public static SAXParserFactory createSaxParserFactory() {
+    static SAXParserFactory createSaxParserFactory() {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try {
             parserFactory.setNamespaceAware(true);

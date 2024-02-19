@@ -1,17 +1,15 @@
 package org.itsallcode.openfasttrace.importer.specobject;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.xmlparser.SaxParserConfigurator;
+import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 
 /**
  * An {@link ImporterFactory} for XML specobject files.
  */
 public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
 {
-    private final SAXParserFactory saxParserFactory;
+    private final XmlParserFactory xmlParserFactory;
 
     /**
      * Create a new instance.
@@ -19,12 +17,12 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
     public SpecobjectImporterFactory()
     {
         super("(?i).*\\.(xml|oreqm)");
-        this.saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
+        this.xmlParserFactory = new XmlParserFactory();
     }
 
     @Override
     public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
-        return new SpecobjectImporter(file, this.saxParserFactory, listener);
+        return new SpecobjectImporter(file, this.xmlParserFactory, listener);
     }
 }

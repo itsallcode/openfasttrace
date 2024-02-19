@@ -3,17 +3,11 @@ package org.itsallcode.openfasttrace.importer.specobject;
 import java.io.IOException;
 import java.io.Reader;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.handler.SpecDocumentHandlerBuilder;
-import org.itsallcode.openfasttrace.importer.xmlparser.ContentHandlerAdapter;
-import org.itsallcode.openfasttrace.importer.xmlparser.IgnoringEntityResolver;
-import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeBuildingContentHandler;
+import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeContentHandler;
-import org.xml.sax.*;
 
 /**
  * Importer for xml files in specobject format.
@@ -22,13 +16,13 @@ class SpecobjectImporter implements Importer
 {
     private final ImportEventListener listener;
     private final InputFile file;
-    private final SAXParserFactory saxParserFactory;
+    private final XmlParserFactory xmlParserFactory;
 
-    SpecobjectImporter(final InputFile file, final SAXParserFactory saxParserFactory,
+    SpecobjectImporter(final InputFile file, final XmlParserFactory xmlParserFactory,
             final ImportEventListener listener)
     {
         this.file = file;
-        this.saxParserFactory = saxParserFactory;
+        this.xmlParserFactory = xmlParserFactory;
         this.listener = listener;
     }
 
@@ -37,19 +31,15 @@ class SpecobjectImporter implements Importer
     {
         try (Reader reader = this.file.createReader())
         {
-            final XMLReader xmlReader = this.saxParserFactory.newSAXParser().getXMLReader();
-            xmlReader.setEntityResolver(new IgnoringEntityResolver());
             final SpecDocumentHandlerBuilder config = new SpecDocumentHandlerBuilder(this.file,
                     this.listener);
             final TreeContentHandler treeContentHandler = config.build();
-            new ContentHandlerAdapter(this.file.getPath(), xmlReader,
-                    new TreeBuildingContentHandler(treeContentHandler)).registerListener();
-            final InputSource input = new InputSource(reader);
-            xmlReader.parse(input);
+            this.xmlParserFactory.createParser().parse(this.file.getPath(), reader, treeContentHandler);
         }
-        catch (SAXException | ParserConfigurationException | IOException exception)
+        catch (final IOException exception)
         {
-            throw new ImporterException("Error reading \"" + this.file + "\"", exception);
+            throw new ImporterException(
+                    "Failed to read input file '" + this.file.getPath() + "': " + exception.getMessage(), exception);
         }
     }
 }

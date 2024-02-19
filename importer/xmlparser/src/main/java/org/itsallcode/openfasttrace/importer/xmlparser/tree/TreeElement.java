@@ -57,12 +57,6 @@ public class TreeElement {
         this.endElementListeners.add(newEndElementListener);
     }
 
-    @Override
-    public String toString() {
-        return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
-                + ", endElementListeners=" + this.endElementListeners + "]";
-    }
-
     /**
      * Get an {@link Attribute} by it's name.
      * 
@@ -88,5 +82,11 @@ public class TreeElement {
      */
     public void invokeEndElementListeners() {
         this.endElementListeners.forEach(listener -> listener.accept(this));
+    }
+
+    @Override
+    public String toString() {
+        return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
+                + ", endElementListeners=" + this.endElementListeners + "]";
     }
 }

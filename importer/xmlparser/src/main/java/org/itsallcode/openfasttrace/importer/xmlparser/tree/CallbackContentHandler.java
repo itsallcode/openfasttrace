@@ -31,27 +31,24 @@ public class CallbackContentHandler implements TreeContentHandler {
      * Sets the default start element listener that is called when no other
      * listener matches.
      *
-     * @param defaultStartElementListener
-     *                                    the default start element listener.
+     * @param defaultListener the default start element listener.
      */
     public void setDefaultStartElementListener(
-            final Consumer<TreeElement> defaultStartElementListener) {
-        this.defaultStartElementListener = defaultStartElementListener;
+            final Consumer<TreeElement> defaultListener) {
+        this.defaultStartElementListener = defaultListener;
     }
 
     /**
      * Adds a {@link TreeContentHandler} that will process the elements in the
      * sub tree.
      *
-     * @param elementName
-     *                    the element name for which to register the listener.
-     * @param supplier
-     *                    the supplier for the content handler.
+     * @param elementName the element name for which to register the listener.
+     * @param supplier    the supplier for the content handler.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addSubTreeHandler(final String elementName,
             final Supplier<TreeContentHandler> supplier) {
-        addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
+        this.addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
         return this;
     }
 
@@ -59,16 +56,14 @@ public class CallbackContentHandler implements TreeContentHandler {
      * Adds a start element listener for elements with a given name. The
      * listener will be called when an element with the given name is found.
      *
-     * @param elementName
-     *                                  the element name for which to register the
-     *                                  listener.
-     * @param startElementEventListener
-     *                                  the listener.
+     * @param elementName the element name for which to register the
+     *                    listener.
+     * @param listener    the start element listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addElementListener(final String elementName,
-            final Consumer<TreeElement> startElementEventListener) {
-        this.addElementListener(elementName, startElementEventListener, null);
+            final Consumer<TreeElement> listener) {
+        this.addElementListener(elementName, listener, null);
         return this;
     }
 
@@ -76,27 +71,23 @@ public class CallbackContentHandler implements TreeContentHandler {
      * Adds start and end element listener for elements with a given name. The
      * listener will be called when an element with the given name is found.
      *
-     * @param elementName
-     *                             the element name for which to register the
-     *                             listener.
-     * @param startElementListener
-     *                             the start element listener.
-     * @param endElementListener
-     *                             the end element listener.
+     * @param elementName   the element name for which to register the listeners.
+     * @param startListener the start element listener.
+     * @param endListener   the end element listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addElementListener(final String elementName,
-            final Consumer<TreeElement> startElementListener,
-            final Consumer<TreeElement> endElementListener) {
+            final Consumer<TreeElement> startListener,
+            final Consumer<TreeElement> endListener) {
         if (this.startElementListeners.containsKey(elementName)) {
             throw new IllegalArgumentException(
                     "Listener already registered for start element " + elementName);
         }
         this.startElementListeners.put(elementName, startElement -> {
-            if (endElementListener != null) {
-                startElement.addEndElementListener(endElementListener);
+            if (endListener != null) {
+                startElement.addEndElementListener(endListener);
             }
-            startElementListener.accept(startElement);
+            startListener.accept(startElement);
         });
         return this;
     }
@@ -147,9 +138,10 @@ public class CallbackContentHandler implements TreeContentHandler {
 
     /**
      * Pushes the given {@link TreeContentHandler} as a delegate.
-     *
-     * @param delegate
-     *                 the new delegate.
+     * This will restore the original handler (i.e. {@code this}) when the current
+     * element ends.
+     * 
+     * @param delegate the new delegate.
      */
     public void pushDelegate(final TreeContentHandler delegate) {
         this.treeParsingController.setDelegate(delegate);
@@ -160,10 +152,8 @@ public class CallbackContentHandler implements TreeContentHandler {
     /**
      * Add a listener for elements with integer content.
      *
-     * @param elementName
-     *                    the element name.
-     * @param listener
-     *                    the listener.
+     * @param elementName the element name.
+     * @param listener    the listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addIntDataListener(final String elementName,
@@ -181,17 +171,14 @@ public class CallbackContentHandler implements TreeContentHandler {
     /**
      * Add a listener for elements with string content.
      *
-     * @param elementName
-     *                    the element name.
-     * @param listener
-     *                    the listener.
+     * @param elementName the element name.
+     * @param listener    the listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addCharacterDataListener(final String elementName,
             final Consumer<String> listener) {
         addElementListener(elementName, startElement -> {
-        },
-                endElement -> listener.accept(endElement.getCharacterData()));
+        }, endElement -> listener.accept(endElement.getCharacterData()));
         return this;
     }
 }

@@ -27,5 +27,4 @@ public interface TreeContentHandler {
      *                      the closed element.
      */
     void endElement(TreeElement closedElement);
-
 }

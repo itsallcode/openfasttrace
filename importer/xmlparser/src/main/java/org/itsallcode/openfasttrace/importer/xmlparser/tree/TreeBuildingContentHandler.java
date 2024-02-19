@@ -19,16 +19,22 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
     /**
      * Create a new instance.
      * 
-     * @param delegate
-     *                 the delegate.
+     * @param delegate the delegate.
      */
     public TreeBuildingContentHandler(final TreeContentHandler delegate) {
         this.delegate = delegate;
     }
 
     @Override
+    public void init(final ContentHandlerAdapterController contentHandlerAdapter) {
+        this.contentHandlerAdapter = contentHandlerAdapter;
+        this.getDelegate().init(this);
+    }
+
+    @Override
     public void startElement(final StartElementEvent event) {
-        final TreeElement treeElement = new TreeElement(event, this.stack.peek());
+        final TreeElement parent = this.stack.peek();
+        final TreeElement treeElement = new TreeElement(event, parent);
         this.stack.push(treeElement);
         this.getDelegate().startElement(treeElement);
     }
@@ -55,11 +61,6 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
         this.stack.peek().addCharacterData(characters);
     }
 
-    @Override
-    public void init(final ContentHandlerAdapterController contentHandlerAdapter) {
-        this.contentHandlerAdapter = contentHandlerAdapter;
-        this.getDelegate().init(this);
-    }
 
     private TreeContentHandler getDelegate() {
         if (this.delegate == null) {

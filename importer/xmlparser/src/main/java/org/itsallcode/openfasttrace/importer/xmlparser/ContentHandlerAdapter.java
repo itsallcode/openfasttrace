@@ -9,17 +9,16 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * A SAX content handler that forwards events from an {@link XMLReader} a
+ * A SAX content handler that forwards events from an {@link XMLReader} to an
  * {@link EventContentHandler}.
  */
-public class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController {
+class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController {
     private static final Logger LOG = Logger.getLogger(ContentHandlerAdapter.class.getName());
 
     private final String filePath;
     private final XMLReader xmlReader;
     private final EventContentHandler delegate;
     private Locator locator;
-    private ContentHandler originalContentHandler;
 
     /**
      * Create a new instance.
@@ -32,7 +31,7 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
      *                  the content handler to which the parsing events should be
      *                  forwared.
      */
-    public ContentHandlerAdapter(final String filePath, final XMLReader xmlReader,
+    ContentHandlerAdapter(final String filePath, final XMLReader xmlReader,
             final EventContentHandler delegate) {
         this.filePath = filePath;
         this.xmlReader = xmlReader;
@@ -42,13 +41,17 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
     /**
      * Initialize the delegate and register XML content handler.
      */
-    public void registerListener() {
-        if (this.originalContentHandler != null) {
-            throw new IllegalStateException("Already registered as listener");
-        }
-        this.originalContentHandler = this.xmlReader.getContentHandler();
+    void registerListener() {
+        verifyNoContentHandlerRegistered();
         this.delegate.init(this);
         this.xmlReader.setContentHandler(this);
+    }
+
+    private void verifyNoContentHandlerRegistered() {
+        final ContentHandler originalContentHandler = this.xmlReader.getContentHandler();
+        if (originalContentHandler != null) {
+            throw new IllegalStateException("An XML content handler is already registered: " + originalContentHandler);
+        }
     }
 
     @Override
@@ -88,6 +91,6 @@ public class ContentHandlerAdapter extends DefaultHandler implements ContentHand
 
     @Override
     public void parsingFinished() {
-        this.xmlReader.setContentHandler(this.originalContentHandler);
+        this.xmlReader.setContentHandler(null);
     }
 }

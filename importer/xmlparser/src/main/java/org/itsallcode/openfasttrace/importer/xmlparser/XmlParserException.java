@@ -10,10 +10,8 @@ public class XmlParserException extends RuntimeException {
     /**
      * Creates a new {@link XmlParserException}.
      * 
-     * @param message
-     *                the message for the exception.
-     * @param cause
-     *                the cause for the exception.
+     * @param message the message for the exception.
+     * @param cause   the cause for the exception.
      */
     public XmlParserException(final String message, final Throwable cause) {
         super(message, cause);
@@ -22,8 +20,7 @@ public class XmlParserException extends RuntimeException {
     /**
      * Creates a new {@link XmlParserException}.
      * 
-     * @param message
-     *                the message for the exception.
+     * @param message the message for the exception.
      */
     public XmlParserException(final String message) {
         super(message);

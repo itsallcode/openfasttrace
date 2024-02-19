@@ -7,10 +7,18 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
+/**
+ * This factory creates new {@link XmlParser}s.
+ */
 public class XmlParserFactory {
 
     private final SAXParserFactory parserFactory = createSaxParserFactory();
 
+    /**
+     * Create a new {@link XmlParser}.
+     * 
+     * @return a new {@link XmlParser}
+     */
     public XmlParser createParser() {
         return new XmlParser(parserFactory);
     }
@@ -20,7 +28,7 @@ public class XmlParserFactory {
      * 
      * @return the configured factory.
      */
-    static SAXParserFactory createSaxParserFactory() {
+    private static SAXParserFactory createSaxParserFactory() {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try {
             parserFactory.setNamespaceAware(true);

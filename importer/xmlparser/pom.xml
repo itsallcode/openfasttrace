@@ -15,5 +15,10 @@
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jparams</groupId>
+            <artifactId>to-string-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

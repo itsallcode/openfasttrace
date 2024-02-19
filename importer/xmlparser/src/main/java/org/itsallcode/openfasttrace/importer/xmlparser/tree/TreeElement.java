@@ -1,25 +1,23 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
-import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
+import org.itsallcode.openfasttrace.importer.xmlparser.event.Attribute;
+import org.itsallcode.openfasttrace.importer.xmlparser.event.StartElementEvent;
 
 /**
  * An element node in a parsed XML tree.
  */
-public class TreeElement
-{
+public class TreeElement {
     private final StartElementEvent element;
     private final StringBuilder characterData = new StringBuilder();
     private final List<Consumer<TreeElement>> endElementListeners = new LinkedList<>();
     private final TreeElement parent;
 
-    TreeElement(final StartElementEvent element, final TreeElement parent)
-    {
+    TreeElement(final StartElementEvent element, final TreeElement parent) {
         this.element = element;
         this.parent = parent;
     }
@@ -29,8 +27,7 @@ public class TreeElement
      * 
      * @return the {@link StartElementEvent}.
      */
-    public StartElementEvent getElement()
-    {
+    public StartElementEvent getElement() {
         return this.element;
     }
 
@@ -39,8 +36,7 @@ public class TreeElement
      * 
      * @return the character data content of the element.
      */
-    public String getCharacterData()
-    {
+    public String getCharacterData() {
         return this.characterData.toString();
     }
 
@@ -49,24 +45,20 @@ public class TreeElement
      * 
      * @return {@code true} if this is the root element.
      */
-    public boolean isRootElement()
-    {
+    public boolean isRootElement() {
         return this.parent == null;
     }
 
-    void addCharacterData(final String characters)
-    {
+    void addCharacterData(final String characters) {
         this.characterData.append(characters);
     }
 
-    void addEndElementListener(final Consumer<TreeElement> newEndElementListener)
-    {
+    void addEndElementListener(final Consumer<TreeElement> newEndElementListener) {
         this.endElementListeners.add(newEndElementListener);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
                 + ", endElementListeners=" + this.endElementListeners + "]";
     }
@@ -75,11 +67,10 @@ public class TreeElement
      * Get an {@link Attribute} by it's name.
      * 
      * @param name
-     *            the attribute name.
+     *             the attribute name.
      * @return the {@link Attribute} or {@code null} if no attribute exists.
      */
-    public Attribute getAttributeValueByName(final String name)
-    {
+    public Attribute getAttributeValueByName(final String name) {
         return this.element.getAttributeValueByName(name);
     }
 
@@ -88,16 +79,14 @@ public class TreeElement
      * 
      * @return the {@link Location} of the start element.
      */
-    public Location getLocation()
-    {
+    public Location getLocation() {
         return this.element.getLocation();
     }
 
     /**
      * Invokes the registered end element listeners.
      */
-    public void invokeEndElementListeners()
-    {
+    public void invokeEndElementListeners() {
         this.endElementListeners.forEach(listener -> listener.accept(this));
     }
 }

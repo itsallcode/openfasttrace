@@ -18,7 +18,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.specobject.xml.SaxParserConfigurator;
+import org.itsallcode.openfasttrace.importer.xmlparser.SaxParserConfigurator;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 

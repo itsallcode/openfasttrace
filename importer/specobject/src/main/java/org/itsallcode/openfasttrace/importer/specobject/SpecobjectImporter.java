@@ -9,10 +9,10 @@ import javax.xml.parsers.SAXParserFactory;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.specobject.handler.SpecDocumentHandlerBuilder;
-import org.itsallcode.openfasttrace.importer.specobject.xml.ContentHandlerAdapter;
-import org.itsallcode.openfasttrace.importer.specobject.xml.IgnoringEntityResolver;
-import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeBuildingContentHandler;
-import org.itsallcode.openfasttrace.importer.specobject.xml.tree.TreeContentHandler;
+import org.itsallcode.openfasttrace.importer.xmlparser.ContentHandlerAdapter;
+import org.itsallcode.openfasttrace.importer.xmlparser.IgnoringEntityResolver;
+import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeBuildingContentHandler;
+import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeContentHandler;
 import org.xml.sax.*;
 
 /**

@@ -1,16 +1,15 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 /**
  * This interface allows {@link TreeContentHandler}s to control the parsing
  * process, e.g. by registering a delegate or stop parsing.
  */
-public interface TreeParsingController
-{
+public interface TreeParsingController {
     /**
      * Set a new handler delegate.
      * 
      * @param newDelegate
-     *            the new delegate.
+     *                    the new delegate.
      */
     void setDelegate(TreeContentHandler newDelegate);
 

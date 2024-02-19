@@ -2,12 +2,8 @@ package org.itsallcode.openfasttrace;
 
 import static java.util.stream.Collectors.toList;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -63,14 +59,19 @@ class ITestSelfTrace
 
     private ImportSettings buildOftSettings()
     {
-        final Path baseDir = Paths.get(new StandardDirectoryService().getCurrent()).resolve("..");
+        final Path baseDir = getProjectBaseDir();
         return ImportSettings.builder() //
                 .addInputs(baseDir.resolve("doc/spec/")) //
                 .addInputs(findInputDirectories(baseDir)) //
                 .build();
     }
 
-    private List<Path> findInputDirectories(Path rootProjectDir)
+    private Path getProjectBaseDir()
+    {
+        return Paths.get(new StandardDirectoryService().getCurrent()).resolve("..").normalize();
+    }
+
+    private List<Path> findInputDirectories(final Path rootProjectDir)
     {
         try (final Stream<Path> stream = Files.walk(rootProjectDir.normalize(), 5))
         {
@@ -87,12 +88,12 @@ class ITestSelfTrace
         }
     }
 
-    private Predicate<Path> containsDir(String dirName)
+    private Predicate<Path> containsDir(final String dirName)
     {
         return path -> path.toString().contains(File.separator + dirName + File.separator);
     }
 
-    private Predicate<Path> endsWith(Path subPath)
+    private Predicate<Path> endsWith(final Path subPath)
     {
         return path -> path.toString().endsWith(File.separator + subPath.toString());
     }

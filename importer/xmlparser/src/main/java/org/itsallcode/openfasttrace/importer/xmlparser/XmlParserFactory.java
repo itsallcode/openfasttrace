@@ -15,6 +15,13 @@ public class XmlParserFactory {
     private final SAXParserFactory parserFactory = createSaxParserFactory();
 
     /**
+     * Create a new instance.
+     */
+    public XmlParserFactory() {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
+    }
+
+    /**
      * Create a new {@link XmlParser}.
      * 
      * @return a new {@link XmlParser}

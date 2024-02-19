@@ -87,6 +87,6 @@ public class TreeElement {
     @Override
     public String toString() {
         return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
-                + ", endElementListeners=" + this.endElementListeners + "]";
+                + ", endElementListeners=" + this.endElementListeners + ", parent=" + parent + "]";
     }
 }

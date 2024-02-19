@@ -42,7 +42,7 @@ public class Attribute {
      *             the attributes to wrap.
      * @return the wrapped attributes.
      */
-    public static Map<String, Attribute> buildMap(final Attributes attr) {
+    static Map<String, Attribute> buildMap(final Attributes attr) {
         final Map<String, Attribute> attributes = new HashMap<>();
         for (int i = 0; i < attr.getLength(); i++) {
             final Attribute attribute = new Attribute(attr.getQName(i), attr.getValue(i));

@@ -27,16 +27,11 @@ public class StartElementEvent {
     /**
      * Creates a new start element event.
      * 
-     * @param uri
-     *                   the namespace URI of the element name.
-     * @param localName
-     *                   the local element name.
-     * @param qName
-     *                   the qname of the element.
-     * @param attributes
-     *                   the attributes of the element.
-     * @param location
-     *                   the location in the document.
+     * @param uri        the namespace URI of the element name.
+     * @param localName  the local element name.
+     * @param qName      the qname of the element.
+     * @param attributes the attributes of the element.
+     * @param location   the location in the document.
      * @return a new start element event.
      */
     public static StartElementEvent create(final String uri, final String localName,
@@ -67,8 +62,7 @@ public class StartElementEvent {
     /**
      * The value of the attribute with the given name.
      * 
-     * @param name
-     *             the attribute's name.
+     * @param name the attribute's name.
      * @return the attribute value or {@code null} if no attribute exists.
      */
     public Attribute getAttributeValueByName(final String name) {

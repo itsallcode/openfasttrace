@@ -25,7 +25,7 @@ class TagImporter implements Importer
         this.file = file;
     }
 
-    public static TagImporter create(final Optional<PathConfig> config, final InputFile file,
+    static TagImporter create(final Optional<PathConfig> config, final InputFile file,
             final ImportEventListener listener)
     {
         final LineConsumer lineConsumer = createLineConsumer(config, file, listener);

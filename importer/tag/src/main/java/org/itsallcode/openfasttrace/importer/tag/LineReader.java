@@ -15,12 +15,12 @@ class LineReader
         this.file = file;
     }
 
-    public static LineReader create(final InputFile file)
+    static LineReader create(final InputFile file)
     {
         return new LineReader(file);
     }
 
-    public void readLines(final LineConsumer consumer)
+    void readLines(final LineConsumer consumer)
     {
         int currentLineNumber = 0;
         try (final LineNumberReader reader = new LineNumberReader(this.file.createReader()))
@@ -46,10 +46,10 @@ class LineReader
         {
             consumer.readLine(currentLineNumber, line);
         }
-        catch (final Exception e)
+        catch (final Exception exception)
         {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":"
-                    + currentLineNumber + " (" + line + "): " + e.getMessage(), e);
+                    + currentLineNumber + " (" + line + "): " + exception.getMessage(), exception);
         }
     }
 

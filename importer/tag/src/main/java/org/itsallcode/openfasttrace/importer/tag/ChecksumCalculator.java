@@ -9,7 +9,7 @@ class ChecksumCalculator
     {
     }
 
-    public static long calculateCrc32(final String value)
+    static long calculateCrc32(final String value)
     {
         final CRC32 checksum = new CRC32();
         checksum.update(value.getBytes(StandardCharsets.UTF_8));

@@ -3,8 +3,7 @@ package org.itsallcode.openfasttrace.importer.tag;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -21,13 +20,17 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
             .getLogger(LongTagImportingLineConsumer.class.getName());
 
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
+    // [impl->dsn~import.full-coverage-tag-with-revision~1]
+    private static final String COVERING_TAG = "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
+            + optional(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR + SpecificationItemId.REVISION_SEPARATOR
+                    + SpecificationItemId.ITEM_REVISION_PATTERN);
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
     private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
             + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
-            + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")" //
+            + COVERING_TAG //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
             + "(" + SpecificationItemId.ID_PATTERN + ")" //
             + OPTIONAL_WHITESPACE + optional(NEEDS_COVERAGE + OPTIONAL_WHITESPACE) //
@@ -36,7 +39,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private final InputFile file;
     private final ImportEventListener listener;
 
-    private static String optional(String regex)
+    private static String optional(final String regex)
     {
         return "(?:" + regex + ")?";
     }
@@ -53,10 +56,12 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     {
         this.listener.beginSpecificationItem();
         this.listener.setLocation(this.file.getPath(), lineNumber);
-        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(2));
-        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(6));
-        final SpecificationItemId generatedId = generateItemId(lineNumber, lineMatchCount, coveredId, matcher.group(1),
-                neededArtifactTypes);
+        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(3));
+        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(7));
+        final String artifactType = matcher.group(1);
+        final Optional<String> revision = Optional.ofNullable(matcher.group(2));
+        final SpecificationItemId generatedId = generateItemId(lineNumber, lineMatchCount, coveredId, artifactType,
+                revision, neededArtifactTypes);
 
         if (neededArtifactTypes.isEmpty())
         {
@@ -74,7 +79,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         this.listener.endSpecificationItem();
     }
 
-    private List<String> parseCommaSeparatedList(String input)
+    private List<String> parseCommaSeparatedList(final String input)
     {
         if (input == null)
         {
@@ -88,15 +93,17 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     }
 
     private SpecificationItemId generateItemId(final int lineNumber, final int lineMatchCount,
-            final SpecificationItemId coveredId, String artifactType, List<String> neededArtifactTypes)
+            final SpecificationItemId coveredId, final String artifactType, final Optional<String> revision,
+            final List<String> neededArtifactTypes)
     {
         final String name = getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
-        return SpecificationItemId.createId(artifactType, name, 0);
+        final int parsedRevision = revision.map(Integer::parseInt).orElse(0);
+        return SpecificationItemId.createId(artifactType, name, parsedRevision);
     }
 
     // [impl->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
     private String getItemName(final int lineNumber, final int lineMatchCount, final SpecificationItemId coveredId,
-            List<String> neededArtifactTypes)
+            final List<String> neededArtifactTypes)
     {
         if (neededArtifactTypes.isEmpty())
         {

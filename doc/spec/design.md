@@ -774,6 +774,26 @@ Covers:
 
 Needs: impl, utest
 
+#### Full Coverage Tag Format Allows Specifying a Revision
+`dsn~import.full-coverage-tag-with-revision~1`
+
+OFT imports full coverage tags with an optional revision:
+
+    full-tag-with-revision = "[" *WSP reference "~" "~" revision "->" requirement-id "]"
+
+    full-tag-with-revision-with-needed-coverage = "[" *WSP reference "~" "~" revision *WSP "->" *WSP requirement-id
+    *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
+
+Rationale:
+
+Specifying an explicit revision in coverage tags allows incrementing the revision when the implementation changes. Without this, OFT would always assign the default revision `0`.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
 #### Coverage Tag With Needed Coverage Generates Readable Names
 `dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1`
 

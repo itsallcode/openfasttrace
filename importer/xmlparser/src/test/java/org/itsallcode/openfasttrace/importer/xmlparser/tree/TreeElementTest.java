@@ -18,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.xml.sax.Attributes;
 
-import com.jparams.verifier.tostring.ToStringVerifier;
-
 @ExtendWith(MockitoExtension.class)
 class TreeElementTest {
     private static final String ELEMENT_URI = "uri";
@@ -33,7 +31,8 @@ class TreeElementTest {
 
     @Test
     void testToString() {
-        ToStringVerifier.forClass(TreeElement.class).verify();
+        assertThat(testee().toString(), equalTo(
+                "TreeElement [element=StartElementEvent [qName={uri}localName, attributeMap={qname0=Attribute [qName=qname0, value=value0]}, location=path:2], characterData=, endElementListeners=[], parent=null]"));
     }
 
     @Test

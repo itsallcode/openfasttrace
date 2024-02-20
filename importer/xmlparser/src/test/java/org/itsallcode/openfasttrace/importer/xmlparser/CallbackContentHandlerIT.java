@@ -42,20 +42,20 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void noListenerRegistered() {
+    void noListenerRegistered() {
         assertDoesNotThrow(() -> parse("<root attr=\"val\">charData<child/></root>"));
         verifyNoInteractions(elementListenerMock);
     }
 
     @Test
-    public void defaultListenerRegistered() {
+    void defaultListenerRegistered() {
         this.handler.setDefaultStartElementListener(elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         verify(elementListenerMock, times(2)).accept(any());
     }
 
     @Test
-    public void consumerFails() {
+    void consumerFails() {
         this.handler.setDefaultStartElementListener(elementListenerMock);
         doThrow(new RuntimeException("expected")).when(elementListenerMock).accept(any());
         final XmlParserException exception = assertThrows(XmlParserException.class,
@@ -66,7 +66,7 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void startElementListenerReadsRootElement() {
+    void startElementListenerReadsRootElement() {
         this.handler.addElementListener("root", elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         final TreeElement element = getCapturedElement();
@@ -85,7 +85,7 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void startElementListenerReadsChildElement() {
+    void startElementListenerReadsChildElement() {
         this.handler.addElementListener("child", elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         final TreeElement element = getCapturedElement();
@@ -104,7 +104,7 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void endElementListenerReadsRootElement() {
+    void endElementListenerReadsRootElement() {
         this.handler.addElementListener("root", null, elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         final TreeElement element = getCapturedElement();
@@ -123,7 +123,7 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void endElementListenerReadsChildElement() {
+    void endElementListenerReadsChildElement() {
         this.handler.addElementListener("child", null, elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         final TreeElement element = getCapturedElement();
@@ -142,28 +142,28 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void addCharacterDataListener() {
+    void addCharacterDataListener() {
         this.handler.addCharacterDataListener("root", stringListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         verify(stringListenerMock).accept("charData");
     }
 
     @Test
-    public void addCharacterDataListenerNoCharContent() {
+    void addCharacterDataListenerNoCharContent() {
         this.handler.addCharacterDataListener("child", stringListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
         verify(stringListenerMock).accept("");
     }
 
     @Test
-    public void addIntDataListener() {
+    void addIntDataListener() {
         this.handler.addIntDataListener("root", intListenerMock);
         parse("<root>123<child/></root>");
         verify(intListenerMock).accept(123);
     }
 
     @Test
-    public void addIntDataListenerNoContent() {
+    void addIntDataListenerNoContent() {
         this.handler.addIntDataListener("root", intListenerMock);
         final XmlParserException exception = assertThrows(XmlParserException.class,
                 () -> parse("<root><child/></root>"));
@@ -171,7 +171,7 @@ class CallbackContentHandlerIT {
     }
 
     @Test
-    public void addIntDataListenerStringContent() {
+    void addIntDataListenerStringContent() {
         this.handler.addIntDataListener("root", intListenerMock);
         final XmlParserException exception = assertThrows(XmlParserException.class,
                 () -> parse("<root>invalidInt<child/></root>"));

@@ -87,7 +87,9 @@ public class CallbackContentHandler implements TreeContentHandler {
             if (endListener != null) {
                 startElement.addEndElementListener(endListener);
             }
-            startListener.accept(startElement);
+            if (startListener != null) {
+                startListener.accept(startElement);
+            }
         });
         return this;
     }
@@ -160,12 +162,20 @@ public class CallbackContentHandler implements TreeContentHandler {
             final IntConsumer listener) {
         addCharacterDataListener(elementName, data -> {
             if (data == null || data.isEmpty()) {
-                throw new IllegalStateException("No string data found for element " + elementName);
+                throw new XmlParserException("No string data found for element '" + elementName + "'");
             }
-            final int parsedInt = Integer.parseInt(data);
-            listener.accept(parsedInt);
+            listener.accept(parseInt(elementName, data));
         });
         return this;
+    }
+
+    private int parseInt(final String elementName, final String data) {
+        try {
+            return Integer.parseInt(data);
+        } catch (final NumberFormatException exception) {
+            throw new XmlParserException("Failed parsing content '" + data + "' of element '" + elementName + "'",
+                    exception);
+        }
     }
 
     /**

@@ -272,6 +272,7 @@ class TestTagImporter
     @Test
     void tagWithRevision()
     {
+        // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17" + "]",
                 SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
                         .addCoveredId("req", "example_name", 17)
@@ -282,6 +283,7 @@ class TestTagImporter
     @Test
     void tagWithRevisionAndNeededCoverage()
     {
+        // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17>>test" + "]",
                 SpecificationItem.builder().id("impl", "example_name", 42)
                         .addCoveredId("req", "example_name", 17)

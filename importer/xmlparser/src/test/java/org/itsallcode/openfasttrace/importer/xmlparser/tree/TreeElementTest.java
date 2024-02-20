@@ -1,7 +1,8 @@
 package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
@@ -9,20 +10,22 @@ import static org.mockito.Mockito.*;
 import java.util.function.Consumer;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.importer.xmlparser.event.Attribute;
 import org.itsallcode.openfasttrace.importer.xmlparser.event.StartElementEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.xml.sax.Attributes;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 @ExtendWith(MockitoExtension.class)
 class TreeElementTest {
-    @Mock
-    StartElementEvent startElementMock;
+    private static final String ELEMENT_URI = "uri";
+    private static final String ELEMENT_LOCAL_NAME = "localName";
+    private static final String ELEMENT_QNAME = "qname";
+
     @Mock
     Consumer<TreeElement> listenerMock1;
     @Mock
@@ -35,7 +38,7 @@ class TreeElementTest {
 
     @Test
     void getElement() {
-        assertThat(testee().getElement(), sameInstance(startElementMock));
+        assertThat(testee().getElement().getName().getLocalPart(), equalTo(ELEMENT_LOCAL_NAME));
     }
 
     @Test
@@ -65,22 +68,18 @@ class TreeElementTest {
 
     @Test
     void isRootFalsForNonNullParent() {
-        final TreeElement element = new TreeElement(startElementMock, mock(TreeElement.class));
+        final TreeElement element = new TreeElement(createStartElement(), mock(TreeElement.class));
         assertThat(element.isRootElement(), is(false));
     }
 
     @Test
     void getAttributeValueByName() {
-        final Attribute attr = mock(Attribute.class);
-        when(startElementMock.getAttributeValueByName("attr")).thenReturn(attr);
-        assertThat(testee().getAttributeValueByName("attr"), sameInstance(attr));
+        assertThat(testee().getAttributeValueByName("qname0").getValue(), equalTo("value0"));
     }
 
     @Test
     void getLocation() {
-        final Location location = mock(Location.class);
-        when(startElementMock.getLocation()).thenReturn(location);
-        assertThat(testee().getLocation(), sameInstance(location));
+        assertThat(testee().getLocation().getPath(), equalTo("path"));
     }
 
     @Test
@@ -109,6 +108,15 @@ class TreeElementTest {
     }
 
     private TreeElement testee() {
-        return new TreeElement(startElementMock, null);
+        return new TreeElement(createStartElement(), null);
+    }
+
+    private StartElementEvent createStartElement() {
+        final Attributes attributesMock = mock(Attributes.class);
+        when(attributesMock.getLength()).thenReturn(1);
+        when(attributesMock.getQName(0)).thenReturn("qname0");
+        when(attributesMock.getValue(0)).thenReturn("value0");
+        return StartElementEvent.create(ELEMENT_URI, ELEMENT_LOCAL_NAME, ELEMENT_QNAME,
+                attributesMock, Location.create("path", 2));
     }
 }

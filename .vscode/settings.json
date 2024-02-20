@@ -10,6 +10,11 @@
     "java.sources.organizeImports.starThreshold": 3,
     "java.sources.organizeImports.staticStarThreshold": 3,
     "java.configuration.updateBuildConfiguration": "automatic",
+    "java.test.config": {
+        "vmArgs": [
+            "-Djava.util.logging.config.file=src/test/resources/logging.properties"
+        ]
+    },
     "sonarlint.connectedMode.project": {
         "connectionId": "itsallcode",
         "projectKey": "org.itsallcode.openfasttrace:openfasttrace-root"

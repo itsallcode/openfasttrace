@@ -21,16 +21,15 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
 
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     // [impl->dsn~import.full-coverage-tag-with-revision~1]
-    private static final String COVERING_TAG = "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
-            + optional(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR + SpecificationItemId.REVISION_SEPARATOR
-                    + SpecificationItemId.ITEM_REVISION_PATTERN);
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
     private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
             + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
-            + COVERING_TAG //
+            + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
+            + optional(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR + SpecificationItemId.REVISION_SEPARATOR
+                    + SpecificationItemId.ITEM_REVISION_PATTERN) //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
             + "(" + SpecificationItemId.ID_PATTERN + ")" //
             + OPTIONAL_WHITESPACE + optional(NEEDS_COVERAGE + OPTIONAL_WHITESPACE) //
@@ -59,7 +58,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(3));
         final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(7));
         final String artifactType = matcher.group(1);
-        final Optional<String> revision = Optional.ofNullable(matcher.group(2));
+        final String revision = matcher.group(2);
         final SpecificationItemId generatedId = generateItemId(lineNumber, lineMatchCount, coveredId, artifactType,
                 revision, neededArtifactTypes);
 
@@ -93,12 +92,18 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     }
 
     private SpecificationItemId generateItemId(final int lineNumber, final int lineMatchCount,
-            final SpecificationItemId coveredId, final String artifactType, final Optional<String> revision,
+            final SpecificationItemId coveredId, final String artifactType, final String revision,
             final List<String> neededArtifactTypes)
     {
         final String name = getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
-        final int parsedRevision = revision.map(Integer::parseInt).orElse(0);
-        return SpecificationItemId.createId(artifactType, name, parsedRevision);
+        return SpecificationItemId.createId(artifactType, name, parseRevision(revision));
+    }
+
+    private int parseRevision(final String revision)
+    {
+        return Optional.ofNullable(revision)
+                .map(Integer::parseInt)
+                .orElse(0);
     }
 
     // [impl->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]

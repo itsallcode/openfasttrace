@@ -272,8 +272,7 @@ class TestTagImporter
     @Test
     void tagWithRevision()
     {
-        assertItems(
-                tag("impl~~42", "req~example_name~17"), //
+        assertItems("[impl~~42->req~example_name~17" + "]",
                 SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
                         .addCoveredId("req", "example_name", 17)
                         .location(FILENAME, 1).build());
@@ -283,8 +282,7 @@ class TestTagImporter
     @Test
     void tagWithRevisionAndNeededCoverage()
     {
-        assertItems(
-                tag("impl~~42", "req~example_name~17", "test"), //
+        assertItems("[impl~~42->req~example_name~17>>test" + "]",
                 SpecificationItem.builder().id("impl", "example_name", 42)
                         .addCoveredId("req", "example_name", 17)
                         .addNeedsArtifactType("test")
@@ -306,11 +304,6 @@ class TestTagImporter
     private String tag(final String coveringArtifactType, final String coveredId)
     {
         return "[" + coveringArtifactType + "->" + coveredId + "]";
-    }
-
-    private String tag(final String coveringArtifactType, final String coveredId, final String forwards)
-    {
-        return "[" + coveringArtifactType + "->" + coveredId + ">>" + forwards + "]";
     }
 
     private static SpecificationItemId id(final String artifactType, final String name,

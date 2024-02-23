@@ -10,14 +10,16 @@ import org.xml.sax.SAXNotSupportedException;
 /**
  * This factory creates new {@link XmlParser}s.
  */
-public class XmlParserFactory {
+public class XmlParserFactory
+{
 
     private final SAXParserFactory parserFactory = createSaxParserFactory();
 
     /**
-     * Create a new instance.
+     * Create a new instance of a {@link XmlParserFactory}.
      */
-    public XmlParserFactory() {
+    public XmlParserFactory()
+    {
         // Default constructor to fix compiler warning "missing-explicit-ctor"
     }
 
@@ -26,35 +28,42 @@ public class XmlParserFactory {
      * 
      * @return a new {@link XmlParser}
      */
-    public XmlParser createParser() {
+    public XmlParser createParser()
+    {
         return new XmlParser(parserFactory);
     }
 
     /**
-     * Creates a new {@link SAXParserFactory} for secure processing.
+     * Creates a new {@link SAXParserFactory} configured for secure processing.
      * 
      * @return the configured factory.
      */
-    private static SAXParserFactory createSaxParserFactory() {
+    private static SAXParserFactory createSaxParserFactory()
+    {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        try {
+        try
+        {
             parserFactory.setNamespaceAware(true);
             forbidDoctypeDeclaration(parserFactory);
             enableSecureProcessing(parserFactory);
-        } catch (SAXNotRecognizedException | SAXNotSupportedException
-                | ParserConfigurationException e) {
+        }
+        catch (SAXNotRecognizedException | SAXNotSupportedException
+                | ParserConfigurationException e)
+        {
             throw new IllegalStateException("Error configuring sax parser factory", e);
         }
         return parserFactory;
     }
 
     private static void enableSecureProcessing(final SAXParserFactory parserFactory)
-            throws ParserConfigurationException, SAXNotRecognizedException, SAXNotSupportedException {
+            throws ParserConfigurationException, SAXNotRecognizedException, SAXNotSupportedException
+    {
         parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
     }
 
     private static void forbidDoctypeDeclaration(final SAXParserFactory parserFactory)
-            throws ParserConfigurationException, SAXNotRecognizedException, SAXNotSupportedException {
+            throws ParserConfigurationException, SAXNotRecognizedException, SAXNotSupportedException
+    {
         parserFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
     }
 }

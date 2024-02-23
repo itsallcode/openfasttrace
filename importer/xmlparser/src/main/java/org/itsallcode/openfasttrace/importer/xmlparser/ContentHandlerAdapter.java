@@ -12,7 +12,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * A SAX content handler that forwards events from an {@link XMLReader} to an
  * {@link EventContentHandler}.
  */
-class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController {
+class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdapterController
+{
     private static final Logger LOG = Logger.getLogger(ContentHandlerAdapter.class.getName());
 
     private final String filePath;
@@ -24,15 +25,16 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
      * Create a new instance.
      * 
      * @param filePath
-     *                  the path of the parsed file.
+     *            the path of the parsed file.
      * @param xmlReader
-     *                  the {@link XMLReader}.
+     *            the {@link XMLReader}.
      * @param delegate
-     *                  the content handler to which the parsing events should be
-     *                  forwared.
+     *            the content handler to which the parsing events should be
+     *            forwarded.
      */
     ContentHandlerAdapter(final String filePath, final XMLReader xmlReader,
-            final EventContentHandler delegate) {
+            final EventContentHandler delegate)
+    {
         this.filePath = filePath;
         this.xmlReader = xmlReader;
         this.delegate = delegate;
@@ -41,27 +43,32 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
     /**
      * Initialize the delegate and register XML content handler.
      */
-    void registerListener() {
+    void registerListener()
+    {
         verifyNoContentHandlerRegistered();
         this.delegate.init(this);
         this.xmlReader.setContentHandler(this);
     }
 
-    private void verifyNoContentHandlerRegistered() {
+    private void verifyNoContentHandlerRegistered()
+    {
         final ContentHandler originalContentHandler = this.xmlReader.getContentHandler();
-        if (originalContentHandler != null) {
+        if (originalContentHandler != null)
+        {
             throw new IllegalStateException("An XML content handler is already registered: " + originalContentHandler);
         }
     }
 
     @Override
-    public void setDocumentLocator(final Locator locator) {
+    public void setDocumentLocator(final Locator locator)
+    {
         this.locator = locator;
     }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
-            final Attributes attributes) throws SAXException {
+            final Attributes attributes) throws SAXException
+    {
         LOG.finest(() -> "Start element: uri=" + uri + ", localName=" + localName + ", qName="
                 + qName);
         final StartElementEvent event = StartElementEvent.create(uri, localName, qName, attributes,
@@ -71,7 +78,8 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
 
     @Override
     public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+            throws SAXException
+    {
         LOG.finest(
                 () -> "End element: uri=" + uri + ", localName=" + localName + ", qName=" + qName);
         final EndElementEvent event = EndElementEvent.create(uri, localName, qName,
@@ -79,18 +87,21 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
         this.delegate.endElement(event);
     }
 
-    private Location getCurrentLocation() {
+    private Location getCurrentLocation()
+    {
         return org.itsallcode.openfasttrace.api.core.Location.create(this.filePath, this.locator.getLineNumber(),
                 this.locator.getColumnNumber());
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length) {
+    public void characters(final char[] ch, final int start, final int length)
+    {
         this.delegate.characters(new String(ch, start, length));
     }
 
     @Override
-    public void parsingFinished() {
+    public void parsingFinished()
+    {
         this.xmlReader.setContentHandler(null);
     }
 }

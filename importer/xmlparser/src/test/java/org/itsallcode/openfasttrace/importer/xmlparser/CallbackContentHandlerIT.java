@@ -28,12 +28,7 @@ class CallbackContentHandlerIT
 {
     private static final String FILE_PATH = "file path";
 
-    @Mock
-    Consumer<TreeElement> elementListenerMock;
-    @Mock
-    Consumer<String> stringListenerMock;
-    @Mock
-    IntConsumer intListenerMock;
+
 
     CallbackContentHandler handler;
 
@@ -44,14 +39,14 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testNoListenerRegistered()
+    void testNoListenerRegistered(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         assertDoesNotThrow(() -> parse("<root attr=\"val\">charData<child/></root>"));
         verifyNoInteractions(elementListenerMock);
     }
 
     @Test
-    void testDefaultListenerRegistered()
+    void testDefaultListenerRegistered(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.setDefaultStartElementListener(elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
@@ -59,7 +54,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testConsumerFails()
+    void testConsumerFails(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.setDefaultStartElementListener(elementListenerMock);
         doThrow(new RuntimeException("expected")).when(elementListenerMock).accept(any());
@@ -71,11 +66,11 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testStartElementListenerReadsRootElement()
+    void testStartElementListenerReadsRootElement(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.addElementListener("root", elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
-        final TreeElement element = getCapturedElement();
+        final TreeElement element = getCapturedElement(elementListenerMock);
 
         final QName name = element.getElement().getName();
         final Location location = element.getLocation();
@@ -91,11 +86,11 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testStartElementListenerReadsChildElement()
+    void testStartElementListenerReadsChildElement(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.addElementListener("child", elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
-        final TreeElement element = getCapturedElement();
+        final TreeElement element = getCapturedElement(elementListenerMock);
 
         final QName name = element.getElement().getName();
         final Location location = element.getLocation();
@@ -111,11 +106,11 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testEndElementListenerReadsRootElement()
+    void testEndElementListenerReadsRootElement(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.addElementListener("root", null, elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
-        final TreeElement element = getCapturedElement();
+        final TreeElement element = getCapturedElement(elementListenerMock);
 
         final QName name = element.getElement().getName();
         final Location location = element.getLocation();
@@ -131,11 +126,11 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testEndElementListenerReadsChildElement()
+    void testEndElementListenerReadsChildElement(@Mock final Consumer<TreeElement> elementListenerMock)
     {
         this.handler.addElementListener("child", null, elementListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
-        final TreeElement element = getCapturedElement();
+        final TreeElement element = getCapturedElement(elementListenerMock);
 
         final QName name = element.getElement().getName();
         final Location location = element.getLocation();
@@ -151,7 +146,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testAddCharacterDataListener()
+    void testAddCharacterDataListener(@Mock final Consumer<String> stringListenerMock)
     {
         this.handler.addCharacterDataListener("root", stringListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
@@ -159,7 +154,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testAddCharacterDataListenerNoCharContent()
+    void testAddCharacterDataListenerNoCharContent(@Mock final Consumer<String> stringListenerMock)
     {
         this.handler.addCharacterDataListener("child", stringListenerMock);
         parse("<root attr=\"val\">charData<child/></root>");
@@ -167,7 +162,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testAddIntDataListener()
+    void testAddIntDataListener(@Mock final IntConsumer intListenerMock)
     {
         this.handler.addIntDataListener("root", intListenerMock);
         parse("<root>123<child/></root>");
@@ -175,7 +170,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testAddIntDataListenerNoContent()
+    void testAddIntDataListenerNoContent(@Mock final IntConsumer intListenerMock)
     {
         this.handler.addIntDataListener("root", intListenerMock);
         final XmlParserException exception = assertThrows(XmlParserException.class,
@@ -184,7 +179,7 @@ class CallbackContentHandlerIT
     }
 
     @Test
-    void testAddIntDataListenerStringContent()
+    void testAddIntDataListenerStringContent(@Mock final IntConsumer intListenerMock)
     {
         this.handler.addIntDataListener("root", intListenerMock);
         final XmlParserException exception = assertThrows(XmlParserException.class,
@@ -192,7 +187,7 @@ class CallbackContentHandlerIT
         assertThat(exception.getMessage(), equalTo("Failed parsing content 'invalidInt' of element 'root'"));
     }
 
-    private TreeElement getCapturedElement()
+    private TreeElement getCapturedElement(final Consumer<TreeElement> elementListenerMock)
     {
         final ArgumentCaptor<TreeElement> arg = ArgumentCaptor.forClass(TreeElement.class);
         verify(elementListenerMock).accept(arg.capture());

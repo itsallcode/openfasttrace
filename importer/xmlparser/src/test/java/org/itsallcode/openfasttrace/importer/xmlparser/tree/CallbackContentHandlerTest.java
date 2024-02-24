@@ -21,11 +21,8 @@ class CallbackContentHandlerTest
     private static final String ELEMENT_LOCAL_NAME = "localName";
     private static final String ELEMENT_QNAME = "qname";
 
-    @Mock
-    Consumer<TreeElement> listenerMock;
-
     @Test
-    void testSetDefaultStartElementListener()
+    void testSetDefaultStartElementListener(@Mock final Consumer<TreeElement> listenerMock)
     {
         final CallbackContentHandler handler = testee();
         handler.setDefaultStartElementListener(listenerMock);

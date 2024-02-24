@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
 
+import org.itsallcode.openfasttrace.importer.xmlparser.event.EndElementEvent;
 import org.itsallcode.openfasttrace.importer.xmlparser.event.StartElementEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,15 @@ class ContentHandlerAdapterTest
     }
 
     @Test
+    void testStartElementFailsForMissingLocator() throws SAXException
+    {
+        final ContentHandlerAdapter testee = testee();
+        final IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> testee.startElement("uri", "localName", "qName", null));
+        assertThat(exception.getMessage(), equalTo("Document locator was not defined"));
+    }
+
+    @Test
     void testStartElementCallsDelegate() throws SAXException
     {
         final ContentHandlerAdapter testee = testee();
@@ -64,6 +74,47 @@ class ContentHandlerAdapterTest
                 () -> assertThat(event.getLocation().getPath(), equalTo("file")),
                 () -> assertThat(event.getLocation().getLine(), equalTo(42)),
                 () -> assertThat(event.getLocation().getColumn(), equalTo(17)));
+    }
+
+    @Test
+    void testEndElementFailsForMissingLocator() throws SAXException
+    {
+        final ContentHandlerAdapter testee = testee();
+        final IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> testee.endElement("uri", "localName", "qName"));
+        assertThat(exception.getMessage(), equalTo("Document locator was not defined"));
+    }
+
+    @Test
+    void testEndElementCallsDelegate() throws SAXException
+    {
+        final ContentHandlerAdapter testee = testee();
+        testee.setDocumentLocator(createLocator(42, 17));
+        testee.endElement("uri", "localName", "qName");
+
+        final ArgumentCaptor<EndElementEvent> arg = ArgumentCaptor.forClass(EndElementEvent.class);
+        verify(delegateMock).endElement(arg.capture());
+        final EndElementEvent event = arg.getValue();
+        assertAll(() -> assertThat(event.getName().toString(), equalTo("{uri}localName")),
+                () -> assertThat(event.getLocation().getPath(), equalTo("file")),
+                () -> assertThat(event.getLocation().getLine(), equalTo(42)),
+                () -> assertThat(event.getLocation().getColumn(), equalTo(17)));
+    }
+
+    @Test
+    void testCharactersCallsDelegate()
+    {
+        final ContentHandlerAdapter testee = testee();
+        testee.characters(new char[] { 'a', 'b', 'c' }, 0, 3);
+        verify(delegateMock).characters("abc");
+    }
+
+    @Test
+    void testParsingFinishedSetsNullContentHandler()
+    {
+        final ContentHandlerAdapter testee = testee();
+        testee.parsingFinished();
+        verify(xmlReaderMock).setContentHandler(null);
     }
 
     private Locator createLocator(final int lineNumber, final int columnNumber)

@@ -95,7 +95,7 @@ public class CallbackContentHandler implements TreeContentHandler
         if (this.startElementListeners.containsKey(elementName))
         {
             throw new IllegalArgumentException(
-                    "Listener already registered for start element " + elementName);
+                    "Listener already registered for start element '" + elementName + "'");
         }
         this.startElementListeners.put(elementName, startElement -> {
             if (endListener != null)

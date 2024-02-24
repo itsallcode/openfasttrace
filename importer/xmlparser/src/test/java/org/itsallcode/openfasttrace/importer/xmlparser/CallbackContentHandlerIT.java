@@ -14,8 +14,7 @@ import javax.xml.namespace.QName;
 
 import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.importer.xmlparser.tree.CallbackContentHandler;
-import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeElement;
+import org.itsallcode.openfasttrace.importer.xmlparser.tree.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,6 +82,35 @@ class CallbackContentHandlerIT
                 () -> assertThat(element.isRootElement(), is(true)),
                 () -> assertThat(element.getCharacterData(), equalTo("charData")),
                 () -> assertThat(element.getAttributeValueByName("attr").getValue(), equalTo("val")));
+    }
+
+    @Test
+    void testStartElementListenerReadsNamespaceWithUrl(@Mock final Consumer<TreeElement> elementListenerMock)
+    {
+        this.handler.addElementListener("root", elementListenerMock);
+        parse("<n:root xmlns:n=\"https://github.com/itsallcode/openfasttrace\">charData<child/></n:root>");
+        final TreeElement element = getCapturedElement(elementListenerMock);
+
+        final QName name = element.getElement().getName();
+        assertAll(() -> assertThat(name.getLocalPart(), equalTo("root")),
+                () -> assertThat(name.getNamespaceURI(), equalTo("https://github.com/itsallcode/openfasttrace")),
+                () -> assertThat(name.getPrefix(), equalTo("")));
+    }
+
+    @Test
+    void testStartElementListenerIgnoresCustomNamespaceElements(@Mock final Consumer<TreeElement> elementListenerMock)
+    {
+        this.handler.addElementListener("root", elementListenerMock);
+        parse("<n:root xmlns:n=\"ignored\">charData<child/></n:root>");
+        verifyNoInteractions(elementListenerMock);
+    }
+
+    @Test
+    void testStartElementListenerIgnoresNotMatchingElementName(@Mock final Consumer<TreeElement> elementListenerMock)
+    {
+        this.handler.addElementListener("ignore", elementListenerMock);
+        parse("<root>charData<child/></root>");
+        verifyNoInteractions(elementListenerMock);
     }
 
     @Test
@@ -185,6 +213,16 @@ class CallbackContentHandlerIT
         final XmlParserException exception = assertThrows(XmlParserException.class,
                 () -> parse("<root>invalidInt<child/></root>"));
         assertThat(exception.getMessage(), equalTo("Failed parsing content 'invalidInt' of element 'root'"));
+    }
+
+    @Test
+    void testAddSubTreeHandler(@Mock final TreeContentHandler handlerMock)
+    {
+        this.handler.addSubTreeHandler("root", () -> handlerMock);
+        parse("<root>invalidInt<child/></root>");
+        final ArgumentCaptor<TreeElement> arg = ArgumentCaptor.forClass(TreeElement.class);
+        verify(handlerMock).startElement(arg.capture());
+        assertThat(arg.getValue().getElement().getName().toString(), equalTo("child"));
     }
 
     private TreeElement getCapturedElement(final Consumer<TreeElement> elementListenerMock)

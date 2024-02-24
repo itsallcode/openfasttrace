@@ -12,30 +12,33 @@ import org.junit.jupiter.api.Test;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
-class EndElementEventTest {
+class EndElementEventTest
+{
     private static final Location LOCATION = Location.create("path", 42);
-    private static final String URI = "uri";
-    private static final String QNAME = "qname";
 
     @Test
-    void testToString() {
+    void testToString()
+    {
         ToStringVerifier.forClass(EndElementEvent.class).verify();
     }
 
     @Test
-    void getName() {
+    void getName()
+    {
         final QName qName = testee().getName();
-        assertAll(() -> assertThat(qName.getLocalPart(), equalTo("qname")),
+        assertAll(() -> assertThat(qName.getLocalPart(), equalTo("localName")),
                 () -> assertThat(qName.getNamespaceURI(), equalTo("uri")),
                 () -> assertThat(qName.getPrefix(), equalTo("")));
     }
 
     @Test
-    void getLocation() {
+    void getLocation()
+    {
         assertThat(testee().getLocation(), sameInstance(LOCATION));
     }
 
-    private EndElementEvent testee() {
-        return EndElementEvent.create(URI, QNAME, QNAME, LOCATION);
+    private EndElementEvent testee()
+    {
+        return EndElementEvent.create("uri", "localName", "qname", LOCATION);
     }
 }

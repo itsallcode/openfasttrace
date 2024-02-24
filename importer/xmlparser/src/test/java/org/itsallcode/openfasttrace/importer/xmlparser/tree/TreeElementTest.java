@@ -19,7 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.xml.sax.Attributes;
 
 @ExtendWith(MockitoExtension.class)
-class TreeElementTest {
+class TreeElementTest
+{
     private static final String ELEMENT_URI = "uri";
     private static final String ELEMENT_LOCAL_NAME = "localName";
     private static final String ELEMENT_QNAME = "qname";
@@ -30,30 +31,35 @@ class TreeElementTest {
     Consumer<TreeElement> listenerMock2;
 
     @Test
-    void testToString() {
+    void testToString()
+    {
         assertThat(testee().toString(), equalTo(
                 "TreeElement [element=StartElementEvent [qName={uri}localName, attributeMap={qname0=Attribute [qName=qname0, value=value0]}, location=path:2], characterData=, endElementListeners=[], parent=null]"));
     }
 
     @Test
-    void getElement() {
+    void getElement()
+    {
         assertThat(testee().getElement().getName().getLocalPart(), equalTo(ELEMENT_LOCAL_NAME));
     }
 
     @Test
-    void getCharacterDataEmpty() {
+    void getCharacterDataEmpty()
+    {
         assertThat(testee().getCharacterData(), equalTo(""));
     }
 
     @Test
-    void getCharacterData() {
+    void getCharacterData()
+    {
         final TreeElement element = testee();
         element.addCharacterData("chars");
         assertThat(element.getCharacterData(), equalTo("chars"));
     }
 
     @Test
-    void getCharacterDataMultipleAdded() {
+    void getCharacterDataMultipleAdded()
+    {
         final TreeElement element = testee();
         element.addCharacterData("chars");
         element.addCharacterData(", more chars");
@@ -61,33 +67,39 @@ class TreeElementTest {
     }
 
     @Test
-    void isRootTrueForNullParent() {
+    void isRootTrueForNullParent()
+    {
         assertThat(testee().isRootElement(), is(true));
     }
 
     @Test
-    void isRootFalsForNonNullParent() {
+    void isRootFalsForNonNullParent()
+    {
         final TreeElement element = new TreeElement(createStartElement(), mock(TreeElement.class));
         assertThat(element.isRootElement(), is(false));
     }
 
     @Test
-    void getAttributeValueByName() {
+    void getAttributeValueByName()
+    {
         assertThat(testee().getAttributeValueByName("qname0").getValue(), equalTo("value0"));
     }
 
     @Test
-    void getLocation() {
+    void getLocation()
+    {
         assertThat(testee().getLocation().getPath(), equalTo("path"));
     }
 
     @Test
-    void invokeEndElementListenersSuccedsForEmptyList() {
+    void invokeEndElementListenersSuccedsForEmptyList()
+    {
         assertDoesNotThrow(testee()::invokeEndElementListeners);
     }
 
     @Test
-    void invokeEndElementListenersCallsSingleEntry() {
+    void invokeEndElementListenersCallsSingleEntry()
+    {
         final TreeElement element = testee();
         element.addEndElementListener(listenerMock1);
         element.invokeEndElementListeners();
@@ -95,7 +107,8 @@ class TreeElementTest {
     }
 
     @Test
-    void invokeEndElementListenersCallsMultipleEntries() {
+    void invokeEndElementListenersCallsMultipleEntries()
+    {
         final TreeElement element = testee();
         element.addEndElementListener(listenerMock1);
         element.addEndElementListener(listenerMock2);
@@ -106,11 +119,13 @@ class TreeElementTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    private TreeElement testee() {
+    private TreeElement testee()
+    {
         return new TreeElement(createStartElement(), null);
     }
 
-    private StartElementEvent createStartElement() {
+    private StartElementEvent createStartElement()
+    {
         final Attributes attributesMock = mock(Attributes.class);
         when(attributesMock.getLength()).thenReturn(1);
         when(attributesMock.getQName(0)).thenReturn("qname0");

@@ -16,35 +16,40 @@ import org.xml.sax.Attributes;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class AttributeTest {
-
+class AttributeTest
+{
     @Mock
     Attributes attributesMock;
 
     @Test
-    void testToString() {
+    void testToString()
+    {
         ToStringVerifier.forClass(Attribute.class).verify();
     }
 
     @Test
-    void buildEmptyMap() {
+    void buildEmptyMap()
+    {
         final Map<String, Attribute> map = Attribute.buildMap(attributesMock);
         assertThat(map.size(), is(0));
     }
 
     @Test
-    void buildMapWithSingleElement() {
+    void buildMapWithSingleElement()
+    {
         when(attributesMock.getLength()).thenReturn(1);
         when(attributesMock.getQName(0)).thenReturn("qname0");
         when(attributesMock.getValue(0)).thenReturn("value0");
         final Map<String, Attribute> map = Attribute.buildMap(attributesMock);
+
         assertAll(() -> assertThat(map.size(), is(1)),
                 () -> assertThat(map.get("qname0").getQname(), equalTo("qname0")),
                 () -> assertThat(map.get("qname0").getValue(), equalTo("value0")));
     }
 
     @Test
-    void buildMapWithMultiple() {
+    void buildMapWithMultiple()
+    {
         when(attributesMock.getLength()).thenReturn(2);
         when(attributesMock.getQName(0)).thenReturn("qname0");
         when(attributesMock.getValue(0)).thenReturn("value0");

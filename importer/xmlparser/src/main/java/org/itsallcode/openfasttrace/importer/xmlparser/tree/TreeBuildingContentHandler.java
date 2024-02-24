@@ -18,10 +18,10 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
     private ContentHandlerAdapterController contentHandlerAdapter;
 
     /**
-     * Create a new instance.
+     * Create a new instance of a {@link TreeBuildingContentHandler}.
      * 
      * @param delegate
-     *            the delegate.
+     *            delegate to which parsing events will be forwarded.
      */
     public TreeBuildingContentHandler(final TreeContentHandler delegate)
     {

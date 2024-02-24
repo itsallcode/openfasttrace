@@ -15,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.xml.sax.Attributes;
 
 @ExtendWith(MockitoExtension.class)
-class CallbackContentHandlerTest {
+class CallbackContentHandlerTest
+{
     private static final String ELEMENT_URI = "";
     private static final String ELEMENT_LOCAL_NAME = "localName";
     private static final String ELEMENT_QNAME = "qname";
@@ -24,7 +25,8 @@ class CallbackContentHandlerTest {
     Consumer<TreeElement> listenerMock;
 
     @Test
-    void setDefaultStartElementListener() {
+    void setDefaultStartElementListener()
+    {
         final CallbackContentHandler handler = testee();
         handler.setDefaultStartElementListener(listenerMock);
         final TreeElement element = createElement();
@@ -33,24 +35,28 @@ class CallbackContentHandlerTest {
     }
 
     @Test
-    void setNullDefaultStartElementListenerIgnoresEvent() {
+    void setNullDefaultStartElementListenerIgnoresEvent()
+    {
         final CallbackContentHandler handler = testee();
         handler.setDefaultStartElementListener(null);
         assertDoesNotThrow(() -> handler.startElement(createElement()));
     }
 
-    private TreeElement createElement() {
+    private TreeElement createElement()
+    {
         return new TreeElement(createStartElement(), null);
     }
 
-    private StartElementEvent createStartElement() {
+    private StartElementEvent createStartElement()
+    {
         final Attributes attributesMock = mock(Attributes.class);
         when(attributesMock.getLength()).thenReturn(0);
         return StartElementEvent.create(ELEMENT_URI, ELEMENT_LOCAL_NAME, ELEMENT_QNAME,
                 attributesMock, Location.create("path", 2));
     }
 
-    private CallbackContentHandler testee() {
+    private CallbackContentHandler testee()
+    {
         return new CallbackContentHandler();
     }
 }

@@ -17,8 +17,8 @@ import org.xml.sax.Attributes;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class StartElementEventTest {
-
+class StartElementEventTest
+{
     private static final Location LOCATION = Location.create("path", 42);
     private static final String URI = "uri";
     private static final String LOCAL_NAME = "localName";
@@ -28,12 +28,14 @@ class StartElementEventTest {
     Attributes attributesMock;
 
     @Test
-    void testToString() {
+    void testToString()
+    {
         ToStringVerifier.forClass(StartElementEvent.class).verify();
     }
 
     @Test
-    void getName() {
+    void getName()
+    {
         final QName qName = testee().getName();
         assertAll(() -> assertThat(qName.getLocalPart(), equalTo("localName")),
                 () -> assertThat(qName.getNamespaceURI(), equalTo("uri")),
@@ -41,28 +43,33 @@ class StartElementEventTest {
     }
 
     @Test
-    void getLocation() {
+    void getLocation()
+    {
         assertThat(testee().getLocation(), sameInstance(LOCATION));
     }
 
     @Test
-    void getAttributeValueByNameExists() {
+    void getAttributeValueByNameExists()
+    {
         final Attribute attr = testee().getAttributeValueByName("qname0");
         assertAll(() -> assertThat(attr.getValue(), equalTo("value0")),
                 () -> assertThat(attr.getQname(), equalTo("qname0")));
     }
 
     @Test
-    void getAttributeValueByNameDoesNotExist() {
+    void getAttributeValueByNameDoesNotExist()
+    {
         assertThat(testee().getAttributeValueByName("missing"), nullValue());
     }
 
-    private StartElementEvent testee() {
+    private StartElementEvent testee()
+    {
         simulateAttributes();
         return StartElementEvent.create(URI, LOCAL_NAME, QNAME, attributesMock, LOCATION);
     }
 
-    private void simulateAttributes() {
+    private void simulateAttributes()
+    {
         when(attributesMock.getLength()).thenReturn(2);
         when(attributesMock.getQName(0)).thenReturn("qname0");
         when(attributesMock.getValue(0)).thenReturn("value0");

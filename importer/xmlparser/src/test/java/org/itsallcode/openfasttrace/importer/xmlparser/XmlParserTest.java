@@ -35,8 +35,9 @@ class XmlParserTest
     void testParsingInvalidXmlFormatFails(@Mock final TreeContentHandler handlerMock) throws IOException
     {
         final XmlParser parser = testee();
+        final StringReader reader = new StringReader("invalidContent");
         final XmlParserException exception = assertThrows(XmlParserException.class,
-                () -> parser.parse("path", new StringReader("invalidContent"), handlerMock));
+                () -> parser.parse("path", reader, handlerMock));
         assertThat(exception.getMessage(), equalTo("Failed to parse file 'path': Content is not allowed in prolog."));
     }
 

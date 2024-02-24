@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.importer.xmlparser;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.core.Location;
@@ -35,9 +36,9 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
     ContentHandlerAdapter(final String filePath, final XMLReader xmlReader,
             final EventContentHandler delegate)
     {
-        this.filePath = filePath;
-        this.xmlReader = xmlReader;
-        this.delegate = delegate;
+        this.filePath = Objects.requireNonNull(filePath, "filePath");
+        this.xmlReader = Objects.requireNonNull(xmlReader, "xmlReader");
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
     /**
@@ -62,7 +63,7 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
     @Override
     public void setDocumentLocator(final Locator locator)
     {
-        this.locator = locator;
+        this.locator = Objects.requireNonNull(locator, "locator");
     }
 
     @Override
@@ -89,6 +90,10 @@ class ContentHandlerAdapter extends DefaultHandler implements ContentHandlerAdap
 
     private Location getCurrentLocation()
     {
+        if (this.locator == null)
+        {
+            throw new IllegalStateException("Document locator was not defined");
+        }
         return org.itsallcode.openfasttrace.api.core.Location.create(this.filePath, this.locator.getLineNumber(),
                 this.locator.getColumnNumber());
     }

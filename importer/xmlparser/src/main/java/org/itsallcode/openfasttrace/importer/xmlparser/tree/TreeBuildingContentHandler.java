@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 import org.itsallcode.openfasttrace.importer.xmlparser.ContentHandlerAdapterController;
 import org.itsallcode.openfasttrace.importer.xmlparser.EventContentHandler;
@@ -25,14 +24,14 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
      */
     public TreeBuildingContentHandler(final TreeContentHandler delegate)
     {
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
     @Override
     public void init(final ContentHandlerAdapterController contentHandlerAdapter)
     {
         this.contentHandlerAdapter = contentHandlerAdapter;
-        this.getDelegate().init(this);
+        this.delegate.init(this);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
         final TreeElement parent = this.stack.peek();
         final TreeElement treeElement = new TreeElement(event, parent);
         this.stack.push(treeElement);
-        this.getDelegate().startElement(treeElement);
+        this.delegate.startElement(treeElement);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
                     + " but got end event for " + event);
         }
         final TreeElement closedElement = this.stack.pop();
-        this.getDelegate().endElement(closedElement);
+        this.delegate.endElement(closedElement);
     }
 
     @Override
@@ -66,24 +65,16 @@ public class TreeBuildingContentHandler implements EventContentHandler, TreePars
     {
         if (this.stack.isEmpty())
         {
-            throw new IllegalStateException("Got characters " + characters + " but stack is empty");
+            throw new IllegalStateException("Got characters '" + characters + "' but stack is empty");
         }
         this.stack.peek().addCharacterData(characters);
     }
 
-    private TreeContentHandler getDelegate()
-    {
-        if (this.delegate == null)
-        {
-            throw new IllegalStateException("No delegate");
-        }
-        return this.delegate;
-    }
 
     @Override
     public void setDelegate(final TreeContentHandler newDelegate)
     {
-        this.delegate = newDelegate;
+        this.delegate = Objects.requireNonNull(newDelegate, "newDelegate");
         newDelegate.init(this);
     }
 

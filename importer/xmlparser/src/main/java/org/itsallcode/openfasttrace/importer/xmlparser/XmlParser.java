@@ -16,7 +16,6 @@ import org.xml.sax.*;
  */
 public class XmlParser
 {
-
     private final SAXParserFactory saxParserFactory;
 
     XmlParser(final SAXParserFactory saxParserFactory)
@@ -62,7 +61,7 @@ public class XmlParser
         }
         catch (SAXException | ParserConfigurationException exception)
         {
-            throw new XmlParserException("Failed to create XML reader", exception);
+            throw new XmlParserException("Failed to create XML reader: " + exception.getMessage(), exception);
         }
     }
 }

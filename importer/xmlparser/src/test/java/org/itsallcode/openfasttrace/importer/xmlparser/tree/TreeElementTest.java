@@ -38,19 +38,19 @@ class TreeElementTest
     }
 
     @Test
-    void getElement()
+    void testGetElement()
     {
         assertThat(testee().getElement().getName().getLocalPart(), equalTo(ELEMENT_LOCAL_NAME));
     }
 
     @Test
-    void getCharacterDataEmpty()
+    void testGetCharacterDataEmpty()
     {
         assertThat(testee().getCharacterData(), equalTo(""));
     }
 
     @Test
-    void getCharacterData()
+    void testGetCharacterData()
     {
         final TreeElement element = testee();
         element.addCharacterData("chars");
@@ -58,7 +58,7 @@ class TreeElementTest
     }
 
     @Test
-    void getCharacterDataMultipleAdded()
+    void testGetCharacterDataMultipleAdded()
     {
         final TreeElement element = testee();
         element.addCharacterData("chars");
@@ -67,38 +67,38 @@ class TreeElementTest
     }
 
     @Test
-    void isRootTrueForNullParent()
+    void testIsRootTrueForNullParent()
     {
         assertThat(testee().isRootElement(), is(true));
     }
 
     @Test
-    void isRootFalsForNonNullParent()
+    void testIsRootFalsForNonNullParent()
     {
         final TreeElement element = new TreeElement(createStartElement(), mock(TreeElement.class));
         assertThat(element.isRootElement(), is(false));
     }
 
     @Test
-    void getAttributeValueByName()
+    void testGetAttributeValueByName()
     {
         assertThat(testee().getAttributeValueByName("qname0").getValue(), equalTo("value0"));
     }
 
     @Test
-    void getLocation()
+    void testGetLocation()
     {
         assertThat(testee().getLocation().getPath(), equalTo("path"));
     }
 
     @Test
-    void invokeEndElementListenersSuccedsForEmptyList()
+    void testInvokeEndElementListenersSuccedsForEmptyList()
     {
         assertDoesNotThrow(testee()::invokeEndElementListeners);
     }
 
     @Test
-    void invokeEndElementListenersCallsSingleEntry()
+    void testInvokeEndElementListenersCallsSingleEntry()
     {
         final TreeElement element = testee();
         element.addEndElementListener(listenerMock1);
@@ -107,7 +107,7 @@ class TreeElementTest
     }
 
     @Test
-    void invokeEndElementListenersCallsMultipleEntries()
+    void testInvokeEndElementListenersCallsMultipleEntries()
     {
         final TreeElement element = testee();
         element.addEndElementListener(listenerMock1);

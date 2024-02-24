@@ -23,7 +23,7 @@ class EndElementEventTest
     }
 
     @Test
-    void getName()
+    void testGetName()
     {
         final QName qName = testee().getName();
         assertAll(() -> assertThat(qName.getLocalPart(), equalTo("localName")),
@@ -32,7 +32,7 @@ class EndElementEventTest
     }
 
     @Test
-    void getLocation()
+    void testGetLocation()
     {
         assertThat(testee().getLocation(), sameInstance(LOCATION));
     }

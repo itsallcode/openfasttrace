@@ -28,14 +28,14 @@ class AttributeTest
     }
 
     @Test
-    void buildEmptyMap()
+    void testBuildEmptyMap()
     {
         final Map<String, Attribute> map = Attribute.buildMap(attributesMock);
         assertThat(map.size(), is(0));
     }
 
     @Test
-    void buildMapWithSingleElement()
+    void testBuildMapWithSingleElement()
     {
         when(attributesMock.getLength()).thenReturn(1);
         when(attributesMock.getQName(0)).thenReturn("qname0");
@@ -48,7 +48,7 @@ class AttributeTest
     }
 
     @Test
-    void buildMapWithMultiple()
+    void testBuildMapWithMultiple()
     {
         when(attributesMock.getLength()).thenReturn(2);
         when(attributesMock.getQName(0)).thenReturn("qname0");

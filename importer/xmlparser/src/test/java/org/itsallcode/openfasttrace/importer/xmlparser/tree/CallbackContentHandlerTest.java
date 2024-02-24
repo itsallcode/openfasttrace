@@ -25,7 +25,7 @@ class CallbackContentHandlerTest
     Consumer<TreeElement> listenerMock;
 
     @Test
-    void setDefaultStartElementListener()
+    void testSetDefaultStartElementListener()
     {
         final CallbackContentHandler handler = testee();
         handler.setDefaultStartElementListener(listenerMock);
@@ -35,7 +35,7 @@ class CallbackContentHandlerTest
     }
 
     @Test
-    void setNullDefaultStartElementListenerIgnoresEvent()
+    void testSetNullDefaultStartElementListenerIgnoresEvent()
     {
         final CallbackContentHandler handler = testee();
         handler.setDefaultStartElementListener(null);

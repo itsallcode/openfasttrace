@@ -34,7 +34,7 @@ class StartElementEventTest
     }
 
     @Test
-    void getName()
+    void testGetName()
     {
         final QName qName = testee().getName();
         assertAll(() -> assertThat(qName.getLocalPart(), equalTo("localName")),
@@ -43,13 +43,13 @@ class StartElementEventTest
     }
 
     @Test
-    void getLocation()
+    void testGetLocation()
     {
         assertThat(testee().getLocation(), sameInstance(LOCATION));
     }
 
     @Test
-    void getAttributeValueByNameExists()
+    void testGetAttributeValueByNameExists()
     {
         final Attribute attr = testee().getAttributeValueByName("qname0");
         assertAll(() -> assertThat(attr.getValue(), equalTo("value0")),
@@ -57,7 +57,7 @@ class StartElementEventTest
     }
 
     @Test
-    void getAttributeValueByNameDoesNotExist()
+    void testGetAttributeValueByNameDoesNotExist()
     {
         assertThat(testee().getAttributeValueByName("missing"), nullValue());
     }

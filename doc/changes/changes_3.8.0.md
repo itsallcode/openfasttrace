@@ -21,6 +21,7 @@ Now you can also specify a revision for coverage tags instead of the default rev
 * #378: Added an RST importer
 * #377: Allow expanding the details sections in the HTML report
 * #379: Allow specifying a revision for coverage tags
+* #394: Import coverage tags from `.yml` files in addition to `.yaml`
 
 ## Bugfixes
 

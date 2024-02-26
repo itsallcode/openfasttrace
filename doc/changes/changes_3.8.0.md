@@ -1,4 +1,4 @@
-# OpenFastTrace 3.8.0, released 2024-02-??
+# OpenFastTrace 3.8.0, released 2024-02-26
 
 Code name: RST Importer
 

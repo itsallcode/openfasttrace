@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.api.importer.input;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,7 +50,12 @@ public class RealFileInput implements InputFile
     @Override
     public BufferedReader createReader() throws IOException
     {
-        return Files.newBufferedReader(this.path, this.charset);
+        // Don't fail when reading files with invalid encoding.
+        // Files.newBufferedReader(this.path, this.charset) won't work here.
+        // See https://stackoverflow.com/a/43446789 for details.
+        final InputStream stream = Files.newInputStream(this.path);
+        final InputStreamReader reader = new InputStreamReader(stream, this.charset);
+        return new BufferedReader(reader);
     }
 
     @Override

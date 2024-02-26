@@ -1,4 +1,4 @@
-# OpenFastTrace 3.8.0, released 2024-02-??
+# OpenFastTrace 3.8.0, released 2024-02-26
 
 Code name: RST Importer
 
@@ -21,6 +21,7 @@ Now you can also specify a revision for coverage tags instead of the default rev
 * #378: Added an RST importer
 * #377: Allow expanding the details sections in the HTML report
 * #379: Allow specifying a revision for coverage tags
+* #394: Import coverage tags from `.yml` files in addition to `.yaml`
 
 ## Bugfixes
 
@@ -28,6 +29,7 @@ Now you can also specify a revision for coverage tags instead of the default rev
 * #373: Ignore spaces after items in "Needs:" and "Tags:" lists (thanks to [@sambishop](https://github.com/sambishop) for his contribution!)
 * #378: Merged integration test coverage with unit test coverage for representative overall figure
 * #303: Escape special characters in HTML report to avoid broken HTML when a specification item contains text like `<section>`
+* #391: Fixed reading files with invalid encoding (thanks to [@ayankuma](https://github.com/ayankuma) for the bug report!)
 
 ## Refactoring
 

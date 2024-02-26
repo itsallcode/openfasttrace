@@ -23,7 +23,7 @@ public class TagImporterFactory extends ImporterFactory
             "cfg", "conf", "ini", // configuration files
             "go", // Go
             "groovy", // Groovy
-            "json", "htm", "html", "xhtml", "yaml", // markup languages
+            "json", "htm", "html", "xhtml", "yaml", "yml", // markup languages
             "java", // Java
             "clj", "kt", "scala", // JVM languages
             "js", // JavaScript

@@ -590,7 +590,7 @@ recognized file types:
 **Markup languages**
 
 * HTML (`.html`, `.htm`, `.xhtml`)
-* YAML (`.yaml`)
+* YAML (`.yaml`, `.yml`)
 
 **Modeling languages**
 

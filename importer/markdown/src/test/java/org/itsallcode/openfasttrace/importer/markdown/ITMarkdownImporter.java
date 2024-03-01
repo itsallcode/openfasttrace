@@ -19,9 +19,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 class ITMarkdownImporter
 {
@@ -261,7 +259,8 @@ class ITMarkdownImporter
 
     @ParameterizedTest
     @ValueSource(strings =
-    { "---------------------------------", "---", "===", "======" })
+    { "---------------------------------", "---", "===", "======", "--------------------------------- ", "--- ", "=== ",
+            "====== " })
     void testRecognizeItemTitleWithUnderlines(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
@@ -279,7 +278,8 @@ class ITMarkdownImporter
 
     @ParameterizedTest
     @ValueSource(strings =
-    { "---------------------------------", "---", "===", "======", "================================================" })
+    { "---------------------------------", "---", "===", "======", "================================================",
+            "--- ", "=== " })
     void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
@@ -307,5 +307,60 @@ class ITMarkdownImporter
                 .id(SpecificationItemId.createId("req", "too-short", 111))
                 .location("file name", 3)
                 .build()));
+    }
+
+    @Test
+    void testBrokenNeedsCoverage()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "Test case for assigning a specific number of SPIs to allocate for dom0less domain\n"
+                        + "=================================================================================\n"
+                        + "\n"
+                        + "`XenValTestCase~arm64_assign_domain_SPIs~1`\n"
+                        + "\n"
+                        + "Covers:\n"
+                        + "- `XenSSR~arm64_assign_domain_SPIs~1`\n"
+                        + "\n"
+                        + "Needs:\n"
+                        + "- XenValTestCode\n"
+                        + "\n"
+                        + "Objectives\n"
+                        + "----------\n"
+                        + "\n"
+                        + "The script is responsible for:\n"
+                        + "- preparing kernel image (AArch64 linux image)");
+        assertThat(items, AutoMatcher.contains(
+                SpecificationItem.builder().id("XenValTestCase", "arm64_assign_domain_SPIs", 1)
+                        .title("Test case for assigning a specific number of SPIs to allocate for dom0less domain")
+                        .addNeedsArtifactType("XenValTestCode")
+                        .addCoveredId("XenSSR", "arm64_assign_domain_SPIs", 1).location(FILENAME, 4)
+                        .description(
+                                "Objectives\n----------\n\nThe script is responsible for:\n- preparing kernel image (AArch64 linux image)")
+                        .build()));
+    }
+
+    @Test
+    void testBrokenNeedsCoverageMinimal()
+    {
+        final List<SpecificationItem> items = runImporterOnText(
+                "## Test case for assigning a specific number of SPIs to allocate for dom0less domain\n"
+                        + "`XenValTestCase~arm64_assign_domain_SPIs~1`\n"
+                        + "Covers:\n"
+                        + "- `XenSSR~arm64_assign_domain_SPIs~1`\n"
+                        + "\n"
+                        + "Needs:\n"
+                        + "- XenValTestCode\n"
+                        + "\n"
+                        + "Objectives\n"
+                        + "The script is responsible for:\n"
+                        + "- preparing kernel image (AArch64 linux image)");
+        assertThat(items, AutoMatcher.contains(
+                SpecificationItem.builder().id("XenValTestCase", "arm64_assign_domain_SPIs", 1)
+                        .title("Test case for assigning a specific number of SPIs to allocate for dom0less domain")
+                        .addNeedsArtifactType("XenValTestCode")
+                        .addCoveredId("XenSSR", "arm64_assign_domain_SPIs", 1).location(FILENAME, 2)
+                        .description(
+                                "Objectives\nThe script is responsible for:\n- preparing kernel image (AArch64 linux image)")
+                        .build()));
     }
 }

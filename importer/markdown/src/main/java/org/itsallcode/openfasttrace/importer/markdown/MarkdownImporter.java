@@ -118,7 +118,7 @@ class MarkdownImporter implements Importer
         transition(NEEDS      , DEPENDS    , MdPattern.DEPENDS    , () -> {}                                              ),
         transition(NEEDS      , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                                        ),
         transition(NEEDS      , NEEDS      , MdPattern.NEEDS_REF  , this::addNeeds                                        ),
-        transition(NEEDS      , NEEDS      , MdPattern.EMPTY      , () -> {}                                              ),
+        transition(NEEDS      , SPEC_ITEM  , MdPattern.EMPTY      , () -> {}                                              ),
         transition(NEEDS      , COVERS     , MdPattern.COVERS     , () -> {}                                              ),
         transition(NEEDS      , TAGS       , MdPattern.TAGS_INT   , this::addTag                                          ),
         transition(NEEDS      , TAGS       , MdPattern.TAGS       , () -> {}                                              ),

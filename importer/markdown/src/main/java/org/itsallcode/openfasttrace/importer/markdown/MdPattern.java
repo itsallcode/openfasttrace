@@ -52,7 +52,7 @@ enum MdPattern
             + "\\s*" //
             + "(.*)"),
     TITLE("#+\\s*(.*)"),
-    UNDERLINE("([=-]{3,})");
+    UNDERLINE("([=-]{3,})\\s*");
     // @formatter:on
 
     private final Pattern pattern;

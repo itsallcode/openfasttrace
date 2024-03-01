@@ -1,10 +1,8 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.importer.specobject.xml.tree.CallbackContentHandler;
+import org.itsallcode.openfasttrace.importer.xmlparser.tree.CallbackContentHandler;
 
 class SingleSpecObjectsHandlerBuilder
 {

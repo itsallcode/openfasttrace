@@ -1,12 +1,12 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.importer.specobject.xml.event.Attribute;
-import org.itsallcode.openfasttrace.importer.specobject.xml.event.StartElementEvent;
+import org.itsallcode.openfasttrace.importer.xmlparser.event.Attribute;
+import org.itsallcode.openfasttrace.importer.xmlparser.event.StartElementEvent;
 
 /**
  * An element node in a parsed XML tree.
@@ -64,13 +64,6 @@ public class TreeElement
         this.endElementListeners.add(newEndElementListener);
     }
 
-    @Override
-    public String toString()
-    {
-        return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
-                + ", endElementListeners=" + this.endElementListeners + "]";
-    }
-
     /**
      * Get an {@link Attribute} by it's name.
      * 
@@ -99,5 +92,12 @@ public class TreeElement
     public void invokeEndElementListeners()
     {
         this.endElementListeners.forEach(listener -> listener.accept(this));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "TreeElement [element=" + this.element + ", characterData=" + this.characterData
+                + ", endElementListeners=" + this.endElementListeners + ", parent=" + this.parent + "]";
     }
 }

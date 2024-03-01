@@ -1,28 +1,44 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml;
+package org.itsallcode.openfasttrace.importer.xmlparser;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
-
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 
 /**
- * Configures a SAX parser.
+ * This factory creates new {@link XmlParser}s.
  */
-public class SaxParserConfigurator
+public class XmlParserFactory
 {
-    private SaxParserConfigurator()
+
+    private final SAXParserFactory parserFactory = createSaxParserFactory();
+
+    /**
+     * Create a new instance of a {@link XmlParserFactory}.
+     */
+    public XmlParserFactory()
     {
+        // Default constructor to fix compiler warning "missing-explicit-ctor"
     }
 
     /**
-     * Creates a new {@link SAXParserFactory} for secure processing.
+     * Create a new {@link XmlParser}.
+     * 
+     * @return a new {@link XmlParser}
+     */
+    public XmlParser createParser()
+    {
+        return new XmlParser(parserFactory);
+    }
+
+    /**
+     * Creates a new {@link SAXParserFactory} configured for secure processing.
      * 
      * @return the configured factory.
      */
-    public static SAXParserFactory createSaxParserFactory()
+    private static SAXParserFactory createSaxParserFactory()
     {
         final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try

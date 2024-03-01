@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 /**
  * A callback interface for handling XML parsing events.
@@ -28,5 +28,4 @@ public interface TreeContentHandler
      *            the closed element.
      */
     void endElement(TreeElement closedElement);
-
 }

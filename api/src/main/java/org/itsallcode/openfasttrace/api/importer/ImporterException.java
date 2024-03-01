@@ -2,7 +2,7 @@ package org.itsallcode.openfasttrace.api.importer;
 
 /**
  * {@link Importer}s throw this exception when there is an error while
- * exporting.
+ * importing.
  */
 public class ImporterException extends RuntimeException
 {

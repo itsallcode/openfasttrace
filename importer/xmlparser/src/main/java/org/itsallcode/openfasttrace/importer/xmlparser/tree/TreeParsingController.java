@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 /**
  * This interface allows {@link TreeContentHandler}s to control the parsing

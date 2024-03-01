@@ -13,12 +13,10 @@ import java.util.*;
 import java.util.logging.*;
 import java.util.stream.Stream;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.specobject.xml.SaxParserConfigurator;
+import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
@@ -46,11 +44,10 @@ class TestSpecobjectImporter
     private ImportEventListener importFromString(final String text)
     {
         final ImportEventListener listenerMock = mock(ImportEventListener.class);
-        final SAXParserFactory saxParserFactory = SaxParserConfigurator.createSaxParserFactory();
         final StringReader stringReader = new StringReader(text);
         final InputFile file = StreamInput.forReader(Paths.get(PSEUDO_FILENAME),
                 new BufferedReader(stringReader));
-        final SpecobjectImporter importer = new SpecobjectImporter(file, saxParserFactory,
+        final SpecobjectImporter importer = new SpecobjectImporter(file, new XmlParserFactory(),
                 listenerMock);
         importer.runImport();
         return listenerMock;

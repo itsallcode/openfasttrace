@@ -243,6 +243,13 @@
             <id>java21</id>
             <activation>
                 <jdk>21</jdk>
+                <property>
+                    <!-- Only activate this when explicitly setting the Java version. Without this the profile would also be activated
+                         in default mode (i.e. without specifying -Djava.version=11) and cause test failures because Java 11
+                         wrongly interprets the "allow" in "-Djava.security.manager=allow" as a class name. -->
+                    <name>java.version</name>
+                    <value>21</value>
+                </property>
             </activation>
             <properties>
                 <!-- java.security.manager is required to fix failing tests in TestCliStarter:

@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml;
+package org.itsallcode.openfasttrace.importer.xmlparser;
 
 /**
  * A controller that allows finishing the parsing.

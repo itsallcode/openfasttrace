@@ -5,14 +5,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
+import java.util.zip.*;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
@@ -115,6 +111,18 @@ class TestZipEntryInput
             final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"),
                     StandardCharsets.ISO_8859_1);
             assertThat(readContent(inputFile), equalTo(CONTENT));
+        }
+    }
+
+    @Test
+    void testReadInvalidEncoding() throws IOException
+    {
+        addEntryToZip("file", new byte[] { (byte) 0x9F, (byte) 0x88 });
+        try (final ZipFile zip = getZipFile())
+        {
+            final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"),
+                    StandardCharsets.UTF_8);
+            assertThat(readContent(inputFile), equalTo("��"));
         }
     }
 

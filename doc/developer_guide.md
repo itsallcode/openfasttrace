@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>3.7.1</version>
+        <version>3.8.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:3.7.1"
+    compile "org.itsallcode.openfasttrace:openfasttrace:3.8.0"
 }
 ```
 
@@ -56,12 +56,92 @@ If you want to build OFT:
 
     apt-get install openjdk-11-jdk maven
 
+## Configure Maven Toolchains
+
+OFT uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
+
+```xml
+<toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>11</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-11-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>17</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-17-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+        <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>21</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-21-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>
+```
+
 ## Essential Build Steps
 
-* `git clone https://github.com/itsallcode/openfasttrace.git`
-* Run `mvn test` to run unit tests.
-* Run `mvn verify` to run integration tests.
-* Run `./oft-self-trace.sh` to run requirements tracing.
+### Clone Git Repository
+
+```sh
+git clone https://github.com/itsallcode/openfasttrace.git
+```
+
+### Test and Build
+
+Run unit tests:
+
+```sh
+mvn test
+```
+
+Run unit and integration tests and additional checks:
+
+```sh
+mvn verify
+```
+
+Build OFT:
+
+```sh
+mvn package -DskipTests
+```
+
+This will build the executable JAR including all modules at `product/target/openfasttrace-$VERSION.jar`.
+
+#### Specify Java Version
+
+By default, OFT is built with Java 11.
+
+To build and test with a later version, add argument `-Djava.version=17` to the Maven command.
+
+
+#### Speedup Build
+
+By default, Maven builds the OFT modules sequentially.
+
+To speedup the build and build modules in parallel, add argument `-T 1C` to the Maven command.
+
+### Run Requirements Tracing
+
+```sh
+./oft-self-trace.sh
+```
 
 ## Using Eclipse
 

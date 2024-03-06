@@ -1,11 +1,11 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.tree;
+package org.itsallcode.openfasttrace.importer.xmlparser.tree;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.*;
 import java.util.logging.Logger;
 
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserException;
 
 /**
  * A convenient {@link TreeContentHandler} that allows registering listeners for
@@ -33,13 +33,13 @@ public class CallbackContentHandler implements TreeContentHandler
      * Sets the default start element listener that is called when no other
      * listener matches.
      *
-     * @param defaultStartElementListener
+     * @param defaultListener
      *            the default start element listener.
      */
     public void setDefaultStartElementListener(
-            final Consumer<TreeElement> defaultStartElementListener)
+            final Consumer<TreeElement> defaultListener)
     {
-        this.defaultStartElementListener = defaultStartElementListener;
+        this.defaultStartElementListener = defaultListener;
     }
 
     /**
@@ -55,7 +55,7 @@ public class CallbackContentHandler implements TreeContentHandler
     public CallbackContentHandler addSubTreeHandler(final String elementName,
             final Supplier<TreeContentHandler> supplier)
     {
-        addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
+        this.addElementListener(elementName, element -> this.pushDelegate(supplier.get()));
         return this;
     }
 
@@ -65,14 +65,14 @@ public class CallbackContentHandler implements TreeContentHandler
      *
      * @param elementName
      *            the element name for which to register the listener.
-     * @param startElementEventListener
-     *            the listener.
+     * @param listener
+     *            the start element listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addElementListener(final String elementName,
-            final Consumer<TreeElement> startElementEventListener)
+            final Consumer<TreeElement> listener)
     {
-        this.addElementListener(elementName, startElementEventListener, null);
+        this.addElementListener(elementName, listener, null);
         return this;
     }
 
@@ -81,28 +81,31 @@ public class CallbackContentHandler implements TreeContentHandler
      * listener will be called when an element with the given name is found.
      *
      * @param elementName
-     *            the element name for which to register the listener.
-     * @param startElementListener
+     *            the element name for which to register the listeners.
+     * @param startListener
      *            the start element listener.
-     * @param endElementListener
+     * @param endListener
      *            the end element listener.
      * @return this instance for method chaining.
      */
     public CallbackContentHandler addElementListener(final String elementName,
-            final Consumer<TreeElement> startElementListener,
-            final Consumer<TreeElement> endElementListener)
+            final Consumer<TreeElement> startListener,
+            final Consumer<TreeElement> endListener)
     {
         if (this.startElementListeners.containsKey(elementName))
         {
             throw new IllegalArgumentException(
-                    "Listener already registered for start element " + elementName);
+                    "Listener already registered for start element '" + elementName + "'");
         }
         this.startElementListeners.put(elementName, startElement -> {
-            if (endElementListener != null)
+            if (endListener != null)
             {
-                startElement.addEndElementListener(endElementListener);
+                startElement.addEndElementListener(endListener);
             }
-            startElementListener.accept(startElement);
+            if (startListener != null)
+            {
+                startListener.accept(startElement);
+            }
         });
         return this;
     }
@@ -137,12 +140,12 @@ public class CallbackContentHandler implements TreeContentHandler
         }
         catch (final Exception e)
         {
-            throw new ImporterException("Error handling " + treeElement + " with consumer "
+            throw new XmlParserException("Error handling " + treeElement + " with consumer "
                     + consumer + ": " + e.getMessage(), e);
         }
     }
 
-    private boolean isCustomXMLNamespace(String namespaceURI)
+    private boolean isCustomXMLNamespace(final String namespaceURI)
     {
         return !"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI);
     }
@@ -162,8 +165,10 @@ public class CallbackContentHandler implements TreeContentHandler
     }
 
     /**
-     * Pushes the given {@link TreeContentHandler} as a delegate.
-     *
+     * Pushes the given {@link TreeContentHandler} as a delegate. This will
+     * restore the original handler (i.e. {@code this}) when the current element
+     * ends.
+     * 
      * @param delegate
      *            the new delegate.
      */
@@ -189,12 +194,24 @@ public class CallbackContentHandler implements TreeContentHandler
         addCharacterDataListener(elementName, data -> {
             if (data == null || data.isEmpty())
             {
-                throw new IllegalStateException("No string data found for element " + elementName);
+                throw new XmlParserException("No string data found for element '" + elementName + "'");
             }
-            final int parsedInt = Integer.parseInt(data);
-            listener.accept(parsedInt);
+            listener.accept(parseInt(elementName, data));
         });
         return this;
+    }
+
+    private int parseInt(final String elementName, final String data)
+    {
+        try
+        {
+            return Integer.parseInt(data);
+        }
+        catch (final NumberFormatException exception)
+        {
+            throw new XmlParserException("Failed parsing content '" + data + "' of element '" + elementName + "'",
+                    exception);
+        }
     }
 
     /**

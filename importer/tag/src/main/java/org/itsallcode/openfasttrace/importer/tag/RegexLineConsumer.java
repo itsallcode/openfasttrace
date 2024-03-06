@@ -36,10 +36,11 @@ abstract class RegexLineConsumer implements LineConsumer
      * @param matcher
      *            regular expression {@link Matcher}.
      * @param lineNumber
-     *            line number of the matched the input, starting with  {@code 1} for the first line.
+     *            line number of the matched the input, starting with {@code 1}
+     *            for the first line.
      * @param lineMatchCount
-     *            number of the current match in the context of the current line,
-     *            starting with {@code 0} for the first match in a line.
+     *            number of the current match in the context of the current
+     *            line, starting with {@code 0} for the first match in a line.
      */
     abstract void processMatch(Matcher matcher, int lineNumber, int lineMatchCount);
 }

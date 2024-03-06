@@ -133,6 +133,16 @@ class ITZipFileImporter
         assertThat(this.actualFileContent.get(1), equalTo(FILE_CONTENT2_STRING));
     }
 
+    @Test
+    void testImportZipWithInvalidEncoding() throws IOException
+    {
+        initializeZipFile();
+        addEntryToZip("file1.c", new byte[] { (byte) 0x9F, (byte) 0x88 });
+        final List<InputFile> importedFiles = runImporter(1);
+        assertThat(importedFiles.get(0).getPath(), equalTo(this.zipFile.getPath() + "!file1.c"));
+        assertThat(this.actualFileContent.get(0), equalTo("��"));
+    }
+
     private void addZipEntryDirectory(final String name) throws IOException
     {
         assertThat(name, not(Matchers.endsWith("/")));

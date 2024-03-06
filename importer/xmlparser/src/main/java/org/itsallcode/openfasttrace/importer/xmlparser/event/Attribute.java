@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.event;
+package org.itsallcode.openfasttrace.importer.xmlparser.event;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class Attribute
      *            the attributes to wrap.
      * @return the wrapped attributes.
      */
-    public static Map<String, Attribute> buildMap(final Attributes attr)
+    static Map<String, Attribute> buildMap(final Attributes attr)
     {
         final Map<String, Attribute> attributes = new HashMap<>();
         for (int i = 0; i < attr.getLength(); i++)

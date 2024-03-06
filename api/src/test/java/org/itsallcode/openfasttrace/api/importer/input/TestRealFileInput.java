@@ -8,9 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,6 +96,15 @@ class TestRealFileInput
         final InputFile inputFile = RealFileInput
                 .forPath(writeTempFile(CONTENT, StandardCharsets.UTF_8), StandardCharsets.UTF_8);
         assertThat(readContent(inputFile), equalTo(CONTENT));
+    }
+
+    @Test
+    void testReadFileWithInvalidEncoding2() throws IOException
+    {
+        final Path path = tempDir.resolve("file");
+        Files.write(path, new byte[] { (byte) 0x9F, (byte) 0x88 });
+        final InputFile inputFile = RealFileInput.forPath(path, StandardCharsets.UTF_8);
+        assertThat(readContent(inputFile), equalTo("��"));
     }
 
     private Path writeTempFile(final String content, final Charset charset) throws IOException

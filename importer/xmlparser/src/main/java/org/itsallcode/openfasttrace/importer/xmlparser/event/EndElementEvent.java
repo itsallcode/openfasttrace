@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml.event;
+package org.itsallcode.openfasttrace.importer.xmlparser.event;
 
 import javax.xml.namespace.QName;
 

@@ -268,6 +268,29 @@ class TestTagImporter
                 itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
     }
 
+    // [utest->dsn~import.full-coverage-tag-with-revision~1]
+    @Test
+    void tagWithRevision()
+    {
+        // Concatenation required to avoid problems during self-trace
+        assertItems("[impl~~42->req~example_name~17" + "]",
+                SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
+                        .addCoveredId("req", "example_name", 17)
+                        .location(FILENAME, 1).build());
+    }
+
+    // [utest->dsn~import.full-coverage-tag-with-revision~1]
+    @Test
+    void tagWithRevisionAndNeededCoverage()
+    {
+        // Concatenation required to avoid problems during self-trace
+        assertItems("[impl~~42->req~example_name~17>>test" + "]",
+                SpecificationItem.builder().id("impl", "example_name", 42)
+                        .addCoveredId("req", "example_name", 17)
+                        .addNeedsArtifactType("test")
+                        .location(FILENAME, 1).build());
+    }
+
     @Test
     void requiredCoverageIndicatorWithMissingTagIgnored()
     {

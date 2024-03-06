@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.specobject.xml;
+package org.itsallcode.openfasttrace.importer.xmlparser;
 
 import java.io.StringReader;
 import java.util.logging.Logger;
@@ -9,14 +9,14 @@ import org.xml.sax.InputSource;
 /**
  * An {@link EntityResolver} that ignores all entities.
  */
-public class IgnoringEntityResolver implements EntityResolver
+class IgnoringEntityResolver implements EntityResolver
 {
     private static final Logger LOG = Logger.getLogger(IgnoringEntityResolver.class.getName());
 
     /**
      * Create a new {@link IgnoringEntityResolver}.
      */
-    public IgnoringEntityResolver()
+    IgnoringEntityResolver()
     {
         // empty by default
     }

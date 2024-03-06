@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
 
+import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.report.html.HtmlReport;
 import org.itsallcode.openfasttrace.report.html.view.ViewFactory;
@@ -27,7 +28,12 @@ class AbstractTestHtmlRenderer
 
     protected void assertOutputLines(final String... lines)
     {
-        assertThat(this.outputStream.toString(), matchesAllLines(lines));
+        assertOutput(matchesAllLines(lines));
+    }
+
+    protected void assertOutput(final Matcher<String> matcher)
+    {
+        assertThat(this.outputStream.toString(), matcher);
     }
 
     protected void assertOutputLinesWithoutCSS(final String... lines)

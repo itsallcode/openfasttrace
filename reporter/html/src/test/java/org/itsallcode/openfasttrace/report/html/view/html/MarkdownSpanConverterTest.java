@@ -36,10 +36,30 @@ class MarkdownSpanConverterTest
             "_text__, <em>text</em>_",
             "_text_more, <em>text</em>more",
             "pre_text_, pre<em>text</em>",
-            "_text_ *text* __text__ **text** [text](https://example.com), <em>text</em> <em>text</em> <strong>text</strong> <strong>text</strong> <a href=\"https://example.com\">text</a>"
+            "_text_ *text* __text__ **text** [text](https://example.com), <em>text</em> <em>text</em> <strong>text</strong> <strong>text</strong> <a href=\"https://example.com\">text</a>",
+            // [utest->dsn~reporting.html.escape-html~1]
+            "pre<tag>post, pre&lt;tag&gt;post",
+            "pre</tag>post, pre&lt;/tag&gt;post",
+            "pre<tag/>post, pre&lt;tag/&gt;post",
     })
     void assertConverted(final String inputLine, final String expected)
     {
         assertThat(MarkdownSpanConverter.convertLineContent(inputLine), equalTo(expected));
+    }
+
+    // [utest->dsn~reporting.html.escape-html~1]
+    @ParameterizedTest(name = "Line ''{0}'' escaped as HTML ''{1}''")
+    @CsvSource(
+    {
+            "no tag, no tag",
+            "'no \t\ntag', 'no \t\ntag'",
+            "pre<tag>post, pre&lt;tag&gt;post",
+            "pre</tag>post, pre&lt;/tag&gt;post",
+            "pre<tag/>post, pre&lt;tag/&gt;post",
+            "<strong>strong</strong>, &lt;strong&gt;strong&lt;/strong&gt;",
+    })
+    void assertHtmlEscaped(final String inputLine, final String expected)
+    {
+        assertThat(MarkdownSpanConverter.escapeHtml(inputLine), equalTo(expected));
     }
 }

@@ -12,8 +12,7 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 // [impl->dsn~import.short-coverage-tag~1]
 class ShortTagImportingLineConsumer extends RegexLineConsumer
 {
-    private static final Logger LOG = Logger
-            .getLogger(ShortTagImportingLineConsumer.class.getName());
+    private static final Logger LOG = Logger.getLogger(ShortTagImportingLineConsumer.class.getName());
 
     private static final String TAG_PREFIX = "\\[\\[";
     private static final String TAG_SUFFIX = "\\]\\]";

@@ -8,7 +8,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.7.2</revision>
+        <revision>3.8.0</revision>
         <java.version>11</java.version>
         <junit.version>5.10.2</junit.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
@@ -117,6 +117,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-xmlparser</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-exporter-specobject</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
@@ -217,6 +223,12 @@
                 <version>3.15.6</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>com.jparams</groupId>
+                <artifactId>to-string-verifier</artifactId>
+                <version>1.4.8</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>
@@ -243,6 +255,13 @@
             <id>java21</id>
             <activation>
                 <jdk>21</jdk>
+                <property>
+                    <!-- Prevent activating this profile when running without specifying -Djava.version.
+                         Tests with JDK 11 fail because it expecteds a class name as value for for
+                         system property "java.security.manager" -->
+                    <name>java.version</name>
+                    <value>21</value>
+                </property>
             </activation>
             <properties>
                 <!-- java.security.manager is required to fix failing tests in TestCliStarter:
@@ -420,6 +439,59 @@
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <printEqualFiles>true</printEqualFiles>
+                    <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                    <failBuildInCaseOfEqualContentConflict>true</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfConflict>true</failBuildInCaseOfConflict>
+                    <checkCompileClasspath>true</checkCompileClasspath>
+                    <checkRuntimeClasspath>true</checkRuntimeClasspath>
+                    <checkTestClasspath>false</checkTestClasspath>
+                    <preferLocal>true</preferLocal>
+                    <useResultFile>false</useResultFile>
+                </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.sonatype.ossindex.maven</groupId>
+                <artifactId>ossindex-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>audit</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>audit</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.github.zlika</groupId>
+                <artifactId>reproducible-build-maven-plugin</artifactId>
+                <version>0.16</version>
+                <executions>
+                    <execution>
+                        <id>strip-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>strip-jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

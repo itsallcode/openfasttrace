@@ -405,10 +405,30 @@ Needs: impl, itest
 
 OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
 
+Covers:
+
+* [`req~reporting.html.details-display~1`](system_requirements.md#html-report-renders-details-expanded-or-collapsed-initially-as-configured)
+
+Needs: impl, utest
+
+#### HTML Report Escapes HTML Tags
+`dsn~reporting.html.escape-html~1`
+
+OFT escapes characters `<` and `>` when rendering the following parts of a specification item to report:
+
+* Title
+* Description
+* Rationale
+* Comment
+
+Rationale:
+
+* This avoids generating invalid HTML when the Markdown contains text like `<section>`.
+* Other parts of a specification item (e.g. item ID) don't allow these characters and don't need escaping.
 
 Covers:
 
-* `req~reporting.html.details-display~1`
+* [`req~reporting.html.valid-html~1`](system_requirements.md#html-report-renders-valid-html)
 
 Needs: impl, utest
 
@@ -747,6 +767,26 @@ Rationale:
 The Tag importer is the catch all solution for all file formats that don't have a dedicated importer. We want to allow specification items imported via Tag importer to be intermediate nodes in the specification tree, instead of limiting them to leaves in the specification tree. Because leaves can only cover other specification items, but not require coverage.
 
 Especially when used for design document files like UML models, requiring coverage is useful.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
+#### Full Coverage Tag Format Allows Specifying a Revision
+`dsn~import.full-coverage-tag-with-revision~1`
+
+OFT imports full coverage tags with an optional revision:
+
+    full-tag-with-revision = "[" *WSP reference "~" "~" revision "->" requirement-id "]"
+
+    full-tag-with-revision-with-needed-coverage = "[" *WSP reference "~" "~" revision *WSP "->" *WSP requirement-id
+    *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
+
+Rationale:
+
+Specifying an explicit revision in coverage tags allows incrementing the revision when the implementation changes. Without this, OFT would always assign the default revision `0`.
 
 Covers:
 

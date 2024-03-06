@@ -14,6 +14,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
+import org.itsallcode.openfasttrace.importer.restructuredtext.RestructuredTextImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
 import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
@@ -43,8 +44,9 @@ class TestInitializingServiceLoader
         final ImporterContext context = new ImporterContext(null);
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
                 context);
-        assertThat(services, hasSize(4));
-        assertThat(services, contains(instanceOf(MarkdownImporterFactory.class), //
+        assertThat(services, hasSize(5));
+        assertThat(services, containsInAnyOrder(instanceOf(MarkdownImporterFactory.class), //
+                instanceOf(RestructuredTextImporterFactory.class), //
                 instanceOf(SpecobjectImporterFactory.class), //
                 instanceOf(TagImporterFactory.class), //
                 instanceOf(ZipFileImporterFactory.class)));

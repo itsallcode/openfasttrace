@@ -28,6 +28,10 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-importer-restructuredtext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-specobject</artifactId>
         </dependency>
         <dependency>

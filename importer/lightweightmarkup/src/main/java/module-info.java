@@ -6,5 +6,5 @@ module org.itsallcode.openfasttrace.importer.lightweightmarkup
     exports org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
     requires java.logging;
-    requires org.itsallcode.openfasttrace.api;
+    requires transitive org.itsallcode.openfasttrace.api;
 }

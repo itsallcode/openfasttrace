@@ -79,7 +79,8 @@ Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-lib
 
 ### Runtime Dependencies
 
-OpenFastTrace 3.0.0 and above only needs a Java 11 (or later) runtime environment to run. Older versions of OpenFastTrace can run with Java 8.
+OpenFastTrace 4.0.0 and above only needs a Java 17 (or later) runtime environment to run. OpenFastTrace until version 3.x.x supported Java 11. Versions prior to that ran with Java 8.
+Note that only the latest version of OFT is actively supported.
 
 #### Installation of Runtime Dependencies on Linux
 
@@ -87,14 +88,14 @@ OpenFastTrace 3.0.0 and above only needs a Java 11 (or later) runtime environmen
 
 If you just want to run OFT:
 
-    apt-get install openjdk-11-jre
+    apt-get install openjdk-17-jre
 
 ## Running OpenFastTrace
 
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```bash
-java -jar product/target/openfasttrace-3.7.1.jar trace /path/to/directory/being/traced
+java -jar product/target/openfasttrace-4.0.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).

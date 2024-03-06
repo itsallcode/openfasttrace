@@ -1,16 +1,15 @@
-package org.itsallcode.openfasttrace.importer.markdown;
-
-import java.util.regex.Pattern;
+package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
 
+import java.util.regex.Pattern;
+
 /**
- * Patterns that describe tokens to be recognized within Markdown-style
- * specifications.
+ * Patterns that describe tokens to be recognized within reStructured Text specifications.
  */
-enum MdPattern implements LinePattern {
+enum RstPattern implements LinePattern {
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
 
@@ -58,7 +57,7 @@ enum MdPattern implements LinePattern {
 
     private final Pattern pattern;
 
-    MdPattern(final String regularExpression)
+    RstPattern(final String regularExpression)
     {
         this.pattern = Pattern.compile(regularExpression);
     }

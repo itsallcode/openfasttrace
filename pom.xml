@@ -3,6 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.itsallcode.openfasttrace</groupId>
     <version>0.0.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-api</artifactId>
+            <version>4.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-testutil</artifactId>
+            <version>4.0.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <artifactId>openfasttrace-root</artifactId>
     <name>OpenFastTrace Root Project</name>
     <packaging>pom</packaging>
@@ -20,6 +34,7 @@
         <module>exporter/specobject</module>
         <module>importer/lightweightmarkup</module>
         <module>importer/markdown</module>
+        <module>importer/restructuredtext</module>
         <module>importer/specobject</module>
         <module>importer/tag</module>
         <module>importer/zip</module>

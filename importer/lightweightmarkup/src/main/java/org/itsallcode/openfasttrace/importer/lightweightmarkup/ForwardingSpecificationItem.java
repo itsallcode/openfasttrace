@@ -12,8 +12,12 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
  */
 public class ForwardingSpecificationItem
 {
-    static final String ORIGINAL_MARKER = ":";
-    static final String FORWARD_MARKER = "-->";
+    // The following markers are part of the syntax of a forward statement. They are public because they are required
+    // in different parsers.
+    /** Marker after which we expect the original artifact type. */
+    public static final String ORIGINAL_MARKER = ":";
+    /** Marker after which the artifact types are listed to which we forward. */
+    public static final String FORWARD_MARKER = "-->";
     private final String skippedArtifactType;
     private final SpecificationItemId originalId;
     private final SpecificationItemId skippedId;

@@ -262,7 +262,7 @@ class ITMarkdownImporter
 
     @ParameterizedTest
     @ValueSource(strings =
-    { "---------------------------------", "---", "===", "======" })
+    { "---------------------------------", "---", "===", "======", "--- ", "===   ", "---\t" })
     void testRecognizeItemTitleWithUnderlines(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(
@@ -280,7 +280,9 @@ class ITMarkdownImporter
 
     @ParameterizedTest
     @ValueSource(strings =
-    { "---------------------------------", "---", "===", "======", "================================================" })
+    { "---------------------------------", "---", "===", "======", "================================================",
+            "--- ", "===   ", "---\t"
+    })
     void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
     {
         final List<SpecificationItem> items = runImporterOnText(

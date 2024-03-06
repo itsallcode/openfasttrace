@@ -4,7 +4,7 @@ Code name: RST Importer
 
 ## Summary
 
-Good news for our 🐍 Python friends: in this release we derived a parser for Restructured Text (RST) from our existing Markdown parser.
+In this release we derived a parser for Restructured Text (RST) from our existing Markdown parser.
 
 The Markdown parser in the process now accepts specification item titles underlined with either "=" (H1) or "-" (H2).
 

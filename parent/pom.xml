@@ -14,6 +14,8 @@
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <reproducible.build.timestamp>2024-04-01T00:00:00Z</reproducible.build.timestamp>
+        <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
         <test.args><!-- Empty default value for Java version < 18 --></test.args>
     </properties>
     <licenses>
@@ -482,18 +484,19 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>io.github.zlika</groupId>
-                <artifactId>reproducible-build-maven-plugin</artifactId>
-                <version>0.16</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-artifact-plugin</artifactId>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
-                        <id>strip-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>strip-jar</goal>
-                        </goals>
+                        <id>verify-reproducible-build</id>
+                        <phase>verify</phase>
+                        <goals><goal>check-buildplan</goal></goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <failOnNonReproducible>true</failOnNonReproducible>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>

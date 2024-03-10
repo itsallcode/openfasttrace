@@ -3,15 +3,18 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-exporter-common</artifactId>
-    <name>Multiple Exporters Utils</name>
+    <name>OpenFastTrace Exporters Utils</name>
     <parent>
         <relativePath>../../parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
+    <properties>
+        <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
+    </properties>
     <dependencies>
-     <dependency>
+        <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-api</artifactId>
         </dependency>

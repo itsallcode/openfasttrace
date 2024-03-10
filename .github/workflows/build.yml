@@ -69,6 +69,20 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+    - name: Verify reproducible build
+      run: |
+        mvn --batch-mode -T 1C clean verify artifact:compare -DskipTests \
+            -Djava.version=${{ matrix.java }}
+
+    - name: Archive aggregated reproducible build report
+      uses: actions/upload-artifact@v4
+      with:
+        name: reproducible-build-report-${{ matrix.os }}-java-${{ matrix.java }}
+        path: |
+          target/openfasttrace-root-0.0.0.buildcompare
+          target/openfasttrace-root-0.0.0.buildinfo
+        if-no-files-found: error
+
     - name: Archive oft binary
       uses: actions/upload-artifact@v4
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}

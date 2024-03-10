@@ -10,6 +10,7 @@
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.outputTimestamp>2024-04-01T00:00:00Z</project.build.outputTimestamp>
     </properties>
     <modules>
         <module>parent</module>

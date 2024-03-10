@@ -1,16 +1,16 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
-import java.util.zip.CRC32;
+import java.util.stream.Stream;
 
 import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
@@ -20,353 +20,129 @@ import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 // [utest->dsn~import.full-coverage-tag~1]
 class TestTagImporter
 {
     private static final String FILENAME = "testfilename.java";
-    private static final SpecificationItemId ID1 = id("artifactTypeA", "name1", 1);
-    private static final SpecificationItemId ID2 = id("artifactTypeB", "name2.suffix", 2);
-    private static final SpecificationItemId ID3 = id("artifactTypeC", "prefix.name3", 3);
-
-    private static final String ID1_TEXT = "artifactTypeA~name1~1";
-    private static final String ID2_TEXT = "artifactTypeB~name2.suffix~2";
-    private static final String ID3_TEXT = "artifactTypeC~prefix.name3~3";
-
-    private static final String COVERING_ARTIFACT_TYPE1 = "coveringArtifactTypeX";
-    private static final String COVERING_ARTIFACT_TYPE2 = "coveringArtifactTypeY";
-
-    private static final String NEEDED_COVERAGE1 = "impl";
-    private static final String NEEDED_COVERAGE2 = "test";
 
     private static final String UNIX_NEWLINE = "\n";
     private static final String CARRIAGE_RETURN = "\r";
     private static final String WINDOWS_NEWLINE = CARRIAGE_RETURN + UNIX_NEWLINE;
 
-    @Test
-    void testEmptyString()
+    static Stream<Arguments> tagImporterTests()
     {
-        assertItems("");
+        return Stream.of(
+                noItemDetected(""),
+                noItemDetected("non empty string"),
+                noItemDetected("non empty string\nmultiline"),
+                noItemDetected("impl->dsn~missing-brackets~1"),
+                noItemDetected("[missing arrow]"),
+                noItemDetected("[impl->invalid covered tag]"),
+                noItemDetected("[impl->dsn~missing-revision]"),
+                noItemDetected("[impl->dsn~invalid-revision~invalid]"),
+                noItemDetected("[impl->\ndsn~newline-after-arrow~1]"),
+                noItemDetected("[impl->dsn~name1~1>>]"),
+                noItemDetected("[impl->dsn~name1~1>>tag with space]"),
+
+                parsedItem("[impl->dsn~name1~1" + "]", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("[ impl -> dsn~name1~1 " + "]", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("[\timpl\t->\tdsn~name1~1\t" + "]", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("[impl->dsn~name1~1" + "]" + UNIX_NEWLINE, item("impl~name1-912633853~0", "dsn~name1~1")),
+
+                parsedItem("prefix[impl->dsn~name1~1" + "]", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("prefix with spaces [impl->dsn~name1~1" + "]",
+                        item("impl~name1-912633853~0", "dsn~name1~1")),
+
+                parsedItem("[impl->dsn~name1~1" + "]postfix", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("[impl->dsn~name1~1" + "] postfix with space",
+                        item("impl~name1-912633853~0", "dsn~name1~1")),
+
+                parsedItem("prefix[impl->dsn~name1~1" + "]postfix", item("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("prefix with space [impl->dsn~name1~1" + "] postfix with space",
+                        item("impl~name1-912633853~0", "dsn~name1~1")),
+
+                parsedItems("[implA->dsn~name1~2" + "][implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1099447527~0", "dsn~name2~3")),
+                parsedItems("[implA->dsn~name1~2" + "] [implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1099447527~0", "dsn~name2~3")),
+                parsedItems("[implA->dsn~name1~2" + "]separator[implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1099447527~0", "dsn~name2~3")),
+                parsedItems("[implA->dsn~name1~2" + "] separator [implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1099447527~0", "dsn~name2~3")),
+
+                parsedItems("[implA->dsn~name1~2" + "][implB->dsn~name2~3" + "][implC->dsn~name3~4" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1099447527~0", "dsn~name2~3"),
+                        item("implC~name3-2846888323~0", "dsn~name3~4")),
+
+                parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+                parsedItems("[implA->dsn~name1~2" + "]" + WINDOWS_NEWLINE + "[implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+                parsedItems("[implA->dsn~name1~2" + "]" + CARRIAGE_RETURN + "[implB->dsn~name2~3" + "]",
+                        item("implA~name1-2943155783~0", "dsn~name1~2"),
+                        item("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+
+                parsedItems("[impl->dsn~name~1" + "][impl->dsn~name~1" + "]",
+                        item("impl~name-4161631350~0", "dsn~name~1"),
+                        item("impl~name-964930486~0", "dsn~name~1")),
+                parsedItems("[impl->dsn~name~1" + "]" + UNIX_NEWLINE + "[impl->dsn~name~1" + "]",
+                        item("impl~name-4161631350~0", "dsn~name~1"),
+                        item("impl~name-2408818310~0", "dsn~name~1").location(FILENAME, 2)),
+
+                // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+                // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
+                parsedItem("[dsn->feat~name1~1>>impl" + "]",
+                        item("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl")),
+
+                // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
+                // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
+                parsedItem("[dsn->feat~name1~1>>impl,test" + "]",
+                        item("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl").addNeedsArtifactType("test")),
+                parsedItem("[ dsn -> feat~name1~1 >> impl , test " + "]",
+                        item("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl").addNeedsArtifactType("test")),
+
+                // [utest->dsn~import.full-coverage-tag-with-revision~1]
+                parsedItem("[impl~~42->req~name~17" + "]", item("impl~name-3433816440~42", "req~name~17")),
+                parsedItems("[impl~~42->req~name~17" + "][impl~~42->req~name~17" + "]",
+                        item("impl~name-3433816440~42", "req~name~17"), item("impl~name-1460579607~42", "req~name~17")),
+
+                // [utest->dsn~import.full-coverage-tag-with-revision~1]
+                parsedItem("[impl~~42->req~example_name~17>>test" + "]",
+                        item("impl~example_name~42", "req~example_name~17").addNeedsArtifactType("test")),
+
+                parsedItem("[impl->dsn~name~2" + "]", item("impl~name-1627661772~0", "dsn~name~2")));
     }
 
-    @Test
-    void testNonStringNoTag()
+    private static SpecificationItem.Builder item(final String id, final String coveredId)
     {
-        assertItems("non empty string");
+        return itemBuilder().id(SpecificationItemId.parseId(id)).addCoveredId(SpecificationItemId.parseId(coveredId));
     }
 
-    @Test
-    void testNonStringMultiLineStringNoTag()
+    private static SpecificationItem.Builder itemBuilder()
     {
-        assertItems("non empty string\nmultiline");
+        return SpecificationItem.builder();
     }
 
-    @Test
-    void testSingleTag()
+    @ParameterizedTest(name = "Text ''{0}'' converted to spec items {1}")
+    @MethodSource("tagImporterTests")
+    void testTagImporter(final String content, final List<SpecificationItem> expectedItems)
     {
-        assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagTrailingNewline()
-    {
-        assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE, //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataBefore()
-    {
-        assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataBeforeWithSpaceSeparator()
-    {
-        assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataAfter()
-    {
-        assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataAfterWithSpaceSeparator()
-    {
-        assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataBeforeAndAfter()
-    {
-        assertItems("data before" + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "data after", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testSingleTagWithDataBeforeAndAfterWithSpaceSeparator()
-    {
-        assertItems("data before " + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " data after", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void testMultipleTagsPerLineWithSeparatorWithoutSpace()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + "separator"
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
-    }
-
-    @Test
-    void testMultipleTagsPerLineWithSeparatorWithSpace()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " separator "
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
-    }
-
-    @Test
-    void testMultipleTagsPerLineWithSpaceSeparator()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
-    }
-
-    @Test
-    void testMultipleTagsPerLineWithoutSeparator()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + ""
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
-    }
-
-    @Test
-    void testThreeTagsOnOneLine()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT)
-                        + tag(COVERING_ARTIFACT_TYPE1, ID3_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2),
-                item(COVERING_ARTIFACT_TYPE1, 1, 2, ID3));
-    }
-
-    @Test
-    void testLinesSeparatedWithUnixNewLine()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
-    }
-
-    @Test
-    void testLinesSeparatedWithWindowsNewLine()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + WINDOWS_NEWLINE
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
-    }
-
-    @Test
-    void testLinesSeparatedWithCarriageReturn()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + CARRIAGE_RETURN
-                        + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID2));
-    }
-
-    @Test
-    void testDuplicateId()
-    {
-        assertItems(tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID1));
-    }
-
-    @Test
-    void testDuplicateIdMultipleLines()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + UNIX_NEWLINE
-                        + tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 2, 0, ID1));
-    }
-
-    @Test
-    void testDifferentArtifactTypes()
-    {
-        assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + " "
-                        + tag(COVERING_ARTIFACT_TYPE2, ID2_TEXT), //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE2, 1, 1, ID2));
-    }
-
-    @Test
-    void tagWithExtraSpaces()
-    {
-        assertItems(
-                "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " ]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void tagWithTabRecognized()
-    {
-        assertItems(
-                "[" + COVERING_ARTIFACT_TYPE1 + "\t-> " + ID1_TEXT + "]", //
-                item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1));
-    }
-
-    @Test
-    void tagWithNewlineNotRecognized()
-    {
-        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->\n" + ID1_TEXT + "]");
-    }
-
-    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
-    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
-    @Test
-    void tagWithSingleRequiredCoverage()
-    {
-        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + "]", //
-                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1)));
-    }
-
-    // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
-    // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
-    @Test
-    void tagWithMultipleRequiredCoverage()
-    {
-        assertItems(
-                "[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>" + NEEDED_COVERAGE1 + ","
-                        + NEEDED_COVERAGE2
-                        + "]", //
-                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
-    }
-
-    @Test
-    void tagWithMultipleRequiredCoverageWithSpaces()
-    {
-        assertItems(
-                "[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> " + NEEDED_COVERAGE1 + " , "
-                        + NEEDED_COVERAGE2 + " ]", //
-                itemWithReadableName(COVERING_ARTIFACT_TYPE1, 1, ID1, List.of(NEEDED_COVERAGE1, NEEDED_COVERAGE2)));
-    }
-
-    // [utest->dsn~import.full-coverage-tag-with-revision~1]
-    @Test
-    void tagWithRevision()
-    {
-        // Concatenation required to avoid problems during self-trace
-        assertItems("[impl~~42->req~example_name~17" + "]",
-                SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
-                        .addCoveredId("req", "example_name", 17)
-                        .location(FILENAME, 1).build());
-    }
-
-    // [utest->dsn~import.full-coverage-tag-with-revision~1]
-    @Test
-    void tagWithRevisionAndNeededCoverage()
-    {
-        // Concatenation required to avoid problems during self-trace
-        assertItems("[impl~~42->req~example_name~17>>test" + "]",
-                SpecificationItem.builder().id("impl", "example_name", 42)
-                        .addCoveredId("req", "example_name", 17)
-                        .addNeedsArtifactType("test")
-                        .location(FILENAME, 1).build());
-    }
-
-    @Test
-    void requiredCoverageIndicatorWithMissingTagIgnored()
-    {
-        assertItems("[" + COVERING_ARTIFACT_TYPE1 + "->" + ID1_TEXT + ">>]");
-    }
-
-    @Test
-    void requiredCoverageWithSpaceIgnored()
-    {
-        assertItems("[ " + COVERING_ARTIFACT_TYPE1 + " -> " + ID1_TEXT + " >> tag with space ]");
-    }
-
-    private String tag(final String coveringArtifactType, final String coveredId)
-    {
-        return "[" + coveringArtifactType + "->" + coveredId + "]";
-    }
-
-    private static SpecificationItemId id(final String artifactType, final String name,
-            final int revision)
-    {
-        return new SpecificationItemId.Builder() //
-                .artifactType(artifactType) //
-                .name(name) //
-                .revision(revision) //
-                .build();
-    }
-
-    private static SpecificationItem item(final String artifactType, final int lineNumber,
-            final int counter, final SpecificationItemId coveredId)
-    {
-        return item(artifactType, lineNumber, counter, coveredId, emptyList());
-    }
-
-    private static SpecificationItem itemWithReadableName(final String artifactType, final int lineNumber,
-            final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
-    {
-        final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
-                coveredId.getName(), 0);
-        final Builder itemBuilder = SpecificationItem.builder() //
-                .id(generatedId) //
-                .addCoveredId(coveredId) //
-                .location(FILENAME, lineNumber);
-        neededArtifactTypes.forEach(itemBuilder::addNeedsArtifactType);
-        return itemBuilder.build();
-    }
-
-    private static SpecificationItem item(final String artifactType, final int lineNumber,
-            final int counter, final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
-    {
-        final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
-                generateName(coveredId, lineNumber, counter), 0);
-        final Builder itemBuilder = SpecificationItem.builder() //
-                .id(generatedId) //
-                .addCoveredId(coveredId) //
-                .location(FILENAME, lineNumber);
-        neededArtifactTypes.forEach(itemBuilder::addNeedsArtifactType);
-        return itemBuilder.build();
-    }
-
-    private static String generateName(final SpecificationItemId coveredId, final int lineNumber,
-            final int counter)
-    {
-        final String uniqueName = FILENAME + lineNumber + counter + coveredId.toString();
-        final CRC32 checksum = new CRC32();
-        checksum.update(uniqueName.getBytes(StandardCharsets.UTF_8));
-        return coveredId.getName() + "-" + checksum.getValue();
-    }
-
-    private void assertItems(final String content, final SpecificationItem... expectedItems)
-    {
-        final List<SpecificationItem> actual = runImporter(content);
-        assertThat(actual, hasSize(expectedItems.length));
-        if (expectedItems.length > 0)
+        final List<SpecificationItem> result = runImporter(content);
+        assertThat(result, hasSize(expectedItems.size()));
+        if (!expectedItems.isEmpty())
         {
-            assertThat(actual, AutoMatcher.contains(expectedItems));
-            assertThat(actual, contains(expectedItems));
+            assertThat(result, AutoMatcher.contains(expectedItems.toArray(new SpecificationItem[0])));
         }
     }
 
@@ -379,5 +155,43 @@ class TestTagImporter
         factory.init(new ImporterContext(null));
         factory.createImporter(file, builder).runImport();
         return builder.build();
+    }
+
+    /**
+     * Create a test case using the content as input for the
+     * {@link TagImporter}. Make sure to concatenate the content to avoid
+     * breaking self-tracing.
+     * 
+     * @param content
+     *            content to parse
+     * @param itemBuilder
+     *            builder for the expected item
+     * @return the test case arguments
+     */
+    private static Arguments parsedItem(final String content, final SpecificationItem.Builder itemBuilder)
+    {
+        if (itemBuilder.build().getLocation() == null)
+        {
+            itemBuilder.location(FILENAME, 1);
+        }
+        return Arguments.of(content, List.of(itemBuilder.build()));
+    }
+
+    private static Arguments parsedItems(final String content, final SpecificationItem.Builder... itemBuilders)
+    {
+        for (final Builder builder : itemBuilders)
+        {
+            if (builder.build().getLocation() == null)
+            {
+                builder.location(FILENAME, 1);
+            }
+        }
+        return Arguments.of(content,
+                Arrays.stream(itemBuilders).map(SpecificationItem.Builder::build).collect(toList()));
+    }
+
+    private static Arguments noItemDetected(final String content)
+    {
+        return Arguments.of(content, emptyList());
     }
 }

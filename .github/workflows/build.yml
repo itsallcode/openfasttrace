@@ -24,6 +24,9 @@ jobs:
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: "bash"
     name: "Build on ${{ matrix.os }} with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
@@ -53,13 +56,11 @@ jobs:
         restore-keys: ${{ runner.os }}-sonar
 
     - name: Build with Java ${{ matrix.java }}
-      shell: bash
       run: |
         mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
             -Djava.version=${{ matrix.java }}
 
     - name: Sonar analysis
-      shell: bash
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
         mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \

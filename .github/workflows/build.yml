@@ -70,6 +70,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Verify reproducible build
+      # Build fails on Windows with error "Failed to execute goal org.apache.maven.plugins:maven-artifact-plugin:3.5.0:compare (default-cli) on project openfasttrace-reporter-plaintext: Could not copy D:\a\openfasttrace\openfasttrace\reporter\plaintext\target\openfasttrace-reporter-plaintext-3.8.0.buildcompareto D:\a\openfasttrace\openfasttrace\target\openfasttrace-root-0.0.0.buildcompare"
+      if: ${{ matrix.os != 'windows-latest' }}
       run: |
         mvn --batch-mode -T 1C clean verify artifact:compare -DskipTests \
             -Djava.version=${{ matrix.java }}

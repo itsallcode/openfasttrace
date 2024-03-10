@@ -24,6 +24,9 @@ jobs:
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: "bash"
     name: "Build on ${{ matrix.os }} with Java ${{ matrix.java }}"
     env:
       DEFAULT_JAVA: 11
@@ -53,13 +56,11 @@ jobs:
         restore-keys: ${{ runner.os }}-sonar
 
     - name: Build with Java ${{ matrix.java }}
-      shell: bash
       run: |
         mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
             -Djava.version=${{ matrix.java }}
 
     - name: Sonar analysis
-      shell: bash
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}
       run: |
         mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
@@ -68,12 +69,33 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+    - name: Verify reproducible build
+      # Build fails on Windows with error "Failed to execute goal org.apache.maven.plugins:maven-artifact-plugin:3.5.0:compare (default-cli) on project openfasttrace-reporter-plaintext: Could not copy D:\a\openfasttrace\openfasttrace\reporter\plaintext\target\openfasttrace-reporter-plaintext-3.8.0.buildcompareto D:\a\openfasttrace\openfasttrace\target\openfasttrace-root-0.0.0.buildcompare"
+      if: ${{ matrix.os != 'windows-latest' }}
+      run: |
+        mvn --batch-mode -T 1C clean verify artifact:compare -DskipTests \
+            -Djava.version=${{ matrix.java }}
+
+    - name: Archive aggregated reproducible build report
+      uses: actions/upload-artifact@v4
+      if: ${{ matrix.os != 'windows-latest' }}
+      with:
+        name: reproducible-build-report-${{ matrix.os }}-java-${{ matrix.java }}
+        path: |
+          target/openfasttrace-root-0.0.0.buildcompare
+          target/openfasttrace-root-0.0.0.buildinfo
+        if-no-files-found: error
+
     - name: Archive oft binary
       uses: actions/upload-artifact@v4
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
       with:
         name: openfasttrace-binaries
-        path: product/target/openfasttrace-*.jar
+        path: |
+          product/target/openfasttrace-*.jar
+          !product/target/openfasttrace-*-javadoc.jar
+          !product/target/openfasttrace-*-sources.jar
+        if-no-files-found: error
 
     - name: Run self-trace
       run: ./oft-self-trace.sh

@@ -1,8 +1,8 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -21,6 +21,7 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -31,54 +32,92 @@ class ITMarkdownImporter
     private static final String TAG1 = "Tag1";
     private static final String FILENAME = "file name";
 
+    // [utest -> dsn~md.specification-item-id-format~3]
+    @CsvSource({
+            "at~name~67, at, name, 67",
+            "longartifacttype~name.with.dots~123456789, longartifacttype, name.with.dots, 123456789",
+            "a~b1.c1.d~0, a, b1.c1.d, 0"
+    })
+    @ParameterizedTest
+    void testRequirementIdDetected(final String markdownId, final String expectedArtifactType,
+                                   final String expectedName, final int expectedRevision)
+    {
+        assertThat(runImporterOnText("/doc/spec.md/", markdownId),
+                contains(SpecificationItem.builder()
+                        .id(expectedArtifactType, expectedName, expectedRevision)
+                        .location("/doc/spec.md", 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.specification-item-title~1]
+    @Test
+    void testMarkdownTitleBeforeRequirementIdIsRequirementTitle()
+    {
+        assertThat(runImporterOnText("titles.md", """
+                # The title
+                the~id~1
+                """),
+                contains(SpecificationItem.builder()
+                        .title("The title")
+                        .id("the", "id", 1)
+                        .location("titles.md", 2)
+                        .build()));
+    }
+
     @Test
     void testFindRequirement()
     {
-        assertThat(runImporterOnText(createCompleteSpecificationItemInMarkdownFormat()),
-                AutoMatcher.contains(SpecificationItem.builder().id(MarkdownTestConstants.ID1).title("Requirement Title")
+        assertThat(runImporterOnText("""
+                        # Requirement Title
+                        `type~id~1` <a id="type~id~1"></a>
+                        Description
+                        
+                        More description
+                        
+                        Rationale:
+                        Rationale
+                        More rationale
+                        
+                        Covers:
+                        
+                          * impl~foo1~1
+                         + [Link to baz2](#impl~baz2~2)
+                        
+                        Depends:
+                        
+                          + configuration~blubb.blah.blah~4711
+                          - db~blah.blubb~42
+                        
+                        Comment:
+                        
+                        Comment
+                        More comment
+                        
+                        Needs: artA , artB
+                        """),
+                contains(SpecificationItem.builder().id(SpecificationItemId.parseId("type~id~1")).title("Requirement Title")
                         .comment("Comment" + NL + "More comment")
                         .description("Description" + NL + NL + "More description")
                         .rationale("Rationale" + NL + "More rationale")
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
-                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID1))
-                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID2))
-                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID1))
-                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID2))
+                        .addCoveredId(SpecificationItemId.parseId("impl~foo1~1"))
+                        .addCoveredId(SpecificationItemId.parseId("impl~baz2~2"))
+                        .addDependOnId(SpecificationItemId.parseId("configuration~blubb.blah.blah~4711"))
+                        .addDependOnId(SpecificationItemId.parseId("db~blah.blubb~42"))
                         .location("file name", 2)
                         .build()));
-
     }
 
     // [utest->dsn~md.needs-coverage-list-compact~1]
-    private String createCompleteSpecificationItemInMarkdownFormat()
-    {
-        return "# " + MarkdownTestConstants.TITLE //
-                + "\n" //
-                + "`" + MarkdownTestConstants.ID1 + "` <a id=\"" + MarkdownTestConstants.ID1 + "\"></a>" //
-                + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
-                + "\nRationale:\n" //
-                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
-                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
-                + "\nCovers:\n\n" //
-                + "  * " + MarkdownTestConstants.COVERED_ID1 + "\n" //
-                + " + " + "[Link to baz2](#" + MarkdownTestConstants.COVERED_ID2 + ")\n" //
-                + "\nDepends:\n\n" //
-                + "  + " + MarkdownTestConstants.DEPENDS_ON_ID1 + "\n" //
-                + "  - " + MarkdownTestConstants.DEPENDS_ON_ID2 + "\n" //
-                + "\nComment:\n\n" //
-                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
-                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
-                + "\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 //
-                + " , " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + " ";
+
+    private List<SpecificationItem> runImporterOnText(final String text) {
+        return runImporterOnText(FILENAME, text);
     }
 
-    private List<SpecificationItem> runImporterOnText(final String text)
+    private List<SpecificationItem> runImporterOnText( final String filename, final String text)
     {
         final BufferedReader reader = new BufferedReader(new StringReader(text));
-        final InputFile file = StreamInput.forReader(Paths.get(FILENAME), reader);
+        final InputFile file = StreamInput.forReader(Paths.get(filename), reader);
         final SpecificationListBuilder specItemBuilder = SpecificationListBuilder.create();
         final Importer importer = new MarkdownImporterFactory().createImporter(file,
                 specItemBuilder);
@@ -90,16 +129,15 @@ class ITMarkdownImporter
     void testTwoConsecutiveSpecificationItems()
     {
         assertThat(runImporterOnText(createTwoConsecutiveItemsInMarkdownFormat()),
-                AutoMatcher
-                        .contains(SpecificationItem.builder().id(MarkdownTestConstants.ID1).title(MarkdownTestConstants.TITLE).location("file name", 2).build(),
+                contains(SpecificationItem.builder().id(SpecificationItemId.parseId("type~id~1")).title("Requirement Title").location("file name", 2).build(),
                                 SpecificationItem.builder().id(MarkdownTestConstants.ID2).title("").location("file name", 4).build()));
     }
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + MarkdownTestConstants.TITLE //
+        return "# " + "Requirement Title" //
                 + "\n" //
-                + MarkdownTestConstants.ID1 + "\n" //
+                + SpecificationItemId.parseId("type~id~1") + "\n" //
                 + "\n" + MarkdownTestConstants.ID2 + "\n" //
                 + "# Irrelevant Title";
     }
@@ -107,9 +145,9 @@ class ITMarkdownImporter
     @Test
     void testSingleNeeds()
     {
-        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1;
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + "artA";
         final List<SpecificationItem> items = runImporterOnText(singleNeedsItem);
-        MatcherAssert.assertThat(items.get(0).getNeedsArtifactTypes(), Matchers.contains(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1));
+        MatcherAssert.assertThat(items.get(0).getNeedsArtifactTypes(), Matchers.contains("artA"));
     }
 
     @Test
@@ -117,7 +155,7 @@ class ITMarkdownImporter
     {
         final String completeItem = createCompleteSpecificationItemInLegacyMarkdownFormat();
         assertThat(runImporterOnText(completeItem),
-                AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_ID))
+                contains(SpecificationItem.builder().id(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_ID))
                         .title("Requirement Title")
                         .status(ItemStatus.PROPOSED)
                         .comment("Comment" + NL + "More comment")
@@ -136,17 +174,17 @@ class ITMarkdownImporter
     // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
-        return "# " + MarkdownTestConstants.TITLE //
+        return "# " + "Requirement Title" //
                 + "\n" //
                 + "`" + MarkdownTestConstants.LEGACY_ID + "`" //
                 + "\n" //
                 + "\nStatus: proposed\n" //
-                + "\nDescription:\n" + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
+                + "\nDescription:\n" + "Description" + "\n" //
+                + "" + "\n" //
+                + "More description" + "\n" //
                 + "\nRationale:\n" //
-                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
-                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
+                + "Rationale" + "\n" //
+                + "More rationale" + "\n" //
                 + "\nDepends:\n\n" //
                 + "  + `" + MarkdownTestConstants.LEGACY_DEPENDS_ON_ID1 + "`\n" //
                 + "  - `" + MarkdownTestConstants.LEGACY_DEPENDS_ON_ID2 + "`\n" //
@@ -154,11 +192,11 @@ class ITMarkdownImporter
                 + "  * `" + MarkdownTestConstants.LEGACY_COVERED_ID1 + "`\n" //
                 + " + `" + MarkdownTestConstants.LEGACY_COVERED_ID2 + "`\n" //
                 + "\nComment:\n\n" //
-                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
-                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
+                + "Comment" + "\n" //
+                + "More comment" + "\n" //
                 + "\nNeeds:\n" //
-                + "   * " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 + "\n"//
-                + "+ " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + "\n" //
+                + "   * " + "artA" + "\n"//
+                + "+ " + "artB" + "\n" //
                 + "\nTags: " + TAG1 + ", " + TAG2;
     }
 
@@ -169,7 +207,7 @@ class ITMarkdownImporter
         final List<SpecificationItem> items = runImporterOnText("arch-->dsn:req~foobar~2\n" //
                 + "   * `dsn --> impl, utest,itest : arch~bar.zoo~123`");
         assertThat(items,
-                AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId("arch~foobar~2"))
+                contains(SpecificationItem.builder().id(SpecificationItemId.parseId("arch~foobar~2"))
                         .forwards(true)
                         .addCoveredId(SpecificationItemId.parseId("req~foobar~2"))
                         .addNeedsArtifactType("dsn")
@@ -189,7 +227,7 @@ class ITMarkdownImporter
         assertThat(runImporterOnText("## This title should be ignored\n\n" //
                 + "### Title\n" //
                 + "`a~b~1`"),
-                AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId("a~b~1"))
+                contains(SpecificationItem.builder().id(SpecificationItemId.parseId("a~b~1"))
                         .title("Title").location("file name", 4)
                         .build()));
     }
@@ -251,7 +289,7 @@ class ITMarkdownImporter
                         + "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                         + " in jeder Generation.\n"
                         + "Needs: arch");
-        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+        assertThat(items, contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
                 .description(
                         "Diese Anforderung ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
@@ -270,7 +308,7 @@ class ITMarkdownImporter
                         + underline + "\n" //
                         + "`extra~support-underlined-headers~1`\n" //
                         + "Body text.\n");
-        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+        assertThat(items, contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
                 .title("This is a title with an underline")
                 .description("Body text.")
@@ -291,7 +329,7 @@ class ITMarkdownImporter
                         + underline + "\n" //
                         + "`extra~support-underlined-headers~1`\n" //
                         + "Body text.\n");
-        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+        assertThat(items, contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
                 .title("This is a title with an underline")
                 .description("Body text.")
@@ -306,7 +344,7 @@ class ITMarkdownImporter
                 "This is not a title since the underline is too short\n"
                         + "--\n"
                         + "req~too-short~111");
-        assertThat(items, AutoMatcher.contains(SpecificationItem.builder()
+        assertThat(items, contains(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("req", "too-short", 111))
                 .location("file name", 3)
                 .build()));

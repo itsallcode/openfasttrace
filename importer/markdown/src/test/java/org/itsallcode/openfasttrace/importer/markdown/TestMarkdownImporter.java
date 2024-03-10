@@ -114,27 +114,27 @@ class TestMarkdownImporter
     // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
-        return "# " + MarkdownTestConstants.TITLE //
+        return "# " + "Requirement Title" //
                 + "\n" //
-                + "`" + MarkdownTestConstants.ID1 + "` <a id=\"" + MarkdownTestConstants.ID1 + "\"></a>" //
+                + "`" + SpecificationItemId.parseId("type~id~1") + "` <a id=\"" + SpecificationItemId.parseId("type~id~1") + "\"></a>" //
                 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
-                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
+                + "Description" + "\n" //
+                + "" + "\n" //
+                + "More description" + "\n" //
                 + "\nRationale:\n" //
-                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
-                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
+                + "Rationale" + "\n" //
+                + "More rationale" + "\n" //
                 + "\nCovers:\n\n" //
-                + "  * " + MarkdownTestConstants.COVERED_ID1 + "\n" //
-                + " + " + "[Link to baz2](#" + MarkdownTestConstants.COVERED_ID2 + ")\n" //
+                + "  * " + "impl~foo1~1" + "\n" //
+                + " + " + "[Link to baz2](#" + "impl~baz2~2" + ")\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + MarkdownTestConstants.DEPENDS_ON_ID1 + "\n" //
-                + "  - " + MarkdownTestConstants.DEPENDS_ON_ID2 + "\n" //
+                + "  + " + "configuration~blubb.blah.blah~4711" + "\n" //
+                + "  - " + "db~blah.blubb~42" + "\n" //
                 + "\nComment:\n\n" //
-                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
-                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
-                + "\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 //
-                + " , " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + " ";
+                + "Comment" + "\n" //
+                + "More comment" + "\n" //
+                + "\nNeeds: " + "artA" //
+                + " , " + "artB" + " ";
     }
 
     private void runImporterOnText(final String text)
@@ -153,26 +153,26 @@ class TestMarkdownImporter
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID1);
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("type~id~1"));
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
-        inOrder.verify(this.listenerMock).setTitle(MarkdownTestConstants.TITLE);
-        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE1);
+        inOrder.verify(this.listenerMock).setTitle("Requirement Title");
+        inOrder.verify(this.listenerMock).appendDescription("Description");
         inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription("");
         inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE3);
-        inOrder.verify(this.listenerMock).appendRationale(MarkdownTestConstants.RATIONALE_LINE1);
-        inOrder.verify(this.listenerMock).appendRationale(MarkdownTestConstants.RATIONALE_LINE2);
-        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID1));
-        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID2));
+        inOrder.verify(this.listenerMock).appendDescription("More description");
+        inOrder.verify(this.listenerMock).appendRationale("Rationale");
+        inOrder.verify(this.listenerMock).appendRationale("More rationale");
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("impl~foo1~1"));
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId("impl~baz2~2"));
         inOrder.verify(this.listenerMock)
-                .addDependsOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID1));
+                .addDependsOnId(SpecificationItemId.parseId("configuration~blubb.blah.blah~4711"));
         inOrder.verify(this.listenerMock)
-                .addDependsOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID2));
-        inOrder.verify(this.listenerMock).appendComment(MarkdownTestConstants.COMMENT_LINE1);
-        inOrder.verify(this.listenerMock).appendComment(MarkdownTestConstants.COMMENT_LINE2);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2);
+                .addDependsOnId(SpecificationItemId.parseId("db~blah.blubb~42"));
+        inOrder.verify(this.listenerMock).appendComment("Comment");
+        inOrder.verify(this.listenerMock).appendComment("More comment");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("artA");
+        inOrder.verify(this.listenerMock).addNeededArtifactType("artB");
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }
@@ -186,9 +186,9 @@ class TestMarkdownImporter
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + MarkdownTestConstants.TITLE //
+        return "# " + "Requirement Title" //
                 + "\n" //
-                + MarkdownTestConstants.ID1 + "\n" //
+                + SpecificationItemId.parseId("type~id~1") + "\n" //
                 + "\n" + MarkdownTestConstants.ID2 + "\n" //
                 + "# Irrelevant Title";
     }
@@ -197,9 +197,9 @@ class TestMarkdownImporter
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID1);
+        inOrder.verify(this.listenerMock).setId(SpecificationItemId.parseId("type~id~1"));
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
-        inOrder.verify(this.listenerMock).setTitle(MarkdownTestConstants.TITLE);
+        inOrder.verify(this.listenerMock).setTitle("Requirement Title");
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verify(this.listenerMock).beginSpecificationItem();
         inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID2);
@@ -211,9 +211,9 @@ class TestMarkdownImporter
     @Test
     void testSingleNeeds()
     {
-        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1;
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + "artA";
         runImporterOnText(singleNeedsItem);
-        verify(this.listenerMock, times(1)).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1);
+        verify(this.listenerMock, times(1)).addNeededArtifactType("artA");
     }
 
     // [utest->dsn~md.eb-markdown-id~1]

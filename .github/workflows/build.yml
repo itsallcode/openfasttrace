@@ -74,7 +74,11 @@ jobs:
       if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
       with:
         name: openfasttrace-binaries
-        path: product/target/openfasttrace-*.jar
+        path: |
+          product/target/openfasttrace-*.jar
+          !product/target/openfasttrace-*-javadoc.jar
+          !product/target/openfasttrace-*-sources.jar
+        if-no-files-found: error
 
     - name: Run self-trace
       run: ./oft-self-trace.sh

@@ -4,7 +4,7 @@ Code name: ???
 
 ## Summary
 
-This release refactors the build to ensure that the built artifacts are reproducible, i.e. given the same input, the build produces the same result for each build.
+This release refactors the build to ensure that the built artifacts are reproducible. Building from the same Git commit will yield the same result for each build.
 
 ## Features
 

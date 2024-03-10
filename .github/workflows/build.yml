@@ -78,6 +78,7 @@ jobs:
 
     - name: Archive aggregated reproducible build report
       uses: actions/upload-artifact@v4
+      if: ${{ matrix.os != 'windows-latest' }}
       with:
         name: reproducible-build-report-${{ matrix.os }}-java-${{ matrix.java }}
         path: |

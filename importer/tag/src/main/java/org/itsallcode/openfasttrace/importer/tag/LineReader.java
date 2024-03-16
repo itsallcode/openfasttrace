@@ -49,7 +49,7 @@ class LineReader
         catch (final Exception exception)
         {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":"
-                    + currentLineNumber + " (" + line + "): " + exception.getMessage(), exception);
+                    + currentLineNumber + " '" + line + "': " + exception.toString(), exception);
         }
     }
 
@@ -62,8 +62,8 @@ class LineReader
          * @param line
          *            current line.
          * @param lineNumber
-         *            number of the current line, starting with {@code 1}
-         *            for the first line.
+         *            number of the current line, starting with {@code 1} for
+         *            the first line.
          */
         void readLine(int lineNumber, String line);
     }

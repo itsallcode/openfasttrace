@@ -8,6 +8,9 @@ on:
 jobs:
   matrix-build:
 
+    permissions:
+      contents: read
+
     strategy:
       fail-fast: true
       matrix:

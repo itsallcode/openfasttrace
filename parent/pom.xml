@@ -131,6 +131,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-markdown</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
@@ -372,6 +378,12 @@
                 <version>0.8.11</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>merge-results</id>
                         <phase>verify</phase>
                         <goals>
@@ -397,6 +409,10 @@
                         </goals>
                         <configuration>
                             <dataFile>${project.build.directory}/aggregate.exec</dataFile>
+                            <formats>
+                                <format>XML</format>
+                                <format>HTML</format>
+                            </formats>
                         </configuration>
                     </execution>
                 </executions>
@@ -411,6 +427,8 @@
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
+                        <!-- Required for Jacoco coverage -->
+                        @{argLine}
                         <!-- Required for Java >= 18 -->
                         ${test.args}
                     </argLine>
@@ -423,10 +441,11 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.config.file>${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
-                        <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
+                        <!-- Required for Jacoco coverage -->
+                        @{argLine}
                         <!-- Required for Java >= 18 -->
                         ${test.args}
                     </argLine>

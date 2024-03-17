@@ -1,37 +1,38 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import java.util.logging.Logger;
 
 import java.util.regex.Matcher;
 
 /**
- * This machine implements the core of a state based parser
- *
+ * This machine implements the core of a state based parser.
+ * <p>
  * Before the state machine is run, it needs to be configured with a transition
  * table in the constructor.
- *
+ * </p><p>
  * Each step of the state machine gets a portion of the text to be imported as
  * input. The machine checks the current state and the input on each step and
  * decides on resulting state and action depending on the configuration provided
  * in the transition table.
+ * </p>
  */
-public class MarkdownImporterStateMachine
+public class LineParserStateMachine
 {
     private static final Logger LOG = Logger
-            .getLogger(MarkdownImporterStateMachine.class.getName());
+            .getLogger(LineParserStateMachine.class.getName());
 
-    private State state = State.START;
+    private LineParserState state = LineParserState.START;
     private String lastToken = "";
     private final Transition[] transitions;
 
     /**
-     * Create a new instance of the {@link MarkdownImporterStateMachine}
+     * Create a new instance of the {@link LineParserStateMachine}
      *
      * @param transitions
      *            the transition table that serves as configuration for the
      *            state machine
      */
-    public MarkdownImporterStateMachine(final Transition[] transitions)
+    public LineParserStateMachine(final Transition[] transitions)
     {
         this.transitions = transitions;
     }
@@ -50,7 +51,7 @@ public class MarkdownImporterStateMachine
             if ((this.state == entry.getFrom()) && matchToken(line, entry))
             {
                 LOG.finest(() -> entry + " : '" + line + "'");
-                entry.getTransition().transit();
+                entry.getTransitionAction().transit();
                 this.state = entry.getTo();
                 break;
             }
@@ -60,7 +61,7 @@ public class MarkdownImporterStateMachine
     private boolean matchToken(final String line, final Transition entry)
     {
         boolean matches = false;
-        final Matcher matcher = entry.getMarkdownPattern().getPattern().matcher(line);
+        final Matcher matcher = entry.getLinePattern().getPattern().matcher(line);
         if (matcher.matches())
         {
             this.lastToken = (matcher.groupCount() == 0) ? "" : matcher.group(1);

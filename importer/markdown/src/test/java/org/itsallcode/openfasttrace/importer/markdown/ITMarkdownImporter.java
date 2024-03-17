@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
-import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -11,6 +10,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.itsallcode.matcher.auto.AutoMatcher;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.Importer;
@@ -34,15 +35,15 @@ class ITMarkdownImporter
     void testFindRequirement()
     {
         assertThat(runImporterOnText(createCompleteSpecificationItemInMarkdownFormat()),
-                AutoMatcher.contains(SpecificationItem.builder().id(ID1).title("Requirement Title")
+                AutoMatcher.contains(SpecificationItem.builder().id(MarkdownTestConstants.ID1).title("Requirement Title")
                         .comment("Comment" + NL + "More comment")
                         .description("Description" + NL + NL + "More description")
                         .rationale("Rationale" + NL + "More rationale")
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
-                        .addCoveredId(SpecificationItemId.parseId(COVERED_ID1))
-                        .addCoveredId(SpecificationItemId.parseId(COVERED_ID2))
-                        .addDependOnId(SpecificationItemId.parseId(DEPENDS_ON_ID1))
-                        .addDependOnId(SpecificationItemId.parseId(DEPENDS_ON_ID2))
+                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID1))
+                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID2))
+                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID1))
+                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID2))
                         .location("file name", 2)
                         .build()));
 
@@ -51,27 +52,27 @@ class ITMarkdownImporter
     // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "# " + MarkdownTestConstants.TITLE //
                 + "\n" //
-                + "`" + ID1 + "` <a id=\"" + ID1 + "\"></a>" //
+                + "`" + MarkdownTestConstants.ID1 + "` <a id=\"" + MarkdownTestConstants.ID1 + "\"></a>" //
                 + "\n" //
-                + DESCRIPTION_LINE1 + "\n" //
-                + DESCRIPTION_LINE2 + "\n" //
-                + DESCRIPTION_LINE3 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
                 + "\nRationale:\n" //
-                + RATIONALE_LINE1 + "\n" //
-                + RATIONALE_LINE2 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
                 + "\nCovers:\n\n" //
-                + "  * " + COVERED_ID1 + "\n" //
-                + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
+                + "  * " + MarkdownTestConstants.COVERED_ID1 + "\n" //
+                + " + " + "[Link to baz2](#" + MarkdownTestConstants.COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + DEPENDS_ON_ID1 + "\n" //
-                + "  - " + DEPENDS_ON_ID2 + "\n" //
+                + "  + " + MarkdownTestConstants.DEPENDS_ON_ID1 + "\n" //
+                + "  - " + MarkdownTestConstants.DEPENDS_ON_ID2 + "\n" //
                 + "\nComment:\n\n" //
-                + COMMENT_LINE1 + "\n" //
-                + COMMENT_LINE2 + "\n" //
-                + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
-                + " , " + NEEDS_ARTIFACT_TYPE2 + " ";
+                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
+                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
+                + "\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 //
+                + " , " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + " ";
     }
 
     private List<SpecificationItem> runImporterOnText(final String text)
@@ -90,25 +91,25 @@ class ITMarkdownImporter
     {
         assertThat(runImporterOnText(createTwoConsecutiveItemsInMarkdownFormat()),
                 AutoMatcher
-                        .contains(SpecificationItem.builder().id(ID1).title(TITLE).location("file name", 2).build(),
-                                SpecificationItem.builder().id(ID2).title("").location("file name", 4).build()));
+                        .contains(SpecificationItem.builder().id(MarkdownTestConstants.ID1).title(MarkdownTestConstants.TITLE).location("file name", 2).build(),
+                                SpecificationItem.builder().id(MarkdownTestConstants.ID2).title("").location("file name", 4).build()));
     }
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "# " + MarkdownTestConstants.TITLE //
                 + "\n" //
-                + ID1 + "\n" //
-                + "\n" + ID2 + "\n" //
+                + MarkdownTestConstants.ID1 + "\n" //
+                + "\n" + MarkdownTestConstants.ID2 + "\n" //
                 + "# Irrelevant Title";
     }
 
     @Test
     void testSingleNeeds()
     {
-        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + NEEDS_ARTIFACT_TYPE1;
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1;
         final List<SpecificationItem> items = runImporterOnText(singleNeedsItem);
-        assertThat(items.get(0).getNeedsArtifactTypes(), contains(NEEDS_ARTIFACT_TYPE1));
+        MatcherAssert.assertThat(items.get(0).getNeedsArtifactTypes(), Matchers.contains(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1));
     }
 
     @Test
@@ -116,17 +117,17 @@ class ITMarkdownImporter
     {
         final String completeItem = createCompleteSpecificationItemInLegacyMarkdownFormat();
         assertThat(runImporterOnText(completeItem),
-                AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId(LEGACY_ID))
+                AutoMatcher.contains(SpecificationItem.builder().id(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_ID))
                         .title("Requirement Title")
                         .status(ItemStatus.PROPOSED)
                         .comment("Comment" + NL + "More comment")
                         .description("Description" + NL + NL + "More description")
                         .rationale("Rationale" + NL + "More rationale")
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
-                        .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID1))
-                        .addCoveredId(SpecificationItemId.parseId(LEGACY_COVERED_ID2))
-                        .addDependOnId(SpecificationItemId.parseId(LEGACY_DEPENDS_ON_ID1))
-                        .addDependOnId(SpecificationItemId.parseId(LEGACY_DEPENDS_ON_ID2))
+                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_COVERED_ID1))
+                        .addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_COVERED_ID2))
+                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_DEPENDS_ON_ID1))
+                        .addDependOnId(SpecificationItemId.parseId(MarkdownTestConstants.LEGACY_DEPENDS_ON_ID2))
                         .addTag("Tag1").addTag("Tag2")
                         .location("file name", 2)
                         .build()));
@@ -135,29 +136,29 @@ class ITMarkdownImporter
     // [utest->dsn~md.needs-coverage-list~2]
     private String createCompleteSpecificationItemInLegacyMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "# " + MarkdownTestConstants.TITLE //
                 + "\n" //
-                + "`" + LEGACY_ID + "`" //
+                + "`" + MarkdownTestConstants.LEGACY_ID + "`" //
                 + "\n" //
                 + "\nStatus: proposed\n" //
-                + "\nDescription:\n" + DESCRIPTION_LINE1 + "\n" //
-                + DESCRIPTION_LINE2 + "\n" //
-                + DESCRIPTION_LINE3 + "\n" //
+                + "\nDescription:\n" + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
                 + "\nRationale:\n" //
-                + RATIONALE_LINE1 + "\n" //
-                + RATIONALE_LINE2 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
                 + "\nDepends:\n\n" //
-                + "  + `" + LEGACY_DEPENDS_ON_ID1 + "`\n" //
-                + "  - `" + LEGACY_DEPENDS_ON_ID2 + "`\n" //
+                + "  + `" + MarkdownTestConstants.LEGACY_DEPENDS_ON_ID1 + "`\n" //
+                + "  - `" + MarkdownTestConstants.LEGACY_DEPENDS_ON_ID2 + "`\n" //
                 + "\nCovers:\n\n" //
-                + "  * `" + LEGACY_COVERED_ID1 + "`\n" //
-                + " + `" + LEGACY_COVERED_ID2 + "`\n" //
+                + "  * `" + MarkdownTestConstants.LEGACY_COVERED_ID1 + "`\n" //
+                + " + `" + MarkdownTestConstants.LEGACY_COVERED_ID2 + "`\n" //
                 + "\nComment:\n\n" //
-                + COMMENT_LINE1 + "\n" //
-                + COMMENT_LINE2 + "\n" //
+                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
+                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
                 + "\nNeeds:\n" //
-                + "   * " + NEEDS_ARTIFACT_TYPE1 + "\n"//
-                + "+ " + NEEDS_ARTIFACT_TYPE2 + "\n" //
+                + "   * " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 + "\n"//
+                + "+ " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + "\n" //
                 + "\nTags: " + TAG1 + ", " + TAG2;
     }
 

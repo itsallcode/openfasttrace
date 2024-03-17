@@ -2,11 +2,11 @@
 
 ## What is OpenFastTrace?
 
-OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing helps you keeping track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you getting rid of them.
+OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing keeps track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
 You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide.md).
 
-Below you see a screenshot of of a HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
+Below you see a screenshot of an HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
 
 <img src="doc/images/oft_screenshot_tracing_report.png" style="box-shadow: 5px 10px 18px #888888;" alt="OFT HTML tracing report">
 

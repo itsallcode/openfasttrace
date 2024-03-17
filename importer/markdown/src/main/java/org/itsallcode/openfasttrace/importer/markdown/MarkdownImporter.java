@@ -1,6 +1,6 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
-import static org.itsallcode.openfasttrace.importer.markdown.State.*;
+import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.*;
 
 class MarkdownImporter implements Importer
 {
@@ -140,7 +141,7 @@ class MarkdownImporter implements Importer
 
     private final InputFile file;
     private final ImportEventListener listener;
-    private final MarkdownImporterStateMachine stateMachine;
+    private final LineParserStateMachine stateMachine;
     private String lastTitle = null;
     private String lastLine = null;
     private boolean inSpecificationItem;
@@ -150,7 +151,7 @@ class MarkdownImporter implements Importer
     {
         this.file = fileName;
         this.listener = listener;
-        this.stateMachine = new MarkdownImporterStateMachine(this.transitions);
+        this.stateMachine = new LineParserStateMachine(this.transitions);
     }
 
     @Override
@@ -186,8 +187,8 @@ class MarkdownImporter implements Importer
         }
     }
 
-    private static Transition transition(final State from, final State to,
-            final MdPattern pattern, final TransitionAction action)
+    private static Transition transition(final LineParserState from, final LineParserState to,
+                                         final LinePattern pattern, final TransitionAction action)
     {
         return new Transition(from, to, pattern, action);
     }

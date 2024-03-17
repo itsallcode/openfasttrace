@@ -2,9 +2,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMatch;
-import static org.itsallcode.openfasttrace.importer.markdown.MarkdownAsserts.assertMismatch;
-import static org.itsallcode.openfasttrace.importer.markdown.MarkdownTestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -44,7 +41,7 @@ class TestMarkdownImporter
     })
     void testIdentifyId(final String text)
     {
-        assertMatch(MdPattern.ID, text);
+        MarkdownAsserts.assertMatch(MdPattern.ID, text);
     }
 
     // [utest->dsn~md.specification-item-id-format~3]
@@ -53,7 +50,7 @@ class TestMarkdownImporter
     { "test~1", "req-test~1", "req~4test~1", "räq~test~1" })
     void testIdentifyNonId(final String text)
     {
-        assertMismatch(MdPattern.ID, text);
+        MarkdownAsserts.assertMismatch(MdPattern.ID, text);
     }
 
     // [utest->dsn~md.specification-item-title~1]
@@ -62,7 +59,7 @@ class TestMarkdownImporter
     { "#Title", "# Title", "###### Title", "#   Title", "# Änderung" })
     void testIdentifyTitle(final String text)
     {
-        assertMatch(MdPattern.TITLE, text);
+        MarkdownAsserts.assertMatch(MdPattern.TITLE, text);
     }
 
     // [utest->dsn~md.specification-item-title~1]
@@ -71,7 +68,7 @@ class TestMarkdownImporter
     { "Title", "Title #", "' # Title'" })
     void testIdentifyNonTitle(final String text)
     {
-        assertMismatch(MdPattern.TITLE, text);
+        MarkdownAsserts.assertMismatch(MdPattern.TITLE, text);
     }
 
     @ParameterizedTest
@@ -79,7 +76,7 @@ class TestMarkdownImporter
     { "Needs: req, dsn", "Needs:req,dsn", "'Needs:  \treq , dsn '" })
     void testIdentifyNeeds(final String text)
     {
-        assertMatch(MdPattern.NEEDS_INT, text);
+        MarkdownAsserts.assertMatch(MdPattern.NEEDS_INT, text);
     }
 
     @ParameterizedTest
@@ -87,7 +84,7 @@ class TestMarkdownImporter
     { "Needs:", "#Needs: abc", "' Needs: abc'", "Needs: önderung" })
     void testIdentifyNonNeeds(final String text)
     {
-        assertMismatch(MdPattern.NEEDS_INT, text);
+        MarkdownAsserts.assertMismatch(MdPattern.NEEDS_INT, text);
     }
 
     @ParameterizedTest
@@ -95,7 +92,7 @@ class TestMarkdownImporter
     { "Tags: req, dsn", "Tags:req,dsn", "'Tags:  \treq , dsn '" })
     void testIdentifyTags(final String text)
     {
-        assertMatch(MdPattern.TAGS_INT, text);
+        MarkdownAsserts.assertMatch(MdPattern.TAGS_INT, text);
     }
 
     @ParameterizedTest
@@ -103,7 +100,7 @@ class TestMarkdownImporter
     { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung" })
     void testIdentifyNonTags(final String text)
     {
-        assertMismatch(MdPattern.TAGS_INT, text);
+        MarkdownAsserts.assertMismatch(MdPattern.TAGS_INT, text);
     }
 
     @Test
@@ -117,27 +114,27 @@ class TestMarkdownImporter
     // [utest->dsn~md.needs-coverage-list-compact~1]
     private String createCompleteSpecificationItemInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "# " + MarkdownTestConstants.TITLE //
                 + "\n" //
-                + "`" + ID1 + "` <a id=\"" + ID1 + "\"></a>" //
+                + "`" + MarkdownTestConstants.ID1 + "` <a id=\"" + MarkdownTestConstants.ID1 + "\"></a>" //
                 + "\n" //
-                + DESCRIPTION_LINE1 + "\n" //
-                + DESCRIPTION_LINE2 + "\n" //
-                + DESCRIPTION_LINE3 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE1 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE2 + "\n" //
+                + MarkdownTestConstants.DESCRIPTION_LINE3 + "\n" //
                 + "\nRationale:\n" //
-                + RATIONALE_LINE1 + "\n" //
-                + RATIONALE_LINE2 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE1 + "\n" //
+                + MarkdownTestConstants.RATIONALE_LINE2 + "\n" //
                 + "\nCovers:\n\n" //
-                + "  * " + COVERED_ID1 + "\n" //
-                + " + " + "[Link to baz2](#" + COVERED_ID2 + ")\n" //
+                + "  * " + MarkdownTestConstants.COVERED_ID1 + "\n" //
+                + " + " + "[Link to baz2](#" + MarkdownTestConstants.COVERED_ID2 + ")\n" //
                 + "\nDepends:\n\n" //
-                + "  + " + DEPENDS_ON_ID1 + "\n" //
-                + "  - " + DEPENDS_ON_ID2 + "\n" //
+                + "  + " + MarkdownTestConstants.DEPENDS_ON_ID1 + "\n" //
+                + "  - " + MarkdownTestConstants.DEPENDS_ON_ID2 + "\n" //
                 + "\nComment:\n\n" //
-                + COMMENT_LINE1 + "\n" //
-                + COMMENT_LINE2 + "\n" //
-                + "\nNeeds: " + NEEDS_ARTIFACT_TYPE1 //
-                + " , " + NEEDS_ARTIFACT_TYPE2 + " ";
+                + MarkdownTestConstants.COMMENT_LINE1 + "\n" //
+                + MarkdownTestConstants.COMMENT_LINE2 + "\n" //
+                + "\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1 //
+                + " , " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2 + " ";
     }
 
     private void runImporterOnText(final String text)
@@ -156,26 +153,26 @@ class TestMarkdownImporter
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID1);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
-        inOrder.verify(this.listenerMock).setTitle(TITLE);
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE1);
+        inOrder.verify(this.listenerMock).setTitle(MarkdownTestConstants.TITLE);
+        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE1);
         inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE2);
+        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE2);
         inOrder.verify(this.listenerMock).appendDescription(System.lineSeparator());
-        inOrder.verify(this.listenerMock).appendDescription(DESCRIPTION_LINE3);
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE1);
-        inOrder.verify(this.listenerMock).appendRationale(RATIONALE_LINE2);
-        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID1));
-        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(COVERED_ID2));
+        inOrder.verify(this.listenerMock).appendDescription(MarkdownTestConstants.DESCRIPTION_LINE3);
+        inOrder.verify(this.listenerMock).appendRationale(MarkdownTestConstants.RATIONALE_LINE1);
+        inOrder.verify(this.listenerMock).appendRationale(MarkdownTestConstants.RATIONALE_LINE2);
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID1));
+        inOrder.verify(this.listenerMock).addCoveredId(SpecificationItemId.parseId(MarkdownTestConstants.COVERED_ID2));
         inOrder.verify(this.listenerMock)
                 .addDependsOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID1));
         inOrder.verify(this.listenerMock)
-                .addDependsOnId(SpecificationItemId.parseId(DEPENDS_ON_ID2));
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE1);
-        inOrder.verify(this.listenerMock).appendComment(COMMENT_LINE2);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
-        inOrder.verify(this.listenerMock).addNeededArtifactType(NEEDS_ARTIFACT_TYPE2);
+                .addDependsOnId(SpecificationItemId.parseId(MarkdownTestConstants.DEPENDS_ON_ID2));
+        inOrder.verify(this.listenerMock).appendComment(MarkdownTestConstants.COMMENT_LINE1);
+        inOrder.verify(this.listenerMock).appendComment(MarkdownTestConstants.COMMENT_LINE2);
+        inOrder.verify(this.listenerMock).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1);
+        inOrder.verify(this.listenerMock).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE2);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
     }
@@ -189,10 +186,10 @@ class TestMarkdownImporter
 
     private String createTwoConsecutiveItemsInMarkdownFormat()
     {
-        return "# " + TITLE //
+        return "# " + MarkdownTestConstants.TITLE //
                 + "\n" //
-                + ID1 + "\n" //
-                + "\n" + ID2 + "\n" //
+                + MarkdownTestConstants.ID1 + "\n" //
+                + "\n" + MarkdownTestConstants.ID2 + "\n" //
                 + "# Irrelevant Title";
     }
 
@@ -200,12 +197,12 @@ class TestMarkdownImporter
     {
         final InOrder inOrder = inOrder(this.listenerMock);
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(ID1);
+        inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID1);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 2);
-        inOrder.verify(this.listenerMock).setTitle(TITLE);
+        inOrder.verify(this.listenerMock).setTitle(MarkdownTestConstants.TITLE);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verify(this.listenerMock).beginSpecificationItem();
-        inOrder.verify(this.listenerMock).setId(ID2);
+        inOrder.verify(this.listenerMock).setId(MarkdownTestConstants.ID2);
         inOrder.verify(this.listenerMock).setLocation(FILENAME, 4);
         inOrder.verify(this.listenerMock).endSpecificationItem();
         inOrder.verifyNoMoreInteractions();
@@ -214,19 +211,19 @@ class TestMarkdownImporter
     @Test
     void testSingleNeeds()
     {
-        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + NEEDS_ARTIFACT_TYPE1;
+        final String singleNeedsItem = "`foo~bar~1`\n\nNeeds: " + MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1;
         runImporterOnText(singleNeedsItem);
-        verify(this.listenerMock, times(1)).addNeededArtifactType(NEEDS_ARTIFACT_TYPE1);
+        verify(this.listenerMock, times(1)).addNeededArtifactType(MarkdownTestConstants.NEEDS_ARTIFACT_TYPE1);
     }
 
     // [utest->dsn~md.eb-markdown-id~1]
     @Test
     void testIdentifyLegacyId()
     {
-        assertMatch(MdPattern.ID, "a:b, v0", "req:test, v1", "req:test,v1", "req:test, v999",
+        MarkdownAsserts.assertMatch(MdPattern.ID, "a:b, v0", "req:test, v1", "req:test,v1", "req:test, v999",
                 "req:test.requirement, v1", "req:test_underscore, v1",
                 "`req:test1, v1`arbitrary text");
-        assertMismatch(MdPattern.ID, "test, v1", "req-test, v1", "req.4test, v1");
+        MarkdownAsserts.assertMismatch(MdPattern.ID, "test, v1", "req-test, v1", "req.4test, v1");
     }
 
     @Test

@@ -12,7 +12,7 @@ module org.itsallcode.openfasttrace.api
     exports org.itsallcode.openfasttrace.api.importer.tag.config;
     exports org.itsallcode.openfasttrace.api.exporter;
     exports org.itsallcode.openfasttrace.api.report;
-    // Required to run the EqualsVerifier:
+    // Workaround: Required for the EqualsVerifier
     opens org.itsallcode.openfasttrace.api.core;
 
     requires java.logging;

@@ -51,7 +51,7 @@ class SpecificationItemIdTest
     {
         final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> parseId(id));
         assertThat(exception.getMessage(),
-                equalTo("String \"" + id + "\" cannot be parsed to a specification item ID"));
+                equalTo("String '" + id + "' cannot be parsed to a specification item ID"));
     }
 
     @Test

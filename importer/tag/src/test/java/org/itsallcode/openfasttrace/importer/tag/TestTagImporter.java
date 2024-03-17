@@ -50,7 +50,8 @@ class TestTagImporter
                 noItemDetected("[impl->dsn~name1~1>>]"),
                 noItemDetected("[impl->dsn~name1~1>>tag with space]"),
 
-                parsedItem("[impl->dsn~name1~1" + "]", itemACoveringB("impl~name1-912633853~0", "dsn~name1~1")),
+                parsedItem("[impl->dsn~name1~1" + "]",
+                        itemACoveringB("impl~name1-912633853~0", "dsn~name1~1")),
                 parsedItem("[ impl -> dsn~nameA~1 " + "]",
                         itemACoveringB("impl~nameA-1653917613~0", "dsn~nameA~1")),
                 parsedItem("[\timpl\t->\tdsn~name1~1\t" + "]",
@@ -93,16 +94,13 @@ class TestTagImporter
 
                 parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME,
-                                2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
                 parsedItems("[implA->dsn~name1~2" + "]" + WINDOWS_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME,
-                                2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
                 parsedItems("[implA->dsn~name1~2" + "]" + CARRIAGE_RETURN + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME,
-                                2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
 
                 parsedItems("[impl->dsn~name~1" + "][impl->dsn~name~1" + "]",
                         itemACoveringB("impl~name-4161631350~0", "dsn~name~1"),
@@ -132,17 +130,34 @@ class TestTagImporter
                         itemACoveringB("impl~name-3433816440~42", "req~name~17"),
                         itemACoveringB("impl~name-1460579607~42", "req~name~17")),
 
+                noItemDetected("[impl~~-42->req~name~17]"),
                 // [utest->dsn~import.full-coverage-tag-with-revision~1]
                 parsedItem("[impl~~42->req~example_name~17>>test" + "]",
                         itemACoveringB("impl~example_name~42", "req~example_name~17")
                                 .addNeedsArtifactType("test")),
 
-                parsedItem("[impl->dsn~name~2" + "]", itemACoveringB("impl~name-1627661772~0", "dsn~name~2")));
+                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~1]
+                parsedItem("[impl->dsn~name~2" + "]", itemACoveringB("impl~name-1627661772~0", "dsn~name~2")),
+                parsedItem("[impl~name1~1->dsn~name2~2" + "]", itemACoveringB("impl~name1~1", "dsn~name2~2")),
+                parsedItem("[impl~name1~1->dsn~name2~2>>test" + "]", itemACoveringB("impl~name1~1", "dsn~name2~2")
+                        .addNeedsArtifactType("test")),
+                parsedItem("[impl~name1~1->dsn~name2~2>>test,other" + "]",
+                        itemACoveringB("impl~name1~1", "dsn~name2~2").addNeedsArtifactType("test")
+                                .addNeedsArtifactType("other")),
+                noItemDetected("[impl~missing-revision->dsn~name2~2]"),
+                noItemDetected("[impl~missing-revision~->dsn~name2~2]"),
+                noItemDetected("[impl~illegal?char~1->dsn~name2~2]"),
+                noItemDetected("[impl~negative-revision~-1->dsn~name2~2]"),
+                noItemDetected("[impl~missing-forward~1->dsn~name2~2>>]"),
+                noItemDetected("[impl~trailing-comma~1->dsn~name2~2>>test,]"),
+                noItemDetected("[impl~duplicate-comma~1->dsn~name2~2>>test,,other]"),
+                noItemDetected("[impl~name1~1->dsn~name2~2>>test,other,]"));
     }
 
     private static SpecificationItem.Builder itemACoveringB(final String id, final String coveredId)
     {
-        return itemBuilder().id(SpecificationItemId.parseId(id)).addCoveredId(SpecificationItemId.parseId(coveredId));
+        return itemBuilder().id(SpecificationItemId.parseId(id))
+                .addCoveredId(SpecificationItemId.parseId(coveredId));
     }
 
     private static SpecificationItem.Builder itemBuilder()
@@ -195,7 +210,8 @@ class TestTagImporter
 
     private static Arguments parsedItems(final String content, final SpecificationItem.Builder... itemBuilders)
     {
-        final List<SpecificationItem> expectedItems = Arrays.stream(itemBuilders).map(TestTagImporter::setLocation)
+        final List<SpecificationItem> expectedItems = Arrays.stream(itemBuilders)
+                .map(TestTagImporter::setLocation)
                 .map(SpecificationItem.Builder::build)
                 .collect(toList());
         return Arguments.of(content, expectedItems);

@@ -3,9 +3,9 @@ package org.itsallcode.openfasttrace.core;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +57,7 @@ class TestSpecificationItem
 
     private SpecificationItem.Builder createSimpleItem()
     {
-        final SpecificationItem.Builder builder = SpecificationItem.builder().id(ID);
+        final SpecificationItem.Builder builder = item().id(ID);
         builder.title(TITLE).description(DESCRIPTION).rationale(RATIONALE).comment(COMMENT);
         return builder;
     }
@@ -166,7 +166,7 @@ class TestSpecificationItem
 
     private Builder createTestItemBuilder()
     {
-        return SpecificationItem.builder() //
+        return item() //
                 .id(ARTIFACT_TYPE, NAME, REVISION);
     }
 
@@ -212,7 +212,7 @@ class TestSpecificationItem
     @Test
     void testBuildingWithOutIdThrowsExepction()
     {
-        final Builder builder = SpecificationItem.builder();
+        final Builder builder = item();
         assertThrows(IllegalStateException.class, () -> builder.build());
     }
 

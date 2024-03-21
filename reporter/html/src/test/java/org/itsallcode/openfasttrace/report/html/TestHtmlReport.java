@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.itemWithId;
+
 @ExtendWith(MockitoExtension.class)
 class TestHtmlReport
 {
@@ -48,13 +50,11 @@ class TestHtmlReport
     void testRenderSimpleTrace()
     {
         final LinkedSpecificationItem itemA = new LinkedSpecificationItem(
-                SpecificationItem.builder() //
-                        .id(SpecificationItemId.createId("a", "a-item", 1)) //
+                itemWithId(SpecificationItemId.createId("a", "a-item", 1)) //
                         .description("Description A") //
                         .build());
         final LinkedSpecificationItem itemB = new LinkedSpecificationItem(
-                SpecificationItem.builder() //
-                        .id(SpecificationItemId.createId("b", "b-item", 1)) //
+                itemWithId(SpecificationItemId.createId("b", "b-item", 1)) //
                         .description("Description b") //
                         .build());
         when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemA, itemB));

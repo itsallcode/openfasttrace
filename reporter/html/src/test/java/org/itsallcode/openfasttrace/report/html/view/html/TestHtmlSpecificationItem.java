@@ -22,6 +22,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.itemWithId;
+
 @ExtendWith(MockitoExtension.class)
 class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
 {
@@ -54,8 +56,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderMinimalItem()
     {
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .title("Item A title") //
                 .description("Single line description") //
                 .build();
@@ -80,8 +81,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     {
         this.factory = HtmlViewFactory.create(this.outputStream, HtmlReport.getCssUrl(),
                 displayStatus);
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .title("Item A title") //
                 .description("Single line description") //
                 .build();
@@ -92,8 +92,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderMultiLineItem()
     {
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_B_ID) //
+        final SpecificationItem item = itemWithId(ITEM_B_ID) //
                 .title("Item B title") //
                 .description("Description A\n\nDescription B") //
                 .rationale("Rationale A\n\nRationale B") //
@@ -127,8 +126,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderNeeds()
     {
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .addNeedsArtifactType(IMPL) //
                 .addNeedsArtifactType(ITEST) //
                 .addNeedsArtifactType(UTEST) //
@@ -151,8 +149,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderIncomingLinks()
     {
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
         linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERED_SHALLOW);
@@ -181,8 +178,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     @Test
     void testRenderOutgoingLinks()
     {
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
         linkedItem.addLinkToItemWithStatus(this.itemMockB, LinkStatus.COVERS);
@@ -212,13 +208,12 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     void testRenderOrigin()
     {
         final Location location = Location.create("foo/bar", 13);
-        final SpecificationItem item = SpecificationItem.builder() //
-                .id(ITEM_A_ID) //
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .location(location) //
                 .build();
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
-        final SpecificationItem subItem = SpecificationItem.builder() //
-                .id(ITEM_B_ID).location(Location.create("http://example.org/foo.txt", 3)).build();
+        final SpecificationItem subItem = itemWithId(ITEM_B_ID)
+                .location(Location.create("http://example.org/foo.txt", 3)).build();
         final LinkedSpecificationItem linkedSubItem = new LinkedSpecificationItem(subItem);
         linkedItem.addLinkToItemWithStatus(linkedSubItem, LinkStatus.COVERED_SHALLOW);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
@@ -276,7 +271,7 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
 
     private SpecificationItem.Builder defaultItem()
     {
-        return SpecificationItem.builder().id(ITEM_A_ID);
+        return itemWithId(ITEM_A_ID);
     }
 
     private void assertRender(final SpecificationItem.Builder itemBuilder, final Matcher<String> matcher)

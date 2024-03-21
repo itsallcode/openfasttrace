@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
@@ -19,61 +20,36 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId
 {
-    private static final int REVISION = 1;
     private static final String NAME = "foo";
     private static final String ARTIFACT_TYPE_FEATURE = "feat";
 
-    @Test
-    void testCreateId()
+    @ParameterizedTest(name = "Parsing of ID ''{0}'' succeeds")
+    @CsvSource(value =
     {
-        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME, REVISION);
-        assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
-                .revision(REVISION).build()));
+            "type~name~42, type, name, 42",
+            "type~name-with-dash~42, type, name-with-dash, 42",
+            "type~name.with.dot~42, type, name.with.dot, 42",
+            "type~name-trailing-~42, type, name-trailing-, 42",
+            "foobar~utf-8.compatible.äöü~333, foobar, utf-8.compatible.äöü, 333"
+    })
+    void parsingValidIdsSucceeds(final String id, final String expectedType, final String expectedName,
+            final int expectedRevision)
+    {
+        final SpecificationItemId parsedId = parseId(id);
+        assertAll(
+                () -> assertThat(parsedId.getArtifactType(), equalTo(expectedType)),
+                () -> assertThat(parsedId.getName(), equalTo(expectedName)),
+                () -> assertThat(parsedId.getRevision(), equalTo(expectedRevision)));
     }
 
+    // This is the wildcard revision test
     @Test
     void testCreateIdWithoutRevision()
     {
-        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
-        assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
-                .revision(Integer.MIN_VALUE).build()));
-    }
-
-    @Test
-    void testParseId_singleDigitRevision()
-    {
-        final SpecificationItemId id = parseId("feat~foo~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo(NAME));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-
-    @Test
-    void testParseId_multipleFragmentName()
-    {
-        final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz-narf~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo("foo.bar_zoo.baz-narf"));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-    @Test
-    void testParseId_umlautName()
-    {
-        final SpecificationItemId id = parseId("feat~änderung~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo("änderung"));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-    @Test
-    void testParseId_multipleDigitRevision()
-    {
-        final SpecificationItemId id = parseId("feat~foo~999");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo(NAME));
-        assertThat(id.getRevision(), equalTo(999));
+        final SpecificationItemId id = createId("impl", "wildcard-feature");
+        assertAll(() -> assertThat(id, equalTo(new Builder().artifactType("impl").name("wildcard-feature")
+                .revision(Integer.MIN_VALUE).build())),
+                () -> assertThat(SpecificationItemId.REVISION_WILDCARD, equalTo(Integer.MIN_VALUE)));
     }
 
     @Test
@@ -85,20 +61,29 @@ class TestSpecificationItemId
                 "Error parsing version number from specification item ID: \"feat~foo~999999999999999999999999999999999999999\""));
     }
 
-    @ParameterizedTest
-    @CsvSource(
-    { "feat.foo~1", "foo~1", "req~foo", "req1~foo~1", "req.r~foo~1", "req~1foo~1", "req~.foo~1", "req~foo~-1",
+    @CsvSource({
+            "feat.foo~1",
+            "foo~1",
+            "req~foo",
+            "req1~foo~1",
+            "req.r~foo~1",
+            "req~1foo~1",
+            "req~.foo~1",
+            "req~foo.~1",
+            "req~foo~-1",
             // Wildcard revision:
-            "feat~foo~-2147483648" })
+            "feat~foo~-2147483648",
+            // Obsolet Elektrobit-style specification item ID
+            "feat:foo, v1"
+    })
+    @ParameterizedTest(name = "Parsing of id ''{0}'' fails")
     void testParseId_mustFailForIllegalIds(final String illegalId)
     {
-
-        final IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> parseId(illegalId));
+        final Throwable exception = assertThrows(IllegalArgumentException.class, () -> parseId(illegalId));
         assertThat(exception.getMessage(),
-                equalTo("String \"" + illegalId + "\" cannot be parsed to a specification item ID"));
+                equalTo("Invalid specification item ID format: \"" + illegalId + "\". "
+                        + "Format must be <arifact-type>~<requirement-name-or-number>~<revision>."));
     }
-
 
     @Test
     void testToRevisionWildcard()
@@ -121,16 +106,7 @@ class TestSpecificationItemId
     {
         final Builder builder = new Builder();
         builder.artifactType("dsn").name("dummy").revisionWildcard();
-        assertThat(builder.build().toString(),
-                equalTo("dsn~dummy~" + SpecificationItemId.REVISION_WILDCARD));
-    }
-
-    void testCreate_WithRevisionWildcard()
-    {
-        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo(NAME));
-        assertThat(id.getRevision(), equalTo(SpecificationItemId.REVISION_WILDCARD));
+        assertThat(builder.build().toString(), equalTo("dsn~dummy~" + SpecificationItemId.REVISION_WILDCARD));
     }
 
     @Test

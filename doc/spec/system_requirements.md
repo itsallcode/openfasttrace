@@ -249,7 +249,7 @@ For backward compatibility OFT supports a variant of this format that was introd
 ##### Markdown Standard Syntax
 `req~markdown-standard-syntax~1`
 
-The OFT Markdown specification artifact format uses the standard markdown syntax without proprietary extensions.
+The OFT Markdown specification artifact format uses the standard Markdown syntax without proprietary extensions.
 
 Rationale:
 
@@ -269,21 +269,6 @@ The Markdown outline -- a table of contents created from the heading structure b
 Rationale:
 
 In long specification document the outline is the primary means of navigating the document. Only if the outline can be read easily, it is useful for authoring specification documents.
-
-Covers:
-
-* [feat~markdown-import~1](#markdown-import)
-
-Needs: dsn
-
-##### Support for EB Markdown Requirements
-`req~eb-markdown~1`
-
-In addition to OFT's requirement-enhanced Markdown syntax OFT also supports Elektrobit's variant.
-
-Rationale:
-
-This allows stepwise migration to the OFT standard format. The Elektrobit format is a little bit closer to ReqM2.
 
 Covers:
 

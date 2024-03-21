@@ -274,7 +274,7 @@ class TestTagImporter
     {
         // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17" + "]",
-                SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
+                item().id("impl", "example_name-4044529862", 42)
                         .addCoveredId("req", "example_name", 17)
                         .location(FILENAME, 1).build());
     }
@@ -285,7 +285,7 @@ class TestTagImporter
     {
         // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17>>test" + "]",
-                SpecificationItem.builder().id("impl", "example_name", 42)
+                item().id("impl", "example_name", 42)
                         .addCoveredId("req", "example_name", 17)
                         .addNeedsArtifactType("test")
                         .location(FILENAME, 1).build());
@@ -329,7 +329,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 coveredId.getName(), 0);
-        final Builder itemBuilder = SpecificationItem.builder() //
+        final Builder itemBuilder = item() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber);
@@ -342,7 +342,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 generateName(coveredId, lineNumber, counter), 0);
-        final Builder itemBuilder = SpecificationItem.builder() //
+        final Builder itemBuilder = item() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber);

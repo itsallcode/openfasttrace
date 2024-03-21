@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
 import java.io.StringWriter;
 import java.util.stream.Stream;
@@ -26,7 +27,7 @@ class TestSpecobjectExporterFactory
     void testCreateExporterWriterStreamOfSpecificationItemNewline()
     {
         final StringWriter writer = new StringWriter();
-        final SpecificationItem item = SpecificationItem.builder().id("art", "name", 42).build();
+        final SpecificationItem item = item().id("art", "name", 42).build();
 
         final Exporter exporter = factory.createExporter(writer, Stream.of(item), Newline.UNIX);
         exporter.runExport();

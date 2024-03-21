@@ -37,7 +37,7 @@ enum MdPattern implements LinePattern {
             + "\\s*"
             + SpecificationItemId.ID_PATTERN
             + ").*?"),
-    ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
+    ID("`?(" + SpecificationItemId.ID_PATTERN + ")`?.*"),
     NEEDS_INT("Needs:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     NEEDS("Needs:\\s*"),
     NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
@@ -87,8 +87,7 @@ enum MdPattern implements LinePattern {
         // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
-                + "((?:" + SpecificationItemId.ID_PATTERN + ")|(?:"
-                + SpecificationItemId.LEGACY_ID_PATTERN + "))" //
+                + "(" + SpecificationItemId.ID_PATTERN + ")" //
                 + "(?:\\W.*)?";
     }
 }

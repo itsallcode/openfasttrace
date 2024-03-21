@@ -24,7 +24,7 @@ public abstract class LightWeightMarkupImporter {
     private String lastTitle = null;
     private String lastLine = null;
     private boolean inSpecificationItem;
-    private int lineNumber = 0;
+    private int lineNumber;
 
     /**
      * Create a new {@link LightWeightMarkupImporter}.
@@ -256,6 +256,7 @@ public abstract class LightWeightMarkupImporter {
             this.listener.addNeededArtifactType(targetArtifactType.trim());
         }
         this.listener.setForwards(true);
+        this.listener.setLocation(this.file.getPath(), this.lineNumber);
         this.listener.endSpecificationItem();
     }
 }

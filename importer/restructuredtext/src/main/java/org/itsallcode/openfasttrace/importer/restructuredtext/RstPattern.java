@@ -36,7 +36,7 @@ enum RstPattern implements LinePattern {
             + "\\s*"
             + SpecificationItemId.ID_PATTERN
             + ").*?"),
-    ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
+    ID("`?(" + SpecificationItemId.ID_PATTERN + ")`?.*"),
     NEEDS_INT("Needs:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     NEEDS("Needs:\\s*"),
     NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
@@ -51,8 +51,7 @@ enum RstPattern implements LinePattern {
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
             + "\\s*" //
             + "(.*)"),
-    TITLE("#+\\s*(.*)"),
-    UNDERLINE("([=-]{3,})\\s*");
+    UNDERLINE("([-=`:.'\"~^_*+#<>]{3,})\\s*");
     // @formatter:on
 
     private final Pattern pattern;
@@ -86,8 +85,7 @@ enum RstPattern implements LinePattern {
         // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
-                + "((?:" + SpecificationItemId.ID_PATTERN + ")|(?:"
-                + SpecificationItemId.LEGACY_ID_PATTERN + "))" //
+                + "(SpecificationItemId.ID_PATTERN)" //
                 + "(?:\\W.*)?";
     }
 }

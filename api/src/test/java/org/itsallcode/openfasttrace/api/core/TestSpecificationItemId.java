@@ -30,7 +30,9 @@ class TestSpecificationItemId
             "type~name-with-dash~42, type, name-with-dash, 42",
             "type~name.with.dot~42, type, name.with.dot, 42",
             "type~name-trailing-~42, type, name-trailing-, 42",
-            "foobar~utf-8.compatible.äöü~333, foobar, utf-8.compatible.äöü, 333"
+            "foobar~utf-8.compatible.äöü~333, foobar, utf-8.compatible.äöü, 333",
+            // Deprecated Elektrobit-style specification item ID
+            "'feat:foo, v1', feat, foo, 1"
     })
     void parsingValidIdsSucceeds(final String id, final String expectedType, final String expectedName,
             final int expectedRevision)
@@ -71,10 +73,6 @@ class TestSpecificationItemId
             "req~.foo~1",
             "req~foo.~1",
             "req~foo~-1",
-            // Wildcard revision:
-            "feat~foo~-2147483648",
-            // Obsolet Elektrobit-style specification item ID
-            "feat:foo, v1"
     })
     @ParameterizedTest(name = "Parsing of id ''{0}'' fails")
     void testParseId_mustFailForIllegalIds(final String illegalId)

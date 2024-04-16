@@ -434,7 +434,7 @@ class TestASpecReport
 
     private SpecificationItem.Builder createItemBuilder()
     {
-        return item();
+        return SpecificationItem.builder();
     }
 
     private LinkedSpecificationItem createItem(final SpecificationItem.Builder builder)

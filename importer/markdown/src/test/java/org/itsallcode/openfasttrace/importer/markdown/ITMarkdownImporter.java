@@ -142,7 +142,7 @@ class ITMarkdownImporter
                         .build()));
     }
 
-    // [impl -> dsn~md.depends-list~1]
+    // [utest -> dsn~md.depends-list~1]
     @Test
     void testSpecificationItemDependsList()
     {
@@ -162,7 +162,7 @@ class ITMarkdownImporter
                         .build()));
     }
 
-    // [impl -> dsn~md.needs-coverage-list-single-line~2]
+    // [utest -> dsn~md.needs-coverage-list-single-line~2]
     @Test
     void testSpecificationItemNeedsCoverageListCompact()
     {
@@ -203,7 +203,7 @@ class ITMarkdownImporter
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")));
     }
 
-    // [impl -> dsn~md.needs-coverage-list~1]
+    // [utest -> dsn~md.needs-coverage-list~1]
     @Test
     void testSpecificationItemNeedsCoverageList() {
         assertImport("needs-list.md", """
@@ -220,7 +220,7 @@ class ITMarkdownImporter
                         .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @CsvSource({
             "dsn-->impl:req~foobar~1, dsn, impl, req, foobar, 1",
             " rsn-->sdk:req~foobar~2, rsn, sdk, req, foobar, 2",
@@ -246,7 +246,7 @@ class ITMarkdownImporter
                         .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testForwardingAfterDepends()
     {
@@ -271,7 +271,7 @@ class ITMarkdownImporter
                                 .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testForwardingAfterTags()
     {
@@ -297,7 +297,7 @@ class ITMarkdownImporter
                                 .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testMultipleForwardsInARow()
     {
@@ -322,7 +322,7 @@ class ITMarkdownImporter
                                 .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testArtifactForwardingAfterARegularSpecificationItem()
     {
@@ -347,7 +347,7 @@ class ITMarkdownImporter
                                 .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testForwardingAfterCovers()
     {
@@ -372,7 +372,7 @@ class ITMarkdownImporter
                                 .build()));
     }
 
-    // [impl -> dsn~md.artifact-forwarding-notation~1]
+    // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
     void testForwardingAfterNeeds()
     {

@@ -25,7 +25,7 @@ class TestSpecobjectExportImport
     void testExportImportSimpleSpecObjectWithMandatoryElements()
             throws IOException, XMLStreamException
     {
-        final SpecificationItem item = item() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .description("the description") //
                 .location(location(4)) //
@@ -36,7 +36,7 @@ class TestSpecobjectExportImport
     @Test
     void testExportImportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
     {
-        final SpecificationItem item = item() //
+        final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
                 .title("My item title") //
                 .status(ItemStatus.DRAFT) //
@@ -55,7 +55,7 @@ class TestSpecobjectExportImport
     @Test
     void testExportImportTwoSpecObjects() throws IOException, XMLStreamException
     {
-        final SpecificationItem itemA = item() //
+        final SpecificationItem itemA = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .status(ItemStatus.PROPOSED) //
                 .description("the description") //
@@ -63,7 +63,7 @@ class TestSpecobjectExportImport
                 .comment("the comment") //
                 .location(location(4)) //
                 .build();
-        final SpecificationItem itemB = item() //
+        final SpecificationItem itemB = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("baz", "zoo", 2)) //
                 .status(ItemStatus.REJECTED) //
                 .description("another\ndescription") //

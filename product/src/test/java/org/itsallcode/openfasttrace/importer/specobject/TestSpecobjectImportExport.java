@@ -65,10 +65,10 @@ class TestSpecobjectImportExport
         final LinkedSpecificationItem dsn = getItemFromTraceForId(trace, dsnId);
         final LinkedSpecificationItem impl = getItemFromTraceForId(trace, implId);
 
-        final SpecificationItem expectedImpl = item().id(implId)
+        final SpecificationItem expectedImpl = SpecificationItem.builder().id(implId)
                 .location("source.java", 1).status(ItemStatus.APPROVED)
                 .addCoveredId("dsn", "exampleB", 1).build();
-        final SpecificationItem expectedDsn = item().id(dsnId)
+        final SpecificationItem expectedDsn = SpecificationItem.builder().id(dsnId)
                 .location("spec.md", 2).description("Example requirement")
                 .addNeedsArtifactType("utest").addNeedsArtifactType("impl").build();
 

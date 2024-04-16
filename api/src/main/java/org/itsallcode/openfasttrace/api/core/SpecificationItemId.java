@@ -36,12 +36,17 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + ITEM_NAME_PATTERN //
             + REVISION_SEPARATOR //
             + ITEM_REVISION_PATTERN;
+    // [impl->dsn~md.eb-markdown-id~1]
+    private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
+            + ITEM_REVISION_PATTERN;
     private static final int ARTIFACT_TYPE_MATCHING_GROUP = 1;
     private static final int NAME_MATCHING_GROUP = 2;
     private static final int REVISION_MATCHING_GROUP = 3;
     /** Regexp pattern for item IDs: {@code <type>~<name>~<revision>} */
     public static final Pattern ID_PATTERN = Pattern.compile(ID);
     private static final Pattern LEGACY_NAME_PATTERN = Pattern.compile(LEGACY_ID_NAME);
+    /** Regexp pattern for legacy item IDs: {@code <name>, v<revision>}. */
+    public static final Pattern LEGACY_ID_PATTERN = Pattern.compile(LEGACY_ID);
 
     private final String name;
     private final int revision;
@@ -296,11 +301,13 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             if (this.id == null)
             {
                 validateFields();
+                cleanUpLegacyIds();
             }
             else
             {
                 parseId();
             }
+
             return new SpecificationItemId(this.name, this.artifactType, this.revision);
         }
 
@@ -312,6 +319,41 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             }
         }
 
+        private void cleanUpLegacyIds()
+        {
+            if (this.artifactType == null || this.artifactType.isEmpty())
+            {
+                inferArtifactType();
+            }
+
+            removeSuperfluousArtifactPrefix();
+        }
+
+        private void inferArtifactType()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
+            }
+            else
+            {
+                LOG.warning(() -> "Name '" + this.name + "' does not match legacy name pattern '"
+                        + LEGACY_NAME_PATTERN + "': using artifact type '" + UNKNOWN_ARTIFACT_TYPE
+                        + "'.");
+                this.artifactType = UNKNOWN_ARTIFACT_TYPE;
+            }
+        }
+
+        private void removeSuperfluousArtifactPrefix()
+        {
+            final Matcher matcher = LEGACY_NAME_PATTERN.matcher(this.name);
+            if (matcher.matches())
+            {
+                this.name = matcher.group(NAME_MATCHING_GROUP);
+            }
+        }
+
         private void parseId()
         {
             final Matcher matcher = ID_PATTERN.matcher(this.id);
@@ -319,10 +361,18 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             {
                 setIdPartsFromMatches(matcher);
             }
-            else {
-                throw new IllegalArgumentException(
-                        "Invalid specification item ID format: \"" + this.id + "\". "
-                        + "Format must be <arifact-type>~<requirement-name-or-number>~<revision>.");
+            else
+            {
+                final Matcher legacyMatcher = LEGACY_ID_PATTERN.matcher(this.id);
+                if (legacyMatcher.matches())
+                {
+                    setIdPartsFromMatches(legacyMatcher);
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Invalid specification item ID format: \"" + this.id
+                            + "\". Format must be <arifact-type>~<requirement-name-or-number>~<revision>.");
+                }
             }
         }
 

@@ -149,7 +149,7 @@ class TestTagImporter
     void testMultipleTagsPerLineWithoutSeparator()
     {
         assertItems(
-                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT) + ""
+                tag(COVERING_ARTIFACT_TYPE1, ID1_TEXT)
                         + tag(COVERING_ARTIFACT_TYPE1, ID2_TEXT), //
                 item(COVERING_ARTIFACT_TYPE1, 1, 0, ID1), item(COVERING_ARTIFACT_TYPE1, 1, 1, ID2));
     }
@@ -274,7 +274,7 @@ class TestTagImporter
     {
         // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17" + "]",
-                item().id("impl", "example_name-4044529862", 42)
+                SpecificationItem.builder().id("impl", "example_name-4044529862", 42)
                         .addCoveredId("req", "example_name", 17)
                         .location(FILENAME, 1).build());
     }
@@ -285,7 +285,7 @@ class TestTagImporter
     {
         // Concatenation required to avoid problems during self-trace
         assertItems("[impl~~42->req~example_name~17>>test" + "]",
-                item().id("impl", "example_name", 42)
+                SpecificationItem.builder().id("impl", "example_name", 42)
                         .addCoveredId("req", "example_name", 17)
                         .addNeedsArtifactType("test")
                         .location(FILENAME, 1).build());
@@ -329,7 +329,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 coveredId.getName(), 0);
-        final Builder itemBuilder = item() //
+        final Builder itemBuilder = SpecificationItem.builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber);
@@ -342,7 +342,7 @@ class TestTagImporter
     {
         final SpecificationItemId generatedId = SpecificationItemId.createId(artifactType,
                 generateName(coveredId, lineNumber, counter), 0);
-        final Builder itemBuilder = item() //
+        final Builder itemBuilder = SpecificationItem.builder() //
                 .id(generatedId) //
                 .addCoveredId(coveredId) //
                 .location(FILENAME, lineNumber);

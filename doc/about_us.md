@@ -3,11 +3,21 @@
 
 ## Origins
 
-OFT's roots go back to the year 2003 when it's first predecessor with the unimaginative name Requirement Manager first saw the light of day at 3SOfT GmbH in Erlangen Tennenlohe (Germany). Being a software supplier for the automotive industry, 3SOFT had a need for requirement tracing to fulfill the strict rules for safety-critical software.
+```
+ReqMgr   ReqMgrNG     .--- ReqM ---.    Allosaurus     OFT   OFT 1.0
+  |         |        /     ReqM2    \       |           |       |
+--+---------+-------{                }------+-----------+-------+-> t
+ 2003      2004      \              /     ~2012        2015    2018
+                      `-- T-Reqs --´
+```
 
-3SOFT was later acquired by the Finish Elektrobit group. And the Requirement Manager got a more sophisticated makeover in form of ReqM2. This had become necessary because the projects had become increasingly complex and required collecting coverage from multiple sub-modules. [Bernd "Poldi" Haberstumpf](https://github.com/poldi2015) improved the tracer over time. This led to the next incarnation dubbed "T-Reqs".
+OFT's roots go back to the year 2003 when it's first predecessor with the unimaginative name 'ReqMgr' (Requirement Manager) first saw the light of day at 3SOfT GmbH in Erlangen Tennenlohe (Germany). Being a software supplier for the automotive industry, 3SOFT had a need for requirement tracing to fulfill the strict rules for safety-critical software.
 
-In even later projects performance became an issue, so the Perl-based T-Reqs was superceded by the much faster Allosaurus (yes, a this point in time everyone went full pun-mode).
+3SOFT was later acquired by the Finish Elektrobit group. [Bernd "Poldi" Haberstumpf](https://github.com/poldi2015) rewrote the complete requirement tracing code in the context of the [Autosar](https://www.autosar.org/) introduction to allow multi-level tracing in 2004. This new version was dubbed 'ReqMgrNG'. The introduction of the ASIL-D Autosar OS with microkernel eventually led to a stripped down version of 'ReqMgr' called 'ReqM' which was missing a lot of functionality of the 'ReqMgrNG'.
+
+In parallel another group of developers at Elektrobit worked on T-Reqs, a Java tool which did not see a lot of adoption.
+
+In even later projects performance became an issue, so ReqM2 and T-Reqs were both superseded by the much faster Allosaurus (yes, at this point in time everyone went full pun-mode).
 
 While a lot faster, Allosaurus was somewhat clunky, and that was what started the development of OFT as a free software project. [Christoph Pirkl](https://github.com/kaklakariada/) and [Sebastian Bär](https://github.com/redcatbear) wrote OFT in their spare time while still working at Elekrobit with generous requirement engineering wisdom kindly supplied by Poldi.
 
@@ -15,4 +25,4 @@ While a lot faster, Allosaurus was somewhat clunky, and that was what started th
 
 ## Free and Open Source
 
-One thing was clear for the four original founders of OFT. This time we wanted a broader community around our requirement tracing suit. And, since we were convinced that there is a general need for requirement engineering in general and tracing in particular, we decided to start OpenFastTrace as an open source project on Github with the [first commit](https://github.com/itsallcode/openfasttrace/commit/f4e9167cedad499c168ab4bb9a4e20d762f33f8b) in 2016. From then on OFT found its way into other industries outside of the automotive world and also into the build toolchains of other open source projects. And tha is the best thing we could ask for.
+One thing was clear for the four original founders of OFT. This time we wanted a broader community around our requirement tracing suite. And, since we were convinced that there is a need for requirement engineering in general and tracing in particular, we decided to start OpenFastTrace as an open source project on GitHub with the [first commit](https://github.com/itsallcode/openfasttrace/commit/f4e9167cedad499c168ab4bb9a4e20d762f33f8b) in 2016. From then on OFT found its way into other industries outside  the automotive world and also into the build toolchains of other open source projects. And that is the best thing we could ask for.

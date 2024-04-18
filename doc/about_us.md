@@ -4,16 +4,16 @@
 ## Origins
 
 ```
-ReqMgr   ReqMgrNG     .--- ReqM ---.    Allosaurus     OFT   OFT 1.0
-  |         |        /     ReqM2    \       |           |       |
---+---------+-------{                }------+-----------+-------+-> t
- 2003      2004      \              /     ~2012        2015    2018
-                      `-- T-Reqs --´
+ReqMgr   ReqMgrNG     ReqM/ReqM2   Allosaurus     OFT   OFT 1.0
+  |         | T-Reqs     |             |           |       |
+--+---------+--+---------+-------------+-----------+-------+-------+-> t
+ 2003      2004                      ~2012       2015    2018
+                      
 ```
 
 OFT's roots go back to the year 2003 when it's first predecessor with the unimaginative name 'ReqMgr' (Requirement Manager) first saw the light of day at 3SOfT GmbH in Erlangen Tennenlohe (Germany). Being a software supplier for the automotive industry, 3SOFT had a need for requirement tracing to fulfill the strict rules for safety-critical software.
 
-3SOFT was later acquired by the Finish Elektrobit group. [Bernd "Poldi" Haberstumpf](https://github.com/poldi2015) rewrote the complete requirement tracing code in the context of the [Autosar](https://www.autosar.org/) introduction to allow multi-level tracing in 2004. This new version was dubbed 'ReqMgrNG'. The introduction of the ASIL-D Autosar OS with microkernel eventually led to a stripped down version of 'ReqMgr' called 'ReqM' which was missing a lot of functionality of the 'ReqMgrNG'.
+3SOFT was later acquired by the Finish Elektrobit group. [Bernd "Poldi" Haberstumpf](https://github.com/poldi2015) rewrote the complete requirement tracing code in the context of the [Autosar](https://www.autosar.org/) introduction to allow multi-level tracing in 2004. This new version was dubbed 'ReqMgrNG'. The introduction of the ASIL-D Autosar OS with microkernel eventually led to a stripped down version of 'ReqM2' which was missing a lot of functionality of the 'ReqMgrNG'.
 
 In parallel another group of developers at Elektrobit worked on T-Reqs, a Java tool which did not see a lot of adoption.
 

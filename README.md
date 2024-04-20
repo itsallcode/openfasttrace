@@ -31,7 +31,6 @@ Sonarcloud status:
 
 **User Guides**
 
-* [📖 About us](doc/about_us.md)
 * [📖 User Guide](doc/user_guide.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 
@@ -42,6 +41,7 @@ Sonarcloud status:
 * [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
 * [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
 * [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [ℹ️ About us](doc/about_us.md)
 
 **Information for Contributors**
 

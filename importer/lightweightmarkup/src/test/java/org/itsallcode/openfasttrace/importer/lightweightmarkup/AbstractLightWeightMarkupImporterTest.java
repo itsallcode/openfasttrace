@@ -1,36 +1,34 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
+import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.runImporterOnText;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.core.*;
-import org.itsallcode.openfasttrace.api.importer.Importer;
-import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
-import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-
-class ITMarkdownImporter
+public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final String NL = System.lineSeparator();
-    private static final String TAG2 = "Tag2";
-    private static final String TAG1 = "Tag1";
-    private static final String FILENAME = "file name";
+
+    public AbstractLightWeightMarkupImporterTest()
+    {
+        // Intentionally empty to satisfy compile checks.
+    }
 
     // [utest -> dsn~md.specification-item-id-format~3]
     @CsvSource({
@@ -48,62 +46,13 @@ class ITMarkdownImporter
                 .build()));
     }
 
-    void assertImport(final String filename, final String input,
-            Matcher<Iterable<? extends SpecificationItem>> matcher)
+    private void assertImport(final String filename, final String input,
+            final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        assertThat(runImporterOnText(filename, input), matcher);
+        assertImportWithFactory(filename, input, matcher, getImporterFactory());
     }
 
-    private List<SpecificationItem> runImporterOnText(final String filename, final String text)
-    {
-        final BufferedReader reader = new BufferedReader(new StringReader(text));
-        final InputFile file = StreamInput.forReader(Paths.get(filename), reader);
-        final SpecificationListBuilder specItemBuilder = SpecificationListBuilder.create();
-        final Importer importer = new MarkdownImporterFactory().createImporter(file,
-                specItemBuilder);
-        importer.runImport();
-        return specItemBuilder.build();
-    }
-
-    private List<SpecificationItem> runImporterOnText(final String text)
-    {
-        return runImporterOnText("irrelevant-filename", text);
-    }
-
-    // [utest -> dsn~md.specification-item-title~1]
-    @Test
-    void testMarkdownTitleBeforeRequirementIdIsRequirementTitle()
-    {
-        assertImport("titles.md",
-                """
-                        # The title
-                        the~id~1
-                        """,
-                contains(item()
-                        .id("the", "id", 1)
-                        .title("The title")
-                        .location("titles.md", 2)
-                        .build()));
-    }
-
-    // [utest -> dsn~md.specification-item-title~1]
-    @Test
-    void testMarkdownTitleDetectedAfterAnotherTitle()
-    {
-        assertImport("more_titles.md",
-                """
-                        # 1st level title
-
-                        # 2nd level title
-
-                        the~id~1
-                        """,
-                contains(item()
-                        .title("2nd level title")
-                        .id("the", "id", 1)
-                        .location("more_titles.md", 5)
-                        .build()));
-    }
+    protected abstract ImporterFactory getImporterFactory();
 
     // [utest -> dsn~md.requirement-references~1]
     @Test
@@ -178,15 +127,6 @@ class ITMarkdownImporter
                         .build()));
     }
 
-
-    @ParameterizedTest
-    @MethodSource("tags")
-    void testTags(final String mdContent, final List<String> expected)
-    {
-        final List<SpecificationItem> items = runImporterOnText("`a~b~1`\n" + mdContent);
-        assertThat(items.get(0).getTags(), equalTo(expected));
-    }
-
     static Stream<Arguments> tags()
     {
         return Stream.of(
@@ -203,15 +143,25 @@ class ITMarkdownImporter
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")));
     }
 
+    @ParameterizedTest
+    @MethodSource("tags")
+    void testTags(final String mdContent, final List<String> expected)
+    {
+        final List<SpecificationItem> items = runImporterOnText("irrelevant-filename", "`a~b~1`\n" + mdContent,
+                getImporterFactory());
+        assertThat(items.get(0).getTags(), equalTo(expected));
+    }
+
     // [utest -> dsn~md.needs-coverage-list~1]
     @Test
-    void testSpecificationItemNeedsCoverageList() {
+    void testSpecificationItemNeedsCoverageList()
+    {
         assertImport("needs-list.md", """
-                        req~needs-coverage-list~4
-                        Needs:
-                        * dsn
-                        * uman
-                        """,
+                req~needs-coverage-list~4
+                Needs:
+                * dsn
+                * uman
+                """,
                 contains(item()
                         .id("req", "needs-coverage-list", 4)
                         .addNeedsArtifactType("dsn")
@@ -440,60 +390,36 @@ class ITMarkdownImporter
                         .build()));
     }
 
-     @Test
-     void testTwoConsecutiveSpecificationItems()
-     {
-         assertImport("file1.md", """
-                         dsn~foo~1
-                         First description
-                         
-                         Comment:
-                         
-                         First comment
-                         
-                         dsn~bar~2
-                         Second description
-                         
-                         Rationale:
-                         Second rationale
-                         """,
-                 contains(
-                         item()
-                                 .id("dsn", "foo", 1)
-                                 .description("First description")
-                                 .comment("First comment")
-                                 .location("file1.md", 1)
-                                 .build(),
-                         item()
-                                 .id("dsn", "bar", 2)
-                                 .description("Second description")
-                                 .rationale("Second rationale")
-                                 .location("file1.md", 8)
-                                 .build()));
-     }
-
-     // [utest->dsn~md.specification-item-title~1]
-     @Test
-     void testFindTitleAfterTitle()
-     {
-         assertImport("x", """
-                 ## This title should be ignored
-
-                 ### Title
-                 `a~b~1
-                 """,
-                 contains(item()
-                         .id(SpecificationItemId.parseId("a~b~1"))
-                         .title("Title").location("x", 4)
-                         .build()));
-     }
-
-    @ParameterizedTest
-    @MethodSource("needsCoverage")
-    void testNeedsCoverage(final String mdContent, final List<String> expected)
+    @Test
+    void testTwoConsecutiveSpecificationItems()
     {
-         final List<SpecificationItem> items = runImporterOnText("`a~b~1`\n" + mdContent);
-         assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
+        assertImport("file1.md", """
+                dsn~foo~1
+                First description
+
+                Comment:
+
+                First comment
+
+                dsn~bar~2
+                Second description
+
+                Rationale:
+                Second rationale
+                """,
+                contains(
+                        item()
+                                .id("dsn", "foo", 1)
+                                .description("First description")
+                                .comment("First comment")
+                                .location("file1.md", 1)
+                                .build(),
+                        item()
+                                .id("dsn", "bar", 2)
+                                .description("Second description")
+                                .rationale("Second rationale")
+                                .location("file1.md", 8)
+                                .build()));
     }
 
     static Stream<Arguments> needsCoverage()
@@ -512,6 +438,15 @@ class ITMarkdownImporter
                 Arguments.of("Needs:\n* req\n* dsn", List.of("req", "dsn")));
     }
 
+    @ParameterizedTest
+    @MethodSource("needsCoverage")
+    void testNeedsCoverage(final String mdContent, final List<String> expected)
+    {
+        final List<SpecificationItem> items = runImporterOnText("irrelevant-filename", "`a~b~1`\n" + mdContent,
+                getImporterFactory());
+        assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
+    }
+
     @Test
     void testItemStatsRecognized()
     {
@@ -527,80 +462,21 @@ class ITMarkdownImporter
     }
 
     // [impl -> dsn~md.specification-item-id-format~3] with UTF-8
-     @Test
-     void testItemIdSupportsUTF8Characaters()
-     {
-         assertImport("umlauts", """
-                 ### Die Implementierung muss den Zustand einzelner Zellen ändern
-                 `req~zellzustandsänderung~1
-                 Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
-                 Needs: arch
-                 """,
-                 contains(item()
-                         .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
-                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
-                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
+    @Test
+    void testItemIdSupportsUTF8Characaters()
+    {
+        assertImport("umlauts", """
+                ### Die Implementierung muss den Zustand einzelner Zellen ändern
+                `req~zellzustandsänderung~1
+                Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
+                Needs: arch
+                """,
+                contains(item()
+                        .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
+                        .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
+                        .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
-                         .location("umlauts", 2).addNeedsArtifactType("arch")
-                         .build()));
-     }
-
-     @ParameterizedTest
-     @ValueSource(strings =
-     { "---------------------------------", "---", "===", "======", "--- ",
-             "=== ", "---\t" })
-     void testRecognizeItemTitleWithUnderlines(final String underline)
-     {
-         assertImport("file name", """
-                         This is a title with an underline
-                         %s
-                         `extra~support-underlined-headers~1`
-                         Body text.
-                         """.formatted(underline),
-                 contains(item()
-                         .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
-                         .title("This is a title with an underline")
-                         .description("Body text.")
-                         .location("file name", 3)
-                         .build()));
-     }
-
-     @ValueSource(strings =
-     { "---------------------------------", "---", "===", "======",
-     "================================================",
-     "--- ", "=== ", "---\t"
-     })
-     @ParameterizedTest
-     void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
-     {
-         assertImport("y", """
-                 # This must be ignored.
-                 This is a title with an underline
-                 %s
-                 `extra~support-underlined-headers~1`
-                 Body text.
-                 """.formatted(underline),
-                 contains(item()
-                         .id(SpecificationItemId.createId("extra", "support-underlined-headers",
-                                 1))
-                         .title("This is a title with an underline")
-                         .description("Body text.")
-                         .location("y", 4)
-                         .build()));
-     }
-
-     @Test
-     void
-     testLessThenTwoUnderliningCharactersAreNotDetectedAsTitleUnderlines()
-     {
-         assertImport("z", """
-                 This is not a title since the underline is too short
-                 --
-                 req~too-short~111
-                 """,
-                 contains(item()
-                         .id(SpecificationItemId.createId("req", "too-short", 111))
-                         .location("z", 3)
-                         .build()));
-     }
+                        .location("umlauts", 2).addNeedsArtifactType("arch")
+                        .build()));
+    }
 }

@@ -10,6 +10,9 @@
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
+    <properties>
+        <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
@@ -21,4 +24,19 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

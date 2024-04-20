@@ -24,27 +24,23 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:"
+            + OPTIONAL_WHITESPACE
             + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
-            + optional(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
-                    // [impl->dsn~import.full-coverage-tag-with-name-and-revision~1]
-                    + "(" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
-                    + SpecificationItemId.REVISION_SEPARATOR
-                    + SpecificationItemId.ITEM_REVISION_PATTERN) //
+            + "(?:" + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
+            // [impl->dsn~import.full-coverage-tag-with-name-and-revision~1]
+            + "(" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
+            + SpecificationItemId.REVISION_SEPARATOR
+            + SpecificationItemId.ITEM_REVISION_PATTERN + ")?" //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
             + "(" + SpecificationItemId.ID_PATTERN + ")" //
-            + OPTIONAL_WHITESPACE + optional(NEEDS_COVERAGE + OPTIONAL_WHITESPACE) //
+            + OPTIONAL_WHITESPACE + "(?:" + NEEDS_COVERAGE + OPTIONAL_WHITESPACE + ")?" //
             + TAG_SUFFIX;
 
     private final InputFile file;
     private final ImportEventListener listener;
-
-    private static String optional(final String regex)
-    {
-        return "(?:" + regex + ")?";
-    }
 
     LongTagImportingLineConsumer(final InputFile file, final ImportEventListener listener)
     {
@@ -104,7 +100,8 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         else
         {
             LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId + "', needs artifact types " + neededArtifactTypes);
+                    + "' covering id '" + coveredId + "', needs artifact types "
+                    + neededArtifactTypes);
         }
     }
 

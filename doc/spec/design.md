@@ -799,10 +799,14 @@ Needs: impl, utest
 
 OFT imports full coverage tags with optional name and revision:
 
-    full-tag-with-name-and-revision = "[" *WSP reference "~" xxx "~" revision "->" requirement-id "]"
+    full-tag-with-name-and-revision =
+        "[" *WSP covering-artifact-type "~" covering-name "~" covering-revision
+        "->" covered-requirement-id "]"
 
-    full-tag-with-name-and-revision-with-needed-coverage = "[" *WSP reference "~" xxx "~" revision *WSP "->" *WSP requirement-id
-    *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
+    full-tag-with-name-and-revision-with-needed-coverage =
+        "[" *WSP covering-artifact-type "~" xxx "~" revision *WSP
+        "->" *WSP requirement-id *WSP
+        ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
 
 Rationale:
 

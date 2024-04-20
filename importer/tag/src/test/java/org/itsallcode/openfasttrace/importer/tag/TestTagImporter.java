@@ -87,40 +87,48 @@ class TestTagImporter
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
                         itemACoveringB("implB~name2-1099447527~0", "dsn~name2~3")),
 
-                parsedItems("[implA->dsn~name1~2" + "][implB->dsn~name2~3" + "][implC->dsn~name3~4" + "]",
+                parsedItems("[implA->dsn~name1~2" + "][implB->dsn~name2~3" + "][implC->dsn~name3~4"
+                        + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
                         itemACoveringB("implB~name2-1099447527~0", "dsn~name2~3"),
                         itemACoveringB("implC~name3-2846888323~0", "dsn~name3~4")),
 
                 parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3")
+                                .location(FILENAME, 2)),
                 parsedItems("[implA->dsn~name1~2" + "]" + WINDOWS_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3")
+                                .location(FILENAME, 2)),
                 parsedItems("[implA->dsn~name1~2" + "]" + CARRIAGE_RETURN + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
-                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3").location(FILENAME, 2)),
+                        itemACoveringB("implB~name2-1743199302~0", "dsn~name2~3")
+                                .location(FILENAME, 2)),
 
                 parsedItems("[impl->dsn~name~1" + "][impl->dsn~name~1" + "]",
                         itemACoveringB("impl~name-4161631350~0", "dsn~name~1"),
                         itemACoveringB("impl~name-964930486~0", "dsn~name~1")),
                 parsedItems("[impl->dsn~name~1" + "]" + UNIX_NEWLINE + "[impl->dsn~name~1" + "]",
                         itemACoveringB("impl~name-4161631350~0", "dsn~name~1"),
-                        itemACoveringB("impl~name-2408818310~0", "dsn~name~1").location(FILENAME, 2)),
+                        itemACoveringB("impl~name-2408818310~0", "dsn~name~1")
+                                .location(FILENAME, 2)),
 
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
                 parsedItem("[dsn->feat~name1~1>>impl" + "]",
-                        itemACoveringB("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl")),
+                        itemACoveringB("dsn~name1~0", "feat~name1~1")
+                                .addNeedsArtifactType("impl")),
 
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
                 parsedItem("[dsn->feat~name1~1>>impl,test" + "]",
-                        itemACoveringB("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl")
+                        itemACoveringB("dsn~name1~0", "feat~name1~1")
+                                .addNeedsArtifactType("impl")
                                 .addNeedsArtifactType("test")),
                 parsedItem("[ dsn -> feat~name1~1 >> impl , test " + "]",
-                        itemACoveringB("dsn~name1~0", "feat~name1~1").addNeedsArtifactType("impl")
+                        itemACoveringB("dsn~name1~0", "feat~name1~1")
+                                .addNeedsArtifactType("impl")
                                 .addNeedsArtifactType("test")),
 
                 // [utest->dsn~import.full-coverage-tag-with-revision~1]
@@ -137,12 +145,20 @@ class TestTagImporter
                                 .addNeedsArtifactType("test")),
 
                 // [utest->dsn~import.full-coverage-tag-with-name-and-revision~1]
-                parsedItem("[impl->dsn~name~2" + "]", itemACoveringB("impl~name-1627661772~0", "dsn~name~2")),
-                parsedItem("[impl~name1~1->dsn~name2~2" + "]", itemACoveringB("impl~name1~1", "dsn~name2~2")),
-                parsedItem("[impl~name1~1->dsn~name2~2>>test" + "]", itemACoveringB("impl~name1~1", "dsn~name2~2")
-                        .addNeedsArtifactType("test")),
+                parsedItem("[impl->dsn~name~2" + "]",
+                        itemACoveringB("impl~name-1627661772~0", "dsn~name~2")),
+                parsedItem("[impl~name1~1->dsn~name2~2" + "]",
+                        itemACoveringB("impl~name1~1", "dsn~name2~2")),
+                parsedItem("[impl~name1~1->dsn~name2~2>>test" + "]",
+                        itemACoveringB("impl~name1~1", "dsn~name2~2")
+                                .addNeedsArtifactType("test")),
                 parsedItem("[impl~name1~1->dsn~name2~2>>test,other" + "]",
-                        itemACoveringB("impl~name1~1", "dsn~name2~2").addNeedsArtifactType("test")
+                        itemACoveringB("impl~name1~1", "dsn~name2~2")
+                                .addNeedsArtifactType("test")
+                                .addNeedsArtifactType("other")),
+                parsedItem(" [ test~with.spaces~1 -> dsn~spaces-supported~2 >> test , other " + "]",
+                        itemACoveringB("test~with.spaces~1", "dsn~spaces-supported~2")
+                                .addNeedsArtifactType("test")
                                 .addNeedsArtifactType("other")),
                 noItemDetected("[impl~missing-revision->dsn~name2~2]"),
                 noItemDetected("[impl~missing-revision~->dsn~name2~2]"),

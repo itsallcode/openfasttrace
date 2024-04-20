@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -11,21 +11,17 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.*;
 
 public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final String NL = System.lineSeparator();
 
-    public AbstractLightWeightMarkupImporterTest()
+    protected AbstractLightWeightMarkupImporterTest()
     {
         // Intentionally empty to satisfy compile checks.
     }
@@ -259,15 +255,18 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 """,
                 contains(
                         item()
-                                .id("arch", "foo", 1).addCoveredId("req", "foo", 1).addNeedsArtifactType("dsn")
+                                .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
+                                .addNeedsArtifactType("dsn")
                                 .forwards(true).location("fwd.md", 2)
                                 .build(),
                         item()
-                                .id("arch", "bar", 2).addCoveredId("req", "bar", 2).addNeedsArtifactType("dsn")
+                                .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
+                                .addNeedsArtifactType("dsn")
                                 .forwards(true).location("fwd.md", 3)
                                 .build(),
                         item()
-                                .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3).addNeedsArtifactType("impl")
+                                .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
+                                .addNeedsArtifactType("impl")
                                 .forwards(true).location("fwd.md", 4)
                                 .build()));
     }
@@ -384,7 +383,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .addNeedsArtifactType("artA").addNeedsArtifactType("artB")
                         .addCoveredId(SpecificationItemId.parseId("impl~foo1~1"))
                         .addCoveredId(SpecificationItemId.parseId("impl~baz2~2"))
-                        .addDependOnId(SpecificationItemId.parseId("configuration~blubb.blah.blah~4711"))
+                        .addDependOnId(SpecificationItemId
+                                .parseId("configuration~blubb.blah.blah~4711"))
                         .addDependOnId(SpecificationItemId.parseId("db~blah.blubb~42"))
                         .location("file name", 2)
                         .build()));
@@ -465,12 +465,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testItemIdSupportsUTF8Characaters()
     {
-        assertImport("umlauts", """
-                ### Die Implementierung muss den Zustand einzelner Zellen ändern
-                `req~zellzustandsänderung~1
-                Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
-                Needs: arch
-                """,
+        assertImport("umlauts",
+                """
+                        ### Die Implementierung muss den Zustand einzelner Zellen ändern
+                        `req~zellzustandsänderung~1
+                        Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
+                        Needs: arch
+                        """,
                 contains(item()
                         .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")

@@ -8,6 +8,8 @@ on:
 jobs:
   linkChecker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Configure broken links checker

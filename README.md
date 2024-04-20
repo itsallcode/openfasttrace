@@ -31,6 +31,7 @@ Sonarcloud status:
 
 **User Guides**
 
+* [📖 About us](doc/about_us.md)
 * [📖 User Guide](doc/user_guide.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 

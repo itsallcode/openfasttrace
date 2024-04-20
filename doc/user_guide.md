@@ -551,6 +551,13 @@ The available color schemes are
 `color`
 : Color output. Also enables font style on the console.
 
+### Build Integration
+
+In order to integrate requirement tracing with OFT into your CI build, we recommend using the OFT plugins for Maven and Gradle:
+
+* [openfasttrace-maven-plugin](https://github.com/itsallcode/openfasttrace-maven-plugin)
+* [openfasttrace-gradle](https://github.com/itsallcode/openfasttrace-gradle)
+
 ### Input Format Support
 
 #### Tags in Programming Language or Markup Files

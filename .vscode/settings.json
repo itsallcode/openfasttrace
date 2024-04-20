@@ -1,6 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "modifications",
+    "editor.formatOnSaveMode": "file",
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit",
         "source.generate.finalModifiers": "explicit",

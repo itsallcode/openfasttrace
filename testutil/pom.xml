@@ -11,6 +11,9 @@
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
+    <properties>
+        <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>

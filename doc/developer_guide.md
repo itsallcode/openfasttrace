@@ -178,6 +178,22 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 
 See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace).
 
+## Reproducible Build
+
+This project is configured to produce exactly the same artifacts each time when building from the same Git commit. See the [Maven Guide to Configuring for Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html).
+
+* Verify correct configuration of the reproducible build (also included in phase `verify`):
+  ```bash
+  mvn initialize artifact:check-buildplan
+  ```
+* Verify that the build produces excatly the same artifacts:
+  ```bash
+  mvn -T 1C clean install -DskipTests
+  mvn -T 1C clean verify artifact:compare -DskipTests
+  ```
+
+The build will use the last Git commit timestamp as timestamp for files in `.jar` archives.
+
 ## Creating a Release
 
 **NOTE**: This currently only works for release version numbers, not SNAPSHOT versions.

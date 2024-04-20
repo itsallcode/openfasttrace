@@ -2,8 +2,6 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
 
-import java.util.logging.Logger;
-
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.*;
@@ -21,8 +19,6 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.*;
  */
 class MarkdownImporter extends LightWeightMarkupImporter implements Importer
 {
-    private static final Logger LOG = Logger.getLogger(MarkdownImporter.class.getName());
-
     /**
      * Creates a {@link MarkdownImporter} object with the given parameters.
      *

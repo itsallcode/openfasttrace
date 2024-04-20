@@ -2,8 +2,6 @@ package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
 
-import java.util.logging.Logger;
-
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
@@ -21,10 +19,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.Transition;
  * explicitly not the purpose of the importer.
  * </p>
  */
-public class RestructuredTextImporter extends LightWeightMarkupImporter implements Importer
-{
-    private static final Logger LOG = Logger.getLogger(RestructuredTextImporter.class.getName());
-
+public class RestructuredTextImporter extends LightWeightMarkupImporter implements Importer {
     /**
      * Creates a {@link RestructuredTextImporter} object with the given parameters.
      *

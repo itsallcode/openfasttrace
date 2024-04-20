@@ -7,7 +7,6 @@ import org.itsallcode.openfasttrace.importer.restructuredtext.RestructuredTextIm
  */
 module org.itsallcode.openfasttrace.importer.restructuredtext
 {
-    requires java.logging;
     requires transitive org.itsallcode.openfasttrace.api;
     requires org.itsallcode.openfasttrace.importer.lightweightmarkup;
 

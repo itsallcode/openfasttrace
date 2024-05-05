@@ -48,7 +48,6 @@ class TestSpecificationItemId
         assertThat(id.getRevision(), equalTo(1));
     }
 
-
     @Test
     void testParseId_multipleFragmentName()
     {
@@ -96,9 +95,8 @@ class TestSpecificationItemId
         final IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> parseId(illegalId));
         assertThat(exception.getMessage(),
-                equalTo("String \"" + illegalId + "\" cannot be parsed to a specification item ID"));
+                equalTo("String '" + illegalId + "' cannot be parsed to a specification item ID"));
     }
-
 
     @Test
     void testToRevisionWildcard()

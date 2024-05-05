@@ -11,7 +11,7 @@ module org.itsallcode.openfasttrace.testutil
     exports org.itsallcode.openfasttrace.testutil.matcher;
     exports org.itsallcode.openfasttrace.testutil.xml;
 
-    requires hamcrest.all;
+    requires org.hamcrest;
     requires transitive org.junit.jupiter.api;
     requires org.mockito;
     requires org.mockito.junit.jupiter;

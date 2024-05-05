@@ -1,4 +1,5 @@
 package org.itsallcode.openfasttrace.cli;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
@@ -180,7 +181,7 @@ class TestCliStarter
         {
             assertThat(e.getExitStatus(),
                     anyOf(equalTo(ExitStatus.OK.getCode()), equalTo(ExitStatus.FAILURE.getCode())));
-            assertThat(err.getCapturedData(), isEmptyOrNullString());
+            assertThat(err.getCapturedData(), is(emptyOrNullString()));
         }
     }
 
@@ -218,7 +219,7 @@ class TestCliStarter
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
                 () -> assertOutputFileExists(false),
-                () -> assertThat(out.getCapturedData(), isEmptyOrNullString()) //
+                () -> assertThat(out.getCapturedData(), is(emptyOrNullString())) //
         );
     }
 
@@ -252,7 +253,7 @@ class TestCliStarter
                     () -> assertThat(e.getExitStatus(),
                             anyOf(equalTo(ExitStatus.OK.getCode()),
                                     equalTo(ExitStatus.FAILURE.getCode()))),
-                    () -> assertThat(err.getCapturedData(), isEmptyOrNullString()),
+                    () -> assertThat(err.getCapturedData(), is(emptyOrNullString())),
                     () -> assertOutputFileExists(true));
         }
     }

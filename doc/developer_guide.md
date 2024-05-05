@@ -163,8 +163,16 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 ## Check for updated dependencies / plugins
 
+Display dependencies and plugins with newer versions:
+
 ```bash
 mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
+```
+
+Automatically upgrade dependencies:
+
+```bash
+mvn --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
 ## Run local sonar analysis

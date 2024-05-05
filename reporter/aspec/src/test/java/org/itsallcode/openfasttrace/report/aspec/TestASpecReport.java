@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.*;
@@ -640,7 +639,6 @@ class TestASpecReport
         }
     }
 
-    @Factory
     static Matcher<String> containsRegexp(final String regexp)
     {
         return new StringRegexpMatcher(regexp);

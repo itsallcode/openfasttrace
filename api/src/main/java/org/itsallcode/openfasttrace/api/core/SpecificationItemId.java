@@ -315,7 +315,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
         {
             if (this.name == null)
             {
-                throw new IllegalStateException("Name is missing");
+                throw new IllegalStateException("Name is missing in ID '" + id + "'");
             }
         }
 

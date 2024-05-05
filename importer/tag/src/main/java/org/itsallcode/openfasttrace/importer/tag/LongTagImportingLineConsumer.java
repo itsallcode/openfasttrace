@@ -24,24 +24,23 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:"
+            + OPTIONAL_WHITESPACE
             + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
             + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
-            + optional(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR + SpecificationItemId.REVISION_SEPARATOR
-                    + SpecificationItemId.ITEM_REVISION_PATTERN) //
+            + "(?:" + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
+            // [impl->dsn~import.full-coverage-tag-with-name-and-revision~1]
+            + "(" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
+            + SpecificationItemId.REVISION_SEPARATOR
+            + SpecificationItemId.ITEM_REVISION_PATTERN + ")?" //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
             + "(" + SpecificationItemId.ID_PATTERN + ")" //
-            + OPTIONAL_WHITESPACE + optional(NEEDS_COVERAGE + OPTIONAL_WHITESPACE) //
+            + OPTIONAL_WHITESPACE + "(?:" + NEEDS_COVERAGE + OPTIONAL_WHITESPACE + ")?" //
             + TAG_SUFFIX;
 
     private final InputFile file;
     private final ImportEventListener listener;
-
-    private static String optional(final String regex)
-    {
-        return "(?:" + regex + ")?";
-    }
 
     LongTagImportingLineConsumer(final InputFile file, final ImportEventListener listener)
     {
@@ -55,23 +54,11 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     {
         this.listener.beginSpecificationItem();
         this.listener.setLocation(this.file.getPath(), lineNumber);
-        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(3));
-        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(7));
-        final String artifactType = matcher.group(1);
-        final String revision = matcher.group(2);
-        final SpecificationItemId generatedId = generateItemId(lineNumber, lineMatchCount, coveredId, artifactType,
-                revision, neededArtifactTypes);
-
-        if (neededArtifactTypes.isEmpty())
-        {
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId);
-        }
-        else
-        {
-            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId + "', needs artifact types " + neededArtifactTypes);
-        }
+        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(5));
+        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(9));
+        final SpecificationItemId generatedId = createItemId(matcher, lineNumber, lineMatchCount, coveredId,
+                neededArtifactTypes);
+        logItem(lineNumber, coveredId, neededArtifactTypes, generatedId);
         this.listener.setId(generatedId);
         this.listener.addCoveredId(coveredId);
         neededArtifactTypes.forEach(listener::addNeededArtifactType);
@@ -91,12 +78,31 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
                 .collect(toList());
     }
 
-    private SpecificationItemId generateItemId(final int lineNumber, final int lineMatchCount,
-            final SpecificationItemId coveredId, final String artifactType, final String revision,
-            final List<String> neededArtifactTypes)
+    private SpecificationItemId createItemId(final Matcher matcher, final int lineNumber, final int lineMatchCount,
+            final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
     {
-        final String name = getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
+        final String artifactType = matcher.group(1);
+        final String customName = matcher.group(2);
+        final String revision = matcher.group(4);
+        final String name = customName != null ? customName
+                : getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
         return SpecificationItemId.createId(artifactType, name, parseRevision(revision));
+    }
+
+    private void logItem(final int lineNumber, final SpecificationItemId coveredId,
+            final List<String> neededArtifactTypes, final SpecificationItemId generatedId)
+    {
+        if (neededArtifactTypes.isEmpty())
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId);
+        }
+        else
+        {
+            LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
+                    + "' covering id '" + coveredId + "', needs artifact types "
+                    + neededArtifactTypes);
+        }
     }
 
     private int parseRevision(final String revision)

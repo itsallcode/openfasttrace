@@ -769,6 +769,30 @@ Covers:
 
 Needs: impl, utest
 
+#### Full Coverage Tag Format Allows Specifying Name and Revision
+`dsn~import.full-coverage-tag-with-name-and-revision~1`
+
+OFT imports full coverage tags with optional name and revision:
+
+    full-tag-with-name-and-revision =
+        "[" *WSP covering-artifact-type "~" covering-name "~" covering-revision
+        "->" covered-requirement-id "]"
+
+    full-tag-with-name-and-revision-with-needed-coverage =
+        "[" *WSP covering-artifact-type "~" xxx "~" revision *WSP
+        "->" *WSP requirement-id *WSP
+        ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
+
+Rationale:
+
+Specifying an explicit name in coverage tags allows overriding the auto-generated name.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
 #### Coverage Tag With Needed Coverage Generates Readable Names
 `dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1`
 

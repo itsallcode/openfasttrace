@@ -53,6 +53,7 @@ Sonarcloud status:
 
 **Demos and Presentations**
 
+* [📹 Introduction Video](https://www.youtube.com/watch?v=tlzMT6RaVWA) (YouTube, 3:30 minutes)
 * [🛗 Elevator pitch](https://github.com/itsallcode/openfasttrace-demo/tree/main?tab=readme-ov-file#elevator-pitch)
 * [📽️ OpenFastTrace Presentation](https://github.com/itsallcode/openfasttrace-demo/blob/main/OpenFastTrace_in_20_minutes.odp) (LibreOffice, 20 minutes)
 * [🎬 OpenFastTrace Live Demo Script](https://github.com/itsallcode/openfasttrace-demo/blob/main/oft-live-demo-medium.md) (Markdown, 1 hour)

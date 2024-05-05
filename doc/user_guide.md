@@ -80,8 +80,8 @@ The identifier (ID) of a [specification item](#specification-item) is a project-
 
 The specification item ID consists of the following parts:
 * [Artifact type](#artifact-type)
-* name
-* [revision](#specification-item-revision)
+* Name
+* [Revision](#specification-item-revision)
 
 All parts are integral to the ID. The name alone is neither unique nor complete. In OFT's native document formats the ID is represented as a character string where the three parts are separated by the tilde ("~") symbol.
 
@@ -583,6 +583,24 @@ private validate(final AuthenticationRequest request){
 }
 ```
 
+##### Optional Elements
+
+Tags can optionally specify a revision number or name and revision number:
+
+```
+[ <covered-artifact-type> ~~ <revision> -> <specification-object-id> ]
+[ <covered-artifact-type> ~ <name> ~ <revision> -> <specification-object-id> ]
+```
+
+Examples:
+
+```java
+// [impl~~2->dsn~validate-authentication-request~1]
+// [impl~validate-password~2->dsn~validate-authentication-request~1]
+```
+
+##### Forwarding Requirements
+
 When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:
 
 ```
@@ -595,6 +613,8 @@ Example:
 ' [dsn->req~1password-login~1>>impl,test]
 user -> system : login(token: OAuthToken)
 ```
+
+##### Supported File Extensions
 
 The Tag Importer recognizes the supported format by the file extension. The following list shows the standard set of
 recognized file types:

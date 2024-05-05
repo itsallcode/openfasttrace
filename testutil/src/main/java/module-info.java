@@ -12,7 +12,7 @@ module org.itsallcode.openfasttrace.testutil
     exports org.itsallcode.openfasttrace.testutil.matcher;
     exports org.itsallcode.openfasttrace.testutil.xml;
 
-    requires transitive hamcrest.all;
+    requires org.hamcrest;
     requires transitive hamcrest.auto.matcher;
     requires transitive org.junit.jupiter.api;
     requires transitive org.junit.jupiter.params;

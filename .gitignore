@@ -15,3 +15,4 @@ doc/**/*.html
 /**/.project
 .idea/
 *.iml
+pom.xml.versionsBackup

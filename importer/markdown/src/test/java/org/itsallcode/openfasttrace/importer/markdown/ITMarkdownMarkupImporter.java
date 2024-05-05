@@ -8,21 +8,24 @@ import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
+import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class ITMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest {
+class ITMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
+{
     private final static ImporterFactory importerFactory = new MarkdownImporterFactory();
 
     @Override
-    protected ImporterFactory getImporterFactory() {
+    protected ImporterFactory getImporterFactory()
+    {
         return importerFactory;
     }
 
     private void assertImport(final String filename, final String input,
-                         final Matcher<Iterable<? extends SpecificationItem>> matcher) {
+            final Matcher<Iterable<? extends SpecificationItem>> matcher)
+    {
         assertImportWithFactory(filename, input, matcher, importerFactory);
     }
 
@@ -61,79 +64,77 @@ class ITMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest {
                         .build()));
     }
 
-
     // [utest->dsn~md.specification-item-title~1]
-     @Test
-     void testFindTitleAfterTitle()
-     {
-         assertImport("x", """
-                 ## This title should be ignored
+    @Test
+    void testFindTitleAfterTitle()
+    {
+        assertImport("x", """
+                ## This title should be ignored
 
-                 ### Title
-                 `a~b~1
-                 """,
-                 contains(item()
-                         .id(SpecificationItemId.parseId("a~b~1"))
-                         .title("Title").location("x", 4)
-                         .build()));
-     }
+                ### Title
+                `a~b~1
+                """,
+                contains(item()
+                        .id(SpecificationItemId.parseId("a~b~1"))
+                        .title("Title").location("x", 4)
+                        .build()));
+    }
 
     @ParameterizedTest
-     @ValueSource(strings =
-     { "---------------------------------", "---", "===", "======", "--- ",
-             "=== ", "---\t" })
-     void testRecognizeItemTitleWithUnderlines(final String underline)
-     {
-         assertImport("file name", """
-                         This is a title with an underline
-                         %s
-                         `extra~support-underlined-headers~1`
-                         Body text.
-                         """.formatted(underline),
-                 contains(item()
-                         .id(SpecificationItemId.createId("extra", "support-underlined-headers", 1))
-                         .title("This is a title with an underline")
-                         .description("Body text.")
-                         .location("file name", 3)
-                         .build()));
-     }
+    @ValueSource(strings =
+    { "---------------------------------", "---", "===", "======", "--- ",
+            "=== ", "---\t" })
+    void testRecognizeItemTitleWithUnderlines(final String underline)
+    {
+        assertImport("file name", """
+                This is a title with an underline
+                %s
+                `extra~support-underlined-headers~1`
+                Body text.
+                """.formatted(underline),
+                contains(item()
+                        .id(SpecificationItemId.createId("extra", "support-underlined-headers",
+                                1))
+                        .title("This is a title with an underline")
+                        .description("Body text.")
+                        .location("file name", 3)
+                        .build()));
+    }
 
-     @ValueSource(strings =
-     { "---------------------------------", "---", "===", "======",
-     "================================================",
-     "--- ", "=== ", "---\t"
-     })
-     @ParameterizedTest
-     void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
-     {
-         assertImport("y", """
-                 # This must be ignored.
-                 This is a title with an underline
-                 %s
-                 `extra~support-underlined-headers~1`
-                 Body text.
-                 """.formatted(underline),
-                 contains(item()
-                         .id(SpecificationItemId.createId("extra", "support-underlined-headers",
-                                 1))
-                         .title("This is a title with an underline")
-                         .description("Body text.")
-                         .location("y", 4)
-                         .build()));
-     }
+    @ValueSource(strings = { "---------------------------------", "---", "===", "======",
+            "================================================",
+            "--- ", "=== ", "---\t"
+    })
+    @ParameterizedTest
+    void testRecognizeItemTitleWithUnderlinesAfterAnotherTitle(final String underline)
+    {
+        assertImport("y", """
+                # This must be ignored.
+                This is a title with an underline
+                %s
+                `extra~support-underlined-headers~1`
+                Body text.
+                """.formatted(underline),
+                contains(item()
+                        .id(SpecificationItemId.createId("extra", "support-underlined-headers",
+                                1))
+                        .title("This is a title with an underline")
+                        .description("Body text.")
+                        .location("y", 4)
+                        .build()));
+    }
 
-     @Test
-     void
-     testLessThenTwoUnderliningCharactersAreNotDetectedAsTitleUnderlines()
-     {
-         assertImport("z", """
-                 This is not a title since the underline is too short
-                 --
-                 req~too-short~111
-                 """,
-                 contains(item()
-                         .id(SpecificationItemId.createId("req", "too-short", 111))
-                         .location("z", 3)
-                         .build()));
-     }
+    @Test
+    void testLessThenTwoUnderliningCharactersAreNotDetectedAsTitleUnderlines()
+    {
+        assertImport("z", """
+                This is not a title since the underline is too short
+                --
+                req~too-short~111
+                """,
+                contains(item()
+                        .id(SpecificationItemId.createId("req", "too-short", 111))
+                        .location("z", 3)
+                        .build()));
+    }
 }

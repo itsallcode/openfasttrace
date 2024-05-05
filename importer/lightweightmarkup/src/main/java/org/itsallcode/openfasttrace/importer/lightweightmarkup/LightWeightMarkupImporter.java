@@ -1,14 +1,14 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * Base class for importers of lightweight markup text.
@@ -28,9 +28,13 @@ public abstract class LightWeightMarkupImporter {
 
     /**
      * Create a new {@link LightWeightMarkupImporter}.
+     * 
      * @param fileName input file
      * @param listener import event listener
      */
+    // Possible 'this' escape before subclass is fully initialized:
+    // LineParserStateMachine constructor does not use 'this'.
+    @SuppressWarnings("this-escape")
     public LightWeightMarkupImporter(final InputFile fileName, final ImportEventListener listener) {
         this.file = fileName;
         this.listener = listener;
@@ -39,20 +43,22 @@ public abstract class LightWeightMarkupImporter {
 
     /**
      * Define the transitions of the parser statemachine.
+     * 
      * @return parser statemachine transitions
      */
     protected abstract Transition[] configureTransitions();
 
     /**
      * Define a transition in the parser statemachine.
-     * @param from state to be matched against the parsers current state
-     * @param to state the parser will be in if the transition happened
+     * 
+     * @param from    state to be matched against the parsers current state
+     * @param to      state the parser will be in if the transition happened
      * @param pattern line pattern to be matched for this transition to happen
-     * @param action action to take as during the transition
+     * @param action  action to take as during the transition
      * @return transition definition
      */
     protected static Transition transition(final LineParserState from, final LineParserState to,
-                                         final LinePattern pattern, final TransitionAction action) {
+            final LinePattern pattern, final TransitionAction action) {
         return new Transition(from, to, pattern, action);
     }
 
@@ -103,7 +109,8 @@ public abstract class LightWeightMarkupImporter {
     }
 
     /**
-     * Informs the listener about a new specification item, including the ID and file and line where it was detected.
+     * Informs the listener about a new specification item, including the ID and
+     * file and line where it was detected.
      */
     protected void informListenerAboutNewItem() {
         final String idText = this.stateMachine.getLastToken();
@@ -119,7 +126,8 @@ public abstract class LightWeightMarkupImporter {
     /**
      * End a specification item gracefully.
      * <p>
-     * As opposed to forcing an end at clean-up (see {@link LightWeightMarkupImporter#cleanUpLastItem()}.
+     * As opposed to forcing an end at clean-up (see
+     * {@link LightWeightMarkupImporter#cleanUpLastItem()}.
      * </p>
      */
     protected void endItem() {
@@ -202,7 +210,8 @@ public abstract class LightWeightMarkupImporter {
     /**
      * Safe the previous line as potential title for the next specification item.
      * <p>
-     * This is useful for markup that uses titles that are defined by being underlined with special characters in the
+     * This is useful for markup that uses titles that are defined by being
+     * underlined with special characters in the
      * line that follows the actual title.
      * </p>
      */
@@ -211,7 +220,8 @@ public abstract class LightWeightMarkupImporter {
     }
 
     /**
-     * Remember the last section title in case this turns out to be a specification item.
+     * Remember the last section title in case this turns out to be a specification
+     * item.
      */
     // [impl->dsn~md.specification-item-title~1]
     protected void rememberTitle() {

@@ -22,14 +22,6 @@
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
         </dependency>
-        <!-- The following allows sharing tests between similar importers -->
-        <dependency>
-            <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
-            <version>${revision}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.collection.IsEmptyIterable;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
@@ -34,7 +33,6 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
      *            the expected id.
      * @return a id matcher.
      */
-    @Factory
     public static Matcher<SpecificationItemId> equalTo(final SpecificationItemId id)
     {
         return new SpecificationItemIdMatcher(id);
@@ -48,7 +46,6 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
      *            the expected ids.
      * @return a id matcher.
      */
-    @Factory
     public static Matcher<Iterable<? extends SpecificationItemId>> equalIds(
             final Collection<SpecificationItemId> expected)
     {

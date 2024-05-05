@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 class StringRegexpMatcherTest
 {
+    private static final String NL = System.lineSeparator();
+
     @Test
     void testMatches()
     {
@@ -26,7 +28,7 @@ class StringRegexpMatcherTest
     {
         final StringRegexpMatcher matcher = new StringRegexpMatcher("a.c");
         final AssertionError error = assertThrows(AssertionError.class, () -> assertThat("ac", matcher));
-        assertThat(error.getMessage(), equalTo("\nExpected: a string contains regexp \"a.c\"\n" + //
+        assertThat(error.getMessage(), equalTo(NL + "Expected: a string contains regexp \"a.c\"" + NL + //
                 "     but: was \"ac\""));
     }
 
@@ -35,7 +37,7 @@ class StringRegexpMatcherTest
     {
         final StringRegexpMatcher matcher = new StringRegexpMatcher("abc");
         final AssertionError error = assertThrows(AssertionError.class, () -> assertThat("aBc", matcher));
-        assertThat(error.getMessage(), equalTo("\nExpected: a string contains regexp \"abc\"\n" + //
+        assertThat(error.getMessage(), equalTo(NL + "Expected: a string contains regexp \"abc\"" + NL + //
                 "     but: was \"aBc\""));
     }
 }

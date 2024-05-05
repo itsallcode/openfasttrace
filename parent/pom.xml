@@ -523,10 +523,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.16.2</version>
-                <configuration>
-                    <excludes>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>

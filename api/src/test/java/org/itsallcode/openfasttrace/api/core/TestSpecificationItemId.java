@@ -48,52 +48,10 @@ class TestSpecificationItemId
     @Test
     void testCreateIdWithoutRevision()
     {
-<<<<<<< HEAD
         final SpecificationItemId id = createId("impl", "wildcard-feature");
         assertAll(() -> assertThat(id, equalTo(new Builder().artifactType("impl").name("wildcard-feature")
                 .revision(Integer.MIN_VALUE).build())),
                 () -> assertThat(SpecificationItemId.REVISION_WILDCARD, equalTo(Integer.MIN_VALUE)));
-=======
-        final SpecificationItemId id = createId(ARTIFACT_TYPE_FEATURE, NAME);
-        assertThat(id, equalTo(new Builder().artifactType(ARTIFACT_TYPE_FEATURE).name(NAME)
-                .revision(Integer.MIN_VALUE).build()));
-    }
-
-    @Test
-    void testParseId_singleDigitRevision()
-    {
-        final SpecificationItemId id = parseId("feat~foo~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo(NAME));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-    @Test
-    void testParseId_multipleFragmentName()
-    {
-        final SpecificationItemId id = parseId("feat~foo.bar_zoo.baz-narf~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo("foo.bar_zoo.baz-narf"));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-    @Test
-    void testParseId_umlautName()
-    {
-        final SpecificationItemId id = parseId("feat~änderung~1");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo("änderung"));
-        assertThat(id.getRevision(), equalTo(1));
-    }
-
-    @Test
-    void testParseId_multipleDigitRevision()
-    {
-        final SpecificationItemId id = parseId("feat~foo~999");
-        assertThat(id.getArtifactType(), equalTo(ARTIFACT_TYPE_FEATURE));
-        assertThat(id.getName(), equalTo(NAME));
-        assertThat(id.getRevision(), equalTo(999));
->>>>>>> origin/main
     }
 
     @Test
@@ -121,12 +79,8 @@ class TestSpecificationItemId
     {
         final Throwable exception = assertThrows(IllegalArgumentException.class, () -> parseId(illegalId));
         assertThat(exception.getMessage(),
-<<<<<<< HEAD
                 equalTo("Invalid specification item ID format: \"" + illegalId + "\". "
                         + "Format must be <arifact-type>~<requirement-name-or-number>~<revision>."));
-=======
-                equalTo("String '" + illegalId + "' cannot be parsed to a specification item ID"));
->>>>>>> origin/main
     }
 
     @Test

@@ -49,13 +49,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 .build()));
     }
 
-    private void assertImport(final String path, final String input,
+    protected void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
         assertImport(Path.of(path), input, matcher);
     }
 
-    private void assertImport(final Path path, final String input,
+    protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
         assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
@@ -162,7 +162,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("tags")
     void testTags(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+                "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getTags(), equalTo(expected));
     }
@@ -238,7 +239,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
-    void testForwardingAfterTags()
+    public void testForwardingAfterTags()
     {
         assertImport("1.2.md", """
                 dsn~foo~1
@@ -276,17 +277,20 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         item()
                                 .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 2 + titleLocationOffset)
+                                .forwards(true)
+                                .location("fwd.md", 2 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 3 + titleLocationOffset)
+                                .forwards(true)
+                                .location("fwd.md", 3 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
                                 .addNeedsArtifactType("impl")
-                                .forwards(true).location("fwd.md", 4 + titleLocationOffset)
+                                .forwards(true)
+                                .location("fwd.md", 4 + titleLocationOffset)
                                 .build()));
     }
 
@@ -460,7 +464,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("needsCoverage")
     void testNeedsCoverage(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+                "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
     }
@@ -495,7 +500,33 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
-                        .location("umlauts", 2 + titleLocationOffset).addNeedsArtifactType("arch")
+                        .location("umlauts", 2 + titleLocationOffset)
+                        .addNeedsArtifactType("arch")
                         .build()));
+    }
+
+    @Test
+    public void testHeaderBelongsToNextItem()
+    {
+        assertImport("file",
+                """
+                        ${title("Item 1", 1)}
+                        `req~item1~1
+                        Item 1 description
+
+                        ${title("Item 2", 1)}
+                        `req~item2~1
+                        Item 2 description
+                        """,
+                contains(item().id(SpecificationItemId.createId("req", "item1", 1))
+                        .title("Item 1")
+                        .description("Item 1 description")
+                        .location("file", 2 + titleLocationOffset)
+                        .build(),
+                        item().id(SpecificationItemId.createId("req", "item2", 1))
+                                .title("Item 2")
+                                .description("Item 2 description")
+                                .location("file", 6 + titleLocationOffset)
+                                .build()));
     }
 }

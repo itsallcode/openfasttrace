@@ -16,6 +16,7 @@
         ]
     },
     "[java]": {
+        "editor.detectIndentation": false,
         "editor.tabSize": 4,
         "editor.indentSize": "tabSize"
     },

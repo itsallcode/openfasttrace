@@ -60,7 +60,7 @@ public class LineParserStateMachine
         }
         if (!matched)
         {
-            LOG.finest(() -> "No match for '" + line + "'");
+            LOG.finest(() -> "Current state: " + this.state + ", no match for '" + line + "'");
         }
     }
 

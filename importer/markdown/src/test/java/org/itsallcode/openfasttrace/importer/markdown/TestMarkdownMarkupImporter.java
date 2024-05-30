@@ -2,12 +2,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
 
-import java.nio.file.Path;
-
-import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
@@ -33,12 +28,6 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     protected String formatTitle(final String title, final int level)
     {
         return "#".repeat(level) + " " + title;
-    }
-
-    private void assertImport(final String filename, final String input,
-            final Matcher<Iterable<? extends SpecificationItem>> matcher)
-    {
-        assertImportWithFactory(Path.of(filename), input, matcher, importerFactory);
     }
 
     // [utest -> dsn~md.specification-item-title~1]

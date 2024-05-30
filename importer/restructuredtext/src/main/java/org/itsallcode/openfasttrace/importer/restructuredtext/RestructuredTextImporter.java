@@ -123,6 +123,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(DEPENDS    , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS       , () -> {}                           ),
+            transition(DEPENDS    , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             // [impl->dsn~md.needs-coverage-list-single-line~2]
             // [impl->dsn~md.needs-coverage-list~1]
@@ -148,7 +149,8 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(TAGS       , NEEDS      , RstPattern.EMPTY      , () -> {}                           ),
             transition(TAGS       , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(TAGS       , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(TAGS       , TAGS       , RstPattern.TAGS_INT   , this::addTag                       )
+            transition(TAGS       , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
+            transition(TAGS       , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      )
         };
         // @formatter:on
     }

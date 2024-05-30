@@ -2,12 +2,7 @@ package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
 
-import java.nio.file.Path;
-
-import org.hamcrest.Matcher;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
@@ -33,12 +28,6 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
     protected String formatTitle(final String title, final int level)
     {
         return title + "\n" + "=".repeat(title.length());
-    }
-
-    private void assertImport(final String filename, final String input,
-            final Matcher<Iterable<? extends SpecificationItem>> matcher)
-    {
-        assertImportWithFactory(Path.of(filename), input, matcher, importerFactory);
     }
 
     // [utest -> dsn~md.specification-item-title~1]
@@ -153,5 +142,37 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                         .id(SpecificationItemId.createId("req", "too-short", 111))
                         .location("z", 3)
                         .build()));
+    }
+
+    @Override
+    @Test
+    public void testArtifactForwardingAfterARegularSpecificationItem()
+    {
+        assertImport("üöä", """
+                art~name~9876
+
+                Forwards
+                ========
+                a-->b:c~d~5
+                """,
+                contains(
+                        item()
+                                .id("art", "name", 9876)
+                                .description("Forwards")
+                                .location("üöä", 1)
+                                .build(),
+                        item()
+                                .id("a", "d", 5)
+                                .addCoveredId("c", "d", 5)
+                                .addNeedsArtifactType("b")
+                                .location("üöä", 5)
+                                .forwards(true)
+                                .build()));
+    }
+
+    @Test
+    public void testHeaderBelongsToNextItem()
+    {
+        super.testHeaderBelongsToNextItem();
     }
 }

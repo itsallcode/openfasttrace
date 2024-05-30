@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import java.util.logging.Logger;
-
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
@@ -15,7 +13,6 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
  */
 public abstract class LightWeightMarkupImporter implements Importer, LineReaderCallback
 {
-    private static final Logger LOG = Logger.getLogger(LightWeightMarkupImporter.class.getName());
     /** File to be imported */
     protected final InputFile file;
     /** Listener for import events */

@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState;
-
 /**
  * Transition in the line parser statemachine.
  */

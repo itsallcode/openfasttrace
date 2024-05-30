@@ -12,5 +12,5 @@ public interface LinePattern
      *
      * @return regular expression pattern
      */
-    public Pattern getPattern();
+    Pattern getPattern();
 }

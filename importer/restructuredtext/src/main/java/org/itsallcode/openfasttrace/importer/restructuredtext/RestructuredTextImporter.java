@@ -1,9 +1,8 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
-import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
+import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LineParserState.*;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
@@ -19,7 +18,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Tran
  * is explicitly not the purpose of the importer.
  * </p>
  */
-public class RestructuredTextImporter extends LightWeightMarkupImporter implements Importer
+public class RestructuredTextImporter extends LightWeightMarkupImporter
 {
     /**
      * Creates a {@link RestructuredTextImporter} object with the given
@@ -35,6 +34,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
         super(fileName, listener);
     }
 
+    @Override
     protected Transition[] configureTransitions()
     {
         // @formatter:off

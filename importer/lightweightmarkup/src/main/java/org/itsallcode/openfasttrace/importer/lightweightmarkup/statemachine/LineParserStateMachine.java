@@ -3,8 +3,6 @@ package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState;
-
 /**
  * This machine implements the core of a state based parser.
  * <p>
@@ -20,8 +18,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState;
  */
 public class LineParserStateMachine
 {
-    private static final Logger LOG = Logger
-            .getLogger(LineParserStateMachine.class.getName());
+    private static final Logger LOG = Logger.getLogger(LineParserStateMachine.class.getName());
 
     private LineParserState state = LineParserState.START;
     private String lastToken = "";
@@ -86,5 +83,10 @@ public class LineParserStateMachine
     public String getLastToken()
     {
         return this.lastToken;
+    }
+
+    LineParserState getState()
+    {
+        return this.state;
     }
 }

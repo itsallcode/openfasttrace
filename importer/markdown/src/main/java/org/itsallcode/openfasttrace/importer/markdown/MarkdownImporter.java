@@ -1,6 +1,6 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
-import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
+import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LineParserState.*;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;

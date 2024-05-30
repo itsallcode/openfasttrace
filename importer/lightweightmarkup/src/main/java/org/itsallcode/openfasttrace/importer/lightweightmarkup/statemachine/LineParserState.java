@@ -1,7 +1,8 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
 /**
- * This enum defines the state the line parser for lightweight markup languages can be in.
+ * This enum defines the state the line parser for lightweight markup languages
+ * can be in.
  */
 public enum LineParserState
 {

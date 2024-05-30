@@ -294,13 +294,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(
                         item()
                                 .id("art", "name", 9876)
-                                .location("üöä", 2)
+                                .location("üöä", 1)
                                 .build(),
                         item()
                                 .id("a", "d", 5)
                                 .addCoveredId("c", "d", 5)
                                 .addNeedsArtifactType("b")
-                                .location("üöä", 5)
+                                .location("üöä", 4)
                                 .forwards(true)
                                 .build()));
     }

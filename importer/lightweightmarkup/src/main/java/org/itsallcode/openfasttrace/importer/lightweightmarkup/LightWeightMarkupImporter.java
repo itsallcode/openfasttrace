@@ -77,7 +77,7 @@ public abstract class LightWeightMarkupImporter {
             }
         } catch (final IOException exception) {
             throw new ImporterException(
-                    "Error reading \"" + this.file.getPath() + "\" at line " + this.lineNumber,
+                    "Error reading '" + this.file.getPath() + "' at line " + this.lineNumber,
                     exception);
 
         }
@@ -208,7 +208,7 @@ public abstract class LightWeightMarkupImporter {
     }
 
     /**
-     * Safe the previous line as potential title for the next specification item.
+     * Save the previous line as potential title for the next specification item.
      * <p>
      * This is useful for markup that uses titles that are defined by being
      * underlined with special characters in the

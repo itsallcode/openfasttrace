@@ -704,7 +704,7 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
         
     original-requirement-id = requirement-id
 
-The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test.
+The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
 
     arch --> dsn, itest : req~skip-this-requirement~1
  

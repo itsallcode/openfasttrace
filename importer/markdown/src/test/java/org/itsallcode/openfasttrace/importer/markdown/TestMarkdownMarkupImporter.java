@@ -19,6 +19,11 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
 {
     private final static ImporterFactory importerFactory = new MarkdownImporterFactory();
 
+    TestMarkdownMarkupImporter()
+    {
+        super(0);
+    }
+
     @Override
     protected ImporterFactory getImporterFactory()
     {

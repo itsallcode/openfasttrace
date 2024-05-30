@@ -9,6 +9,7 @@ import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.ru
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
@@ -21,10 +22,12 @@ import org.junit.jupiter.params.provider.*;
 public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final String NL = System.lineSeparator();
+    private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
+    private final int titleLocationOffset;
 
-    protected AbstractLightWeightMarkupImporterTest()
+    protected AbstractLightWeightMarkupImporterTest(final int titleLocationOffset)
     {
-        // Intentionally empty to satisfy compile checks.
+        this.titleLocationOffset = titleLocationOffset;
     }
 
     protected abstract String formatTitle(final String title, int level);
@@ -55,7 +58,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
     private void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        assertImportWithFactory(path, input, matcher, getImporterFactory());
+        assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
+    }
+
+    private String processTextInput(final String input)
+    {
+        return TITLE_PLACEHOLDER.matcher(input)
+                .replaceAll(match -> formatTitle(match.group(1), Integer.parseInt(match.group(2))));
     }
 
     protected abstract ImporterFactory getImporterFactory();
@@ -258,7 +267,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testMultipleForwardsInARow()
     {
         assertImport("fwd.md", """
-                # A Collection of Different Forwards
+                ${title("A Collection of Different Forwards", 1)}
                 * `arch --> dsn : req~foo~1`
                 * arch  -->dsn  : req~bar~2   with a comment
                 dsn-->impl      :    req~zoo~3
@@ -267,17 +276,17 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         item()
                                 .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 2)
+                                .forwards(true).location("fwd.md", 2 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 3)
+                                .forwards(true).location("fwd.md", 3 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
                                 .addNeedsArtifactType("impl")
-                                .forwards(true).location("fwd.md", 4)
+                                .forwards(true).location("fwd.md", 4 + titleLocationOffset)
                                 .build()));
     }
 
@@ -288,7 +297,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
         assertImport("üöä", """
                 art~name~9876
 
-                # Forwards
+                ${title("Forwards", 1)}
                 a-->b:c~d~5
                 """,
                 contains(
@@ -358,7 +367,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testComplexRequirement()
     {
         assertImport("file name", """
-                # Requirement Title
+                ${title("Requirement Title", 1)}
                 `type~id~1` <a id="type~id~1"></a>
                 Description
 
@@ -395,7 +404,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .addDependOnId(SpecificationItemId
                                 .parseId("configuration~blubb.blah.blah~4711"))
                         .addDependOnId(SpecificationItemId.parseId("db~blah.blubb~42"))
-                        .location("file name", 2)
+                        .location("file name", 2 + titleLocationOffset)
                         .build()));
     }
 
@@ -476,7 +485,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     {
         assertImport("umlauts",
                 """
-                        ### Die Implementierung muss den Zustand einzelner Zellen ändern
+                        ${title("Die Implementierung muss den Zustand einzelner Zellen ändern", 3)}
                         `req~zellzustandsänderung~1
                         Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
                         Needs: arch
@@ -486,7 +495,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
-                        .location("umlauts", 2).addNeedsArtifactType("arch")
+                        .location("umlauts", 2 + titleLocationOffset).addNeedsArtifactType("arch")
                         .build()));
     }
 }

@@ -19,6 +19,11 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 {
     private final static ImporterFactory importerFactory = new RestructuredTextImporterFactory();
 
+    TestRestructuredTextImporter()
+    {
+        super(1);
+    }
+
     @Override
     protected ImporterFactory getImporterFactory()
     {

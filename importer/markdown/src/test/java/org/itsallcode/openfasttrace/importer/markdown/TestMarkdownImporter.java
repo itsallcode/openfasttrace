@@ -3,9 +3,10 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
@@ -95,12 +96,13 @@ class TestMarkdownImporter
 
     @Test
     void testRunImportHandlesIOException(@Mock final InputFile fileMock, @Mock final ImportEventListener listenerMock,
-                                        @Mock final BufferedReader readerMock) throws IOException {
+            @Mock final BufferedReader readerMock) throws IOException
+    {
         when(fileMock.getPath()).thenReturn("/the/file");
         when(fileMock.createReader()).thenReturn(readerMock);
         when(readerMock.readLine()).thenThrow(new IOException("Dummy exception"));
         final MarkdownImporter importer = new MarkdownImporter(fileMock, listenerMock);
         final ImporterException exception = assertThrows(ImporterException.class, importer::runImport);
-        assertThat(exception.getMessage(), equalTo("Error reading \"/the/file\" at line 0"));
+        assertThat(exception.getMessage(), equalTo("Error reading '/the/file' at line 0: Dummy exception"));
     }
 }

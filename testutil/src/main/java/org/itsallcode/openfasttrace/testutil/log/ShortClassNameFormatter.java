@@ -7,9 +7,16 @@ import java.time.ZonedDateTime;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
-public class ShortClassNameFormatter extends Formatter
+public final class ShortClassNameFormatter extends Formatter
 {
     private static final String FORMAT = "%1$tF %1$tT [%4$s] %2$s - %5$s %6$s%n";
+
+    public ShortClassNameFormatter()
+    {
+        // Suppress warning "class ... declares no explicit constructors,
+        // thereby exposing
+        // a default constructor"
+    }
 
     @Override
     public String format(final LogRecord logRecord)

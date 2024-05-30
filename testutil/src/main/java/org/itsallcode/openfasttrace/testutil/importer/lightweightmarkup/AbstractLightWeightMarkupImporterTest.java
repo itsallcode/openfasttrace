@@ -7,6 +7,7 @@ import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item
 import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
 import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.runImporterOnText;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,16 +37,23 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testRequirementIdDetected(final String markdownId, final String expectedArtifactType,
             final String expectedName, final int expectedRevision)
     {
-        assertImport("/doc/spec.md/", markdownId, contains(item()
+        final Path path = Path.of("/doc/spec.md/");
+        assertImport(path, markdownId, contains(item()
                 .id(expectedArtifactType, expectedName, expectedRevision)
-                .location("/doc/spec.md", 1)
+                .location(path.toString(), 1)
                 .build()));
     }
 
-    private void assertImport(final String filename, final String input,
+    private void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        assertImportWithFactory(filename, input, matcher, getImporterFactory());
+        assertImport(Path.of(path), input, matcher);
+    }
+
+    private void assertImport(final Path path, final String input,
+            final Matcher<Iterable<? extends SpecificationItem>> matcher)
+    {
+        assertImportWithFactory(path, input, matcher, getImporterFactory());
     }
 
     protected abstract ImporterFactory getImporterFactory();
@@ -143,7 +151,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("tags")
     void testTags(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText("irrelevant-filename", "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getTags(), equalTo(expected));
     }
@@ -442,7 +450,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("needsCoverage")
     void testNeedsCoverage(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText("irrelevant-filename", "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
     }

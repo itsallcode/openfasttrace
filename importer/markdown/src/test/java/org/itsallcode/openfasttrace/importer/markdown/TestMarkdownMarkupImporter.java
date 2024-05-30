@@ -4,6 +4,8 @@ import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
 
+import java.nio.file.Path;
+
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -26,7 +28,7 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
         private void assertImport(final String filename, final String input,
                         final Matcher<Iterable<? extends SpecificationItem>> matcher)
         {
-                assertImportWithFactory(filename, input, matcher, importerFactory);
+                assertImportWithFactory(Path.of(filename), input, matcher, importerFactory);
         }
 
         // [utest -> dsn~md.specification-item-title~1]

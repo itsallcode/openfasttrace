@@ -22,8 +22,8 @@ public abstract class LightWeightMarkupImporter
     protected final ImportEventListener listener;
     /** Statemachine for a line-by-line parser */
     protected final LineParserStateMachine stateMachine;
-    private String lastTitle = null;
-    private String lastLine = null;
+    private String lastTitle;
+    private String lastLine;
     private boolean inSpecificationItem;
     private int lineNumber;
 
@@ -38,7 +38,7 @@ public abstract class LightWeightMarkupImporter
     // Possible 'this' escape before subclass is fully initialized:
     // LineParserStateMachine constructor does not use 'this'.
     @SuppressWarnings("this-escape")
-    public LightWeightMarkupImporter(final InputFile fileName, final ImportEventListener listener)
+    protected LightWeightMarkupImporter(final InputFile fileName, final ImportEventListener listener)
     {
         this.file = fileName;
         this.listener = listener;
@@ -76,7 +76,7 @@ public abstract class LightWeightMarkupImporter
      */
     public void runImport()
     {
-        LOG.fine(() -> "Starting import of file " + this.file);
+        LOG.fine(() -> "Starting import of file '" + this.file + "'");
         String line;
         this.lineNumber = 0;
         try (BufferedReader reader = this.file.createReader())

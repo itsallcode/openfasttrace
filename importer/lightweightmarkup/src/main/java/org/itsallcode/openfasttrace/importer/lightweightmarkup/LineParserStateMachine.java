@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import java.util.logging.Logger;
-
 import java.util.regex.Matcher;
 
 /**
@@ -9,7 +8,8 @@ import java.util.regex.Matcher;
  * <p>
  * Before the state machine is run, it needs to be configured with a transition
  * table in the constructor.
- * </p><p>
+ * </p>
+ * <p>
  * Each step of the state machine gets a portion of the text to be imported as
  * input. The machine checks the current state and the input on each step and
  * decides on resulting state and action depending on the configuration provided
@@ -46,6 +46,7 @@ public class LineParserStateMachine
      */
     public void step(final String line)
     {
+        boolean matched = false;
         for (final Transition entry : this.transitions)
         {
             if ((this.state == entry.getFrom()) && matchToken(line, entry))
@@ -53,8 +54,13 @@ public class LineParserStateMachine
                 LOG.finest(() -> entry + " : '" + line + "'");
                 entry.getTransitionAction().transit();
                 this.state = entry.getTo();
+                matched = true;
                 break;
             }
+        }
+        if (!matched)
+        {
+            LOG.finest(() -> "No match for '" + line + "'");
         }
     }
 

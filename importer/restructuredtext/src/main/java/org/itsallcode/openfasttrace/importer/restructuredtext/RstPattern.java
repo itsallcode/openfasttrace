@@ -1,15 +1,17 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
+import java.util.regex.Pattern;
+
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
 
-import java.util.regex.Pattern;
-
 /**
- * Patterns that describe tokens to be recognized within reStructured Text specifications.
+ * Patterns that describe tokens to be recognized within reStructured Text
+ * specifications.
  */
-enum RstPattern implements LinePattern {
+enum RstPattern implements LinePattern
+{
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
 
@@ -72,7 +74,7 @@ enum RstPattern implements LinePattern {
         return this.pattern;
     }
 
-    private static class PatternConstants
+    private static final class PatternConstants
     {
         private PatternConstants()
         {
@@ -85,7 +87,7 @@ enum RstPattern implements LinePattern {
         // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
-                + "(SpecificationItemId.ID_PATTERN)" //
+                + "(" + SpecificationItemId.ID_PATTERN + ")" //
                 + "(?:\\W.*)?";
     }
 }

@@ -25,6 +25,11 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
         return importerFactory;
     }
 
+    protected String formatTitle(final String title, final int level)
+    {
+        return title + "\n" + "=".repeat(title.length());
+    }
+
     private void assertImport(final String filename, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {

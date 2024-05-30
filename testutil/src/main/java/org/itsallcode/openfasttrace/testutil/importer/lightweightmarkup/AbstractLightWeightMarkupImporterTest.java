@@ -27,6 +27,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
         // Intentionally empty to satisfy compile checks.
     }
 
+    protected abstract String formatTitle(final String title, int level);
+
     // [utest -> dsn~md.specification-item-id-format~3]
     @CsvSource({
             "at~name~67, at, name, 67",
@@ -281,10 +283,9 @@ public abstract class AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
-    void testArtifactForwardingAfterARegularSpecificationItem()
+    public void testArtifactForwardingAfterARegularSpecificationItem()
     {
         assertImport("üöä", """
-
                 art~name~9876
 
                 # Forwards

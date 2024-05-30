@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
@@ -15,6 +16,8 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 
 public final class ImportAssertions
 {
+    private static final Logger LOGGER = Logger.getLogger(ImportAssertions.class.getName());
+
     private ImportAssertions()
     {
         // Prevent instantiation.
@@ -40,6 +43,7 @@ public final class ImportAssertions
     public static List<SpecificationItem> runImporterOnText(final Path path, final String text,
             final ImporterFactory importerFactory)
     {
+        LOGGER.fine("Importing text: ***\n" + text + "\n***");
         final BufferedReader reader = new BufferedReader(new StringReader(text));
         final InputFile file = StreamInput.forReader(path, reader);
         final SpecificationListBuilder specItemBuilder = SpecificationListBuilder.create();

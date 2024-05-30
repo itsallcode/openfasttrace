@@ -12,16 +12,18 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.Transition;
  * Importer for OFT augmented reStructuredText.
  * <p>
  * The purpose of this importer is to find specification items that follow a
- * certain structure inside reStructuredText documents. It is not the goal to ingest the
- * complete reStructuredText document though, only the specification items. Also, the
- * hierarchical structure of the document itself has no impact on the
- * specification items. OFT just extracts a flat list. Linking the items is
- * explicitly not the purpose of the importer.
+ * certain structure inside reStructuredText documents. It is not the goal to
+ * ingest the complete reStructuredText document though, only the specification
+ * items. Also, the hierarchical structure of the document itself has no impact
+ * on the specification items. OFT just extracts a flat list. Linking the items
+ * is explicitly not the purpose of the importer.
  * </p>
  */
-public class RestructuredTextImporter extends LightWeightMarkupImporter implements Importer {
+public class RestructuredTextImporter extends LightWeightMarkupImporter implements Importer
+{
     /**
-     * Creates a {@link RestructuredTextImporter} object with the given parameters.
+     * Creates a {@link RestructuredTextImporter} object with the given
+     * parameters.
      *
      * @param fileName
      *            the input file to be imported
@@ -43,6 +45,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
 
             transition(TITLE      , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
             transition(TITLE      , TITLE      , RstPattern.EMPTY      , () -> {}                           ),
+            transition(TITLE      , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
             transition(TITLE      , OUTSIDE    , RstPattern.EVERYTHING , this::resetTitle                   ),
 
             transition(OUTSIDE    , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
@@ -71,6 +74,8 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(DESCRIPTION, NEEDS      , RstPattern.NEEDS      , () -> {}                           ),
             transition(DESCRIPTION, TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(DESCRIPTION, TAGS       , RstPattern.TAGS       , () -> {}                           ),
+            transition(DESCRIPTION, OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(DESCRIPTION, TITLE      , RstPattern.UNDERLINE  , this::rememberPreviousLineAsTitle  ),
             transition(DESCRIPTION, DESCRIPTION, RstPattern.EVERYTHING , this::appendDescription            ),
 
             transition(RATIONALE  , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
@@ -93,7 +98,6 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(COMMENT    , TAGS       , RstPattern.TAGS       , () -> {}                           ),
             transition(COMMENT    , COMMENT    , RstPattern.EVERYTHING , this::appendComment                ),
 
-
             // [impl->dsn~md.covers-list~1]
             transition(COVERS     , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
             transition(COVERS     , COVERS     , RstPattern.COVERS_REF , this::addCoverage                  ),
@@ -105,6 +109,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(COVERS     , COVERS     , RstPattern.EMPTY      , () -> {}                           ),
             transition(COVERS     , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(COVERS     , TAGS       , RstPattern.TAGS       , () -> {}                           ),
+            transition(COVERS     , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             // [impl->dsn~md.depends-list~1]
             transition(DEPENDS    , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
@@ -131,6 +136,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter implemen
             transition(NEEDS      , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS       , () -> {}                           ),
+            transition(NEEDS      , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             transition(TAGS       , TAGS       , RstPattern.TAG_ENTRY  , this::addTag                       ),
             transition(TAGS       , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),

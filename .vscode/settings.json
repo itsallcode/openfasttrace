@@ -15,6 +15,10 @@
             "-Djava.util.logging.config.file=src/test/resources/logging.properties"
         ]
     },
+    "[java]": {
+        "editor.tabSize": 4,
+        "editor.indentSize": "tabSize"
+    },
     "sonarlint.connectedMode.project": {
         "connectionId": "itsallcode",
         "projectKey": "org.itsallcode.openfasttrace:openfasttrace-root"

@@ -686,7 +686,7 @@ Unlike references to other requirements, artifact types are usually very short, 
 
 Covers:
 
-* `req~eb-markdown~1`
+* `req~markdown-standard-syntax~1`
 
 Needs: impl, utest
 

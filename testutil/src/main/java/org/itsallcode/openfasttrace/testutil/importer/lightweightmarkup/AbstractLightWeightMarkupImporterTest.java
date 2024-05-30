@@ -67,7 +67,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
-    // [utest -> dsn.covers-list~1]
+    // [utest -> dsn~md.covers-list~1]
     @Test
     void testSpecificationItemCoversList()
     {

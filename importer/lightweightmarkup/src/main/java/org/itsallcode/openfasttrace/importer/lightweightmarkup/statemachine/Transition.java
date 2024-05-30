@@ -1,4 +1,6 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
+
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState;
 
 /**
  * Transition in the line parser statemachine.
@@ -13,13 +15,17 @@ public class Transition
     /**
      * Create a new instance of a {@link Transition}.
      *
-     * @param from state the statemachine comes from
-     * @param to state the machine will switch to if the pattern matches
-     * @param linePattern pattern the line must match for the transition to happen
-     * @param transitionAction action that will be executed as result of the transition
+     * @param from
+     *            state the statemachine comes from
+     * @param to
+     *            state the machine will switch to if the pattern matches
+     * @param linePattern
+     *            pattern the line must match for the transition to happen
+     * @param transitionAction
+     *            action that will be executed as result of the transition
      */
     public Transition(final LineParserState from, final LineParserState to, final LinePattern linePattern,
-                      final TransitionAction transitionAction)
+            final TransitionAction transitionAction)
     {
         this.from = from;
         this.to = to;
@@ -48,7 +54,8 @@ public class Transition
     }
 
     /**
-     * Get the regular expression pattern that needs to be matched in order for the transition to happen.
+     * Get the regular expression pattern that needs to be matched in order for
+     * the transition to happen.
      *
      * @return line pattern to be matched
      */

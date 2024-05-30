@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
 
 /**
  * Patterns that describe tokens to be recognized within reStructured Text

@@ -1,11 +1,12 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
 import java.util.regex.Pattern;
 
 /**
  * Common interface for text patterns used in line parsers.
  */
-public interface LinePattern {
+public interface LinePattern
+{
     /**
      * Get the regular expression pattern associated with this line pattern.
      *

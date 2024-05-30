@@ -6,7 +6,7 @@ import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.Transition;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
 
 /**
  * Importer for OFT augmented reStructuredText.

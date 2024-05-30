@@ -2,9 +2,10 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.LineParserState.*;
 
-import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.*;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
 
 /**
  * Importer for OFT augmented Markdown.
@@ -17,7 +18,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.*;
  * explicitly not the purpose of the importer.
  * </p>
  */
-class MarkdownImporter extends LightWeightMarkupImporter implements Importer
+class MarkdownImporter extends LightWeightMarkupImporter
 {
     /**
      * Creates a {@link MarkdownImporter} object with the given parameters.

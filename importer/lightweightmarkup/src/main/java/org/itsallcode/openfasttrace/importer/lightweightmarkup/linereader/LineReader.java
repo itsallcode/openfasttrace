@@ -39,7 +39,7 @@ public class LineReader
      */
     public void readFile()
     {
-        LOG.fine(() -> "Starting import of file '" + this.file + "'");
+        LOG.finest(() -> "Starting import of file '" + this.file + "'");
         String previousLine = null;
         String currentLine = null;
         String nextLine = null;

@@ -42,20 +42,15 @@ class MarkdownImporter extends LightWeightMarkupImporter
         return new Transition[]{
                 transition(START      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(START      , TITLE      , SECTION_TITLE        , this::rememberTitle                ),
-                transition(START      , OUTSIDE    , MdPattern.FORWARD    , this::forward                      ),
-                transition(START      , OUTSIDE    , MdPattern.EVERYTHING , () -> {}                           ),
+                transition(START      , START      , MdPattern.FORWARD    , this::forward                      ),
+                transition(START      , START      , MdPattern.EVERYTHING , () -> {}                           ),
 
                 transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(TITLE      , TITLE      , SECTION_TITLE        , this::rememberTitle                ),
                 transition(TITLE      , TITLE      , MdPattern.UNDERLINE  , () -> {}                           ),
                 transition(TITLE      , TITLE      , MdPattern.EMPTY      , () -> {}                           ),
-                transition(TITLE      , OUTSIDE    , MdPattern.FORWARD    , () -> {forward(); resetTitle();}   ),
-                transition(TITLE      , OUTSIDE    , MdPattern.EVERYTHING , this::resetTitle                   ),
-
-
-                transition(OUTSIDE    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
-                transition(OUTSIDE    , OUTSIDE    , MdPattern.FORWARD    , this::forward                      ),
-                transition(OUTSIDE    , TITLE      , SECTION_TITLE        , this::rememberTitle                ),
+                transition(TITLE      , START      , MdPattern.FORWARD    , () -> {forward(); resetTitle();}   ),
+                transition(TITLE      , START      , MdPattern.EVERYTHING , this::resetTitle                   ),
 
                 transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.STATUS     , this::setStatus                    ),
@@ -118,7 +113,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(COVERS     , COVERS     , MdPattern.EMPTY      , () -> {}                           ),
                 transition(COVERS     , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(COVERS     , TAGS       , MdPattern.TAGS       , () -> {}                           ),
-                transition(COVERS     , OUTSIDE    , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
+                transition(COVERS     , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
                 // [impl->dsn~md.depends-list~1]
                 transition(DEPENDS    , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -133,7 +128,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(DEPENDS    , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(DEPENDS    , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(DEPENDS    , TAGS       , MdPattern.TAGS       , () -> {}                           ),
-                transition(DEPENDS    , OUTSIDE    , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
+                transition(DEPENDS    , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
                 // [impl->dsn~md.needs-coverage-list-single-line~2]
                 // [impl->dsn~md.needs-coverage-list~1]
@@ -148,7 +143,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(NEEDS      , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(NEEDS      , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(NEEDS      , TAGS       , MdPattern.TAGS       , () -> {}                           ),
-                transition(NEEDS      , OUTSIDE    , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
+                transition(NEEDS      , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
                 transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , this::addTag                       ),
                 transition(TAGS       , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -162,7 +157,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(TAGS       , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
-                transition(TAGS       , OUTSIDE    , MdPattern.FORWARD    , () -> {endItem(); forward();}      )
+                transition(TAGS       , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      )
         };
         // @formatter:on
     }

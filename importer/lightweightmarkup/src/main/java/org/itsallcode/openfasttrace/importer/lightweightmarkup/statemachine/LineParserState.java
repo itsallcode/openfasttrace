@@ -6,10 +6,11 @@ package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
  */
 public enum LineParserState
 {
-    /** Parser started (at beginning of the file) */
+    /**
+     * Parser started (at beginning of the file) or outside of a specification
+     * item
+     */
     START,
-    /** We are outside any specification item */
-    OUTSIDE,
     /** Inside a specification item */
     SPEC_ITEM,
     /** Inside a description section */

@@ -3,8 +3,10 @@ package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +29,26 @@ class LineParserStateMachineTest
     }
 
     @Test
-    void testMatchedTransition()
+    void testMatchedTransitionWithMock(@Mock final LinePattern patternMock)
+    {
+        when(patternMock.getMatches("line1", "line2")).thenReturn(Optional.of(List.of("result", "ignored")));
+        setupTransitions(transition(LineParserState.START, LineParserState.COMMENT, patternMock));
+        assertTransition("line1", "line2", LineParserState.COMMENT, "result");
+        verify(actionMock).transit();
+        verifyNoMoreInteractions(actionMock);
+    }
+
+    @Test
+    void testNotMatchedTransitionWithMock(@Mock final LinePattern patternMock)
+    {
+        when(patternMock.getMatches("line1", "line2")).thenReturn(Optional.empty());
+        setupTransitions(transition(LineParserState.START, LineParserState.COMMENT, patternMock));
+        assertTransition("line1", "line2", LineParserState.START, "");
+        verifyNoMoreInteractions(actionMock);
+    }
+
+    @Test
+    void testMatchedTransitionInNextLine()
     {
         setupTransitions(transition(LineParserState.START, LineParserState.COMMENT, pattern("(line)")));
         assertTransition("line", LineParserState.COMMENT, "line");

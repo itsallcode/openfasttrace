@@ -54,6 +54,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
      */
     protected abstract Transition[] configureTransitions();
 
+    @Override
     public void nextLine(final LineContext context)
     {
         this.currentContext = context;
@@ -79,6 +80,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
         return new Transition(from, to, pattern, action);
     }
 
+    @Override
     public void finishReading()
     {
         if (this.inSpecificationItem)

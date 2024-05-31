@@ -13,12 +13,16 @@ class MdSectionTitlePattern implements LinePattern
     @Override
     public Optional<List<String>> getMatches(final String line, final String nextLine)
     {
+        if (line == null)
+        {
+            return Optional.empty();
+        }
         final Optional<List<String>> hashTitle = HASH_TITLE.getMatches(line, null);
         if (hashTitle.isPresent())
         {
             return hashTitle;
         }
-        if (line != null && nextLine != null && UNDERLINE.getMatches(nextLine, null).isPresent())
+        if (nextLine != null && UNDERLINE.getMatches(nextLine, null).isPresent())
         {
             return Optional.of(List.of(line));
         }

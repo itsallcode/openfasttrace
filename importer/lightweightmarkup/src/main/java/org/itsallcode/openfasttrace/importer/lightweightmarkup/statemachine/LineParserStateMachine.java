@@ -44,7 +44,9 @@ public class LineParserStateMachine
      *            state and action
      * @param nextLine
      *            the following line or {@code null} if the current line is the
-     *            last one in the file
+     *            last one in the file. This is useful as a lookahead for
+     *            patterns that span multiple lines like underlined titles in
+     *            Markdown or RST.
      */
     public void step(final String line, final String nextLine)
     {

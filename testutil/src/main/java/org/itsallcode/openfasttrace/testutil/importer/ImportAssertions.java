@@ -43,7 +43,7 @@ public final class ImportAssertions
     public static List<SpecificationItem> runImporterOnText(final Path path, final String text,
             final ImporterFactory importerFactory)
     {
-        LOGGER.fine("Importing text: ***\n" + text + "\n***");
+        LOGGER.finest("Importing text: ***\n" + text + "\n***");
         final BufferedReader reader = new BufferedReader(new StringReader(text));
         final InputFile file = StreamInput.forReader(path, reader);
         final SpecificationListBuilder specItemBuilder = SpecificationListBuilder.create();

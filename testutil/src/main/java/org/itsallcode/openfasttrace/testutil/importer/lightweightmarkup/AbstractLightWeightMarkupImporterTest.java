@@ -240,7 +240,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
-    public void testForwardingAfterTags()
+    void testForwardingAfterTags()
     {
         assertImport("1.2.md", """
                 dsn~foo~1
@@ -297,7 +297,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~md.artifact-forwarding-notation~1]
     @Test
-    public void testArtifactForwardingAfterARegularSpecificationItem()
+    void testArtifactForwardingAfterARegularSpecificationItem()
     {
         assertImport("üöä", """
                 art~name~9876
@@ -507,7 +507,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     }
 
     @Test
-    public void testHeaderBelongsToNextItem()
+    void testHeaderBelongsToNextItem()
     {
         assertImport("file",
                 """

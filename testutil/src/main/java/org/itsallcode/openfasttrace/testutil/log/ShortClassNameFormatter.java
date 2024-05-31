@@ -7,6 +7,18 @@ import java.time.ZonedDateTime;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * This {@code java.util.logging} {@link Formatter} is based on
+ * {@link java.util.logging.SimpleFormatter}. It uses a fixed, single-line
+ * format and shortens the class name of the logger to the last part of the
+ * fully qualified class name.
+ * <p>
+ * Configure the formatter in {@code logging.properties} like this:
+ * 
+ * <pre>
+ * java.util.logging.ConsoleHandler.formatter = org.itsallcode.openfasttrace.testutil.log.ShortClassNameFormatter
+ * </pre>
+ */
 public final class ShortClassNameFormatter extends Formatter
 {
     private static final String FORMAT = "%1$tF %1$tT [%4$s] %2$s - %5$s %6$s%n";
@@ -14,8 +26,7 @@ public final class ShortClassNameFormatter extends Formatter
     public ShortClassNameFormatter()
     {
         // Suppress warning "class ... declares no explicit constructors,
-        // thereby exposing
-        // a default constructor"
+        // thereby exposing a default constructor"
     }
 
     @Override

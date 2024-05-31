@@ -313,7 +313,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("a", "d", 5)
                                 .addCoveredId("c", "d", 5)
                                 .addNeedsArtifactType("b")
-                                .location("üöä", 4)
+                                .location("üöä", 4 + titleLocationOffset)
                                 .forwards(true)
                                 .build()));
     }
@@ -526,7 +526,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         item().id(SpecificationItemId.createId("req", "item2", 1))
                                 .title("Item 2")
                                 .description("Item 2 description")
-                                .location("file", 6 + titleLocationOffset)
+                                .location("file", 6 + (2 * titleLocationOffset))
                                 .build()));
     }
 }

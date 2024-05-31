@@ -87,7 +87,13 @@ class LineParserStateMachineTest
     private void assertTransition(final String inputLine, final LineParserState expectedState,
             final String expectedToken)
     {
-        this.stateMachine.step(inputLine);
+        assertTransition(inputLine, null, expectedState, expectedToken);
+    }
+
+    private void assertTransition(final String inputLine, final String nextInputLine,
+            final LineParserState expectedState, final String expectedToken)
+    {
+        this.stateMachine.step(inputLine, nextInputLine);
         assertAll(() -> assertThat("next state", this.stateMachine.getState(), equalTo(expectedState)),
                 () -> assertThat("token", this.stateMachine.getLastToken(), equalTo(expectedToken)));
     }

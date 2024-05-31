@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -13,4 +15,19 @@ public interface LinePattern
      * @return regular expression pattern
      */
     Pattern getPattern();
+
+    default Optional<List<String>> getMatches(final String line, final String nextLine)
+    {
+        final Matcher matcher = getPattern().matcher(line);
+        if (matcher.matches())
+        {
+            final List<String> matches = new ArrayList<>();
+            for (int i = 1; i <= matcher.groupCount(); i++)
+            {
+                matches.add(matcher.group(i));
+            }
+            return Optional.of(matches);
+        }
+        return Optional.empty();
+    }
 }

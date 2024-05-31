@@ -1,7 +1,8 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 
 /**
  * This machine implements the core of a state based parser.
@@ -43,12 +44,12 @@ public class LineParserStateMachine
      *            the text fragment on which the state machine decides the next
      *            state and action
      */
-    public void step(final String line)
+    public void step(final String line, final String nextLine)
     {
         boolean matched = false;
         for (final Transition entry : this.transitions)
         {
-            if ((this.state == entry.getFrom()) && matchToken(line, entry))
+            if ((this.state == entry.getFrom()) && matchToken(line, nextLine, entry))
             {
                 LOG.finest(() -> entry + " : '" + line + "'");
                 entry.getTransitionAction().transit();
@@ -63,16 +64,20 @@ public class LineParserStateMachine
         }
     }
 
-    private boolean matchToken(final String line, final Transition entry)
+    private boolean matchToken(final String line, final String nextLine, final Transition entry)
     {
-        boolean matches = false;
-        final Matcher matcher = entry.getLinePattern().getPattern().matcher(line);
-        if (matcher.matches())
+        final Optional<List<String>> matches = entry.getLinePattern().getMatches(line, nextLine);
+        if (matches.isPresent())
         {
-            this.lastToken = (matcher.groupCount() == 0) ? "" : matcher.group(1);
-            matches = true;
+            final List<String> groups = matches.get();
+            this.lastToken = groups.isEmpty() ? "" : groups.get(0);
+            return true;
         }
-        return matches;
+        else
+        {
+            this.lastToken = "";
+            return false;
+        }
     }
 
     /**

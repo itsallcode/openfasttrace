@@ -17,7 +17,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
     protected final InputFile file;
     /** Listener for import events */
     protected final ImportEventListener listener;
-    /** Statemachine for a line-by-line parser */
+    /** State machine for a line-by-line parser */
     protected final LineParserStateMachine stateMachine;
     private String lastTitle;
     private boolean inSpecificationItem;
@@ -60,7 +60,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
     public void nextLine(final LineContext context)
     {
         this.currentContext = context;
-        this.stateMachine.step(this.currentContext.currentLine());
+        this.stateMachine.step(this.currentContext.currentLine(), this.currentContext.nextLine());
     }
 
     /**
@@ -221,20 +221,6 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
         {
             this.listener.addNeededArtifactType(artifactType.trim());
         }
-    }
-
-    /**
-     * Save the previous line as potential title for the next specification
-     * item.
-     * <p>
-     * This is useful for markup that uses titles that are defined by being
-     * underlined with special characters in the line that follows the actual
-     * title.
-     * </p>
-     */
-    protected void rememberPreviousLineAsTitle()
-    {
-        this.lastTitle = this.currentContext.previousLine();
     }
 
     /**

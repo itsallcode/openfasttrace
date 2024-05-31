@@ -5,6 +5,7 @@ import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachi
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
 
 /**
@@ -20,6 +21,8 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Tran
  */
 public class RestructuredTextImporter extends LightWeightMarkupImporter
 {
+    private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
+
     /**
      * Creates a {@link RestructuredTextImporter} object with the given
      * parameters.
@@ -40,22 +43,22 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
         // @formatter:off
         return new Transition[]{
             transition(START      , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
-            transition(START      , OUTSIDE    , RstPattern.FORWARD    , this::forward                      ),
-            transition(START      , OUTSIDE    , RstPattern.EVERYTHING , () -> {}                           ),
+            transition(START      , START      , RstPattern.FORWARD    , this::forward                      ),
+            transition(START      , TITLE      , SECTION_TITLE         , this::rememberTitle                ),
+            transition(START      , START      , RstPattern.EVERYTHING , () -> {}                           ),
 
+            transition(TITLE      , TITLE      , RstPattern.UNDERLINE  , () -> {}                           ),
+            transition(TITLE      , TITLE      , SECTION_TITLE         , this::rememberTitle                ),
             transition(TITLE      , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
             transition(TITLE      , TITLE      , RstPattern.EMPTY      , () -> {}                           ),
-            transition(TITLE      , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
-            transition(TITLE      , OUTSIDE    , RstPattern.EVERYTHING , this::resetTitle                   ),
-
-            transition(OUTSIDE    , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
-            transition(OUTSIDE    , OUTSIDE    , RstPattern.FORWARD    , this::forward                      ),
-            transition(OUTSIDE    , TITLE      , RstPattern.UNDERLINE  , this::rememberPreviousLineAsTitle  ),
+            transition(TITLE      , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(TITLE      , START      , RstPattern.EVERYTHING , this::resetTitle                   ),
 
             transition(SPEC_ITEM  , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
             transition(SPEC_ITEM  , SPEC_ITEM  , RstPattern.STATUS     , this::setStatus                    ),
             transition(SPEC_ITEM  , RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(SPEC_ITEM  , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
+            transition(SPEC_ITEM  , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(SPEC_ITEM  , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(SPEC_ITEM  , DEPENDS    , RstPattern.DEPENDS    , () -> {}                           ),
             transition(SPEC_ITEM  , NEEDS      , RstPattern.NEEDS_INT  , this::addNeeds                     ),
@@ -66,6 +69,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(SPEC_ITEM  , DESCRIPTION, RstPattern.NOT_EMPTY  , this::beginDescription             ),
 
             transition(DESCRIPTION, SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(DESCRIPTION, TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(DESCRIPTION, RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(DESCRIPTION, COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
             transition(DESCRIPTION, COVERS     , RstPattern.COVERS     , () -> {}                           ),
@@ -74,11 +78,12 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(DESCRIPTION, NEEDS      , RstPattern.NEEDS      , () -> {}                           ),
             transition(DESCRIPTION, TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(DESCRIPTION, TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(DESCRIPTION, OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
-            transition(DESCRIPTION, TITLE      , RstPattern.UNDERLINE  , this::rememberPreviousLineAsTitle  ),
+            transition(DESCRIPTION, START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(DESCRIPTION, TITLE      , SECTION_TITLE         , this::rememberTitle                ),
             transition(DESCRIPTION, DESCRIPTION, RstPattern.EVERYTHING , this::appendDescription            ),
 
             transition(RATIONALE  , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(RATIONALE  , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(RATIONALE  , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
             transition(RATIONALE  , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(RATIONALE  , DEPENDS    , RstPattern.DEPENDS    , () -> {}                           ),
@@ -89,6 +94,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(RATIONALE  , RATIONALE  , RstPattern.EVERYTHING , this::appendRationale              ),
 
             transition(COMMENT    , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(COMMENT    , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(COMMENT    , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(COMMENT    , DEPENDS    , RstPattern.DEPENDS    , () -> {}                           ),
             transition(COMMENT    , NEEDS      , RstPattern.NEEDS_INT  , this::addNeeds                     ),
@@ -100,6 +106,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
 
             // [impl->dsn~md.covers-list~1]
             transition(COVERS     , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(COVERS     , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(COVERS     , COVERS     , RstPattern.COVERS_REF , this::addCoverage                  ),
             transition(COVERS     , RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(COVERS     , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
@@ -109,10 +116,11 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(COVERS     , COVERS     , RstPattern.EMPTY      , () -> {}                           ),
             transition(COVERS     , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(COVERS     , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(COVERS     , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(COVERS     , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             // [impl->dsn~md.depends-list~1]
             transition(DEPENDS    , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(DEPENDS    , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(DEPENDS    , DEPENDS    , RstPattern.DEPENDS_REF, this::addDependency                ),
             transition(DEPENDS    , RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(DEPENDS    , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
@@ -123,11 +131,12 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(DEPENDS    , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(DEPENDS    , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(DEPENDS    , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             // [impl->dsn~md.needs-coverage-list-single-line~2]
             // [impl->dsn~md.needs-coverage-list~1]
             transition(NEEDS      , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
+            transition(NEEDS      , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(NEEDS      , RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(NEEDS      , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
             transition(NEEDS      , DEPENDS    , RstPattern.DEPENDS    , () -> {}                           ),
@@ -137,9 +146,10 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(NEEDS      , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(NEEDS      , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(NEEDS      , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             transition(TAGS       , TAGS       , RstPattern.TAG_ENTRY  , this::addTag                       ),
+            transition(TAGS       , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(TAGS       , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),
             transition(TAGS       , RATIONALE  , RstPattern.RATIONALE  , this::beginRationale               ),
             transition(TAGS       , COMMENT    , RstPattern.COMMENT    , this::beginComment                 ),
@@ -150,7 +160,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(TAGS       , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(TAGS       , TAGS       , RstPattern.TAGS       , () -> {}                           ),
             transition(TAGS       , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
-            transition(TAGS       , OUTSIDE    , RstPattern.FORWARD    , () -> {endItem(); forward();}      )
+            transition(TAGS       , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      )
         };
         // @formatter:on
     }

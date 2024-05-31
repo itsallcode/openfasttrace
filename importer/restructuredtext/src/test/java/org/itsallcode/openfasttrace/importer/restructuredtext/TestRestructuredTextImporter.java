@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private final static ImporterFactory importerFactory = new RestructuredTextImporterFactory();
+    private static final ImporterFactory importerFactory = new RestructuredTextImporterFactory();
 
     TestRestructuredTextImporter()
     {
@@ -142,37 +142,5 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                         .id(SpecificationItemId.createId("req", "too-short", 111))
                         .location("z", 3)
                         .build()));
-    }
-
-    @Override
-    @Test
-    public void testArtifactForwardingAfterARegularSpecificationItem()
-    {
-        assertImport("üöä", """
-                art~name~9876
-
-                Forwards
-                ========
-                a-->b:c~d~5
-                """,
-                contains(
-                        item()
-                                .id("art", "name", 9876)
-                                .description("Forwards")
-                                .location("üöä", 1)
-                                .build(),
-                        item()
-                                .id("a", "d", 5)
-                                .addCoveredId("c", "d", 5)
-                                .addNeedsArtifactType("b")
-                                .location("üöä", 5)
-                                .forwards(true)
-                                .build()));
-    }
-
-    @Test
-    public void testHeaderBelongsToNextItem()
-    {
-        super.testHeaderBelongsToNextItem();
     }
 }

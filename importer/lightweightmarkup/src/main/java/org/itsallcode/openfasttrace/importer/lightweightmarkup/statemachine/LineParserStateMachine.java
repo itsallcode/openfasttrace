@@ -38,11 +38,14 @@ public class LineParserStateMachine
     }
 
     /**
-     * Step the state machine
+     * Step the state machine.
      *
      * @param line
      *            the text fragment on which the state machine decides the next
      *            state and action
+     * @param nextLine
+     *            the following line or {@code null} if the current line is the
+     *            last one in the file
      */
     public void step(final String line, final String nextLine)
     {
@@ -90,6 +93,14 @@ public class LineParserStateMachine
         return this.lastToken;
     }
 
+    /**
+     * Get the current state of the state machine.
+     * <p>
+     * This method is package private because it used only for testing.
+     * </p>
+     * 
+     * @return the current state of the state machine
+     */
     LineParserState getState()
     {
         return this.state;

@@ -41,9 +41,6 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
         this.stateMachine = new LineParserStateMachine(configureTransitions());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void runImport()
     {

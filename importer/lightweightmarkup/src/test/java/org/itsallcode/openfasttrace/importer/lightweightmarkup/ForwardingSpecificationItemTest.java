@@ -1,13 +1,12 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.junit.jupiter.api.Test;
 
 class ForwardingSpecificationItemTest
 {

@@ -7,6 +7,9 @@ import java.util.logging.Logger;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
+/**
+ * Read a file line by line and call a callback for each line.
+ */
 public class LineReader
 {
     private static final Logger LOG = Logger.getLogger(LineReader.class.getName());
@@ -14,6 +17,14 @@ public class LineReader
     private final InputFile file;
     private final LineReaderCallback callback;
 
+    /**
+     * Create a new {@link LineReader}.
+     * 
+     * @param file
+     *            the file to read
+     * @param callback
+     *            the callback to call for each line
+     */
     public LineReader(final InputFile file, final LineReaderCallback callback)
     {
         this.file = file;
@@ -21,7 +32,10 @@ public class LineReader
     }
 
     /**
-     * Start reading the file and call the callback for each line.
+     * Start reading the file and call
+     * {@link LineReaderCallback#nextLine(LineContext)} for each line. After
+     * reading the last line, this will call
+     * {@link LineReaderCallback#finishReading()}.
      */
     public void readFile()
     {

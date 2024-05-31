@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface LinePattern
 {
     /**
-     * Get the matches groups of the regular expression pattern in the given
+     * Get the matching groups of the regular expression pattern in the given
      * line and its following line.
      * <p>
      * Implementors are free to ignore the following line if it is not needed.

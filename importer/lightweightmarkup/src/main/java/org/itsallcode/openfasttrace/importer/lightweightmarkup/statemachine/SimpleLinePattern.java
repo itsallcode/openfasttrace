@@ -4,7 +4,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SimpleLinePattern implements LinePattern
+/**
+ * Simple {@link LinePattern} implementation that only considers the current
+ * line and not the following line.
+ */
+public final class SimpleLinePattern implements LinePattern
 {
     private final Pattern pattern;
 
@@ -13,11 +17,20 @@ public class SimpleLinePattern implements LinePattern
         this.pattern = pattern;
     }
 
+    /**
+     * Create a new instance of a {@link SimpleLinePattern}.
+     * 
+     * @param pattern
+     *            the regular expression pattern to match, potentially
+     *            containing groups, see {@link Pattern#compile(String)}
+     * @return a new instance of a {@link SimpleLinePattern}
+     */
     public static SimpleLinePattern of(final String pattern)
     {
         return new SimpleLinePattern(Pattern.compile(pattern));
     }
 
+    @Override
     public Optional<List<String>> getMatches(final String line, final String nextLine)
     {
         final Matcher matcher = pattern.matcher(line);

@@ -75,11 +75,6 @@ enum MdPattern
 
     private static final class PatternConstants
     {
-        private PatternConstants()
-        {
-            // not instantiable
-        }
-
         public static final String ARTIFACT_TYPE = "[a-zA-Z]+";
         public static final String BULLETS = "[+*-]";
         private static final String UP_TO_3_WHITESPACES = "\\s{0,3}";
@@ -88,5 +83,10 @@ enum MdPattern
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
                 + "(" + SpecificationItemId.ID_PATTERN + ")" //
                 + "(?:\\W.*)?";
+
+        private PatternConstants()
+        {
+            // not instantiable
+        }
     }
 }

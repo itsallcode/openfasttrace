@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -34,7 +33,7 @@ public class LineParserStateMachine
      */
     public LineParserStateMachine(final Transition[] transitions)
     {
-        this.transitions = transitions;
+        this.transitions = Arrays.copyOf(transitions, transitions.length);
     }
 
     /**

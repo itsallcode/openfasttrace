@@ -5,8 +5,7 @@ import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachi
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
  * Importer for OFT augmented reStructuredText.
@@ -131,7 +130,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(DEPENDS    , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(DEPENDS    , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(DEPENDS    , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(DEPENDS    , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             // [impl->dsn~md.needs-coverage-list-single-line~2]
             // [impl->dsn~md.needs-coverage-list~1]
@@ -146,7 +145,7 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(NEEDS      , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
             transition(NEEDS      , TAGS       , RstPattern.TAGS       , () -> {}                           ),
-            transition(NEEDS      , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
+            transition(NEEDS      , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
             transition(TAGS       , TAGS       , RstPattern.TAG_ENTRY  , this::addTag                       ),
             transition(TAGS       , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
@@ -160,8 +159,14 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
             transition(TAGS       , COVERS     , RstPattern.COVERS     , () -> {}                           ),
             transition(TAGS       , TAGS       , RstPattern.TAGS       , () -> {}                           ),
             transition(TAGS       , TAGS       , RstPattern.TAGS_INT   , this::addTag                       ),
-            transition(TAGS       , START    , RstPattern.FORWARD    , () -> {endItem(); forward();}      )
+            transition(TAGS       , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      )
         };
         // @formatter:on
+    }
+
+    private static Transition transition(final LineParserState from, final LineParserState to,
+            final RstPattern pattern, final TransitionAction action)
+    {
+        return new Transition(from, to, pattern.getPattern(), action);
     }
 }

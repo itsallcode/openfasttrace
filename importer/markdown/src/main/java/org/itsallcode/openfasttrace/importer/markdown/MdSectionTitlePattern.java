@@ -2,31 +2,23 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
 
 class MdSectionTitlePattern implements LinePattern
 {
-    private static final Pattern UNDERLINE = MdPattern.UNDERLINE.getPattern();
-    private static final Pattern HASH_TITLE = MdPattern.TITLE.getPattern();
-
-    @Override
-    public Pattern getPattern()
-    {
-        throw new UnsupportedOperationException("Unimplemented method 'getPattern()'. Use 'getMatches()' instead.");
-    }
+    private static final LinePattern UNDERLINE = MdPattern.UNDERLINE.getPattern();
+    private static final LinePattern HASH_TITLE = MdPattern.TITLE.getPattern();
 
     @Override
     public Optional<List<String>> getMatches(final String line, final String nextLine)
     {
-        final Matcher hashTitleMatcher = HASH_TITLE.matcher(line);
-        if (hashTitleMatcher.matches())
+        final Optional<List<String>> hashTitle = HASH_TITLE.getMatches(line, null);
+        if (hashTitle.isPresent())
         {
-            return Optional.of(List.of(hashTitleMatcher.group(1)));
+            return hashTitle;
         }
-        if (line != null && nextLine != null && UNDERLINE.matcher(nextLine).matches())
+        if (line != null && nextLine != null && UNDERLINE.getMatches(nextLine, null).isPresent())
         {
             return Optional.of(List.of(line));
         }

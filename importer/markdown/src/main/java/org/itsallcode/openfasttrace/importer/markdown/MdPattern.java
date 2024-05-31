@@ -1,16 +1,15 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
-import java.util.regex.Pattern;
-
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.SimpleLinePattern;
 
 /**
  * Patterns that describe tokens to be recognized within Markdown-style
  * specifications.
  */
-enum MdPattern implements LinePattern
+enum MdPattern
 {
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
@@ -57,11 +56,11 @@ enum MdPattern implements LinePattern
     UNDERLINE("([=-]{3,})\\s*");
     // @formatter:on
 
-    private final Pattern pattern;
+    private final LinePattern pattern;
 
     MdPattern(final String regularExpression)
     {
-        this.pattern = Pattern.compile(regularExpression);
+        this.pattern = SimpleLinePattern.of(regularExpression);
     }
 
     /**
@@ -69,13 +68,12 @@ enum MdPattern implements LinePattern
      *
      * @return the pattern
      */
-    @Override
-    public Pattern getPattern()
+    public LinePattern getPattern()
     {
         return this.pattern;
     }
 
-    private static class PatternConstants
+    private static final class PatternConstants
     {
         private PatternConstants()
         {

@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import java.util.regex.Pattern;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -64,14 +62,7 @@ class LineParserStateMachineTest
 
     private LinePattern pattern(final String pattern)
     {
-        return new LinePattern()
-        {
-            @Override
-            public Pattern getPattern()
-            {
-                return Pattern.compile(pattern);
-            }
-        };
+        return SimpleLinePattern.of(pattern);
     }
 
     private void setupTransitions(final Transition... transitions)

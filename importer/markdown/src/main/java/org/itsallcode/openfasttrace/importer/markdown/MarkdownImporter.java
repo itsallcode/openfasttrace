@@ -5,8 +5,7 @@ import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachi
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.Transition;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
  * Importer for OFT augmented Markdown.
@@ -160,5 +159,11 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(TAGS       , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      )
         };
         // @formatter:on
+    }
+
+    private static Transition transition(final LineParserState from, final LineParserState to,
+            final MdPattern pattern, final TransitionAction action)
+    {
+        return new Transition(from, to, pattern.getPattern(), action);
     }
 }

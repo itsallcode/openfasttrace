@@ -18,13 +18,13 @@ class RstSectionTitlePatternTest
     static Stream<Arguments> testCases()
     {
         return Stream.of(
-                testCase(null, null, null),
-                testCase(null, "ignored", null),
-                testCase(null, "====", null),
-                testCase("ignored", null, null),
-                testCase("# Title", null, null),
-                testCase("## Title", null, null),
-                testCase("# Title", "ignored", null),
+                titleNotRecongnized(null, null),
+                titleNotRecongnized(null, "ignored"),
+                titleNotRecongnized(null, "===="),
+                titleNotRecongnized("ignored", null),
+                titleNotRecongnized("# Title", null),
+                titleNotRecongnized("## Title", null),
+                titleNotRecongnized("# Title", "ignored"),
                 testCase("# Title", "=======", "# Title"),
                 testCase("Title with words", "=======", "Title with words"),
                 testCase("\t Leading & trailing whitespace not removed ", "=======",
@@ -60,6 +60,11 @@ class RstSectionTitlePatternTest
     private static Arguments underlineNotRecognized(final String underline)
     {
         return Arguments.of("Title", underline, null);
+    }
+
+    private static Arguments titleNotRecongnized(final String line, final String nextLine)
+    {
+        return testCase(line, nextLine, null);
     }
 
     private static Arguments testCase(final String line, final String nextLine, final String expected)

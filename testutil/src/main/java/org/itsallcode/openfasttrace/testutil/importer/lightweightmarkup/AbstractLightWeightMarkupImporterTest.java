@@ -509,16 +509,15 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testHeaderBelongsToNextItem()
     {
-        assertImport("file",
-                """
-                        ${title("Item 1", 1)}
-                        `req~item1~1
-                        Item 1 description
+        assertImport("file", """
+                ${title("Item 1", 1)}
+                `req~item1~1
+                Item 1 description
 
-                        ${title("Item 2", 1)}
-                        `req~item2~1
-                        Item 2 description
-                        """,
+                ${title("Item 2", 1)}
+                `req~item2~1
+                Item 2 description
+                """,
                 contains(item().id(SpecificationItemId.createId("req", "item1", 1))
                         .title("Item 1")
                         .description("Item 1 description")

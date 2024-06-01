@@ -17,10 +17,10 @@ class MdSectionTitlePatternTest
     static Stream<Arguments> testCases()
     {
         return Stream.of(
-                testCase(null, null, null),
-                testCase(null, "ignored", null),
-                testCase(null, "====", null),
-                testCase("ignored", null, null),
+                titleNotRecongnized(null, null),
+                titleNotRecongnized(null, "ignored"),
+                titleNotRecongnized(null, "===="),
+                titleNotRecongnized("ignored", null),
                 testCase("# Title", null, "Title"),
                 testCase("## Title", null, "Title"),
                 testCase("## Title with words", null, "Title with words"),
@@ -48,6 +48,11 @@ class MdSectionTitlePatternTest
     private static Arguments underlineNotRecognized(final String underline)
     {
         return Arguments.of("Title", underline, null);
+    }
+
+    private static Arguments titleNotRecongnized(final String line, final String nextLine)
+    {
+        return testCase(line, nextLine, null);
     }
 
     private static Arguments testCase(final String line, final String nextLine, final String expected)

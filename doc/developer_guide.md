@@ -216,7 +216,7 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
     * `doc/developer_guide.md`
 4. Add changes in new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
 5. Commit and push changes.
-6. Create a new Pull Request, have it reviewed and merged to `main`.
+6. Create a new pull request, have it reviewed and merged to `main`.
 
 ### Perform the Release
 

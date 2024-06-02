@@ -28,5 +28,5 @@ echo "Changes file: $changes_file"
 title="Release $project_version"
 notes=$(cat "$changes_file")
 tag="$project_version"
-release_url=$(gh release create --latest --draft --title "$title" --notes "$notes" --target main "$tag" "$artifact" "$checksum_file_path")
+release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact" "$checksum_file_path")
 echo "Release URL: $release_url"

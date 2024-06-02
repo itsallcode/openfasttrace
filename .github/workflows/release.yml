@@ -59,3 +59,5 @@ jobs:
 
       - name: Create GitHub Release
         run: ./.github/workflows/github_release.sh
+        env:
+          GH_TOKEN: ${{ github.token }}

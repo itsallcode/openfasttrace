@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,9 +15,7 @@ import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
-import org.itsallcode.openfasttrace.api.report.ReportException;
-import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
-import org.itsallcode.openfasttrace.api.report.ReporterContext;
+import org.itsallcode.openfasttrace.api.report.*;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
 import org.junit.jupiter.api.Test;
@@ -41,7 +38,7 @@ class TestReportService
                 .builder() //
                 .verbosity(ReportVerbosity.MINIMAL) //
                 .build();
-        out.capture();
+        out.captureMuted();
         createService(settings).reportTraceToStdOut(this.traceMock, settings.getOutputFormat());
         assertThat(out.getCapturedData(), equalTo("not ok\n"));
     }
@@ -53,7 +50,7 @@ class TestReportService
                 .builder() //
                 .outputFormat("html") //
                 .build();
-        out.capture();
+        out.captureMuted();
         createService(settings).reportTraceToStdOut(this.traceMock, settings.getOutputFormat());
         assertThat(out.getCapturedData(), startsWith("<!DOCTYPE html>"));
     }

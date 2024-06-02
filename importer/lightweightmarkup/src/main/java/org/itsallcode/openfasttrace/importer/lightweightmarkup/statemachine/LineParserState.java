@@ -1,14 +1,16 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
 /**
- * This enum defines the state the line parser for lightweight markup languages can be in.
+ * This enum defines the state the line parser for lightweight markup languages
+ * can be in.
  */
 public enum LineParserState
 {
-    /** Parser started (at beginning of the file) */
+    /**
+     * Parser started (at beginning of the file) or outside of a specification
+     * item
+     */
     START,
-    /** We are outside any specification item */
-    OUTSIDE,
     /** Inside a specification item */
     SPEC_ITEM,
     /** Inside a description section */

@@ -2,14 +2,15 @@ package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LinePattern;
-
-import java.util.regex.Pattern;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.SimpleLinePattern;
 
 /**
- * Patterns that describe tokens to be recognized within reStructured Text specifications.
+ * Patterns that describe tokens to be recognized within reStructured Text
+ * specifications.
  */
-enum RstPattern implements LinePattern {
+enum RstPattern
+{
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
 
@@ -54,11 +55,11 @@ enum RstPattern implements LinePattern {
     UNDERLINE("([-=`:.'\"~^_*+#<>]{3,})\\s*");
     // @formatter:on
 
-    private final Pattern pattern;
+    private final LinePattern pattern;
 
     RstPattern(final String regularExpression)
     {
-        this.pattern = Pattern.compile(regularExpression);
+        this.pattern = SimpleLinePattern.of(regularExpression);
     }
 
     /**
@@ -66,26 +67,25 @@ enum RstPattern implements LinePattern {
      *
      * @return the pattern
      */
-    @Override
-    public Pattern getPattern()
+    public LinePattern getPattern()
     {
         return this.pattern;
     }
 
-    private static class PatternConstants
+    private static final class PatternConstants
     {
-        private PatternConstants()
-        {
-            // not instantiable
-        }
-
         public static final String ARTIFACT_TYPE = "[a-zA-Z]+";
         public static final String BULLETS = "[+*-]";
         private static final String UP_TO_3_WHITESPACES = "\\s{0,3}";
         // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
-                + "(SpecificationItemId.ID_PATTERN)" //
+                + "(" + SpecificationItemId.ID_PATTERN + ")" //
                 + "(?:\\W.*)?";
+
+        private PatternConstants()
+        {
+            // not instantiable
+        }
     }
 }

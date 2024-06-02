@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.markdown;
+package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
+class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private final static ImporterFactory importerFactory = new MarkdownImporterFactory();
+    private static final ImporterFactory importerFactory = new RestructuredTextImporterFactory();
 
-    TestMarkdownMarkupImporter()
+    TestRestructuredTextImporter()
     {
-        super(0);
+        super(1);
     }
 
     @Override
@@ -27,7 +27,7 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
 
     protected String formatTitle(final String title, final int level)
     {
-        return "#".repeat(level) + " " + title;
+        return title + "\n" + "=".repeat(title.length());
     }
 
     // [utest -> dsn~md.specification-item-title~1]
@@ -36,13 +36,14 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     {
         assertImport("titles.md",
                 """
-                        # The title
+                        The title
+                        =========
                         the~id~1
                         """,
                 contains(item()
                         .id("the", "id", 1)
                         .title("The title")
-                        .location("titles.md", 2)
+                        .location("titles.md", 3)
                         .build()));
     }
 
@@ -52,16 +53,18 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     {
         assertImport("more_titles.md",
                 """
-                        # 1st level title
+                        1st level title
+                        ===============
 
-                        # 2nd level title
+                        2nd level title
+                        ---------------
 
                         the~id~1
                         """,
                 contains(item()
                         .title("2nd level title")
                         .id("the", "id", 1)
-                        .location("more_titles.md", 5)
+                        .location("more_titles.md", 7)
                         .build()));
     }
 
@@ -70,14 +73,16 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     void testFindTitleAfterTitle()
     {
         assertImport("x", """
-                ## This title should be ignored
+                This title should be ignored
+                ============================
 
-                ### Title
+                Title
+                -----
                 `a~b~1
                 """,
                 contains(item()
                         .id(SpecificationItemId.parseId("a~b~1"))
-                        .title("Title").location("x", 4)
+                        .title("Title").location("x", 6)
                         .build()));
     }
 

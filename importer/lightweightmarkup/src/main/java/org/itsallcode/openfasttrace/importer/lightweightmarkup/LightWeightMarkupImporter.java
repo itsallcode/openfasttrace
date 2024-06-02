@@ -1,36 +1,32 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.logging.Logger;
-
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
+import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.*;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
  * Base class for importers of lightweight markup text.
  */
-public abstract class LightWeightMarkupImporter
+public abstract class LightWeightMarkupImporter implements Importer, LineReaderCallback
 {
-    private static final Logger LOG = Logger.getLogger(LightWeightMarkupImporter.class.getName());
     /** File to be imported */
     protected final InputFile file;
     /** Listener for import events */
     protected final ImportEventListener listener;
-    /** Statemachine for a line-by-line parser */
+    /** State machine for a line-by-line parser */
     protected final LineParserStateMachine stateMachine;
-    private String lastTitle = null;
-    private String lastLine = null;
+    private String lastTitle;
     private boolean inSpecificationItem;
-    private int lineNumber;
+    private LineContext currentContext;
 
     /**
      * Create a new {@link LightWeightMarkupImporter}.
      * 
-     * @param fileName
+     * @param file
      *            input file
      * @param listener
      *            import event listener
@@ -38,11 +34,17 @@ public abstract class LightWeightMarkupImporter
     // Possible 'this' escape before subclass is fully initialized:
     // LineParserStateMachine constructor does not use 'this'.
     @SuppressWarnings("this-escape")
-    public LightWeightMarkupImporter(final InputFile fileName, final ImportEventListener listener)
+    protected LightWeightMarkupImporter(final InputFile file, final ImportEventListener listener)
     {
-        this.file = fileName;
+        this.file = file;
         this.listener = listener;
         this.stateMachine = new LineParserStateMachine(configureTransitions());
+    }
+
+    @Override
+    public void runImport()
+    {
+        new LineReader(file, this).readFile();
     }
 
     /**
@@ -51,6 +53,13 @@ public abstract class LightWeightMarkupImporter
      * @return parser statemachine transitions
      */
     protected abstract Transition[] configureTransitions();
+
+    @Override
+    public void nextLine(final LineContext context)
+    {
+        this.currentContext = context;
+        this.stateMachine.step(this.currentContext.currentLine(), this.currentContext.nextLine());
+    }
 
     /**
      * Define a transition in the parser statemachine.
@@ -71,35 +80,8 @@ public abstract class LightWeightMarkupImporter
         return new Transition(from, to, pattern, action);
     }
 
-    /**
-     * Run the import.
-     */
-    public void runImport()
-    {
-        LOG.fine(() -> "Starting import of file " + this.file);
-        String line;
-        this.lineNumber = 0;
-        try (BufferedReader reader = this.file.createReader())
-        {
-            while ((line = reader.readLine()) != null)
-            {
-                ++this.lineNumber;
-                this.stateMachine.step(line);
-                this.lastLine = line;
-            }
-        }
-        catch (final IOException exception)
-        {
-            throw new ImporterException(
-                    "Error reading '" + this.file.getPath() + "' at line " + this.lineNumber + ": "
-                            + exception.getMessage(),
-                    exception);
-
-        }
-        finishImport();
-    }
-
-    private void finishImport()
+    @Override
+    public void finishReading()
     {
         if (this.inSpecificationItem)
         {
@@ -138,7 +120,7 @@ public abstract class LightWeightMarkupImporter
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
         this.listener.setId(id);
-        this.listener.setLocation(this.file.getPath(), this.lineNumber);
+        this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
         if (this.lastTitle != null)
         {
             this.listener.setTitle(this.lastTitle);
@@ -241,20 +223,6 @@ public abstract class LightWeightMarkupImporter
     }
 
     /**
-     * Save the previous line as potential title for the next specification
-     * item.
-     * <p>
-     * This is useful for markup that uses titles that are defined by being
-     * underlined with special characters in the line that follows the actual
-     * title.
-     * </p>
-     */
-    protected void rememberPreviousLineAsTitle()
-    {
-        this.lastTitle = this.lastLine;
-    }
-
-    /**
      * Remember the last section title in case this turns out to be a
      * specification item.
      */
@@ -308,7 +276,7 @@ public abstract class LightWeightMarkupImporter
             this.listener.addNeededArtifactType(targetArtifactType.trim());
         }
         this.listener.setForwards(true);
-        this.listener.setLocation(this.file.getPath(), this.lineNumber);
+        this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
         this.listener.endSpecificationItem();
     }
 }

@@ -20,9 +20,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId
 {
-    private static final String NAME = "foo";
-    private static final String ARTIFACT_TYPE_FEATURE = "feat";
-
     @ParameterizedTest(name = "Parsing of ID ''{0}'' succeeds")
     @CsvSource(value =
     {

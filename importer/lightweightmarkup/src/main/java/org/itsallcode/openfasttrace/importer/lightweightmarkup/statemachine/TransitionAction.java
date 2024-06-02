@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.lightweightmarkup;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
 /**
  * Action that is executed as a result of a state transition in the line parser.

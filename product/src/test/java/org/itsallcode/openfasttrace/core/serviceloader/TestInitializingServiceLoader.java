@@ -37,7 +37,6 @@ class TestInitializingServiceLoader
         assertThat(voidServiceLoader, emptyIterable());
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void testImporterFactoriesRegistered()
     {

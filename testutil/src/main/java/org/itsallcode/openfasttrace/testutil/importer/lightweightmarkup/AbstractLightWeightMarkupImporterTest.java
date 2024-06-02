@@ -9,6 +9,7 @@ import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.ru
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.hamcrest.Matcher;
@@ -20,12 +21,17 @@ import org.junit.jupiter.params.provider.*;
 
 public abstract class AbstractLightWeightMarkupImporterTest
 {
+    private static final Path PATH = Path.of("/a/b/c.markdown");
     private static final String NL = System.lineSeparator();
+    private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
+    private final int titleLocationOffset;
 
-    protected AbstractLightWeightMarkupImporterTest()
+    protected AbstractLightWeightMarkupImporterTest(final int titleLocationOffset)
     {
-        // Intentionally empty to satisfy compile checks.
+        this.titleLocationOffset = titleLocationOffset;
     }
+
+    protected abstract String formatTitle(final String title, int level);
 
     // [utest -> dsn~md.specification-item-id-format~3]
     @CsvSource({
@@ -37,23 +43,28 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testRequirementIdDetected(final String markdownId, final String expectedArtifactType,
             final String expectedName, final int expectedRevision)
     {
-        final Path path = Path.of("/doc/spec.md/");
-        assertImport(path, markdownId, contains(item()
+        assertImport(PATH, markdownId, contains(item()
                 .id(expectedArtifactType, expectedName, expectedRevision)
-                .location(path.toString(), 1)
+                .location(PATH.toString(), 1)
                 .build()));
     }
 
-    private void assertImport(final String path, final String input,
+    protected void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
         assertImport(Path.of(path), input, matcher);
     }
 
-    private void assertImport(final Path path, final String input,
+    protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        assertImportWithFactory(path, input, matcher, getImporterFactory());
+        assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
+    }
+
+    private String processTextInput(final String input)
+    {
+        return TITLE_PLACEHOLDER.matcher(input)
+                .replaceAll(match -> formatTitle(match.group(1), Integer.parseInt(match.group(2))));
     }
 
     protected abstract ImporterFactory getImporterFactory();
@@ -62,7 +73,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testSpecificationItemReferenceDetected()
     {
-        assertImport("/a/b/c.markdown", """
+        assertImport(PATH, """
                 `req~item-a~2`
 
                 Covers:
@@ -71,7 +82,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id("req", "item-a", 2)
                         .addCoveredId("feat", "item-b", 1)
-                        .location("/a/b/c.markdown", 1)
+                        .location(PATH.toString(), 1)
                         .build()));
     }
 
@@ -79,7 +90,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testSpecificationItemCoversList()
     {
-        assertImport("/a/b/c.markdown", """
+        assertImport(PATH, """
                 req~covers-list~4
                 Covers:
                 * `feat~item-a~1`
@@ -91,7 +102,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .addCoveredId("feat", "item-a", 1)
                         .addCoveredId("feat", "item-b", 2)
                         .addCoveredId("feat", "item-c", 3)
-                        .location("/a/b/c.markdown", 1)
+                        .location(PATH.toString(), 1)
                         .build()));
     }
 
@@ -99,7 +110,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testSpecificationItemDependsList()
     {
-        assertImport("/a/b/c.markdown", """
+        assertImport(PATH, """
                 req~depends-list~4
                 Depends:
                 * `feat~item-a~1`
@@ -111,7 +122,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .addDependOnId("feat", "item-a", 1)
                         .addDependOnId("feat", "item-b", 2)
                         .addDependOnId("feat", "item-c", 3)
-                        .location("/a/b/c.markdown", 1)
+                        .location(PATH.toString(), 1)
                         .build()));
     }
 
@@ -119,7 +130,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testSpecificationItemNeedsCoverageListCompact()
     {
-        assertImport("~/git/foo/bar.md", """
+        final Path path = Path.of("~/git/foo/bar.md");
+        assertImport(path, """
                 req~needs-coverage-list-single-line~4
                 Needs: dsn, uman
                 """,
@@ -127,7 +139,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .id("req", "needs-coverage-list-single-line", 4)
                         .addNeedsArtifactType("dsn")
                         .addNeedsArtifactType("uman")
-                        .location("~/git/foo/bar.md", 1)
+                        .location(path.toString(), 1)
                         .build()));
     }
 
@@ -151,7 +163,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("tags")
     void testTags(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+                "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getTags(), equalTo(expected));
     }
@@ -188,12 +201,12 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @ParameterizedTest
     void testArtifactForwardingNotation(final String input, final String forwardedArtifactType,
             final String targetArtifactType, final String originalArtifactType,
-            final String orginalName, final int originalRevision)
+            final String originalName, final int originalRevision)
     {
         assertImport("xyz", input,
                 contains(item()
-                        .id(forwardedArtifactType, orginalName, originalRevision)
-                        .addCoveredId(originalArtifactType, orginalName, originalRevision)
+                        .id(forwardedArtifactType, originalName, originalRevision)
+                        .addCoveredId(originalArtifactType, originalName, originalRevision)
                         .addNeedsArtifactType(targetArtifactType)
                         .forwards(true)
                         .location("xyz", 1)
@@ -256,7 +269,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testMultipleForwardsInARow()
     {
         assertImport("fwd.md", """
-                # A Collection of Different Forwards
+                ${title("A Collection of Different Forwards", 1)}
                 * `arch --> dsn : req~foo~1`
                 * arch  -->dsn  : req~bar~2   with a comment
                 dsn-->impl      :    req~zoo~3
@@ -265,17 +278,20 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         item()
                                 .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 2)
+                                .forwards(true)
+                                .location("fwd.md", 2 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("dsn")
-                                .forwards(true).location("fwd.md", 3)
+                                .forwards(true)
+                                .location("fwd.md", 3 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
                                 .addNeedsArtifactType("impl")
-                                .forwards(true).location("fwd.md", 4)
+                                .forwards(true)
+                                .location("fwd.md", 4 + titleLocationOffset)
                                 .build()));
     }
 
@@ -284,22 +300,21 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testArtifactForwardingAfterARegularSpecificationItem()
     {
         assertImport("üöä", """
-
                 art~name~9876
 
-                # Forwards
+                ${title("Forwards", 1)}
                 a-->b:c~d~5
                 """,
                 contains(
                         item()
                                 .id("art", "name", 9876)
-                                .location("üöä", 2)
+                                .location("üöä", 1)
                                 .build(),
                         item()
                                 .id("a", "d", 5)
                                 .addCoveredId("c", "d", 5)
                                 .addNeedsArtifactType("b")
-                                .location("üöä", 5)
+                                .location("üöä", 4 + titleLocationOffset)
                                 .forwards(true)
                                 .build()));
     }
@@ -357,7 +372,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testComplexRequirement()
     {
         assertImport("file name", """
-                # Requirement Title
+                ${title("Requirement Title", 1)}
                 `type~id~1` <a id="type~id~1"></a>
                 Description
 
@@ -394,7 +409,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .addDependOnId(SpecificationItemId
                                 .parseId("configuration~blubb.blah.blah~4711"))
                         .addDependOnId(SpecificationItemId.parseId("db~blah.blubb~42"))
-                        .location("file name", 2)
+                        .location("file name", 2 + titleLocationOffset)
                         .build()));
     }
 
@@ -450,7 +465,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("needsCoverage")
     void testNeedsCoverage(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"), "`a~b~1`\n" + mdContent,
+        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+                "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
     }
@@ -475,7 +491,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     {
         assertImport("umlauts",
                 """
-                        ### Die Implementierung muss den Zustand einzelner Zellen ändern
+                        ${title("Die Implementierung muss den Zustand einzelner Zellen ändern", 3)}
                         `req~zellzustandsänderung~1
                         Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen in jeder Generation.
                         Needs: arch
@@ -485,7 +501,32 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
-                        .location("umlauts", 2).addNeedsArtifactType("arch")
+                        .location("umlauts", 2 + titleLocationOffset)
+                        .addNeedsArtifactType("arch")
                         .build()));
+    }
+
+    @Test
+    void testHeaderBelongsToNextItem()
+    {
+        assertImport("file", """
+                ${title("Item 1", 1)}
+                `req~item1~1
+                Item 1 description
+
+                ${title("Item 2", 1)}
+                `req~item2~1
+                Item 2 description
+                """,
+                contains(item().id(SpecificationItemId.createId("req", "item1", 1))
+                        .title("Item 1")
+                        .description("Item 1 description")
+                        .location("file", 2 + titleLocationOffset)
+                        .build(),
+                        item().id(SpecificationItemId.createId("req", "item2", 1))
+                                .title("Item 2")
+                                .description("Item 2 description")
+                                .location("file", 6 + (2 * titleLocationOffset))
+                                .build()));
     }
 }

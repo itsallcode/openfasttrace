@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.exporter.specobject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -23,7 +24,7 @@ class TestSpecobjectExporter
     @Test
     void testExportSimpleSpecObjectWithMandatoryElements() throws IOException, XMLStreamException
     {
-        final SpecificationItem item = SpecificationItem.builder() //
+        final SpecificationItem item = item() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .description("the description") //
                 .build();
@@ -45,7 +46,7 @@ class TestSpecobjectExporter
     @Test
     void testExportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
     {
-        final SpecificationItem item = SpecificationItem.builder() //
+        final SpecificationItem item = item() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
                 .title("My item title") //
                 .status(ItemStatus.DRAFT) //
@@ -96,14 +97,14 @@ class TestSpecobjectExporter
     @Test
     void testExportTwoSpecObjects() throws IOException, XMLStreamException
     {
-        final SpecificationItem itemA = SpecificationItem.builder() //
+        final SpecificationItem itemA = item() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .status(ItemStatus.PROPOSED) //
                 .description("the description") //
                 .rationale("the rationale") //
                 .comment("the comment") //
                 .build();
-        final SpecificationItem itemB = SpecificationItem.builder() //
+        final SpecificationItem itemB = item() //
                 .id(SpecificationItemId.createId("baz", "zoo", 2)) //
                 .status(ItemStatus.REJECTED) //
                 .description("another\ndescription") //

@@ -1,10 +1,10 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
 
-import java.util.regex.Matcher;
+import java.util.List;
+import java.util.Optional;
 
 class MarkdownAsserts
 {
@@ -23,9 +23,9 @@ class MarkdownAsserts
     {
         for (final String text : samples)
         {
-            final Matcher matcher = mdPattern.getPattern().matcher(text);
+            final Optional<List<String>> matcher = mdPattern.getPattern().getMatches(text, null);
             assertThat(mdPattern.toString() + " must " + (mustMatch ? "" : "not ") + "match " + "\""
-                    + text + "\"", matcher.matches(), equalTo(mustMatch));
+                    + text + "\"", matcher.isPresent(), equalTo(mustMatch));
         }
     }
 }

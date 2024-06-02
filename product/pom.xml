@@ -23,15 +23,15 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
-            <artifactId>openfasttrace-exporter-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-exporter-specobject</artifactId>
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-importer-markdown</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-importer-restructuredtext</artifactId>
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>

@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
+            <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>

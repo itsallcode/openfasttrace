@@ -1,19 +1,19 @@
-package org.itsallcode.openfasttrace.importer.markdown;
-
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.junit.jupiter.api.Test;
+package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MarkdownForwardingSpecificationItemTest
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.junit.jupiter.api.Test;
+
+class ForwardingSpecificationItemTest
 {
     @Test
     void parseForwardInstrcution()
     {
-        final MarkdownForwardingSpecificationItem item = new MarkdownForwardingSpecificationItem(
+        final ForwardingSpecificationItem item = new ForwardingSpecificationItem(
                 "arch --> dsn : req~web-ui-uses-corporate-design~1");
         assertAll(
                 () -> assertThat(item.getSkippedArtifactType(), equalTo("arch")),

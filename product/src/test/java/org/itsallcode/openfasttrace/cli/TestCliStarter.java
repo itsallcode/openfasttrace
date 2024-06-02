@@ -68,7 +68,7 @@ class TestCliStarter
     private void assertExitWithError(final Runnable runnable, final ExitStatus status,
             final String message, final Capturable stream) throws MultipleFailuresError
     {
-        stream.capture();
+        stream.captureMuted();
         assertAll( //
                 () -> assertExitWithStatus(status.getCode(), runnable),
                 () -> assertThat(stream.getCapturedData(), startsWith(message)) //
@@ -100,7 +100,7 @@ class TestCliStarter
     private void assertExitOkWithStdOutStart(final Runnable runnable, final String outputStart,
             final Capturable out) throws MultipleFailuresError
     {
-        out.capture();
+        out.captureMuted();
         assertAll(() -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), () -> assertOutputFileExists(false), //
                 () -> assertThat(out.getCapturedData(), startsWith(outputStart)));
     }
@@ -215,7 +215,7 @@ class TestCliStarter
                 TRACE_COMMAND, this.DOC_DIR.toString(), //
                 REPORT_VERBOSITY_PARAMETER, "QUIET" //
         );
-        out.capture();
+        out.captureMuted();
         assertAll( //
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), runnable), //
                 () -> assertOutputFileExists(false),

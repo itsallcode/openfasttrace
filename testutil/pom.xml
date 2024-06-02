@@ -26,6 +26,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
             <scope>compile</scope>
@@ -53,6 +58,8 @@
                         <arg>-Xlint:-exports</arg>
                         <!-- Suppress warnings "testutil/src/main/java/module-info.java:[14,21] requires directive for an automatic module" -->
                         <arg>-Xlint:-requires-automatic</arg>
+                        <!-- Suppress warnings "testutil/src/main/java/module-info.java:[20,41] requires transitive directive for an automatic module" -->
+                        <arg>-Xlint:-requires-transitive-automatic</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
@@ -61,6 +68,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
+                    <!-- This module is only used in tests, so we don't need javadoc comments. -->
                     <skip>true</skip>
                 </configuration>
             </plugin>

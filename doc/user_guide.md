@@ -330,6 +330,36 @@ In the following example a requirement in the system requirement specification (
 
     arch --> dsn : req~web-ui-uses-corporate-design~1
 
+Please note that the arrow is intentionally done with two dashes (`-->`) in order to reduce the chance for parsing collisions since the arrow with one dash often appears in documents. 
+
+This notation can appear after:
+
+* A title
+* "Needs" section
+* "Depends" section
+* "Covers" section
+* "Tags" section
+
+If it appears in a mutli-line text section of a requirement (description, comment or rationale) the forward is ignored.
+
+Note that a forward terminates the previous specification item, so the following notation does not work:
+
+    `dsn~foo~1`
+    …
+    Covers: req~foo~1
+    
+    dsn-->impl:req~bar~1              <-- this terminates the previous specification item
+    
+    Needs: impl,utest                 <-- this is now lost
+
+To avoid confusion, it is best to have all forwards in a separate section with their own title:
+
+    # Forwarded Requirements
+
+    * `dsn-->impl:req~bar~1`
+    * `dsn-->impl:req~zoo~2`
+    * `…`
+
 ### Distributing the Detailing Work
 
 In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.

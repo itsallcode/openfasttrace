@@ -1,8 +1,9 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
-import java.util.regex.Pattern;
-
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.ForwardingSpecificationItem;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LinePattern;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.SimpleLinePattern;
 
 /**
  * Patterns that describe tokens to be recognized within Markdown-style
@@ -25,18 +26,18 @@ enum MdPattern
     FORWARD(".*?("
             + PatternConstants.ARTIFACT_TYPE
             + "\\s*"
-            + MarkdownForwardingSpecificationItem.FORWARD_MARKER
+            + ForwardingSpecificationItem.FORWARD_MARKER
             + "\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + "(?:,\\s*"
             + PatternConstants.ARTIFACT_TYPE
             + ")*"
             + "\\s*"
-            + MarkdownForwardingSpecificationItem.ORIGINAL_MARKER
+            + ForwardingSpecificationItem.ORIGINAL_MARKER
             + "\\s*"
             + SpecificationItemId.ID_PATTERN
             + ").*?"),
-    ID("`?((?:" + SpecificationItemId.ID_PATTERN + ")|(?:" + SpecificationItemId.LEGACY_ID_PATTERN + "))`?.*"),
+    ID("`?(" + SpecificationItemId.ID_PATTERN + ")`?.*"),
     NEEDS_INT("Needs:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     NEEDS("Needs:\\s*"),
     NEEDS_REF(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS
@@ -52,14 +53,14 @@ enum MdPattern
             + "\\s*" //
             + "(.*)"),
     TITLE("#+\\s*(.*)"),
-    UNDERLINE("([=-]{3,})");
+    UNDERLINE("([=-]{3,})\\s*");
     // @formatter:on
 
-    private final Pattern pattern;
+    private final LinePattern pattern;
 
     MdPattern(final String regularExpression)
     {
-        this.pattern = Pattern.compile(regularExpression);
+        this.pattern = SimpleLinePattern.of(regularExpression);
     }
 
     /**
@@ -67,26 +68,25 @@ enum MdPattern
      *
      * @return the pattern
      */
-    public Pattern getPattern()
+    public LinePattern getPattern()
     {
         return this.pattern;
     }
 
-    private static class PatternConstants
+    private static final class PatternConstants
     {
-        private PatternConstants()
-        {
-            // not instantiable
-        }
-
         public static final String ARTIFACT_TYPE = "[a-zA-Z]+";
         public static final String BULLETS = "[+*-]";
         private static final String UP_TO_3_WHITESPACES = "\\s{0,3}";
         // [impl->dsn~md.requirement-references~1]
         public static final String REFERENCE_AFTER_BULLET = UP_TO_3_WHITESPACES
                 + PatternConstants.BULLETS + "(?:.*\\W)?" //
-                + "((?:" + SpecificationItemId.ID_PATTERN + ")|(?:"
-                + SpecificationItemId.LEGACY_ID_PATTERN + "))" //
+                + "(" + SpecificationItemId.ID_PATTERN + ")" //
                 + "(?:\\W.*)?";
+
+        private PatternConstants()
+        {
+            // not instantiable
+        }
     }
 }

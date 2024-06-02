@@ -1,8 +1,8 @@
 package org.itsallcode.openfasttrace.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.mockito.Mockito.mock;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -26,7 +26,7 @@ class TestTracedLink
             final String artifactType, final String name, final int revision)
     {
         return new LinkedSpecificationItem(
-                SpecificationItem.builder().id(artifactType, name, revision).build());
+                item().id(artifactType, name, revision).build());
     }
 
     @Test

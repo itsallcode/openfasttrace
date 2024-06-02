@@ -8,8 +8,8 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>3.8.0</revision>
-        <java.version>11</java.version>
+        <revision>4.0.0</revision>
+        <java.version>17</java.version>
         <junit.version>5.11.0-M1</junit.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -131,7 +131,19 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-markdown</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-restructuredtext</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
             </dependency>

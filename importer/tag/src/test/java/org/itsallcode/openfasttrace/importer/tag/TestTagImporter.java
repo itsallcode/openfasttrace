@@ -208,7 +208,7 @@ class TestTagImporter
      * Create a test case using the content as input for the
      * {@link TagImporter}. Make sure to concatenate the content to avoid
      * breaking self-tracing.
-     * 
+     *
      * @param content
      *            content to parse
      * @param itemBuilder

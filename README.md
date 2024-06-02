@@ -2,11 +2,11 @@
 
 ## What is OpenFastTrace?
 
-OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing helps you keeping track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you getting rid of them.
+OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing keeps track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
 You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide.md).
 
-Below you see a screenshot of of a HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
+Below you see a screenshot of an HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
 
 <img src="doc/images/oft_screenshot_tracing_report.png" style="box-shadow: 5px 10px 18px #888888;" alt="OFT HTML tracing report">
 
@@ -31,7 +31,6 @@ Sonarcloud status:
 
 **User Guides**
 
-* [📖 About us](doc/about_us.md)
 * [📖 User Guide](doc/user_guide.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 
@@ -42,6 +41,7 @@ Sonarcloud status:
 * [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
 * [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
 * [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
+* [ℹ️ About us](doc/about_us.md)
 
 **Information for Contributors**
 
@@ -70,10 +70,10 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.c
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-3.8.0.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-4.0.0.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/3.8.0/openfasttrace-3.8.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/3.8.0/openfasttrace-3.8.0.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/4.0.0/openfasttrace-4.0.0.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/4.0.0/openfasttrace-4.0.0.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
@@ -81,7 +81,8 @@ Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-lib
 
 ### Runtime Dependencies
 
-OpenFastTrace 3.0.0 and above only needs a Java 11 (or later) runtime environment to run. Older versions of OpenFastTrace can run with Java 8.
+OpenFastTrace 4.0.0 and above only needs a Java 17 (or later) runtime environment to run. OpenFastTrace until version 3.x.x supported Java 11. Versions prior to that ran with Java 8.
+Note that only the latest version of OFT is actively supported.
 
 #### Installation of Runtime Dependencies on Linux
 
@@ -89,14 +90,14 @@ OpenFastTrace 3.0.0 and above only needs a Java 11 (or later) runtime environmen
 
 If you just want to run OFT:
 
-    apt-get install openjdk-11-jre
+    apt-get install openjdk-17-jre
 
 ## Running OpenFastTrace
 
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```bash
-java -jar product/target/openfasttrace-3.8.0.jar trace /path/to/directory/being/traced
+java -jar product/target/openfasttrace-4.0.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).

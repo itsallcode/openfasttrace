@@ -15,7 +15,9 @@ if $oft_script trace \
     --output-file "$report_file" \
     --output-format html \
     "$base_dir/doc/spec" \
+    "$base_dir/importer/lightweightmarkup/src" \
     "$base_dir/importer/markdown/src" \
+    "$base_dir/importer/restructuredtext/src" \
     "$base_dir/importer/specobject/src" \
     "$base_dir/importer/zip/src" \
     "$base_dir/importer/tag/src" \

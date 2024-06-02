@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.core;
 
 import static org.itsallcode.openfasttrace.core.SpecificationItemAssertions.*;
 import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.*;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
@@ -28,9 +29,9 @@ class TestTracing
     @BeforeEach
     void beforeEach()
     {
-        this.grandParentBuilder = SpecificationItem.builder().id(grandParentId);
-        this.parentBuilder = SpecificationItem.builder().id(parentId);
-        this.childABuilder = SpecificationItem.builder().id(childAId);
+        this.grandParentBuilder = item().id(grandParentId);
+        this.parentBuilder = item().id(parentId);
+        this.childABuilder = item().id(childAId);
     }
 
     // [utest->dsn~tracing.deep-coverage~1]

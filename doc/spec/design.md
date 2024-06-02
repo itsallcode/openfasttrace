@@ -652,10 +652,10 @@ Covers:
 
 Needs: impl, utest
 
-#### Markdown Compact "Needs" List
-`dsn~md.needs-coverage-list-compact~1`
+#### Markdown "Needs" List
+`dsn~md.needs-coverage-list~1`
 
-The Markdown Importer supports the following compact format for defining the list of artifact types that are needed to fully cover the current specification item.
+The Markdown Importer supports the following list format for defining the list of artifact types that are needed to fully cover the current specification item.
 
     needs-list = needs-header 1*(LINEBREAK depends-line)
 
@@ -666,6 +666,23 @@ The Markdown Importer supports the following compact format for defining the lis
 Rationale:
 
 This alternative style of the "needs" list provides backward compatibility to Elektrobit's legacy requirement enhanced Markdown format.
+
+Covers:
+
+* `req~markdown-standard-syntax~1`
+
+Needs: impl, utest
+
+#### Markdown "Needs" List
+`dsn~md.needs-coverage-list-single-line~2`
+
+The Markdown Importer supports the following format for defining the list of artifact types that are needed to fully cover the current specification item.
+
+    needs-list = "Needs:" *WSP reference *("," *WSP reference)
+
+Rationale:
+
+Unlike references to other requirements, artifact types are usually very short, so it is visually beneficial to use a compact style with a comma separated list in a single line.
 
 Covers:
 
@@ -687,55 +704,13 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
         
     original-requirement-id = requirement-id
 
-The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test.
+The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
 
     arch --> dsn, itest : req~skip-this-requirement~1
  
 Covers:
 
 * `req~artifact-type-forwarding-in-markdown~1`
-
-Needs: impl, utest
-
-### Elektrobit Markdown-style Structures
-
-#### Markdown "Needs" List
-`dsn~md.needs-coverage-list~2`
-
-The Markdown Importer supports the following format for defining the list of artifact types that are needed to fully cover the current specification item.
-
-    needs-list = "Needs:" *WSP reference *("," *WSP reference)
-
-Rationale:
-
-Unlike the the references to other requirements, tags are usually very short, so it is visually beneficial to use a compact style with a comma separated list in a single line.
-
-Covers:
-
-* `req~eb-markdown~1`
-
-Needs: impl, utest
-
-#### Legacy Markdown Specification Item ID Format
-`dsn~md.eb-markdown-id~1`
-
-Alternatively a Markdown requirement ID can have the following format
-
-    requirement-id = *1(type~)type ":" id "," *WSP "v" revision
-
-See [`dsn~md.specification-item-id-format~3`](#markdown-specification-item-id-format) for definitions of the ABNF sub-rules referred to here.
-
-Rationale:
-
-This ID format is supported for backwards compatibility with Elektrobit's legacy requirement-enhanced Markdown format.
-
-Comment:
-
-This format is deprecated. Please use the one specified in [`dsn~md.specification-item-id-format~3`](#markdown-specification-item-id-format) for new documents.
-
-Covers:
-
-* `req~eb-markdown~1`
 
 Needs: impl, utest
 

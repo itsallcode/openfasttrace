@@ -36,7 +36,6 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
             + ITEM_NAME_PATTERN //
             + REVISION_SEPARATOR //
             + ITEM_REVISION_PATTERN;
-    // [impl->dsn~md.eb-markdown-id~1]
     private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
     private static final int ARTIFACT_TYPE_MATCHING_GROUP = 1;
@@ -370,8 +369,8 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
                 }
                 else
                 {
-                    throw new IllegalStateException(
-                            "String '" + this.id + "' cannot be parsed to a specification item ID");
+                    throw new IllegalArgumentException("Invalid specification item ID format: \"" + this.id
+                            + "\". Format must be <arifact-type>~<requirement-name-or-number>~<revision>.");
                 }
             }
         }

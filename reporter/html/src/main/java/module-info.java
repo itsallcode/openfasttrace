@@ -1,5 +1,5 @@
 /**
- * This provides an report generator for the HTML format.
+ * This provides a report generator for the HTML format.
  * 
  * @provides org.itsallcode.openfasttrace.api.report.ReporterFactory
  */

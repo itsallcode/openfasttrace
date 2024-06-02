@@ -1,10 +1,10 @@
-name: Release on Maven Central and GitHub
+name: Release
 
 on:
   workflow_dispatch:
     inputs:
-      deploy-maven-central:
-        description: "Deploy to Maven Central"
+      skip-deploy-maven-central:
+        description: "Skip deployment to Maven Central"
         required: true
         type: boolean
         default: false
@@ -44,13 +44,13 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Build
-        run: mvn --batch-mode -T 1C clean install -DskipTests
+        run: mvn --batch-mode -T 1C clean install -DskipTests ## FIXME: Remove -DskipTests
 
       - name: List secret GPG keys
         run: gpg --list-secret-keys
 
       - name: Publish to Maven Central Repository
-        if: ${{ inputs.deploy-maven-central }}
+        if: ${{ !inputs.skip-deploy-maven-central }}
         run: mvn --batch-mode deploy -Possrh -DstagingDescription="Deployed via workflow release.yml"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}

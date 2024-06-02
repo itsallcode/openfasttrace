@@ -9,30 +9,38 @@ readonly base_dir
 readonly pom_file="$base_dir/parent/pom.xml"
 
 # Read project version from pom file
-project_version=$(grep "<revision>" "$pom_file" | sed --regexp-extended 's/<.{0,1}revision>//g' | xargs)
+project_version=$(grep "<revision>" "$pom_file" | sed --regexp-extended 's/\s*<revision>(.*)<\/revision>\s*/\1/g')
 readonly project_version
 echo "Read project version '$project_version' from $pom_file"
 
 # Calculate checksum
-readonly artifact="$base_dir/product/target/openfasttrace-${project_version}.jar"
-echo "Calculate sha256sum for file '$artifact'"
-file_dir="$(dirname "$artifact")"
+readonly artifact_path="$base_dir/product/target/openfasttrace-${project_version}.jar"
+echo "Calculate sha256sum for file '$artifact_path'"
+file_dir="$(dirname "$artifact_path")"
 readonly file_dir
-file_name=$(basename "$artifact")
+file_name=$(basename "$artifact_path")
 readonly file_name
-pushd "$file_dir"
+cd "$file_dir"
 readonly checksum_file_name="${file_name}.sha256"
 sha256sum "$file_name" > "$checksum_file_name"
 readonly checksum_file_path="$file_dir/$checksum_file_name"
-popd
+cd "$base_dir"
+
 
 # Create GitHub release
 readonly changes_file="$base_dir/doc/changes/changes_${project_version}.md"
-echo "Changes file: $changes_file"
-readonly title="Release $project_version"
 notes=$(cat "$changes_file")
 readonly notes
+
+readonly title="Release $project_version"
 readonly tag="$project_version"
-release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact" "$checksum_file_path")
+echo "Creating release:"
+echo "Git tag      : $tag"
+echo "Title        : $title"
+echo "Changes file : $changes_file"
+echo "Artifact file: $artifact_path"
+echo "Checksum file: $checksum_file_path"
+
+release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact_path" "$checksum_file_path")
 readonly release_url
 echo "Release URL: $release_url"

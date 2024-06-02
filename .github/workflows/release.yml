@@ -1,0 +1,16 @@
+name: Release on Maven Central and GitHub
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy-maven-central:
+        description: "Deploy to Maven Central"
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Dummy workflow for testing"

@@ -1,4 +1,4 @@
-# OpenFastTrace 4.0.0, released 2024-04-??
+# OpenFastTrace 4.0.0, released 2024-04-03
 
 Code name: RST Importer
 
@@ -48,3 +48,4 @@ has now been removed from the Markdown format. Please migrate to OFT's native fo
 ## Features
 
 * #378: Added an RST importer
+* #412: Added automatic release for Maven Central and GitHub

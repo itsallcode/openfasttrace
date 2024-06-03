@@ -13,4 +13,5 @@ if [ ! -f "$jar_file" ]; then
     exit 1
 fi
 
+# shellcheck disable=SC2068 # Double quote to prevent globbing
 java -jar "$jar_file" $@

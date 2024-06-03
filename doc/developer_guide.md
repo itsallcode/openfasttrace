@@ -206,35 +206,6 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
 
 **NOTE**: This currently only works for release version numbers, not SNAPSHOT versions.
 
-### One-time Setup
-
-Add the following to your `~/.m2/settings.xml`:
-
-```xml
-<settings>
-    <servers>
-        <server>
-            <id>ossrh</id>
-            <username>your-jira-id</username>
-            <password>your-jira-pwd</password>
-        </server>
-    </servers>
-    <profiles>
-        <profile>
-            <id>ossrh</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <gpg.executable>gpg</gpg.executable>
-                <gpg.keyname>key_id</gpg.keyname>
-                <gpg.passphrase>the_pass_phrase</gpg.passphrase>
-            </properties>
-        </profile>
-    </profiles>
-</settings>
-```
-
 ### Prepare the Release
 
 1. Checkout the `main` branch.
@@ -244,23 +215,13 @@ Add the following to your `~/.m2/settings.xml`:
     * `README.md`
     * `doc/developer_guide.md`
 4. Add changes in new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
-5. Verify that build runs successfully:
-
-    ```bash
-    mvn clean verify
-    ```
-6. Commit and push changes.
-7. Create a new Pull Request, have it reviewed and merged.
+5. Commit and push changes.
+6. Create a new pull request, have it reviewed and merged to `main`.
 
 ### Perform the Release
 
-1. Checkout `main` and get the latest changes.
-1. Run this command
-
-    ```bash
-    mvn clean deploy -Possrh
-    ```
-1. Create a [release](https://github.com/itsallcode/openfasttrace/releases) of the `main` branch on GitHub.
-1. Copy the changelog entries for the new version to the GitHub release.
-1. Upload `product/target/openfasttrace-<version>.jar` and attach it to the new GitHub release.
-1. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
+1. Start the release workflow
+  * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace --ref main`
+  * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
+2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace/releases).
+3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).

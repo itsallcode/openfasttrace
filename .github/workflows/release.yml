@@ -1,10 +1,10 @@
-name: Release on Maven Central and GitHub
+name: Release
 
 on:
   workflow_dispatch:
     inputs:
-      deploy-maven-central:
-        description: "Deploy to Maven Central"
+      skip-deploy-maven-central:
+        description: "Skip deployment to Maven Central"
         required: true
         type: boolean
         default: false
@@ -12,5 +12,52 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: "bash"
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+    permissions:
+      contents: write # Required for creating GitHub release
     steps:
-      - run: echo "Dummy workflow for testing"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fail if not running on main branch
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('Not running on main branch, github.ref is ${{ github.ref }}. Please start this workflow only on main')
+
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 17
+          cache: "maven"
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Build
+        run: mvn --batch-mode -T 1C clean install
+
+      - name: List secret GPG keys
+        run: gpg --list-secret-keys
+
+      - name: Publish to Maven Central Repository
+        if: ${{ !inputs.skip-deploy-maven-central }}
+        run: mvn --batch-mode deploy -Possrh -DstagingDescription="Deployed via GitHub workflow release.yml"
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+
+      - name: Create GitHub Release
+        run: ./.github/workflows/github_release.sh
+        env:
+          GH_TOKEN: ${{ github.token }}

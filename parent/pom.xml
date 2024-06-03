@@ -10,7 +10,7 @@
     <properties>
         <revision>4.0.0</revision>
         <java.version>17</java.version>
-        <junit.version>5.11.0-M1</junit.version>
+        <junit.version>5.11.0-M2</junit.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -216,7 +216,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>5.11.0</version>
+                <version>5.12.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -656,7 +656,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.13</version>
+                    <version>1.7.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>

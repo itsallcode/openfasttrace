@@ -17,4 +17,10 @@ class DelegatingLoader<T> implements Loader<T>
     {
         return delegates.stream().flatMap(Loader::load);
     }
+
+    @Override
+    public void close()
+    {
+        delegates.forEach(Loader::close);
+    }
 }

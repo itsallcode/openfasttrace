@@ -70,4 +70,10 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
     {
         return load().iterator();
     }
+
+    @Override
+    public void close()
+    {
+        delegate.close();
+    }
 }

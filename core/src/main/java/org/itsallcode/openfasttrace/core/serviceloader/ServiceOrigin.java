@@ -6,9 +6,10 @@ import static java.util.stream.Collectors.joining;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
-final class ServiceOrigin
+final class ServiceOrigin implements AutoCloseable
 {
     private final ClassLoader classLoader;
     private final List<Path> jars;
@@ -16,7 +17,7 @@ final class ServiceOrigin
     private ServiceOrigin(final ClassLoader classLoader, final List<Path> jars)
     {
         this.classLoader = classLoader;
-        this.jars = jars;
+        this.jars = new ArrayList<>(jars);
     }
 
     public static ServiceOrigin forCurrentClassPath()
@@ -73,5 +74,20 @@ final class ServiceOrigin
     public String toString()
     {
         return "ServiceOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
+    }
+
+    public void close()
+    {
+        if (classLoader instanceof AutoCloseable)
+        {
+            try
+            {
+                ((AutoCloseable) classLoader).close();
+            }
+            catch (final Exception e)
+            {
+                throw new IllegalStateException("Error closing class loader " + classLoader, e);
+            }
+        }
     }
 }

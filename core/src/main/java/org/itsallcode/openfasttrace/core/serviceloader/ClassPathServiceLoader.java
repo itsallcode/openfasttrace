@@ -41,4 +41,10 @@ final class ClassPathServiceLoader<T> implements Loader<T>
         }
         return correctClassLoader;
     }
+
+    @Override
+    public void close()
+    {
+        this.serviceOrigin.close();
+    }
 }

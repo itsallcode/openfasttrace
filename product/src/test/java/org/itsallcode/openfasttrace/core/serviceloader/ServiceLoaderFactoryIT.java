@@ -31,12 +31,16 @@ class ServiceLoaderFactoryIT
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
                 "openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\-javadoc.jar");
-        assertThat(loadService(), empty());
+        try (Loader<ReporterFactory> loader = createLoader())
+        {
+            final List<ReporterFactory> service = loader.load().toList();
+            assertThat(service, empty());
+        }
     }
 
-    private List<ReporterFactory> loadService()
+    private Loader<ReporterFactory> createLoader()
     {
-        return new ServiceLoaderFactory(tempDir, false).createLoader(ReporterFactory.class).load().toList();
+        return new ServiceLoaderFactory(tempDir, false).createLoader(ReporterFactory.class);
     }
 
     @Test
@@ -44,16 +48,20 @@ class ServiceLoaderFactoryIT
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
                 "openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\.jar");
-        final List<ReporterFactory> services = loadService();
-        assertThat(services, hasSize(1));
-        final ReporterFactory service = services.get(0);
-        final ClassLoader pluginClassLoader = service.getClass().getClassLoader();
-        assertAll(
-                () -> assertThat(service.getClass().getName().toString(),
-                        equalTo("org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory")),
-                () -> assertThat(pluginClassLoader.getName(),
-                        startsWith("ServiceClassLoader-openfasttrace-reporter-plaintext")),
-                () -> assertThat(pluginClassLoader, not(sameInstance(Thread.currentThread().getContextClassLoader()))));
+        try (Loader<ReporterFactory> loader = createLoader())
+        {
+            final List<ReporterFactory> services = loader.load().toList();
+            assertThat(services, hasSize(1));
+            final ReporterFactory service = services.get(0);
+            final ClassLoader pluginClassLoader = service.getClass().getClassLoader();
+            assertAll(
+                    () -> assertThat(service.getClass().getName().toString(),
+                            equalTo("org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory")),
+                    () -> assertThat(pluginClassLoader.getName(),
+                            startsWith("ServiceClassLoader-openfasttrace-reporter-plaintext")),
+                    () -> assertThat(pluginClassLoader,
+                            not(sameInstance(Thread.currentThread().getContextClassLoader()))));
+        }
     }
 
     private void preparePlugin(final Path targetDir, final String filePattern) throws TestAbortedException, IOException

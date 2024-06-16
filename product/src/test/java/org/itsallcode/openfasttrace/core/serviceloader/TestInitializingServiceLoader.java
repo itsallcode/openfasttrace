@@ -1,11 +1,9 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
@@ -21,7 +19,9 @@ import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test for {@link InitializingServiceLoader}
+ * Test for {@link InitializingServiceLoader} from module {@code core}. This
+ * test must be located in module {@code product} (which includes all plugin
+ * modules) so that it can access all plugin services.
  */
 class TestInitializingServiceLoader
 {
@@ -31,8 +31,7 @@ class TestInitializingServiceLoader
         final Object context = new Object();
         final InitializingServiceLoader<InitializableServiceStub, Object> voidServiceLoader = InitializingServiceLoader
                 .load(InitializableServiceStub.class, context);
-        final List<InitializableServiceStub> services = StreamSupport
-                .stream(voidServiceLoader.spliterator(), false).collect(toList());
+        final List<InitializableServiceStub> services = voidServiceLoader.load().toList();
         assertThat(services, emptyIterable());
         assertThat(voidServiceLoader, emptyIterable());
     }
@@ -44,10 +43,11 @@ class TestInitializingServiceLoader
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
                 context);
         assertThat(services, hasSize(5));
-        assertThat(services, containsInAnyOrder(instanceOf(MarkdownImporterFactory.class), //
-                instanceOf(RestructuredTextImporterFactory.class), //
-                instanceOf(SpecobjectImporterFactory.class), //
-                instanceOf(TagImporterFactory.class), //
+        assertThat(services, containsInAnyOrder(
+                instanceOf(MarkdownImporterFactory.class),
+                instanceOf(RestructuredTextImporterFactory.class),
+                instanceOf(SpecobjectImporterFactory.class),
+                instanceOf(TagImporterFactory.class),
                 instanceOf(ZipFileImporterFactory.class)));
         for (final ImporterFactory importerFactory : services)
         {
@@ -74,7 +74,7 @@ class TestInitializingServiceLoader
     {
         final InitializingServiceLoader<T, C> serviceLoader = InitializingServiceLoader.load(type,
                 context);
-        return StreamSupport.stream(serviceLoader.spliterator(), false).collect(toList());
+        return serviceLoader.load().toList();
     }
 
     class InitializableServiceStub implements Initializable<Object>

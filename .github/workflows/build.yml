@@ -53,10 +53,13 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build with Java ${{ matrix.java }}
-        run: |
-          mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
-              -Djava.version=${{ matrix.java }}
+      - name: Build with Java 17
+        if: ${{ matrix.java == 17 }}
+        run: JAVA_HOME=$JAVA_HOME_17_X64 mvn --batch-mode -T 1C clean install -Djava.version=${{ matrix.java }}
+
+      - name: Build with Java 21
+        if: ${{ matrix.java == 21 }}
+        run: JAVA_HOME=JAVA_HOME_21_X64 mvn --batch-mode -T 1C clean install -Djava.version=${{ matrix.java }}
 
       - name: Sonar analysis
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}

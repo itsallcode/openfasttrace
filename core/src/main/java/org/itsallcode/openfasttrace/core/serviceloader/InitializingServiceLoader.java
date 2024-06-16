@@ -43,7 +43,7 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
     public static <T extends Initializable<C>, C> InitializingServiceLoader<T, C> load(
             final Class<T> serviceType, final C context)
     {
-        final PluginLoaderFactory loaderFactory = PluginLoaderFactory.createDefault();
+        final ServiceLoaderFactory loaderFactory = ServiceLoaderFactory.createDefault();
         return new InitializingServiceLoader<>(loaderFactory.createLoader(serviceType), context);
     }
 

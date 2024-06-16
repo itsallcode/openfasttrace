@@ -17,11 +17,11 @@ import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.TestAbortedException;
 
 /**
- * Test for {@link PluginLoaderFactory} from module {@code core}. This test must
- * be located in module {@code product} (which includes all plugin modules) so
- * that it can access all plugin services.
+ * Test for {@link ServiceLoaderFactory} from module {@code core}. This test
+ * must be located in module {@code product} (which includes all plugin modules)
+ * so that it can access all plugin services.
  */
-class PluginLoaderFactoryIT
+class ServiceLoaderFactoryIT
 {
     @TempDir
     Path tempDir;
@@ -36,7 +36,7 @@ class PluginLoaderFactoryIT
 
     private List<ReporterFactory> loadService()
     {
-        return new PluginLoaderFactory(tempDir, false).createLoader(ReporterFactory.class).load().toList();
+        return new ServiceLoaderFactory(tempDir, false).createLoader(ReporterFactory.class).load().toList();
     }
 
     @Test

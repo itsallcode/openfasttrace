@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
 
-class PluginLoaderFactoryTest
+class ServiceLoaderFactoryTest
 {
     @TempDir
     Path tempDir;
@@ -25,9 +25,16 @@ class PluginLoaderFactoryTest
         assertThat(testee().createLoader(ReporterFactory.class).load().toList(), empty());
     }
 
-    private PluginLoaderFactory testee()
+    private ServiceLoaderFactory testee()
     {
-        return new PluginLoaderFactory(tempDir, true);
+        return new ServiceLoaderFactory(tempDir, true);
+    }
+
+    @Test
+    void findServiceSkipCurrentClassLoader() throws IOException
+    {
+        Files.delete(tempDir);
+        assertThat(new ServiceLoaderFactory(tempDir, false).findServiceOrigins(), empty());
     }
 
     @Test

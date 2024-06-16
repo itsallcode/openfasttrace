@@ -7,21 +7,30 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 
-class PluginLoaderFactory
+class ServiceLoaderFactory
 {
-    private static final Logger LOGGER = Logger.getLogger(PluginLoaderFactory.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ServiceLoaderFactory.class.getName());
     private final Path pluginsDirectory;
     private final boolean searchCurrentClasspath;
 
-    PluginLoaderFactory(final Path pluginsDirectory, final boolean searchCurrentClasspath)
+    /**
+     * Create a new factory for service {@link Loader}.
+     * 
+     * @param pluginsDirectory
+     *            the directory to search for plugins
+     * @param searchCurrentClasspath
+     *            whether to search the current classpath for plugins. This is
+     *            useful for testing to avoid loading plugins twice.
+     */
+    ServiceLoaderFactory(final Path pluginsDirectory, final boolean searchCurrentClasspath)
     {
         this.pluginsDirectory = pluginsDirectory;
         this.searchCurrentClasspath = searchCurrentClasspath;
     }
 
-    static PluginLoaderFactory createDefault()
+    static ServiceLoaderFactory createDefault()
     {
-        return new PluginLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"), true);
+        return new ServiceLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"), true);
     }
 
     private static Path getHomeDirectory()
@@ -102,7 +111,7 @@ class PluginLoaderFactory
     {
         try
         {
-            return Files.list(path).filter(PluginLoaderFactory::isJarFile).toList();
+            return Files.list(path).filter(ServiceLoaderFactory::isJarFile).toList();
         }
         catch (final IOException exception)
         {

@@ -1,23 +1,27 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
 final class ServiceOrigin
 {
     private final ClassLoader classLoader;
+    private final List<Path> jars;
 
-    private ServiceOrigin(final ClassLoader classLoader)
+    private ServiceOrigin(final ClassLoader classLoader, final List<Path> jars)
     {
         this.classLoader = classLoader;
+        this.jars = jars;
     }
 
     public static ServiceOrigin forCurrentClassPath()
     {
-        return new ServiceOrigin(getBaseClassLoader());
+        return new ServiceOrigin(getBaseClassLoader(), emptyList());
     }
 
     private static ClassLoader getBaseClassLoader()
@@ -32,14 +36,14 @@ final class ServiceOrigin
 
     public static ServiceOrigin forJars(final List<Path> jars)
     {
-        return new ServiceOrigin(createClassLoader(jars));
+        return new ServiceOrigin(createClassLoader(jars), jars);
     }
 
     private static ClassLoader createClassLoader(final List<Path> jars)
     {
         final URL[] urls = jars.stream().map(ServiceOrigin::toUrl)
                 .toArray(URL[]::new);
-        return new URLClassLoader(getClassLoaderName(jars), urls, getBaseClassLoader());
+        return new ChildFirstClassLoader(getClassLoaderName(jars), urls, getBaseClassLoader());
     }
 
     private static String getClassLoaderName(final List<Path> jars)
@@ -68,6 +72,6 @@ final class ServiceOrigin
     @Override
     public String toString()
     {
-        return "ServiceOrigin [classLoader=" + classLoader + "]";
+        return "ServiceOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
     }
 }

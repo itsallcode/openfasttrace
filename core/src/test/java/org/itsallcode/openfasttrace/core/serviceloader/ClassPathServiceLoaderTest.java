@@ -40,13 +40,14 @@ class ClassPathServiceLoaderTest
 
     @Test
     void loadingReturnsService(@Mock final ServiceLoader<DummyService> serviceLoaderMock,
-            @Mock final Provider<DummyService> providerMock)
+            @Mock final Provider<DummyService> providerMock, @Mock final ServiceOrigin originMock)
     {
-
         final DummyServiceImpl service = new DummyServiceImpl();
         when(serviceLoaderMock.stream()).thenReturn(Stream.of(providerMock));
         when(providerMock.get()).thenReturn(service);
-        final List<DummyService> services = new ClassPathServiceLoader<DummyService>(serviceLoaderMock).load().toList();
+        final List<DummyService> services = new ClassPathServiceLoader<DummyService>(originMock, serviceLoaderMock)
+                .load()
+                .toList();
         assertAll(() -> assertThat(services, hasSize(1)),
                 () -> assertThat(services.get(0), not(nullValue())),
                 () -> assertThat(services.get(0), instanceOf(DummyServiceImpl.class)),

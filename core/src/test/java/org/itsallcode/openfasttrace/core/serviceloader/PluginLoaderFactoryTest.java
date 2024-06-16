@@ -27,7 +27,7 @@ class PluginLoaderFactoryTest
 
     private PluginLoaderFactory testee()
     {
-        return new PluginLoaderFactory(tempDir);
+        return new PluginLoaderFactory(tempDir, true);
     }
 
     @Test

@@ -11,15 +11,17 @@ class PluginLoaderFactory
 {
     private static final Logger LOGGER = Logger.getLogger(PluginLoaderFactory.class.getName());
     private final Path pluginsDirectory;
+    private final boolean searchCurrentClasspath;
 
-    PluginLoaderFactory(final Path pluginsDirectory)
+    PluginLoaderFactory(final Path pluginsDirectory, final boolean searchCurrentClasspath)
     {
         this.pluginsDirectory = pluginsDirectory;
+        this.searchCurrentClasspath = searchCurrentClasspath;
     }
 
     static PluginLoaderFactory createDefault()
     {
-        return new PluginLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"));
+        return new PluginLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"), true);
     }
 
     private static Path getHomeDirectory()
@@ -43,7 +45,10 @@ class PluginLoaderFactory
     List<ServiceOrigin> findServiceOrigins()
     {
         final List<ServiceOrigin> origins = new ArrayList<>();
-        origins.add(ServiceOrigin.forCurrentClassPath());
+        if (searchCurrentClasspath)
+        {
+            origins.add(ServiceOrigin.forCurrentClassPath());
+        }
         origins.addAll(findPluginOrigins());
         LOGGER.fine(() -> "Found " + origins.size() + " service origins: " + origins + ".");
         return origins;

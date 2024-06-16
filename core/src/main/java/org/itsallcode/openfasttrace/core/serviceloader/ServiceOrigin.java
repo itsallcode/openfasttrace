@@ -37,10 +37,15 @@ final class ServiceOrigin
 
     private static ClassLoader createClassLoader(final List<Path> jars)
     {
-        final String name = "ServiceClassLoader-"
-                + jars.stream().map(Path::getFileName).map(Path::toString).collect(joining(","));
-        final URL[] urls = jars.stream().map(ServiceOrigin::toUrl).toArray(URL[]::new);
-        return new URLClassLoader(name, urls, getBaseClassLoader());
+        final URL[] urls = jars.stream().map(ServiceOrigin::toUrl)
+                .toArray(URL[]::new);
+        return new URLClassLoader(getClassLoaderName(jars), urls, getBaseClassLoader());
+    }
+
+    private static String getClassLoaderName(final List<Path> jars)
+    {
+        return "ServiceClassLoader-"
+                + jars.stream().map(Path::getFileName).sorted().map(Path::toString).collect(joining(","));
     }
 
     private static URL toUrl(final Path path)
@@ -58,5 +63,11 @@ final class ServiceOrigin
     public ClassLoader getClassLoader()
     {
         return classLoader;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ServiceOrigin [classLoader=" + classLoader + "]";
     }
 }

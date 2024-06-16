@@ -8,12 +8,12 @@ final class ClassPathServiceLoader<T> implements Loader<T>
 {
     private final ServiceLoader<T> serviceLoader;
 
-    private ClassPathServiceLoader(final ServiceLoader<T> serviceLoader)
+    ClassPathServiceLoader(final ServiceLoader<T> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
     }
 
-    static <T> Loader<T> load(final Class<T> serviceType, final ServiceOrigin serviceOrigin)
+    static <T> Loader<T> create(final Class<T> serviceType, final ServiceOrigin serviceOrigin)
     {
         return new ClassPathServiceLoader<>(ServiceLoader.load(serviceType, serviceOrigin.getClassLoader()));
     }

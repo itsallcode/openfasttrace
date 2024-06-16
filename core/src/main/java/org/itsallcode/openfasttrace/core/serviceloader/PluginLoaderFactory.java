@@ -5,9 +5,11 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.logging.Logger;
 
 class PluginLoaderFactory
 {
+    private static final Logger LOGGER = Logger.getLogger(PluginLoaderFactory.class.getName());
     private final Path pluginsDirectory;
 
     PluginLoaderFactory(final Path pluginsDirectory)
@@ -32,16 +34,18 @@ class PluginLoaderFactory
 
     private <T> Loader<T> createLoader(final Class<T> serviceType, final List<ServiceOrigin> origins)
     {
-        final List<Loader<T>> loaders = origins.stream().map(origin -> ClassPathServiceLoader.load(serviceType, origin))
+        final List<Loader<T>> loaders = origins.stream()
+                .map(origin -> ClassPathServiceLoader.create(serviceType, origin))
                 .toList();
         return new DelegatingLoader<>(loaders);
     }
 
-    private List<ServiceOrigin> findServiceOrigins()
+    List<ServiceOrigin> findServiceOrigins()
     {
         final List<ServiceOrigin> origins = new ArrayList<>();
         origins.add(ServiceOrigin.forCurrentClassPath());
         origins.addAll(findPluginOrigins());
+        LOGGER.fine(() -> "Found " + origins.size() + " service origins: " + origins + ".");
         return origins;
     }
 
@@ -51,10 +55,10 @@ class PluginLoaderFactory
         {
             return Collections.emptyList();
         }
-
         try
         {
             return Files.list(pluginsDirectory)
+                    .sorted()
                     .map(this::originForPath)
                     .flatMap(Optional::stream)
                     .toList();
@@ -71,17 +75,21 @@ class PluginLoaderFactory
     {
         if (isJarFile(path))
         {
+            LOGGER.fine(() -> "Found single plugin jar '" + path + "'.");
             return Optional.of(ServiceOrigin.forJars(List.of(path)));
         }
         if (!Files.isDirectory(path))
         {
+            LOGGER.fine(() -> "Ignore unsupported file '" + path + "'.");
             return Optional.empty();
         }
         final List<Path> jars = findJarsInDir(path);
         if (jars.isEmpty())
         {
+            LOGGER.fine(() -> "Ignore empty plugin directory '" + path + "'.");
             return Optional.empty();
         }
+        LOGGER.fine(() -> "Found " + jars.size() + " in '" + path + "': " + jars + ".");
         return Optional.of(ServiceOrigin.forJars(jars));
     }
 

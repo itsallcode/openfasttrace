@@ -11,7 +11,7 @@
         <revision>4.0.0</revision>
         <java.version>17</java.version>
         <junit.version>5.11.0-M2</junit.version>
-        <maven.surefire.version>3.2.5</maven.surefire.version>
+        <maven.surefire.version>3.3.0</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>

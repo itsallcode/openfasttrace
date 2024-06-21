@@ -68,6 +68,25 @@ class ServiceLoaderFactoryTest
     }
 
     @Test
+    void findServiceOriginsIgnoresNonJarFiles() throws IOException
+    {
+        final Path pluginDir = tempDir.resolve("plugin1");
+        Files.createDirectories(pluginDir);
+        Files.createFile(pluginDir.resolve("plugin1.txt"));
+        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        assertNoPlugins(origins);
+    }
+
+    @Test
+    void findServiceOriginsIgnoresDirectories() throws IOException
+    {
+        final Path pluginDir = tempDir.resolve("plugin1");
+        Files.createDirectories(pluginDir.resolve("ignored-directory"));
+        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        assertNoPlugins(origins);
+    }
+
+    @Test
     void findServiceOriginsSingleJar() throws IOException
     {
         final Path pluginDir = tempDir.resolve("plugin1");

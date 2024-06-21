@@ -17,7 +17,7 @@ final class ServiceOrigin implements AutoCloseable
     private final ClassLoader classLoader;
     private final List<Path> jars;
 
-    private ServiceOrigin(final ClassLoader classLoader, final List<Path> jars)
+    ServiceOrigin(final ClassLoader classLoader, final List<Path> jars)
     {
         this.classLoader = classLoader;
         this.jars = new ArrayList<>(jars);

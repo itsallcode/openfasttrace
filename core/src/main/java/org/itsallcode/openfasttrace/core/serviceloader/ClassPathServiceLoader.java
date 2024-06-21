@@ -40,8 +40,9 @@ final class ClassPathServiceLoader<T> implements Loader<T>
         final boolean correctClassLoader = serviceClassLoader == serviceOrigin.getClassLoader();
         if (!correctClassLoader)
         {
-            LOGGER.fine(() -> "Service " + service + " has wrong class loader: " + serviceClassLoader + ", expected "
-                    + serviceOrigin.getClassLoader());
+            LOGGER.finest(
+                    () -> "Service " + service + " has unexpected class loader: " + serviceClassLoader + ", expected "
+                            + serviceOrigin.getClassLoader() + ". This service will not be used.");
         }
         return correctClassLoader;
     }

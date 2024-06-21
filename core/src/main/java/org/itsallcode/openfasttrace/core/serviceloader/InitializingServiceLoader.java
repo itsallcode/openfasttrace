@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
-import java.util.*;
+import java.util.List;
+import java.util.ServiceLoader;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
@@ -14,7 +15,7 @@ import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
  * @param <C>
  *            the context type
  */
-public final class InitializingServiceLoader<T extends Initializable<C>, C> implements Iterable<T>, Loader<T>
+public final class InitializingServiceLoader<T extends Initializable<C>, C> implements Loader<T>
 {
     private final Loader<T> delegate;
     private final C context;
@@ -63,12 +64,6 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
             service.init(this.context);
             return service;
         }).toList();
-    }
-
-    @Override
-    public Iterator<T> iterator()
-    {
-        return load().iterator();
     }
 
     @Override

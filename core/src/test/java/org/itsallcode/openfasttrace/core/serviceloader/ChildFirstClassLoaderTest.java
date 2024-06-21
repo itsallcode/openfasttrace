@@ -18,21 +18,25 @@ import org.junit.jupiter.api.condition.OS;
 class ChildFirstClassLoaderTest
 {
     @Test
-    void parentFindsClass() throws ClassNotFoundException
+    void parentFindsClass() throws ClassNotFoundException, IOException
     {
-        final ClassLoader testee = new ChildFirstClassLoader("name", new URL[] {},
-                new MockClassLoader(String.class));
-        assertThat(testee.loadClass("ClassName"), sameInstance(String.class));
+        try (final ChildFirstClassLoader testee = new ChildFirstClassLoader("name", new URL[] {},
+                new MockClassLoader(String.class)))
+        {
+            assertThat(testee.loadClass("ClassName"), sameInstance(String.class));
+        }
     }
 
     @Test
-    void parentDoesNotFindClass()
+    void parentDoesNotFindClass() throws IOException
     {
-        final ClassLoader testee = new ChildFirstClassLoader("name", new URL[] {},
-                new MockClassLoader(null));
-        final ClassNotFoundException exception = assertThrows(ClassNotFoundException.class,
-                () -> testee.loadClass("ClassName"));
-        assertThat(exception.getMessage(), equalTo("ClassName"));
+        try (final ChildFirstClassLoader testee = new ChildFirstClassLoader("name", new URL[] {},
+                new MockClassLoader(null)))
+        {
+            final ClassNotFoundException exception = assertThrows(ClassNotFoundException.class,
+                    () -> testee.loadClass("ClassName"));
+            assertThat(exception.getMessage(), equalTo("ClassName"));
+        }
     }
 
     @Test
@@ -40,11 +44,13 @@ class ChildFirstClassLoaderTest
     {
         final Class<?> classToFind = Matchers.class;
         final URL jarForClass = findJarForClass(classToFind.getName());
-        final ClassLoader testee = new ChildFirstClassLoader("name", new URL[] { jarForClass },
-                Thread.currentThread().getContextClassLoader());
-        final Class<?> foundClass = testee.loadClass(classToFind.getName());
-        assertThat(foundClass, not(sameInstance(classToFind)));
-        assertThat(foundClass.toGenericString(), equalTo(classToFind.toGenericString()));
+        try (final ChildFirstClassLoader testee = new ChildFirstClassLoader("name", new URL[] { jarForClass },
+                Thread.currentThread().getContextClassLoader()))
+        {
+            final Class<?> foundClass = testee.loadClass(classToFind.getName());
+            assertThat(foundClass, not(sameInstance(classToFind)));
+            assertThat(foundClass.toGenericString(), equalTo(classToFind.toGenericString()));
+        }
     }
 
     public static URL findJarForClass(final String className) throws IOException
@@ -70,6 +76,10 @@ class ChildFirstClassLoaderTest
         throw new AssertionError("No jar found containing " + className);
     }
 
+    /**
+     * We can't mock the ClassLoader using Mockito because method
+     * {@link ClassLoader#loadClass(String, boolean)} is protected.
+     */
     private static class MockClassLoader extends ClassLoader
     {
         private final Class<?> clazz;
@@ -79,7 +89,8 @@ class ChildFirstClassLoaderTest
             this.clazz = clazz;
         }
 
-        public Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException
+        @Override
+        protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException
         {
             if (clazz == null)
             {

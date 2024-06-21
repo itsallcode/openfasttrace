@@ -21,7 +21,7 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
     private final C context;
     private List<T> services;
 
-    private InitializingServiceLoader(final Loader<T> delegate, final C context)
+    InitializingServiceLoader(final Loader<T> delegate, final C context)
     {
         this.delegate = delegate;
         this.context = context;

@@ -19,21 +19,21 @@ class DelegatingLoaderTest
     @Test
     void noDelegates()
     {
-        assertThat(new DelegatingLoader<>(List.of()).load().toList(), empty());
+        assertThat(load(List.of()), empty());
     }
 
     @Test
     void emptyDelegate(@Mock final Loader<DummyService> loaderMock)
     {
         when(loaderMock.load()).thenReturn(Stream.empty());
-        assertThat(new DelegatingLoader<>(List.of(loaderMock)).load().toList(), empty());
+        assertThat(load(List.of(loaderMock)), empty());
     }
 
     @Test
     void nonEmptyDelegate(@Mock final Loader<DummyService> loaderMock, @Mock final DummyService serviceMock)
     {
         when(loaderMock.load()).thenReturn(Stream.of(serviceMock));
-        assertThat(new DelegatingLoader<>(List.of(loaderMock)).load().toList(), contains(serviceMock));
+        assertThat(load(List.of(loaderMock)), contains(serviceMock));
     }
 
     @Test
@@ -43,8 +43,16 @@ class DelegatingLoaderTest
     {
         when(loaderMock1.load()).thenReturn(Stream.of(serviceMock1));
         when(loaderMock2.load()).thenReturn(Stream.of(serviceMock2));
-        assertThat(new DelegatingLoader<>(List.of(loaderMock1, loaderMock2)).load().toList(),
+        assertThat(load(List.of(loaderMock1, loaderMock2)),
                 contains(serviceMock1, serviceMock2));
+    }
+
+    private <T> List<T> load(final List<Loader<T>> delegates)
+    {
+        try (DelegatingLoader<T> loader = new DelegatingLoader<T>(delegates))
+        {
+            return loader.load().toList();
+        }
     }
 
     static interface DummyService

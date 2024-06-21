@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Origin of a service, either the current classpath or a list of jar files.
+ */
 final class ServiceOrigin implements AutoCloseable
 {
     private final ClassLoader classLoader;
@@ -20,7 +23,12 @@ final class ServiceOrigin implements AutoCloseable
         this.jars = new ArrayList<>(jars);
     }
 
-    public static ServiceOrigin forCurrentClassPath()
+    /**
+     * Create a service origin for the current classpath.
+     * 
+     * @return a service origin for the current classpath
+     */
+    static ServiceOrigin forCurrentClassPath()
     {
         return new ServiceOrigin(getBaseClassLoader(), emptyList());
     }
@@ -30,12 +38,26 @@ final class ServiceOrigin implements AutoCloseable
         return Thread.currentThread().getContextClassLoader();
     }
 
-    public static ServiceOrigin forJar(final Path jar)
+    /**
+     * Create a service origin for a single jar file.
+     * 
+     * @param jar
+     *            path to the jar file
+     * @return a service origin for the jar file
+     */
+    static ServiceOrigin forJar(final Path jar)
     {
         return forJars(List.of(jar));
     }
 
-    public static ServiceOrigin forJars(final List<Path> jars)
+    /**
+     * Create a service origin for a list of jar files.
+     * 
+     * @param jars
+     *            list of paths to jar files
+     * @return a service origin for the jar files
+     */
+    static ServiceOrigin forJars(final List<Path> jars)
     {
         return new ServiceOrigin(createClassLoader(jars), jars);
     }

@@ -40,7 +40,7 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
      *            instances.
      * @return an {@link InitializingServiceLoader} for type <code>T</code>
      */
-    public static <T extends Initializable<C>, C> InitializingServiceLoader<T, C> load(
+    public static <T extends Initializable<C>, C> Loader<T> load(
             final Class<T> serviceType, final C context)
     {
         final ServiceLoaderFactory loaderFactory = ServiceLoaderFactory.createDefault();

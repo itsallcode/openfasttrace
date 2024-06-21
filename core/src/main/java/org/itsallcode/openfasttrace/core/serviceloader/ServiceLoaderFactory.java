@@ -6,7 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
+/**
+ * Factory for creating {@link Loader} instances for services.
+ */
 class ServiceLoaderFactory
 {
     private static final Logger LOGGER = Logger.getLogger(ServiceLoaderFactory.class.getName());
@@ -28,6 +32,11 @@ class ServiceLoaderFactory
         this.searchCurrentClasspath = searchCurrentClasspath;
     }
 
+    /**
+     * Create a default factory that searches for plugins in the user's home.
+     * 
+     * @return a default factory
+     */
     static ServiceLoaderFactory createDefault()
     {
         return new ServiceLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"), true);
@@ -38,6 +47,15 @@ class ServiceLoaderFactory
         return Path.of(System.getProperty("user.home"));
     }
 
+    /**
+     * Create a new {@link Loader} for the given service type.
+     * 
+     * @param <T>
+     *            service type
+     * @param serviceType
+     *            service type
+     * @return a new {@link Loader} for the given service type
+     */
     <T> Loader<T> createLoader(final Class<T> serviceType)
     {
         return createLoader(serviceType, findServiceOrigins());
@@ -51,6 +69,13 @@ class ServiceLoaderFactory
         return new DelegatingLoader<>(loaders);
     }
 
+    /**
+     * Find all service origins.
+     * <p>
+     * This method is package-private for testing.
+     * 
+     * @return a list of service origins
+     */
     List<ServiceOrigin> findServiceOrigins()
     {
         final List<ServiceOrigin> origins = new ArrayList<>();
@@ -63,7 +88,7 @@ class ServiceLoaderFactory
         return origins;
     }
 
-    Collection<ServiceOrigin> findPluginOrigins()
+    private Collection<ServiceOrigin> findPluginOrigins()
     {
         if (!Files.isDirectory(pluginsDirectory))
         {
@@ -111,7 +136,10 @@ class ServiceLoaderFactory
     {
         try
         {
-            return Files.list(path).filter(ServiceLoaderFactory::isJarFile).toList();
+            try (Stream<Path> stream = Files.list(path))
+            {
+                return stream.filter(ServiceLoaderFactory::isJarFile).toList();
+            }
         }
         catch (final IOException exception)
         {

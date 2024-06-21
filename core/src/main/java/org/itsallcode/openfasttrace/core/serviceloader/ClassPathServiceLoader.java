@@ -5,6 +5,10 @@ import java.util.ServiceLoader.Provider;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+/**
+ * A service loader that loads services from the classpath using a given
+ * {@link ServiceOrigin}.
+ */
 final class ClassPathServiceLoader<T> implements Loader<T>
 {
     private static final Logger LOGGER = Logger.getLogger(ClassPathServiceLoader.class.getName());

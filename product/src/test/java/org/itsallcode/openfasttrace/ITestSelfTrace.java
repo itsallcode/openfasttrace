@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.*;
 import java.nio.file.*;
 import java.util.List;
@@ -80,7 +78,7 @@ class ITestSelfTrace
                     .filter(path -> Files.isDirectory(path)) //
                     .filter(endsWith(Paths.get("src/main")) //
                             .or(endsWith(Paths.get("src/test/java")))) //
-                    .collect(toList());
+                    .toList();
         }
         catch (final IOException e)
         {

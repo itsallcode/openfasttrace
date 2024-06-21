@@ -29,11 +29,11 @@ class TestInitializingServiceLoader
     void testNoServicesRegistered()
     {
         final Object context = new Object();
-        final InitializingServiceLoader<InitializableServiceStub, Object> voidServiceLoader = InitializingServiceLoader
+        final Loader<InitializableServiceStub> voidServiceLoader = InitializingServiceLoader
                 .load(InitializableServiceStub.class, context);
         final List<InitializableServiceStub> services = voidServiceLoader.load().toList();
         assertThat(services, emptyIterable());
-        assertThat(voidServiceLoader, emptyIterable());
+        assertThat(voidServiceLoader.load().toList(), emptyIterable());
     }
 
     @Test
@@ -72,8 +72,7 @@ class TestInitializingServiceLoader
     private <T extends Initializable<C>, C> List<T> getRegisteredServices(final Class<T> type,
             final C context)
     {
-        final InitializingServiceLoader<T, C> serviceLoader = InitializingServiceLoader.load(type,
-                context);
+        final Loader<T> serviceLoader = InitializingServiceLoader.load(type, context);
         return serviceLoader.load().toList();
     }
 

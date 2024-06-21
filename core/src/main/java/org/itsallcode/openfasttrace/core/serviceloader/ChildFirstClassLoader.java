@@ -8,6 +8,9 @@ import java.net.URLClassLoader;
  * then from the parent class loader, unlike {@link URLClassLoader} which does
  * it the other way around.
  * <p>
+ * This allows us to prefer externl plugins over plugins on the classpath
+ * included with OFT.
+ * <p>
  * This is based on
  * https://medium.com/@isuru89/java-a-child-first-class-loader-cbd9c3d0305
  * <p>
@@ -22,28 +25,38 @@ class ChildFirstClassLoader extends URLClassLoader
     @Override
     protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException
     {
-        // has the class loaded already?
-        Class<?> loadedClass = findLoadedClass(name);
-        if (loadedClass == null)
-        {
-            try
-            {
-                // find the class from given jar urls
-                loadedClass = findClass(name);
-            }
-            catch (final ClassNotFoundException ignore)
-            {
-                // Hmmm... class does not exist in the given urls.
-                // Let's try finding it in our parent classloader.
-                // this'll throw ClassNotFoundException in failure.
-                loadedClass = super.loadClass(name, resolve);
-            }
-        }
-
+        final Class<?> loadedClass = findClass(name, resolve);
         if (resolve)
-        { // marked to resolve
+        {
             resolveClass(loadedClass);
         }
         return loadedClass;
+    }
+
+    private Class<?> findClass(final String name, final boolean resolve) throws ClassNotFoundException
+    {
+        // Has the class loaded already?
+        final Class<?> loadedClass = findLoadedClass(name);
+        if (loadedClass != null)
+        {
+            return loadedClass;
+        }
+        return loadClassInternally(name, resolve);
+    }
+
+    private Class<?> loadClassInternally(final String name, final boolean resolve) throws ClassNotFoundException
+    {
+        try
+        {
+            // Find the class from given jar urls
+            return findClass(name);
+        }
+        catch (final ClassNotFoundException ignore)
+        {
+            // Class does not exist in the given urls.
+            // Let's try finding it in our parent classloader.
+            // This will throw ClassNotFoundException on failure.
+            return super.loadClass(name, resolve);
+        }
     }
 }

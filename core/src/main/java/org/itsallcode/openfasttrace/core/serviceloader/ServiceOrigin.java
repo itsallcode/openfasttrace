@@ -98,17 +98,18 @@ final class ServiceOrigin implements AutoCloseable
         return "ServiceOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
     }
 
+    @Override
     public void close()
     {
-        if (classLoader instanceof AutoCloseable)
+        if (classLoader instanceof final AutoCloseable closable)
         {
             try
             {
-                ((AutoCloseable) classLoader).close();
+                closable.close();
             }
-            catch (final Exception e)
+            catch (final Exception exception)
             {
-                throw new IllegalStateException("Error closing class loader " + classLoader, e);
+                throw new IllegalStateException("Error closing class loader " + classLoader, exception);
             }
         }
     }

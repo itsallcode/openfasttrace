@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -12,7 +13,7 @@ class DelegatingLoader<T> implements Loader<T>
 
     DelegatingLoader(final List<Loader<T>> delegates)
     {
-        this.delegates = delegates;
+        this.delegates = new ArrayList<>(delegates);
     }
 
     @Override

@@ -61,7 +61,7 @@ class ServiceLoaderFactory
         return createLoader(serviceType, findServiceOrigins());
     }
 
-    private <T> Loader<T> createLoader(final Class<T> serviceType, final List<ServiceOrigin> origins)
+    private static <T> Loader<T> createLoader(final Class<T> serviceType, final List<ServiceOrigin> origins)
     {
         final List<Loader<T>> loaders = origins.stream()
                 .map(origin -> ClassPathServiceLoader.create(serviceType, origin))
@@ -96,11 +96,13 @@ class ServiceLoaderFactory
         }
         try
         {
-            return Files.list(pluginsDirectory)
-                    .sorted()
-                    .map(this::originForPath)
-                    .flatMap(Optional::stream)
-                    .toList();
+            try (Stream<Path> stream = Files.list(pluginsDirectory))
+            {
+                return stream.sorted()
+                        .map(ServiceLoaderFactory::originForPath)
+                        .flatMap(Optional::stream)
+                        .toList();
+            }
         }
         catch (final IOException exception)
         {
@@ -110,7 +112,7 @@ class ServiceLoaderFactory
         }
     }
 
-    private Optional<ServiceOrigin> originForPath(final Path path)
+    private static Optional<ServiceOrigin> originForPath(final Path path)
     {
         if (isJarFile(path))
         {

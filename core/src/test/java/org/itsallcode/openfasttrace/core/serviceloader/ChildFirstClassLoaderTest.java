@@ -26,7 +26,7 @@ class ChildFirstClassLoaderTest
     }
 
     @Test
-    void parentDoesNotFindClass() throws ClassNotFoundException
+    void parentDoesNotFindClass()
     {
         final ClassLoader testee = new ChildFirstClassLoader("name", new URL[] {},
                 new MockClassLoader(null));

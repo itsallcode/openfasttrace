@@ -13,6 +13,7 @@ import java.util.Enumeration;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.OS;
 
 class ChildFirstClassLoaderTest
 {
@@ -55,8 +56,12 @@ class ChildFirstClassLoaderTest
             final URL url = urls.nextElement();
             if ("jar".equals(url.getProtocol()))
             {
-                final String jarPath = url.getPath().substring(5,
-                        url.getPath().indexOf("!"));
+                String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+                if (OS.WINDOWS.isCurrentOs())
+                {
+                    // Remove leading slash of "/C:/Users/user/.m2/..."
+                    jarPath = jarPath.substring(1);
+                }
                 final Path path = Path.of(jarPath);
                 assertTrue(Files.exists(path));
                 return path.toUri().toURL();

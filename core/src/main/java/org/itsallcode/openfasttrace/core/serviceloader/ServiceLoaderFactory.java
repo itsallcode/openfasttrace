@@ -39,7 +39,8 @@ class ServiceLoaderFactory
      */
     static ServiceLoaderFactory createDefault()
     {
-        return new ServiceLoaderFactory(getHomeDirectory().resolve(".oft").resolve("plugins"), true);
+        final Path pluginsDirectory = getHomeDirectory().resolve(".oft").resolve("plugins");
+        return new ServiceLoaderFactory(pluginsDirectory, true);
     }
 
     private static Path getHomeDirectory()
@@ -76,6 +77,7 @@ class ServiceLoaderFactory
      * 
      * @return a list of service origins
      */
+    // [impl->dsn~plugins.loading~1]
     List<ServiceOrigin> findServiceOrigins()
     {
         final List<ServiceOrigin> origins = new ArrayList<>();

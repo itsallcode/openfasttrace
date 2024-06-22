@@ -13,8 +13,6 @@ import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.importer.ImporterServiceImpl;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 
 class ServiceFactory
 {
@@ -26,9 +24,7 @@ class ServiceFactory
     ImporterService createImporterService(final ImportSettings settings)
     {
         final ImporterContext context = new ImporterContext(settings);
-        final Loader<ImporterFactory> serviceLoader = InitializingServiceLoader.load(ImporterFactory.class, context);
-        final ImporterService service = new ImporterServiceImpl(
-                new ImporterFactoryLoader(serviceLoader), settings);
+        final ImporterService service = new ImporterServiceImpl(new ImporterFactoryLoader(context), settings);
         context.setImporterService(service);
         return service;
     }

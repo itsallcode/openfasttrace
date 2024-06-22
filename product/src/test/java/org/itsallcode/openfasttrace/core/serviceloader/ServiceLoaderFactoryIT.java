@@ -21,6 +21,7 @@ import org.opentest4j.TestAbortedException;
  * must be located in module {@code product} (which includes all plugin modules)
  * so that it can access all plugin services.
  */
+// [itest->dsn~plugins.loading~1]
 class ServiceLoaderFactoryIT
 {
     @TempDir

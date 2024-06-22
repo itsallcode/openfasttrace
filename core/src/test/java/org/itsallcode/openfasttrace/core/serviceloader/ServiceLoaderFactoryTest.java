@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
 
+// [utest->dsn~plugins.loading~1]
 class ServiceLoaderFactoryTest
 {
     @TempDir

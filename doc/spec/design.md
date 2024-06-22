@@ -152,7 +152,7 @@ Separating plugins from each other avoids conflicts between potentially duplicat
 Covers:
 * [`req~plugins.loading~1`](system_requirements.md#loading-plugins)
 
-Needs: impl, utest, itest
+Needs: impl, utest
 
 ### Loader Supports Plugin Types
 `dsn~plugins.loading.plugin_types~1`
@@ -165,7 +165,7 @@ The Plugin loader supports loading factories the following plugin types:
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 
-Needs: impl, utest, itest
+Needs: impl, itest
 
 ## Import
 
@@ -1031,7 +1031,7 @@ The CLI allows listing available plugins in OFT.
 Covers:
 - [req~plugins.list~1](system_requirements.md#listing-available-plugins)
 
-Needs: impl, utest, itest
+#Needs: impl, utest, itest
 
 # Design Decisions
 

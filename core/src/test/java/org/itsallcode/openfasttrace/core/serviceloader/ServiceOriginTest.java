@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+// [utest->dsn~plugins.loading~1]
 @ExtendWith(MockitoExtension.class)
 class ServiceOriginTest
 {
@@ -34,6 +35,7 @@ class ServiceOriginTest
         assertThat(origin, hasToString(startsWith("CurrentClassPathOrigin [classLoader=")));
     }
 
+    // [utest->dsn~plugins.loading.separate_classloader~1]
     @Test
     void currentClassPathGetClassLoader()
     {

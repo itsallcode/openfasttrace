@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Origin of a service, either the current classpath or a list of jar files.
  */
+// [impl->dsn~plugins.loading~1]
 interface ServiceOrigin extends AutoCloseable
 {
     /**
@@ -45,6 +46,7 @@ interface ServiceOrigin extends AutoCloseable
      *            list of paths to jar files
      * @return a service origin for the jar files
      */
+    // [impl->dsn~plugins.loading.separate_classloader~1]
     static ServiceOrigin forJars(final List<Path> jars)
     {
         return new JarFileOrigin(jars, createClassLoader(jars));

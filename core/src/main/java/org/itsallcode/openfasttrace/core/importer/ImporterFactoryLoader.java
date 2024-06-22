@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 
 /**
@@ -26,9 +26,21 @@ public class ImporterFactoryLoader
      * @param serviceLoader
      *            the loader used for locating importers.
      */
-    public ImporterFactoryLoader(final Loader<ImporterFactory> serviceLoader)
+    ImporterFactoryLoader(final Loader<ImporterFactory> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
+    }
+
+    /**
+     * Create a new loader for the given context.
+     * 
+     * @param context
+     *            the context for the new loader.
+     */
+    public ImporterFactoryLoader(final ImporterContext context)
+    {
+        // [impl->dsn~plugins.loading.plugin_types~1]
+        this(InitializingServiceLoader.load(ImporterFactory.class, context));
     }
 
     /**

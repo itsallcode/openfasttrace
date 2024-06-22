@@ -3,17 +3,12 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Enumeration;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.OS;
 
 class ChildFirstClassLoaderTest
 {
@@ -43,7 +38,7 @@ class ChildFirstClassLoaderTest
     void classFoundInJar() throws ClassNotFoundException, IOException
     {
         final Class<?> classToFind = Matchers.class;
-        final URL jarForClass = findJarForClass(classToFind.getName());
+        final URL jarForClass = ClassPathHelper.findUrlForClass(classToFind);
         try (final ChildFirstClassLoader testee = new ChildFirstClassLoader("name", new URL[] { jarForClass },
                 Thread.currentThread().getContextClassLoader()))
         {
@@ -51,29 +46,6 @@ class ChildFirstClassLoaderTest
             assertThat(foundClass, not(sameInstance(classToFind)));
             assertThat(foundClass.toGenericString(), equalTo(classToFind.toGenericString()));
         }
-    }
-
-    public static URL findJarForClass(final String className) throws IOException
-    {
-        final String classAsResource = className.replace('.', '/') + ".class";
-        final Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(classAsResource);
-        while (urls.hasMoreElements())
-        {
-            final URL url = urls.nextElement();
-            if ("jar".equals(url.getProtocol()))
-            {
-                String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
-                if (OS.WINDOWS.isCurrentOs())
-                {
-                    // Remove leading slash of "/C:/Users/user/.m2/..."
-                    jarPath = jarPath.substring(1);
-                }
-                final Path path = Path.of(jarPath);
-                assertTrue(Files.exists(path));
-                return path.toUri().toURL();
-            }
-        }
-        throw new AssertionError("No jar found containing " + className);
     }
 
     /**

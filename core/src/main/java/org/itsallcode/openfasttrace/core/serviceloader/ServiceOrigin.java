@@ -1,28 +1,16 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Origin of a service, either the current classpath or a list of jar files.
  */
-final class ServiceOrigin implements AutoCloseable
+interface ServiceOrigin extends AutoCloseable
 {
-    private final ClassLoader classLoader;
-    private final List<Path> jars;
-
-    ServiceOrigin(final ClassLoader classLoader, final List<Path> jars)
-    {
-        this.classLoader = classLoader;
-        this.jars = new ArrayList<>(jars);
-    }
-
     /**
      * Create a service origin for the current classpath.
      * 
@@ -30,7 +18,7 @@ final class ServiceOrigin implements AutoCloseable
      */
     static ServiceOrigin forCurrentClassPath()
     {
-        return new ServiceOrigin(getBaseClassLoader(), emptyList());
+        return new CurrentClassPathOrigin(getBaseClassLoader());
     }
 
     private static ClassLoader getBaseClassLoader()
@@ -59,10 +47,10 @@ final class ServiceOrigin implements AutoCloseable
      */
     static ServiceOrigin forJars(final List<Path> jars)
     {
-        return new ServiceOrigin(createClassLoader(jars), jars);
+        return new JarFileOrigin(jars, createClassLoader(jars));
     }
 
-    private static ClassLoader createClassLoader(final List<Path> jars)
+    private static URLClassLoader createClassLoader(final List<Path> jars)
     {
         final URL[] urls = jars.stream().map(ServiceOrigin::toUrl)
                 .toArray(URL[]::new);
@@ -87,30 +75,80 @@ final class ServiceOrigin implements AutoCloseable
         }
     }
 
-    public ClassLoader getClassLoader()
-    {
-        return classLoader;
-    }
+    /**
+     * Get the class loader for this service origin.
+     * 
+     * @return the class loader for this service origin
+     */
+    ClassLoader getClassLoader();
 
-    @Override
-    public String toString()
-    {
-        return "ServiceOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
-    }
+    /**
+     * Close the underlying ClassLoader if appropriate.
+     */
+    void close();
 
-    @Override
-    public void close()
+    static final class JarFileOrigin implements ServiceOrigin
     {
-        if (classLoader instanceof final AutoCloseable closable)
+        private final List<Path> jars;
+        private final URLClassLoader classLoader;
+
+        JarFileOrigin(final List<Path> jars, final URLClassLoader classLoader)
+        {
+            this.jars = jars;
+            this.classLoader = classLoader;
+        }
+
+        @Override
+        public ClassLoader getClassLoader()
+        {
+            return classLoader;
+        }
+
+        @Override
+        public void close()
         {
             try
             {
-                closable.close();
+                classLoader.close();
             }
             catch (final Exception exception)
             {
                 throw new IllegalStateException("Error closing class loader " + classLoader, exception);
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return "JarFileOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
+        }
+    }
+
+    static final class CurrentClassPathOrigin implements ServiceOrigin
+    {
+        private final ClassLoader classLoader;
+
+        CurrentClassPathOrigin(final ClassLoader classLoader)
+        {
+            this.classLoader = classLoader;
+        }
+
+        @Override
+        public ClassLoader getClassLoader()
+        {
+            return classLoader;
+        }
+
+        @Override
+        public void close()
+        {
+            // The current class loader cannot be closed.
+        }
+
+        @Override
+        public String toString()
+        {
+            return "CurrentClassPathOrigin [classLoader=" + classLoader + "]";
         }
     }
 }

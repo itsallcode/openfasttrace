@@ -1,7 +1,12 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
 
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+import java.net.URLClassLoader;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
@@ -13,20 +18,55 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ServiceOriginTest
 {
     @Test
-    void closesClassLoader(@Mock(extraInterfaces = AutoCloseable.class) final ClassLoader classLoaderMock)
+    void closesUrlClassLoader(@Mock final URLClassLoader classLoaderMock)
             throws Exception
     {
-        final ServiceOrigin serviceOrigin = new ServiceOrigin(classLoaderMock, Collections.emptyList());
+        final ServiceOrigin serviceOrigin = new ServiceOrigin.JarFileOrigin(Collections.emptyList(), classLoaderMock);
         serviceOrigin.close();
         verify(((AutoCloseable) classLoaderMock)).close();
         verifyNoMoreInteractions(classLoaderMock);
     }
 
     @Test
-    void doesNotCloseClassLoader(@Mock final ClassLoader classLoaderMock)
+    void currentClassPathOriginToString()
     {
-        final ServiceOrigin serviceOrigin = new ServiceOrigin(classLoaderMock, Collections.emptyList());
-        serviceOrigin.close();
-        verifyNoInteractions(classLoaderMock);
+        final ServiceOrigin origin = ServiceOrigin.forCurrentClassPath();
+        assertThat(origin, hasToString(startsWith("CurrentClassPathOrigin [classLoader=")));
+    }
+
+    @Test
+    void currentClassPathGetClassLoader()
+    {
+        final ServiceOrigin origin = ServiceOrigin.forCurrentClassPath();
+        assertThat(origin.getClassLoader(), sameInstance(Thread.currentThread().getContextClassLoader()));
+    }
+
+    @Test
+    void currentClassPathClose()
+    {
+        final ServiceOrigin origin = ServiceOrigin.forCurrentClassPath();
+        assertDoesNotThrow(origin::close);
+    }
+
+    @Test
+    void jarFileOriginToString()
+    {
+        final ServiceOrigin origin = ServiceOrigin.forJar(ClassPathHelper.findJarForClass(Test.class));
+        assertThat(origin,
+                hasToString(allOf(startsWith("JarFileOrigin [classLoader="), containsString("junit-jupiter-api"))));
+    }
+
+    @Test
+    void jarFileOriginGetClassLoader()
+    {
+        final ServiceOrigin origin = ServiceOrigin.forJar(ClassPathHelper.findJarForClass(Test.class));
+        assertThat(origin.getClassLoader(), instanceOf(URLClassLoader.class));
+    }
+
+    @Test
+    void jarFileOriginClose()
+    {
+        final ServiceOrigin origin = ServiceOrigin.forJar(ClassPathHelper.findJarForClass(Test.class));
+        assertDoesNotThrow(origin::close);
     }
 }

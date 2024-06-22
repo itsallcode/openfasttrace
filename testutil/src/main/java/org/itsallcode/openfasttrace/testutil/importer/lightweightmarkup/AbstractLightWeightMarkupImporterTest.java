@@ -86,6 +86,21 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
+    @Test
+    void testSpecificationItemReferenceWithDots()
+    {
+        assertImport(PATH, """
+                `req~SR.AB.1.1.1~2`
+                Covers:
+                * `feat~SR.CD.1.2.3~4`
+                """,
+                contains(item()
+                        .id("req", "SR.AB.1.1.1", 2)
+                        .addCoveredId("feat", "SR.CD.1.2.3", 4)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
     // [utest -> dsn~md.covers-list~1]
     @Test
     void testSpecificationItemCoversList()

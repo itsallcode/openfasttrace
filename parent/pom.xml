@@ -8,7 +8,7 @@
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>4.0.0</revision>
+        <revision>4.0.1</revision>
         <java.version>17</java.version>
         <junit.version>5.11.0-M2</junit.version>
         <maven.surefire.version>3.3.0</maven.surefire.version>

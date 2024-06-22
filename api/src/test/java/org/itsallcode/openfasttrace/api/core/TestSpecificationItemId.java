@@ -29,7 +29,16 @@ class TestSpecificationItemId
             "type~name-trailing-~42, type, name-trailing-, 42",
             "foobar~utf-8.compatible.äöü~333, foobar, utf-8.compatible.äöü, 333",
             // Deprecated Elektrobit-style specification item ID
-            "'feat:foo, v1', feat, foo, 1"
+            "'feat:foo, v1', feat, foo, 1",
+            "req~ab1~2, req, ab1, 2", // Name ends with a number
+            "req~ab.1~2, req, ab.1, 2", // Numbers directly after dot
+            "req~ab__1~2, req, ab__1, 2", // Consecutive underscores
+            "req~ab--1~2, req, ab--1, 2", // Consecutive dashes
+            // ID with multiple dots
+            "req~SR.AB.a.b.c~2, req, SR.AB.a.b.c, 2",
+            "req~SR.AB.1.1.1~2, req, SR.AB.1.1.1, 2",
+            "req~SR.AB.1_1_1~2, req, SR.AB.1_1_1, 2",
+            "req~SR.AB.a_b_c~2, req, SR.AB.a_b_c, 2",
     })
     void parsingValidIdsSucceeds(final String id, final String expectedType, final String expectedName,
             final int expectedRevision)
@@ -62,14 +71,19 @@ class TestSpecificationItemId
 
     @CsvSource({
             "feat.foo~1",
-            "foo~1",
-            "req~foo",
-            "req1~foo~1",
-            "req.r~foo~1",
-            "req~1foo~1",
-            "req~.foo~1",
-            "req~foo.~1",
-            "req~foo~-1",
+            "foo~1", // missing name
+            "req~foo", // missing revision
+            "req1~foo~1", // type ends with number
+            "1req~abc~2", // type with leading number
+            "re1q~abc~2", // type contains number
+            "req.r~foo~1", // type contain a dot
+            "req~1foo~1", // name starts with number
+            "req~.foo~1", // name begins with a dot
+            "req~foo.~1", // name ends with a dot
+            "req~_foo~1", // name starts with underscore
+            "req~-foo~1", // name starts with dash
+            "req~foo~-1", // negative revision
+            "req~foo..a~0", // consecutive dots
     })
     @ParameterizedTest(name = "Parsing of id ''{0}'' fails")
     void testParseId_mustFailForIllegalIds(final String illegalId)

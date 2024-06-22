@@ -79,11 +79,11 @@ We use this term to better distinguish between the accepted use of the word "req
 The identifier (ID) of a [specification item](#specification-item) is a project-globally unique key which is used to refer to a specification item.
 
 The specification item ID consists of the following parts:
-* [Artifact type](#artifact-type)
-* Name
+* [Artifact type](#specification-item-artifact-type)
+* [Name](#specification-item-name)
 * [Revision](#specification-item-revision)
 
-All parts are integral to the ID. The name alone is neither unique nor complete. In OFT's native document formats the ID is represented as a character string where the three parts are separated by the tilde ("~") symbol.
+All parts are integral to the ID. The name alone is neither unique nor complete. In OFT's native document formats the ID is represented as a character string where the three parts are separated by the tilde (`~`) symbol.
 
 Examples:
 
@@ -92,18 +92,16 @@ Examples:
     dsn~html5-exporter~1
     utest~html5-exporter~4
 
-The name part of the ID must be a character string consisting of Unicode letters and or numbers separated by underscore ("_"), hyphen ("-") or dot ("."). Whitespaces are not allowed.
+The following sections explain the each of the three parts in detail.
 
-The revision number is a positive integer number that can be started at zero but out of convention usually is started at one.
-
-#### Artifact Type
+##### Specification Item Artifact Type
 
 The artifact type serves two purposes:
 
 1. identifying the source document type
 2. identifying the position in the tracing hierarchy
 
-Artifact types are represented by character strings consisting out of ASCII letters and numbers. No other characters are allowed.
+Artifact types are represented by character strings consisting out of ASCII letters. No other characters are allowed.
 
 While not enforced by OFT the following strings are well established:
 
@@ -116,14 +114,30 @@ While not enforced by OFT the following strings are well established:
 * `itest` - integration test
 * `stest` - system test
 * `uman` - user manual
+* `oman` - operation manual
 
 If you don't distinguish between architectural and detailed design we recommend using `dsn` for both. The OFT specification for example does it that way.
 
 How many types you introduce, how you name and stack them is up to you. When we designed OFT, we were clear about the fact that we would not be able to cover all possible artifact types one could imagine, so we did not hardcode them into OFT.
 
-#### Specification Item Revision
+##### Specification Item Name
 
-The revision of a specification item is intended to obsolete existing coverage links in case the content of a specification item semantically changed. Incrementing the revision voids all existing links to this item so that authors linking to the item know they have to check for changes and adapt the covering items.
+The name part of the ID must be a character string consisting of Unicode letters and/or numbers separated by underscore (`_`), hyphen (`-`) or dot (`.`). Whitespaces are not allowed.
+
+* Names must start with a unicode letter
+* Consecutive dots `.` are not allowed
+
+We recommend using a dot `.` to create a hierarchy of items:
+
+    exporter.html5.folding
+    exporter.html5.colors
+    exporter.csv.column_names
+
+##### Specification Item Revision
+
+The revision number of a specification item is a positive integer number that can be started at zero but by convention usually is started at one.
+
+The revision is intended to obsolete existing coverage links in case the content of a specification item semantically changed. Incrementing the revision voids all existing links to this item so that authors linking to the item know they have to check for changes and adapt the covering items.
 
 Examples:
 
@@ -141,17 +155,17 @@ Normative passages contain requirements (or in OFT terms ["specification items"]
 
 #### Coverage
 
-The term "coverage" describes the relation between [specification items](#specification-item) that require detailing, implementation or verification and the items providing just that. This is done by listing all [artifact types](#artifact-type) where the author of a specification item expects to see coverage for that item.
+The term "coverage" describes the relation between [specification items](#specification-item) that require detailing, implementation or verification and the items providing just that. This is done by listing all [artifact types](#specification-item-artifact-type) where the author of a specification item expects to see coverage for that item.
 
 A specification item is covered when for each of the required artifact types at least one item exists that covers the original item.
 
 #### Deep Coverage
 
-Deep coverage is a special form of coverage. Achieving deep coverage means that not only is a [specification item](#specification-item) covered by all required [artifact types](#artifact-type), but also the covering items are all covered.
+Deep coverage is a special form of coverage. Achieving deep coverage means that not only is a [specification item](#specification-item) covered by all required [artifact types](#specification-item-artifact-type), but also the covering items are all covered.
 
 #### Terminating Specification Item
 
-A [specification item](#specification-item) terminates a chain of items if it does not require coverage in any [artifact type](#artifact-type).
+A [specification item](#specification-item) terminates a chain of items if it does not require coverage in any [artifact type](#specification-item-artifact-type).
 
 Example:
 
@@ -197,7 +211,7 @@ The upside of giving requirements a title is that they appear in Markdown outlin
 
 The number of hash marks in front of the title must adhere to the rules of Markdown, meaning that if you want to put a [specification item](#specification-item) inside a section with a level two header, the item title must start with three hash marks.
 
-At the moment the specification item above is a [terminating item](#terminating-specification-item) because it does not require coverage by any [artifact type](#artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
+At the moment the specification item above is a [terminating item](#terminating-specification-item) because it does not require coverage by any [artifact type](#specification-item-artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
 
     ### The Requirement Title
     `req~this-is-the-id~1`

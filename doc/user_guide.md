@@ -957,21 +957,21 @@ or run a report.
 
 The following example code use OFT as a converter that scans the current working directory recursively (default import setting) and exports the found artifacts with the standard settings to a ReqM2 file. 
 
-```JAVA
+```java
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
 ```
 
 Select input paths and import specification items from there:
 
-```JAVA
+```java
 final Oft oft = Oft.create();
 final List<SpecificationItem> items = oft.importItems(settings);
 ```
 
 Export the items:
 
-```JAVA
+```java
 oft.exportToPath(items, Paths.get("/output/path/export.oreqm"));
 ```
 
@@ -979,7 +979,7 @@ oft.exportToPath(items, Paths.get("/output/path/export.oreqm"));
 
 The example below shows how to use OFT as a reporter.  
 
-```JAVA
+```java
 import org.itsallcode.openfasttrace.Oft;
 import org.itsallcode.openfasttrace.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.core.SpecificationItem;
@@ -988,7 +988,7 @@ import org.itsallcode.openfasttrace.core.Trace;
 
 The import is similar to the converter case, except this time we add an input path explicitly for the sake of demonstration: 
 
-```JAVA
+```java
 final ImportSettings settings = ImportSettings //
         .builder() //
         .addInputs("/input/path") //
@@ -999,25 +999,25 @@ final List<SpecificationItem> items = oft.importItems(settings);
 
 Now link the items together (i.e. make them navigable):
 
-```JAVA
+```java
 final List<LinkedSpecificationItem> linkedItems = oft.link(items);
 ```
 
 Run the tracer on the linked items:
 
-```JAVA
+```java
 final Trace trace = oft.trace(linkedItems);
 ```
 
 Create a report from the trace:
 
-```JAVA
+```java
 oft.reportToStdOut(trace);
 ```
 
 You can also use the trace results in your own code:
 
-```JAVA
+```java
 if (trace.hasNoDefects())
 {
     // ... do something
@@ -1028,7 +1028,7 @@ if (trace.hasNoDefects())
 
 There are various reporting formats for OFT and one can set it using the ReportSettings object.
 
-```JAVA
+```java
 ReportSettings reportSettings = ReportSettings.builder().outputFormat("html").build();
 ```
 
@@ -1036,13 +1036,13 @@ The `ReportSettings` builder has other functions as well that allow you to set v
 
 OFT allows you to report directly to the standard output or to a file
 
-```JAVA
-//Reporting to a file
+```java
+// Reporting to a file
 oft.reportToPath(trace, reportPath, reportSettings);
 ```
 
-```JAVA
-//Reporting to stdout
+```java
+// Reporting to stdout
 oft.reportToStdOut(trace);
 ```
 
@@ -1056,7 +1056,7 @@ Import, export and report each have an overloaded variant that can be configured
 
 Each of those classes comes with a builder which is called like this:
 
-```JAVA
+```java
 ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
 
@@ -1082,3 +1082,7 @@ The following editors and integrated development environments are well suited fo
 | [IntelliJ](https://www.jetbrains.com/idea/)            | y             | y       | y       | y           |
 | [Vim](https://www.vim.org/)                            | y             |         |         |             |
 | [Visual Studio Code](https://code.visualstudio.com/)   | y             | y       | y       |             |
+
+### Templates for IDEs
+
+You can create OpenFastTrace artifacts faster with templates for your IDE. See [the list of available IDE Templates](https://github.com/itsallcode/openfasttrace-ide-templates).

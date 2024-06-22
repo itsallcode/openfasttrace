@@ -1,4 +1,4 @@
-# OpenFastTrace 4.0.1, released 2024-06-??
+# OpenFastTrace 4.0.1, released 2024-06-22
 
 Code name: Allow numbers after dots in specification item names
 

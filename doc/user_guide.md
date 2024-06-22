@@ -135,7 +135,7 @@ We recommend using a dot `.` to create a hierarchy of items:
 
 ##### Specification Item Revision
 
-The revision number of a specification item is a positive integer number that can be started at zero but out of convention usually is started at one.
+The revision number of a specification item is a positive integer number that can be started at zero but by convention usually is started at one.
 
 The revision is intended to obsolete existing coverage links in case the content of a specification item semantically changed. Incrementing the revision voids all existing links to this item so that authors linking to the item know they have to check for changes and adapt the covering items.
 

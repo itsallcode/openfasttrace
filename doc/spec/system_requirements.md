@@ -175,6 +175,19 @@ Running traces automatically in a scripted environment is the most important use
 
 Needs: req
 
+### Third Party Plugins
+
+`feat~plugins~1`
+
+Users can extend OFT's features with plugins from third parties.
+
+Rationale:
+
+* Some use cases or proprietary file formats might only be relevant for a very small user group. It does not make sense to integrate this into the core OFT product.
+* Some importers/exporters require additional dependencies that we don't want to include in the core OFT product.
+
+Needs: req
+
 ## Functional Requirements
 
 ### Anatomy of Specification Items
@@ -793,4 +806,48 @@ Covers:
 * [feat~reqm2-export~1](#reqm2-export)
 * [feat~plain-text-report](#plain-text-report)
 
+Needs: dsn
+
+### Third Party Plugins
+
+#### Loading Plugins
+`req~plugins.loading~1`
+
+OFT automatically loads plugins from JAR files located in a predefined location at startup.
+
+Rationale:
+
+* Plugins must be only installed once in the correct location.
+* This requires no additional configuration by the user.
+
+Covers:
+* [feat~plugins~1](#third-party-plugins)
+Needs: dsn
+
+#### Supported Plugin Types
+`req~plugins.types~1`
+
+OFT supports the following plugin types:
+* Importers add support for importing requirements from additional file formats.
+* Exporters add support for exporting requirements in additional file formats.
+* Reports add support for generating reports in additional formats.
+
+Covers:
+* [feat~plugins~1](#third-party-plugins)
+Needs: dsn
+
+#### Listing Available Plugins
+`req~plugins.list~1`
+
+OFT allows users to list all currently available plugins including the following information:
+* Plugin type (importer, exporter, reporter)
+* Location (included with OFT, external JAR)
+* Version number
+
+Rationale:
+
+This is helpful for debugging in case OFT does not use a plugin as expected.
+
+Covers:
+* [feat~plugins~1](#third-party-plugins)
 Needs: dsn

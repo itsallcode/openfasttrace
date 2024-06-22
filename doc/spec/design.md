@@ -92,6 +92,9 @@ Since the specification item IDs inherently look similar, load tests need to sho
 
 # Building Block View
 
+## Plugin Loader
+The plugin loader discovers and loads available plugins.
+
 ## Importers
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
@@ -121,6 +124,48 @@ The exporter transforms the internal representation of [specification items](#sp
 API users select exporters via their name as strings.
 
 # Runtime View
+
+## Discovering and Loading Plugins
+`dsn~plugins.loading~1`
+
+OFT loads plugins at startup from these locations:
+* Plugins included with OFT from the current ClassPath
+* Third party plugins from folder `$HOME/.oft/plugins/<plugin-name>/*.jar`
+
+Rationale:
+* A plugin may consist of multiple JARs, e.g. the plugin itself and it's dependencies.
+
+Covers:
+* [`req~plugins.loading~1`](system_requirements.md#loading-plugins)
+
+Needs: impl, utest, itest
+
+### Plugin Loader Uses Separate ClassLoaders
+`dsn~plugins.loading.separate_classloader~1`
+
+The Plugin loader uses a separate ClassLoader for each plugin.
+
+Rationale:
+
+Separating plugins from each other avoids conflicts between potentially duplicate classes in plugin.
+
+Covers:
+* [`req~plugins.loading~1`](system_requirements.md#loading-plugins)
+
+Needs: impl, utest, itest
+
+### Loader Supports Plugin Types
+`dsn~plugins.loading.plugin_types~1`
+
+The Plugin loader supports loading factories the following plugin types:
+* Importers: `org.itsallcode.openfasttrace.api.importer.ImporterFactory`
+* Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
+* Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`
+
+Covers:
+* [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
+
+Needs: impl, utest, itest
 
 ## Import
 
@@ -835,7 +880,7 @@ Needs: impl, utest
 
 The CLI expects one of the following commands as first unnamed command line parameter:
 
-    command = "trace" / "convert"
+    command = "trace" / "convert" / "help"
 
 Covers:
 
@@ -977,6 +1022,16 @@ Covers:
 * `req~cli.conversion.default-output-format~1`
 
 Needs: impl, itest, utest
+
+### Listing Plugins
+`dsn~cli.plugins.list~1`
+
+The CLI allows listing available plugins in OFT.
+
+Covers:
+- [req~plugins.list~1](system_requirements.md#listing-available-plugins)
+
+Needs: impl, utest, itest
 
 # Design Decisions
 

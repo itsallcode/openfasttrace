@@ -9,6 +9,8 @@
     <properties>
         <sonar.organization>itsallcode</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!-- Exclude abstract base test from coverage -->
+        <sonar.coverage.exclusions>testutil/src/main/java/org/itsallcode/openfasttrace/testutil/importer/lightweightmarkup/AbstractLightWeightMarkupImporterTest.java</sonar.coverage.exclusions>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- This root module does not produce any artifacts.
              We use the minimal timestamp to suppress a warning by artifact:compare. -->

@@ -22,7 +22,7 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     /** Regexp pattern for revision number. */
     public static final String ITEM_REVISION_PATTERN = "(\\d+)";
     /** Regexp pattern for item names. */
-    public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.\\p{Alpha}[\\w-]*)*+)";
+    public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.[\\w-]+)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
     /** Separator between artifact type and name in an item ID. */

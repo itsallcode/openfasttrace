@@ -10,6 +10,7 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
 /**
  * Configures console logging for the application.
  */
+// [impl->dsn~cli.plugins.log~1]
 public class LoggingConfigurator
 {
     private static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARNING;

@@ -4,6 +4,9 @@ import java.util.logging.Level;
 
 /**
  * Log levels for console logging.
+ * <p>
+ * We can't use {@link java.util.logging.Level} directly for configuration
+ * because it is not an enum.
  */
 public enum LogLevel
 {

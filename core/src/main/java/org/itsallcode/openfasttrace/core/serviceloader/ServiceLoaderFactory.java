@@ -80,12 +80,11 @@ class ServiceLoaderFactory
     // [impl->dsn~plugins.loading~1]
     List<ServiceOrigin> findServiceOrigins()
     {
-        final List<ServiceOrigin> origins = new ArrayList<>();
+        final List<ServiceOrigin> origins = new ArrayList<>(findPluginOrigins());
         if (searchCurrentClasspath)
         {
             origins.add(ServiceOrigin.forCurrentClassPath());
         }
-        origins.addAll(findPluginOrigins());
         LOGGER.finest(() -> "Found " + origins.size() + " service origins: " + origins + ".");
         return origins;
     }

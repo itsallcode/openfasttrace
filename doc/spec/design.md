@@ -1031,7 +1031,7 @@ The CLI logs available plugins in OFT at startup.
 Covers:
 - [req~plugins.log~1](system_requirements.md#logging-available-plugins)
 
-Needs: impl, utest, itest
+Needs: impl
 
 # Design Decisions
 

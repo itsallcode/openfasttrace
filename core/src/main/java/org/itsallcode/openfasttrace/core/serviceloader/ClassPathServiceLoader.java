@@ -28,10 +28,13 @@ final class ClassPathServiceLoader<T> implements Loader<T>
     }
 
     @Override
+    @SuppressWarnings("java:S3864") // Using peek() for logging only.
     public Stream<T> load()
     {
-        return this.serviceLoader.stream().map(Provider::get)
-                .filter(this::filterOtherClassLoader);
+        return this.serviceLoader.stream()
+                .map(Provider::get)
+                .filter(this::filterOtherClassLoader)
+                .peek(this::logService);
     }
 
     private boolean filterOtherClassLoader(final T service)
@@ -45,6 +48,11 @@ final class ClassPathServiceLoader<T> implements Loader<T>
                             + serviceOrigin.getClassLoader() + ". This service will not be used.");
         }
         return correctClassLoader;
+    }
+
+    private void logService(final T service)
+    {
+        LOGGER.info(() -> "Loaded service from " + serviceOrigin + ": " + service.getClass().getName());
     }
 
     @Override

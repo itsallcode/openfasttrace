@@ -61,7 +61,7 @@ interface ServiceOrigin extends AutoCloseable
 
     private static String getClassLoaderName(final List<Path> jars)
     {
-        return "ServiceClassLoader-"
+        return "JarClassLoader-"
                 + jars.stream().map(Path::getFileName).sorted().map(Path::toString).collect(joining(","));
     }
 
@@ -122,7 +122,7 @@ interface ServiceOrigin extends AutoCloseable
         @Override
         public String toString()
         {
-            return "JarFileOrigin [classLoader=" + classLoader + ", jars=" + jars + "]";
+            return "JarFileOrigin [classLoader=" + classLoader.getName() + ", jars=" + jars + "]";
         }
     }
 
@@ -150,7 +150,7 @@ interface ServiceOrigin extends AutoCloseable
         @Override
         public String toString()
         {
-            return "CurrentClassPathOrigin [classLoader=" + classLoader + "]";
+            return "CurrentClassPathOrigin [classLoader=" + classLoader.getName() + "]";
         }
     }
 }

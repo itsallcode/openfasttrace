@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -229,7 +228,7 @@ class TestTagImporter
         final List<SpecificationItem> expectedItems = Arrays.stream(itemBuilders)
                 .map(TestTagImporter::setLocation)
                 .map(SpecificationItem.Builder::build)
-                .collect(toList());
+                .toList();
         return Arguments.of(content, expectedItems);
     }
 

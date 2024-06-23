@@ -4,9 +4,6 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
-  # Temporarily also run on pull requests
-  pull_request:
-    branches: ["main"]
 
 permissions:
   contents: read

@@ -14,10 +14,7 @@ import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.exporter.Exporter;
 import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
-import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.Importer;
-import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.api.report.Reportable;
@@ -25,7 +22,6 @@ import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,7 +50,7 @@ class TestAllServicesAvailable
         final ImporterContext contextMock = mock(ImporterContext.class,
                 withSettings().defaultAnswer(Answers.RETURNS_DEEP_STUBS));
 
-        return new ImporterFactoryLoader(InitializingServiceLoader.load(ImporterFactory.class, contextMock));
+        return new ImporterFactoryLoader(contextMock);
     }
 
     private static ExporterFactoryLoader createExporterLoader()

@@ -95,7 +95,7 @@ class ServiceLoaderFactoryTest
         Files.createFile(pluginDir.resolve("plugin1.jar"));
         final List<ServiceOrigin> origins = testee().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
-                () -> assertThat(origins.get(1).getClassLoader().getName(), equalTo("ServiceClassLoader-plugin1.jar")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("JarClassLoader-plugin1.jar")));
     }
 
     @Test
@@ -107,8 +107,8 @@ class ServiceLoaderFactoryTest
         Files.createFile(pluginDir.resolve("plugin2.jar"));
         final List<ServiceOrigin> origins = testee().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
-                () -> assertThat(origins.get(1).getClassLoader().getName(),
-                        equalTo("ServiceClassLoader-plugin1.jar,plugin2.jar")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("JarClassLoader-plugin1.jar,plugin2.jar")));
     }
 
     @Test
@@ -122,9 +122,9 @@ class ServiceLoaderFactoryTest
         Files.createFile(pluginDir2.resolve("plugin2.jar"));
         final List<ServiceOrigin> origins = testee().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(3)),
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("JarClassLoader-plugin1.jar")),
                 () -> assertThat(origins.get(1).getClassLoader().getName(),
-                        equalTo("ServiceClassLoader-plugin1.jar")),
-                () -> assertThat(origins.get(2).getClassLoader().getName(),
-                        equalTo("ServiceClassLoader-plugin2.jar")));
+                        equalTo("JarClassLoader-plugin2.jar")));
     }
 }

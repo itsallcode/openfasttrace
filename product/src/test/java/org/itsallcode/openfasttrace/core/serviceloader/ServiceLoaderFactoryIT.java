@@ -59,7 +59,7 @@ class ServiceLoaderFactoryIT
                     () -> assertThat(service.getClass().getName().toString(),
                             equalTo("org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory")),
                     () -> assertThat(pluginClassLoader.getName(),
-                            startsWith("ServiceClassLoader-openfasttrace-reporter-plaintext")),
+                            startsWith("JarClassLoader-openfasttrace-reporter-plaintext")),
                     () -> assertThat(pluginClassLoader,
                             not(sameInstance(Thread.currentThread().getContextClassLoader()))));
         }
@@ -69,7 +69,8 @@ class ServiceLoaderFactoryIT
     {
         final Path jar = findMatchingFile(targetDir, filePattern)
                 .orElseThrow(() -> new AssertionError(
-                        "Did not file matching '" + filePattern + "' in '" + targetDir + "'"));
+                        "Did not file matching '" + filePattern + "' in '" + targetDir
+                                + "'. Ensure the module was built with 'mvn package'."));
         preparePlugin(jar);
     }
 

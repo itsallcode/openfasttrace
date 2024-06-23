@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run Self-Trace",
+            "request": "launch",
+            "mainClass": "org.itsallcode.openfasttrace.core.cli.CliStarter",
+            "projectName": "openfasttrace",
+            "args": [
+                "trace",
+                "--log-level",
+                "INFO",
+                "${workspaceFolder}/doc/spec",
+                "${workspaceFolder}/importer/lightweightmarkup/src",
+                "${workspaceFolder}/importer/markdown/src",
+                "${workspaceFolder}/importer/restructuredtext/src",
+                "${workspaceFolder}/importer/specobject/src",
+                "${workspaceFolder}/importer/zip/src",
+                "${workspaceFolder}/importer/tag/src",
+                "${workspaceFolder}/core/src/main",
+                "${workspaceFolder}/core/src/test/java",
+                "${workspaceFolder}/reporter/plaintext/src",
+                "${workspaceFolder}/reporter/html/src",
+                "${workspaceFolder}/reporter/aspec/src",
+                "${workspaceFolder}/product/src/test/java",
+                "${workspaceFolder}/api/src",
+                "${workspaceFolder}/exporter/specobject/src",
+                "${workspaceFolder}/exporter/common/src",
+                "${workspaceFolder}/testutil/src"
+            ]
+        }
+    ]
+}

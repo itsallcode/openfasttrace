@@ -7,6 +7,9 @@ import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.core.cli.CliArguments;
 
+/**
+ * Configures console logging for the application.
+ */
 public class LoggingConfigurator
 {
     private static final String CONFIG_TEMPLATE = """
@@ -24,11 +27,21 @@ public class LoggingConfigurator
         this.logLevel = logLevel;
     }
 
+    /**
+     * Create a new logging configurator.
+     * 
+     * @param arguments
+     *            the command line arguments.
+     * @return a new logging configurator.
+     */
     public static LoggingConfigurator create(final CliArguments arguments)
     {
         return new LoggingConfigurator(arguments.getLogLevel().orElse(LogLevel.INFO));
     }
 
+    /**
+     * Configures logging according to the configured log level.
+     */
     public void configureLogging()
     {
         final LogManager logManager = LogManager.getLogManager();
@@ -39,7 +52,7 @@ public class LoggingConfigurator
 
     private String getConfigContent()
     {
-        return CONFIG_TEMPLATE.replace("$LOG_LEVEL", this.logLevel.getJulLogLevel().getName());
+        return CONFIG_TEMPLATE.replace("$LOG_LEVEL", this.logLevel.getJulLogLevel());
     }
 
     private void configureLogManager(final LogManager logManager, final String configContent)

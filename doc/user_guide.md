@@ -568,7 +568,7 @@ The available color schemes are
 
     -l, --log-level <log level>
     
-Log level for console logging. One of `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`.
+Log level for console logging. One of `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`. Defaults to `WARNING`.
 
 ### Build Integration
 

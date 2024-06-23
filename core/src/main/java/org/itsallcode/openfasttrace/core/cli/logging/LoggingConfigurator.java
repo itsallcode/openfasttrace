@@ -12,6 +12,7 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
  */
 public class LoggingConfigurator
 {
+    private static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARNING;
     private static final String CONFIG_TEMPLATE = """
             handlers=java.util.logging.ConsoleHandler
             .level=$LOG_LEVEL
@@ -36,7 +37,7 @@ public class LoggingConfigurator
      */
     public static LoggingConfigurator create(final CliArguments arguments)
     {
-        return new LoggingConfigurator(arguments.getLogLevel().orElse(LogLevel.INFO));
+        return new LoggingConfigurator(arguments.getLogLevel().orElse(DEFAULT_LOG_LEVEL));
     }
 
     /**

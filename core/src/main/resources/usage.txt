@@ -38,7 +38,8 @@ Common options:
                                the list to also import items without any tags.
   -l, --log-level              Log level for console logging. One of
                                "OFF", "SEVERE", "WARNING", "INFO", "CONFIG",
-                               "FINE", "FINER", "FINEST", "ALL"
+                               "FINE", "FINER", "FINEST", "ALL".
+                               Defaults to "WARNING".
 
 Returns:
   0   on success

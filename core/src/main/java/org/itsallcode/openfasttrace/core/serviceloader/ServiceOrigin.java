@@ -2,8 +2,11 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 
 import static java.util.stream.Collectors.joining;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,14 +92,14 @@ interface ServiceOrigin extends AutoCloseable
      */
     void close();
 
-    static final class JarFileOrigin implements ServiceOrigin
+    final class JarFileOrigin implements ServiceOrigin
     {
         private final List<Path> jars;
         private final URLClassLoader classLoader;
 
         JarFileOrigin(final List<Path> jars, final URLClassLoader classLoader)
         {
-            this.jars = jars;
+            this.jars = new ArrayList<>(jars);
             this.classLoader = classLoader;
         }
 
@@ -113,9 +116,9 @@ interface ServiceOrigin extends AutoCloseable
             {
                 classLoader.close();
             }
-            catch (final Exception exception)
+            catch (final IOException exception)
             {
-                throw new IllegalStateException("Error closing class loader " + classLoader, exception);
+                throw new UncheckedIOException("Error closing class loader " + classLoader, exception);
             }
         }
 
@@ -126,7 +129,7 @@ interface ServiceOrigin extends AutoCloseable
         }
     }
 
-    static final class CurrentClassPathOrigin implements ServiceOrigin
+    final class CurrentClassPathOrigin implements ServiceOrigin
     {
         private final ClassLoader classLoader;
 

@@ -49,7 +49,7 @@ public enum LogLevel
 
     private final Level julLevel;
 
-    private LogLevel(final Level julLevel)
+    LogLevel(final Level julLevel)
     {
         this.julLevel = julLevel;
     }

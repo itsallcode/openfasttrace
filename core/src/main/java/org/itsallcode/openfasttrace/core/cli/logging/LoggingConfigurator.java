@@ -11,7 +11,7 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
  * Configures console logging for the application.
  */
 // [impl->dsn~cli.plugins.log~1]
-public class LoggingConfigurator
+public final class LoggingConfigurator
 {
     private static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARNING;
     private static final String CONFIG_TEMPLATE = """
@@ -57,7 +57,7 @@ public class LoggingConfigurator
         return CONFIG_TEMPLATE.replace("$LOG_LEVEL", this.logLevel.getJulLogLevel());
     }
 
-    private void configureLogManager(final LogManager logManager, final String configContent)
+    private static void configureLogManager(final LogManager logManager, final String configContent)
     {
         try (InputStream config = new ByteArrayInputStream(configContent.getBytes(StandardCharsets.UTF_8)))
         {

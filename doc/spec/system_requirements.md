@@ -836,10 +836,10 @@ Covers:
 * [feat~plugins~1](#third-party-plugins)
 Needs: dsn
 
-#### Listing Available Plugins
-`req~plugins.list~1`
+#### Logging Available Plugins
+`req~plugins.log~1`
 
-OFT allows users to list all currently available plugins including the following information:
+OFT logs all currently available plugins at startup including the following information:
 * Plugin type (importer, exporter, reporter)
 * Location (included with OFT, external JAR)
 * Version number

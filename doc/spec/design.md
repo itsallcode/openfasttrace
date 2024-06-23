@@ -1024,14 +1024,14 @@ Covers:
 Needs: impl, itest, utest
 
 ### Listing Plugins
-`dsn~cli.plugins.list~1`
+`dsn~cli.plugins.log~1`
 
-The CLI allows listing available plugins in OFT.
+The CLI logs available plugins in OFT at startup.
 
 Covers:
-- [req~plugins.list~1](system_requirements.md#listing-available-plugins)
+- [req~plugins.log~1](system_requirements.md#logging-available-plugins)
 
-#Needs: impl, utest, itest
+Needs: impl, utest, itest
 
 # Design Decisions
 

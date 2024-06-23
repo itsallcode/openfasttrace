@@ -86,7 +86,7 @@ class ServiceLoaderFactory
             origins.add(ServiceOrigin.forCurrentClassPath());
         }
         origins.addAll(findPluginOrigins());
-        LOGGER.fine(() -> "Found " + origins.size() + " service origins: " + origins + ".");
+        LOGGER.finest(() -> "Found " + origins.size() + " service origins: " + origins + ".");
         return origins;
     }
 

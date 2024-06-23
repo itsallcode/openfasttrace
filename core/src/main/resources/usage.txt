@@ -36,6 +36,9 @@ Common options:
                                least one tag contained in the comma-separated
                                list. Add a single underscore as first item in
                                the list to also import items without any tags.
+  -l, --log-level              Log level for console logging. One of
+                               "OFF", "SEVERE", "WARNING", "INFO", "CONFIG",
+                               "FINE", "FINER", "FINEST", "ALL"
 
 Returns:
   0   on success

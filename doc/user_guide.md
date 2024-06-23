@@ -565,6 +565,11 @@ The available color schemes are
 `color`
 : Color output. Also enables font style on the console.
 
+
+    -l, --log-level <log level>
+    
+Log level for console logging. One of `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`.
+
 ### Build Integration
 
 In order to integrate requirement tracing with OFT into your CI build, we recommend using the OFT plugins for Maven and Gradle:

@@ -495,11 +495,12 @@ The format of the report.
 
 One of:
 * `plain`
-* `html` 
+* `html`
+* `aspec`
 
 Defaults to `plain`.
 
-    --v, --verbosity-level <level>
+    --v, --report-verbosity <level>
 
 The verbosity of the tracing report.
 
@@ -770,7 +771,7 @@ The XML exporter is called `aspec` reporter. `aspec` in this case means augmente
 can be generated  by calling OpenFastTrace in the following way:
 
 ```bash
-java -jar openfasttrace.jar trace -o aspac -f requirements.xml requirements
+java -jar openfasttrace.jar trace -o aspec -f requirements.xml requirements
 ```
 
 OpenFastTrace needs to be executed  with the command `trace` to activate the reporter. The `aspec` report is selected 

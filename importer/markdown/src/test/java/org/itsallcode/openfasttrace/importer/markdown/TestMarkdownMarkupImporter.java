@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private final static ImporterFactory importerFactory = new MarkdownImporterFactory();
+    private static final ImporterFactory importerFactory = new MarkdownImporterFactory();
 
     TestMarkdownMarkupImporter()
     {

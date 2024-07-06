@@ -330,7 +330,7 @@ is functionally equivalent to
 
 ##### `Tags`
 
-Tags are described in detail later in this document.
+Tags are described in detail later in this document, see section [Distributing the Detailing Work](#distributing-the-detailing-work).
 
 ### Delegating Requirement Coverage
 
@@ -354,7 +354,7 @@ This notation can appear after:
 * "Covers" section
 * "Tags" section
 
-If it appears in a mutli-line text section of a requirement (description, comment or rationale) the forward is ignored.
+If it appears in a multi-line text section of a requirement (description, comment or rationale) the forward is ignored.
 
 Note that a forward terminates the previous specification item, so the following notation does not work:
 

@@ -88,7 +88,8 @@ class TestMarkdownImporter
 
     @ParameterizedTest
     @CsvSource(
-    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung" })
+    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung", "Tags: -leadingDash", "Tags: trailingDash-",
+            "Tags: tag with spaces", "Tags: Täg" })
     void testIdentifyNonTags(final String text)
     {
         MarkdownAsserts.assertMismatch(MdPattern.TAGS_INT, text);

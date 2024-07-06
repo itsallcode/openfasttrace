@@ -330,7 +330,7 @@ is functionally equivalent to
 
 ##### `Tags`
 
-Tags are described in detail later in this document.
+Tags are described in detail later in this document, see section [Distributing the Detailing Work](#distributing-the-detailing-work).
 
 ### Delegating Requirement Coverage
 
@@ -354,7 +354,7 @@ This notation can appear after:
 * "Covers" section
 * "Tags" section
 
-If it appears in a mutli-line text section of a requirement (description, comment or rationale) the forward is ignored.
+If it appears in a multi-line text section of a requirement (description, comment or rationale) the forward is ignored.
 
 Note that a forward terminates the previous specification item, so the following notation does not work:
 
@@ -495,11 +495,12 @@ The format of the report.
 
 One of:
 * `plain`
-* `html` 
+* `html`
+* `aspec`
 
 Defaults to `plain`.
 
-    --v, --verbosity-level <level>
+    --v, --report-verbosity <level>
 
 The verbosity of the tracing report.
 
@@ -770,7 +771,7 @@ The XML exporter is called `aspec` reporter. `aspec` in this case means augmente
 can be generated  by calling OpenFastTrace in the following way:
 
 ```bash
-java -jar openfasttrace.jar trace -o aspac -f requirements.xml requirements
+java -jar openfasttrace.jar trace -o aspec -f requirements.xml requirements
 ```
 
 OpenFastTrace needs to be executed  with the command `trace` to activate the reporter. The `aspec` report is selected 

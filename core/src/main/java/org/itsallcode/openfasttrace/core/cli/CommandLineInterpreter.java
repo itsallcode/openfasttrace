@@ -101,7 +101,7 @@ public class CommandLineInterpreter
     private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
             final String argument) throws CliException
     {
-        final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase();
+        final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase(Locale.ENGLISH);
         final int lastPosition = characters.length() - 1;
 
         for (int position = 0; position <= lastPosition; ++position)
@@ -120,7 +120,7 @@ public class CommandLineInterpreter
             }
             else
             {
-                reportUnexpectedNamedArgument(character);
+                reportUnexpectedNamedArgument(argument);
             }
         }
     }
@@ -128,18 +128,18 @@ public class CommandLineInterpreter
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
             throws CliException
     {
-        final String argumentName = argument.replace("-", "").toLowerCase();
+        final String argumentName = argument.replace("-", "").toLowerCase(Locale.ENGLISH);
         if (this.setters.containsKey(argumentName))
         {
             handleExpectedNamedArgument(iterator, argumentName);
         }
         else
         {
-            reportUnexpectedNamedArgument(argumentName);
+            reportUnexpectedNamedArgument(argument);
         }
     }
 
-    private void handleUnnamedArgument(final List<String> unnamedArguments, final String argument)
+    private static void handleUnnamedArgument(final List<String> unnamedArguments, final String argument)
     {
         unnamedArguments.add(argument);
     }
@@ -167,10 +167,10 @@ public class CommandLineInterpreter
             if ((iterator != null) && iterator.hasNext())
             {
                 final String successor = iterator.next();
-                if (isParamterName(successor))
+                if (isParameterName(successor))
                 {
                     iterator.previous();
-                    reportMissingParamterValue(argumentName);
+                    reportMissingParameterValue(argumentName);
                 }
                 else
                 {
@@ -180,7 +180,7 @@ public class CommandLineInterpreter
             }
             else
             {
-                reportMissingParamterValue(argumentName);
+                reportMissingParameterValue(argumentName);
             }
         }
     }
@@ -207,7 +207,7 @@ public class CommandLineInterpreter
         try
         {
             @SuppressWarnings("rawtypes")
-            final Enum enumValue = Enum.valueOf(enumType, stringValue.toUpperCase());
+            final Enum enumValue = Enum.valueOf(enumType, stringValue.toUpperCase(Locale.ENGLISH));
             return type.cast(enumValue);
         }
         catch (final IllegalArgumentException e)
@@ -224,12 +224,12 @@ public class CommandLineInterpreter
                 + "'. Only one argument is allowed.");
     }
 
-    private void reportMissingParamterValue(final String argumentName) throws CliException
+    private void reportMissingParameterValue(final String argumentName) throws CliException
     {
         throw new CliException("No value for argument '" + argumentName + "'");
     }
 
-    private boolean isParamterName(final String text)
+    private static boolean isParameterName(final String text)
     {
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }

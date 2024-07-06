@@ -163,6 +163,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
         return Stream.of(
                 Arguments.of("Tags: req , dsn ", List.of("req", "dsn")),
                 Arguments.of("Tags: req ", List.of("req")),
+                Arguments.of("Tags: req_1 ", List.of("req_1")),
                 Arguments.of("Tags: req,dsn ", List.of("req", "dsn")),
                 Arguments.of("Tags: req ,dsn", List.of("req", "dsn")),
                 Arguments.of("Tags: req,dsn", List.of("req", "dsn")),
@@ -171,7 +172,17 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")),
                 Arguments.of("Tags:\n * req\n * dsn\n", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req \n\t* dsn ", List.of("req", "dsn")),
-                Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")));
+                Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")),
+                Arguments.of("Tags:\n* req_1\n* dsn_2", List.of("req_1", "dsn_2")),
+
+                // Inconsistent behavior, see
+                // https://github.com/itsallcode/openfasttrace/issues/423
+                Arguments.of("Tags: _ ", List.of("_")),
+                Arguments.of("Tags: täg1, taeg2", List.of()),
+                Arguments.of("Tags: _tag1, taeg2", List.of("_tag1", "taeg2")),
+                Arguments.of("Tags: -dash, tag", List.of()),
+                Arguments.of("Tags:\n* tag1\n* täg2", List.of("tag1", "täg2")),
+                Arguments.of("Tags:\n* -tag1\n* täg2", List.of("-tag1", "täg2")));
     }
 
     @ParameterizedTest

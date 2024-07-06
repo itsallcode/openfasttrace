@@ -8,4 +8,4 @@ This release updates the HTML report so that jumping to anchored tags does no lo
 
 ## Bugfixes
 
-* #420: Fix jumping in HTML reports
+* #420: Fix jumping in HTML reports ([@RobertZickler](https://github.com/RobertZickler))

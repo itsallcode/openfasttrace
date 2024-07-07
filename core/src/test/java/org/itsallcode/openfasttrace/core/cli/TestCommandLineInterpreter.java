@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.core.cli.CommandLineArgumentsStub.StubEnum;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link CommandLineInterpreter}
@@ -44,18 +46,14 @@ class TestCommandLineInterpreter
                 "No value for argument 'a'");
     }
 
-    @Test
-    void testUnexpectedArgumentName()
+    @ParameterizedTest
+    @ValueSource(strings =
+    { "--unexpected", "--Unexpected", "-u", "--u", "--long-unexpected-parameter", "-unexpectedParameter",
+            "--unexpectedParameter" })
+    void testUnexpectedArgumentName(final String parameter)
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("--unexpected"),
-                "Unexpected parameter 'unexpected' is not allowed");
-    }
-
-    @Test
-    void testUnexpectedSingleCharacterArgumentName()
-    {
-        expectParseException(new CommandLineArgumentsStub(), asList("-u"),
-                "Unexpected parameter 'u' is not allowed");
+        expectParseException(new CommandLineArgumentsStub(), asList(parameter),
+                "Unexpected parameter '" + parameter + "' is not allowed");
     }
 
     @Test

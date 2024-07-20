@@ -23,7 +23,7 @@ class ServiceLoaderFactoryTest
     @Test
     void noPluginJar()
     {
-        assertThat(testee().createLoader(ReporterFactory.class).load().toList(), empty());
+        assertThat(factory().createLoader(ReporterFactory.class).load().toList(), empty());
     }
 
     private ServiceLoaderFactory factory()
@@ -42,7 +42,7 @@ class ServiceLoaderFactoryTest
     void findServiceMissingParentDir() throws IOException
     {
         Files.delete(tempDir);
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertNoPlugins(origins);
     }
 
@@ -55,7 +55,7 @@ class ServiceLoaderFactoryTest
     @Test
     void findServiceOriginsPluginDir()
     {
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertNoPlugins(origins);
     }
 
@@ -64,7 +64,7 @@ class ServiceLoaderFactoryTest
     {
         final Path pluginDir = tempDir.resolve("plugin1");
         Files.createDirectories(pluginDir);
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertNoPlugins(origins);
     }
 
@@ -74,7 +74,7 @@ class ServiceLoaderFactoryTest
         final Path pluginDir = tempDir.resolve("plugin1");
         Files.createDirectories(pluginDir);
         Files.createFile(pluginDir.resolve("plugin1.txt"));
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertNoPlugins(origins);
     }
 
@@ -83,7 +83,7 @@ class ServiceLoaderFactoryTest
     {
         final Path pluginDir = tempDir.resolve("plugin1");
         Files.createDirectories(pluginDir.resolve("ignored-directory"));
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertNoPlugins(origins);
     }
 
@@ -93,7 +93,7 @@ class ServiceLoaderFactoryTest
         final Path pluginDir = tempDir.resolve("plugin1");
         Files.createDirectories(pluginDir);
         Files.createFile(pluginDir.resolve("plugin1.jar"));
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
                 () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("JarClassLoader-plugin1.jar")));
     }
@@ -105,7 +105,7 @@ class ServiceLoaderFactoryTest
         Files.createDirectories(pluginDir);
         Files.createFile(pluginDir.resolve("plugin1.jar"));
         Files.createFile(pluginDir.resolve("plugin2.jar"));
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
                 () -> assertThat(origins.get(0).getClassLoader().getName(),
                         equalTo("JarClassLoader-plugin1.jar,plugin2.jar")));
@@ -120,7 +120,7 @@ class ServiceLoaderFactoryTest
         Files.createDirectories(pluginDir2);
         Files.createFile(pluginDir1.resolve("plugin1.jar"));
         Files.createFile(pluginDir2.resolve("plugin2.jar"));
-        final List<ServiceOrigin> origins = testee().findServiceOrigins();
+        final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(3)),
                 () -> assertThat(origins.get(0).getClassLoader().getName(),
                         equalTo("JarClassLoader-plugin1.jar")),

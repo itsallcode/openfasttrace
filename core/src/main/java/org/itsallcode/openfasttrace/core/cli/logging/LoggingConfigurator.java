@@ -49,7 +49,7 @@ public final class LoggingConfigurator
         final LogManager logManager = LogManager.getLogManager();
         configureLogManager(logManager, getConfigContent());
         final Logger rootLogger = logManager.getLogger("");
-        rootLogger.debug(() -> "Logging configured with level " + this.logLevel + ".");
+        rootLogger.fine(() -> "Logging configured with level " + this.logLevel + ".");
     }
 
     private String getConfigContent()

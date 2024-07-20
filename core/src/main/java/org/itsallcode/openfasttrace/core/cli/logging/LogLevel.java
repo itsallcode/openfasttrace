@@ -13,7 +13,7 @@ public enum LogLevel
     /**
      * OFF is a special level that can be used to turn off logging.
      */
-    OFF(Level.NONE),
+    OFF(Level.OFF),
     /**
      * SEVERE is a message level indicating a serious failure.
      */

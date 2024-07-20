@@ -52,7 +52,7 @@ final class ClassPathServiceLoader<T> implements Loader<T>
 
     private void logService(final T service)
     {
-        LOGGER.info(() -> "Loading service '" + service.getClass().getName() + "'from " + serviceOrigin + ".";
+        LOGGER.info(() -> "Loading service '" + service.getClass().getName() + "'from " + serviceOrigin + ".");
     }
 
     @Override

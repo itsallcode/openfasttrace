@@ -32,7 +32,7 @@ class ServiceLoaderFactoryTest
     }
 
     @Test
-    void findServiceSkipCurrentClassLoader() throws IOException
+    void findServiceSkipCurrentClassLoader()
     {
         final Path missingDirectory = tempDir.resolve("missing-dir");
         assertThat(new ServiceLoaderFactory(missingDirectory, false).findServiceOrigins(), empty());

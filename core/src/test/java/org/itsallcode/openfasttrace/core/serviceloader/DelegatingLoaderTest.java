@@ -22,6 +22,14 @@ class DelegatingLoaderTest
         assertThat(load(List.of()), empty());
     }
 
+    private <T> List<T> load(final List<Loader<T>> delegates)
+    {
+        try (DelegatingLoader<T> loader = new DelegatingLoader<T>(delegates))
+        {
+            return loader.load().toList();
+        }
+    }
+
     @Test
     void emptyDelegate(@Mock final Loader<DummyService> loaderMock)
     {
@@ -45,14 +53,6 @@ class DelegatingLoaderTest
         when(loaderMock2.load()).thenReturn(Stream.of(serviceMock2));
         assertThat(load(List.of(loaderMock1, loaderMock2)),
                 contains(serviceMock1, serviceMock2));
-    }
-
-    private <T> List<T> load(final List<Loader<T>> delegates)
-    {
-        try (DelegatingLoader<T> loader = new DelegatingLoader<T>(delegates))
-        {
-            return loader.load().toList();
-        }
     }
 
     static interface DummyService

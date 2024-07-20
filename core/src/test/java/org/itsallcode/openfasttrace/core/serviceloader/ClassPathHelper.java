@@ -45,18 +45,23 @@ final class ClassPathHelper
             final URL url = urls.nextElement();
             if ("jar".equals(url.getProtocol()))
             {
-                String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
-                if (OS.WINDOWS.isCurrentOs())
-                {
-                    // Remove leading slash of "/C:/Users/user/.m2/..."
-                    jarPath = jarPath.substring(1);
-                }
-                final Path path = Path.of(jarPath);
+                final Path path = Path.of(getJarPath(url));
                 assertTrue(Files.exists(path));
                 return path;
             }
         }
         throw new AssertionError("No jar found containing " + className);
+    }
+
+    private static String getJarPath(final URL url)
+    {
+        final String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+        if (OS.WINDOWS.isCurrentOs())
+        {
+            // Remove leading slash of "/C:/Users/user/.m2/..."
+            return jarPath.substring(1);
+        }
+        return jarPath;
     }
 
     private static Enumeration<URL> getResources(final String resourceName)

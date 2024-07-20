@@ -31,7 +31,7 @@ class ServiceLoaderFactoryIT
     void loadServiceFromWrongJar() throws IOException
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
-                "openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\-javadoc.jar");
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\-javadoc.jar"));
         try (Loader<ReporterFactory> loader = createLoader())
         {
             final List<ReporterFactory> service = loader.load().toList();
@@ -48,7 +48,7 @@ class ServiceLoaderFactoryIT
     void loadServiceFromJar() throws IOException
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
-                "openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\.jar");
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\.jar"));
         try (Loader<ReporterFactory> loader = createLoader())
         {
             final List<ReporterFactory> services = loader.load().toList();
@@ -65,7 +65,7 @@ class ServiceLoaderFactoryIT
         }
     }
 
-    private void preparePlugin(final Path targetDir, final String filePattern) throws TestAbortedException, IOException
+    private void preparePlugin(final Path targetDir, final Pattern filePattern) throws TestAbortedException, IOException
     {
         final Path jar = findMatchingFile(targetDir, filePattern)
                 .orElseThrow(() -> new AssertionError(
@@ -74,10 +74,9 @@ class ServiceLoaderFactoryIT
         preparePlugin(jar);
     }
 
-    private Optional<Path> findMatchingFile(final Path dir, final String filePattern) throws IOException
+    private Optional<Path> findMatchingFile(final Path dir, final Pattern filePattern) throws IOException
     {
-        final Pattern pattern = Pattern.compile(filePattern);
-        return Files.list(dir).filter(file -> pattern.matcher(file.getFileName().toString()).matches())
+        return Files.list(dir).filter(file -> filePattern.matcher(file.getFileName().toString()).matches())
                 .findFirst();
     }
 

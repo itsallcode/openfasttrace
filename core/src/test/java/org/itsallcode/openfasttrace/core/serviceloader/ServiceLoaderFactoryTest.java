@@ -34,12 +34,12 @@ class ServiceLoaderFactoryTest
     @Test
     void findServiceSkipCurrentClassLoader() throws IOException
     {
-        Files.delete(tempDir);
-        assertThat(new ServiceLoaderFactory(tempDir, false).findServiceOrigins(), empty());
+        final Path missingDirectory = tempDir.resolve("missing-dir");
+        assertThat(new ServiceLoaderFactory(missingDirectory, false).findServiceOrigins(), empty());
     }
 
     @Test
-    void findServiceMissingParentDir() throws IOException
+    void findServiceMissingParentDirFindsNoPlugins() throws IOException
     {
         Files.delete(tempDir);
         final List<ServiceOrigin> origins = factory().findServiceOrigins();
@@ -48,8 +48,9 @@ class ServiceLoaderFactoryTest
 
     private void assertNoPlugins(final List<ServiceOrigin> origins) throws MultipleFailuresError
     {
-        assertAll(() -> assertThat(origins, hasSize(1)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("app")));
+        assertThat(origins, contains(
+                hasProperty("classLoader",
+                        hasProperty("name", equalTo("app")))));
     }
 
     @Test

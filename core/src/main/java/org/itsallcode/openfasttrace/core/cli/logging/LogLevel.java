@@ -5,8 +5,8 @@ import java.util.logging.Level;
 /**
  * Log levels for console logging.
  * <p>
- * We can't use {@link java.util.logging.Level} directly for configuration
- * because it is not an enum.
+ * We can't use {@code java.util.logging} (JUL) {@link java.util.logging.Level}
+ * directly for configuration because it is not an enum.
  */
 public enum LogLevel
 {
@@ -54,7 +54,7 @@ public enum LogLevel
         this.julLevel = julLevel;
     }
 
-    String getJulLogLevel()
+    String getJavaUtilLoggingLogLevel()
     {
         return julLevel.getName();
     }

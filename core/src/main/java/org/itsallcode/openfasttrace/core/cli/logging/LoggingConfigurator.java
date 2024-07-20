@@ -54,7 +54,7 @@ public final class LoggingConfigurator
 
     private String getConfigContent()
     {
-        return CONFIG_TEMPLATE.replace("$LOG_LEVEL", this.logLevel.getJulLogLevel());
+        return CONFIG_TEMPLATE.replace("$LOG_LEVEL", this.logLevel.getJavaUtilLoggingLogLevel());
     }
 
     private static void configureLogManager(final LogManager logManager, final String configContent)

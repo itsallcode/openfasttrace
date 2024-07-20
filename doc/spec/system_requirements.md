@@ -821,6 +821,7 @@ Rationale:
 
 * Plugins must be only installed once in the correct location.
 * This requires no additional configuration by the user.
+* OFT adheres to the standard locations for plugin installation depending on the OS.
 
 Covers:
 * [feat~plugins~1](#third-party-plugins)

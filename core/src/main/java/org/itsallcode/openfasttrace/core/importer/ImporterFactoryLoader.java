@@ -35,11 +35,11 @@ public class ImporterFactoryLoader
      * Create a new loader for the given context.
      * 
      * @param context
-     *            the context for the new loader.
+     *            context for the new loader
      */
     public ImporterFactoryLoader(final ImporterContext context)
     {
-        // [impl->dsn~plugins.loading.plugin_types~1]
+        // [impl->dsn~plugins.loading.plugin-types~1]
         this(InitializingServiceLoader.load(ImporterFactory.class, context));
     }
 

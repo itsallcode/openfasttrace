@@ -26,7 +26,7 @@ class ServiceLoaderFactoryTest
         assertThat(testee().createLoader(ReporterFactory.class).load().toList(), empty());
     }
 
-    private ServiceLoaderFactory testee()
+    private ServiceLoaderFactory factory()
     {
         return new ServiceLoaderFactory(tempDir, true);
     }

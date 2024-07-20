@@ -186,6 +186,8 @@ Rationale:
 * Some use cases or proprietary file formats might only be relevant for a very small user group. It does not make sense to integrate this into the core OFT product.
 * Some importers/exporters require additional dependencies that we don't want to include in the core OFT product.
 
+*  We want to be able to release OFT and the plugins independently. Especially if the plugins have many dependencies, it is expected that they need frequent security updates. By keeping them separate, we make sure that users don't have to update OFT whenever a plugin needs a security update.
+
 Needs: req
 
 ## Functional Requirements
@@ -822,18 +824,22 @@ Rationale:
 
 Covers:
 * [feat~plugins~1](#third-party-plugins)
+
 Needs: dsn
 
 #### Supported Plugin Types
 `req~plugins.types~1`
 
 OFT supports the following plugin types:
+
 * Importers add support for importing requirements from additional file formats.
 * Exporters add support for exporting requirements in additional file formats.
 * Reports add support for generating reports in additional formats.
 
 Covers:
+
 * [feat~plugins~1](#third-party-plugins)
+
 Needs: dsn
 
 #### Logging Available Plugins
@@ -849,5 +855,7 @@ Rationale:
 This is helpful for debugging in case OFT does not use a plugin as expected.
 
 Covers:
+
 * [feat~plugins~1](#third-party-plugins)
+
 Needs: dsn

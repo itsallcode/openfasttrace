@@ -21,7 +21,7 @@ class ServiceLoaderFactory
      * Create a new factory for service {@link Loader}.
      * 
      * @param pluginsDirectory
-     *            the directory to search for plugins
+     *            directory to search for plugins
      * @param searchCurrentClasspath
      *            whether to search the current classpath for plugins. This is
      *            useful for testing to avoid loading plugins twice.
@@ -117,32 +117,29 @@ class ServiceLoaderFactory
     {
         if (isJarFile(path))
         {
-            LOGGER.fine(() -> "Found single plugin jar '" + path + "'.");
+            LOGGER.fine(() -> "Found single plugin JAR '" + path + "'.");
             return Optional.of(ServiceOrigin.forJars(List.of(path)));
         }
         if (!Files.isDirectory(path))
         {
-            LOGGER.fine(() -> "Ignore unsupported file '" + path + "'.");
+            LOGGER.fine(() -> "Ignoring plugin search path '" + path + "' because it is not a directory.");
             return Optional.empty();
         }
         final List<Path> jars = findJarsInDir(path);
         if (jars.isEmpty())
         {
-            LOGGER.fine(() -> "Ignore empty plugin directory '" + path + "'.");
+            LOGGER.fine(() -> "Ignoring empty plugin directory '" + path + "'.");
             return Optional.empty();
         }
-        LOGGER.fine(() -> "Found " + jars.size() + " in '" + path + "': " + jars + ".");
+        LOGGER.fine(() -> "Found " + jars.size() + " JAR files in '" + path + "': " + jars + ".");
         return Optional.of(ServiceOrigin.forJars(jars));
     }
 
     private static List<Path> findJarsInDir(final Path path)
     {
-        try
+        try (Stream<Path> stream = Files.list(path))
         {
-            try (Stream<Path> stream = Files.list(path))
-            {
-                return stream.filter(ServiceLoaderFactory::isJarFile).toList();
-            }
+            return stream.filter(ServiceLoaderFactory::isJarFile).toList();
         }
         catch (final IOException exception)
         {

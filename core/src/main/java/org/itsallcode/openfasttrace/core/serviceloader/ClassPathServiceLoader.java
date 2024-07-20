@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
- * A service loader that loads services from the classpath using a given
+ * A service loader that loads services from the class path using a given
  * {@link ServiceOrigin}.
  */
 final class ClassPathServiceLoader<T> implements Loader<T>
@@ -52,7 +52,7 @@ final class ClassPathServiceLoader<T> implements Loader<T>
 
     private void logService(final T service)
     {
-        LOGGER.info(() -> "Loaded service from " + serviceOrigin + ": " + service.getClass().getName());
+        LOGGER.info(() -> "Loading service '" + service.getClass().getName() + "'from " + serviceOrigin + ".";
     }
 
     @Override

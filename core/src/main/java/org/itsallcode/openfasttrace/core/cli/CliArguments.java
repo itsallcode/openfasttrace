@@ -424,9 +424,9 @@ public class CliArguments
     }
 
     /**
-     * Get the log level console logging.
+     * Get the log level for console logging.
      * 
-     * @return the log level
+     * @return log level
      */
     public Optional<LogLevel> getLogLevel()
     {
@@ -437,7 +437,7 @@ public class CliArguments
      * Set the log level for console logging.
      * 
      * @param logLevel
-     *            the log level
+     *            log level
      */
     public void setLogLevel(final LogLevel logLevel)
     {
@@ -448,7 +448,7 @@ public class CliArguments
      * Set the log level for console logging.
      * 
      * @param logLevel
-     *            the log level
+     *            log level
      */
     public void setL(final LogLevel logLevel)
     {

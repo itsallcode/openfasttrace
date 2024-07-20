@@ -9,7 +9,7 @@ This release adds support for loading third-party plugins from external JAR file
 * [Installation](../plugins.md)
 * [Plugin developer guide](../plugin_developer_guide.md)
 
-The release also adds command line option `--log-level` that allows configuring the log level. Possible values are `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`. The default log level is `WARNING`.
+The release also adds command line option `--log-level` that allows configuring the log level. Possible values are `NONE`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`. The default log level is `WARNING`.
 
 ## Features
 

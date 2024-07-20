@@ -53,7 +53,7 @@ class ChildFirstClassLoader extends URLClassLoader
         }
         catch (final ClassNotFoundException ignore)
         {
-            // Class does not exist in the given urls.
+            // Class does not exist in the given URLs.
             // Let's try finding it in our parent classloader.
             // This will throw ClassNotFoundException on failure.
             return super.loadClass(name, resolve);

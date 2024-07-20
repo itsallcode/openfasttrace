@@ -33,7 +33,7 @@ public final class LoggingConfigurator
      * Create a new logging configurator.
      * 
      * @param arguments
-     *            the command line arguments.
+     *            command line arguments.
      * @return a new logging configurator.
      */
     public static LoggingConfigurator create(final CliArguments arguments)
@@ -49,7 +49,7 @@ public final class LoggingConfigurator
         final LogManager logManager = LogManager.getLogManager();
         configureLogManager(logManager, getConfigContent());
         final Logger rootLogger = logManager.getLogger("");
-        rootLogger.info(() -> "Logging configured with level " + this.logLevel + ".");
+        rootLogger.debug(() -> "Logging configured with level " + this.logLevel + ".");
     }
 
     private String getConfigContent()

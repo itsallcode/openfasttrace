@@ -36,7 +36,7 @@ class ClassPathServiceLoaderTest
         final List<ReporterFactory> services = ClassPathServiceLoader
                 .create(ReporterFactory.class, ServiceOrigin.forCurrentClassPath()).load()
                 .toList();
-        assertThat(services, hasSize(0));
+        assertThat(services, emptyIterable());
     }
 
     @Test
@@ -49,10 +49,7 @@ class ClassPathServiceLoaderTest
         when(originMock.getClassLoader()).thenReturn(DummyServiceImpl.class.getClassLoader());
         final List<DummyService> services = new ClassPathServiceLoader<DummyService>(originMock, serviceLoaderMock)
                 .load().toList();
-        assertAll(() -> assertThat(services, hasSize(1)),
-                () -> assertThat(services.get(0), not(nullValue())),
-                () -> assertThat(services.get(0), instanceOf(DummyServiceImpl.class)),
-                () -> assertThat(services.get(0), sameInstance(service)));
+        assertThat(services, contains(sameInstance(service)));
     }
 
     @Test

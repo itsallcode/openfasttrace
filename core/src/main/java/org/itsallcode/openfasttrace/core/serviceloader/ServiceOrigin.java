@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Origin of a service, either the current classpath or a list of jar files.
+ * Origin of a service, either the current class path or a list of JAR files.
  */
 // [impl->dsn~plugins.loading~1]
 interface ServiceOrigin extends AutoCloseable
 {
     /**
-     * Create a service origin for the current classpath.
+     * Create a service origin for the current class path.
      * 
-     * @return a service origin for the current classpath
+     * @return a service origin for the current class path
      */
     static ServiceOrigin forCurrentClassPath()
     {
@@ -31,11 +31,11 @@ interface ServiceOrigin extends AutoCloseable
     }
 
     /**
-     * Create a service origin for a single jar file.
+     * Create a service origin for a single JAR file.
      * 
      * @param jar
-     *            path to the jar file
-     * @return a service origin for the jar file
+     *            path to the JAR file
+     * @return a service origin for the JAR file
      */
     static ServiceOrigin forJar(final Path jar)
     {
@@ -43,13 +43,13 @@ interface ServiceOrigin extends AutoCloseable
     }
 
     /**
-     * Create a service origin for a list of jar files.
+     * Create a service origin for a list of JAR files.
      * 
      * @param jars
-     *            list of paths to jar files
-     * @return a service origin for the jar files
+     *            list of paths to JAR files
+     * @return a service origin for the JAR files
      */
-    // [impl->dsn~plugins.loading.separate_classloader~1]
+    // [impl->dsn~plugins.loading.separate-classloader~1]
     static ServiceOrigin forJars(final List<Path> jars)
     {
         return new JarFileOrigin(jars, createClassLoader(jars));
@@ -74,9 +74,9 @@ interface ServiceOrigin extends AutoCloseable
         {
             return path.toUri().toURL();
         }
-        catch (final MalformedURLException e)
+        catch (final MalformedURLException exception)
         {
-            throw new IllegalStateException("Error converting path " + path + " to url", e);
+            throw new IllegalStateException("Error converting path " + path + " to url", exception);
         }
     }
 

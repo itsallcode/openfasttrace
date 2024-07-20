@@ -133,9 +133,12 @@ OFT loads plugins at startup from these locations:
 * Third party plugins from folder `$HOME/.oft/plugins/<plugin-name>/*.jar`
 
 Rationale:
+
 * A plugin may consist of multiple JARs, e.g. the plugin itself and it's dependencies.
+* A plugin might need extra resources
 
 Covers:
+
 * [`req~plugins.loading~1`](system_requirements.md#loading-plugins)
 
 Needs: impl, utest, itest
@@ -150,6 +153,7 @@ Rationale:
 Separating plugins from each other avoids conflicts between potentially duplicate classes in plugin.
 
 Covers:
+
 * [`req~plugins.loading~1`](system_requirements.md#loading-plugins)
 
 Needs: impl, utest
@@ -157,7 +161,8 @@ Needs: impl, utest
 ### Loader Supports Plugin Types
 `dsn~plugins.loading.plugin_types~1`
 
-The Plugin loader supports loading factories the following plugin types:
+The Plugin loader supports loading factories for the following plugin types:
+
 * Importers: `org.itsallcode.openfasttrace.api.importer.ImporterFactory`
 * Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
 * Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`

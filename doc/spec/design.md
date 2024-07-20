@@ -144,7 +144,7 @@ Covers:
 Needs: impl, utest, itest
 
 ### Plugin Loader Uses Separate ClassLoaders
-`dsn~plugins.loading.separate_classloader~1`
+`dsn~plugins.loading.separate-classloader~1`
 
 The Plugin loader uses a separate ClassLoader for each plugin.
 
@@ -159,7 +159,7 @@ Covers:
 Needs: impl, utest
 
 ### Loader Supports Plugin Types
-`dsn~plugins.loading.plugin_types~1`
+`dsn~plugins.loading.plugin-types~1`
 
 The Plugin loader supports loading factories for the following plugin types:
 

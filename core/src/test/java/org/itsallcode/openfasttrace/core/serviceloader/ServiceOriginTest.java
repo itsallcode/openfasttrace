@@ -35,7 +35,7 @@ class ServiceOriginTest
         assertThat(origin, hasToString(startsWith("CurrentClassPathOrigin [classLoader=")));
     }
 
-    // [utest->dsn~plugins.loading.separate_classloader~1]
+    // [utest->dsn~plugins.loading.separate-classloader~1]
     @Test
     void currentClassPathGetClassLoader()
     {

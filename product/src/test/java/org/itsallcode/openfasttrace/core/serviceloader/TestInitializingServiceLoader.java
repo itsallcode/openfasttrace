@@ -41,7 +41,7 @@ class TestInitializingServiceLoader
         assertThat(voidServiceLoader.load().toList(), emptyIterable());
     }
 
-    // [itest->dsn~plugins.loading.plugin_types~1]
+    // [itest->dsn~plugins.loading.plugin-types~1]
     @Test
     void testImporterFactoriesRegistered()
     {
@@ -61,7 +61,7 @@ class TestInitializingServiceLoader
         }
     }
 
-    // [itest->dsn~plugins.loading.plugin_types~1]
+    // [itest->dsn~plugins.loading.plugin-types~1]
     @Test
     void testExporterFactoriesRegistered()
     {

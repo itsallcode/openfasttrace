@@ -8,7 +8,7 @@ import java.net.URLClassLoader;
  * then from the parent class loader, unlike {@link URLClassLoader} which does
  * it the other way around.
  * <p>
- * This allows us to prefer externl plugins over plugins on the classpath
+ * This allows us to prefer external plugins over plugins on the classpath
  * included with OFT.
  * <p>
  * This is based on

@@ -49,7 +49,7 @@ class ChildFirstClassLoaderTest
     }
 
     /**
-     * We can't mock the ClassLoader using Mockito because method
+     * We can't stub the ClassLoader using Mockito because method
      * {@link ClassLoader#loadClass(String, boolean)} is protected.
      */
     private static class MockClassLoader extends ClassLoader

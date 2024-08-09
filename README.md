@@ -32,6 +32,7 @@ Sonarcloud status:
 **User Guides**
 
 * [📖 User Guide](doc/user_guide.md)
+* [🔌 Extending OpenFastTrace With Plugins](doc/plugins.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 
 **News and Discussions**
@@ -47,6 +48,7 @@ Sonarcloud status:
 
 * [🎟️ Project Board](https://github.com/orgs/itsallcode/projects/3/views/1)
 * [🦮 Developer Guide](doc/developer_guide.md)
+* [🔌 Plugin Developer Guide](doc/plugin_developer_guide.md)
 * [🎁 Contributing Guide](CONTRIBUTING.md)
 * [💡 System Requirements](doc/spec/system_requirements.md)
 * [👜 Design](doc/spec/design.md)

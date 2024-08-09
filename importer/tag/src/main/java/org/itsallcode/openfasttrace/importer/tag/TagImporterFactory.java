@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -92,7 +90,7 @@ public class TagImporterFactory extends ImporterFactory
         {
             throw new ImporterException("File '" + path
                     + "' cannot be imported because it does not match any supported file patterns: "
-                    + DEFAULT_FILE_REGEX + " and " + getPathConfigs().collect(toList()));
+                    + DEFAULT_FILE_REGEX + " and " + getPathConfigs().toList());
         }
         final Optional<PathConfig> config = findConfig(path);
         return TagImporter.create(config, path, listener);

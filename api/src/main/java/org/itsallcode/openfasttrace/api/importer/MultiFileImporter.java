@@ -26,8 +26,8 @@ public interface MultiFileImporter
     MultiFileImporter importFile(InputFile file);
 
     /**
-     * Import from the path, independently of whether it is represents a
-     * directory or a file.
+     * Import from the path, independently of whether it represents a directory
+     * or a file.
      * 
      * @param paths
      *            lists of paths to files or directories

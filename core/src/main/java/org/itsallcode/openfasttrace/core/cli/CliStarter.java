@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
+import org.itsallcode.openfasttrace.core.cli.logging.LoggingConfigurator;
 
 /**
  * The main entry point class for the command line application.
@@ -51,6 +52,7 @@ public class CliStarter
         final ArgumentValidator validator = new ArgumentValidator(arguments);
         if (validator.isValid())
         {
+            LoggingConfigurator.create(arguments).configureLogging();
             new CliStarter(arguments).run();
         }
         else

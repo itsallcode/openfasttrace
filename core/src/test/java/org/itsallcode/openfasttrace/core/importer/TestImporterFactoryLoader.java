@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.core.importer;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,12 +8,13 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class TestImporterFactoryLoader
 {
     @Mock
-    private InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoaderMock;
+    private Loader<ImporterFactory> serviceLoaderMock;
     @Mock
     private ImporterFactory supportedFactory1;
     @Mock
@@ -87,6 +87,6 @@ class TestImporterFactoryLoader
 
     private void simulateFactories(final ImporterFactory... factories)
     {
-        when(this.serviceLoaderMock.spliterator()).thenReturn(asList(factories).spliterator());
+        when(this.serviceLoaderMock.load()).thenReturn(Arrays.stream(factories));
     }
 }

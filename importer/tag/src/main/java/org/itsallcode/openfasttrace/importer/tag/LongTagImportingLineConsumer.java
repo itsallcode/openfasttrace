@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -75,7 +74,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         return Arrays.stream(input.split(","))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
-                .collect(toList());
+                .toList();
     }
 
     private SpecificationItemId createItemId(final Matcher matcher, final int lineNumber, final int lineMatchCount,

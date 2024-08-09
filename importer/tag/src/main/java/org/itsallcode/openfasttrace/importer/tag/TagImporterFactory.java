@@ -19,6 +19,7 @@ public class TagImporterFactory extends ImporterFactory
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
             "c#", "cs", // C#
             "cfg", "conf", "ini", // configuration files
+            "feature", // Gherkin feature files
             "go", // Go
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "yaml", "yml", // markup languages

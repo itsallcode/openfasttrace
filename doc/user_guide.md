@@ -675,6 +675,10 @@ recognized file types:
 
 Note that XML is at the moment not yet supported by the Tag Importer, because it would collide with the SpecObj Importer. Once import fallback is implemented, XML will be supported too.
 
+**Test Specification languages**
+
+* [Gherkin](https://cucumber.io/docs/gherkin/) (`.feature`)
+ 
 #### Markdown
 
 The main importer of OFT accepts markdown files with the extensions `.md` and `.markdown`.
@@ -1080,14 +1084,14 @@ The OFT command line interface returns the following exit codes:
 
 The following editors and integrated development environments are well suited for authoring OFT documents. The list is not exhaustive, any editor with Markdown capabilities can be used.
 
-| Editor / IDE                                           | Syntax highl. | Preview | Outline | HTML export |
-|--------------------------------------------------------|---------------|---------|---------|-------------|
-| [Gedit](https://wiki.gnome.org/Apps/Gedit)             | y             |         |         |             |
-| [Eclipse](https://eclipse.org) with WikiText plug-in   | y             | y       | y       | y           |
-| [Eclipse](https://eclipse.org) with GMF plug-in        |               | y       |         |             |
-| [IntelliJ](https://www.jetbrains.com/idea/)            | y             | y       | y       | y           |
-| [Vim](https://www.vim.org/)                            | y             |         |         |             |
-| [Visual Studio Code](https://code.visualstudio.com/)   | y             | y       | y       |             |
+| Editor / IDE                                         | Syntax highl. | Preview | Outline | HTML export |
+| ---------------------------------------------------- | ------------- | ------- | ------- | ----------- |
+| [Gedit](https://wiki.gnome.org/Apps/Gedit)           | y             |         |         |             |
+| [Eclipse](https://eclipse.org) with WikiText plug-in | y             | y       | y       | y           |
+| [Eclipse](https://eclipse.org) with GMF plug-in      |               | y       |         |             |
+| [IntelliJ](https://www.jetbrains.com/idea/)          | y             | y       | y       | y           |
+| [Vim](https://www.vim.org/)                          | y             |         |         |             |
+| [Visual Studio Code](https://code.visualstudio.com/) | y             | y       | y       |             |
 
 ### Templates for IDEs
 

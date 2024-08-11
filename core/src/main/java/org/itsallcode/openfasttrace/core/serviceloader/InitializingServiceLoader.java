@@ -1,5 +1,8 @@
 package org.itsallcode.openfasttrace.core.serviceloader;
-import java.util.*;
+
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 
@@ -12,15 +15,15 @@ import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
  * @param <C>
  *            the context type
  */
-public class InitializingServiceLoader<T extends Initializable<C>, C> implements Iterable<T>
+public final class InitializingServiceLoader<T extends Initializable<C>, C> implements Loader<T>
 {
-    private final ServiceLoader<T> serviceLoader;
+    private final Loader<T> delegate;
     private final C context;
     private List<T> services;
 
-    private InitializingServiceLoader(final ServiceLoader<T> serviceLoader, final C context)
+    InitializingServiceLoader(final Loader<T> delegate, final C context)
     {
-        this.serviceLoader = serviceLoader;
+        this.delegate = delegate;
         this.context = context;
     }
 
@@ -38,30 +41,34 @@ public class InitializingServiceLoader<T extends Initializable<C>, C> implements
      *            instances.
      * @return an {@link InitializingServiceLoader} for type <code>T</code>
      */
-    public static <T extends Initializable<C>, C> InitializingServiceLoader<T, C> load(
+    public static <T extends Initializable<C>, C> Loader<T> load(
             final Class<T> serviceType, final C context)
     {
-        return new InitializingServiceLoader<>(ServiceLoader.load(serviceType), context);
+        final ServiceLoaderFactory loaderFactory = ServiceLoaderFactory.createDefault();
+        return new InitializingServiceLoader<>(loaderFactory.createLoader(serviceType), context);
     }
 
     @Override
-    public Iterator<T> iterator()
+    public Stream<T> load()
     {
         if (this.services == null)
         {
             this.services = loadServices();
         }
-        return this.services.iterator();
+        return services.stream();
     }
 
     private List<T> loadServices()
     {
-        final List<T> initializedServices = new ArrayList<>();
-        for (final T service : this.serviceLoader)
-        {
+        return this.delegate.load().map(service -> {
             service.init(this.context);
-            initializedServices.add(service);
-        }
-        return initializedServices;
+            return service;
+        }).toList();
+    }
+
+    @Override
+    public void close()
+    {
+        delegate.close();
     }
 }

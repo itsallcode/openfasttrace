@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.core.importer.tag.config;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -166,7 +165,7 @@ class DescribedPathMatcherTest
     {
         final List<Path> pathList = Arrays.stream(paths) //
                 .map(Paths::get) //
-                .collect(toList());
+                .toList();
         this.matcher = DescribedPathMatcher.createPathListMatcher(pathList);
     }
 

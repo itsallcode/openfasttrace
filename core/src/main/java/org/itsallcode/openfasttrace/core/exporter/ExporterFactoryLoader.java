@@ -1,13 +1,11 @@
 package org.itsallcode.openfasttrace.core.exporter;
 
-import static java.util.stream.Collectors.toList;
-
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.api.exporter.*;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 
 /**
  * This class is responsible for finding the matching {@link ExporterFactory}
@@ -15,7 +13,7 @@ import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader
  */
 public class ExporterFactoryLoader
 {
-    private final InitializingServiceLoader<ExporterFactory, ExporterContext> serviceLoader;
+    private final Loader<ExporterFactory> serviceLoader;
 
     /**
      * Create a new loader for the given context.
@@ -25,11 +23,11 @@ public class ExporterFactoryLoader
      */
     public ExporterFactoryLoader(final ExporterContext context)
     {
+        // [impl->dsn~plugins.loading.plugin-types~1]
         this(InitializingServiceLoader.load(ExporterFactory.class, context));
     }
 
-    ExporterFactoryLoader(
-            final InitializingServiceLoader<ExporterFactory, ExporterContext> serviceLoader)
+    ExporterFactoryLoader(final Loader<ExporterFactory> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
     }
@@ -64,9 +62,9 @@ public class ExporterFactoryLoader
 
     private List<ExporterFactory> getMatchingFactories(final String format)
     {
-        return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter(f -> f.supportsFormat(format)) //
-                .collect(toList());
+        return this.serviceLoader.load()
+                .filter(f -> f.supportsFormat(format))
+                .toList();
     }
 
     /**

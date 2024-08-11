@@ -1,16 +1,14 @@
 package org.itsallcode.openfasttrace.core.importer;
 
-import static java.util.stream.Collectors.toList;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 
 /**
  * This class is responsible for finding the matching {@link ImporterFactory}
@@ -20,7 +18,7 @@ public class ImporterFactoryLoader
 {
     private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
 
-    private final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader;
+    private final Loader<ImporterFactory> serviceLoader;
 
     /**
      * Creates a new loader.
@@ -28,10 +26,21 @@ public class ImporterFactoryLoader
      * @param serviceLoader
      *            the loader used for locating importers.
      */
-    public ImporterFactoryLoader(
-            final InitializingServiceLoader<ImporterFactory, ImporterContext> serviceLoader)
+    ImporterFactoryLoader(final Loader<ImporterFactory> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
+    }
+
+    /**
+     * Create a new loader for the given context.
+     * 
+     * @param context
+     *            context for the new loader
+     */
+    public ImporterFactoryLoader(final ImporterContext context)
+    {
+        // [impl->dsn~plugins.loading.plugin-types~1]
+        this(InitializingServiceLoader.load(ImporterFactory.class, context));
     }
 
     /**
@@ -79,8 +88,8 @@ public class ImporterFactoryLoader
 
     private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
-        return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter(f -> f.supportsFile(file)) //
-                .collect(toList());
+        return this.serviceLoader.load()
+                .filter(f -> f.supportsFile(file))
+                .toList();
     }
 }

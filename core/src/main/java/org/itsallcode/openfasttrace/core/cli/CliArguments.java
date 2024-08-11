@@ -12,6 +12,7 @@ import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
+import org.itsallcode.openfasttrace.core.cli.logging.LogLevel;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
 
 /**
@@ -41,6 +42,9 @@ public class CliArguments
 
     // [impl->dsn~reporting.html.details-display~1]
     private DetailsSectionDisplay detailsSectionDisplay;
+
+    // [impl->dsn~cli.plugins.log~1]
+    private LogLevel logLevel;
 
     /**
      * Create new {@link CliArguments}.
@@ -300,18 +304,21 @@ public class CliArguments
     /**
      * Get the color scheme.
      * <p>
-     * Defaults to {@link ColorScheme#COLOR}. The switch <code>-f</code> overrides this setting, so that the color
-     * scheme is always {@link ColorScheme#BLACK_AND_WHITE}.
+     * Defaults to {@link ColorScheme#COLOR}. The switch <code>-f</code>
+     * overrides this setting, so that the color scheme is always
+     * {@link ColorScheme#BLACK_AND_WHITE}.
      * </p>
      *
      * @return the color scheme
      */
     public ColorScheme getColorScheme()
     {
-        if (this.getOutputPath() == null) {
+        if (this.getOutputPath() == null)
+        {
             return (this.colorScheme == null) ? ColorScheme.COLOR : this.colorScheme;
         }
-        else {
+        else
+        {
             return ColorScheme.BLACK_AND_WHITE;
         }
     }
@@ -354,8 +361,7 @@ public class CliArguments
     /**
      * Check if origin information should be shown in reports.
      * 
-     * @return {@code true} if origin information should be shown in
-     *         reports.
+     * @return {@code true} if origin information should be shown in reports.
      */
     public boolean getShowOrigin()
     {
@@ -366,8 +372,7 @@ public class CliArguments
      * Choose whether to show origin information in reports.
      * 
      * @param showOrigin
-     *            {@code true} if origin information should be shown in
-     *            reports
+     *            {@code true} if origin information should be shown in reports
      */
     public void setShowOrigin(final boolean showOrigin)
     {
@@ -378,8 +383,7 @@ public class CliArguments
      * Choose whether to show origin information in reports.
      * 
      * @param showOrigin
-     *            {@code true} if origin information should be shown in
-     *            reports
+     *            {@code true} if origin information should be shown in reports
      */
     public void setS(final boolean showOrigin)
     {
@@ -389,7 +393,8 @@ public class CliArguments
     /**
      * Choose the color scheme.
      *
-     * @param colorScheme color scheme to use for console output
+     * @param colorScheme
+     *            color scheme to use for console output
      */
     public void setColorScheme(final ColorScheme colorScheme)
     {
@@ -399,7 +404,8 @@ public class CliArguments
     /**
      * Choose the color scheme.
      *
-     * @param colorScheme color scheme to use for console output
+     * @param colorScheme
+     *            color scheme to use for console output
      */
     public void setC(final ColorScheme colorScheme)
     {
@@ -415,5 +421,37 @@ public class CliArguments
     public void setDetailsSectionDisplay(final DetailsSectionDisplay detailsSectionDisplay)
     {
         this.detailsSectionDisplay = detailsSectionDisplay;
+    }
+
+    /**
+     * Get the log level for console logging.
+     * 
+     * @return log level
+     */
+    public Optional<LogLevel> getLogLevel()
+    {
+        return Optional.ofNullable(this.logLevel);
+    }
+
+    /**
+     * Set the log level for console logging.
+     * 
+     * @param logLevel
+     *            log level
+     */
+    public void setLogLevel(final LogLevel logLevel)
+    {
+        this.logLevel = logLevel;
+    }
+
+    /**
+     * Set the log level for console logging.
+     * 
+     * @param logLevel
+     *            log level
+     */
+    public void setL(final LogLevel logLevel)
+    {
+        setLogLevel(logLevel);
     }
 }

@@ -98,19 +98,19 @@ git clone https://github.com/itsallcode/openfasttrace.git
 Run unit tests:
 
 ```sh
-mvn test
+mvn -T 1C test
 ```
 
 Run unit and integration tests and additional checks:
 
 ```sh
-mvn verify
+mvn -T 1C verify
 ```
 
 Build OFT:
 
 ```sh
-mvn package -DskipTests
+mvn -T 1C package -DskipTests
 ```
 
 This will build the executable JAR including all modules at `product/target/openfasttrace-$VERSION.jar`.
@@ -163,13 +163,13 @@ mvn --update-snapshots versions:display-dependency-updates versions:display-plug
 Automatically upgrade dependencies:
 
 ```bash
-mvn --update-snapshots versions:use-latest-releases versions:update-properties
+mvn -T 1C --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
 ## Run local sonar analysis
 
 ```bash
-mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+mvn -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.token=[token]
 ```
 

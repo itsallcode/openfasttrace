@@ -12,6 +12,7 @@ report_file=$base_dir/target/self-trace-report.html
 mkdir -p "$(dirname "$report_file")"
 
 if $oft_script trace \
+    --log-level INFO \
     --output-file "$report_file" \
     --output-format html \
     "$base_dir/doc/spec" \

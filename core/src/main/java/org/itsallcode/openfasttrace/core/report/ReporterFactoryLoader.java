@@ -1,13 +1,11 @@
 package org.itsallcode.openfasttrace.core.report;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.report.*;
 import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 
 /**
  * This class is responsible for finding the matching {@link ReporterFactory}
@@ -15,7 +13,7 @@ import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader
  */
 public class ReporterFactoryLoader
 {
-    private final InitializingServiceLoader<ReporterFactory, ReporterContext> serviceLoader;
+    private final Loader<ReporterFactory> serviceLoader;
 
     /**
      * Create a new {@link ReporterFactoryLoader}.
@@ -26,11 +24,11 @@ public class ReporterFactoryLoader
      */
     public ReporterFactoryLoader(final ReporterContext context)
     {
+        // [impl->dsn~plugins.loading.plugin-types~1]
         this(InitializingServiceLoader.load(ReporterFactory.class, context));
     }
 
-    private ReporterFactoryLoader(
-            final InitializingServiceLoader<ReporterFactory, ReporterContext> serviceLoader)
+    private ReporterFactoryLoader(final Loader<ReporterFactory> serviceLoader)
     {
         this.serviceLoader = serviceLoader;
     }
@@ -65,9 +63,9 @@ public class ReporterFactoryLoader
 
     private List<ReporterFactory> getMatchingFactories(final String format)
     {
-        return StreamSupport.stream(this.serviceLoader.spliterator(), false) //
-                .filter(factory -> factory.supportsFormat(format)) //
-                .collect(toList());
+        return this.serviceLoader.load()
+                .filter(factory -> factory.supportsFormat(format))
+                .toList();
     }
 
     /**

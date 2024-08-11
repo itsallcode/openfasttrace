@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
+import java.nio.file.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -85,18 +83,21 @@ public class MultiFileImporterImpl implements MultiFileImporter
         final int itemCountBefore = this.specItemBuilder.getItemCount();
         try (Stream<Path> fileStream = Files.walk(dir))
         {
-            fileStream.filter(path -> !path.toFile().isDirectory()) //
-                    .filter(matcher::matches) //
+            fileStream.filter(path -> !path.toFile().isDirectory())
+                    .filter(matcher::matches)
                     .map(path -> RealFileInput.forPath(path, DEFAULT_CHARSET))
                     .filter(this.factoryLoader::supportsFile)
-                    .map(file -> createImporterIfPossible(file, this.specItemBuilder)).forEach(importer -> {
-                        importer.ifPresent(Importer::runImport);
+                    .map(file -> createImporterIfPossible(file, this.specItemBuilder))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .forEach(importer -> {
+                        importer.runImport();
                         fileCount.incrementAndGet();
                     });
         }
-        catch (final IOException e)
+        catch (final IOException exception)
         {
-            throw new ImporterException("Error walking directory " + dir, e);
+            throw new ImporterException("Error walking directory " + dir, exception);
         }
         final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
         LOG.fine(() -> "Imported " + fileCount + " files containing " + itemCountImported
@@ -112,14 +113,13 @@ public class MultiFileImporterImpl implements MultiFileImporter
 
     private Optional<Importer> createImporterIfPossible(final InputFile file, final SpecificationListBuilder builder)
     {
-        final Optional<ImporterFactory> importerFactory = this.factoryLoader.getImporterFactory(file);
-        final Optional<Importer> importer = importerFactory.isPresent()
-                ? Optional.of(importerFactory.get().createImporter(file, builder))
-                : Optional.empty();
+        final Optional<Importer> importer = this.factoryLoader.getImporterFactory(file)
+                .map(factory -> factory.createImporter(file, builder));
 
-        LOG.fine(() -> (importer.isPresent() ? "Created importer of type '" + importer.getClass().getSimpleName()
-                : "No import")
-                + "' for file '" + file + "'");
+        LOG.finest(
+                () -> (importer.isPresent() ? "Created importer of type '" + importer.get().getClass().getSimpleName()
+                        : "No import")
+                        + "' for file '" + file + "'");
         return importer;
     }
 

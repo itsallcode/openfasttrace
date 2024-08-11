@@ -54,7 +54,7 @@ OpenFastTrace uses [Apache Maven](https://maven.apache.org) as technical project
 
 If you want to build OFT:
 
-    apt-get install openjdk-11-jdk maven
+    apt-get install openjdk-17-jdk maven
 
 ## Configure Maven Toolchains
 
@@ -64,15 +64,6 @@ OFT uses Maven Toolchains to configure the correct JDK version (see the [documen
 <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
-    <toolchain>
-        <type>jdk</type>
-        <provides>
-            <version>11</version>
-        </provides>
-        <configuration>
-            <jdkHome>/usr/lib/jvm/java-11-openjdk-amd64/</jdkHome>
-        </configuration>
-    </toolchain>
     <toolchain>
         <type>jdk</type>
         <provides>
@@ -126,7 +117,7 @@ This will build the executable JAR including all modules at `product/target/open
 
 #### Specify Java Version
 
-By default, OFT is built with Java 11.
+By default, OFT is built with Java 17.
 
 To build and test with a later version, add argument `-Djava.version=17` to the Maven command.
 
@@ -179,9 +170,7 @@ mvn --update-snapshots versions:use-latest-releases versions:update-properties
 
 ```bash
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-    -Dsonar.host.url=https://sonarcloud.io \
-    -Dsonar.organization=itsallcode \
-    -Dsonar.login=[token]
+    -Dsonar.token=[token]
 ```
 
 See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace).

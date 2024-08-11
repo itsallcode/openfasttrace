@@ -1,4 +1,4 @@
-# OpenFastTrace 4.1.0, released 2024-06-??
+# OpenFastTrace 4.1.0, released 2024-08-11
 
 Code name: Third-party plugins
 

@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
+import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
@@ -136,6 +137,39 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.createId("req", "too-short", 111))
                         .location("z", 3)
+                        .build()));
+    }
+
+    @Test
+    void testWhenInsideMarkdownCodeBlockThenNoSpecificationItemMustBeDetected() {
+        assertImport("file_with_code_block.md", """
+                ```
+                This is a code block, the following requirement must be ignored.
+                
+                req~example~1
+                ```
+                """,
+                Matchers.emptyIterable());
+    }
+
+    // Unit Test
+    @Test
+    void testWhenCodeBlockIsInsideCommentSectionThenItIsImportedAsPartOfComment() {
+        assertImport("file_with_code_block_in_comment.md", """
+                req~comment_with_code_block~1
+                Comment:
+                
+                ```
+                This is a code block inside a comment.
+                ```
+                """,
+                contains(item()
+                        .id(SpecificationItemId.createId("req", "comment_with_code_block", 1))
+                        .comment("""
+                                ```
+                                This is a code block inside a comment.
+                                ```""")
+                        .location("file_with_code_block_in_comment.md", 1)
                         .build()));
     }
 }

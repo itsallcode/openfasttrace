@@ -29,6 +29,8 @@ public enum LineParserState
     TITLE,
     /** Found tags */
     TAGS,
+    /** Code block */
+    CODE_BLOCK,
     /** Reached the end of the file */
     EOF
 }

@@ -173,18 +173,12 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     @ParameterizedTest
     @CsvSource(
     {
-            "'', ''",
-            "', '",
-            "'`', '`'",
-            "'``', '``'",
-            "'````', '````'",
-            "'``` ', ' ```'",
-            "'```  ', '  ```'",
-            "'   ```', '```   '",
-            "'```java ', ' ```java'",
-            "'~~~', '~~~'",
-            "'~~~java', '~~~java'",
-            "'~~~~java ', ' ~~~~java '"
+            "`,`",
+            "``,``",
+            " ``', ``",
+            "`` ,`` ",
+            "``java,``",
+            "~~,~~",
     })
     void testWhenNotInsideMarkdownCodeBlockThenSpecificationItemMustBeDetected(final String startMarker,
             final String endMarker)
@@ -199,6 +193,7 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.parseId("req~example~1"))
                         .location("file_without_code_block.md", 4)
+                        .description(endMarker) // End marker looks like part of the description in this case.
                         .build()));
     }
 

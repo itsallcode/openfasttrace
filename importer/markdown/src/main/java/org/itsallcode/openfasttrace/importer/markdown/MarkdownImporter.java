@@ -42,6 +42,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(START      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(START      , TITLE      , SECTION_TITLE        , this::rememberTitle                ),
                 transition(START      , START      , MdPattern.FORWARD    , this::forward                      ),
+                transition(START      , CODE_BLOCK , MdPattern.CODE_BEGIN , () -> {}                            ),
                 transition(START      , START      , MdPattern.EVERYTHING , () -> {}                           ),
 
                 transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -99,7 +100,6 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(COMMENT    , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(COMMENT    , COMMENT    , MdPattern.EVERYTHING , this::appendComment                ),
 
-
                 // [impl->dsn~md.covers-list~1]
                 transition(COVERS     , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(COVERS     , TITLE      , SECTION_TITLE        , () -> {endItem(); rememberTitle();}),
@@ -156,7 +156,9 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(TAGS       , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
-                transition(TAGS       , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      )
+                transition(TAGS       , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
+
+                transition(CODE_BLOCK , START      , MdPattern.CODE_END   , () -> {}                           )
         };
         // @formatter:on
     }

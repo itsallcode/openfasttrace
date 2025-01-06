@@ -15,6 +15,8 @@ enum MdPattern
     // [impl->dsn~md.artifact-forwarding-notation~1]
 
     // @formatter:off
+    CODE_BEGIN(" *[`~]{3,30}\\w*\\s*"),
+    CODE_END(" *[`~]{3,30}\\s*"),
     COMMENT("Comment:\\s*"),
     COVERS("Covers:\\s*"),
     COVERS_REF(PatternConstants.REFERENCE_AFTER_BULLET),

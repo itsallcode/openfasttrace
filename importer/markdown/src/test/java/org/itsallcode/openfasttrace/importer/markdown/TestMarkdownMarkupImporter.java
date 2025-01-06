@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
@@ -8,6 +9,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
@@ -136,6 +138,81 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.createId("req", "too-short", 111))
                         .location("z", 3)
+                        .build()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+    {
+            "```,```",
+            "``` ,``` ",
+            "``` ,```",
+            "````, ````",
+            " ```, ```",
+            "  ```,  ```",
+            "   ```,   ```",
+            "```java, ```",
+            "```java , ``` ",
+            "~~~, ~~~",
+            "~~~java, ~~~",
+            "  ~~~~java,  ~~~~ "
+    })
+    void testWhenInsideMarkdownCodeBlockThenNoSpecificationItemMustBeDetected(final String startMarker,
+            final String endMarker)
+    {
+        assertImport("file_with_code_block.md", """
+                %s
+                This is a code block, the following requirement must be ignored.
+
+                req~example~1
+                %s
+                """.formatted(startMarker, endMarker),
+                emptyIterable());
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+    {
+            "`,`",
+            "``,``",
+            " ``', ``",
+            "`` ,`` ",
+            "``java,``",
+            "~~,~~",
+    })
+    void testWhenNotInsideMarkdownCodeBlockThenSpecificationItemMustBeDetected(final String startMarker,
+            final String endMarker)
+    {
+        assertImport("file_without_code_block.md", """
+                %s
+                This is not a code block, the following requirement must be detected.
+
+                req~example~1
+                %s
+                """.formatted(startMarker, endMarker),
+                contains(item()
+                        .id(SpecificationItemId.parseId("req~example~1"))
+                        .location("file_without_code_block.md", 4)
+                        .description(endMarker) // End marker looks like part of the description in this case.
+                        .build()));
+    }
+
+    @Test
+    void testWhenCodeBlockIsInsideCommentSectionThenItIsImportedAsPartOfComment()
+    {
+        assertImport("file_with_code_block_in_comment.md", """
+                req~comment_with_code_block~1
+                Comment:
+
+                ```
+                This is a code block inside a comment.
+                ```
+                """,
+                contains(item()
+                        .id(SpecificationItemId.createId("req", "comment_with_code_block", 1))
+                        .comment("```" + System.lineSeparator()+ "This is a code block inside a comment."
+                                        + System.lineSeparator() + "```")
+                        .location("file_with_code_block_in_comment.md", 1)
                         .build()));
     }
 }

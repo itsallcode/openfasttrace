@@ -1,14 +1,15 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
-import org.hamcrest.Matchers;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
@@ -140,25 +141,36 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
-    @Test
-    void testWhenInsideMarkdownCodeBlockThenNoSpecificationItemMustBeDetected() {
+    @ParameterizedTest
+    @CsvSource(
+    {
+            "```,```",
+            "``` ,``` ",
+            "``` ,```",
+            "```java, ```",
+            "```java , ``` ",
+    })
+    void testWhenInsideMarkdownCodeBlockThenNoSpecificationItemMustBeDetected(final String startMarker,
+            final String endMarker)
+    {
         assertImport("file_with_code_block.md", """
-                ```
-                This is a code block, the following requirement must be ignored.
-                
-                req~example~1
-                ```
-                """,
-                Matchers.emptyIterable());
+                        %s
+                        This is a code block, the following requirement must be ignored.
+
+                        req~example~1
+                        %s
+                        """.formatted(startMarker, endMarker),
+                emptyIterable());
     }
 
     // Unit Test
     @Test
-    void testWhenCodeBlockIsInsideCommentSectionThenItIsImportedAsPartOfComment() {
+    void testWhenCodeBlockIsInsideCommentSectionThenItIsImportedAsPartOfComment()
+    {
         assertImport("file_with_code_block_in_comment.md", """
                 req~comment_with_code_block~1
                 Comment:
-                
+
                 ```
                 This is a code block inside a comment.
                 ```

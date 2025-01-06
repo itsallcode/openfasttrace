@@ -147,8 +147,15 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
             "```,```",
             "``` ,``` ",
             "``` ,```",
+            "````, ````",
+            " ```, ```",
+            "  ```,  ```",
+            "   ```,   ```",
             "```java, ```",
             "```java , ``` ",
+            "~~~, ~~~",
+            "~~~java, ~~~",
+            "  ~~~~java,  ~~~~ "
     })
     void testWhenInsideMarkdownCodeBlockThenNoSpecificationItemMustBeDetected(final String startMarker,
             final String endMarker)

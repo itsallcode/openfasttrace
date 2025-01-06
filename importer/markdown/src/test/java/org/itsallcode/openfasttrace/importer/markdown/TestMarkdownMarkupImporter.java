@@ -161,16 +161,47 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
             final String endMarker)
     {
         assertImport("file_with_code_block.md", """
-                        %s
-                        This is a code block, the following requirement must be ignored.
+                %s
+                This is a code block, the following requirement must be ignored.
 
-                        req~example~1
-                        %s
-                        """.formatted(startMarker, endMarker),
+                req~example~1
+                %s
+                """.formatted(startMarker, endMarker),
                 emptyIterable());
     }
 
-    // Unit Test
+    @ParameterizedTest
+    @CsvSource(
+    {
+            "'', ''",
+            "', '",
+            "'`', '`'",
+            "'``', '``'",
+            "'````', '````'",
+            "'``` ', ' ```'",
+            "'```  ', '  ```'",
+            "'   ```', '```   '",
+            "'```java ', ' ```java'",
+            "'~~~', '~~~'",
+            "'~~~java', '~~~java'",
+            "'~~~~java ', ' ~~~~java '"
+    })
+    void testWhenNotInsideMarkdownCodeBlockThenSpecificationItemMustBeDetected(final String startMarker,
+            final String endMarker)
+    {
+        assertImport("file_without_code_block.md", """
+                %s
+                This is not a code block, the following requirement must be detected.
+
+                req~example~1
+                %s
+                """.formatted(startMarker, endMarker),
+                contains(item()
+                        .id(SpecificationItemId.parseId("req~example~1"))
+                        .location("file_without_code_block.md", 4)
+                        .build()));
+    }
+
     @Test
     void testWhenCodeBlockIsInsideCommentSectionThenItIsImportedAsPartOfComment()
     {

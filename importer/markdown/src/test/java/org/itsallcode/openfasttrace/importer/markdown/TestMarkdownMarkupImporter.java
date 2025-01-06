@@ -210,10 +210,8 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 """,
                 contains(item()
                         .id(SpecificationItemId.createId("req", "comment_with_code_block", 1))
-                        .comment("""
-                                ```
-                                This is a code block inside a comment.
-                                ```""")
+                        .comment("```" + System.lineSeparator()+ "This is a code block inside a comment."
+                                        + System.lineSeparator() + "```")
                         .location("file_with_code_block_in_comment.md", 1)
                         .build()));
     }

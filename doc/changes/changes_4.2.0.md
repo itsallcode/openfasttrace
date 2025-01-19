@@ -11,4 +11,5 @@ We also added a whole section about understanding and fixing broken links betwee
 ## Features
 
 * #431: Documented "unwanted coverage" in user guide.
+* #437: Upgrade build and test dependencies on top of 4.1.0
 * #480: Ignore specification items inside Markdown code blocks

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
 
+@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
 @ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
 @ExtendWith(SystemErrGuard.class)

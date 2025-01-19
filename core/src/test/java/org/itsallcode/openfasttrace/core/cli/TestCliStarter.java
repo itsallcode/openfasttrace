@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
 @ExtendWith(ExitGuard.class)
 class TestCliStarter
 {

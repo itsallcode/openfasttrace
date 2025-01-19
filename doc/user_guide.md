@@ -503,7 +503,7 @@ When the outgoing link from this item is "predated", that means it points to a n
 
 "Outdated" coverage typically happens when an existing specification item was updated, but the coverage wasn't. This is one of the most useful safeguards in OFT.
 
-Copy & paste often leads to "ambiguous" coverage, where two items are defined with the same ID. Treat this like you would fix a typo, but be careful, if the ID wasn't updated, then there are likely other c&p errors hiding in the vicinity. 
+Copy & paste often leads to "ambiguous" coverage, where two items are defined with the same ID. Treat this like you would fix a typo, but be careful, if the ID wasn't updated, then there are likely other copy & paste errors hiding in the vicinity. 
 
 Coverage is "unwanted" when the specification item that it points to didn't ask for it. Check for typos in both IDs. The most common mistake here is that either the required artifact types or the coveraging artifact types are wrong.
 

@@ -19,6 +19,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
+@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
 @ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
 class ITestCliWithFilter extends AbstractFileBasedTest

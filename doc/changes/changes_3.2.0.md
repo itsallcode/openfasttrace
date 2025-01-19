@@ -11,3 +11,7 @@ In this release we added an exporter that creates ASPEC documents.
 ## Features
 
 * #260: Added ASPEC exporter
+
+## Bugfixes
+
+* #258: Importing of files for which no importer or more than one importer is found don't let the build fail

@@ -9,4 +9,7 @@ In this release we changed the behavior of the Markdown importer, so that if we 
 ## Features
 
 * #480: Ignore specification items inside Markdown code blocks
-* #???: Upgrade build and test dependencies on top of 4.1.0
+
+## Refactoring
+
+* #437: Upgrade build and test dependencies on top of 4.1.0

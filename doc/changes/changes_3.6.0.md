@@ -1,4 +1,4 @@
-# OpenFastTrace 3.6.0, released 
+# OpenFastTrace 3.6.0, released 2022-08-21
 
 Code name: C# and Robot Framework support in `TagImporter`
 
@@ -18,5 +18,5 @@ We now also upload a self-tracing report as part of the CI build and added suppo
 * #246: Upload self-tracing report to GitHub Action result in CI build
 * #329: Fixed static code analysis warnings in unit tests
 * #330: upgraded test and build dependencies
-* #334: Added `module-info.java` files to support Java modules
 * #331: Removed license headers from sources and `license-maven-plugin`
+* #334: Added `module-info.java` files to support Java modules

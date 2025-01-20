@@ -11,7 +11,8 @@ We also broadened the support of file types in the `TagImporter`.
 ## Features
 
 * #238: Added more file suffixes to the `TagImporter`
+* #239: Added file suffix for SQL to the `TagImporter`
 
 ## Refactoring
 
-* #238: Ported to Java 11
+* #237: Ported to Java 11. Renamed Java packages so that they are unique for each module.

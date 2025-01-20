@@ -8,7 +8,7 @@ In this release we split OFT into Maven submodules.
 
 ## Features
 
-* #226: Pretty print specobjects
+* #219: Pretty print specobjects
 
 ## Bugfixes
 

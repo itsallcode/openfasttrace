@@ -16,9 +16,10 @@ class ProcessOutputConsumer
     private final ProcessStreamConsumer stdOutConsumer;
     private final ProcessStreamConsumer stdErrConsumer;
 
-    ProcessOutputConsumer(final Process process)
+    ProcessOutputConsumer(final Process process, final Duration streamCloseTimeout)
     {
-        this(createThreadExecutor(), process, new ProcessStreamConsumer("stdout"), new ProcessStreamConsumer("stderr"));
+        this(createThreadExecutor(), process, new ProcessStreamConsumer("stdout", streamCloseTimeout),
+                new ProcessStreamConsumer("stderr", streamCloseTimeout));
     }
 
     ProcessOutputConsumer(final Executor executor, final Process process,
@@ -42,6 +43,7 @@ class ProcessOutputConsumer
 
     void start()
     {
+        LOG.finest("Start reading stdout and stderr streams in background...");
         executor.execute(() -> {
             readStream(process.getInputStream(), stdOutConsumer);
         });
@@ -55,10 +57,12 @@ class ProcessOutputConsumer
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)))
         {
             String line = null;
+            LOG.finest("Start reading from '%s' stream...".formatted(consumer.name));
             while ((line = reader.readLine()) != null)
             {
                 consumer.accept(line);
             }
+            LOG.finest("Stream '%s' finished".formatted(consumer.name));
             consumer.streamFinished();
         }
         catch (final IOException exception)
@@ -78,10 +82,10 @@ class ProcessOutputConsumer
         return stdErrConsumer.getContent();
     }
 
-    void waitForStreamsClosed(final Duration timeout)
+    void waitForStreamsClosed()
     {
-        stdOutConsumer.waitUntilStreamClosed(timeout);
-        stdErrConsumer.waitUntilStreamClosed(timeout);
+        stdOutConsumer.waitUntilStreamClosed();
+        stdErrConsumer.waitUntilStreamClosed();
     }
 
     private static class ProcessStreamConsumer
@@ -89,10 +93,12 @@ class ProcessOutputConsumer
         private final CountDownLatch streamFinished = new CountDownLatch(1);
         private final StringBuilder builder = new StringBuilder();
         private final String name;
+        private final Duration streamCloseTimeout;
 
-        ProcessStreamConsumer(final String name)
+        ProcessStreamConsumer(final String name, final Duration streamCloseTimeout)
         {
             this.name = name;
+            this.streamCloseTimeout = streamCloseTimeout;
         }
 
         String getContent()
@@ -111,12 +117,17 @@ class ProcessOutputConsumer
             builder.append(line).append("\n");
         }
 
-        void waitUntilStreamClosed(final Duration timeout)
+        void waitUntilStreamClosed()
         {
-            if (!await(timeout))
+            LOG.finest("Waiting %s for stream '%s' to close".formatted(streamCloseTimeout, name));
+            if (!await(streamCloseTimeout))
             {
                 throw new IllegalStateException(
-                        "Stream '%s' not closed within timeout of %s".formatted(name, timeout));
+                        "Stream '%s' not closed within timeout of %s".formatted(name, streamCloseTimeout));
+            }
+            else
+            {
+                LOG.finest("Stream '%s' closed".formatted(name));
             }
         }
 
@@ -129,7 +140,8 @@ class ProcessOutputConsumer
             catch (final InterruptedException exception)
             {
                 Thread.currentThread().interrupt();
-                throw new IllegalStateException("Interrupted while waiting for stream to be closed", exception);
+                throw new IllegalStateException("Interrupted while waiting for stream '%s' to be closed: %s"
+                        .formatted(name, exception.getMessage()), exception);
             }
         }
     }

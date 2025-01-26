@@ -47,7 +47,8 @@ class JarLauncher
         try
         {
             final Process process = processBuilder.start();
-            final ProcessOutputConsumer consumer = new ProcessOutputConsumer(process);
+            final ProcessOutputConsumer consumer = new ProcessOutputConsumer(process, Duration.ofSeconds(1));
+            consumer.start();
             return new JarLauncher(process, consumer);
         }
         catch (final IOException exception)
@@ -79,14 +80,15 @@ class JarLauncher
     void waitUntilTerminated(final Duration timeout)
     {
         waitForProcessTerminated(timeout);
-        LOG.fine("Process terminated with exit code %d".formatted(exitValue()));
-        consumer.waitForStreamsClosed(timeout);
+        LOG.fine("Process %d terminated with exit code %d".formatted(process.pid(), exitValue()));
+        consumer.waitForStreamsClosed();
     }
 
     private void waitForProcessTerminated(final Duration timeout)
     {
         try
         {
+            LOG.finest("Waiting %s for process %d to terminate...".formatted(timeout, process.pid()));
             if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS))
             {
                 throw new IllegalStateException(
@@ -96,6 +98,8 @@ class JarLauncher
         catch (final InterruptedException exception)
         {
             Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while waiting %s for process to finish".formatted(timeout),
+                    exception);
         }
     }
 

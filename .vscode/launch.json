@@ -23,6 +23,7 @@
                 "${workspaceFolder}/reporter/plaintext/src",
                 "${workspaceFolder}/reporter/html/src",
                 "${workspaceFolder}/reporter/aspec/src",
+                "${workspaceFolder}/reporter/ux/src",
                 "${workspaceFolder}/product/src/test/java",
                 "${workspaceFolder}/api/src",
                 "${workspaceFolder}/exporter/specobject/src",

@@ -1,26 +1,36 @@
 package org.itsallcode.openfasttrace.report.ux;
 
-import org.itsallcode.openfasttrace.api.core.LinkStatus;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.ux.model.Coverage;
+import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.itsallcode.openfasttrace.report.ux.model.UxSpecItem;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Collector traverses a {@link LinkedSpecificationItem} tree and provides a {@link UxSpecItem} and
+ * a {@link UxModel} based on the parsed items.
+ */
 public class Collector {
 
     private final List<LinkedSpecificationItem> items = new ArrayList<>();
+    private final List<SpecificationItemId> ids = new ArrayList<>();
     private final List<UxSpecItem> uxItems = new ArrayList<>();
 
     private final List<String> allTypes = new ArrayList<>();
     private final List<String> orderedTypes = new ArrayList<>();
 
-    private final Map<LinkedSpecificationItem, Map<String, Coverage>> itemCoverages = new HashMap<>();
+    final List<Map<String, Coverage>> itemCoverages = new ArrayList<>();
 
     public Collector() {
     }
 
+    /**
+     * Fill in the caches of the Collector based on the given items.
+     *
+     * @param specItems {@link LinkedSpecificationItem} model.
+     */
     public Collector collect(List<LinkedSpecificationItem> specItems) {
         this.items.clear();
         this.items.addAll(specItems);
@@ -31,17 +41,30 @@ public class Collector {
         return this;
     }
 
+    /**
+     * @return unordered list of {@link SpecificationItem} types.
+     */
     public List<String> getAllTypes() {
         return allTypes;
     }
 
+    /**
+     * @return {@link SpecificationItem} types ordered base on the downward linkage of items.
+     */
     public List<String> getOrderedTypes() {
         return orderedTypes;
     }
 
-    public Map<LinkedSpecificationItem, Map<String, Coverage>> getItemCoverages() {
-        return itemCoverages;
-    }
+    /**
+     * ItemCoverages provide a shallow coverages for each type of {@link SpecificationItem} type based on the linkage
+     * of a SpecItem.
+     * The linkage tree is flattended, means the shallows coverages of all types merged. Merged means that the type is
+     * not part of the tree {@link Coverage#NONE} is returned, {@link Coverage#UNCOVERED} is returned when at least one
+     * item of the type is uncovered. {@link Coverage#COVERED} is returned when all items of a type are covered.
+     *
+     * @return list of coverages indexes by {@link LinkedSpecificationItem} handed in to {@link #collect(List)}.
+     */
+    public List<Map<String, Coverage>> getItemCoverages() {return itemCoverages;}
 
     public List<UxSpecItem> getUxItems() {
         return uxItems;
@@ -59,7 +82,10 @@ public class Collector {
         allTypes.clear();
         allTypes.addAll(collectAllTypes(items));
         orderedTypes.clear();
-        orderedTypes.addAll(createOrderedTypes(items, allTypes));
+        orderedTypes.addAll(createOrderedTypes(items));
+
+        ids.clear();
+        ids.addAll(items.stream().map(LinkedSpecificationItem::getId).toList());
     }
 
     /**
@@ -74,19 +100,17 @@ public class Collector {
      *
      * @param items
      *         Items to process
-     * @param allTypes
-     *         all existing types
      * @return order types
      */
-    static List<String> createOrderedTypes(final List<LinkedSpecificationItem> items,
-                                           final List<String> allTypes) {
+    static List<String> createOrderedTypes(final List<LinkedSpecificationItem> items) {
         final List<String> orderedTypes = new ArrayList<>();
         final Map<String, TypeDependencies> dependenciesByType = collectDependentTypes(items);
 
         // Kahn's BFS algorithm
-        while( !dependenciesByType.isEmpty() && orderedTypes.size() < allTypes.size() ) {
-            for( final Map.Entry<String, TypeDependencies> neededTypeEntry : dependenciesByType.entrySet().stream()
-                    .toList() ) {
+        while( !dependenciesByType.isEmpty() ) {
+            final Map<String, TypeDependencies> previousDependenciesByType = new HashMap<>(dependenciesByType);
+
+            for( final Map.Entry<String, TypeDependencies> neededTypeEntry : previousDependenciesByType.entrySet() ) {
                 final String type = neededTypeEntry.getKey();
                 final TypeDependencies dependencies = neededTypeEntry.getValue();
                 if( dependencies.needs.isEmpty() ) {
@@ -95,6 +119,12 @@ public class Collector {
                             (providerType) -> dependenciesByType.get(providerType).needs.remove(type));
                     dependenciesByType.remove(type);
                 }
+            }
+
+            // Break circles
+            if( dependenciesByType.size() == previousDependenciesByType.size() ) {
+                orderedTypes.addAll(0, dependenciesByType.keySet());
+                dependenciesByType.clear();
             }
         }
 
@@ -136,44 +166,94 @@ public class Collector {
 
     // Covered Status
 
+    /**
+     * Fille in the ItemCoverages.
+     */
     void collectItemCoverages() {
+        // Initialize coverages
         itemCoverages.clear();
-        final Map<String, Coverage> coverages = initializedCoverages(orderedTypes);
-        for( final LinkedSpecificationItem item : items ) {
-            collectItemCoverage(item, coverages);
+        for( int i = 0; i < items.size(); i++ ) {
+            itemCoverages.add(null);
+        }
+
+        // Fill coverages
+        for( int i = 0; i < items.size(); i++ ) {
+            collectItemCoverage(i);
         }
     }
 
-    void collectItemCoverage(final LinkedSpecificationItem item, final Map<String, Coverage> coverages) {
-        // Item Coverage already collected
-        if( mergeCoverages(itemCoverages.get(item), coverages) ) return;
+    /**
+     * Calculate the coverages for a given {@link LinkedSpecificationItem}.
+     * The method traverses the tree recursively merging the coverage of all items with the same type
+     * with {@link #mergeCoverages(Map, Map)}
+     * 
+     * @param index The index within the {@link LinkedSpecificationItem} list.
+     * @return coverages of the item
+     */
+    Map<String, Coverage> collectItemCoverage(final int index) {
+        // Coverage already collected
+        final Map<String, Coverage> targetCoverage = itemCoverages.get(index);
+        if( targetCoverage != null ) {
+            System.out.println("<<< already covered index " + index);
+            return targetCoverage;
+        }
+
+        final Map<String, Coverage> coverages = initializedCoverages(orderedTypes);
 
         // End of the tree
+        final LinkedSpecificationItem item = items.get(index);
         if( item.getNeedsArtifactTypes().isEmpty() ) {
-            updateItemCoverage(item, true, coverages);
-            return;
+            System.out.println("<<< final " + item.getId());
+            return updateItemCoverage(index,
+                    item.getArtifactType(),
+                    item.getStatus() == ItemStatus.APPROVED,
+                    coverages);
         }
 
         // Traverse down
         for( final LinkedSpecificationItem coveringItem : item.getLinksByStatus(LinkStatus.COVERED_SHALLOW) ) {
-            collectItemCoverage(coveringItem, coverages);
+            int coveringIndex = ids.indexOf(coveringItem.getId());
+            System.out.println(">>> coveringItem (" +coveringIndex + ")" + coveringItem.getId());
+            final Map<String, Coverage> collectedCoverages = collectItemCoverage(coveringIndex);
+            mergeCoverages(collectedCoverages, coverages);
         }
 
         // Refresh this coverage
-        updateItemCoverage(item, item.isCoveredShallowWithApprovedItems(), coverages);
+        updateItemCoverage(index, item.getArtifactType(), item.isCoveredShallowWithApprovedItems(), coverages);
+
+        System.out.println("<<< intermediate " + item.getId());
+        return coverages;
     }
 
-    void updateItemCoverage(final LinkedSpecificationItem item,
-                            final boolean covered,
-                            final Map<String, Coverage> coverages) {
-        final Map<String, Coverage> targetCoverages = itemCoverages.getOrDefault(item, new HashMap<>());
-        mergeCoverages(coverages, targetCoverages);
-        targetCoverages.put(item.getArtifactType(), covered ? Coverage.COVERED : Coverage.UNCOVERED);
-        itemCoverages.put(item, targetCoverages);
+    /**
+     * Updates the given coverages by setting the coverage of the goven type and updates the {@link #itemCoverages}.
+     *
+     * @param index The index of the item
+     * @param artifactType The type of the coverage
+     * @param covered true if the type is covered
+     * @param coverages the coverages to update
+     * @return the coverages
+     */
+    Map<String, Coverage> updateItemCoverage(final int index,
+                                             final String artifactType,
+                                             final boolean covered,
+                                             final Map<String, Coverage> coverages) {
+        coverages.put(artifactType, covered ? Coverage.COVERED : Coverage.UNCOVERED);
+        itemCoverages.set(index, coverages);
+        return coverages;
     }
 
+    /**
+     * Merges to SpecItemType coverages resulting in a superset with Coverage types merged by mergeCoverType.
+     *
+     * @param fromCoverages
+     *         types to be merged into toCoverage, may be null
+     * @param toCoverages
+     *         the target types
+     * @return true = merged
+     */
     static boolean mergeCoverages(final Map<String, Coverage> fromCoverages,
-                           final Map<String, Coverage> toCoverages) {
+                                  final Map<String, Coverage> toCoverages) {
         if( fromCoverages == null ) return false;
         for( final Map.Entry<String, Coverage> fromCoverage : fromCoverages.entrySet() ) {
             final Coverage fromCoverageValue = fromCoverage.getValue();
@@ -183,14 +263,36 @@ public class Collector {
         return true;
     }
 
+    /**
+     * Merges two coverage types.
+     *
+     * At least one coverage type is uncovered, result is uncovered, no type on with returns NONE, both covered
+     * returns covered.
+     *
+     * @param type1
+     *         First input coverage
+     * @param type2
+     *         Second input coverage
+     * @return merge input coverage
+     */
     static Coverage mergeCoverType(Coverage type1, Coverage type2) {
-        return type1 == Coverage.UNCOVERED || type2 == Coverage.UNCOVERED ? Coverage.UNCOVERED
-                : type1 == Coverage.COVERED || type2 == Coverage.COVERED ? Coverage.COVERED
-                : Coverage.NONE;
+        return type1 == org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED || type2 == org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED ?
+                org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED
+                :
+                type1 == org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED || type2 == org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED ?
+                        org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED
+                        :
+                        org.itsallcode.openfasttrace.report.ux.model.Coverage.NONE;
     }
 
+    /**
+     * @param allTypes
+     *         all known SpecItem types
+     * @return Map with all SpecItemTypes as name and Coverage.NONE
+     */
     static Map<String, Coverage> initializedCoverages(final List<String> allTypes) {
-        return allTypes.stream().collect(Collectors.toMap(type -> type, (any) -> Coverage.NONE));
+        return allTypes.stream().collect(
+                Collectors.toMap(type -> type, (any) -> org.itsallcode.openfasttrace.report.ux.model.Coverage.NONE));
     }
 
 } // Collector

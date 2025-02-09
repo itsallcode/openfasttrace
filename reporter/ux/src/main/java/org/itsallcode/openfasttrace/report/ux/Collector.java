@@ -5,6 +5,8 @@ import org.itsallcode.openfasttrace.report.ux.model.Coverage;
 import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.itsallcode.openfasttrace.report.ux.model.UxSpecItem;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,12 +18,19 @@ public class Collector {
 
     private final List<LinkedSpecificationItem> items = new ArrayList<>();
     private final List<SpecificationItemId> ids = new ArrayList<>();
-    private final List<UxSpecItem> uxItems = new ArrayList<>();
 
     private final List<String> allTypes = new ArrayList<>();
     private final List<String> orderedTypes = new ArrayList<>();
 
+    private final List<String> tags = new ArrayList<>();
+    private final Set<String> uniqueTags = new HashSet<>();
+
     final List<Map<String, Coverage>> itemCoverages = new ArrayList<>();
+
+    private final List<Boolean> isCovered = new ArrayList<>();
+
+    private final List<UxSpecItem> uxItems = new ArrayList<>();
+    private UxModel uxModel = null;
 
     public Collector() {
     }
@@ -29,7 +38,8 @@ public class Collector {
     /**
      * Fill in the caches of the Collector based on the given items.
      *
-     * @param specItems {@link LinkedSpecificationItem} model.
+     * @param specItems
+     *         {@link LinkedSpecificationItem} model.
      */
     public Collector collect(List<LinkedSpecificationItem> specItems) {
         this.items.clear();
@@ -37,6 +47,8 @@ public class Collector {
 
         initializeIndexes();
         collectItemCoverages();
+        collectUxItems();
+        collectUxModel();
 
         return this;
     }
@@ -56,6 +68,13 @@ public class Collector {
     }
 
     /**
+     * @return all tags of all items.
+     */
+    public List<String> getTags() {
+        return tags;
+    }
+
+    /**
      * ItemCoverages provide a shallow coverages for each type of {@link SpecificationItem} type based on the linkage
      * of a SpecItem.
      * The linkage tree is flattended, means the shallows coverages of all types merged. Merged means that the type is
@@ -64,14 +83,105 @@ public class Collector {
      *
      * @return list of coverages indexes by {@link LinkedSpecificationItem} handed in to {@link #collect(List)}.
      */
-    public List<Map<String, Coverage>> getItemCoverages() {return itemCoverages;}
+    public List<Map<String, Coverage>> getItemCoverages() {
+        return itemCoverages;
+    }
 
+    /**
+     * @return the meta model of the collected items.
+     */
+    public UxModel getUxModel() {
+        return uxModel;
+    }
+
+    /**
+     * @return All {@link UxSpecItem} matching all items given to {@link #collect(List)}
+     */
     public List<UxSpecItem> getUxItems() {
         return uxItems;
     }
 
     //
     // private members
+
+    // UxModel
+
+    private void collectUxModel() {
+        uxModel = UxModel.Builder.builder()
+                .withProjectName(generateProjectName(""))
+                .withArtifactTypes(orderedTypes)
+                .withNumberOfSpecItems(items.size())
+                .withUncoveredSpecItems((int)isCovered.stream().filter(covered -> covered).count())
+                .withTags(tags)
+                .withItems(uxItems)
+                .build();
+    }
+
+    private String generateProjectName(final String name) {
+        final StringBuilder projectName = new StringBuilder();
+        projectName.append(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replaceAll(":", "."));
+        if( name != null && !name.isEmpty() ) projectName.append(name).append("-");
+
+        return projectName.toString();
+    }
+
+    private void collectUxItems() {
+        uxItems.clear();
+        for( int i = 0; i < items.size(); i++ ) {
+            uxItems.add(createUxSpecItem(i));
+        }
+    }
+
+    UxSpecItem createUxSpecItem(final int index) {
+        final LinkedSpecificationItem item = items.get(index);
+        return UxSpecItem.Builder.builder()
+                .withIndex(index)
+                .withTypeIndex(orderedTypes.indexOf(item.getArtifactType()))
+                .withName(toName(item))
+                .withFullName(item.getId().toString())
+                .withTagIndex(toTagIndex(item))
+                .withNeededTypeIndex(typeToIndex(orderedTypes))
+                .withCoveredIndex(toCoveragesIds(index))
+                .withCoveringIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERS)))
+                .withCoveredByIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERED_SHALLOW)))
+                .withDependsIndex(toIdIndex(item.getItem().getDependOnIds()))
+                .withStatusId(item.getItem().getStatus().ordinal())
+                //.withPath()
+                .withItem(item)
+                .build();
+    }
+
+    private List<Integer> typeToIndex(final List<String> types) {
+        return types.stream().map(orderedTypes::indexOf).toList();
+    }
+
+    private String toName(final LinkedSpecificationItem item) {
+        final String title = item.getTitle();
+        if( title != null && !title.isEmpty() ) return title;
+        final String name = item.getId().getName();
+        final int version = item.getId().getRevision();
+        return version > 1 ? name + ":" + version : name;
+    }
+
+    private List<Integer> toCoveragesIds(final int index) {
+        final Map<String, Coverage> coverages = itemCoverages.get(index);
+        return orderedTypes.stream().map(type -> {
+            final Coverage coverage = coverages.get(type);
+            return coverage != null ? coverage.ordinal() : Coverage.NONE.ordinal();
+        }).toList();
+    }
+
+    private List<Integer> toItemIndex(final List<LinkedSpecificationItem> items) {
+        return items.stream().map(item -> ids.indexOf(item.getId())).toList();
+    }
+
+    private List<Integer> toIdIndex(final List<SpecificationItemId> ids) {
+        return ids.stream().map(this.ids::indexOf).filter(id -> id >= 0).toList();
+    }
+
+    private List<Integer> toTagIndex(final LinkedSpecificationItem item) {
+        return item.getTags().stream().map(tags::indexOf).toList();
+    }
 
     // Types and indexes
 
@@ -86,13 +196,26 @@ public class Collector {
 
         ids.clear();
         ids.addAll(items.stream().map(LinkedSpecificationItem::getId).toList());
+
+        tags.clear();
+        uniqueTags.clear();
+        tags.addAll(collectTags(items, uniqueTags));
     }
 
     /**
      * @return Get all types of all specItems.
      */
-    static Set<String> collectAllTypes(List<LinkedSpecificationItem> items) {
+    static Set<String> collectAllTypes(final List<LinkedSpecificationItem> items) {
         return items.stream().map(LinkedSpecificationItem::getArtifactType).collect(Collectors.toSet());
+    }
+
+    static List<String> collectTags(final List<LinkedSpecificationItem> items, Set<String> uniqueTags) {
+        final List<String> tags = new ArrayList<>();
+        for( final LinkedSpecificationItem item : items ) {
+            item.getTags().stream().filter(tag -> !uniqueTags.contains(tag)).forEach(tags::add);
+        }
+
+        return tags;
     }
 
     /**
@@ -178,16 +301,27 @@ public class Collector {
 
         // Fill coverages
         for( int i = 0; i < items.size(); i++ ) {
-            collectItemCoverage(i);
+            final Map<String, Coverage> itemCoverage = collectItemCoverage(i);
+            isCovered.add(collectIsCovered(itemCoverage));
         }
+    }
+
+    /**
+     * @param itemCoverage
+     *         collected coverages for an item
+     * @return true if item is fully covered
+     */
+    private boolean collectIsCovered(final Map<String, Coverage> itemCoverage) {
+        return itemCoverage.values().stream().noneMatch(coverage -> coverage == Coverage.UNCOVERED);
     }
 
     /**
      * Calculate the coverages for a given {@link LinkedSpecificationItem}.
      * The method traverses the tree recursively merging the coverage of all items with the same type
      * with {@link #mergeCoverages(Map, Map)}
-     * 
-     * @param index The index within the {@link LinkedSpecificationItem} list.
+     *
+     * @param index
+     *         The index within the {@link LinkedSpecificationItem} list.
      * @return coverages of the item
      */
     Map<String, Coverage> collectItemCoverage(final int index) {
@@ -213,7 +347,7 @@ public class Collector {
         // Traverse down
         for( final LinkedSpecificationItem coveringItem : item.getLinksByStatus(LinkStatus.COVERED_SHALLOW) ) {
             int coveringIndex = ids.indexOf(coveringItem.getId());
-            System.out.println(">>> coveringItem (" +coveringIndex + ")" + coveringItem.getId());
+            System.out.println(">>> coveringItem (" + coveringIndex + ")" + coveringItem.getId());
             final Map<String, Coverage> collectedCoverages = collectItemCoverage(coveringIndex);
             mergeCoverages(collectedCoverages, coverages);
         }
@@ -228,10 +362,14 @@ public class Collector {
     /**
      * Updates the given coverages by setting the coverage of the goven type and updates the {@link #itemCoverages}.
      *
-     * @param index The index of the item
-     * @param artifactType The type of the coverage
-     * @param covered true if the type is covered
-     * @param coverages the coverages to update
+     * @param index
+     *         The index of the item
+     * @param artifactType
+     *         The type of the coverage
+     * @param covered
+     *         true if the type is covered
+     * @param coverages
+     *         the coverages to update
      * @return the coverages
      */
     Map<String, Coverage> updateItemCoverage(final int index,
@@ -265,7 +403,6 @@ public class Collector {
 
     /**
      * Merges two coverage types.
-     *
      * At least one coverage type is uncovered, result is uncovered, no type on with returns NONE, both covered
      * returns covered.
      *

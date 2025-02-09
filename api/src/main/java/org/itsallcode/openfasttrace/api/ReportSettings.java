@@ -19,7 +19,12 @@ public class ReportSettings
     private final ColorScheme colorScheme;
     private final DetailsSectionDisplay detailsSectionDisplay;
 
-    private ReportSettings(final Builder builder)
+    /**
+     * Settings for a reporter.
+     *
+     * @param builder builder for a reporter
+     */
+    protected ReportSettings(final Builder builder)
     {
         this.verbosity = builder.verbosity;
         this.showOrigin = builder.showOrigin;
@@ -121,7 +126,10 @@ public class ReportSettings
         private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
         private ColorScheme colorScheme = ColorScheme.BLACK_AND_WHITE;
 
-        private Builder()
+        /**
+         * Create the builder
+         */
+        protected Builder()
         {
             // empty by intention
         }

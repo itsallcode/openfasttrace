@@ -2,83 +2,129 @@ package org.itsallcode.openfasttrace.report.ux.model;
 
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UxSpecItem
 {
     private final int index;
     private final int typeIndex;
-    private final List<Integer> neededTypeIndexes;
+    private final String name;
+    private final String fullName;
+    private final List<Integer> tagIndex;
+    private final List<Integer> providesIndex;
+    private final List<Integer> neededTypeIndex;
+    private final List<Integer> coveredIndex;
+    private final List<Integer> uncoveredIndex;
+    private final List<Integer> coveringIndex;
+    private final List<Integer> coveredByIndex;
+    private final List<Integer> dependsIndex;
     private final int statusId;
-    private final List<UxSpecItem> coveredBy;
-    private final List<UxSpecItem> covers;
+    private final List<String> path;
     private final LinkedSpecificationItem item;
 
-    private UxSpecItem(Builder builder)
-    {
+    private UxSpecItem(Builder builder) {
         index = builder.index;
         typeIndex = builder.typeIndex;
-        neededTypeIndexes = builder.neededTypeIndexes;
+        name = builder.name;
+        fullName = builder.fullName;
+        tagIndex = builder.tagIndex;
+        providesIndex = builder.providesIndex;
+        neededTypeIndex = builder.neededTypeIndex;
+        coveredIndex = builder.coveredIndex;
+        uncoveredIndex = builder.uncoveredIndex;
+        coveringIndex = builder.coveringIndex;
+        coveredByIndex = builder.coveredByIndex;
+        dependsIndex = builder.dependsIndex;
         statusId = builder.statusId;
-        coveredBy = builder.coveredBy;
-        covers = builder.covers;
+        path = builder.path;
         item = builder.item;
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return index;
     }
 
-    public int getTypeIndex()
-    {
+    public int getTypeIndex() {
         return typeIndex;
     }
 
-    public List<Integer> getNeededTypeIndexes()
-    {
-        return neededTypeIndexes;
+    public String getName() {
+        return name;
     }
 
-    public int getStatusId()
-    {
+    public String getFullName() {
+        return fullName;
+    }
+
+    public List<Integer> getTagIndex() {
+        return tagIndex;
+    }
+
+    public List<Integer> getProvidesIndex() {
+        return providesIndex;
+    }
+
+    public List<Integer> getNeededTypeIndex() {
+        return neededTypeIndex;
+    }
+
+    public List<Integer> getCoveredIndex() {
+        return coveredIndex;
+    }
+
+    public List<Integer> getUncoveredIndex() {
+        return uncoveredIndex;
+    }
+
+    public List<Integer> getCoveringIndex() {
+        return coveringIndex;
+    }
+
+    public List<Integer> getCoveredByIndex() {
+        return coveredByIndex;
+    }
+
+    public List<Integer> getDependsIndex() {
+        return dependsIndex;
+    }
+
+    public int getStatusId() {
         return statusId;
     }
 
-    public List<UxSpecItem> getCoveredBy()
-    {
-        return coveredBy;
+    public List<String> getPath() {
+        return path;
     }
 
-    public List<UxSpecItem> getCovers()
-    {
-        return covers;
-    }
-
-    public LinkedSpecificationItem getItem()
-    {
+    public LinkedSpecificationItem getItem() {
         return item;
     }
 
     /**
      * {@code UxSpecItem} builder static inner class.
      */
-    public static final class Builder
-    {
+    public static final class Builder {
         private int index;
         private int typeIndex;
-        private List<Integer> neededTypeIndexes;
+        private String name;
+        private String fullName;
+        private List<Integer> tagIndex = new ArrayList<>();
+        private List<Integer> providesIndex  = new ArrayList<>();
+        private List<Integer> neededTypeIndex;
+        private List<Integer> coveredIndex;
+        private List<Integer> uncoveredIndex =  new ArrayList<>();
+        private List<Integer> coveringIndex;
+        private List<Integer> coveredByIndex;
+        private List<Integer> dependsIndex =  new ArrayList<>();
         private int statusId;
-        private List<UxSpecItem> coveredBy;
-        private List<UxSpecItem> covers;
+        private List<String> path  = new ArrayList<>();
         private LinkedSpecificationItem item;
 
-        private Builder()
-        {
+        private Builder() {
         }
 
-        public static Builder builder()
-        {
+        public static Builder builder() {
             return new Builder();
         }
 
@@ -89,8 +135,7 @@ public class UxSpecItem
          *         the {@code index} to set
          * @return a reference to this Builder
          */
-        public Builder withIndex(int index)
-        {
+        public Builder withIndex(int index) {
             this.index = index;
             return this;
         }
@@ -102,22 +147,128 @@ public class UxSpecItem
          *         the {@code typeIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withTypeIndex(int typeIndex)
-        {
+        public Builder withTypeIndex(int typeIndex) {
             this.typeIndex = typeIndex;
             return this;
         }
 
         /**
-         * Sets the {@code neededTypeIndexes} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
          *
-         * @param neededTypeIndexes
-         *         the {@code neededTypeIndexes} to set
+         * @param name
+         *         the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withNeededTypeIndexes(List<Integer> neededTypeIndexes)
-        {
-            this.neededTypeIndexes = neededTypeIndexes;
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
+         * Sets the {@code fullName} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param fullName
+         *         the {@code fullName} to set
+         * @return a reference to this Builder
+         */
+        public Builder withFullName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+
+        /**
+         * Sets the {@code tagIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param tagIndex
+         *         the {@code tagIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withTagIndex(List<Integer> tagIndex) {
+            this.tagIndex = tagIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code providesIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param providesIndex
+         *         the {@code providesIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withProvidesIndex(List<Integer> providesIndex) {
+            this.providesIndex = providesIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code neededTypeIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param neededTypeIndex
+         *         the {@code neededTypeIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withNeededTypeIndex(List<Integer> neededTypeIndex) {
+            this.neededTypeIndex = neededTypeIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code coveredIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param coveredIndex
+         *         the {@code coveredIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withCoveredIndex(List<Integer> coveredIndex) {
+            this.coveredIndex = coveredIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code uncoveredIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param uncoveredIndex
+         *         the {@code uncoveredIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withUncoveredIndex(List<Integer> uncoveredIndex) {
+            this.uncoveredIndex = uncoveredIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code coveringIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param coveringIndex
+         *         the {@code coveringIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withCoveringIndex(List<Integer> coveringIndex) {
+            this.coveringIndex = coveringIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code coveredByIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param coveredByIndex
+         *         the {@code coveredByIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withCoveredByIndex(List<Integer> coveredByIndex) {
+            this.coveredByIndex = coveredByIndex;
+            return this;
+        }
+
+        /**
+         * Sets the {@code dependsIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param dependsIndex
+         *         the {@code dependsIndex} to set
+         * @return a reference to this Builder
+         */
+        public Builder withDependsIndex(List<Integer> dependsIndex) {
+            this.dependsIndex = dependsIndex;
             return this;
         }
 
@@ -128,35 +279,20 @@ public class UxSpecItem
          *         the {@code statusId} to set
          * @return a reference to this Builder
          */
-        public Builder withStatusId(int statusId)
-        {
+        public Builder withStatusId(int statusId) {
             this.statusId = statusId;
             return this;
         }
 
         /**
-         * Sets the {@code coveredBy} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code path} and returns a reference to this Builder enabling method chaining.
          *
-         * @param coveredBy
-         *         the {@code coveredBy} to set
+         * @param path
+         *         the {@code path} to set
          * @return a reference to this Builder
          */
-        public Builder withCoveredBy(List<UxSpecItem> coveredBy)
-        {
-            this.coveredBy = coveredBy;
-            return this;
-        }
-
-        /**
-         * Sets the {@code covers} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param covers
-         *         the {@code covers} to set
-         * @return a reference to this Builder
-         */
-        public Builder withCovers(List<UxSpecItem> covers)
-        {
-            this.covers = covers;
+        public Builder withPath(List<String> path) {
+            this.path = path;
             return this;
         }
 
@@ -167,8 +303,7 @@ public class UxSpecItem
          *         the {@code item} to set
          * @return a reference to this Builder
          */
-        public Builder withItem(LinkedSpecificationItem item)
-        {
+        public Builder withItem(LinkedSpecificationItem item) {
             this.item = item;
             return this;
         }
@@ -178,8 +313,7 @@ public class UxSpecItem
          *
          * @return a {@code UxSpecItem} built with parameters of this {@code UxSpecItem.Builder}
          */
-        public UxSpecItem build()
-        {
+        public UxSpecItem build() {
             return new UxSpecItem(this);
         }
     }

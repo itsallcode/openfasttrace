@@ -150,6 +150,6 @@ public class JsGenerator implements IGenerator {
         indentEnd();
 
         return b.toString();
-
     }
-}
+
+} // JsGenerator

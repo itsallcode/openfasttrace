@@ -44,4 +44,5 @@ public class UxReporter implements Reportable
         final IGenerator generator = new JsGenerator();
         generator.generate(outputStream, collector.getUxModel());
     }
-}
+
+} // UxReporter

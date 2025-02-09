@@ -8,10 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -83,6 +85,16 @@ class CollectorTest {
                 hasEntry("arch", Coverage.NONE),
                 hasEntry("req", Coverage.NONE)
         ));
+    }
+
+    /**
+     * Helper to produce tuples of all permutations of coverage types.
+     */
+    public static Stream<Arguments> provideCoveragePermutations() {
+        return Arrays.stream(Coverage.values()).flatMap(firstCoverage ->
+                Arrays.stream(Coverage.values()).map(secondCoverage ->
+                        Arguments.of(firstCoverage, secondCoverage)
+                ));
     }
 
     /**
@@ -230,5 +242,4 @@ class CollectorTest {
                 allOf(SampleData.coverages(Coverage.NONE,Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
     }
 
-
-}
+} // CollectorTest

@@ -9,4 +9,5 @@ public interface IGenerator {
     String type();
 
     public void generate(final OutputStream out, final UxModel model);
-}
+
+} // IGenerator

@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.report.ux.model;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Surrounding model that is used to generate the specitem_data model for OpenFastTrace-UX.
@@ -173,4 +172,5 @@ public class UxModel
             return this;
         }
     }
-}
+
+} // UxModel

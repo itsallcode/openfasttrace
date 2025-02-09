@@ -8,11 +8,9 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.Linker;
 import org.itsallcode.openfasttrace.report.ux.model.Coverage;
-import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SampleData {
     /**
@@ -64,16 +62,6 @@ public class SampleData {
     //
     // Helpers
 
-    /**
-     * Helper to produce tuples of all permutations of coverage types.
-     */
-    public static Stream<Arguments> provideCoveragePermutations() {
-        return Arrays.stream(Coverage.values()).flatMap(firstCoverage ->
-                Arrays.stream(Coverage.values()).map(secondCoverage ->
-                        Arguments.of(firstCoverage, secondCoverage)
-                ));
-    }
-
     public static List<Matcher<? super Map<String, Coverage>>> coverages(Coverage... coverage) {
         final List<Coverage> stack = new ArrayList<>(Arrays.stream(coverage).toList());
         return ORDERED_SAMPLE_TYPES.stream().map(type ->
@@ -114,4 +102,5 @@ public class SampleData {
                 new SpecificationItemId.Builder(id).build() :
                 new SpecificationItemId.Builder(id + "~1").build();
     }
-}
+
+} // SampleData

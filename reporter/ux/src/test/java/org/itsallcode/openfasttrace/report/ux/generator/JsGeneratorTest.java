@@ -5,11 +5,10 @@ import org.itsallcode.openfasttrace.report.ux.SampleData;
 import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 
 class JsGeneratorTest {
 
@@ -25,6 +24,7 @@ class JsGeneratorTest {
         final UxModel model = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS).getUxModel();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         new JsGenerator().generate(out,model);
-        System.out.println(out.toString());
+        System.out.println(out);
     }
-}
+
+} // JsGeneratorTest

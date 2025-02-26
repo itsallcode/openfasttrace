@@ -137,8 +137,9 @@ public class Collector {
         return UxSpecItem.Builder.builder()
                 .withIndex(index)
                 .withTypeIndex(orderedTypes.indexOf(item.getArtifactType()))
+                .withTitle(toTitle(item))
                 .withName(toName(item))
-                .withFullName(item.getId().toString())
+                .withId(toId(item))
                 .withTagIndex(toTagIndex(item))
                 .withNeededTypeIndex(typeToIndex(item.getNeedsArtifactTypes()))
                 .withCoveredIndex(toCoveragesIds(index))
@@ -155,12 +156,20 @@ public class Collector {
         return types.stream().map(orderedTypes::indexOf).toList();
     }
 
-    private String toName(final LinkedSpecificationItem item) {
+    private String toTitle(final LinkedSpecificationItem item ) {
         final String title = item.getTitle();
-        if( title != null && !title.isEmpty() ) return title;
+        return title != null && !title.isEmpty() ? title :  item.getId().getName();
+    }
+
+    private String toName( final LinkedSpecificationItem item ) {
+        return item.getId().getName();
+    }
+
+    private String toId(final LinkedSpecificationItem item) {
+        final String type = item.getId().getArtifactType();
         final String name = item.getId().getName();
         final int version = item.getId().getRevision();
-        return version > 1 ? name + ":" + version : name;
+        return version > 1 ? type + ":" + name + ":" + version : type + ":" + name;
     }
 
     private List<Integer> toCoveragesIds(final int index) {

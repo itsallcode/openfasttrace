@@ -65,8 +65,9 @@ public class JsGenerator implements IGenerator {
         printOpen("{");
         println("index", item.getIndex());
         println("type", item.getTypeIndex());
+        println("title", item.getTitle());
         println("name", item.getName());
-        println("fullName", item.getFullName());
+        println("id", item.getId());
         println("tags", item.getTagIndex());
         println("version", item.getItem().getRevision());
         println("content", item.getItem().getItem().getDescription());

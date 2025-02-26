@@ -9,8 +9,9 @@ public class UxSpecItem
 {
     private final int index;
     private final int typeIndex;
+    private final String title;
     private final String name;
-    private final String fullName;
+    private final String id;
     private final List<Integer> tagIndex;
     private final List<Integer> providesIndex;
     private final List<Integer> neededTypeIndex;
@@ -26,8 +27,9 @@ public class UxSpecItem
     private UxSpecItem(Builder builder) {
         index = builder.index;
         typeIndex = builder.typeIndex;
+        title = builder.title;
         name = builder.name;
-        fullName = builder.fullName;
+        id = builder.id;
         tagIndex = builder.tagIndex;
         providesIndex = builder.providesIndex;
         neededTypeIndex = builder.neededTypeIndex;
@@ -49,12 +51,16 @@ public class UxSpecItem
         return typeIndex;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getId() {
+        return id;
     }
 
     public List<Integer> getTagIndex() {
@@ -107,18 +113,19 @@ public class UxSpecItem
     public static final class Builder {
         private int index;
         private int typeIndex;
+        private String title;
         private String name;
-        private String fullName;
+        private String id;
         private List<Integer> tagIndex = new ArrayList<>();
-        private List<Integer> providesIndex  = new ArrayList<>();
+        private List<Integer> providesIndex = new ArrayList<>();
         private List<Integer> neededTypeIndex;
         private List<Integer> coveredIndex;
-        private List<Integer> uncoveredIndex =  new ArrayList<>();
+        private List<Integer> uncoveredIndex = new ArrayList<>();
         private List<Integer> coveringIndex;
         private List<Integer> coveredByIndex;
-        private List<Integer> dependsIndex =  new ArrayList<>();
+        private List<Integer> dependsIndex = new ArrayList<>();
         private int statusId;
-        private List<String> path  = new ArrayList<>();
+        private List<String> path = new ArrayList<>();
         private LinkedSpecificationItem item;
 
         private Builder() {
@@ -153,6 +160,18 @@ public class UxSpecItem
         }
 
         /**
+         * Sets the {@code title} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param title
+         *         the {@code title} to set
+         * @return a reference to this Builder
+         */
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
          *
          * @param name
@@ -165,14 +184,14 @@ public class UxSpecItem
         }
 
         /**
-         * Sets the {@code fullName} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code id} and returns a reference to this Builder enabling method chaining.
          *
-         * @param fullName
-         *         the {@code fullName} to set
+         * @param id
+         *         the {@code id} to set
          * @return a reference to this Builder
          */
-        public Builder withFullName(String fullName) {
-            this.fullName = fullName;
+        public Builder withId(String id) {
+            this.id = id;
             return this;
         }
 

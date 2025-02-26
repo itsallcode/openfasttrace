@@ -17,11 +17,8 @@ public class UxReporter implements Reportable
 
     private static final Logger LOG = Logger.getLogger(UxReporter.class.getName());
 
-    private final Collector collector;
-
-    public UxReporter() {
-        collector = new Collector();
-    }
+    private final Trace trace;
+    private final ReporterContext context;
 
     /**
      *
@@ -31,7 +28,8 @@ public class UxReporter implements Reportable
     public UxReporter(final Trace trace, final ReporterContext context)
     {
         LOG.info(String.format("constructor(context=%s",context.toString()));
-        collector = new Collector().collect(trace.getItems());
+        this.trace = trace;
+        this.context = context;
     }
 
     /**
@@ -41,6 +39,7 @@ public class UxReporter implements Reportable
     @Override public void renderToStream(OutputStream outputStream)
     {
         LOG.info("renderToStream");
+        final Collector collector = new Collector().collect(trace.getItems());
         final IGenerator generator = new JsGenerator();
         generator.generate(outputStream, collector.getUxModel());
     }

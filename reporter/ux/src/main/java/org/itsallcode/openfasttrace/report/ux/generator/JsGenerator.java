@@ -46,10 +46,11 @@ public class JsGenerator implements IGenerator {
     }
 
     private void generateMetaData(final UxModel model) {
-        printOpen("meta: {");
+        printOpen("project: {");
         println("projectName", model.getProjectName());
         println("types", model.getArtifactTypes());
         println("tags", model.getTags());
+        println("status",model.getStatusNames());
         println("item_count", model.getItems().size());
         println("item_covered", model.getItems().size() - model.getUncoveredSpecItems());
         println("item_uncovered", model.getUncoveredSpecItems());
@@ -70,6 +71,7 @@ public class JsGenerator implements IGenerator {
         println("version", item.getItem().getRevision());
         println("content", item.getItem().getItem().getDescription());
         println("provides", item.getProvidesIndex());
+        println("needs", item.getNeededTypeIndex());
         println("covered", item.getCoveredIndex());
         println("uncovered", item.getUncoveredIndex());
         println("covering", item.getCoveringIndex());
@@ -134,22 +136,30 @@ public class JsGenerator implements IGenerator {
     }
 
     private String wrap(final String text, final int offset) {
-        if( text.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return "\"" + text + "\",";
+        final String value = quote(text);
+        if( value.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return "'" + value + "',";
 
         final StringBuilder b = new StringBuilder();
         b.append(System.lineSeparator());
 
         indentBegin();
         final int fragmentLength = LINE_LENGTH - offset - INDENT - 3;
-        for( int i = 0; i < text.length(); i += fragmentLength ) {
+        for( int i = 0; i < value.length(); i += fragmentLength ) {
             b.append(" ".repeat(indent));
-            b.append(i == 0 ? "\"" : "+ \"");
-            b.append(text, i, Math.min(i + fragmentLength, text.length()));
-            b.append(( i + fragmentLength ) < text.length() ? "\"" + System.lineSeparator() : "\",");
+            b.append(i == 0 ? "'" : "+ '");
+            b.append(value, i, Math.min(i + fragmentLength, value.length()));
+            b.append(( i + fragmentLength ) < value.length() ? "'" + System.lineSeparator() : "',");
         }
         indentEnd();
 
         return b.toString();
+    }
+
+    private String quote(final String text) {
+        return text.replace("'", "\\\'")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replaceAll("\n\r?|\r", "<br>");
     }
 
 } // JsGenerator

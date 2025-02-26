@@ -77,7 +77,7 @@ public class Collector {
     /**
      * ItemCoverages provide a shallow coverages for each type of {@link SpecificationItem} type based on the linkage
      * of a SpecItem.
-     * The linkage tree is flattended, means the shallows coverages of all types merged. Merged means that the type is
+     * The linkage tree is flattened, means the shallows coverages of all types merged. Merged means that the type is
      * not part of the tree {@link Coverage#NONE} is returned, {@link Coverage#UNCOVERED} is returned when at least one
      * item of the type is uncovered. {@link Coverage#COVERED} is returned when all items of a type are covered.
      *
@@ -111,7 +111,7 @@ public class Collector {
                 .withProjectName(generateProjectName(""))
                 .withArtifactTypes(orderedTypes)
                 .withNumberOfSpecItems(items.size())
-                .withUncoveredSpecItems((int)isCovered.stream().filter(covered -> covered).count())
+                .withUncoveredSpecItems(items.size() - (int)isCovered.stream().filter(covered -> covered).count())
                 .withTags(tags)
                 .withItems(uxItems)
                 .build();
@@ -140,7 +140,7 @@ public class Collector {
                 .withName(toName(item))
                 .withFullName(item.getId().toString())
                 .withTagIndex(toTagIndex(item))
-                .withNeededTypeIndex(typeToIndex(orderedTypes))
+                .withNeededTypeIndex(typeToIndex(item.getNeedsArtifactTypes()))
                 .withCoveredIndex(toCoveragesIds(index))
                 .withCoveringIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERS)))
                 .withCoveredByIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERED_SHALLOW)))
@@ -167,7 +167,7 @@ public class Collector {
         final Map<String, Coverage> coverages = itemCoverages.get(index);
         return orderedTypes.stream().map(type -> {
             final Coverage coverage = coverages.get(type);
-            return coverage != null ? coverage.ordinal() : Coverage.NONE.ordinal();
+            return coverage != null ? coverage.getId() : Coverage.NONE.ordinal();
         }).toList();
     }
 
@@ -302,6 +302,7 @@ public class Collector {
         // Fill coverages
         for( int i = 0; i < items.size(); i++ ) {
             final Map<String, Coverage> itemCoverage = collectItemCoverage(i);
+            if( !collectIsCovered(itemCoverage)) System.out.println("not covered " + i + " times " + itemCoverage.values().stream().filter(coverage -> coverage == Coverage.UNCOVERED).count());
             isCovered.add(collectIsCovered(itemCoverage));
         }
     }

@@ -1,7 +1,9 @@
 package org.itsallcode.openfasttrace.report.ux.model;
 
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ public class UxModel
     private final String projectName;
     private final List<String> artifactTypes;
     private final List<String> tags;
+    private final List<String> statusNames;
 
     private final int numberOfSpecItems;
     private final int uncoveredSpecItems;
@@ -25,6 +28,7 @@ public class UxModel
         numberOfSpecItems = builder.numberOfSpecItems;
         uncoveredSpecItems = builder.uncoveredSpecItems;
         items = builder.items;
+        statusNames = Arrays.stream(ItemStatus.values()).map(Enum::name).toList();
     }
 
     /**
@@ -64,6 +68,13 @@ public class UxModel
      */
     public List<String> getTags() {
         return tags;
+    }
+
+    /**
+     * @return The names of the {@link ItemStatus} enum entries.
+     */
+    public List<String> getStatusNames() {
+        return statusNames;
     }
 
     /**

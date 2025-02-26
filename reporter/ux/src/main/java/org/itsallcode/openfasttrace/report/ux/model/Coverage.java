@@ -2,18 +2,18 @@ package org.itsallcode.openfasttrace.report.ux.model;
 
 public enum Coverage
 {
-    COVERED(0),
+    COVERED(2),
     UNCOVERED(1),
-    NONE(2);
+    NONE(0);
 
-    Coverage(int index) {
-        this.index = index;
+    Coverage(int id) {
+        this.id = id;
     }
 
-    private final int index;
+    private final int id;
 
-    public int getIndex()
+    public int getId()
     {
-        return index;
+        return id;
     }
 }

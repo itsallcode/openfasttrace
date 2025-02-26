@@ -27,4 +27,11 @@ class JsGeneratorTest {
         System.out.println(out);
     }
 
+    @Test
+    void regexp() {
+        String text = "'Users can extend OFT's features with plugins from third parties.'";
+        String o = text.replace("'","\\\'").replaceAll("\n\r?|\r", "<br>");
+        System.out.println(o);
+    }
+
 } // JsGeneratorTest

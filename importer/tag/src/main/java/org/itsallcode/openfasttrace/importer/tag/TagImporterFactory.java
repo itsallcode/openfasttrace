@@ -38,6 +38,7 @@ public class TagImporterFactory extends ImporterFactory
             "rs", // Rust
             "sh", "bash", "zsh", // Shell programming
             "swift", // Swift
+            "toml", // Tom's Obvious Minimal Language : a config file format
             "tf", "tfvars", // Terraform
             "sql", "pls" // Database related
     );

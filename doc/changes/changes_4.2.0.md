@@ -15,5 +15,6 @@ We also added a whole section about understanding and fixing broken links betwee
 
 ## Documentation
 
-* #427: Removed old `CHANGELOG.md` file and merged missing parts into release history
+* #427: Removed old `CHANGELOG.md` file and merged missing parts into release history.
 * #431: Documented "unwanted coverage" in user guide.
+* #440: Added Tag importer support for TOML files.

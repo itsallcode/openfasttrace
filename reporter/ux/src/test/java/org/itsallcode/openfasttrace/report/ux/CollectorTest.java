@@ -103,7 +103,11 @@ class CollectorTest {
     @ParameterizedTest
     @MethodSource( "provideCoveragePermutations" )
     void testMergeCoverageType(final Coverage firstCoverage, final Coverage secondCoverage) {
-        if( ( firstCoverage == Coverage.UNCOVERED || secondCoverage == Coverage.UNCOVERED ) ) {
+        System.out.println(firstCoverage + ", " + secondCoverage);
+        if( ( firstCoverage == Coverage.MISSING || secondCoverage == Coverage.MISSING ) ) {
+            assertThat(Collector.mergeCoverType(firstCoverage, secondCoverage), equalTo(Coverage.MISSING));
+        }
+        else if( ( firstCoverage == Coverage.UNCOVERED || secondCoverage == Coverage.UNCOVERED ) ) {
             assertThat(Collector.mergeCoverType(firstCoverage, secondCoverage), equalTo(Coverage.UNCOVERED));
         }
         else if( firstCoverage == Coverage.COVERED || secondCoverage == Coverage.COVERED ) {
@@ -159,7 +163,7 @@ class CollectorTest {
 
         final Collector collector = new Collector().collect(List.of());
         collector.itemCoverages.add(0, sampleCoverages);
-        collector.updateItemCoverage(0, sampleItem.getArtifactType(), true, sampleCoverages);
+        collector.updateItemCoverage(0, sampleItem.getArtifactType(), Coverage.COVERED, sampleCoverages);
 
         final List<Map<String, Coverage>> result = collector.getItemCoverages();
         assertThat(result.size(), is(1));
@@ -176,31 +180,49 @@ class CollectorTest {
      */
     @Test
     void testItemCoverages() {
-        final List<Map<String, Coverage>> coverages = collector.getItemCoverages();
-        System.out.println("0:" + coverages.get(0));
+        final Coverage[][] expectedCoverages = {
+                { Coverage.COVERED, Coverage.COVERED, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.COVERED, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.COVERED, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED },
+        };
+
+        final List<Map<String, Coverage>> coverages = collector
+                .collect(SampleData.LINKED_SAMPLE_ITEMS)
+                .getItemCoverages();
+        validateCoverages(SampleData.LINKED_SAMPLE_ITEMS, coverages, expectedCoverages);
+/*
+
+        System.out.println("0:" + coverages.get(0) + " of " + SAMPLE_ITEMS.get(0).getId());
         assertThat(coverages.get(0),
                 allOf(SampleData.coverages(Coverage.COVERED, Coverage.COVERED, Coverage.UNCOVERED, Coverage.COVERED)));
-        System.out.println("1:" + coverages.get(1));
+        System.out.println("1:" + coverages.get(1) + " of " + SAMPLE_ITEMS.get(1).getId());
         assertThat(coverages.get(1),
                 allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("2:" + coverages.get(2));
+        System.out.println("2:" + coverages.get(2) + " of " + SAMPLE_ITEMS.get(2).getId());
         assertThat(coverages.get(2),
                 allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.UNCOVERED, Coverage.NONE)));
-        System.out.println("3:" + coverages.get(3));
+        System.out.println("3:" + coverages.get(3) + " of " + SAMPLE_ITEMS.get(3).getId());
         assertThat(coverages.get(3),
                 allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("4:" + coverages.get(4));
+        System.out.println("4:" + coverages.get(4) + " of " + SAMPLE_ITEMS.get(4).getId());
         assertThat(coverages.get(4),
                 allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("5:" + coverages.get(5));
+        System.out.println("5:" + coverages.get(5) + " of " + SAMPLE_ITEMS.get(5).getId());
         assertThat(coverages.get(5),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED)));
-        System.out.println("6:" + coverages.get(6));
+                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED, Coverage.MISSING)));
+        System.out.println("6:" + coverages.get(6) + " of " + SAMPLE_ITEMS.get(6).getId());
         assertThat(coverages.get(6),
                 allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
-        System.out.println("7:" + coverages.get(7));
+        System.out.println("7:" + coverages.get(7) + " of " + SAMPLE_ITEMS.get(7).getId());
         assertThat(coverages.get(7),
-                allOf(SampleData.coverages(Coverage.NONE,Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
+                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
+
+ */
     }
 
     /**
@@ -208,38 +230,48 @@ class CollectorTest {
      */
     @Test
     void testItemCoveragesWithCycle() {
-        final List<Map<String, Coverage>> coverages = collector.collect(SampleData.LINKED_SAMPLE_ITEMS_CYCLE).getItemCoverages();
-        System.out.println(coverages.stream().map(Object::toString).collect(Collectors.joining(",\n")));
-        System.out.println("0:" + coverages.get(0));
-        assertThat(coverages.get(0),
-                allOf(SampleData.coverages(Coverage.COVERED, Coverage.COVERED, Coverage.UNCOVERED, Coverage.COVERED)));
-        System.out.println("1:" + coverages.get(1));
-        assertThat(coverages.get(1),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("2:" + coverages.get(2));
-        assertThat(coverages.get(2),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.UNCOVERED, Coverage.NONE)));
-        System.out.println("3:" + coverages.get(3));
-        assertThat(coverages.get(3),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("4:" + coverages.get(4));
-        assertThat(coverages.get(4),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("5:" + coverages.get(5));
-        assertThat(coverages.get(5),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED)));
-        System.out.println("6:" + coverages.get(6));
-        assertThat(coverages.get(6),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("7:" + coverages.get(7));
-        assertThat(coverages.get(7),
-                allOf(SampleData.coverages(Coverage.NONE,Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
-        System.out.println("8:" + coverages.get(8));
-        assertThat(coverages.get(8),
-                allOf(SampleData.coverages(Coverage.NONE,Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
-        System.out.println("9:" + coverages.get(8));
-        assertThat(coverages.get(9),
-                allOf(SampleData.coverages(Coverage.NONE,Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
+        final Coverage[][] expectedCoverages = {
+                { Coverage.COVERED, Coverage.COVERED, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.COVERED, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.COVERED, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED, Coverage.MISSING },
+                { Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED },
+                { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED }
+        };
+
+        final List<Map<String, Coverage>> coverages = collector
+                .collect(SampleData.LINKED_SAMPLE_ITEMS_CYCLE)
+                .getItemCoverages();
+        validateCoverages(SampleData.LINKED_SAMPLE_ITEMS_CYCLE, coverages, expectedCoverages);
+    }
+
+    private void validateCoverages(final List<LinkedSpecificationItem> specItems,
+                                   final List<Map<String, Coverage>> returnedCoverages,
+                                   final Coverage[][] expectedCoverages) {
+        for( int index = 0; index < expectedCoverages.length; index++ ) {
+            validateCoverage(index, specItems, returnedCoverages, expectedCoverages[index]);
+        }
+    }
+
+
+    //
+     // Helper
+
+    private void validateCoverage(int index,
+                                  List<LinkedSpecificationItem> specItems,
+                                  List<Map<String, Coverage>> returnedCoverages,
+                                  Coverage... expectedCoverages) {
+        final LinkedSpecificationItem specItem = specItems.get(index);
+        final Map<String, Coverage> returnedCoverage = returnedCoverages.get(index);
+        System.out.printf("%d: %s%s matching {%s}\n", index,
+                specItem.getArtifactType(),
+                returnedCoverage,
+                Arrays.stream(expectedCoverages).map(Coverage::toString).collect(Collectors.joining(",")));
+        assertThat(returnedCoverage, allOf(SampleData.coverages(expectedCoverages)));
     }
 
 } // CollectorTest

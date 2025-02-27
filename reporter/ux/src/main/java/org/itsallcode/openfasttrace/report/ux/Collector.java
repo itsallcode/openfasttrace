@@ -311,7 +311,6 @@ public class Collector {
         // Fill coverages
         for( int i = 0; i < items.size(); i++ ) {
             final Map<String, Coverage> itemCoverage = collectItemCoverage(i);
-            if( !collectIsCovered(itemCoverage)) System.out.println("not covered " + i + " times " + itemCoverage.values().stream().filter(coverage -> coverage == Coverage.UNCOVERED).count());
             isCovered.add(collectIsCovered(itemCoverage));
         }
     }
@@ -338,7 +337,7 @@ public class Collector {
         // Coverage already collected
         final Map<String, Coverage> targetCoverage = itemCoverages.get(index);
         if( targetCoverage != null ) {
-            System.out.println("<<< already covered index " + index);
+            //System.out.println("<<< already covered index " + index);
             return targetCoverage;
         }
 
@@ -347,25 +346,33 @@ public class Collector {
         // End of the tree
         final LinkedSpecificationItem item = items.get(index);
         if( item.getNeedsArtifactTypes().isEmpty() ) {
-            System.out.println("<<< final " + item.getId());
+            //System.out.println("<<< final " + item.getId());
             return updateItemCoverage(index,
                     item.getArtifactType(),
-                    item.getStatus() == ItemStatus.APPROVED,
+                    item.getStatus() == ItemStatus.APPROVED ? Coverage.COVERED : Coverage.UNCOVERED,
                     coverages);
         }
 
         // Traverse down
         for( final LinkedSpecificationItem coveringItem : item.getLinksByStatus(LinkStatus.COVERED_SHALLOW) ) {
-            int coveringIndex = ids.indexOf(coveringItem.getId());
-            System.out.println(">>> coveringItem (" + coveringIndex + ")" + coveringItem.getId());
+            final int coveringIndex = ids.indexOf(coveringItem.getId());
+            //System.out.println(">>> coveringItem (" + coveringIndex + ")" + coveringItem.getId());
             final Map<String, Coverage> collectedCoverages = collectItemCoverage(coveringIndex);
             mergeCoverages(collectedCoverages, coverages);
         }
 
         // Refresh this coverage
-        updateItemCoverage(index, item.getArtifactType(), item.isCoveredShallowWithApprovedItems(), coverages);
+        updateItemCoverage(index,
+                item.getArtifactType(),
+                item.isCoveredShallowWithApprovedItems() ? Coverage.COVERED :Coverage.UNCOVERED,
+                coverages);
 
-        System.out.println("<<< intermediate " + item.getId());
+        // Refresh needed uncovered types
+        for( final String uncoveredType : item.getUncoveredApprovedArtifactTypes() ) {
+            updateItemCoverage(index,uncoveredType,Coverage.MISSING,coverages);
+        }
+
+        //System.out.println("<<< intermediate " + item.getId());
         return coverages;
     }
 
@@ -376,7 +383,7 @@ public class Collector {
      *         The index of the item
      * @param artifactType
      *         The type of the coverage
-     * @param covered
+     * @param coverage
      *         true if the type is covered
      * @param coverages
      *         the coverages to update
@@ -384,9 +391,9 @@ public class Collector {
      */
     Map<String, Coverage> updateItemCoverage(final int index,
                                              final String artifactType,
-                                             final boolean covered,
+                                             final Coverage coverage,
                                              final Map<String, Coverage> coverages) {
-        coverages.put(artifactType, covered ? Coverage.COVERED : Coverage.UNCOVERED);
+        coverages.put(artifactType, coverage);
         itemCoverages.set(index, coverages);
         return coverages;
     }
@@ -423,13 +430,10 @@ public class Collector {
      * @return merge input coverage
      */
     static Coverage mergeCoverType(Coverage type1, Coverage type2) {
-        return type1 == org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED || type2 == org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED ?
-                org.itsallcode.openfasttrace.report.ux.model.Coverage.UNCOVERED
-                :
-                type1 == org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED || type2 == org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED ?
-                        org.itsallcode.openfasttrace.report.ux.model.Coverage.COVERED
-                        :
-                        org.itsallcode.openfasttrace.report.ux.model.Coverage.NONE;
+        return type1 == Coverage.MISSING || type2 == Coverage.MISSING ? Coverage.MISSING
+                : type1 == Coverage.UNCOVERED || type2 == Coverage.UNCOVERED ? Coverage.UNCOVERED
+                : type1 == Coverage.COVERED || type2 == Coverage.COVERED ? Coverage.COVERED
+                        : Coverage.NONE;
     }
 
     /**
@@ -439,7 +443,7 @@ public class Collector {
      */
     static Map<String, Coverage> initializedCoverages(final List<String> allTypes) {
         return allTypes.stream().collect(
-                Collectors.toMap(type -> type, (any) -> org.itsallcode.openfasttrace.report.ux.model.Coverage.NONE));
+                Collectors.toMap(type -> type, (any) -> Coverage.NONE));
     }
 
 } // Collector

@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.report.ux.model;
 
 public enum Coverage
 {
+    MISSING(3),
     COVERED(2),
     UNCOVERED(1),
     NONE(0);

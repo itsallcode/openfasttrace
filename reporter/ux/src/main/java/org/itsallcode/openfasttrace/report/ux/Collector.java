@@ -88,7 +88,7 @@ public class Collector {
     }
 
     /**
-     * @return the meta model of the collected items.
+     * @return the metamodel of the collected items.
      */
     public UxModel getUxModel() {
         return uxModel;
@@ -143,6 +143,7 @@ public class Collector {
                 .withTagIndex(toTagIndex(item))
                 .withNeededTypeIndex(typeToIndex(item.getNeedsArtifactTypes()))
                 .withCoveredIndex(toCoveragesIds(index))
+                .withUncoveredIndex(toUncoveredIndexes(index))
                 .withCoveringIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERS)))
                 .withCoveredByIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERED_SHALLOW)))
                 .withDependsIndex(toIdIndex(item.getItem().getDependOnIds()))
@@ -176,8 +177,22 @@ public class Collector {
         final Map<String, Coverage> coverages = itemCoverages.get(index);
         return orderedTypes.stream().map(type -> {
             final Coverage coverage = coverages.get(type);
-            return coverage != null ? coverage.getId() : Coverage.NONE.ordinal();
+            return coverage != null ? coverage.getId() : Coverage.NONE.getId();
         }).toList();
+    }
+
+    private List<Integer> toUncoveredIndexes(final int index) {
+        final Map<String, Coverage> coverages = itemCoverages.get(index);
+        final List<Integer> uncoveredIndexes = new ArrayList<>();
+        int i = 0;
+        for( final String type : orderedTypes ) {
+            final Coverage coverage = coverages.get(type);
+            if( ( coverage == Coverage.UNCOVERED || coverage == Coverage.MISSING ) ) {
+                uncoveredIndexes.add(i);
+            }
+            i++;
+        }
+        return uncoveredIndexes;
     }
 
     private List<Integer> toItemIndex(final List<LinkedSpecificationItem> items) {

@@ -111,7 +111,7 @@ public class Collector {
                 .withProjectName(generateProjectName(""))
                 .withArtifactTypes(orderedTypes)
                 .withNumberOfSpecItems(items.size())
-                .withUncoveredSpecItems(items.size() - (int)isCovered.stream().filter(covered -> covered).count())
+                .withUncoveredSpecItems(items.size() - (int) isCovered.stream().filter(covered -> covered).count())
                 .withTags(tags)
                 .withItems(uxItems)
                 .build();
@@ -141,6 +141,7 @@ public class Collector {
                 .withName(toName(item))
                 .withId(toId(item))
                 .withTagIndex(toTagIndex(item))
+                .withProvidesIndex(getProvidesTypeIndex(item))
                 .withNeededTypeIndex(typeToIndex(item.getNeedsArtifactTypes()))
                 .withCoveredIndex(toCoveragesIds(index))
                 .withUncoveredIndex(toUncoveredIndexes(index))
@@ -157,12 +158,11 @@ public class Collector {
         return types.stream().map(orderedTypes::indexOf).toList();
     }
 
-    private String toTitle(final LinkedSpecificationItem item ) {
-        final String title = item.getTitle();
-        return title != null && !title.isEmpty() ? title :  item.getId().getName();
+    private String toTitle(final LinkedSpecificationItem item) {
+        return item.getTitleWithFallback();
     }
 
-    private String toName( final LinkedSpecificationItem item ) {
+    private String toName(final LinkedSpecificationItem item) {
         return item.getId().getName();
     }
 
@@ -171,6 +171,11 @@ public class Collector {
         final String name = item.getId().getName();
         final int version = item.getId().getRevision();
         return version > 1 ? type + ":" + name + ":" + version : type + ":" + name;
+    }
+
+    private List<Integer> getProvidesTypeIndex( final LinkedSpecificationItem item ) {
+        List<LinkedSpecificationItem> uplinks = item.getLinks().getOrDefault(LinkStatus.COVERS,List.of());
+        return typeToIndex(uplinks.stream().map(LinkedSpecificationItem::getArtifactType).toList());
     }
 
     private List<Integer> toCoveragesIds(final int index) {
@@ -311,10 +316,11 @@ public class Collector {
         return dependenciesByType;
     }
 
+
     // Covered Status
 
     /**
-     * Fille in the ItemCoverages.
+     * Fill in the ItemCoverages.
      */
     void collectItemCoverages() {
         // Initialize coverages
@@ -379,12 +385,12 @@ public class Collector {
         // Refresh this coverage
         updateItemCoverage(index,
                 item.getArtifactType(),
-                item.isCoveredShallowWithApprovedItems() ? Coverage.COVERED :Coverage.UNCOVERED,
+                item.isCoveredShallowWithApprovedItems() ? Coverage.COVERED : Coverage.UNCOVERED,
                 coverages);
 
         // Refresh needed uncovered types
         for( final String uncoveredType : item.getUncoveredApprovedArtifactTypes() ) {
-            updateItemCoverage(index,uncoveredType,Coverage.MISSING,coverages);
+            updateItemCoverage(index, uncoveredType, Coverage.MISSING, coverages);
         }
 
         //System.out.println("<<< intermediate " + item.getId());
@@ -392,7 +398,7 @@ public class Collector {
     }
 
     /**
-     * Updates the given coverages by setting the coverage of the goven type and updates the {@link #itemCoverages}.
+     * Updates the given coverages by setting the coverage of the given type and updates the {@link #itemCoverages}.
      *
      * @param index
      *         The index of the item
@@ -448,7 +454,7 @@ public class Collector {
         return type1 == Coverage.MISSING || type2 == Coverage.MISSING ? Coverage.MISSING
                 : type1 == Coverage.UNCOVERED || type2 == Coverage.UNCOVERED ? Coverage.UNCOVERED
                 : type1 == Coverage.COVERED || type2 == Coverage.COVERED ? Coverage.COVERED
-                        : Coverage.NONE;
+                : Coverage.NONE;
     }
 
     /**

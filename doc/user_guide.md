@@ -722,7 +722,6 @@ recognized file types:
 * Java (`.java`)
 * JavaScript (`.js`)
 * TypeScript (`.ts`)
-* JSON (`.json`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
 * Perl (`.pl`, `.pm`)
@@ -734,6 +733,11 @@ recognized file types:
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
 * Windows batch files (`.bat`)
+
+**Configuration and Serialization Formats** 
+
+* JSON (`.json`)
+* TOML (`.toml`)
 
 **Markup languages**
 

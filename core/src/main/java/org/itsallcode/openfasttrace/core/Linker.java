@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,7 +82,8 @@ public class Linker
             final LinkedSpecificationItem covered)
     {
         final String coveringArtifactType = covering.getArtifactType();
-        if (covered.getItem().getNeedsArtifactTypes().contains(coveringArtifactType))
+        if (covered.getItem().getNeedsArtifactTypes().contains(coveringArtifactType) ||
+                covered.getArtifactType().equals(covering.getArtifactType()))
         {
             if (covered.hasDuplicates())
             {

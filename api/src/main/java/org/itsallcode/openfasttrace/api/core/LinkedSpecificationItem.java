@@ -311,6 +311,8 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Check if this item is covered by an item of the same artifactType.
+     *
      * @return true if this item is covered by an item of the same artifactType.
      */
     public boolean isRefined()
@@ -319,6 +321,8 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Check if this item is covered by an item of the same artifactType and both items are approved.
+     *
      * @return if this item is approved and is covered by an item of the same artifactType that is also approved.
      */
     public boolean isRefinedApproved()

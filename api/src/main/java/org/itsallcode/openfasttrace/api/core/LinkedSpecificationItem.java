@@ -17,6 +17,8 @@ public class LinkedSpecificationItem
     private final Set<String> coveredArtifactTypes = new HashSet<>();
     private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();
+    private boolean isRefined = false;
+    private boolean isRefinedApproved = false;
 
     /**
      * Create a new instance of class {@link LinkedSpecificationItem}.
@@ -142,6 +144,10 @@ public class LinkedSpecificationItem
             cacheApprovedCoveredArtifactType(item);
             coveredArtifactTypes.add(item.getArtifactType());
             addMyItemIdToCoveringItem(item);
+            if (item.getArtifactType() != null && item.getArtifactType().equals(this.getArtifactType()))
+            {
+                isRefined = true;
+            }
             break;
         case COVERED_UNWANTED:
             cacheOverCoveredArtifactType(item);
@@ -171,6 +177,10 @@ public class LinkedSpecificationItem
         if (coveringItem.isApproved())
         {
             coveredArtifactTypesFromApprovedItems.add(coveringItem.getArtifactType());
+            if (coveringItem.getArtifactType() != null && coveringItem.getArtifactType().equals(this.getArtifactType()))
+            {
+                isRefinedApproved = true;
+            }
         }
     }
 
@@ -298,6 +308,22 @@ public class LinkedSpecificationItem
         final List<String> uncovered = new ArrayList<>(getNeedsArtifactTypes());
         uncovered.removeAll(getCoveredApprovedArtifactTypes());
         return uncovered;
+    }
+
+    /**
+     * @return true if this item is covered by an item of the same artifactType.
+     */
+    public boolean isRefined()
+    {
+        return isRefined;
+    }
+
+    /**
+     * @return if this item is approved and is covered by an item of the same artifactType that is also approved.
+     */
+    public boolean isRefinedApproved()
+    {
+        return isRefinedApproved;
     }
 
     /**
@@ -447,12 +473,12 @@ public class LinkedSpecificationItem
 
     private boolean areAllArtifactTypesCovered()
     {
-        return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+        return isRefined || this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
     }
 
     private boolean areAllCoveredArtifactTypesApproved()
     {
-        return this.getCoveredApprovedArtifactTypes().containsAll(this.getNeedsArtifactTypes());
+        return isRefinedApproved || this.getCoveredApprovedArtifactTypes().containsAll(this.getNeedsArtifactTypes());
     }
 
     private boolean isApproved()

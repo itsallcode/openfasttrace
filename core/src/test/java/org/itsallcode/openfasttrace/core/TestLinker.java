@@ -196,7 +196,7 @@ class TestLinker
         }
     }
 
-    public static void assertItemRefined( final LinkedSpecificationItem item, final boolean approved )
+    private static void assertItemRefined( final LinkedSpecificationItem item, final boolean approved )
     {
         if(approved) {
             assertThat( item.getId() + " is refined by approved item", item.isRefinedApproved(), is(true));

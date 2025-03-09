@@ -56,12 +56,13 @@ public class UxReporter implements Reportable
         final UxModel.Builder uxModelBuilder = UxModel.builder(uxModel);
 
         // Add project name prefix if set
-        final String projectNameEnvironment = System.getenv("oftProjectName");
+        String projectNameEnvironment = System.getenv("oftProjectName");
+        if( "".equals(projectNameEnvironment)) projectNameEnvironment = null;
         final String projectNameProperty = System.getProperty("oftProjectName");
-        if (projectNameEnvironment != null || projectNameProperty != null)
+        if ( projectNameEnvironment != null || projectNameProperty != null)
         {
             final String projectName = projectNameEnvironment != null ? projectNameEnvironment : projectNameProperty;
-            uxModelBuilder.withProjectName(projectName + " " + uxModel.getProjectName());
+            uxModelBuilder.withProjectName(projectName + " (" + uxModel.getProjectName() + ")");
         }
 
         return uxModelBuilder.build();

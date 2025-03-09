@@ -1,10 +1,12 @@
 package org.itsallcode.openfasttrace.report.ux;
 
+import org.itsallcode.openfasttrace.api.ReportSettings;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.report.ux.generator.IGenerator;
 import org.itsallcode.openfasttrace.report.ux.generator.JsGenerator;
+import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 
 import java.io.OutputStream;
 import java.util.logging.Logger;
@@ -18,7 +20,7 @@ public class UxReporter implements Reportable
     private static final Logger LOG = Logger.getLogger(UxReporter.class.getName());
 
     private final Trace trace;
-    private final ReporterContext context;
+    private final ReportSettings settings;
 
     /**
      *
@@ -29,7 +31,7 @@ public class UxReporter implements Reportable
     {
         LOG.info(String.format("constructor(context=%s",context.toString()));
         this.trace = trace;
-        this.context = context;
+        this.settings = context.getSettings();
     }
 
     /**
@@ -41,7 +43,26 @@ public class UxReporter implements Reportable
         LOG.info("renderToStream");
         final Collector collector = new Collector().collect(trace.getItems());
         final IGenerator generator = new JsGenerator();
-        generator.generate(outputStream, collector.getUxModel());
+        generator.generate(outputStream, extendModel(collector.getUxModel(), settings));
+    }
+
+    /**
+     * Adjusts
+     *
+     * @param uxModel The collected model
+     * @return uxModel extended via setting
+     */
+    private static UxModel extendModel( final UxModel uxModel, final ReportSettings settings ) {
+        final UxModel.Builder uxModelBuilder = UxModel.builder(uxModel);
+
+        // Add project name prefix if set
+        final String projectName = System.getProperty("oftProjectName");
+        if( projectName != null )
+        {
+            uxModelBuilder.withProjectName(projectName + " " + uxModel.getProjectName() );
+        }
+
+        return uxModelBuilder.build();
     }
 
 } // UxReporter

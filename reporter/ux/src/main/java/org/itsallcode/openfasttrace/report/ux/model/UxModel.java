@@ -21,14 +21,28 @@ public class UxModel
 
     private final List<UxSpecItem> items;
 
-    private UxModel(Builder builder) {
+    private UxModel(Builder builder)
+    {
         projectName = builder.projectName;
         artifactTypes = builder.artifactTypes;
         tags = builder.tags;
+        statusNames = builder.statusNames;
         numberOfSpecItems = builder.numberOfSpecItems;
         uncoveredSpecItems = builder.uncoveredSpecItems;
         items = builder.items;
-        statusNames = Arrays.stream(ItemStatus.values()).map(Enum::name).toList();
+    }
+
+    public static Builder builder(UxModel copy)
+    {
+        Builder builder = new Builder();
+        builder.projectName = copy.getProjectName();
+        builder.artifactTypes = copy.getArtifactTypes();
+        builder.tags = copy.getTags();
+        builder.statusNames = copy.getStatusNames();
+        builder.numberOfSpecItems = copy.getNumberOfSpecItems();
+        builder.uncoveredSpecItems = copy.getUncoveredSpecItems();
+        builder.items = copy.getItems();
+        return builder;
     }
 
     /**
@@ -87,18 +101,22 @@ public class UxModel
     /**
      * {@code UxModel} builder static inner class.
      */
-    public static final class Builder {
+    public static final class Builder
+    {
         private List<String> artifactTypes;
         private List<String> tags;
+        private List<String> statusNames;
         private int numberOfSpecItems;
         private int uncoveredSpecItems;
         private List<UxSpecItem> items;
         private String projectName;
 
-        private Builder() {
+        private Builder()
+        {
         }
 
-        public static Builder builder() {
+        public static Builder builder()
+        {
             return new Builder();
         }
 
@@ -109,7 +127,8 @@ public class UxModel
          *         the {@code artifactTypes} to set
          * @return a reference to this Builder
          */
-        public Builder withArtifactTypes(List<String> artifactTypes) {
+        public Builder withArtifactTypes(List<String> artifactTypes)
+        {
             this.artifactTypes = artifactTypes;
             return this;
         }
@@ -121,8 +140,22 @@ public class UxModel
          *         the {@code tags} to set
          * @return a reference to this Builder
          */
-        public Builder withTags(List<String> tags) {
+        public Builder withTags(List<String> tags)
+        {
             this.tags = tags;
+            return this;
+        }
+
+        /**
+         * Sets the {@code statusNames} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param statusNames
+         *         the {@code statusNames} to set
+         * @return a reference to this Builder
+         */
+        public Builder withStatusNames(List<String> statusNames)
+        {
+            this.statusNames = statusNames;
             return this;
         }
 
@@ -133,7 +166,8 @@ public class UxModel
          *         the {@code numberOfSpecItems} to set
          * @return a reference to this Builder
          */
-        public Builder withNumberOfSpecItems(int numberOfSpecItems) {
+        public Builder withNumberOfSpecItems(int numberOfSpecItems)
+        {
             this.numberOfSpecItems = numberOfSpecItems;
             return this;
         }
@@ -145,7 +179,8 @@ public class UxModel
          *         the {@code uncoveredSpecItems} to set
          * @return a reference to this Builder
          */
-        public Builder withUncoveredSpecItems(int uncoveredSpecItems) {
+        public Builder withUncoveredSpecItems(int uncoveredSpecItems)
+        {
             this.uncoveredSpecItems = uncoveredSpecItems;
             return this;
         }
@@ -157,7 +192,8 @@ public class UxModel
          *         the {@code items} to set
          * @return a reference to this Builder
          */
-        public Builder withItems(List<UxSpecItem> items) {
+        public Builder withItems(List<UxSpecItem> items)
+        {
             this.items = items;
             return this;
         }
@@ -167,7 +203,8 @@ public class UxModel
          *
          * @return a {@code UxModel} built with parameters of this {@code UxModel.Builder}
          */
-        public UxModel build() {
+        public UxModel build()
+        {
             return new UxModel(this);
         }
 
@@ -178,7 +215,8 @@ public class UxModel
          *         the {@code projectName} to set
          * @return a reference to this Builder
          */
-        public Builder withProjectName(String projectName) {
+        public Builder withProjectName(String projectName)
+        {
             this.projectName = projectName;
             return this;
         }

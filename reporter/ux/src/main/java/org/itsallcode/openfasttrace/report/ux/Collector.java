@@ -113,6 +113,7 @@ public class Collector {
                 .withNumberOfSpecItems(items.size())
                 .withUncoveredSpecItems(items.size() - (int) isCovered.stream().filter(covered -> covered).count())
                 .withTags(tags)
+                .withStatusNames(Arrays.stream(ItemStatus.values()).map(ItemStatus::toString).toList())
                 .withItems(uxItems)
                 .build();
     }

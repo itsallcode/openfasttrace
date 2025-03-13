@@ -5,6 +5,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Surrounding model that is used to generate the specitem_data model for OpenFastTrace-UX.
@@ -21,6 +22,11 @@ public class UxModel
 
     private final List<UxSpecItem> items;
 
+    private final List<Integer> typeCount;
+    private final List<Integer> uncoveredCount;
+    private final List<Integer> statusCount;
+    private final List<Integer> tagCount;
+
     private UxModel(Builder builder)
     {
         projectName = builder.projectName;
@@ -30,6 +36,10 @@ public class UxModel
         numberOfSpecItems = builder.numberOfSpecItems;
         uncoveredSpecItems = builder.uncoveredSpecItems;
         items = builder.items;
+        typeCount = builder.typeCount;
+        uncoveredCount = builder.uncoveredCount;
+        statusCount = builder.statusCount;
+        tagCount = builder.tagCount;
     }
 
     public static Builder builder(UxModel copy)
@@ -42,6 +52,10 @@ public class UxModel
         builder.numberOfSpecItems = copy.getNumberOfSpecItems();
         builder.uncoveredSpecItems = copy.getUncoveredSpecItems();
         builder.items = copy.getItems();
+        builder.typeCount = copy.getTypeCount();
+        builder.uncoveredCount = copy.getUncoveredCount();
+        builder.statusCount = copy.getStatusCount();
+        builder.tagCount = copy.getTagCount();
         return builder;
     }
 
@@ -99,6 +113,38 @@ public class UxModel
     }
 
     /**
+     * @return number of items by type index
+     */
+    public List<Integer> getTypeCount()
+    {
+        return typeCount;
+    }
+
+    /**
+     * @return covered count per soecObject type
+     */
+    public List<Integer> getUncoveredCount()
+    {
+        return uncoveredCount;
+    }
+
+    /**
+     * @return number of items by status index
+     */
+    public List<Integer> getStatusCount()
+    {
+        return statusCount;
+    }
+
+    /**
+     * @return number of items by status index
+     */
+    public List<Integer> getTagCount()
+    {
+        return tagCount;
+    }
+
+    /**
      * {@code UxModel} builder static inner class.
      */
     public static final class Builder
@@ -109,6 +155,10 @@ public class UxModel
         private int numberOfSpecItems;
         private int uncoveredSpecItems;
         private List<UxSpecItem> items;
+        private List<Integer> typeCount;
+        private List<Integer> uncoveredCount;
+        private List<Integer> statusCount;
+        private List<Integer> tagCount;
         private String projectName;
 
         private Builder()
@@ -195,6 +245,58 @@ public class UxModel
         public Builder withItems(List<UxSpecItem> items)
         {
             this.items = items;
+            return this;
+        }
+
+        /**
+         * Sets the {@code typeCount} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param typeCount
+         *         the {@code typeCount} to set
+         * @return a reference to this Builder
+         */
+        public Builder withTypeCount(List<Integer> typeCount)
+        {
+            this.typeCount = typeCount;
+            return this;
+        }
+
+        /**
+         * Sets the {@code uncoveredCount} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param uncoveredCount
+         *         the {@code uncoveredCount} to set
+         * @return a reference to this Builder
+         */
+        public Builder withUncoveredCount(List<Integer> uncoveredCount)
+        {
+            this.uncoveredCount = uncoveredCount;
+            return this;
+        }
+
+        /**
+         * Sets the {@code statusCount} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param statusCount
+         *         the {@code statusCount} to set
+         * @return a reference to this Builder
+         */
+        public Builder withStatusCount(List<Integer> statusCount)
+        {
+            this.statusCount = statusCount;
+            return this;
+        }
+
+        /**
+         * Sets the {@code tagCount} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param tagCount
+         *         the {@code tagCount} to set
+         * @return a reference to this Builder
+         */
+        public Builder withTagCount(List<Integer> tagCount)
+        {
+            this.tagCount = tagCount;
             return this;
         }
 

@@ -54,6 +54,10 @@ public class JsGenerator implements IGenerator {
         println("item_count", model.getItems().size());
         println("item_covered", model.getItems().size() - model.getUncoveredSpecItems());
         println("item_uncovered", model.getUncoveredSpecItems());
+        println("type_count",model.getTypeCount());
+        println("uncovered_count", model.getUncoveredCount());
+        println("status_count",model.getStatusCount());
+        println("tag_count", model.getTagCount());
         printClose("},");
     }
 

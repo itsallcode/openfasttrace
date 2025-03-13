@@ -23,13 +23,20 @@ public class Collector {
     private final List<String> orderedTypes = new ArrayList<>();
 
     private final List<String> tags = new ArrayList<>();
-    private final Set<String> uniqueTags = new HashSet<>();
+    private final List<Integer> tagCount = new ArrayList<>();
 
     final List<Map<String, Coverage>> itemCoverages = new ArrayList<>();
 
-    private final List<Boolean> isCovered = new ArrayList<>();
+    private final List<Boolean> isDeepCovered = new ArrayList<>();
 
     private final List<UxSpecItem> uxItems = new ArrayList<>();
+
+    private final List<Integer> typeCount = new ArrayList<>();
+
+    private final List<Integer> uncoveredCounts = new ArrayList<>();
+
+    private final List<Integer> statusCount = new ArrayList<>();
+
     private UxModel uxModel = null;
 
     public Collector() {
@@ -111,9 +118,13 @@ public class Collector {
                 .withProjectName(generateProjectName(""))
                 .withArtifactTypes(orderedTypes)
                 .withNumberOfSpecItems(items.size())
-                .withUncoveredSpecItems(items.size() - (int) isCovered.stream().filter(covered -> covered).count())
+                .withUncoveredSpecItems(items.size() - (int) isDeepCovered.stream().filter(covered -> covered).count())
                 .withTags(tags)
                 .withStatusNames(Arrays.stream(ItemStatus.values()).map(ItemStatus::toString).toList())
+                .withTypeCount(typeCount)
+                .withUncoveredCount(uncoveredCounts)
+                .withStatusCount(statusCount)
+                .withTagCount(tagCount)
                 .withItems(uxItems)
                 .build();
     }
@@ -223,13 +234,21 @@ public class Collector {
         allTypes.addAll(collectAllTypes(items));
         orderedTypes.clear();
         orderedTypes.addAll(createOrderedTypes(items));
+        typeCount.clear();
+        typeCount.addAll(collectTypeCount(items, orderedTypes));
 
         ids.clear();
         ids.addAll(items.stream().map(LinkedSpecificationItem::getId).toList());
 
         tags.clear();
-        uniqueTags.clear();
-        tags.addAll(collectTags(items, uniqueTags));
+        tagCount.clear();
+        final Map<String, Integer> tagMap = collectTagCount(items);
+        final List<String> tagList = new ArrayList<>(tagMap.keySet());
+        tags.addAll(tagList);
+        tagList.forEach(tag -> tagCount.add(tagMap.get(tag)));
+
+        statusCount.clear();
+        statusCount.addAll(collectStatusCount(items));
     }
 
     /**
@@ -239,10 +258,22 @@ public class Collector {
         return items.stream().map(LinkedSpecificationItem::getArtifactType).collect(Collectors.toSet());
     }
 
-    static List<String> collectTags(final List<LinkedSpecificationItem> items, Set<String> uniqueTags) {
-        final List<String> tags = new ArrayList<>();
-        for( final LinkedSpecificationItem item : items ) {
-            item.getTags().stream().filter(tag -> !uniqueTags.contains(tag)).forEach(tags::add);
+    /**
+     * Provides a list of tags accompanied by the number of items that provides a specific tags.
+     *
+     * @param items
+     *         The items to process
+     * @return tag to count mapping
+     */
+    static Map<String, Integer> collectTagCount(final List<LinkedSpecificationItem> items)
+    {
+        final Map<String, Integer> tags = new HashMap<>();
+        for (final LinkedSpecificationItem item : items)
+        {
+            for (final String tag : item.getTags())
+            {
+                tags.put(tag, tags.getOrDefault(tag, 0) + 1);
+            }
         }
 
         return tags;
@@ -317,6 +348,39 @@ public class Collector {
         return dependenciesByType;
     }
 
+    /**
+     * Collects the number of items for all types of the given types.
+     *
+     * @param items
+     *         The items to process
+     * @param orderedTypes
+     *         The index of the returned list is the index of the type in orderedTypes
+     */
+    private static List<Integer> collectTypeCount(final List<LinkedSpecificationItem> items,
+            final List<String> orderedTypes)
+    {
+        final List<Integer> typeCount = new ArrayList<>(Collections.nCopies(orderedTypes.size(), 0));
+        for (final LinkedSpecificationItem item : items)
+        {
+            final int typeIndex = orderedTypes.indexOf(item.getArtifactType());
+            typeCount.set(typeIndex, typeCount.get(typeIndex) + 1);
+        }
+
+        return typeCount;
+    }
+
+    private static List<Integer> collectStatusCount(final List<LinkedSpecificationItem> items)
+    {
+        final List<Integer> statusCount = new ArrayList<>(Collections.nCopies(ItemStatus.values().length, 0));
+        for (final LinkedSpecificationItem item : items)
+        {
+            final int statusIndex = item.getStatus().ordinal();
+            statusCount.set(statusIndex, statusIndex < statusCount.size() ? statusCount.get(statusIndex) + 1 : 1);
+        }
+
+        return statusCount;
+    }
+
 
     // Covered Status
 
@@ -330,11 +394,40 @@ public class Collector {
             itemCoverages.add(null);
         }
 
+        // Initialize uncoveredCounts
+        uncoveredCounts.clear();
+        for (int i = 0; i < orderedTypes.size(); i++)
+        {
+            uncoveredCounts.add(0);
+        }
+
         // Fill coverages
         for( int i = 0; i < items.size(); i++ ) {
             final Map<String, Coverage> itemCoverage = collectItemCoverage(i);
-            isCovered.add(collectIsCovered(itemCoverage));
+            isDeepCovered.add(collectIsCovered(itemCoverage));
+            updateUncoveredCount(i,items.get(i).isCoveredShallowWithApprovedItems());
         }
+    }
+
+    /**
+     * Update {@link #uncoveredCounts} by incrementing the corresponding entry if the item with the given index is
+     * uncovered.
+     *
+     * @param index
+     *         The index of the processed item
+     * @param isCovered
+     *         true of the item is covered
+     * @return true of the item is covered
+     */
+    private boolean updateUncoveredCount(final int index, final boolean isCovered)
+    {
+        if (!isCovered)
+        {
+            final int uncoveredIndex = orderedTypes.indexOf(items.get(index).getArtifactType());
+            uncoveredCounts.set(uncoveredIndex, uncoveredCounts.get(uncoveredIndex) + 1);
+        }
+
+        return isCovered;
     }
 
     /**

@@ -43,7 +43,7 @@ public class UxReporter implements Reportable
         LOG.info("renderToStream");
         final Collector collector = new Collector().collect(trace.getItems());
         final IGenerator generator = new JsGenerator();
-        generator.generate(outputStream, extendModel(collector.getUxModel(), settings));
+        generator.generate(outputStream, extendModel(collector.getUxModel()));
     }
 
     /**
@@ -52,7 +52,8 @@ public class UxReporter implements Reportable
      * @param uxModel The collected model
      * @return uxModel extended via setting
      */
-    private static UxModel extendModel( final UxModel uxModel, final ReportSettings settings ) {
+    private static UxModel extendModel(final UxModel uxModel)
+    {
         final UxModel.Builder uxModelBuilder = UxModel.builder(uxModel);
 
         // Add project name prefix if set

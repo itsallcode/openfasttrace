@@ -111,7 +111,7 @@ public class JsGenerator implements IGenerator {
     }
 
     private void println(final String name, final String value) {
-        printf("%s: %s", name, wrap(value, name.length()));
+        printf("%s:%s", name, wrap(value, name.length()));
     }
 
     private <T> void println(final String name, final List<T> values) {
@@ -142,7 +142,7 @@ public class JsGenerator implements IGenerator {
 
     private String wrap(final String text, final int offset) {
         final String value = quote(text);
-        if( value.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return "'" + value + "',";
+        if( value.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return " '" + value + "',";
 
         final StringBuilder b = new StringBuilder();
         b.append(System.lineSeparator());

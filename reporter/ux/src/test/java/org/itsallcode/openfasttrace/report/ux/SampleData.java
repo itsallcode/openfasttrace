@@ -13,10 +13,31 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SampleData {
+
+    public static final String LONG_SAMPLE_CONTENT =
+            "Officia voluptate aliquip ullamco dolore irure sint occaecat dolore eu proident."
+                    + " Lorem cupidatat dolore voluptate non nulla commodo sint. Aliquip velit anim tem"
+                    + "por magna culpa in esse. Excepteur anim ea ex est anim minim esse ut. Deserunt e"
+                    + "nim veniam amet quis veniam amet in velit esse. Pariatur ut aliquip ipsum dolore"
+                    + " quis reprehenderit excepteur adipisicing.Reprehenderit laboris reprehenderit re"
+                    + "prehenderit irure aute eiusmod fugiat dolore ipsum velit mollit cillum. Commodo "
+                    + "minim dolore nisi nostrud enim nisi reprehenderit aliqua anim deserunt ea ut eli"
+                    + "t. Aute Lorem quis elit proident veniam sunt duis aliquip. Duis duis ad nostrud "
+                    + "adipisicing. Consequat laboris qui aute cillum do eu non. Tempor commodo adipisi"
+                    + "cing eu exercitation laboris.";
+
+    public static final List<String> SAMPLE_TAGS = List.of( "v1", "v2", "v3" );
+
     /**
      * Coverage types in ordered from based on SAMPLE_ITEM linkage
      */
     public static final List<String> ORDERED_SAMPLE_TYPES = List.of("fea", "req", "arch", "utest");
+
+    /**
+     * Generated samples data with project name removed.
+     */
+    public static final String SAMPLE_OUTPUT_RESOURCE = "sample_jsgenerator_result.js";
+
     /**
      * Sample for items on all level fea,req,arch,utest with upwards linkes
      */
@@ -26,7 +47,7 @@ public class SampleData {
             item("req~req2", ItemStatus.APPROVED, Set.of("arch"), Set.of("fea~fea1")),
             item("arch~arch1", ItemStatus.APPROVED, Set.of("utest"), Set.of("req~req1")),
             item("arch~arch2", ItemStatus.APPROVED, Set.of("utest"), Set.of("req~req1")),
-            item("arch~arch3", ItemStatus.APPROVED, Set.of("utest"), Set.of("req~req2")),
+            item("arch~arch3", ItemStatus.APPROVED, Set.of("utest"), Set.of("req~req2"),LONG_SAMPLE_CONTENT, SAMPLE_TAGS),
             item("utest~utest1", ItemStatus.APPROVED, Set.of(), Set.of("arch~arch1")),
             item("utest~utest2", ItemStatus.APPROVED, Set.of(), Set.of("arch~arch2"))
     );
@@ -62,14 +83,14 @@ public class SampleData {
     //
     // Helpers
 
-    public static List<Matcher<? super Map<String, Coverage>>> coverages(Coverage... coverage) {
+    public static List<Matcher<? super Map<String, Coverage>>> coverages(final Coverage... coverage) {
         final List<Coverage> stack = new ArrayList<>(Arrays.stream(coverage).toList());
         return ORDERED_SAMPLE_TYPES.stream().map(type ->
                 Matchers.hasEntry(type, !stack.isEmpty() ? stack.remove(0) : Coverage.NONE)
         ).collect(Collectors.toList());
     }
 
-    public static SpecificationItem item(final String id, ItemStatus status, Set<String> needs) {
+    public static SpecificationItem item(final String id, final ItemStatus status, final Set<String> needs) {
         final SpecificationItemId specId = id(id);
         SpecificationItem.Builder builder = SpecificationItem.builder()
                 .id(specId)
@@ -82,9 +103,9 @@ public class SampleData {
     }
 
     public static SpecificationItem item(final String id,
-                                         ItemStatus status,
-                                         Set<String> needs,
-                                         Set<String> coverages) {
+                                         final ItemStatus status,
+                                         final Set<String> needs,
+                                         final Set<String> coverages) {
         final SpecificationItemId specId = id(id);
         SpecificationItem.Builder builder = SpecificationItem.builder()
                 .id(specId)
@@ -92,6 +113,25 @@ public class SampleData {
                 .description("Descriptive text for " + id)
                 .status(status);
         needs.forEach(builder::addNeedsArtifactType);
+        coverages.forEach(coverage -> builder.addCoveredId(id(coverage)));
+
+        return builder.build();
+    }
+
+    public static SpecificationItem item(final String id,
+            final ItemStatus status,
+            final Set<String> needs,
+            final Set<String> coverages,
+            final String content,
+            final List<String> tags) {
+        final SpecificationItemId specId = id(id);
+        SpecificationItem.Builder builder = SpecificationItem.builder()
+                .id(specId)
+                .title("Title " + id)
+                .description(content)
+                .status(status);
+        needs.forEach(builder::addNeedsArtifactType);
+        tags.forEach(builder::addTag);
         coverages.forEach(coverage -> builder.addCoveredId(id(coverage)));
 
         return builder.build();

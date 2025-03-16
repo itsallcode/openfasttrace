@@ -6,9 +6,13 @@ import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.itsallcode.openfasttrace.report.ux.SampleData.SAMPLE_OUTPUT_RESOURCE;
+import static org.itsallcode.openfasttrace.report.ux.TestHelper.equalsToResource;
+import static org.itsallcode.openfasttrace.report.ux.TestHelper.removeProjectNameFromJs;
 
 class JsGeneratorTest {
 
@@ -20,11 +24,14 @@ class JsGeneratorTest {
     }
 
     @Test
-    void generate() {
+    void generate() throws IOException
+    {
         final UxModel model = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS).getUxModel();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         new JsGenerator().generate(out,model);
         System.out.println(out);
+        final String outWithoutProjectName = removeProjectNameFromJs(out.toString());
+        assertThat(outWithoutProjectName, equalsToResource(SAMPLE_OUTPUT_RESOURCE));
     }
 
     @Test

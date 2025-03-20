@@ -100,7 +100,7 @@ class TestAllServicesAvailable
 
     @ParameterizedTest
     @CsvSource(
-    { "aspec", "html", "plain" })
+    { "aspec", "html", "plain", "ux" })
     void reporterAvailable(final String format)
     {
         if (!reporterLoader.isFormatSupported(format))

@@ -21,6 +21,7 @@ import org.itsallcode.openfasttrace.importer.zip.ZipFileImporterFactory;
 import org.itsallcode.openfasttrace.report.aspec.ASpecReporterFactory;
 import org.itsallcode.openfasttrace.report.html.HtmlReporterFactory;
 import org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory;
+import org.itsallcode.openfasttrace.report.ux.UxReporterFactory;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -83,9 +84,10 @@ class TestInitializingServiceLoader
         final ReporterContext context = new ReporterContext(null);
         final List<ReporterFactory> services = getRegisteredServices(ReporterFactory.class,
                 context);
-        assertThat(services, hasSize(3));
+        assertThat(services, hasSize(4));
         assertThat(services, containsInAnyOrder(instanceOf(PlaintextReporterFactory.class),
                 instanceOf(ASpecReporterFactory.class),
+                instanceOf(UxReporterFactory.class),
                 instanceOf(HtmlReporterFactory.class)));
         for (final ReporterFactory factory : services)
         {

@@ -720,7 +720,7 @@ recognized file types:
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
 * Java (`.java`)
-* JavaScript (`.js`)
+* JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
 * TypeScript (`.ts`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)

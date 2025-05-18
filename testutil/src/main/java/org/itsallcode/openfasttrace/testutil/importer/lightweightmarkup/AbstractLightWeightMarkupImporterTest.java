@@ -594,6 +594,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(createId("dsn", "needs", 3))
                         .description("Description with a bulleted list"
+                                + System.lineSeparator()
                                 + System.lineSeparator() + "* this"
                                 + System.lineSeparator() + "* that")
                         .addCoveredId(createId("req", "needs", 2))

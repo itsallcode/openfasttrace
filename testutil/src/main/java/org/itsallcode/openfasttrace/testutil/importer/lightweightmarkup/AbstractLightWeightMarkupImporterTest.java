@@ -593,11 +593,9 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 """,
                 contains(item()
                         .id(createId("dsn", "needs", 3))
-                        .description("""
-                                Description with a bulleted list
-                                
-                                * this
-                                * that""")
+                        .description("Description with a bulleted list"
+                                + System.lineSeparator() + "* this"
+                                + System.lineSeparator() + "* that")
                         .addCoveredId(createId("req", "needs", 2))
                         .addNeedsArtifactType("itest")
                         .location("needs_after_covers.md", 1)

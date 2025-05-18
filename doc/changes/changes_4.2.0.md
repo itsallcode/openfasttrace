@@ -19,5 +19,6 @@ The new token `oft:on|off` allows switching off OFT parsing for certain text pas
 
 * #427: Removed old `CHANGELOG.md` file and merged missing parts into release history.
 * #431: Documented "unwanted coverage" in user guide.
+* #449: Fix parsing past end of "needs" paragraph.
 * #440: Added Tag importer support for TOML files.
 * #442: Added support for javascript file extensions `.cjs`, `.mjs` and `.ejs`

@@ -754,9 +754,8 @@ recognized file types:
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
 * Java (`.java`)
-* JavaScript (`.js`)
+* JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
 * TypeScript (`.ts`)
-* JSON (`.json`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
 * Perl (`.pl`, `.pm`)
@@ -768,6 +767,11 @@ recognized file types:
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
 * Windows batch files (`.bat`)
+
+**Configuration and Serialization Formats** 
+
+* JSON (`.json`)
+* TOML (`.toml`)
 
 **Markup languages**
 

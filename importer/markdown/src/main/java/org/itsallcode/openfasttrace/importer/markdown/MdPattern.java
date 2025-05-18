@@ -48,7 +48,7 @@ enum MdPattern
             + "(?:\\W.*)?"),
     NOT_EMPTY("([^\n\r]+)"),
     RATIONALE("Rationale:\\s*"),
-    STATUS("Status:\\s*(approved|proposed|draft)\\s*"),
+    STATUS("Status:\\s*(approved|proposed|draft|rejected)\\s*"),
     TAGS_INT("Tags:(\\s*\\w+\\s*(?:,\\s*\\w+\\s*)*)"),
     TAGS("Tags:\\s*"),
     TAG_ENTRY(PatternConstants.UP_TO_3_WHITESPACES + PatternConstants.BULLETS

@@ -27,10 +27,10 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
         return asList("file.java", "FILE.java", "file.md.java", "foo.bash", "foo.bar.bash",
                 "foo.bat", "foo.java", "foo.c", "foo.C", "foo.c++", "foo.c#", "foo.cc", "foo.cfg",
                 "foo.conf", "foo.cpp", "foo.cs", "foo.feature", "foo.groovy", "foo.h", "foo.H", "foo.hh", "foo.h++",
-                "foo.htm", "foo.html", "foo.ini", "foo.js", "foo.ts", "foo.json", "foo.lua", "foo.m",
-                "foo.mm", "foo.php", "foo.pl", "foo.pls", "foo.pm", "foo.py", "foo.sql", "foo.r",
+                "foo.htm", "foo.html", "foo.ini", "foo.js", "foo.mjs", "foo.cjs", "foo.ejs", "foo.ts", "foo.json", 
+                "foo.lua", "foo.m", "foo.mm", "foo.php", "foo.pl", "foo.pls", "foo.pm", "foo.py", "foo.sql", "foo.r",
                 "foo.rs", "foo.sh", "foo.yaml", "foo.yml", "foo.xhtml", "foo.zsh", "foo.clj", "foo.kt", "foo.scala",
-                "foo.pu", "foo.puml", "foo.plantuml", "foo.go", "foo.robot", "foo.tf", "foo.tfvars");
+                "foo.pu", "foo.puml", "foo.plantuml", "foo.go", "foo.robot", "foo.tf", "foo.tfvars", "foo.toml");
     }
 
     @Override

@@ -25,7 +25,7 @@ public class TagImporterFactory extends ImporterFactory
             "json", "htm", "html", "xhtml", "yaml", "yml", // markup languages
             "java", // Java
             "clj", "kt", "scala", // JVM languages
-            "js", // JavaScript
+            "js", "mjs", "cjs", "ejs", // JavaScript
             "ts", // TypeScript
             "lua", // Lua
             "m", "mm", // Objective C
@@ -38,6 +38,7 @@ public class TagImporterFactory extends ImporterFactory
             "rs", // Rust
             "sh", "bash", "zsh", // Shell programming
             "swift", // Swift
+            "toml", // Tom's Obvious Minimal Language : a config file format
             "tf", "tfvars", // Terraform
             "sql", "pls" // Database related
     );

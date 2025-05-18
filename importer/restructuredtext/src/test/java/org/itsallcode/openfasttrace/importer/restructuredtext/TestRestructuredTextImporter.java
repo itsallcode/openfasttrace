@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
+import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -141,6 +142,32 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.createId("req", "too-short", 111))
                         .location("z", 3)
+                        .build()));
+    }
+
+    // [utest -> dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1]
+    @Test
+    void testDisablingRstParsingForATextBlock() {
+        assertImport("disable_parsing.rst", """
+                `req~stop-parsing~1`
+                
+                The next part must not be parsed:
+                
+                .. oft:off
+                `req~do-not-parse-me~2`
+                
+                Invisible.
+                
+                Needs: utest
+                .. oft:on
+                
+                Needs: impl
+                """,
+                contains(item()
+                        .id(createId("req", "stop-parsing", 1))
+                        .description("The next part must not be parsed:")
+                        .addNeedsArtifactType("impl")
+                        .location("disable_parsing.rst", 1)
                         .build()));
     }
 }

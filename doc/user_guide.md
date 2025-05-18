@@ -261,8 +261,6 @@ Requirements should be accompanied by a rationale in all cases where the reason 
     the details are up to the detailed design.
     
     Needs: dsn 
-    
-
 
 `Needs`, `Rationale` and `Comment` are OpenFastTrace keywords that tell OpenFastTrace how to process the following content. There are other keywords in the context of specification items written in Markdown described in the following sections.
 
@@ -298,6 +296,22 @@ Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement 
     Covers:
     - feat~rubber-ducky~1
 
+##### `Needs`
+
+The `Needs` keyword states which artifact types are needed to cover the current specification item. It is followed by a list of artifact types that are needed, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the artifact type abbreviation. `Needs` comes in two flavors: as one-liner or as list. 
+
+**Variant a) one-line `needs`**
+
+    Needs: impl, utest, itest
+
+**Variant b) as List**
+
+    Needs:
+    - dsn
+    - uman
+
+Please note that you cannot mix the two styles in one specification item.
+
 ##### `Depends`
 
 The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used. This has no effect on the coverage of specification items.
@@ -331,6 +345,26 @@ is functionally equivalent to
 ##### `Tags`
 
 Tags are described in detail later in this document, see section [Distributing the Detailing Work](#distributing-the-detailing-work).
+
+### Excluding Parts of a Specification Document for OFT Parsing
+
+Sometimes you want specific sections or a whole document to be excluded from OFT parsing. One reason could be that it is a document that contains an OFT example, that should not contribute to the trace. Or, you could have data in a document and don't want to risk that something accidentally looks like an OFT artifact.
+
+To switch of scanning use the token `oft:on|off` in your document at the appropriate location.
+
+Markdown example:
+
+    <!-- oft:off -->
+    This part is ignored by OFT.
+    <!-- oft:on -->
+    Here OFT scans again.
+
+ReStructured text example:
+
+    .. oft:off
+    This part is ignored by OFT.
+    .. oft:on
+    Here OFT scans again.
 
 ### Delegating Requirement Coverage
 

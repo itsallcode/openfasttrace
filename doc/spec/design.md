@@ -220,6 +220,40 @@ Covers:
 
 Needs: impl, utest, itest
 
+### Markdown Importer
+
+This section contains requirements that are specific to the Markdown importer.
+
+##### Disabling OFT Parsing for Parts of a Markdown File
+`dsn~disabling-oft-parsing-for-parts-of-a-markdown-file~1`
+
+When it encounters the token `oft:off`, the Markdown importer stops extracting specification items until it
+
+* either encounters the token `oft:on`
+* or reaches the end of the current document.
+
+Covers:
+
+* `req~disabling-oft-parsing-for-parts-of-a-markdown-file~1`
+
+Needs: impl, utest
+
+### RST Importer
+
+##### Disabling OFT Parsing for Parts of an RST File
+`dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1`
+
+When it encounters the token `oft:off`, the RST importer stops extracting specification items until it
+
+* either encounters the token `oft:on`
+* or reaches the end of the current document.
+
+Covers:
+
+* `req~disabling-oft-parsing-for-parts-of-an-rst-file~1`
+
+Needs: impl, utest
+
 ## Tracing
 
 ### Tracing Needed Coverage
@@ -756,8 +790,10 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
 
 The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
 
+<!-- oft:off -->
     arch --> dsn, itest : req~skip-this-requirement~1
- 
+<!-- oft:on -->
+
 Covers:
 
 * `req~artifact-type-forwarding-in-markdown~1`

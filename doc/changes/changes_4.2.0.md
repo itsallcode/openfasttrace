@@ -1,4 +1,4 @@
-# OpenFastTrace 4.2.0, released ???
+# OpenFastTrace 4.2.0, released 2025-05-18
 
 Code name: Markdown code blocks
 
@@ -8,6 +8,8 @@ In this release we changed the behavior of the Markdown importer, so that if we 
 
 We also added a whole section about understanding and fixing broken links between specification items to the user guide.
 
+The new token `oft:on|off` allows switching off OFT parsing for certain text passages in Markdown and RST documents.
+
 ## Features
 
 * #437: Upgrade build and test dependencies on top of 4.1.0
@@ -15,5 +17,5 @@ We also added a whole section about understanding and fixing broken links betwee
 
 ## Documentation
 
-* #427: Removed old `CHANGELOG.md` file and merged missing parts into release history
+* #427: Removed old `CHANGELOG.md` file and merged missing parts into release history.
 * #431: Documented "unwanted coverage" in user guide.

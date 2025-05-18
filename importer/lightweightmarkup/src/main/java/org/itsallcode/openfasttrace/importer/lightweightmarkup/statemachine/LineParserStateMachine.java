@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import static java.util.regex.Pattern.UNICODE_CHARACTER_CLASS;
+
 /**
  * This machine implements the core of a state based parser.
  * <p>
@@ -20,8 +22,10 @@ import java.util.regex.Pattern;
 public class LineParserStateMachine
 {
     private static final Logger LOG = Logger.getLogger(LineParserStateMachine.class.getName());
-    private static final Pattern PARSER_OFF_PATTERN = Pattern.compile("(?:^|\\W)oft:off(?:\\W||$)");
-    private static final Pattern PARSER_ON_PATTERN = Pattern.compile("(?:^|\\W)oft:on(?:\\W|$)");
+    private static final Pattern PARSER_OFF_PATTERN = Pattern.compile("(?:^|\\W)oft:off(?:\\W|$)",
+            UNICODE_CHARACTER_CLASS);
+    private static final Pattern PARSER_ON_PATTERN = Pattern.compile("(?:^|\\W)oft:on(?:\\W|$)",
+            UNICODE_CHARACTER_CLASS);
 
     private LineParserState state = LineParserState.START;
     private String lastToken = "";
@@ -56,21 +60,32 @@ public class LineParserStateMachine
     // [impl -> dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1]
     public void step(final String line, final String nextLine)
     {
-        if (enabled) {
-            if (PARSER_OFF_PATTERN.matcher(line).find()) {
+        if (enabled)
+        {
+            if (PARSER_OFF_PATTERN.matcher(line).find())
+            {
                 enabled = false;
-            } else {
+            }
+            else
+            {
                 stepEnabled(line, nextLine);
             }
-        } else if (PARSER_ON_PATTERN.matcher(line).find()) {
-            enabled = true;
+        }
+        else
+        {
+            if (PARSER_ON_PATTERN.matcher(line).find()) {
+                enabled = true;
+            }
         }
     }
 
-    private void stepEnabled(final String line, final String nextLine) {
+    private void stepEnabled(final String line, final String nextLine)
+    {
         boolean matched = false;
-        for (final Transition entry : this.transitions) {
-            if ((this.state == entry.getFrom()) && matchToken(line, nextLine, entry)) {
+        for (final Transition entry : this.transitions)
+        {
+            if ((this.state == entry.getFrom()) && matchToken(line, nextLine, entry))
+            {
                 LOG.finest(() -> entry + " : '" + line + "'");
                 entry.getTransitionAction().transit();
                 this.state = entry.getTo();
@@ -78,7 +93,8 @@ public class LineParserStateMachine
                 break;
             }
         }
-        if (!matched) {
+        if (!matched)
+        {
             LOG.finest(() -> "Current state: " + this.state + ", no match for '" + line + "'");
         }
     }

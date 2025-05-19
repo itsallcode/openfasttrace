@@ -1,8 +1,10 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class RstSectionTitlePatternTest
+class TestRstSectionTitlePattern
 {
 
     static Stream<Arguments> testCases()
@@ -85,9 +87,15 @@ class RstSectionTitlePatternTest
         }
         else
         {
-            assertAll(() -> assertThat(
-                    "Lines '" + line + "' + '" + nextLine + "' should be recognized as a section title",
-                    result.isPresent(), is(true)), () -> assertThat(result.get().get(0), is(expected)));
+            if(result.isPresent()) {
+                final List<String> matches = result.get();
+                assertAll(
+                        () -> assertThat(matches, hasSize(1)),
+                        () -> assertThat(matches.get(0), is(expected))
+                );
+            } else {
+                fail("No match found for '" + line + "' + '" + nextLine + "'");
+            }
         }
     }
 }

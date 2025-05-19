@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
+import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -213,6 +214,33 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                         .comment("```" + System.lineSeparator()+ "This is a code block inside a comment."
                                         + System.lineSeparator() + "```")
                         .location("file_with_code_block_in_comment.md", 1)
+                        .build()));
+    }
+
+
+    // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
+    @Test
+    void testDisablingMarkdownParsingForATextBlock() {
+        assertImport("disable_parsing.md", """
+                `req~stop-parsing~1`
+                
+                The next part must not be parsed:
+                
+                <!-- oft:off -->
+                `req~do-not-parse-me~2`
+                
+                Invisible.
+                
+                Needs: utest
+                <!-- oft:on -->
+                
+                Needs: impl
+                """,
+                contains(item()
+                        .id(createId("req", "stop-parsing", 1))
+                        .description("The next part must not be parsed:")
+                        .addNeedsArtifactType("impl")
+                        .location("disable_parsing.md", 1)
                         .build()));
     }
 }

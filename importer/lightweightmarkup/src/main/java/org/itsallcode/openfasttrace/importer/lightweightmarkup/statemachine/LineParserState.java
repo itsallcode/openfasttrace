@@ -7,7 +7,7 @@ package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 public enum LineParserState
 {
     /**
-     * Parser started (at beginning of the file) or outside of a specification
+     * Parser started (at beginning of the file) or outside a specification
      * item
      */
     START,
@@ -23,8 +23,10 @@ public enum LineParserState
     RATIONALE,
     /** Inside a comment section */
     COMMENT,
-    /** Inside a section defining the required coverage */
-    NEEDS,
+    /** Inside a section defining the required coverage (inline form) */
+    NEEDS_LINE,
+    /** Required coverage (list form) */
+    NEEDS_LIST,
     /** Found a title */
     TITLE,
     /** Found tags */

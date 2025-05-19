@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
+import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
 import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.runImporterOnText;
@@ -523,7 +524,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         Needs: arch
                         """,
                 contains(item()
-                        .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
+                        .id(createId("req", "zellzustandsänderung", 1))
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
@@ -544,15 +545,61 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 `req~item2~1
                 Item 2 description
                 """,
-                contains(item().id(SpecificationItemId.createId("req", "item1", 1))
+                contains(item().id(createId("req", "item1", 1))
                         .title("Item 1")
                         .description("Item 1 description")
                         .location("file", 2 + titleLocationOffset)
                         .build(),
-                        item().id(SpecificationItemId.createId("req", "item2", 1))
+                        item().id(createId("req", "item2", 1))
                                 .title("Item 2")
                                 .description("Item 2 description")
                                 .location("file", 6 + (2 * titleLocationOffset))
                                 .build()));
+    }
+
+    // This is a regression test for https://github.com/itsallcode/openfasttrace/issues/449
+    @Test
+    void testParsingNeedsIgnoresExtraListItems() {
+        assertImport("needs_with_extra_list_items.md", """
+                `feat~the-feature~1`
+                
+                Needs: arch
+                
+                * this must not be in needs section
+                """,
+                contains(item()
+                        .id(createId("feat", "the-feature", 1))
+                        .addNeedsArtifactType("arch")
+                        .description("* this must not be in needs section")
+                        .location("needs_with_extra_list_items.md", 1)
+                        .build()));
+    }
+
+    @Test
+    void testNeedsAfterCovers() {
+        assertImport("needs_after_covers.md", """
+                `dsn~needs~3`
+                
+                Description with a bulleted list
+                
+                * this
+                * that
+                
+                Covers:
+                
+                * `req~needs~2`
+                
+                Needs: itest
+                """,
+                contains(item()
+                        .id(createId("dsn", "needs", 3))
+                        .description("Description with a bulleted list"
+                                + System.lineSeparator()
+                                + System.lineSeparator() + "* this"
+                                + System.lineSeparator() + "* that")
+                        .addCoveredId(createId("req", "needs", 2))
+                        .addNeedsArtifactType("itest")
+                        .location("needs_after_covers.md", 1)
+                        .build()));
     }
 }

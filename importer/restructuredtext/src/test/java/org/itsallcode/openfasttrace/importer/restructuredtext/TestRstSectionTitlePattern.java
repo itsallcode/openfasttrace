@@ -1,7 +1,9 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
@@ -86,7 +88,11 @@ class TestRstSectionTitlePattern
         else
         {
             if(result.isPresent()) {
-                assertThat(result.get().get(0), is(expected));
+                final List<String> matches = result.get();
+                assertAll(
+                        () -> assertThat(matches, hasSize(1)),
+                        () -> assertThat(matches.get(0), is(expected))
+                );
             } else {
                 fail("No match found for '" + line + "' + '" + nextLine + "'");
             }

@@ -253,9 +253,43 @@ Needs: dsn
 
 ### Supported Formats
 
+#### Common Requirements for Lightweight Markup Import
+
+Typical OFT specification are written in a lightweight markup language like [Markdown](#markdown-import) or [ReStructured Text](#restructured-text-rst-import). Before we go into the specifics, this section discusses the common requirements.
+
+##### Disabling OFT Parsing for Parts of a Markup File
+`req~disabling-oft-parsing-for-parts-of-a-markup-file~1`
+
+OFT-enhanced markup allows excluding text blocks from OFT parsing with the syntax `oft:on|off`.
+
+Example for Markdown:
+
+    <!-- oft:off -->
+    This part of the document will not be parsed for OFT specification items.
+
+    Until the end marker or the end of the current document is reached
+    <!-- oft:on -->
+
+Example for RST:
+
+    .. oft:off
+    Not imported.
+    .. oft:on
+
+Rationale:
+
+This allows creating OFT examples that do not contribute to the code and avoid accidental recognition of specification items in text that is not supposed to contain them.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+* [feat~rst-import~1](#restructured-text-rst-import)
+
+Needs: dsn
+
 #### Markdown
 
-Markdown is a simple ASCII-based markup format that is designed to be human readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.
+Markdown is a simple ASCII-based markup format that is designed to be human-readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.
 
 Markdown focuses on content over formatting by giving the document structure like headlines, paragraphs and lists. The combination of being lightweight, human-readable and structure-oriented makes it a good fit for writing specifications as code.
 
@@ -305,54 +339,6 @@ Often a system requirement does not affect the high-level architecture. In this 
 Covers:
 
 * [feat~markdown-import~1](#markdown-import)
-
-Needs: dsn
-
-##### Disabling OFT Parsing for Parts of a Markdown File
-`req~disabling-oft-parsing-for-parts-of-a-markdown-file~1`
-
-The Markdown format allows excluding text blocks from OFT parsing with the syntax `oft:on|off`.
-
-Example:
-
-    <!-- oft:off -->
-    This part of the document will not be parsed for OFT specification items.
-
-    Until the end marker or the end of the current document is reached
-    <!-- oft:on -->
-
-Rationale:
-
-This allows creating OFT examples that do not contribute to the code and avoid accidental recognition of specification items in text that is not supposed to contain them.
-
-Covers:
-
-* [feat~markdown-import~1](#markdown-import)
-
-Needs: dsn
-
-### ReStructured Text
-
-##### Disabling OFT Parsing for Parts of an RST File
-`req~disabling-oft-parsing-for-parts-of-an-rst-file~1`
-
-The ReStructured Text format allows excluding text blocks from OFT parsing with the syntax `oft:on|off`.
-
-Example:
-
-    .. oft:off
-    This part of the document will not be parsed for OFT specification items.
-
-    Until the end marker or the end of the current document is reached
-    .. oft:on
-
-Rationale:
-
-This allows creating OFT examples that do not contribute to the code and avoid accidental recognition of specification items in text that is not supposed to contain them.
-
-Covers:
-
-* [feat~rst-import~1](#restructured-text-rst-import)
 
 Needs: dsn
 

@@ -218,7 +218,7 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     }
 
 
-    // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markdown-file~1]
+    // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
     void testDisablingMarkdownParsingForATextBlock() {
         assertImport("disable_parsing.md", """

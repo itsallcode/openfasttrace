@@ -145,7 +145,7 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
-    // [utest -> dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1]
+    // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
     void testDisablingRstParsingForATextBlock() {
         assertImport("disable_parsing.rst", """

@@ -220,37 +220,21 @@ Covers:
 
 Needs: impl, utest, itest
 
-### Markdown Importer
+### Line Parser for Lightweight Markup Import
 
-This section contains requirements that are specific to the Markdown importer.
+RST and Markdown share a common underlying parser that operates on a line-by-line basis.
 
-##### Disabling OFT Parsing for Parts of a Markdown File
-`dsn~disabling-oft-parsing-for-parts-of-a-markdown-file~1`
+##### Disabling OFT Parsing for Parts of a Markup File
+`dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1`
 
-When it encounters the token `oft:off`, the Markdown importer stops extracting specification items until it
-
-* either encounters the token `oft:on`
-* or reaches the end of the current document.
-
-Covers:
-
-* `req~disabling-oft-parsing-for-parts-of-a-markdown-file~1`
-
-Needs: impl, utest
-
-### RST Importer
-
-##### Disabling OFT Parsing for Parts of an RST File
-`dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1`
-
-When it encounters the token `oft:off`, the RST importer stops extracting specification items until it
+When it encounters the token `oft:off`, the line parser stops extracting specification items until it
 
 * either encounters the token `oft:on`
 * or reaches the end of the current document.
 
 Covers:
 
-* `req~disabling-oft-parsing-for-parts-of-an-rst-file~1`
+* `req~disabling-oft-parsing-for-parts-of-a-markup-file~1`
 
 Needs: impl, utest
 

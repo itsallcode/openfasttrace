@@ -1,4 +1,4 @@
-# OpenFastTrace 4.2.0, released 2025-05-18
+# OpenFastTrace 4.2.0, released 2025-05-19
 
 Code name: Markdown code blocks
 

@@ -25,7 +25,7 @@ public enum LineParserState
     COMMENT,
     /** Inside a section defining the required coverage (inline form) */
     NEEDS_LINE,
-    /** Required coverage (list form */
+    /** Required coverage (list form) */
     NEEDS_LIST,
     /** Found a title */
     TITLE,

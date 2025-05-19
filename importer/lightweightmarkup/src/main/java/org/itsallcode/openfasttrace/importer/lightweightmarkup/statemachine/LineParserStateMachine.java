@@ -56,8 +56,7 @@ public class LineParserStateMachine
      *            patterns that span multiple lines like underlined titles in
      *            Markdown or RST.
      */
-    // [impl -> dsn~disabling-oft-parsing-for-parts-of-a-markdown-file~1]
-    // [impl -> dsn~disabling-oft-parsing-for-parts-of-an-rst-file~1]
+    // [impl -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     public void step(final String line, final String nextLine)
     {
         if (enabled)

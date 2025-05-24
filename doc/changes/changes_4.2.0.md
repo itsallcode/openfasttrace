@@ -10,6 +10,10 @@ We also added a whole section about understanding and fixing broken links betwee
 
 The new token `oft:on|off` allows switching off OFT parsing for certain text passages in Markdown and RST documents.
 
+The Central Repository changed its deployment mechanism. We adapted the project accordingly.
+
+Finally, we updated test dependencies and Maven plugins.
+
 ## Features
 
 * #437: Upgrade build and test dependencies on top of 4.1.0
@@ -22,3 +26,7 @@ The new token `oft:on|off` allows switching off OFT parsing for certain text pas
 * #449: Fix parsing past end of "needs" paragraph.
 * #440: Added Tag importer support for TOML files.
 * #442: Added support for javascript file extensions `.cjs`, `.mjs` and `.ejs`
+
+## Refactoring
+
+#452: Migrated Deployment to new Central Repository mechanism

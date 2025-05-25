@@ -1,4 +1,4 @@
-# OpenFastTrace 4.2.0, released 2025-05-24
+# OpenFastTrace 4.2.0, released 2025-05-25
 
 Code name: Markdown code blocks
 
@@ -29,4 +29,5 @@ Finally, we updated test dependencies and Maven plugins.
 
 ## Refactoring
 
-#452: Migrated Deployment to new Central Repository mechanism
+* #452: Migrated Deployment to new Central Repository mechanism
+* #454: Fixed deployment to Maven Central

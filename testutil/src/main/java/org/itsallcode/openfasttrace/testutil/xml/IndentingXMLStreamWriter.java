@@ -9,7 +9,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     public static final String DEFAULT_INDENT = "  ";
 
     /**
-     * "\n"; the normalized representation of end-of-line in
+     * "\n"; the normalized end-of-line representation in
      * <a href="http://www.w3.org/TR/xml11/#sec-line-ends">XML</a>.
      */
     public static final String NORMAL_END_OF_LINE = "\n";
@@ -28,7 +28,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     /** stack[depth] indicates what's been written into the current scope. */
     private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
 
-    /** newLine followed by copies of indent. */
+    /** Prefix that defines how deeply a line is indented. */
     private char[] linePrefix = null;
 
     public IndentingXMLStreamWriter(final XMLStreamWriter out)
@@ -203,9 +203,9 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to write markup, by writing a new line and indentation.
+     * Prepare to write markup by writing a new line and indentation.
      *
-     * @throws XMLStreamException
+     * @throws XMLStreamException here for interface compatibility only
      */
     protected void beforeMarkup() throws XMLStreamException
     {
@@ -214,7 +214,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
                 && (this.depth > 0 || soFar != 0)) // not the first line
         {
             writeNewLine(this.depth);
-            if (this.depth > 0 && this.indent.length() > 0)
+            if (this.depth > 0 && !this.indent.isEmpty())
             {
                 afterMarkup(); // indentation was written
             }
@@ -234,9 +234,9 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to start an element, by allocating stack space.
+     * Prepare to start an element by allocating stack space.
      *
-     * @throws XMLStreamException
+     * @throws XMLStreamException here for interface compatibility only
      */
     protected void beforeStartElement() throws XMLStreamException
     {
@@ -259,9 +259,9 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to end an element, by writing a new line and indentation.
+     * Prepare to end an element by writing a new line and indentation.
      *
-     * @throws XMLStreamException
+     * @throws XMLStreamException here for interface compatibility only
      */
     protected void beforeEndElement() throws XMLStreamException
     {
@@ -283,7 +283,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     /**
      * Note that a document was ended.
      *
-     * @throws XMLStreamException
+     * @throws XMLStreamException here for interface compatibility only
      */
     protected void afterEndDocument() throws XMLStreamException
     {

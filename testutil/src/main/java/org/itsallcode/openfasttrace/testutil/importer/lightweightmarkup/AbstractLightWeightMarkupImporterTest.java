@@ -20,6 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+/**
+ * Base class for testing lightweight markup importers.
+ */
 public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final Path PATH = Path.of("/a/b/c.markdown");
@@ -27,11 +30,26 @@ public abstract class AbstractLightWeightMarkupImporterTest
     private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
     private final int titleLocationOffset;
 
+    /**
+     * Creates a new instance of the test base.
+     * 
+     * @param titleLocationOffset
+     *            offset to add to line numbers when a title is present
+     */
     protected AbstractLightWeightMarkupImporterTest(final int titleLocationOffset)
     {
         this.titleLocationOffset = titleLocationOffset;
     }
 
+    /**
+     * Format a title in the markup language.
+     * 
+     * @param title
+     *            title text
+     * @param level
+     *            heading level
+     * @return formatted title
+     */
     protected abstract String formatTitle(final String title, int level);
 
     // [utest -> dsn~md.specification-item-id-format~3]
@@ -50,12 +68,32 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 .build()));
     }
 
+    /**
+     * Assert that importing the given input produces specification items that match the given matcher.
+     * 
+     * @param path
+     *            path to use for the input file
+     * @param input
+     *            input text to import
+     * @param matcher
+     *            matcher to verify the imported specification items
+     */
     protected void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
         assertImport(Path.of(path), input, matcher);
     }
 
+    /**
+     * Assert that importing the given input produces specification items that match the given matcher.
+     * 
+     * @param path
+     *            path to use for the input file
+     * @param input
+     *            input text to import
+     * @param matcher
+     *            matcher to verify the imported specification items
+     */
     protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
@@ -68,6 +106,11 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 .replaceAll(match -> formatTitle(match.group(1), Integer.parseInt(match.group(2))));
     }
 
+    /**
+     * Get the importer factory for testing.
+     * 
+     * @return importer factory
+     */
     protected abstract ImporterFactory getImporterFactory();
 
     // [utest -> dsn~md.requirement-references~1]
@@ -562,9 +605,9 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testParsingNeedsIgnoresExtraListItems() {
         assertImport("needs_with_extra_list_items.md", """
                 `feat~the-feature~1`
-                
+
                 Needs: arch
-                
+
                 * this must not be in needs section
                 """,
                 contains(item()
@@ -579,16 +622,16 @@ public abstract class AbstractLightWeightMarkupImporterTest
     void testNeedsAfterCovers() {
         assertImport("needs_after_covers.md", """
                 `dsn~needs~3`
-                
+
                 Description with a bulleted list
-                
+
                 * this
                 * that
-                
+
                 Covers:
-                
+
                 * `req~needs~2`
-                
+
                 Needs: itest
                 """,
                 contains(item()

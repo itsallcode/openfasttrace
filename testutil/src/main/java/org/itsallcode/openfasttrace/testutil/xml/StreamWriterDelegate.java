@@ -4,13 +4,24 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+/**
+ * This interface allows intercepting calls to a stream writer, pre-processing
+ * them and then handing the rest of the work of to a given delegate.
+ */
 public abstract class StreamWriterDelegate implements XMLStreamWriter
 {
+    /**
+     * Creates a new instance of the delegate.
+     *
+     * @param out
+     *            stream writer to delegate to
+     */
     protected StreamWriterDelegate(final XMLStreamWriter out)
     {
         this.out = out;
     }
 
+    /** Stream writer to delegate to. */
     protected XMLStreamWriter out;
 
     @Override

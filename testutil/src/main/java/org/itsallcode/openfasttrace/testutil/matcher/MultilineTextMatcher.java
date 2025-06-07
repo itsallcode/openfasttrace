@@ -7,7 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 /**
- * This class implements a matcher for multiline text that helps finding the
+ * This class implements a matcher for multiline text that helps find the
  * differences more quickly.
  */
 public class MultilineTextMatcher extends TypeSafeMatcher<String>
@@ -16,6 +16,12 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
     private final String originalText;
     private String text;
 
+    /**
+     * Creates a new matcher for the given text.
+     * 
+     * @param originalText
+     *            text to match against
+     */
     public MultilineTextMatcher(final String originalText)
     {
         this.originalText = originalText;
@@ -23,11 +29,11 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
 
     /**
      * Match the text against the original text.
-     * 
+     * <p>
      * A full match (including line separators) is required.
-     * 
+     * </p>
      * @param text
-     *            the text to be matched against the original text.
+     *            text to be matched against the original text.
      */
     @Override
     public boolean matchesSafely(final String text)
@@ -92,7 +98,7 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
      * 
      * @param lines
      *            lines of text
-     * @return the matcher
+     * @return multiline text matcher
      */
     public static MultilineTextMatcher matchesAllLines(final String... lines)
     {

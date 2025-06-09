@@ -608,9 +608,14 @@
                     </executions>
                 </plugin>
                 <plugin>
+                    <!-- This plugin needs to be skipped when using the central-publishing-maven-plugin
+ -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.1.4</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
                 </plugin>
                 <!--This
                 plugin's configuration is used to store Eclipse 
@@ -668,8 +673,9 @@
                     <extensions>true</extensions>
                     <configuration>
                         <publishingServerId>central</publishingServerId>
-                        <autoPublish>true</autoPublish>
+                        <autoPublish>false</autoPublish>
                         <waitUntil>validated</waitUntil>
+                        <deploymentName>Manual deployment of OpenFastTrace</deploymentName>
                     </configuration>
                 </plugin>
                 <plugin>

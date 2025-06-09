@@ -17,6 +17,24 @@ public class CompareAssertions
         // Not instantiable
     }
 
+    /**
+     * Test that a comparator is consistent with equals and follows the {@link Comparator} contract.
+     * 
+     * @param <T>
+     *            type of objects that may be compared by the comparator
+     * @param comparator
+     *            comparator to test
+     * @param o
+     *            reference object
+     * @param smaller
+     *            an object that is smaller than the reference object
+     * @param equal
+     *            an object that is equal to the reference object
+     * @param greater
+     *            an object that is greater than the reference object
+     * @param nullValueSupported
+     *            {@code true} if the comparator supports null values
+     */
     public static <T> void testComparatorConsistentWithEquals(Comparator<? super T> comparator, T o,
             T smaller, T equal, T greater, boolean nullValueSupported)
     {
@@ -24,6 +42,24 @@ public class CompareAssertions
         testConsistencyWithEquals(comparator, o, smaller, equal, greater);
     }
 
+    /**
+     * Test that a comparator follows the {@link Comparator} contract.
+     * 
+     * @param <T>
+     *            type of objects that may be compared by the comparator
+     * @param comparator
+     *            comparator to test
+     * @param o
+     *            reference object
+     * @param smaller
+     *            an object that is smaller than the reference object
+     * @param equal
+     *            an object that is equal to the reference object
+     * @param greater
+     *            an object that is greater than the reference object
+     * @param nullValueSupported
+     *            {@code true} if the comparator supports null values
+     */
     public static <T> void testComparator(Comparator<? super T> comparator, T o, T smaller, T equal,
             T greater, boolean nullValueSupported)
     {
@@ -101,6 +137,20 @@ public class CompareAssertions
         assertEquals(o.equals(greater), comparator.compare(o, greater) == 0);
     }
 
+    /**
+     * Test that a comparable is consistent with equals and follows the {@link Comparable} contract.
+     * 
+     * @param <T>
+     *            type of objects that may be compared
+     * @param o
+     *            reference object
+     * @param smaller
+     *            an object that is smaller than the reference object
+     * @param equal
+     *            an object that is equal to the reference object
+     * @param greater
+     *            an object that is greater than the reference object
+     */
     public static <T extends Comparable<? super T>> void testComparableConsistentWithEquals(T o,
             T smaller, T equal, T greater)
     {
@@ -108,6 +158,20 @@ public class CompareAssertions
                 false);
     }
 
+    /**
+     * Test that a comparable follows the {@link Comparable} contract.
+     * 
+     * @param <T>
+     *            type of objects that may be compared
+     * @param o
+     *            reference object
+     * @param smaller
+     *            an object that is smaller than the reference object
+     * @param equal
+     *            an object that is equal to the reference object
+     * @param greater
+     *            an object that is greater than the reference object
+     */
     public static <T extends Comparable<? super T>> void testComparable(T o, T smaller, T equal,
             T greater)
     {

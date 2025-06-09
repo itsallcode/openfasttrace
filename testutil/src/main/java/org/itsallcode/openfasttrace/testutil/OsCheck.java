@@ -4,16 +4,25 @@ import java.util.Locale;
 
 /**
  * Helper class to check the operating system this Java VM runs in.
- *
+ * <p>
  * please keep the notes below as a pseudo-license:
- *
+ * </p>
+ * <p>
  * http://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
- * compare to
- * http://svn.terracotta.org/svn/tc/dso/tags/2.6.4/code/base/common/src/com/tc/util/runtime/Os.java
- * http://www.docjar.com/html/api/org/apache/commons/lang/SystemUtils.java.html
+ * </p>
+ * <p>
+ * compare to:
+ * </p>
+ * <ul>
+ * <li>http://svn.terracotta.org/svn/tc/dso/tags/2.6.4/code/base/common/src/com/tc/util/runtime/Os.java</li>
+ * <li>http://www.docjar.com/html/api/org/apache/commons/lang/SystemUtils.java.html</li>
+ * </ul>
  */
 public class OsCheck
 {
+    /**
+     * Create a new instance of the operating system check.
+     */
     public OsCheck()
     {
         // Default constructor to fix compiler warning "missing-explicit-ctor"
@@ -41,15 +50,15 @@ public class OsCheck
     private static OSType detectOperatingSystemType()
     {
         final String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-        if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0))
+        if (os.contains("mac") || os.contains("darwin"))
         {
             return OSType.MACOS;
         }
-        else if (os.indexOf("win") >= 0)
+        else if (os.contains("win"))
         {
             return OSType.WINDOWS;
         }
-        else if (os.indexOf("linux") >= 0)
+        else if (os.contains("linux"))
         {
             return OSType.LINUX;
         }

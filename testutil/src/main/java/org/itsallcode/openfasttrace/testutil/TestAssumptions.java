@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assumptions;
 import org.opentest4j.TestAbortedException;
 
 /**
- * Assumptions for unit and integration tests, see {@link TestAbortedException}.
+ * Assumptions for unit and integration tests.
  */
 public class TestAssumptions
 {
@@ -16,12 +16,11 @@ public class TestAssumptions
     }
 
     /**
-     * This ensures that the current JDK supports using the
-     * {@link SecurityManager}. Starting with Java 19 the security manager is
-     * not supported any more.
+     * This ensures that the current JDK supports using Java's security manager.
+     * Starting with Java 19, the security manager is not supported anymore.
      * 
      * @throws TestAbortedException
-     *             if the JVM does not support {@link SecurityManager}.
+     *             if the JVM does not support Java's security manager.
      */
     public static void assumeSecurityManagerSupported() throws TestAbortedException
     {

@@ -23,12 +23,23 @@ public final class ShortClassNameFormatter extends Formatter
 {
     private static final String FORMAT = "%1$tF %1$tT [%4$s] %2$s - %5$s %6$s%n";
 
+    /**
+     * Create a new instance of the formatter.
+     */
     public ShortClassNameFormatter()
     {
         // Suppress warning "class ... declares no explicit constructors,
         // thereby exposing a default constructor"
     }
 
+    /**
+     * Formats the given log record as a single line with the shortened class
+     * name.
+     * 
+     * @param logRecord
+     *            log record to format
+     * @return formatted log record
+     */
     @Override
     public String format(final LogRecord logRecord)
     {

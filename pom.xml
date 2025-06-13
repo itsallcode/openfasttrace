@@ -16,9 +16,6 @@
              We use the minimal timestamp to suppress a warning by artifact:compare. -->
         <project.build.outputTimestamp>1980-01-01T00:00:02Z</project.build.outputTimestamp>
     </properties>
-    <prerequisites>
-        <maven>3.9.9</maven>
-    </prerequisites>
     <modules>
         <module>parent</module>
         <module>api</module>

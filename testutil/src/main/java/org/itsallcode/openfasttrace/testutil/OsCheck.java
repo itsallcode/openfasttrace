@@ -33,7 +33,14 @@ public class OsCheck
      */
     public enum OSType
     {
-        WINDOWS, MACOS, LINUX, OTHER
+        /** Windows OS */
+        WINDOWS,
+        /** macOS */
+        MACOS,
+        /** Linux */
+        LINUX,
+        /** Any other operating system */
+        OTHER
     }
 
     /**

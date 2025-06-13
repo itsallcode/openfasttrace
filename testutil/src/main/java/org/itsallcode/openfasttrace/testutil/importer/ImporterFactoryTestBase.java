@@ -42,7 +42,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     }
 
     @BeforeEach
-    public void initMocks()
+    void initMocks()
     {
         lenient().when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }

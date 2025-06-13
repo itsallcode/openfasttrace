@@ -35,6 +35,8 @@ public final class ImportAssertions
      *            content to be imported
      * @param matcher
      *            matcher that defines expectation for imported data
+     * @param importerFactory
+     *            factory that generates the importer
      */
     public static void assertImportWithFactory(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher,
@@ -44,7 +46,8 @@ public final class ImportAssertions
     }
 
     /**
-     * Run an importer on the given text and return the imported specification items.
+     * Run an importer on the given text and return the imported specification
+     * items.
      * 
      * @param path
      *            path to use for the input file

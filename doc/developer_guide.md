@@ -33,10 +33,10 @@ dependencies {
 
 ## Build Time Dependencies
 
-The list below shows all build time dependencies in alphabetical order. Note that except the Maven build tool all required modules are downloaded automatically by Maven.
+The list below shows all build time dependencies in alphabetical order. Note that except the Maven build tool, Maven downloads all required modules automatically.
 
 | Dependency                                                                         | Purpose                                                | License                       |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------- |
+|------------------------------------------------------------------------------------|--------------------------------------------------------|-------------------------------|
 | [Apache Maven](https://maven.apache.org/)                                          | Build tool                                             | Apache License 2.0            |
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                          | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher)       | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
@@ -46,7 +46,7 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 
 ## Preparations
 
-OpenFastTrace uses [Apache Maven](https://maven.apache.org) as technical project management tool that resolves and downloads the build-dependencies before building the packages.
+OpenFastTrace uses [Apache Maven](https://maven.apache.org) as the technical project management tool that resolves and downloads the build-dependencies before building the packages.
 
 ### Installation of Initial Build Dependencies on Linux
 
@@ -126,7 +126,7 @@ To build and test with a later version, add argument `-Djava.version=17` to the 
 
 By default, Maven builds the OFT modules sequentially.
 
-To speedup the build and build modules in parallel, add argument `-T 1C` to the Maven command.
+To speed up the build and build modules in parallel, add argument `-T 1C` to the Maven command.
 
 ### Run Requirements Tracing
 
@@ -140,7 +140,7 @@ Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr;
 
 ## Configure the `itsallcode style` formatter
 
-All sub-projects come with formatter and save actions configuration for Eclipse.
+All subprojects come with formatter and save actions configuration for Eclipse.
 
 If you use a different IDE like IntelliJ, please import the formatter configuration [itsallcode_formatter.xml](itsallcode_formatter.xml).
 
@@ -183,7 +183,7 @@ This project is configured to produce exactly the same artifacts each time when 
   ```bash
   mvn initialize artifact:check-buildplan
   ```
-* Verify that the build produces excatly the same artifacts:
+* Verify that the build produces exactly the same artifacts:
   ```bash
   mvn -T 1C clean install -DskipTests
   mvn -T 1C clean verify artifact:compare -DskipTests
@@ -199,18 +199,64 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
 
 1. Checkout the `main` branch.
 2. Create a new "prepare-release" branch.
-3. Update version in
+3. Update the version in
     * `openfasttrace-parent/pom.xml` (`revision` property)
     * `README.md`
     * `doc/developer_guide.md`
-4. Add changes in new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
+4. Add changes in a new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
 5. Commit and push changes.
 6. Create a new pull request, have it reviewed and merged to `main`.
 
 ### Perform the Release
 
 1. Start the release workflow
-  * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace --ref main`
-  * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
-2. Update title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace/releases).
+   * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace --ref main`
+   * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
+2. Update the title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace/releases).
 3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
+
+## Module Overview
+
+This section explains the module structure of OpenFastTrace.
+
+| Module                                     | Deployed to MC | Content                                                  |
+|--------------------------------------------|----------------|----------------------------------------------------------|
+| **Core Modules**                           |                |                                                          |
+| `openfasttrace-api`                        | ✅              | Core API interfaces and contracts for the tracing system |
+| `openfasttrace-core`                       | ✅              | Main implementation of tracing logic and algorithms      |
+| `openfasttrace-testutil`                   | ❌              | Test utilities and helpers (internal development only)   |
+| **Exporters**                              |                |                                                          |
+| `openfasttrace-exporter-common`            | ✅              | Common utilities and base classes for exporters          |
+| `openfasttrace-exporter-specobject`        | ✅              | Exporter for SpecObject format                           |
+| **Importers**                              |                |                                                          |
+| `openfasttrace-importer-lightweightmarkup` | ✅              | Base classes for lightweight markup importers            |
+| `openfasttrace-importer-markdown`          | ✅              | Importer for Markdown documents with requirement tags    |
+| `openfasttrace-importer-restructuredtext`  | ✅              | Importer for reStructuredText documents                  |
+| `openfasttrace-importer-specobject`        | ✅              | Importer for SpecObject XML format                       |
+| `openfasttrace-importer-tag`               | ✅              | Importer for tagged source code comments                 |
+| `openfasttrace-importer-xmlparser`         | ✅              | Common XML parsing utilities for importers               |
+| `openfasttrace-importer-zip`               | ✅              | Importer for ZIP archives containing requirements        |
+| **Reporters**                              |                |                                                          |
+| `openfasttrace-reporter-plaintext`         | ✅              | Plain text report generator                              |
+| `openfasttrace-reporter-html`              | ✅              | HTML report generator with interactive features          |
+| `openfasttrace-reporter-aspec`             | ✅              | ASpec format reporter for augmented specifications       |
+| **Product**                                |                |                                                          |
+| `openfasttrace` (product)                  | ✅              | Complete application bundle with all modules (uber-JAR)  |
+| **Infrastructure**                         |                |                                                          |
+| `openfasttrace-parent`                     | ❌              | Base parent POM (build infrastructure)                   |
+| `openfasttrace-mc-deployable-parent`       | ❌              | Deployment parent POM (build infrastructure)             |
+| `openfasttrace` (root)                     | ❌              | Root aggregator POM (build infrastructure)               |
+
+Legend:
+
+✅ Deployed to Maven Central: Public API modules that external users can depend on
+
+❌ Not Deployed: Internal infrastructure, test utilities, and build configuration
+
+### Why Two Parent POMs?
+
+As you can see in the table above, not all modules are intended to be deployed on Maven Central. The distinction is made by using two parent POMs. 
+
+The base POM is `openfasttrace-parent`, it mainly contains common dependencies and build configuration. On top of that, `openfasttrace-mc-deployable-parent` adds signing and Maven central deployment. 
+
+This structure ensures that only user-facing components are published to Maven Central while keeping internal development tools and build infrastructure private.

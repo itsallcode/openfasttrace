@@ -1,0 +1,85 @@
+<!--
+This parent POM specifically handles deployment configuration for modules that need to be published to Maven Central.
+
+It is maintained separately from the main parent POM for the following reasons:
+
+- Contains Maven Central specific configurations like GPG signing and deployment settings
+- Avoids cluttering the main parent POM with deployment-specific settings
+- Allows selective application of deployment configuration only to modules that need it
+- Provides flexibility to adapt deployment settings without affecting other modules
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>openfasttrace-mc-deployable-parent</artifactId>
+    <version>${revision}</version>
+    <name>OpenFastTrace Parent for modules deployed to Maven Central</name>
+    <packaging>pom</packaging>
+    <parent>
+        <relativePath>../parent/pom.xml</relativePath>
+        <groupId>org.itsallcode.openfasttrace</groupId>
+        <artifactId>openfasttrace-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <description>Free requirement tracking suite</description>
+    <url>https://github.com/itsallcode/openfasttrace</url>
+    <profiles>
+        <profile>
+            <id>central-publishing</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>false</autoPublish>
+                            <waitUntil>validated</waitUntil>
+                            <deploymentName>Manual deployment of OpenFastTrace</deploymentName>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- This plugin needs to be skipped when using the central-publishing-maven-plugin
+ -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>3.1.4</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>central</id>
+            <name>Maven Central Snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>

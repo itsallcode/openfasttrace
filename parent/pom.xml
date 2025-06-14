@@ -582,6 +582,16 @@
                         </execution>
                     </executions>
                 </plugin>
+                <!-- The maven-deploy-plugin MUST be disabled when using the central-publishing-maven-plugin!
+-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <!-- The version does not really matter if all we want is disabling the plugin -->
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
                 <!--This
                 plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
@@ -669,16 +679,7 @@
             </plugin>
         </plugins>
     </reporting>
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>central</id>
-            <name>Maven Central Snapshots</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <!-- With the central-publishing-plugin, the distribution management section
+    is now obsolete, since the only place this plugin can deploy to is Maven
+    central anyway. -->
 </project>

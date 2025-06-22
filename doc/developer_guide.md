@@ -40,7 +40,7 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 | [Apache Maven](https://maven.apache.org/)                                          | Build tool                                             | Apache License 2.0            |
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                          | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher)       | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
-| [JUnit](https://junit.org/junit5)                                                  | Unit testing framework                                 | Eclipse Public License 1.0    |
+| [JUnit](https://junit.org)                                                         | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](https://github.com/mockito/mockito)                                      | Mocking framework                                      | MIT License                   |
 | [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls           | Eclipse Public License 2.0    |
 

@@ -51,7 +51,7 @@ jobs:
 
       - name: Publish to Maven Central Repository
         if: ${{ !inputs.skip-deploy-maven-central }}
-        run: mvn --batch-mode deploy -Pcentral-publishing -DdeploymentName="Deployed OFT via GitHub workflow release.yml"
+        run: mvn --batch-mode deploy -Pcentral-publishing -DautoPublish=true -DdeploymentName="Deployed OFT via GitHub workflow release.yml"
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_PORTAL_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PORTAL_TOKEN }}

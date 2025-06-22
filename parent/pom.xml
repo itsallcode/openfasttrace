@@ -594,8 +594,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--This
-                plugin's configuration is used to store Eclipse 
+                <!-- This plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -655,7 +654,4 @@
             </plugin>
         </plugins>
     </reporting>
-    <!-- With the central-publishing-plugin, the distribution management section
-    is now obsolete, since the only place this plugin can deploy to is Maven
-    central anyway. -->
 </project>

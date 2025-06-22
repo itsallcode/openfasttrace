@@ -58,7 +58,7 @@ jobs:
         if: ${{ !inputs.skip-deploy-maven-central }}
         run: |
           mvn --batch-mode deploy -Pcentral-publishing \
-               -DskipPublishing=false
+               -DskipPublishing=false \
                -DautoPublish=${{ inputs.maven-central-auto-publish }} \
                -DdeploymentName="Auto-deploy OFT via release.yml"
         env:

@@ -416,8 +416,7 @@
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
-                    <argLine>
-                        <!-- Required for Java >= 18 --> ${test.args} </argLine>
+                    <argLine><!-- Required for Java >= 18 --> ${test.args} </argLine>
                 </configuration>
                 <executions>
                     <execution>
@@ -450,7 +449,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.9.9</version>
+                                    <version>3.8.7</version>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -517,6 +516,15 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.18.0</version>
+            </plugin>
+            <plugin>
+                <!-- Deployment of this module not required -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -586,18 +594,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- The maven-deploy-plugin MUST be disabled when using the central-publishing-maven-plugin!
--->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <!-- The version does not really matter if all we want is disabling the plugin -->
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-                <!--This
-                plugin's configuration is used to store Eclipse 
+                <!-- This plugin's configuration is used to store Eclipse 
                     m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -645,34 +642,6 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                <plugin>
-                    <groupId>org.sonatype.central</groupId>
-                    <artifactId>central-publishing-maven-plugin</artifactId>
-                    <version>0.7.0</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <publishingServerId>central</publishingServerId>
-                        <centralBaseUrl>https://central.sonatype.com</centralBaseUrl>
-                        <centralSnapshotsUrl>https://central.sonatype.com</centralSnapshotsUrl>
-                        <autoPublish>false</autoPublish>
-                        <waitUntil>validated</waitUntil>
-                        <deploymentName>Manual deployment of OpenFastTrace</deploymentName>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.2.7</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -685,7 +654,4 @@
             </plugin>
         </plugins>
     </reporting>
-    <!-- With the central-publishing-plugin, the distribution management section
-    is now obsolete, since the only place this plugin can deploy to is Maven
-    central anyway. -->
 </project>

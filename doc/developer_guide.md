@@ -40,7 +40,7 @@ The list below shows all build time dependencies in alphabetical order. Note tha
 | [Apache Maven](https://maven.apache.org/)                                          | Build tool                                             | Apache License 2.0            |
 | [Equals Verifier](https://github.com/jqno/equalsverifier)                          | Automatic contract checker for `equals()` and `hash()` | Apache License 2.0            |
 | [Hamcrest Auto Matcher](https://github.com/itsallcode/hamcrest-auto-matcher)       | Speed-up for building Hamcrest matchers                | GNU General Public License V3 |
-| [JUnit](https://junit.org/junit5)                                                  | Unit testing framework                                 | Eclipse Public License 1.0    |
+| [JUnit](https://junit.org)                                                         | Unit testing framework                                 | Eclipse Public License 1.0    |
 | [Mockito](https://github.com/mockito/mockito)                                      | Mocking framework                                      | MIT License                   |
 | [JUnit5 System Extensions](https://github.com/itsallcode/junit5-system-extensions) | JUnit extension for testing `System.x` calls           | Eclipse Public License 2.0    |
 
@@ -260,3 +260,42 @@ As you can see in the table above, not all modules are intended to be deployed o
 The base POM is `openfasttrace-parent`, it mainly contains common dependencies and build configuration. On top of that, `openfasttrace-mc-deployable-parent` adds signing and Maven central deployment. 
 
 This structure ensures that only user-facing components are published to Maven Central while keeping internal development tools and build infrastructure private.
+
+## Debugging Maven Central Deployment
+
+### Build Deployment Bundle
+
+Build deployment bundle to check if the expected modules are included:
+
+```sh
+mvn -T1C  deploy -Pcentral-publishing -DskipPublishing=true -DskipTests
+```
+
+This will build `central-bundle.zip` in one of the modules. Find it with `find . -name "central-bundle.zip"`, then check it's content with `unzip -l api/target/central-publishing/central-bundle.zip`.
+
+Ensure that neither `testutil` nor any parent module is included.
+
+### Verify Deployment Preconditions
+
+Configure Maven Central credentials in `~/.m2/settings.xml`: 
+
+```xml
+<settings>
+    <servers>
+        <server>
+            <id>central</id>
+            <username>user</username>
+            <password>password</password>
+        </server>
+    </servers>
+</settings>
+
+```
+
+The following command will upload the bundle to Maven Central without publishing:
+
+```sh
+mvn -T1C clean deploy -Pcentral-publishing -DskipPublishing=true -DautoPublish=false -DskipTests
+```
+
+Then go to https://central.sonatype.com/publishing/deployments and check that the deployment is marked as "validated" and that the expected components are included. Don't forget to click the "Drop" button to avoid accidentally publishing the release.

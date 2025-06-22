@@ -37,6 +37,7 @@ It is maintained separately from the main parent POM for the following reasons:
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
+                            <skipPublishing>false</skipPublishing>
                             <autoPublish>false</autoPublish>
                             <waitUntil>validated</waitUntil>
                             <deploymentName>Manual deployment of OpenFastTrace</deploymentName>
@@ -55,6 +56,11 @@ It is maintained separately from the main parent POM for the following reasons:
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>3.1.4</version>
                     </plugin>
                 </plugins>
             </build>

@@ -42,7 +42,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(START      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(START      , TITLE      , SECTION_TITLE        , this::rememberTitle                ),
                 transition(START      , START      , MdPattern.FORWARD    , this::forward                      ),
-                transition(START      , CODE_BLOCK , MdPattern.CODE_BEGIN , () -> {}                            ),
+                transition(START      , CODE_BLOCK , MdPattern.CODE_BEGIN , () -> {}                           ),
                 transition(START      , START      , MdPattern.EVERYTHING , () -> {}                           ),
 
                 transition(TITLE      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -59,11 +59,12 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(SPEC_ITEM  , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(SPEC_ITEM  , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(SPEC_ITEM  , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(SPEC_ITEM  , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(SPEC_ITEM  , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(SPEC_ITEM  , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(SPEC_ITEM  , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(SPEC_ITEM  , DESCRIPTION, MdPattern.DESCRIPTION, this::beginDescription             ),
+                transition(SPEC_ITEM  , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
                 transition(SPEC_ITEM  , DESCRIPTION, MdPattern.NOT_EMPTY  , this::beginDescription             ),
 
                 transition(DESCRIPTION, SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -72,10 +73,11 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(DESCRIPTION, COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(DESCRIPTION, COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(DESCRIPTION, DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(DESCRIPTION, NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(DESCRIPTION, SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(DESCRIPTION, NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(DESCRIPTION, TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(DESCRIPTION, TAGS       , MdPattern.TAGS       , () -> {}                           ),
+                transition(DESCRIPTION, START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
                 transition(DESCRIPTION, DESCRIPTION, MdPattern.EVERYTHING , this::appendDescription            ),
 
                 transition(RATIONALE  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -83,8 +85,8 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(RATIONALE  , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(RATIONALE  , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(RATIONALE  , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(RATIONALE  , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(RATIONALE  , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(RATIONALE  , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(RATIONALE  , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(RATIONALE  , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(RATIONALE  , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(RATIONALE  , RATIONALE  , MdPattern.EVERYTHING , this::appendRationale              ),
@@ -93,8 +95,8 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(COMMENT    , TITLE      , SECTION_TITLE        , () -> {endItem(); rememberTitle();}),
                 transition(COMMENT    , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(COMMENT    , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(COMMENT    , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(COMMENT    , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(COMMENT    , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(COMMENT    , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(COMMENT    , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
                 transition(COMMENT    , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(COMMENT    , TAGS       , MdPattern.TAGS       , () -> {}                           ),
@@ -107,8 +109,8 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(COVERS     , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
                 transition(COVERS     , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(COVERS     , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(COVERS     , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(COVERS     , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(COVERS     , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(COVERS     , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(COVERS     , COVERS     , MdPattern.EMPTY      , () -> {}                           ),
                 transition(COVERS     , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
                 transition(COVERS     , TAGS       , MdPattern.TAGS       , () -> {}                           ),
@@ -121,8 +123,8 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(DEPENDS    , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
                 transition(DEPENDS    , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(DEPENDS    , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(DEPENDS    , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(DEPENDS    , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
+                transition(DEPENDS    , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(DEPENDS    , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
                 transition(DEPENDS    , DEPENDS    , MdPattern.EMPTY      , () -> {}                           ),
                 transition(DEPENDS    , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(DEPENDS    , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
@@ -131,18 +133,17 @@ class MarkdownImporter extends LightWeightMarkupImporter
 
                 // [impl->dsn~md.needs-coverage-list-single-line~2]
                 // [impl->dsn~md.needs-coverage-list~1]
-                transition(NEEDS      , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
-                transition(NEEDS      , TITLE      , SECTION_TITLE        , () -> {endItem(); rememberTitle();}),
-                transition(NEEDS      , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
-                transition(NEEDS      , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
-                transition(NEEDS      , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(NEEDS      , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(NEEDS      , NEEDS      , MdPattern.NEEDS_REF  , this::addNeeds                     ),
-                transition(NEEDS      , NEEDS      , MdPattern.EMPTY      , () -> {}                           ),
-                transition(NEEDS      , COVERS     , MdPattern.COVERS     , () -> {}                           ),
-                transition(NEEDS      , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
-                transition(NEEDS      , TAGS       , MdPattern.TAGS       , () -> {}                           ),
-                transition(NEEDS      , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
+                transition(NEEDS_LIST , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
+                transition(NEEDS_LIST , TITLE      , SECTION_TITLE        , () -> {endItem(); rememberTitle();}),
+                transition(NEEDS_LIST , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
+                transition(NEEDS_LIST , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
+                transition(NEEDS_LIST , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
+                transition(NEEDS_LIST , NEEDS_LIST , MdPattern.NEEDS_REF  , this::addNeeds                     ),
+                transition(NEEDS_LIST , DESCRIPTION, MdPattern.EMPTY      , () -> {}                           ),
+                transition(NEEDS_LIST , COVERS     , MdPattern.COVERS     , () -> {}                           ),
+                transition(NEEDS_LIST , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
+                transition(NEEDS_LIST , TAGS       , MdPattern.TAGS       , () -> {}                           ),
+                transition(NEEDS_LIST , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
                 transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , this::addTag                       ),
                 transition(TAGS       , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
@@ -150,9 +151,9 @@ class MarkdownImporter extends LightWeightMarkupImporter
                 transition(TAGS       , RATIONALE  , MdPattern.RATIONALE  , this::beginRationale               ),
                 transition(TAGS       , COMMENT    , MdPattern.COMMENT    , this::beginComment                 ),
                 transition(TAGS       , DEPENDS    , MdPattern.DEPENDS    , () -> {}                           ),
-                transition(TAGS       , NEEDS      , MdPattern.NEEDS_INT  , this::addNeeds                     ),
-                transition(TAGS       , NEEDS      , MdPattern.NEEDS      , () -> {}                           ),
-                transition(TAGS       , NEEDS      , MdPattern.EMPTY      , () -> {}                           ),
+                transition(TAGS       , SPEC_ITEM  , MdPattern.NEEDS_INT  , this::addNeeds                     ),
+                transition(TAGS       , NEEDS_LIST , MdPattern.NEEDS      , () -> {}                           ),
+                transition(TAGS       , SPEC_ITEM  , MdPattern.EMPTY      , () -> {}                           ),
                 transition(TAGS       , COVERS     , MdPattern.COVERS     , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(TAGS       , TAGS       , MdPattern.TAGS_INT   , this::addTag                       ),
@@ -163,6 +164,19 @@ class MarkdownImporter extends LightWeightMarkupImporter
         // @formatter:on
     }
 
+    /**
+     * Define a transition in the parser statemachine.
+     *
+     * @param from
+     *            state to be matched against the parsers current state
+     * @param to
+     *            state the parser will be in if the transition happened
+     * @param pattern
+     *            line pattern to be matched for this transition to happen
+     * @param action
+     *            action to take as during the transition
+     * @return transition definition
+     */
     private static Transition transition(final LineParserState from, final LineParserState to,
             final MdPattern pattern, final TransitionAction action)
     {

@@ -3,39 +3,29 @@ package org.itsallcode.openfasttrace.testutil.xml;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+/**
+ * A stream writer for XML that adds indentation.
+ */
 public class IndentingXMLStreamWriter extends StreamWriterDelegate
 {
-    /** Two spaces; the default indentation. */
-    public static final String DEFAULT_INDENT = "  ";
-
-    /**
-     * "\n"; the normalized representation of end-of-line in
-     * <a href="http://www.w3.org/TR/xml11/#sec-line-ends">XML</a>.
-     */
-    public static final String NORMAL_END_OF_LINE = "\n";
-
     private static final int WROTE_MARKUP = 1;
-
     private static final int WROTE_DATA = 2;
-
     private final String indent;
-
     private final String newLine;
-
     /** How deeply nested the current scope is. The root element is depth 1. */
     private int depth = 0; // document scope
-
     /** stack[depth] indicates what's been written into the current scope. */
     private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
-
-    /** newLine followed by copies of indent. */
+    /** Prefix that defines how deeply a line is indented. */
     private char[] linePrefix = null;
 
-    public IndentingXMLStreamWriter(final XMLStreamWriter out)
-    {
-        this(out, DEFAULT_INDENT, NORMAL_END_OF_LINE);
-    }
-
+    /**
+     * Create a new instance of the {@link IndentingXMLStreamWriter}.
+     *
+     * @param out stream writer to output to
+     * @param indent string used as the indentation prefix
+     * @param newLine newline character (for platform-specific output)
+     */
     public IndentingXMLStreamWriter(final XMLStreamWriter out, final String indent,
             final String newLine)
     {
@@ -203,9 +193,10 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to write markup, by writing a new line and indentation.
+     * Prepare to write markup by writing a new line and indentation.
      *
      * @throws XMLStreamException
+     *             here for interface compatibility only
      */
     protected void beforeMarkup() throws XMLStreamException
     {
@@ -214,7 +205,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
                 && (this.depth > 0 || soFar != 0)) // not the first line
         {
             writeNewLine(this.depth);
-            if (this.depth > 0 && this.indent.length() > 0)
+            if (this.depth > 0 && !this.indent.isEmpty())
             {
                 afterMarkup(); // indentation was written
             }
@@ -234,9 +225,10 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to start an element, by allocating stack space.
+     * Prepare to start an element by allocating stack space.
      *
      * @throws XMLStreamException
+     *             here for interface compatibility only
      */
     protected void beforeStartElement() throws XMLStreamException
     {
@@ -259,9 +251,10 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     }
 
     /**
-     * Prepare to end an element, by writing a new line and indentation.
+     * Prepare to end an element by writing a new line and indentation.
      *
      * @throws XMLStreamException
+     *             here for interface compatibility only
      */
     protected void beforeEndElement() throws XMLStreamException
     {
@@ -284,6 +277,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
      * Note that a document was ended.
      *
      * @throws XMLStreamException
+     *             here for interface compatibility only
      */
     protected void afterEndDocument() throws XMLStreamException
     {
@@ -295,7 +289,14 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
         this.stack[this.depth] = 0; // start fresh
     }
 
-    /** Write a line separator followed by indentation. */
+    /**
+     * Write an indented line.
+     * 
+     * @param indentation
+     *            indentation depth
+     * @throws XMLStreamException
+     *             if the underlying {@link XMLStreamWriter} has a problem
+     */
     protected void writeNewLine(final int indentation) throws XMLStreamException
     {
         final int newLineLength = this.newLine.length();

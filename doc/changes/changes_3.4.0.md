@@ -9,3 +9,7 @@ With this release you can now optionally require coverage in the `TagImporter`.
 ## Features
 
 * #306: Optionally require coverage in `TagImporter`
+
+## Dependencies
+
+* 310: Updated dependencies

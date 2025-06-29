@@ -5,9 +5,9 @@
     <artifactId>openfasttrace-importer-zip</artifactId>
     <name>OpenFastTrace Zip Importer</name>
     <parent>
-        <relativePath>../../parent/pom.xml</relativePath>
+        <relativePath>../../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>
-        <artifactId>openfasttrace-parent</artifactId>
+        <artifactId>openfasttrace-mc-deployable-parent</artifactId>
         <version>${revision}</version>
     </parent>
     <properties>

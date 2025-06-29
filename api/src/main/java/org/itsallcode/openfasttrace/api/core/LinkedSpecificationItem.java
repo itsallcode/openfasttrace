@@ -247,7 +247,7 @@ public class LinkedSpecificationItem
     /**
      * Get the artifact type which are covered.
      *
-     * @return the list of covered artifact types.
+     * @return the set of covered artifact types.
      */
     public Set<String> getCoveredArtifactTypes()
     {
@@ -265,9 +265,9 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get a list of all artifact types that have unwanted coverage.
+     * Get a set of all artifact types that have unwanted coverage.
      *
-     * @return list of over-covered artifact types.
+     * @return set of over-covered artifact types.
      */
     public Set<String> getOverCoveredArtifactTypes()
     {
@@ -400,9 +400,9 @@ public class LinkedSpecificationItem
 
     /**
      * Check if the item is defect.
-     *
-     * An item counts a defect if the following applies:
-     *
+     * <p>
+     * An item counts as a defect if the following applies:
+     * </p>
      * <pre>
      * has duplicates
      * or (not rejected

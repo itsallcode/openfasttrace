@@ -2,6 +2,9 @@ package org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.UNICODE_CHARACTER_CLASS;
 
 /**
  * This machine implements the core of a state based parser.
@@ -19,10 +22,15 @@ import java.util.logging.Logger;
 public class LineParserStateMachine
 {
     private static final Logger LOG = Logger.getLogger(LineParserStateMachine.class.getName());
+    private static final Pattern PARSER_OFF_PATTERN = Pattern.compile("(?:^|\\W)oft:off(?:\\W|$)",
+            UNICODE_CHARACTER_CLASS);
+    private static final Pattern PARSER_ON_PATTERN = Pattern.compile("(?:^|\\W)oft:on(?:\\W|$)",
+            UNICODE_CHARACTER_CLASS);
 
     private LineParserState state = LineParserState.START;
     private String lastToken = "";
     private final Transition[] transitions;
+    private boolean enabled = true;
 
     /**
      * Create a new instance of the {@link LineParserStateMachine}
@@ -48,7 +56,29 @@ public class LineParserStateMachine
      *            patterns that span multiple lines like underlined titles in
      *            Markdown or RST.
      */
+    // [impl -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     public void step(final String line, final String nextLine)
+    {
+        if (enabled)
+        {
+            if (PARSER_OFF_PATTERN.matcher(line).find())
+            {
+                enabled = false;
+            }
+            else
+            {
+                stepEnabled(line, nextLine);
+            }
+        }
+        else
+        {
+            if (PARSER_ON_PATTERN.matcher(line).find()) {
+                enabled = true;
+            }
+        }
+    }
+
+    private void stepEnabled(final String line, final String nextLine)
     {
         boolean matched = false;
         for (final Transition entry : this.transitions)

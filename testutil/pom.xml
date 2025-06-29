@@ -13,6 +13,8 @@
     </parent>
     <properties>
         <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
+        <!-- This is a test module. We don't need code coverage here. -->
+        <sonar.coverage.exclusions>**/*</sonar.coverage.exclusions>
     </properties>
     <dependencies>
         <dependency>
@@ -62,35 +64,6 @@
                         <arg>-Xlint:-requires-transitive-automatic</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <!-- This module is only used in tests, so we don't need javadoc comments. -->
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <configuration>
-                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>

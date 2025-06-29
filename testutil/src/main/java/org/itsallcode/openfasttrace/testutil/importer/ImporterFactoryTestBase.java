@@ -27,16 +27,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
 {
+    /**
+     * Mock of the importer context used in tests.
+     */
     @Mock
     protected ImporterContext contextMock;
 
+    /**
+     * Create a new instance of the test base.
+     */
     protected ImporterFactoryTestBase()
     {
         // Default constructor to fix compiler warning "missing-explicit-ctor"
     }
 
     @BeforeEach
-    public void initMocks()
+    void initMocks()
     {
         lenient().when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
@@ -98,9 +104,24 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
         }
     }
 
+    /**
+     * Create a new instance of the factory under test.
+     * 
+     * @return a new instance of the factory
+     */
     protected abstract T createFactory();
 
+    /**
+     * Get a list of filenames that should be supported by the factory.
+     * 
+     * @return list of supported filenames
+     */
     protected abstract List<String> getSupportedFilenames();
 
+    /**
+     * Get a list of filenames that should not be supported by the factory.
+     * 
+     * @return list of unsupported filenames
+     */
     protected abstract List<String> getUnsupportedFilenames();
 }

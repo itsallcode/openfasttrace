@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import org.itsallcode.io.Capturable;
-import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
@@ -19,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
-@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
-@ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
 class ITestCliWithFilter extends AbstractFileBasedTest
 {

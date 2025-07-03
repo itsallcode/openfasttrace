@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.nio.file.*;
 
 import org.itsallcode.io.Capturable;
-import org.itsallcode.junit.sysextensions.*;
+import org.itsallcode.junit.sysextensions.SystemErrGuard;
 import org.itsallcode.junit.sysextensions.SystemErrGuard.SysErr;
+import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
@@ -22,8 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
 
-@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
-@ExtendWith(ExitGuard.class)
 @ExtendWith(SystemOutGuard.class)
 @ExtendWith(SystemErrGuard.class)
 // [itest->dsn~cli.tracing.exit-status~1]

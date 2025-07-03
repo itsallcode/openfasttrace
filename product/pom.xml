@@ -67,6 +67,11 @@
             <artifactId>maven-project-version-getter</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>simple-process</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>openfasttrace-${revision}</finalName>

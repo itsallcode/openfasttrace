@@ -15,9 +15,9 @@ import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.junit.sysextensions.security.ExitTrapException;
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
 import org.itsallcode.openfasttrace.core.cli.ExitStatus;
-import org.itsallcode.openfasttrace.testutil.TestAssumptions;
 import org.itsallcode.openfasttrace.testutil.cli.FakeDirectoryService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.MultipleFailuresError;
@@ -46,12 +46,6 @@ class TestCliStarter
     private final Path DOC_DIR = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
 
     private Path outputFile;
-
-    @BeforeAll
-    static void assumeSecurityManagerSupported()
-    {
-        TestAssumptions.assumeSecurityManagerSupported();
-    }
 
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir)

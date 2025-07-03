@@ -1,31 +1,77 @@
 package org.itsallcode.openfasttrace.cli;
 
-import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
+import static java.util.Collections.emptyList;
+import static org.hamcrest.Matchers.*;
 
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
 
-import org.itsallcode.junit.sysextensions.ExitGuard;
-import org.itsallcode.openfasttrace.core.cli.*;
+import org.itsallcode.openfasttrace.core.cli.ExitStatus;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
-import org.itsallcode.openfasttrace.testutil.TestAssumptions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 
-@SuppressWarnings("removal") // https://github.com/itsallcode/openfasttrace/issues/436
-@ExtendWith(ExitGuard.class)
 class TestCliExit
 {
     private static final String TEST_RESOURCES_MARKDOWN = "../core/src/test/resources/markdown";
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";
     private static final String SAMPLE_SYSTEM_REQUIREMENTS = TEST_RESOURCES_MARKDOWN
             + "/sample_system_requirements.md";
+    private static final Duration TIMEOUT = Duration.ofSeconds(5);
 
-    @BeforeAll
-    static void assumeSecurityManagerSupported()
+    @Test
+    void testRunWithoutArguments()
     {
-        TestAssumptions.assumeSecurityManagerSupported();
+        jarLauncher()
+                .args(emptyList())
+                .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
+                .expectStdOut(emptyString())
+                .expectStdErr(equalTo("oft: Missing command\nAdd one of 'help','convert','trace'\n\n"))
+                .start()
+                .waitUntilTerminated(TIMEOUT);
+    }
+
+    @Test
+    void testRunWithUnsupportedCommand()
+    {
+        jarLauncher()
+                .args(List.of("unsupported"))
+                .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
+                .expectStdOut(emptyString())
+                .expectStdErr(equalTo(
+                        "oft: 'unsupported' is not an OFT command.\nChoose one of 'help','convert','trace'.\n\n"))
+                .start()
+                .waitUntilTerminated(TIMEOUT);
+    }
+
+    @Test
+    void testRunWithHelpCommand()
+    {
+        jarLauncher()
+                .args(List.of("help"))
+                .expectedExitCode(ExitStatus.OK.getCode())
+                .expectStdOut(startsWith("""
+                        OpenFastTrace
+
+                        Usage:
+                          oft command"""))
+                .expectStdErr(emptyString())
+                .start()
+                .waitUntilTerminated(TIMEOUT);
+    }
+
+    @Test
+    void testRunWithUnsupportedReporter(@TempDir final Path emptyDir)
+    {
+        jarLauncher()
+                .args(List.of("trace", "-o", "unknown", emptyDir.toString()))
+                .expectedExitCode(ExitStatus.FAILURE.getCode())
+                .expectStdOut(emptyString())
+                .expectStdErr(startsWith(
+                        "Exception in thread \"main\" org.itsallcode.openfasttrace.api.exporter.ExporterException: Found no matching reporter for output format 'unknown'"))
+                .start()
+                .waitUntilTerminated(TIMEOUT);
     }
 
     @Test
@@ -34,21 +80,25 @@ class TestCliExit
         assertExitStatusForTracedFiles(ExitStatus.OK, SAMPLE_SYSTEM_REQUIREMENTS, SAMPLE_DESIGN);
     }
 
-    private void assertExitStatusForTracedFiles(final ExitStatus expectedStatus,
-            final String... files)
+    private void assertExitStatusForTracedFiles(final ExitStatus expectedStatus, final String... files)
     {
-        assertExitStatusForCommandWithFiles(expectedStatus, TraceCommand.COMMAND_NAME, files);
+        final List<String> args = new ArrayList<>();
+        args.add(TraceCommand.COMMAND_NAME);
+        args.addAll(Arrays.asList(files));
+        jarLauncher()
+                .args(args)
+                .expectedExitCode(expectedStatus.getCode())
+                .expectStdErr(emptyString())
+                .expectStdOut(not(emptyString()))
+                .start()
+                .waitUntilTerminated(TIMEOUT);
     }
 
-    private void assertExitStatusForCommandWithFiles(final ExitStatus expectedStatus,
-            final String command, final String... files)
+    private JarLauncher.Builder jarLauncher()
     {
-        final CliArguments arguments = new CliArguments(new StandardDirectoryService());
-        final List<String> values = new ArrayList<>();
-        values.add(command);
-        values.addAll(Arrays.asList(files));
-        arguments.setUnnamedValues(values);
-        assertExitWithStatus(expectedStatus.getCode(), () -> new CliStarter(arguments).run());
+        return JarLauncher.builder()
+                .jarNameTemplate("openfasttrace-%s.jar")
+                .currentWorkingDir();
     }
 
     @Test
@@ -60,13 +110,12 @@ class TestCliExit
     @Test
     void testCliExitCode_CliError()
     {
-        final String[] arguments = { "--zzzzz" };
-        assertExitWithStatus(ExitStatus.CLI_ERROR.getCode(), () -> CliStarter.main(arguments));
-    }
-
-    @Test
-    void testExecutableJarLauncher()
-    {
-        JarLauncher.start(null, List.of()).waitUntilTerminated(Duration.ofSeconds(10));
+        jarLauncher()
+                .args(List.of("--zzzz"))
+                .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
+                .expectStdOut(emptyString())
+                .expectStdErr(equalTo("oft: Unexpected parameter '--zzzz' is not allowed\n"))
+                .start()
+                .waitUntilTerminated(TIMEOUT);
     }
 }

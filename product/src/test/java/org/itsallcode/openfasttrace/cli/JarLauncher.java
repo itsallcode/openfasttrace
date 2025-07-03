@@ -1,67 +1,72 @@
 package org.itsallcode.openfasttrace.cli;
 
-import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.hamcrest.Matcher;
+import org.itsallcode.process.SimpleProcess;
+import org.itsallcode.process.SimpleProcessBuilder;
 
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
-class JarLauncher
+final class JarLauncher
 {
-    private static final Logger LOG = Logger.getLogger(ProcessOutputConsumer.class.getName());
+    private static final Logger LOG = Logger.getLogger(JarLauncher.class.getName());
+    private final SimpleProcess<String> process;
+    private final Builder builder;
 
-    private final Process process;
-    private final ProcessOutputConsumer consumer;
-
-    private JarLauncher(final Process process, final ProcessOutputConsumer consumer)
+    private JarLauncher(final SimpleProcess<String> process, final Builder builder)
     {
         this.process = process;
-        this.consumer = consumer;
+        this.builder = builder;
     }
 
-    public static JarLauncher start(final Path workingDir, final List<String> args)
+    private static JarLauncher start(final Builder builder)
     {
-        final Path jarPath = getExecutableJar();
+        final Path jarPath = getExecutableJar(builder.jarNameTemplate);
         if (!Files.exists(jarPath))
         {
             throw new IllegalStateException(
                     "Executable JAR not found at %s. Run 'mvn -T1C package -DskipTests' to build it.");
         }
         final List<String> command = new ArrayList<>();
-        command.addAll(asList(getJavaExecutable().toString(), "-jar", getExecutableJar().toString()));
-        command.addAll(args);
-        final ProcessBuilder processBuilder = new ProcessBuilder(command.toArray(String[]::new))
-                .redirectErrorStream(false);
-        if (workingDir != null)
+        command.addAll(javaLaunchArgs(jarPath, builder.mainClass));
+        if (builder.args != null)
         {
-            processBuilder.directory(workingDir.toFile());
+            command.addAll(builder.args);
         }
-        try
-        {
-            final Process process = processBuilder.start();
-            final ProcessOutputConsumer consumer = new ProcessOutputConsumer(process, Duration.ofSeconds(1));
-            consumer.start();
-            return new JarLauncher(process, consumer);
-        }
-        catch (final IOException exception)
-        {
-            throw new UncheckedIOException("Failed to start process %s in working dir %s: %s".formatted(command,
-                    workingDir, exception.getMessage()), exception);
-        }
+
+        final SimpleProcess<String> process = SimpleProcessBuilder.create().command(command)
+                .workingDir(builder.workingDir)
+                .redirectErrorStream(false)
+                .streamLogLevel(Level.INFO)
+                .start();
+        return new JarLauncher(process, builder);
     }
 
-    private static Path getExecutableJar()
+    private static List<String> javaLaunchArgs(final Path jarPath, final Class<?> mainClass)
+    {
+        final String javaExecutable = getJavaExecutable().toString();
+        if (mainClass == null)
+        {
+            return List.of(javaExecutable, "-jar", jarPath.toString());
+        }
+        return List.of(javaExecutable, "-classpath", jarPath.toString(), mainClass.getName());
+    }
+
+    private static Path getExecutableJar(final String jarNameTemplate)
     {
         return Path.of("target")
-                .resolve("openfasttrace-%s.jar".formatted(getCurrentProjectVersion()))
+                .resolve(Objects.requireNonNull(jarNameTemplate, "jarNameTemplate")
+                        .formatted(getCurrentProjectVersion()))
                 .toAbsolutePath();
     }
 
@@ -77,34 +82,100 @@ class JarLauncher
                 .orElseThrow(() -> new IllegalStateException("Java executable not found"));
     }
 
-    void waitUntilTerminated(final Duration timeout)
+    public void waitUntilTerminated(final Duration timeout)
     {
-        waitForProcessTerminated(timeout);
-        LOG.fine("Process %d terminated with exit code %d".formatted(process.pid(), exitValue()));
-        consumer.waitForStreamsClosed();
+        process.waitForTermination(timeout);
+        final int exitValue = process.exitValue();
+        LOG.fine("Process %d terminated with exit code %d".formatted(process.pid(), exitValue));
+        assertAll(() -> assertThat("exit code", exitValue, equalTo(builder.expectedExitCode)),
+                () -> {
+                    if (builder.expectedStdOut != null)
+                    {
+                        assertThat("std out", process.getStdOut(), builder.expectedStdOut);
+                    }
+                }, () -> {
+                    if (builder.expectedStdErr != null)
+                    {
+                        assertThat("std err", process.getStdErr(), builder.expectedStdErr);
+                    }
+                });
     }
 
-    private void waitForProcessTerminated(final Duration timeout)
+    public static Builder builder()
     {
-        try
+        return new Builder();
+    }
+
+    public static final class Builder
+    {
+        private String jarNameTemplate;
+        private Path workingDir;
+        private List<String> args;
+        private int expectedExitCode = 0;
+        private Matcher<String> expectedStdOut;
+        private Matcher<String> expectedStdErr;
+        private Class<?> mainClass;
+
+        private Builder()
         {
-            LOG.finest("Waiting %s for process %d to terminate...".formatted(timeout, process.pid()));
-            if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS))
-            {
-                throw new IllegalStateException(
-                        "Timeout while waiting %s for process %d".formatted(timeout, process.pid()));
-            }
         }
-        catch (final InterruptedException exception)
+
+        public Builder jarNameTemplate(final String jarNameTemplate)
         {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException("Interrupted while waiting %s for process to finish".formatted(timeout),
-                    exception);
+            this.jarNameTemplate = jarNameTemplate;
+            return this;
+        }
+
+        public Builder mainClass(final Class<?> mainClass)
+        {
+            this.mainClass = mainClass;
+            return this;
+        }
+
+        public Builder currentWorkingDir()
+        {
+            return this.workingDir(Path.of(System.getProperty("user.dir")));
+        }
+
+        public Builder workingDir(final Path workingDir)
+        {
+            this.workingDir = workingDir;
+            return this;
+        }
+
+        public Builder args(final List<String> args)
+        {
+            this.args = args;
+            return this;
+        }
+
+        public Builder successExitCode()
+        {
+            return this.expectedExitCode(0);
+        }
+
+        public Builder expectedExitCode(final int expectedExitCode)
+        {
+            this.expectedExitCode = expectedExitCode;
+            return this;
+        }
+
+        public Builder expectStdOut(final Matcher<String> expectedStdOut)
+        {
+            this.expectedStdOut = expectedStdOut;
+            return this;
+        }
+
+        public Builder expectStdErr(final Matcher<String> expectedStdErr)
+        {
+            this.expectedStdErr = expectedStdErr;
+            return this;
+        }
+
+        public JarLauncher start()
+        {
+            return JarLauncher.start(this);
         }
     }
 
-    int exitValue()
-    {
-        return process.exitValue();
-    }
 }

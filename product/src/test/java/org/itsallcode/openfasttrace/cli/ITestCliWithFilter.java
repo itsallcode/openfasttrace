@@ -14,8 +14,8 @@ import org.itsallcode.junit.sysextensions.ExitGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
 import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
-import org.itsallcode.openfasttrace.testutil.TestAssumptions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -36,12 +36,6 @@ class ITestCliWithFilter extends AbstractFileBasedTest
             "`impl~d~4`");
 
     private File specFile;
-
-    @BeforeAll
-    static void assumeSecurityManagerSupported()
-    {
-        TestAssumptions.assumeSecurityManagerSupported();
-    }
 
     @BeforeEach
     void beforeEach(@TempDir final Path tempDir, @SysOut final Capturable out) throws IOException

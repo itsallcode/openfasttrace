@@ -242,6 +242,12 @@
                 <version>1.2.1</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.itsallcode</groupId>
+                <artifactId>simple-process</artifactId>
+                <version>0.2.0</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>

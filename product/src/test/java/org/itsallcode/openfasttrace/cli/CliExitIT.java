@@ -12,7 +12,7 @@ import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class TestCliExit
+class CliExitIT
 {
     private static final String TEST_RESOURCES_MARKDOWN = "../core/src/test/resources/markdown";
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";

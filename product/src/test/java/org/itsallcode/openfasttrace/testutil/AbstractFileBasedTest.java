@@ -1,11 +1,11 @@
 package org.itsallcode.openfasttrace.testutil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-import org.itsallcode.openfasttrace.core.cli.CliStarter;
+import org.hamcrest.Matcher;
+import org.itsallcode.openfasttrace.cli.JarLauncher;
 
 /**
  * This class is the base class for integration tests that require input files.
@@ -23,8 +23,8 @@ public class AbstractFileBasedTest
     }
 
     @SuppressWarnings("javadoc")
-    protected void runWithArguments(final String... args)
+    protected void assertStdOut(final List<String> args, final Matcher<String> stdOutMatcher)
     {
-        CliStarter.main(args);
+        JarLauncher.builder().args(args).expectStdOut(stdOutMatcher).expectedExitCode(0).start();
     }
 }

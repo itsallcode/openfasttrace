@@ -1,17 +1,15 @@
 package org.itsallcode.openfasttrace.cli;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.itsallcode.junit.sysextensions.AssertExit.assertExitWithStatus;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
-import org.itsallcode.io.Capturable;
 import org.itsallcode.junit.sysextensions.SystemOutGuard;
-import org.itsallcode.junit.sysextensions.SystemOutGuard.SysOut;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,55 +33,43 @@ class ITestCliWithFilter extends AbstractFileBasedTest
     private File specFile;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir, @SysOut final Capturable out) throws IOException
+    void beforeEach(@TempDir final Path tempDir) throws IOException
     {
         this.specFile = tempDir.resolve("spec.md").toFile();
         writeTextFile(this.specFile, SPECIFICATION);
-        out.capture();
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testWithoutFilter(@SysOut final Capturable out)
+    void testWithoutFilter()
     {
-        assertExitWithStatus(0, () -> runWithArguments("convert", this.specFile.toString()));
-        final String stdOut = out.getCapturedData();
-        assertThat(stdOut, containsString("<id>a<"));
-        assertThat(stdOut, containsString("<id>b<"));
-        assertThat(stdOut, containsString("<id>c<"));
+        assertStdOut(List.of("convert", this.specFile.toString()),
+                allOf(containsString("<id>a<"),
+                        containsString("<id>b<"),
+                        containsString("<id>c<")));
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testFilterWithAtLeastOneMatchingTag(@SysOut final Capturable out)
+    void testFilterWithAtLeastOneMatchingTag()
     {
-        assertExitWithStatus(0,
-                () -> runWithArguments("convert", "-t", "tag1", this.specFile.toString()));
-        final String stdOut = out.getCapturedData();
-        assertThat(stdOut, not(containsString("<id>a<")));
-        assertThat(stdOut, containsString("<id>b<"));
-        assertThat(stdOut, not(containsString("<id>c<")));
+        assertStdOut(List.of("convert", "-t", "tag1", this.specFile.toString()),
+                allOf(not(containsString("<id>a<")), containsString("<id>b<"), not(containsString("<id>c<"))));
     }
 
     // [itest->dsn~filtering-by-tags-during-import~1]
     @Test
-    void testFilterWithEmptyTagListFiltersOutEverything(final Capturable stream)
+    void testFilterWithEmptyTagListFiltersOutEverything()
     {
-        assertExitWithStatus(0,
-                () -> runWithArguments("convert", "-t", "", this.specFile.toString()));
-        final String stdOut = stream.getCapturedData();
-        assertThat(stdOut, not(containsString("<id>")));
+        assertStdOut(List.of("convert", "-t", "", this.specFile.toString()), not(containsString("<id>")));
     }
 
     // [itest->dsn~filtering-by-tags-or-no-tags-during-import~1]
     @Test
-    void testFilterWithAtLeastOneMatchingTagOrNoTags(final Capturable stream)
+    void testFilterWithAtLeastOneMatchingTagOrNoTags()
     {
-        assertExitWithStatus(0,
-                () -> runWithArguments("convert", "-t", "_,tag1", this.specFile.toString()));
-        final String stdOut = stream.getCapturedData();
-        assertThat(stdOut, containsString("<id>a<"));
-        assertThat(stdOut, containsString("<id>b<"));
-        assertThat(stdOut, not(containsString("<id>c<")));
+        assertStdOut(List.of(
+                "convert", "-t", "_,tag1", this.specFile.toString()),
+                allOf(containsString("<id>a<"), containsString("<id>b<"), not(containsString("<id>c<"))));
     }
 }

@@ -17,7 +17,7 @@ import org.itsallcode.process.SimpleProcessBuilder;
 
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
-final class JarLauncher
+public final class JarLauncher
 {
     private static final Logger LOG = Logger.getLogger(JarLauncher.class.getName());
     private final SimpleProcess<String> process;
@@ -35,7 +35,8 @@ final class JarLauncher
         if (!Files.exists(jarPath))
         {
             throw new IllegalStateException(
-                    "Executable JAR not found at %s. Run 'mvn -T1C package -DskipTests' to build it.");
+                    "Executable JAR not found at %s. Run 'mvn -T1C package -DskipTests' to build it."
+                            .formatted(jarPath));
         }
         final List<String> command = new ArrayList<>();
         command.addAll(javaLaunchArgs(jarPath, builder.mainClass));

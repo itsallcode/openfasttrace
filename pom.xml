@@ -33,6 +33,7 @@
         <module>reporter/plaintext</module>
         <module>reporter/html</module>
         <module>reporter/aspec</module>
+        <module>reporter/ux</module>
         <module>testutil</module>
     </modules>
     <build>

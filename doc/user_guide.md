@@ -496,6 +496,18 @@ While plain text reports are perfect for debugging your tracing chain, sometimes
 oft trace -o html
 ```
 
+### Interactive requirement analyisis
+
+Besides a basic HTML visualization of requirements OpenFastTrace also provides an interactive requirement browsing and requirement analysis frontend in the form of a responsive HTML page similar to the HTML report.
+
+The UX reporter:
+
+```
+oft trace -o ux
+```
+
+generates an input file for the OpenFastTrace-UX HTML frontend  [OpenFastTrace-UX](https://github.com/poldi2015/openfasttrace-ux).
+
 ### Understanding and Fixing Broken Requirement Branches
 
 Requirements — or specification items as we call them more broadly — in OFT are internally organized in a graph. If you haven't heard of that term, don't worry. In most cases it is close enough to think of the relationships between the specification items like a forest where the highest level of the specification are tree trunks from which details branch out into big branches, twigs and eventually leaves.
@@ -602,6 +614,7 @@ One of:
 * `plain`
 * `html`
 * `aspec`
+* `ux`
 
 Defaults to `plain`.
 

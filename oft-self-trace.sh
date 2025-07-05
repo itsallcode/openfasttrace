@@ -27,6 +27,7 @@ if $oft_script trace \
     "$base_dir/reporter/plaintext/src" \
     "$base_dir/reporter/html/src" \
     "$base_dir/reporter/aspec/src" \
+    "$base_dir/reporter/ux/src" \
     "$base_dir/product/src/test/java" \
     "$base_dir/api/src" \
     "$base_dir/exporter/specobject/src" \

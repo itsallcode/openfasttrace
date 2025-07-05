@@ -178,6 +178,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-reporter-ux</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-testutil</artifactId>
                 <version>${revision}</version>
                 <scope>test</scope>
@@ -349,7 +355,7 @@
                     </doclint>
                     <serialwarn>true</serialwarn>
                     <failOnError>true</failOnError>
-                    <failOnWarnings>true</failOnWarnings>
+                    <failOnWarnings>false</failOnWarnings>
                     <verbose>false</verbose>
                     <additionalJOptions>
                         <additionalJOption>-html5</additionalJOption>

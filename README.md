@@ -10,6 +10,8 @@ Below you see a screenshot of an HTML tracing report where OFT traces itself. Yo
 
 <img src="doc/images/oft_screenshot_tracing_report.png" style="box-shadow: 5px 10px 18px #888888;" alt="OFT HTML tracing report">
 
+In addition to the HTML tracing report an interactive requirement browser and analysis tool is integrated into OpenFastTrace.
+
 ## Project Information
 
 [![Build](https://github.com/itsallcode/openfasttrace/actions/workflows/build.yml/badge.svg)](https://github.com/itsallcode/openfasttrace/actions/workflows/build.yml)

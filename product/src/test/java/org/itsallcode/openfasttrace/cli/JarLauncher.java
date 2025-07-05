@@ -109,7 +109,7 @@ public final class JarLauncher
 
     public static final class Builder
     {
-        private String jarNameTemplate;
+        private String jarNameTemplate = "openfasttrace-%s.jar";
         private Path workingDir;
         private List<String> args;
         private int expectedExitCode = 0;

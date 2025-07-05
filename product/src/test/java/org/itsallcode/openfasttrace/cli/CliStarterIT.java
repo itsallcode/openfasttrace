@@ -343,7 +343,6 @@ class CliStarterIT
     private JarLauncher.Builder jarLauncher()
     {
         return JarLauncher.builder()
-                .jarNameTemplate("openfasttrace-%s.jar")
                 .currentWorkingDir();
     }
 }

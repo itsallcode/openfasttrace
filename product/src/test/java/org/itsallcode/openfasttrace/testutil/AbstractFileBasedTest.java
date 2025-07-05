@@ -25,6 +25,6 @@ public class AbstractFileBasedTest
     @SuppressWarnings("javadoc")
     protected void assertStdOut(final List<String> args, final Matcher<String> stdOutMatcher)
     {
-        JarLauncher.builder().args(args).expectStdOut(stdOutMatcher).expectedExitCode(0).start();
+        JarLauncher.builder().args(args).currentWorkingDir().expectStdOut(stdOutMatcher).expectedExitCode(0).start();
     }
 }

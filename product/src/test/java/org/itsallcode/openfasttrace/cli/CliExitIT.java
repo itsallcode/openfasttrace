@@ -97,7 +97,6 @@ class CliExitIT
     private JarLauncher.Builder jarLauncher()
     {
         return JarLauncher.builder()
-                .jarNameTemplate("openfasttrace-%s.jar")
                 .currentWorkingDir();
     }
 

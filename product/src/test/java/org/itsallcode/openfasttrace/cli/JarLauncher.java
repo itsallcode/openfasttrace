@@ -45,7 +45,9 @@ public final class JarLauncher
             command.addAll(builder.args);
         }
 
-        final SimpleProcess<String> process = SimpleProcessBuilder.create().command(command)
+        LOG.info("Starting command %s in working dir %s...".formatted(command, builder.workingDir));
+        final SimpleProcess<String> process = SimpleProcessBuilder.create()
+                .command(command)
                 .workingDir(builder.workingDir)
                 .redirectErrorStream(false)
                 .streamLogLevel(Level.INFO)
@@ -83,8 +85,14 @@ public final class JarLauncher
                 .orElseThrow(() -> new IllegalStateException("Java executable not found"));
     }
 
+    public void waitUntilTerminated()
+    {
+        waitUntilTerminated(Duration.ofSeconds(3));
+    }
+
     public void waitUntilTerminated(final Duration timeout)
     {
+        LOG.fine("Waiting %s for process %d to terminate...".formatted(timeout, process.pid()));
         process.waitForTermination(timeout);
         final int exitValue = process.exitValue();
         LOG.fine("Process %d terminated with exit code %d".formatted(process.pid(), exitValue));

@@ -4,7 +4,6 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.*;
 
 import org.itsallcode.openfasttrace.core.cli.ExitStatus;
@@ -18,7 +17,6 @@ class CliExitIT
     private static final String SAMPLE_DESIGN = TEST_RESOURCES_MARKDOWN + "/sample_design.md";
     private static final String SAMPLE_SYSTEM_REQUIREMENTS = TEST_RESOURCES_MARKDOWN
             + "/sample_system_requirements.md";
-    private static final Duration TIMEOUT = Duration.ofSeconds(5);
 
     @Test
     void testRunWithoutArguments()
@@ -29,7 +27,7 @@ class CliExitIT
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo("oft: Missing command\nAdd one of 'help','convert','trace'\n\n"))
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 
     @Test
@@ -42,7 +40,7 @@ class CliExitIT
                 .expectStdErr(equalTo(
                         "oft: 'unsupported' is not an OFT command.\nChoose one of 'help','convert','trace'.\n\n"))
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 
     @Test
@@ -58,7 +56,7 @@ class CliExitIT
                           oft command"""))
                 .expectStdErr(emptyString())
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 
     @Test
@@ -71,7 +69,7 @@ class CliExitIT
                 .expectStdErr(startsWith(
                         "Exception in thread \"main\" org.itsallcode.openfasttrace.api.exporter.ExporterException: Found no matching reporter for output format 'unknown'"))
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 
     @Test
@@ -91,7 +89,7 @@ class CliExitIT
                 .expectStdErr(emptyString())
                 .expectStdOut(not(emptyString()))
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 
     private JarLauncher.Builder jarLauncher()
@@ -115,6 +113,6 @@ class CliExitIT
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo("oft: Unexpected parameter '--zzzz' is not allowed\n"))
                 .start()
-                .waitUntilTerminated(TIMEOUT);
+                .waitUntilTerminated();
     }
 }

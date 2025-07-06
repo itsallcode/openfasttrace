@@ -3,9 +3,11 @@ package org.itsallcode.openfasttrace.cli;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.Duration;
 import java.util.List;
 
 import org.itsallcode.junit.sysextensions.SystemErrGuard;
@@ -37,7 +39,7 @@ class CliStarterIT
     private static final String CARRIAGE_RETURN = "\r";
     private static final String NEWLINE = "\n";
 
-    private final Path DOC_DIR = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
+    private static final Path DOC_DIR = Paths.get("../core/src/test/resources/markdown").toAbsolutePath();
 
     private Path outputFile;
 
@@ -92,7 +94,7 @@ class CliStarterIT
     void testConvertUnknownExporter()
     {
         final Builder jarLauncherBuilder = jarLauncher(
-                CONVERT_COMMAND, this.DOC_DIR.toString(),
+                CONVERT_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FORMAT_PARAMETER, "illegal",
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString());
         assertExitWithError(jarLauncherBuilder, ExitStatus.CLI_ERROR,
@@ -104,7 +106,7 @@ class CliStarterIT
     void testConvertToSpecobjectFile()
     {
         final Builder jarLauncherBuilder = jarLauncher( //
-                CONVERT_COMMAND, this.DOC_DIR.toString(), //
+                CONVERT_COMMAND, DOC_DIR.toString(), //
                 OUTPUT_FORMAT_PARAMETER, "specobject", //
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(), //
                 COLOR_SCHEME_PARAMETER, "BLACK_AND_WHITE");
@@ -115,7 +117,8 @@ class CliStarterIT
     private void assertExitOkWithOutputFileStart(final JarLauncher.Builder jarLauncherBuilder, final String fileStart)
             throws MultipleFailuresError
     {
-        jarLauncherBuilder.expectedExitCode(ExitStatus.OK.getCode()).start();
+        jarLauncherBuilder.expectedExitCode(ExitStatus.OK.getCode()).start()
+                .waitUntilTerminated(Duration.ofSeconds(10));
         assertAll(
                 () -> assertOutputFileExists(true),
                 () -> assertOutputFileContentStartsWith(fileStart));
@@ -123,16 +126,16 @@ class CliStarterIT
 
     // [itest->dsn~cli.conversion.default-output-format~1]
     @Test
-    void testConvertDefaultOutputFormat() throws IOException
+    void testConvertDefaultOutputFormat()
     {
-        assertExitOkWithStdOutStart(jarLauncher(CONVERT_COMMAND, this.DOC_DIR.toString()), SPECOBJECT_PREAMBLE);
+        assertExitOkWithStdOutStart(jarLauncher(CONVERT_COMMAND, DOC_DIR.toString()), SPECOBJECT_PREAMBLE);
     }
 
     // [itest->dsn~cli.input-file-selection~1]
     @Test
     void testConvertDefaultOutputFormatIntoFile()
     {
-        assertExitOkWithOutputFileStart(jarLauncher(CONVERT_COMMAND, this.DOC_DIR.toString(),
+        assertExitOkWithOutputFileStart(jarLauncher(CONVERT_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString()), SPECOBJECT_PREAMBLE);
     }
 
@@ -140,10 +143,9 @@ class CliStarterIT
     @Test
     void testConvertDefaultInputDir()
     {
-        assertExitOkWithOutputFileOfLength(jarLauncher( //
-                CONVERT_COMMAND, //
-                OUTPUT_FILE_PARAMETER, this.outputFile.toString() //
-        ), 2000);
+        assertExitOkWithOutputFileOfLength(jarLauncher(
+                CONVERT_COMMAND,
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString()), 2000);
     }
 
     @Test
@@ -162,14 +164,14 @@ class CliStarterIT
         assertExitOkWithOutputFileStart(jarLauncher(
                 TRACE_COMMAND,
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
-                this.DOC_DIR.toString()), "ok - 5 total");
+                DOC_DIR.toString()), "ok - 5 total");
     }
 
     @Test
     void testTraceWithReportVerbosityMinimal()
     {
         assertExitOkWithOutputFileStart(jarLauncher(
-                TRACE_COMMAND, this.DOC_DIR.toString(),
+                TRACE_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
                 REPORT_VERBOSITY_PARAMETER, "MINIMAL"), "ok");
     }
@@ -178,7 +180,7 @@ class CliStarterIT
     void testTraceWithReportVerbosityQuietToStdOut()
     {
         jarLauncher(
-                TRACE_COMMAND, this.DOC_DIR.toString(),
+                TRACE_COMMAND, DOC_DIR.toString(),
                 REPORT_VERBOSITY_PARAMETER, "QUIET").expectStdOut(emptyString())
                 .expectedExitCode(ExitStatus.OK.getCode()).start();
         assertOutputFileExists(false);
@@ -188,7 +190,7 @@ class CliStarterIT
     void testTraceWithReportVerbosityQuietToFileMustBeRejected()
     {
         jarLauncher(
-                TRACE_COMMAND, this.DOC_DIR.toString(),
+                TRACE_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
                 REPORT_VERBOSITY_PARAMETER, "QUIET").expectedExitCode(ExitStatus.CLI_ERROR.getCode())
                 .expectStdErr(equalTo("oft: combining stream"));
@@ -198,20 +200,19 @@ class CliStarterIT
     // [itest->dsn~cli.default-input~1]
     void testTraceDefaultInputDir()
     {
-        // This test is fragile, since we can't influence the current working
-        // directory which is automatically used if no directory is specified.
-        // All we know is that no CLI error should be returned and an output
-        // file must exist.
-        jarLauncher(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString()).expectStdErr(emptyString());
+        jarLauncher(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString())
+                .expectStdOut(emptyString())
+                .expectedExitCode(1)
+                .start()
+                .waitUntilTerminated(Duration.ofSeconds(10));
         assertOutputFileExists(true);
-
     }
 
     @Test
     void testBasicHtmlTrace()
     {
         assertExitOkWithStdOutStart(jarLauncher(
-                TRACE_COMMAND, this.DOC_DIR.toString(),
+                TRACE_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FORMAT_PARAMETER, "html"), "<!DOCTYPE html>");
     }
 
@@ -241,7 +242,7 @@ class CliStarterIT
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), TRACE_COMMAND,
                         OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
                         NEWLINE_PARAMETER, "OLDMAC",
-                        this.DOC_DIR.toString()),
+                        DOC_DIR.toString()),
                 () -> assertOutputFileExists(true),
                 this::assertOutputFileContainsOldMacNewlines,
                 this::assertOutputFileContainsNoUnixNewlines);
@@ -266,7 +267,7 @@ class CliStarterIT
         assertAll(
                 () -> assertExitWithStatus(ExitStatus.OK.getCode(), TRACE_COMMAND,
                         OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
-                        this.DOC_DIR.toString()),
+                        DOC_DIR.toString()),
                 () -> assertOutputFileExists(true),
                 this::assertPlatformNewlines,
                 this::assertNoOffendingNewlines);
@@ -274,7 +275,7 @@ class CliStarterIT
 
     private void assertExitWithStatus(final int code, final String... args)
     {
-        jarLauncher().args(List.of(args)).expectedExitCode(code).start();
+        jarLauncher().args(List.of(args)).expectedExitCode(code).start().waitUntilTerminated();
     }
 
     private void assertPlatformNewlines()
@@ -298,6 +299,8 @@ class CliStarterIT
             assertThat("Has no newline without carriage return and vice-versa",
                     getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
             break;
+        default:
+            fail("Unsupported line separator");
         }
     }
 
@@ -305,7 +308,7 @@ class CliStarterIT
     void testTraceWithFilteredArtifactType()
     {
         assertExitOkWithOutputFileStart(jarLauncher(
-                TRACE_COMMAND, this.DOC_DIR.toString(),
+                TRACE_COMMAND, DOC_DIR.toString(),
                 OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
                 WANTED_ARTIFACT_TYPES_PARAMETER, "feat,req"), "ok - 3 total");
     }
@@ -317,7 +320,8 @@ class CliStarterIT
 
     private void assertOutputFileExists(final boolean fileExists)
     {
-        assertThat("Output file exists", Files.exists(this.outputFile), equalTo(fileExists));
+        assertThat("Output file %s exists".formatted(this.outputFile), Files.exists(this.outputFile),
+                equalTo(fileExists));
     }
 
     private String getOutputFileContent()
@@ -337,7 +341,7 @@ class CliStarterIT
 
     private Builder jarLauncher(final String... arguments)
     {
-        return jarLauncher().args(List.of(arguments));
+        return jarLauncher().workingDir(Path.of("..").toAbsolutePath()).args(List.of(arguments));
     }
 
     private JarLauncher.Builder jarLauncher()

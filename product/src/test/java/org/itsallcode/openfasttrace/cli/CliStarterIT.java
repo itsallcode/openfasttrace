@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.List;
@@ -154,7 +155,12 @@ class CliStarterIT
         // This test is fragile, since we can't influence the current working
         // directory which is automatically used if no directory is specified.
         // All we know is that no CLI error should be returned.
-        jarLauncher(TRACE_COMMAND).start();
+        jarLauncher(TRACE_COMMAND)
+                .currentWorkingDir()
+                .expectedExitCode(1)
+                .expectStdOut(containsString("not ok[0m - 43 total, 43 defect"))
+                .start()
+                .waitUntilTerminated();
     }
 
     // [itest->dsn~cli.command-selection~1]
@@ -327,6 +333,10 @@ class CliStarterIT
     private String getOutputFileContent()
     {
         final Path file = this.outputFile;
+        if (!Files.exists(file))
+        {
+            throw new AssertionError("Expected output file %s does not exist".formatted(file));
+        }
         try
         {
             return Files.readString(file);
@@ -335,7 +345,7 @@ class CliStarterIT
         {
             // Need to convert this to an unchecked exception. Otherwise, we get
             // stuck with the checked exceptions in the assertion lambdas.
-            throw new RuntimeException(exception);
+            throw new UncheckedIOException("Failed to read file %s".formatted(file), exception);
         }
     }
 

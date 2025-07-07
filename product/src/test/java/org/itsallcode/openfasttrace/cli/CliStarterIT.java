@@ -59,7 +59,10 @@ class CliStarterIT
     private void assertExitWithError(final JarLauncher.Builder jarLauncherBuilder, final ExitStatus status,
             final String message) throws MultipleFailuresError
     {
-        jarLauncherBuilder.expectStdOut(startsWith(message)).expectedExitCode(status.getCode()).start();
+        jarLauncherBuilder
+                .expectStdErr(startsWith(message))
+                .expectedExitCode(status.getCode()).start()
+                .waitUntilTerminated();
     }
 
     // [itest->dsn~cli.command-selection~1]
@@ -87,7 +90,7 @@ class CliStarterIT
     private void assertExitOkWithStdOutStart(final JarLauncher.Builder jarLauncherBuilder, final String outputStart)
             throws MultipleFailuresError
     {
-        jarLauncherBuilder.expectStdOut(startsWith(outputStart)).expectedExitCode(0).start();
+        jarLauncherBuilder.expectStdOut(startsWith(outputStart)).expectedExitCode(0).start().waitUntilTerminated();
         assertOutputFileExists(false);
     }
 
@@ -152,9 +155,6 @@ class CliStarterIT
     @Test
     void testTraceNoArguments()
     {
-        // This test is fragile, since we can't influence the current working
-        // directory which is automatically used if no directory is specified.
-        // All we know is that no CLI error should be returned.
         jarLauncher(TRACE_COMMAND)
                 .currentWorkingDir()
                 .expectedExitCode(1)
@@ -188,7 +188,8 @@ class CliStarterIT
         jarLauncher(
                 TRACE_COMMAND, DOC_DIR.toString(),
                 REPORT_VERBOSITY_PARAMETER, "QUIET").expectStdOut(emptyString())
-                .expectedExitCode(ExitStatus.OK.getCode()).start();
+                .expectedExitCode(ExitStatus.OK.getCode()).start()
+                .waitUntilTerminated();
         assertOutputFileExists(false);
     }
 

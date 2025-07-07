@@ -50,7 +50,7 @@ public final class JarLauncher
                 .command(command)
                 .workingDir(builder.workingDir)
                 .redirectErrorStream(false)
-                .streamLogLevel(Level.INFO)
+                .streamLogLevel(Level.FINE)
                 .start();
         return new JarLauncher(process, builder);
     }

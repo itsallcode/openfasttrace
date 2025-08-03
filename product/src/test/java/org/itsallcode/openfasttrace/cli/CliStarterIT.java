@@ -61,8 +61,8 @@ class CliStarterIT
     {
         jarLauncherBuilder
                 .expectStdErr(startsWith(message))
-                .expectedExitCode(status.getCode()).start()
-                .waitUntilTerminated();
+                .expectedExitCode(status.getCode())
+                .verify();
     }
 
     // [itest->dsn~cli.command-selection~1]
@@ -90,7 +90,9 @@ class CliStarterIT
     private void assertExitOkWithStdOutStart(final JarLauncher.Builder jarLauncherBuilder, final String outputStart)
             throws MultipleFailuresError
     {
-        jarLauncherBuilder.expectStdOut(startsWith(outputStart)).expectedExitCode(0).start().waitUntilTerminated();
+        jarLauncherBuilder.expectStdOut(startsWith(outputStart))
+                .expectedExitCode(0)
+                .verify();
         assertOutputFileExists(false);
     }
 
@@ -121,8 +123,9 @@ class CliStarterIT
     private void assertExitOkWithOutputFileStart(final JarLauncher.Builder jarLauncherBuilder, final String fileStart)
             throws MultipleFailuresError
     {
-        jarLauncherBuilder.expectedExitCode(ExitStatus.OK.getCode()).start()
-                .waitUntilTerminated(Duration.ofSeconds(10));
+        jarLauncherBuilder.expectedExitCode(ExitStatus.OK.getCode())
+                .timeout(Duration.ofSeconds(10))
+                .verify();
         assertAll(
                 () -> assertOutputFileExists(true),
                 () -> assertOutputFileContentStartsWith(fileStart));
@@ -159,8 +162,7 @@ class CliStarterIT
                 .currentWorkingDir()
                 .expectedExitCode(1)
                 .expectStdOut(containsString("not ok[0m - 43 total, 43 defect"))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     // [itest->dsn~cli.command-selection~1]
@@ -188,8 +190,8 @@ class CliStarterIT
         jarLauncher(
                 TRACE_COMMAND, DOC_DIR.toString(),
                 REPORT_VERBOSITY_PARAMETER, "QUIET").expectStdOut(emptyString())
-                .expectedExitCode(ExitStatus.OK.getCode()).start()
-                .waitUntilTerminated();
+                .expectedExitCode(ExitStatus.OK.getCode())
+                .verify();
         assertOutputFileExists(false);
     }
 
@@ -210,8 +212,8 @@ class CliStarterIT
         jarLauncher(TRACE_COMMAND, OUTPUT_FILE_PARAMETER, this.outputFile.toString())
                 .expectStdOut(emptyString())
                 .expectedExitCode(1)
-                .start()
-                .waitUntilTerminated(Duration.ofSeconds(10));
+                .timeout(Duration.ofSeconds(10))
+                .verify();
         assertOutputFileExists(true);
     }
 
@@ -282,7 +284,10 @@ class CliStarterIT
 
     private void assertExitWithStatus(final int code, final String... args)
     {
-        jarLauncher().args(List.of(args)).expectedExitCode(code).start().waitUntilTerminated();
+        jarLauncher()
+                .args(List.of(args))
+                .expectedExitCode(code)
+                .verify();
     }
 
     private void assertPlatformNewlines()

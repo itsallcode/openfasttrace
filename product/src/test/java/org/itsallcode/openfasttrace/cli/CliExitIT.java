@@ -26,8 +26,7 @@ class CliExitIT
                 .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo("oft: Missing command\nAdd one of 'help','convert','trace'\n\n"))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     @Test
@@ -39,8 +38,7 @@ class CliExitIT
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo(
                         "oft: 'unsupported' is not an OFT command.\nChoose one of 'help','convert','trace'.\n\n"))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     @Test
@@ -55,8 +53,7 @@ class CliExitIT
                         Usage:
                           oft command"""))
                 .expectStdErr(emptyString())
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     @Test
@@ -68,8 +65,7 @@ class CliExitIT
                 .expectStdOut(emptyString())
                 .expectStdErr(startsWith(
                         "Exception in thread \"main\" org.itsallcode.openfasttrace.api.exporter.ExporterException: Found no matching reporter for output format 'unknown'"))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     @Test
@@ -88,8 +84,7 @@ class CliExitIT
                 .expectedExitCode(expectedStatus.getCode())
                 .expectStdErr(emptyString())
                 .expectStdOut(not(emptyString()))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 
     private JarLauncher.Builder jarLauncher()
@@ -112,7 +107,6 @@ class CliExitIT
                 .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo("oft: Unexpected parameter '--zzzz' is not allowed\n"))
-                .start()
-                .waitUntilTerminated();
+                .verify();
     }
 }

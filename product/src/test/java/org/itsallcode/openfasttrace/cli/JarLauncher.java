@@ -39,7 +39,7 @@ public final class JarLauncher
                             .formatted(jarPath));
         }
         final List<String> command = new ArrayList<>();
-        command.addAll(javaLaunchArgs(jarPath, builder.mainClass));
+        command.addAll(createJavaLaunchArgs(jarPath, builder.mainClass));
         if (builder.args != null)
         {
             command.addAll(builder.args);
@@ -55,7 +55,7 @@ public final class JarLauncher
         return new JarLauncher(process, builder);
     }
 
-    private static List<String> javaLaunchArgs(final Path jarPath, final Class<?> mainClass)
+    private static List<String> createJavaLaunchArgs(final Path jarPath, final Class<?> mainClass)
     {
         final String javaExecutable = getJavaExecutable().toString();
         if (mainClass == null)
@@ -85,12 +85,7 @@ public final class JarLauncher
                 .orElseThrow(() -> new IllegalStateException("Java executable not found"));
     }
 
-    public void waitUntilTerminated()
-    {
-        waitUntilTerminated(Duration.ofSeconds(3));
-    }
-
-    public void waitUntilTerminated(final Duration timeout)
+    private void waitUntilTerminated(final Duration timeout)
     {
         LOG.fine("Waiting %s for process %d to terminate...".formatted(timeout, process.pid()));
         process.waitForTermination(timeout);
@@ -123,6 +118,7 @@ public final class JarLauncher
         private int expectedExitCode = 0;
         private Matcher<String> expectedStdOut;
         private Matcher<String> expectedStdErr;
+        private Duration timeout = Duration.ofSeconds(3);
         private Class<?> mainClass;
 
         private Builder()
@@ -158,6 +154,12 @@ public final class JarLauncher
             return this;
         }
 
+        public Builder timeout(final Duration timeout)
+        {
+            this.timeout = timeout;
+            return this;
+        }
+
         public Builder successExitCode()
         {
             return this.expectedExitCode(0);
@@ -181,9 +183,9 @@ public final class JarLauncher
             return this;
         }
 
-        public JarLauncher start()
+        public void verify()
         {
-            return JarLauncher.start(this);
+            JarLauncher.start(this).waitUntilTerminated(this.timeout);
         }
     }
 

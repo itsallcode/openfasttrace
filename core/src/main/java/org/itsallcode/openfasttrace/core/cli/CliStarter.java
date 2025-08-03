@@ -63,6 +63,7 @@ public class CliStarter
         }
     }
 
+    @SuppressWarnings("java:S1166") // Exceptions are reported to the user
     private static CliArguments parseCommandLineArguments(final String[] args,
             final DirectoryService directoryService)
     {

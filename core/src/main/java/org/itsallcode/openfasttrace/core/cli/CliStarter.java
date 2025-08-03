@@ -38,7 +38,7 @@ public class CliStarter
 
     /**
      * Auxiliary entry point to the command line application that allows
-     * injection of a
+     * injection of a {@link DirectoryService}.
      * 
      * @param args
      *            command line arguments.
@@ -63,6 +63,7 @@ public class CliStarter
         }
     }
 
+    @SuppressWarnings("java:S1166") // Exceptions are reported to the user
     private static CliArguments parseCommandLineArguments(final String[] args,
             final DirectoryService directoryService)
     {

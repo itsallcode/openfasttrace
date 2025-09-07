@@ -7,7 +7,7 @@
 
 ## Acknowledgments
 
-This documents structure is derived from the "[arc42][bib.arc42]" architectural template by Dr. Gernot Starke, Dr. Peter Hruschka.
+This document's structure is derived from the "[arc42][bib.arc42]" architectural template by Dr. Gernot Starke, Dr. Peter Hruschka.
 
 If you build your own modifications based on this document, please keep the attrbiutions.
 
@@ -174,9 +174,25 @@ Needs: impl, itest
 
 ## Import
 
-Depending on the source format a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an [import event listener](#import-event-listener) consumes.
+Depending on the source format, a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an [import event listener](#import-event-listener) consumes.
 
-Common parts of the import like filtering out unnecessary items or attributes are handled by the listener.
+The listener handles Common parts of the import like filtering out unnecessary items or attributes.
+
+A factory for importers decides which importer to use. Usually, by file extension.
+
+### ReqM2 File Detection
+`dsn~import.reqm2-file-detection~1`
+
+The `SpecobjectImporterFactory` detects ReqM2 files either
+
+1. via the file extension `.oreqm` or
+2. via the file extension `.xml` and the presence of the string `<specdocument` within the first 4096 bytes of the file.
+
+Covers:
+
+* `req~import.reqm2-file-detection~1`
+
+Needs: impl, utest
 
 ### Selective Artifact Type Import
 

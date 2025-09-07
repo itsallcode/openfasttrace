@@ -255,7 +255,7 @@ Needs: dsn
 
 #### Common Requirements for Lightweight Markup Import
 
-Typical OFT specification are written in a lightweight markup language like [Markdown](#markdown-import) or [ReStructured Text](#restructured-text-rst-import). Before we go into the specifics, this section discusses the common requirements.
+Typical OFT specifications are written in a lightweight markup language like [Markdown](#markdown-import) or [ReStructured Text](#restructured-text-rst-import). Before we go into the specifics, this section discusses the common requirements.
 
 ##### Disabling OFT Parsing for Parts of a Markup File
 `req~disabling-oft-parsing-for-parts-of-a-markup-file~1`
@@ -295,7 +295,7 @@ Markdown focuses on content over formatting by giving the document structure lik
 
 OFT defines a Markdown format that we call "Requirement-Enhanced Markdown" which is a superset of the regular Markdown. Any Markdown renderer can render this format without understanding it. The additional structural definitions tell OFT which part of the text is a specification item.
 
-For backward compatibility OFT supports a variant of this format that was introduced at Elektrobit. This format is a little bit closer to ReqM2, the predecessor that sparked the OFT idea. We recommend using standard OFT Markdown format in new documents though since this format is cleaner.
+For backward compatibility OFT supports a variant of this format that was introduced at Elektrobit. This format is a little bit closer to ReqM2, the predecessor that sparked the OFT idea. We recommend using the standard OFT Markdown format in new documents, though, since this format is cleaner.
 
 ##### Markdown Standard Syntax
 `req~markdown-standard-syntax~1`
@@ -319,7 +319,7 @@ The Markdown outline -- a table of contents created from the heading structure b
 
 Rationale:
 
-In long specification document the outline is the primary means of navigating the document. Only if the outline can be read easily, it is useful for authoring specification documents.
+In long specification documents the outline is the primary means of navigating the document. Only if the outline can be read easily, it is useful for authoring specification documents.
 
 Covers:
 
@@ -365,6 +365,24 @@ OFT imports coverage tags from source files in a short format that requires addi
 Covers:
 
 * [feat~coverage-tag-import~1](#coverage-tag-import)
+
+Needs: dsn
+
+#### ReqM2 Format
+
+ReqM2 is a markup format developed at Elektrobit. ReqM2 files traditionally use the `.xml` file extension, a better way is to use `.oreqm` instead since that identifies the files uniquely.
+
+##### ReqM2 File Detection
+`req~import.reqm2-file-detection~1`
+
+OFT considers a file to be a ReqM2 file if it either
+
+1. has a the `.oreqm` extension or
+2. has a the `.xml` extension and the header indicates that it is a ReqM2 file.
+
+Covers:
+
+* [feat~reqm2-import~1](#reqm2-import)
 
 Needs: dsn
 
@@ -467,13 +485,13 @@ Usually the responsibility of document authors or coders when it comes to tracin
 
 If the users try to run a regular trace without feeding in the artifacts all the way to the bottom level of the tracing chain, the coverage check will always report errors because of missing lower level coverage.
 
-To mitigate the situation OFT allows users to ignore required coverage for selected artifact types.
+To mitigate the situation,OFT allows users to ignore required coverage for selected artifact types.
 
 Example:
 
-Kim is a software architect and it is her job to cover the system requirements coming from Steve in her software architecture. Kim wants to make sure she did not forget to cover a system requirement and uses OFT to trace the two documents. The system requirement specification uses the artifact types `feat` and `req` where `req` covers the `feat` artifacts in the same document. Kim's architecture uses the artifact type `sysarch` which covers `req` and requires a detailed design `dsn`.
+Kim is a software architect, and it is her job to cover the system requirements coming from Steve in her software architecture. Kim wants to make sure she did not forget to cover a system requirement and uses OFT to trace the two documents. The system requirement specification uses the artifact types `feat` and `req` where `req` covers the `feat` artifacts in the same document. Kim's architecture uses the artifact type `sysarch` which covers `req` and requires a detailed design `dsn`.
 
-Obviously the detailed design is missing at the point when Kim runs the trace. To mitigate this situation Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
+Obviously, the detailed design is missing at the point when Kim runs the trace. To mitigate this situation, Kim configures OFT to ignore all artifacts of type `dsn`, including the needed coverage. This allows Kim to validate coverage towards the system requirement without needing the detailed design document.
 
 #### Include Only Artifact Types
 `req~include-only-artifact-types~1`

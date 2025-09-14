@@ -9,10 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 /**
  * Tests for {@link SpecobjectImporterFactory}
@@ -74,6 +77,25 @@ class TestSpecobjectImporterFactory
                 </root>"
                 """);
         final boolean supported = createFactory().supportsFile(RealFileInput.forPath(tempFile));
+        assertThat(supported, equalTo(false));
+    }
+
+    // [utest ->dsn~import.reqm2-file-detection~1]
+    @Test
+    void givenEmptyFileWhenCheckingReqM2HeaderThenDoesNotClaimSupport(@TempDir final Path tempDir) throws IOException
+    {
+        final Path tempFile = tempDir.resolve("empty.xml");
+        Files.writeString(tempFile, "");
+        final boolean supported = createFactory().supportsFile(RealFileInput.forPath(tempFile));
+        assertThat(supported, equalTo(false));
+    }
+
+    // [utest ->dsn~import.reqm2-file-detection~1]
+    @Test
+    void givenFileWhenIOExceptionOccursThenDoesNotClaimSupport(@Mock InputFile mockInputFile) throws IOException
+    {
+        Mockito.when(mockInputFile.createReader()).thenThrow(new IOException("This is an expected test exception"));
+        final boolean supported = createFactory().supportsFile(mockInputFile);
         assertThat(supported, equalTo(false));
     }
 }

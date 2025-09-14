@@ -19,7 +19,7 @@ jobs:
             "aliveStatusCodes": [429, 200],
             "ignorePatterns": [
               {
-                # The Autosar website's TLS certificate cannot be validated from GitHub Actions.
+                # The Autosar TLS certificate cannot be validated from GitHub Actions.
                 "pattern": "^https://www.autosar.org/"
               }
             ]

@@ -485,7 +485,7 @@ Usually the responsibility of document authors or coders when it comes to tracin
 
 If the users try to run a regular trace without feeding in the artifacts all the way to the bottom level of the tracing chain, the coverage check will always report errors because of missing lower level coverage.
 
-To mitigate the situation,OFT allows users to ignore required coverage for selected artifact types.
+To mitigate the situation, OFT allows users to ignore required coverage for selected artifact types.
 
 Example:
 

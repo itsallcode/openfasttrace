@@ -12,7 +12,7 @@ import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 /**
  * An {@link ImporterFactory} for ReqM2/SpecObject XML files.
  */
-public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
+public class SpecobjectImporterFactory extends ImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(SpecobjectImporterFactory.class.getName());
     private static final int PEEK_CHARS = 4096;
@@ -24,7 +24,6 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
      */
     public SpecobjectImporterFactory()
     {
-        super("(?i).*\\.(xml|oreqm)");
         this.xmlParserFactory = new XmlParserFactory();
     }
 
@@ -40,25 +39,29 @@ public class SpecobjectImporterFactory extends RegexMatchingImporterFactory
         }
         else if (lower.endsWith(".xml"))
         {
-            try (BufferedReader reader = file.createReader())
+            return doesFileContainOreqmHeader(file, path);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean doesFileContainOreqmHeader(final InputFile file, final String path) {
+        try (BufferedReader reader = file.createReader())
+        {
+            final char[] buf = new char[PEEK_CHARS];
+            final int read = reader.read(buf);
+            if (read <= 0)
             {
-                final char[] buf = new char[PEEK_CHARS];
-                final int read = reader.read(buf);
-                if (read <= 0)
-                {
-                    return false;
-                }
-                else {
-                    final String header = new String(buf, 0, read);
-                    return header.contains("<specdocument");
-                }
-            }
-            catch (final IOException exception)
-            {
-                LOG.fine(() -> "Unable to peek XML file '" + path + "' trying to determine if it contains ReqM2 format: " + exception.getMessage());
                 return false;
             }
-        } else {
+            else {
+                final String header = new String(buf, 0, read);
+                return header.contains("<specdocument");
+            }
+        }
+        catch (final IOException exception)
+        {
+            LOG.fine(() -> "Unable to peek XML file '" + path + "' trying to determine if it contains ReqM2 format: " + exception.getMessage());
             return false;
         }
     }

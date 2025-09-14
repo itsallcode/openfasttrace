@@ -1,4 +1,4 @@
-# OpenFastTrace 4.2.1, released 2025-09-07
+# OpenFastTrace 4.2.1, released 2025-09-14
 
 Code name: Peek before you guess
 

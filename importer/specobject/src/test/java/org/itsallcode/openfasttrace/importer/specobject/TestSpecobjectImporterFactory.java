@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.specobject;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +16,6 @@ import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 /**
  * Tests for {@link SpecobjectImporterFactory}
@@ -94,7 +94,8 @@ class TestSpecobjectImporterFactory
     @Test
     void givenFileWhenIOExceptionOccursThenDoesNotClaimSupport(@Mock InputFile mockInputFile) throws IOException
     {
-        Mockito.when(mockInputFile.createReader()).thenThrow(new IOException("This is an expected test exception"));
+        when(mockInputFile.getPath()).thenReturn("/irrelevant/path/to/file.xml");
+        when(mockInputFile.createReader()).thenThrow(new IOException("This is an expected test exception"));
         final boolean supported = createFactory().supportsFile(mockInputFile);
         assertThat(supported, equalTo(false));
     }

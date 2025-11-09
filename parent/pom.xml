@@ -511,6 +511,9 @@
                 <groupId>org.sonatype.ossindex.maven</groupId>
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <version>3.2.0</version>
+                <configuration>
+                    <authId>ossindex</authId>
+                </configuration>
                 <executions>
                     <execution>
                         <id>audit</id>

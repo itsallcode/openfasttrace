@@ -11,11 +11,19 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Configure broken links checker
         run: |
           mkdir -p ./target
-          echo '{ "aliveStatusCodes": [429, 200] }' > ./target/broken_links_checker.json
+          echo '{
+            "aliveStatusCodes": [429, 200],
+            "ignorePatterns": [
+              {
+                # The Autosar TLS certificate cannot be validated from GitHub Actions.
+                "pattern": "^https://www.autosar.org/"
+              }
+            ]
+          }' > ./target/broken_links_checker.json
       - uses: tcort/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: "yes"

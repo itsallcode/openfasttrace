@@ -209,7 +209,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>5.18.0</version>
+                <version>5.20.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -227,7 +227,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>4.0</version>
+                <version>4.2.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -239,7 +239,7 @@
             <dependency>
                 <groupId>com.exasol</groupId>
                 <artifactId>maven-project-version-getter</artifactId>
-                <version>1.2.1</version>
+                <version>1.2.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

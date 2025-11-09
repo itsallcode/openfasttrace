@@ -406,6 +406,19 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.9.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- Define ${org.mockito:mockito-core:jar} property required for Mockito agent loading -->
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.version}</version>
                 <configuration>
@@ -415,7 +428,7 @@
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
-                        <!-- Required for Java >= 18 --> ${test.args} </argLine>
+                        <!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -429,7 +442,7 @@
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
-                    <argLine><!-- Required for Java >= 18 --> ${test.args} </argLine>
+                    <argLine><!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
                 <executions>
                     <execution>

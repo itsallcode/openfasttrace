@@ -91,7 +91,10 @@ public final class JarLauncher
         process.waitForTermination(timeout);
         final int exitValue = process.exitValue();
         LOG.fine("Process %d terminated with exit code %d".formatted(process.pid(), exitValue));
-        assertAll(() -> assertThat("exit code", exitValue, equalTo(builder.expectedExitCode)),
+        assertAll(
+                () -> assertThat(
+                        "exit code (std out: %s, std err: %s)".formatted(process.getStdOut(), process.getStdErr()),
+                        exitValue, equalTo(builder.expectedExitCode)),
                 () -> {
                     if (builder.expectedStdOut != null)
                     {

@@ -12,8 +12,8 @@
     <properties>
         <revision>4.2.1</revision>
         <java.version>17</java.version>
-        <junit.version>5.12.2</junit.version>
-        <maven.surefire.version>3.5.3</maven.surefire.version>
+        <junit.version>6.0.1</junit.version>
+        <maven.surefire.version>3.5.4</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
@@ -250,33 +250,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <profiles>
-        <profile>
-        <!-- FIX ME -->
-            <id>java21</id>
-            <activation>
-                <jdk>21</jdk>
-                <property>
-                    <!-- Prevent activating this profile when running without specifying
-                    -Djava.version.
-                         Tests with JDK 11 fail because it expects a class name as value for for
-                         system property "java.security.manager" -->
-                    <name>java.version</name>
-                    <value>21</value>
-                </property>
-            </activation>
-            <properties>
-                <!-- java.security.manager is required to fix failing tests in TestCliStarter:
-                    UnsupportedOperation The Security Manager is deprecated and will be removed in a future release -->
-                <!-- EnableDynamicAgentLoading suppresses a warning caused by Mockito dynamically
-                loading a Java agent:
-                    WARNING: A Java agent has been loaded dynamically
-                (~/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.11/byte-buddy-agent-1.14.11.jar)
-                    Dynamic loading of agents will be disallowed by default in a future release -->
-                <test.args>-Djava.security.manager=allow -XX:+EnableDynamicAgentLoading</test.args>
-            </properties>
-        </profile>
-    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -322,7 +295,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -457,7 +429,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.3</version>
                 <configuration>
                     <flattenMode>oss</flattenMode> <!-- Use 'oss' mode for Maven Central -->
                 </configuration>
@@ -465,7 +437,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -527,7 +499,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-artifact-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>verify-reproducible-build</id>
@@ -544,7 +516,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.18.0</version>
+                <version>2.19.1</version>
             </plugin>
             <plugin>
                 <!-- Deployment of this module not required -->
@@ -561,7 +533,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.4.1</version>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -576,12 +553,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>4.0.0-M16</version>
+                    <version>3.21.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -596,7 +573,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.11.2</version>
+                    <version>3.12.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -667,7 +644,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2025.0</version>
+                            <version>1.2025.10</version>
                         </dependency>
                     </dependencies>
                 </plugin>

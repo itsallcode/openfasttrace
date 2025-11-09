@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.cli;
 
+import static java.util.stream.Collectors.joining;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -298,7 +299,8 @@ class CliStarterIT
 
     private void assertNoOffendingNewlines()
     {
-        switch (System.lineSeparator())
+        final String systemLineSeparator = System.lineSeparator();
+        switch (systemLineSeparator)
         {
         case NEWLINE:
             assertThat("Has no carriage returns", getOutputFileContent().contains(CARRIAGE_RETURN),
@@ -312,7 +314,10 @@ class CliStarterIT
                     getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
             break;
         default:
-            fail("Unsupported line separator");
+            final String hexCode = systemLineSeparator.chars()
+                    .mapToObj(c -> String.format("\\u%04x", c))
+                    .collect(joining());
+            fail("Unsupported line separator '%s' (hex: %s)".formatted(systemLineSeparator, hexCode));
         }
     }
 

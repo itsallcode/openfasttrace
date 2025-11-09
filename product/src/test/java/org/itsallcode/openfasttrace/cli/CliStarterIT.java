@@ -313,11 +313,15 @@ class CliStarterIT
             assertThat("Has no newline without carriage return and vice-versa",
                     getOutputFileContent().matches("\n[^\r]|[^\n]\r"), equalTo(false));
             break;
+        case CARRIAGE_RETURN + NEWLINE:
+            assertThat("Has no carriage return without newline and vice-versa",
+                    getOutputFileContent().matches("\r[^\n]|[^\r]\n"), equalTo(false));
+            break;
         default:
             final String hexCode = systemLineSeparator.chars()
                     .mapToObj(c -> String.format("\\u%04x", c))
                     .collect(joining());
-            fail("Unsupported line separator '%s' (hex: %s)".formatted(systemLineSeparator, hexCode));
+            fail("Unsupported line separator '%s' (%s)".formatted(systemLineSeparator, hexCode));
         }
     }
 

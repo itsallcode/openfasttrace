@@ -121,12 +121,19 @@ By default, OFT is built with Java 17.
 
 To build and test with a later version, add argument `-Djava.version=17` to the Maven command.
 
-
 #### Speedup Build
 
 By default, Maven builds the OFT modules sequentially.
 
 To speed up the build and build modules in parallel, add argument `-T 1C` to the Maven command.
+
+#### Run Single Integration Test
+
+Specify test class via system property `it.test` and module via command line option `-projects`:
+
+```sh
+mvn -Dit.test=CliStarterIT failsafe:integration-test -projects product
+```
 
 ### Run Requirements Tracing
 

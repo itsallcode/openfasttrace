@@ -127,6 +127,7 @@ public class CliStarter
     }
 
     // [impl->dsn~cli.tracing.exit-status~1]
+    @SuppressWarnings("java:S1147") // Calling System.exit() intentionally
     private static void exit(final ExitStatus exitStatus)
     {
         System.exit(exitStatus.getCode());

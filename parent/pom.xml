@@ -245,20 +245,21 @@
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>simple-process</artifactId>
-                <version>0.2.0</version>
+                <version>0.3.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>
         <profile>
+        <!-- FIX ME -->
             <id>java21</id>
             <activation>
                 <jdk>21</jdk>
                 <property>
                     <!-- Prevent activating this profile when running without specifying
                     -Djava.version.
-                         Tests with JDK 11 fail because it expecteds a class name as value for for
+                         Tests with JDK 11 fail because it expects a class name as value for for
                          system property "java.security.manager" -->
                     <name>java.version</name>
                     <value>21</value>

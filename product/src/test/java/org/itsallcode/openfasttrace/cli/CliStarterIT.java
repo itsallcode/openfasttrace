@@ -76,7 +76,7 @@ class CliStarterIT
     @Test
     void testHelpPrintsUsage()
     {
-        final String nl = System.lineSeparator();
+        final String nl = "\n";
         assertExitOkWithStdOutStart(jarLauncher(HELP_COMMAND), "OpenFastTrace" + nl + nl + "Usage:");
     }
 

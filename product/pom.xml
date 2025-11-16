@@ -62,6 +62,16 @@
             <artifactId>openfasttrace-testutil</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>maven-project-version-getter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>simple-process</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>openfasttrace-${revision}</finalName>
@@ -117,7 +127,7 @@
                 <configuration>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
-                        <!-- Suppress warning "bad path element "/Users/chp/private/git/openfasttrace/product/target/classes": no such file or directory" -->
+                        <!-- Suppress warning "bad path element "openfasttrace/product/target/classes": no such file or directory" -->
                         <arg>-Xlint:-path</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>

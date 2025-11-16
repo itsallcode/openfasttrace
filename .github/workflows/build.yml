@@ -18,6 +18,8 @@ jobs:
         include:
           - os: ubuntu-latest
             java: 21
+          - os: ubuntu-latest
+            java: 25
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-os-${{ matrix.os }}-java-${{ matrix.java }}
@@ -43,6 +45,9 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
           cache: "maven"
+          server-id: ossindex
+          server-username: OSSINDEX_USERNAME
+          server-password: OSSINDEX_TOKEN
 
       - name: Cache SonarQube packages
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
@@ -56,6 +61,9 @@ jobs:
         run: |
           mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
               -Djava.version=${{ matrix.java }}
+        env:
+          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
 
       - name: Sonar analysis
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java && env.SONAR_TOKEN != null }}

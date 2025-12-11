@@ -18,8 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
         <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
-        <test.args><!-- Empty default value for Java version < 18 -->
-        </test.args>
+        <test.args>-Duser.language=en</test.args>
     </properties>
     <licenses>
         <license>

@@ -15,6 +15,7 @@ public class TagImporterFactory extends ImporterFactory
 {
     private static final String DEFAULT_FILE_REGEX = "(?i).*\\.java";
     private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList( //
+            "ads", "adb", // Ada
             "bat", // Windows batch files
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
             "c#", "cs", // C#

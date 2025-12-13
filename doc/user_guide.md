@@ -746,6 +746,7 @@ recognized file types:
 
 **Programming languages**
 
+* Ada (`.ads`, `.adb`)
 * C (`.c`, `.h`)
 * C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
 * C# (`.c#`, `cs`)

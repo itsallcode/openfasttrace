@@ -26,7 +26,7 @@ class JsGeneratorTest {
     @Test
     void generate() throws IOException
     {
-        final UxModel model = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS).getUxModel();
+        final UxModel model = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS_WRONG_LINK).getUxModel();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         new JsGenerator().generate(out,model);
         System.out.println(out);

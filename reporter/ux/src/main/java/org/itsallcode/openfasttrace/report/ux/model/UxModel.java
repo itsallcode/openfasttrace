@@ -3,9 +3,7 @@ package org.itsallcode.openfasttrace.report.ux.model;
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Surrounding model that is used to generate the specitem_data model for OpenFastTrace-UX.
@@ -16,6 +14,7 @@ public class UxModel
     private final List<String> artifactTypes;
     private final List<String> tags;
     private final List<String> statusNames;
+    private final List<WrongLinkType> wrongLinkTypes;
 
     private final int numberOfSpecItems;
     private final int uncoveredSpecItems;
@@ -26,6 +25,7 @@ public class UxModel
     private final List<Integer> uncoveredCount;
     private final List<Integer> statusCount;
     private final List<Integer> tagCount;
+    private final List<Integer> wrongLinkCount;
 
     private UxModel(Builder builder)
     {
@@ -33,6 +33,7 @@ public class UxModel
         artifactTypes = builder.artifactTypes;
         tags = builder.tags;
         statusNames = builder.statusNames;
+        wrongLinkTypes = builder.wrongLinkTypes;
         numberOfSpecItems = builder.numberOfSpecItems;
         uncoveredSpecItems = builder.uncoveredSpecItems;
         items = builder.items;
@@ -40,6 +41,7 @@ public class UxModel
         uncoveredCount = builder.uncoveredCount;
         statusCount = builder.statusCount;
         tagCount = builder.tagCount;
+        wrongLinkCount = builder.wrongLinkCount;
     }
 
     public static Builder builder(UxModel copy)
@@ -49,6 +51,7 @@ public class UxModel
         builder.artifactTypes = copy.getArtifactTypes();
         builder.tags = copy.getTags();
         builder.statusNames = copy.getStatusNames();
+        builder.wrongLinkTypes = copy.getWrongLinkTypes();
         builder.numberOfSpecItems = copy.getNumberOfSpecItems();
         builder.uncoveredSpecItems = copy.getUncoveredSpecItems();
         builder.items = copy.getItems();
@@ -56,6 +59,7 @@ public class UxModel
         builder.uncoveredCount = copy.getUncoveredCount();
         builder.statusCount = copy.getStatusCount();
         builder.tagCount = copy.getTagCount();
+        builder.wrongLinkCount = copy.getWrongLinkCount();
         return builder;
     }
 
@@ -106,6 +110,14 @@ public class UxModel
     }
 
     /**
+     * @return The names of the wrongLink type names find in specItems.
+     */
+    public List<WrongLinkType> getWrongLinkTypes()
+    {
+        return wrongLinkTypes;
+    }
+
+    /**
      * @return items within the model
      */
     public List<UxSpecItem> getItems() {
@@ -113,7 +125,7 @@ public class UxModel
     }
 
     /**
-     * @return number of items by type index
+     * @return numbers of items by type index
      */
     public List<Integer> getTypeCount()
     {
@@ -121,7 +133,7 @@ public class UxModel
     }
 
     /**
-     * @return covered count per soecObject type
+     * @return covered count per specObject type
      */
     public List<Integer> getUncoveredCount()
     {
@@ -129,7 +141,7 @@ public class UxModel
     }
 
     /**
-     * @return number of items by status index
+     * @return numbers of items by status index
      */
     public List<Integer> getStatusCount()
     {
@@ -137,11 +149,19 @@ public class UxModel
     }
 
     /**
-     * @return number of items by status index
+     * @return numbers of items by status index
      */
     public List<Integer> getTagCount()
     {
         return tagCount;
+    }
+
+    /**
+     * @return numbers of wrong links
+     */
+    public List<Integer> getWrongLinkCount()
+    {
+        return wrongLinkCount;
     }
 
     /**
@@ -152,6 +172,7 @@ public class UxModel
         private List<String> artifactTypes;
         private List<String> tags;
         private List<String> statusNames;
+        private List<WrongLinkType> wrongLinkTypes;
         private int numberOfSpecItems;
         private int uncoveredSpecItems;
         private List<UxSpecItem> items;
@@ -159,6 +180,7 @@ public class UxModel
         private List<Integer> uncoveredCount;
         private List<Integer> statusCount;
         private List<Integer> tagCount;
+        private List<Integer> wrongLinkCount;
         private String projectName;
 
         private Builder()
@@ -206,6 +228,19 @@ public class UxModel
         public Builder withStatusNames(List<String> statusNames)
         {
             this.statusNames = statusNames;
+            return this;
+        }
+
+        /**
+         * Sets the {@code wrongLinkTypeNames} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param wrongLinkType
+         *         the {@code wrongLinkTypeNames} to set
+         * @return a reference to this Builder
+         */
+        public Builder withWrongLinkType(List<WrongLinkType> wrongLinkType)
+        {
+            this.wrongLinkTypes = wrongLinkType;
             return this;
         }
 
@@ -297,6 +332,19 @@ public class UxModel
         public Builder withTagCount(List<Integer> tagCount)
         {
             this.tagCount = tagCount;
+            return this;
+        }
+
+        /**
+         * Sets the {@code wrongLinkCount} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param wrongLinkCount
+         *         the {@code wrongLinkCount} to set
+         * @return a reference to this Builder
+         */
+        public Builder withWrongLinkCount(List<Integer> wrongLinkCount)
+        {
+            this.wrongLinkCount = wrongLinkCount;
             return this;
         }
 

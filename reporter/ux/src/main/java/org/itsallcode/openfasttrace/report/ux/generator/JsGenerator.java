@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.report.ux.generator;
 import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.itsallcode.openfasttrace.report.ux.model.UxSpecItem;
+import org.itsallcode.openfasttrace.report.ux.model.WrongLinkType;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -51,6 +52,7 @@ public class JsGenerator implements IGenerator {
         println("types", model.getArtifactTypes());
         println("tags", model.getTags());
         println("status",model.getStatusNames());
+        println("wronglinkNames", model.getWrongLinkTypes().stream().map(WrongLinkType::toString).toList());
         println("item_count", model.getItems().size());
         println("item_covered", model.getItems().size() - model.getUncoveredSpecItems());
         println("item_uncovered", model.getUncoveredSpecItems());
@@ -58,6 +60,7 @@ public class JsGenerator implements IGenerator {
         println("uncovered_count", model.getUncoveredCount());
         println("status_count",model.getStatusCount());
         println("tag_count", model.getTagCount());
+        println("wronglink_count", model.getWrongLinkCount());
         printClose("},");
     }
 
@@ -88,6 +91,11 @@ public class JsGenerator implements IGenerator {
         println("sourceFile", location != null ? location.getPath() : "");
         println("sourceLine", location != null ? location.getLine() : 0);
         println("comments", item.getItem().getItem().getComment());
+        println("wrongLinkTypes", item.getWrongLinkTypes());
+        println("wrongLinkTargets",
+                item.getWrongLinkTargets().entrySet().stream().map(entry ->
+                        String.format("%s[%s]", entry.getKey(), entry.getValue())).toList()
+        );
         printClose("},");
     }
 
@@ -161,7 +169,7 @@ public class JsGenerator implements IGenerator {
     }
 
     private String quote(final String text) {
-        return text.replace("'", "\\\'")
+        return text.replace("'", "\\'")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;")
                 .replaceAll("\n\r?|\r", "<br>");

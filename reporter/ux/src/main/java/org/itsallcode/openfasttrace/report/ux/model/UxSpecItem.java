@@ -4,6 +4,7 @@ import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class UxSpecItem
 {
@@ -21,10 +22,13 @@ public class UxSpecItem
     private final List<Integer> coveredByIndex;
     private final List<Integer> dependsIndex;
     private final int statusId;
+    private final List<Integer> wrongLinkTypes;
+    private final Map<String, String> wrongLinkTargets;
     private final List<String> path;
     private final LinkedSpecificationItem item;
 
-    private UxSpecItem(Builder builder) {
+    private UxSpecItem(Builder builder)
+    {
         index = builder.index;
         typeIndex = builder.typeIndex;
         title = builder.title;
@@ -39,8 +43,34 @@ public class UxSpecItem
         coveredByIndex = builder.coveredByIndex;
         dependsIndex = builder.dependsIndex;
         statusId = builder.statusId;
+        wrongLinkTypes = builder.wrongLinkTypes;
+        wrongLinkTargets = builder.wrongLinkTargets;
         path = builder.path;
         item = builder.item;
+    }
+
+    public static Builder builder(UxSpecItem copy)
+    {
+        Builder builder = new Builder();
+        builder.index = copy.getIndex();
+        builder.typeIndex = copy.getTypeIndex();
+        builder.title = copy.getTitle();
+        builder.name = copy.getName();
+        builder.id = copy.getId();
+        builder.tagIndex = copy.getTagIndex();
+        builder.providesIndex = copy.getProvidesIndex();
+        builder.neededTypeIndex = copy.getNeededTypeIndex();
+        builder.coveredIndex = copy.getCoveredIndex();
+        builder.uncoveredIndex = copy.getUncoveredIndex();
+        builder.coveringIndex = copy.getCoveringIndex();
+        builder.coveredByIndex = copy.getCoveredByIndex();
+        builder.dependsIndex = copy.getDependsIndex();
+        builder.statusId = copy.getStatusId();
+        builder.wrongLinkTypes = copy.getWrongLinkTypes();
+        builder.wrongLinkTargets = copy.getWrongLinkTargets();
+        builder.path = copy.getPath();
+        builder.item = copy.getItem();
+        return builder;
     }
 
     public int getIndex() {
@@ -99,6 +129,16 @@ public class UxSpecItem
         return statusId;
     }
 
+    public List<Integer> getWrongLinkTypes()
+    {
+        return wrongLinkTypes;
+    }
+
+    public Map<String, String> getWrongLinkTargets()
+    {
+        return wrongLinkTargets;
+    }
+
     public List<String> getPath() {
         return path;
     }
@@ -110,7 +150,8 @@ public class UxSpecItem
     /**
      * {@code UxSpecItem} builder static inner class.
      */
-    public static final class Builder {
+    public static final class Builder
+    {
         private int index;
         private int typeIndex;
         private String title;
@@ -125,13 +166,17 @@ public class UxSpecItem
         private List<Integer> coveredByIndex;
         private List<Integer> dependsIndex = new ArrayList<>();
         private int statusId;
+        private List<Integer> wrongLinkTypes;
+        private Map<String, String> wrongLinkTargets;
         private List<String> path = new ArrayList<>();
         private LinkedSpecificationItem item;
 
-        private Builder() {
+        private Builder()
+        {
         }
 
-        public static Builder builder() {
+        public static Builder builder()
+        {
             return new Builder();
         }
 
@@ -142,7 +187,8 @@ public class UxSpecItem
          *         the {@code index} to set
          * @return a reference to this Builder
          */
-        public Builder withIndex(int index) {
+        public Builder withIndex(int index)
+        {
             this.index = index;
             return this;
         }
@@ -154,7 +200,8 @@ public class UxSpecItem
          *         the {@code typeIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withTypeIndex(int typeIndex) {
+        public Builder withTypeIndex(int typeIndex)
+        {
             this.typeIndex = typeIndex;
             return this;
         }
@@ -166,7 +213,8 @@ public class UxSpecItem
          *         the {@code title} to set
          * @return a reference to this Builder
          */
-        public Builder withTitle(String title) {
+        public Builder withTitle(String title)
+        {
             this.title = title;
             return this;
         }
@@ -178,7 +226,8 @@ public class UxSpecItem
          *         the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withName(String name) {
+        public Builder withName(String name)
+        {
             this.name = name;
             return this;
         }
@@ -190,7 +239,8 @@ public class UxSpecItem
          *         the {@code id} to set
          * @return a reference to this Builder
          */
-        public Builder withId(String id) {
+        public Builder withId(String id)
+        {
             this.id = id;
             return this;
         }
@@ -202,7 +252,8 @@ public class UxSpecItem
          *         the {@code tagIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withTagIndex(List<Integer> tagIndex) {
+        public Builder withTagIndex(List<Integer> tagIndex)
+        {
             this.tagIndex = tagIndex;
             return this;
         }
@@ -214,7 +265,8 @@ public class UxSpecItem
          *         the {@code providesIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withProvidesIndex(List<Integer> providesIndex) {
+        public Builder withProvidesIndex(List<Integer> providesIndex)
+        {
             this.providesIndex = providesIndex;
             return this;
         }
@@ -226,7 +278,8 @@ public class UxSpecItem
          *         the {@code neededTypeIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withNeededTypeIndex(List<Integer> neededTypeIndex) {
+        public Builder withNeededTypeIndex(List<Integer> neededTypeIndex)
+        {
             this.neededTypeIndex = neededTypeIndex;
             return this;
         }
@@ -238,7 +291,8 @@ public class UxSpecItem
          *         the {@code coveredIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withCoveredIndex(List<Integer> coveredIndex) {
+        public Builder withCoveredIndex(List<Integer> coveredIndex)
+        {
             this.coveredIndex = coveredIndex;
             return this;
         }
@@ -250,7 +304,8 @@ public class UxSpecItem
          *         the {@code uncoveredIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withUncoveredIndex(List<Integer> uncoveredIndex) {
+        public Builder withUncoveredIndex(List<Integer> uncoveredIndex)
+        {
             this.uncoveredIndex = uncoveredIndex;
             return this;
         }
@@ -262,7 +317,8 @@ public class UxSpecItem
          *         the {@code coveringIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withCoveringIndex(List<Integer> coveringIndex) {
+        public Builder withCoveringIndex(List<Integer> coveringIndex)
+        {
             this.coveringIndex = coveringIndex;
             return this;
         }
@@ -274,7 +330,8 @@ public class UxSpecItem
          *         the {@code coveredByIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withCoveredByIndex(List<Integer> coveredByIndex) {
+        public Builder withCoveredByIndex(List<Integer> coveredByIndex)
+        {
             this.coveredByIndex = coveredByIndex;
             return this;
         }
@@ -286,7 +343,8 @@ public class UxSpecItem
          *         the {@code dependsIndex} to set
          * @return a reference to this Builder
          */
-        public Builder withDependsIndex(List<Integer> dependsIndex) {
+        public Builder withDependsIndex(List<Integer> dependsIndex)
+        {
             this.dependsIndex = dependsIndex;
             return this;
         }
@@ -298,8 +356,35 @@ public class UxSpecItem
          *         the {@code statusId} to set
          * @return a reference to this Builder
          */
-        public Builder withStatusId(int statusId) {
+        public Builder withStatusId(int statusId)
+        {
             this.statusId = statusId;
+            return this;
+        }
+
+        /**
+         * Sets the {@code wrongLinkTypes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param wrongLinkTypes
+         *         the {@code wrongLinkTypes} to set
+         * @return a reference to this Builder
+         */
+        public Builder withWrongLinkTypes(List<Integer> wrongLinkTypes)
+        {
+            this.wrongLinkTypes = wrongLinkTypes;
+            return this;
+        }
+
+        /**
+         * Sets the {@code wrongLinkTargets} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param wrongLinkTargets
+         *         the {@code wrongLinkTargets} to set
+         * @return a reference to this Builder
+         */
+        public Builder withWrongLinkTargets(Map<String, String> wrongLinkTargets)
+        {
+            this.wrongLinkTargets = wrongLinkTargets;
             return this;
         }
 
@@ -310,7 +395,8 @@ public class UxSpecItem
          *         the {@code path} to set
          * @return a reference to this Builder
          */
-        public Builder withPath(List<String> path) {
+        public Builder withPath(List<String> path)
+        {
             this.path = path;
             return this;
         }
@@ -322,7 +408,8 @@ public class UxSpecItem
          *         the {@code item} to set
          * @return a reference to this Builder
          */
-        public Builder withItem(LinkedSpecificationItem item) {
+        public Builder withItem(LinkedSpecificationItem item)
+        {
             this.item = item;
             return this;
         }
@@ -332,7 +419,8 @@ public class UxSpecItem
          *
          * @return a {@code UxSpecItem} built with parameters of this {@code UxSpecItem.Builder}
          */
-        public UxSpecItem build() {
+        public UxSpecItem build()
+        {
             return new UxSpecItem(this);
         }
     }

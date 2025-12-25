@@ -11,6 +11,7 @@ import org.itsallcode.openfasttrace.report.ux.model.Coverage;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SampleData {
 
@@ -79,6 +80,23 @@ public class SampleData {
             "utest", Coverage.NONE
     );
 
+    public static final List<SpecificationItem> SAMPLE_WRONG_LINKS = List.of(
+            item("feat~feat1~2", ItemStatus.APPROVED, Set.of("req")),
+            item("req~req_lower_version~1", ItemStatus.APPROVED, Set.of("arch"), Set.of("feat~feat1~1")),
+            item("req~req_higher_version~1", ItemStatus.APPROVED, Set.of("arch"), Set.of("feat~feat1~3")),
+            item("itest~itest_wrong_type~1", ItemStatus.APPROVED, Set.of("arch"), Set.of("feat~feat1~2")),
+            item("itest~itest_dead_type~1", ItemStatus.APPROVED, Set.of("arch"), Set.of("feat~feat2~3"))
+    );
+
+    public static final List<LinkedSpecificationItem> LINKED_SAMPLE_WRONG_LINKS = new Linker(SAMPLE_WRONG_LINKS).link();
+
+    public static final List<SpecificationItem> SAMPLE_ITEMS_WRONG_LINKS = Stream.concat(
+            SAMPLE_ITEMS.stream(),
+            SAMPLE_WRONG_LINKS.stream()
+    ).toList();
+
+    public static final List<LinkedSpecificationItem> LINKED_SAMPLE_ITEMS_WRONG_LINK =
+            new Linker(SAMPLE_ITEMS_WRONG_LINKS).link();
 
     //
     // Helpers
@@ -140,7 +158,7 @@ public class SampleData {
     public static SpecificationItemId id(final String id) {
         return id.matches("/~.*~") ?
                 new SpecificationItemId.Builder(id).build() :
-                new SpecificationItemId.Builder(id + "~1").build();
+                new SpecificationItemId.Builder(id.matches(".*~[0-9]+$") ? id : id + "~1").build();
     }
 
 } // SampleData

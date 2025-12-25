@@ -2,10 +2,12 @@ package org.itsallcode.openfasttrace.report.ux;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.core.Linker;
 import org.itsallcode.openfasttrace.report.ux.model.Coverage;
+import org.itsallcode.openfasttrace.report.ux.model.UxSpecItem;
+import org.itsallcode.openfasttrace.report.ux.model.WrongLinkType;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,15 +20,10 @@ import java.util.stream.Stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.itsallcode.matcher.auto.AutoMatcher.containsInAnyOrder;
+import static org.itsallcode.openfasttrace.report.ux.SampleData.LINKED_SAMPLE_WRONG_LINKS;
+import static org.itsallcode.openfasttrace.report.ux.model.WrongLinkType.*;
 
 class CollectorTest {
-
-    private Collector collector = null;
-
-    @BeforeEach
-    void setUp() {
-        collector = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS);
-    }
 
     @AfterEach
     void tearDown() {
@@ -191,38 +188,10 @@ class CollectorTest {
                 { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED },
         };
 
-        final List<Map<String, Coverage>> coverages = collector
+        final List<Map<String, Coverage>> coverages = new Collector()
                 .collect(SampleData.LINKED_SAMPLE_ITEMS)
                 .getItemCoverages();
         validateCoverages(SampleData.LINKED_SAMPLE_ITEMS, coverages, expectedCoverages);
-/*
-
-        System.out.println("0:" + coverages.get(0) + " of " + SAMPLE_ITEMS.get(0).getId());
-        assertThat(coverages.get(0),
-                allOf(SampleData.coverages(Coverage.COVERED, Coverage.COVERED, Coverage.UNCOVERED, Coverage.COVERED)));
-        System.out.println("1:" + coverages.get(1) + " of " + SAMPLE_ITEMS.get(1).getId());
-        assertThat(coverages.get(1),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("2:" + coverages.get(2) + " of " + SAMPLE_ITEMS.get(2).getId());
-        assertThat(coverages.get(2),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.COVERED, Coverage.UNCOVERED, Coverage.NONE)));
-        System.out.println("3:" + coverages.get(3) + " of " + SAMPLE_ITEMS.get(3).getId());
-        assertThat(coverages.get(3),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("4:" + coverages.get(4) + " of " + SAMPLE_ITEMS.get(4).getId());
-        assertThat(coverages.get(4),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.COVERED, Coverage.COVERED)));
-        System.out.println("5:" + coverages.get(5) + " of " + SAMPLE_ITEMS.get(5).getId());
-        assertThat(coverages.get(5),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.UNCOVERED, Coverage.MISSING)));
-        System.out.println("6:" + coverages.get(6) + " of " + SAMPLE_ITEMS.get(6).getId());
-        assertThat(coverages.get(6),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
-        System.out.println("7:" + coverages.get(7) + " of " + SAMPLE_ITEMS.get(7).getId());
-        assertThat(coverages.get(7),
-                allOf(SampleData.coverages(Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED)));
-
- */
     }
 
     /**
@@ -243,11 +212,344 @@ class CollectorTest {
                 { Coverage.NONE, Coverage.NONE, Coverage.NONE, Coverage.COVERED }
         };
 
-        final List<Map<String, Coverage>> coverages = collector
+        final List<Map<String, Coverage>> coverages = new Collector()
                 .collect(SampleData.LINKED_SAMPLE_ITEMS_CYCLE)
                 .getItemCoverages();
         validateCoverages(SampleData.LINKED_SAMPLE_ITEMS_CYCLE, coverages, expectedCoverages);
     }
+
+    @Test
+    void testLinkTypes()
+    {
+        final Collector collector = new Collector().collect(LINKED_SAMPLE_WRONG_LINKS);
+        assertThat(collector.getUxModel().getWrongLinkTypes(), containsInAnyOrder(WRONG_VERSION, UNWANTED, ORPHANED));
+    }@Test
+    void testCollectWrongLinkTypesWithWrongLinks()
+    {
+        final List<WrongLinkType> wrongLinkTypes = Collector.collectWrongLinkTypes(LINKED_SAMPLE_WRONG_LINKS);
+
+        assertThat(wrongLinkTypes, hasSize(3));
+        assertThat(wrongLinkTypes, containsInAnyOrder(WRONG_VERSION, ORPHANED, UNWANTED));
+    }
+
+    @Test
+    void testCollectWrongLinkTypesWithNoWrongLinks()
+    {
+        final List<WrongLinkType> wrongLinkTypes = Collector.collectWrongLinkTypes(SampleData.LINKED_SAMPLE_ITEMS);
+
+        assertThat(wrongLinkTypes, hasSize(0));
+    }
+
+    @Test
+    void testCollectWrongLinkTypesEmptyItems()
+    {
+        final List<WrongLinkType> wrongLinkTypes = Collector.collectWrongLinkTypes(List.of());
+
+        assertThat(wrongLinkTypes, hasSize(0));
+    }
+
+    @Test
+    void testWrongLinks()
+    {
+        final Map<String, WrongLinkType> goldenWrongLinkTypeMapping = Map.of(
+                "req~req_lower_version~1", WRONG_VERSION,
+                "req~req_higher_version~1", WRONG_VERSION,
+                "itest~itest_wrong_type~1", UNWANTED,
+                "itest~itest_dead_type~1", ORPHANED
+        );
+        final Collector collector = new Collector().collect(LINKED_SAMPLE_WRONG_LINKS);
+        final List<WrongLinkType> wrongLinkTypeMap = collector.getUxModel().getWrongLinkTypes();
+
+        for (final UxSpecItem item : collector.getUxItems())
+        {
+            if ("feat".equals(item.getItem().getId().getArtifactType()))
+                continue;
+
+            final String id = item.getItem().getId().toString();
+            final int expectedTypeIndex = wrongLinkTypeMap.indexOf(goldenWrongLinkTypeMapping.get(id));
+            System.out.printf("Item links %s %s%n", item.getId(),
+                    item.getWrongLinkTypes().stream()
+                            .map(index -> wrongLinkTypeMap.get(index).getText())
+                            .collect(Collectors.joining(","))
+            );
+            assertThat(item.getWrongLinkTypes(), hasItem(expectedTypeIndex));
+        }
+    }
+
+    @Test
+    void testWrongLinksByType()
+    {
+        final Map<String, List<String>> goldenWrongLinkTypeMapping = Map.of(
+                "req:req_lower_version", List.of("feat:feat1:2[outdated]", "feat:feat1[orphaned]"),
+                "req:req_higher_version", List.of("feat:feat1:2[predated]", "feat:feat1:3[orphaned]"),
+                "itest:itest_wrong_type", List.of("feat:feat1:2[unwanted]"),
+                "itest:itest_dead_type", List.of("feat:feat2:3[orphaned]")
+        );
+
+        final Collector collector = new Collector().collect(LINKED_SAMPLE_WRONG_LINKS);
+        for (final UxSpecItem item : collector.getUxItems())
+        {
+            if ("feat".equals(item.getItem().getId().getArtifactType()))
+                continue;
+
+            final List<String> goldenSample = goldenWrongLinkTypeMapping.get(item.getId());
+            assertThat(goldenSample,notNullValue());
+            Map<String, String> targets = item.getWrongLinkTargets();
+            for (Map.Entry<String, String> target : targets.entrySet())
+            {
+                final String targetValue = String.format("%s[%s]", target.getKey(), target.getValue());
+                assertThat(targetValue,is(in(goldenSample)));
+            }
+        }
+    }
+
+    @Test
+    void testCollectWrongLinkCountWithNoWrongLinks()
+    {
+        final List<WrongLinkType> wrongLinkTypes = List.of(WRONG_VERSION, ORPHANED, UNWANTED);
+        final List<Integer> wrongLinkCount = Collector.collectWrongLinkCount(
+                SampleData.LINKED_SAMPLE_ITEMS, wrongLinkTypes);
+
+        assertThat(wrongLinkCount, hasSize(3));
+        assertThat(wrongLinkCount, contains(0, 0, 0));
+    }
+
+    @Test
+    void testCollectWrongLinkCountWithWrongLinks()
+    {
+        final List<WrongLinkType> wrongLinkTypes = Collector.collectWrongLinkTypes(LINKED_SAMPLE_WRONG_LINKS);
+        final List<Integer> wrongLinkCount = Collector.collectWrongLinkCount(
+                LINKED_SAMPLE_WRONG_LINKS, wrongLinkTypes);
+
+        // wrongLinkTypes should be in the order: [WRONG_VERSION, ORPHANED, UNWANTED]
+        // or could be in a different order, so we need to check based on the actual order
+        final int versionIndex = wrongLinkTypes.indexOf(WRONG_VERSION);
+        final int orphanedIndex = wrongLinkTypes.indexOf(ORPHANED);
+        final int unwantedIndex = wrongLinkTypes.indexOf(UNWANTED);
+
+        assertThat(wrongLinkCount, hasSize(3));
+        // 2 version wrong links (1 outdated + 1 predated)
+        assertThat(wrongLinkCount.get(versionIndex), is(2));
+        // 3 orphaned links (1 from req_lower_version + 1 from req_higher_version + 1 from itest_dead_type)
+        assertThat(wrongLinkCount.get(orphanedIndex), is(3));
+        // 1 unwanted link (from itest_wrong_type)
+        assertThat(wrongLinkCount.get(unwantedIndex), is(1));
+    }
+
+    @Test
+    void testCollectWrongLinkCountEmptyItems()
+    {
+        final List<WrongLinkType> wrongLinkTypes = List.of(WRONG_VERSION, ORPHANED, UNWANTED);
+        final List<Integer> wrongLinkCount = Collector.collectWrongLinkCount(
+                List.of(), wrongLinkTypes);
+
+        assertThat(wrongLinkCount, hasSize(3));
+        assertThat(wrongLinkCount, contains(0, 0, 0));
+    }
+
+    @Test
+    void testCollectWrongLinkCountEmptyWrongLinkTypes()
+    {
+        final List<Integer> wrongLinkCount = Collector.collectWrongLinkCount(
+                LINKED_SAMPLE_WRONG_LINKS, List.of());
+
+        assertThat(wrongLinkCount, hasSize(0));
+    }
+
+    @Test
+    void testCollectWrongLinkCountIntegration()
+    {
+        final Collector collector = new Collector().collect(LINKED_SAMPLE_WRONG_LINKS);
+        final List<Integer> wrongLinkCount = collector.getUxModel().getWrongLinkCount();
+        final List<WrongLinkType> wrongLinkTypes = collector.getUxModel().getWrongLinkTypes();
+
+        assertThat(wrongLinkCount, notNullValue());
+        assertThat(wrongLinkCount, hasSize(wrongLinkTypes.size()));
+
+        // Verify the total count matches expected
+        final int totalWrongLinks = wrongLinkCount.stream().mapToInt(Integer::intValue).sum();
+        assertThat(totalWrongLinks, is(6)); // 2 version + 3 orphaned + 1 unwanted = 6 total
+    }
+
+    // Collect Tag Count
+
+    @Test
+    void testCollectTagCountWithTags()
+    {
+        final Map<String, Integer> tagCount = Collector.collectTagCount(SampleData.LINKED_SAMPLE_ITEMS);
+
+        assertThat(tagCount, notNullValue());
+        assertThat(tagCount, hasEntry("v1", 1));
+        assertThat(tagCount, hasEntry("v2", 1));
+        assertThat(tagCount, hasEntry("v3", 1));
+        assertThat(tagCount.size(), is(3));
+    }
+
+    @Test
+    void testCollectTagCountNoTags()
+    {
+        final List<SpecificationItem> itemsWithoutTags = List.of(
+                SampleData.item("req~req1", ItemStatus.APPROVED, Set.of("arch"))
+        );
+        final List<LinkedSpecificationItem> linkedItems = new Linker(itemsWithoutTags).link();
+        final Map<String, Integer> tagCount = Collector.collectTagCount(linkedItems);
+
+        assertThat(tagCount, notNullValue());
+        assertThat(tagCount.isEmpty(), is(true));
+    }
+
+    @Test
+    void testCollectTagCountMultipleItemsWithSameTags()
+    {
+        final List<SpecificationItem> itemsWithTags = List.of(
+                SampleData.item("req~req1", ItemStatus.APPROVED, Set.of("arch"), Set.of(),
+                        "content", List.of("tag1", "tag2")),
+                SampleData.item("req~req2", ItemStatus.APPROVED, Set.of("arch"), Set.of(),
+                        "content", List.of("tag1")),
+                SampleData.item("req~req3", ItemStatus.APPROVED, Set.of("arch"), Set.of(),
+                        "content", List.of("tag2", "tag3"))
+        );
+        final List<LinkedSpecificationItem> linkedItems = new Linker(itemsWithTags).link();
+        final Map<String, Integer> tagCount = Collector.collectTagCount(linkedItems);
+
+        assertThat(tagCount, hasEntry("tag1", 2));
+        assertThat(tagCount, hasEntry("tag2", 2));
+        assertThat(tagCount, hasEntry("tag3", 1));
+        assertThat(tagCount.size(), is(3));
+    }
+
+    @Test
+    void testCollectTagCountEmptyItems()
+    {
+        final Map<String, Integer> tagCount = Collector.collectTagCount(List.of());
+
+        assertThat(tagCount, notNullValue());
+        assertThat(tagCount.isEmpty(), is(true));
+    }
+
+    @Test
+    void testCollectTagCountIntegration()
+    {
+        final Collector collector = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS);
+        final List<String> tags = collector.getUxModel().getTags();
+        final List<Integer> tagCounts = collector.getUxModel().getTagCount();
+
+        assertThat(tags, hasSize(3));
+        assertThat(tagCounts, hasSize(3));
+        assertThat(tagCounts, everyItem(is(1))); // Each tag appears once in sample data
+    }
+
+    // Collect Type Count
+
+    @Test
+    void testCollectTypeCountWithTypes()
+    {
+        final List<String> orderedTypes = SampleData.ORDERED_SAMPLE_TYPES;
+        final List<Integer> typeCount = Collector.collectTypeCount(
+                SampleData.LINKED_SAMPLE_ITEMS, orderedTypes);
+
+        assertThat(typeCount, hasSize(4));
+        // fea: 1, req: 2, arch: 3, utest: 2
+        assertThat(typeCount.get(orderedTypes.indexOf("fea")), is(1));
+        assertThat(typeCount.get(orderedTypes.indexOf("req")), is(2));
+        assertThat(typeCount.get(orderedTypes.indexOf("arch")), is(3));
+        assertThat(typeCount.get(orderedTypes.indexOf("utest")), is(2));
+    }
+
+    @Test
+    void testCollectTypeCountEmptyItems()
+    {
+        final List<String> orderedTypes = SampleData.ORDERED_SAMPLE_TYPES;
+        final List<Integer> typeCount = Collector.collectTypeCount(List.of(), orderedTypes);
+
+        assertThat(typeCount, hasSize(4));
+        assertThat(typeCount, everyItem(is(0)));
+    }
+
+    @Test
+    void testCollectTypeCountCountsForAllTypes()
+    {
+        final List<Integer> typeCount = Collector.collectTypeCount(
+                SampleData.LINKED_SAMPLE_ITEMS, List.of("fea","req","arch","utest"));
+
+        assertThat(typeCount, hasSize(4));
+    }
+
+    @Test
+    void testCollectTypeCountIntegration()
+    {
+        final Collector collector = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS);
+        final List<String> types = collector.getUxModel().getArtifactTypes();
+        final List<Integer> typeCounts = collector.getUxModel().getTypeCount();
+
+        assertThat(types, hasSize(4));
+        assertThat(typeCounts, hasSize(4));
+
+        final int totalItems = typeCounts.stream().mapToInt(Integer::intValue).sum();
+        assertThat(totalItems, is(SampleData.LINKED_SAMPLE_ITEMS.size()));
+    }
+
+    // Collect Status Count
+
+    @Test
+    void testCollectStatusCountWithApprovedItems()
+    {
+        final List<Integer> statusCount = Collector.collectStatusCount(SampleData.LINKED_SAMPLE_ITEMS);
+
+        assertThat(statusCount, hasSize(ItemStatus.values().length));
+        // All sample items are APPROVED (index 0)
+        assertThat(statusCount.get(ItemStatus.APPROVED.ordinal()), is(SampleData.LINKED_SAMPLE_ITEMS.size()));
+        assertThat(statusCount.get(ItemStatus.PROPOSED.ordinal()), is(0));
+        assertThat(statusCount.get(ItemStatus.DRAFT.ordinal()), is(0));
+        assertThat(statusCount.get(ItemStatus.REJECTED.ordinal()), is(0));
+    }
+
+    @Test
+    void testCollectStatusCountWithMixedStatuses()
+    {
+        final List<SpecificationItem> mixedStatusItems = List.of(
+                SampleData.item("req~req1", ItemStatus.APPROVED, Set.of("arch")),
+                SampleData.item("req~req2", ItemStatus.PROPOSED, Set.of("arch")),
+                SampleData.item("req~req3", ItemStatus.DRAFT, Set.of("arch")),
+                SampleData.item("req~req4", ItemStatus.REJECTED, Set.of("arch")),
+                SampleData.item("req~req5", ItemStatus.APPROVED, Set.of("arch"))
+        );
+        final List<LinkedSpecificationItem> linkedItems = new Linker(mixedStatusItems).link();
+        final List<Integer> statusCount = Collector.collectStatusCount(linkedItems);
+
+        assertThat(statusCount, hasSize(ItemStatus.values().length));
+        assertThat(statusCount.get(ItemStatus.APPROVED.ordinal()), is(2));
+        assertThat(statusCount.get(ItemStatus.PROPOSED.ordinal()), is(1));
+        assertThat(statusCount.get(ItemStatus.DRAFT.ordinal()), is(1));
+        assertThat(statusCount.get(ItemStatus.REJECTED.ordinal()), is(1));
+    }
+
+    @Test
+    void testCollectStatusCountEmptyItems()
+    {
+        final List<Integer> statusCount = Collector.collectStatusCount(List.of());
+
+        assertThat(statusCount, hasSize(ItemStatus.values().length));
+        assertThat(statusCount, everyItem(is(0)));
+    }
+
+    @Test
+    void testCollectStatusCountIntegration()
+    {
+        final Collector collector = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS);
+        final List<String> statusNames = collector.getUxModel().getStatusNames();
+        final List<Integer> statusCounts = collector.getUxModel().getStatusCount();
+
+        assertThat(statusNames, hasSize(ItemStatus.values().length));
+        assertThat(statusCounts, hasSize(ItemStatus.values().length));
+
+        final int totalItems = statusCounts.stream().mapToInt(Integer::intValue).sum();
+        assertThat(totalItems, is(SampleData.LINKED_SAMPLE_ITEMS.size()));
+    }
+
+    //
+    // Helper
+
 
     private void validateCoverages(final List<LinkedSpecificationItem> specItems,
                                    final List<Map<String, Coverage>> returnedCoverages,
@@ -256,10 +558,6 @@ class CollectorTest {
             validateCoverage(index, specItems, returnedCoverages, expectedCoverages[index]);
         }
     }
-
-
-    //
-     // Helper
 
     private void validateCoverage(int index,
                                   List<LinkedSpecificationItem> specItems,

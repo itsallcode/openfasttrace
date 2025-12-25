@@ -4,11 +4,15 @@ import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.report.ux.model.Coverage;
 import org.itsallcode.openfasttrace.report.ux.model.UxModel;
 import org.itsallcode.openfasttrace.report.ux.model.UxSpecItem;
+import org.itsallcode.openfasttrace.report.ux.model.WrongLinkType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import static java.util.Map.entry;
 
 /**
  * Collector traverses a {@link LinkedSpecificationItem} tree and provides a {@link UxSpecItem} and
@@ -21,6 +25,8 @@ public class Collector {
 
     private final List<String> allTypes = new ArrayList<>();
     private final List<String> orderedTypes = new ArrayList<>();
+
+    private final List<WrongLinkType> wrongLinkTypes = new ArrayList<>();
 
     private final List<String> tags = new ArrayList<>();
     private final List<Integer> tagCount = new ArrayList<>();
@@ -36,6 +42,8 @@ public class Collector {
     private final List<Integer> uncoveredCounts = new ArrayList<>();
 
     private final List<Integer> statusCount = new ArrayList<>();
+
+    private final List<Integer> wrongLinkCount = new ArrayList<>();
 
     private UxModel uxModel = null;
 
@@ -121,10 +129,12 @@ public class Collector {
                 .withUncoveredSpecItems(items.size() - (int) isDeepCovered.stream().filter(covered -> covered).count())
                 .withTags(tags)
                 .withStatusNames(Arrays.stream(ItemStatus.values()).map(ItemStatus::toString).toList())
+                .withWrongLinkType(wrongLinkTypes)
                 .withTypeCount(typeCount)
                 .withUncoveredCount(uncoveredCounts)
                 .withStatusCount(statusCount)
                 .withTagCount(tagCount)
+                .withWrongLinkCount(wrongLinkCount)
                 .withItems(uxItems)
                 .build();
     }
@@ -161,6 +171,8 @@ public class Collector {
                 .withCoveredByIndex(toItemIndex(item.getLinksByStatus(LinkStatus.COVERED_SHALLOW)))
                 .withDependsIndex(toIdIndex(item.getItem().getDependOnIds()))
                 .withStatusId(item.getItem().getStatus().ordinal())
+                .withWrongLinkTypes(getWrongLinkTypeIndexes(item))
+                .withWrongLinkTargets(getWrongLinkTypeByTargets(item))
                 //.withPath()
                 .withItem(item)
                 .build();
@@ -212,6 +224,30 @@ public class Collector {
         return uncoveredIndexes;
     }
 
+    private List<Integer> getWrongLinkTypeIndexes(final LinkedSpecificationItem item)
+    {
+        return item.getLinks().keySet().stream()
+                .map(WrongLinkType::toWrongLinkType)
+                .filter(WrongLinkType::isValid).distinct()
+                .map(wrongLinkTypes::indexOf)
+                .toList();
+    }
+
+    private Map<String, String> getWrongLinkTypeByTargets(final LinkedSpecificationItem item)
+    {
+        final Set<LinkStatus> acceptedStatusTypes = Set.of(LinkStatus.ORPHANED, LinkStatus.AMBIGUOUS,
+                LinkStatus.COVERED_UNWANTED, LinkStatus.COVERED_OUTDATED, LinkStatus.COVERED_PREDATED);
+
+        final Map<List<LinkedSpecificationItem>, LinkStatus> statusByLinkTargets = item.getLinks().entrySet().stream()
+                .filter(entry -> acceptedStatusTypes.contains(entry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+
+        return statusByLinkTargets.entrySet().stream()
+                .flatMap(entry -> entry.getKey().stream()
+                        .map(targetItem -> entry(toId(targetItem), entry.getValue().toString())))
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
     private List<Integer> toItemIndex(final List<LinkedSpecificationItem> items) {
         return items.stream().map(item -> ids.indexOf(item.getId())).toList();
     }
@@ -236,6 +272,8 @@ public class Collector {
         orderedTypes.addAll(createOrderedTypes(items));
         typeCount.clear();
         typeCount.addAll(collectTypeCount(items, orderedTypes));
+        wrongLinkTypes.clear();
+        wrongLinkTypes.addAll(collectWrongLinkTypes(items));
 
         ids.clear();
         ids.addAll(items.stream().map(LinkedSpecificationItem::getId).toList());
@@ -249,6 +287,9 @@ public class Collector {
 
         statusCount.clear();
         statusCount.addAll(collectStatusCount(items));
+
+        wrongLinkCount.clear();
+        wrongLinkCount.addAll(collectWrongLinkCount(items, wrongLinkTypes));
     }
 
     /**
@@ -256,6 +297,24 @@ public class Collector {
      */
     static Set<String> collectAllTypes(final List<LinkedSpecificationItem> items) {
         return items.stream().map(LinkedSpecificationItem::getArtifactType).collect(Collectors.toSet());
+    }
+
+    /**
+     * Collects all wrongLinkTypes that exist in the model.
+     *
+     * @param items
+     *         All {@link LinkedSpecificationItem}
+     * @return A list of used types
+     */
+    static List<WrongLinkType> collectWrongLinkTypes(final List<LinkedSpecificationItem> items)
+    {
+        return items.stream()
+                .map(item -> item.getLinks().keySet())
+                .flatMap(Collection::stream)
+                .map(WrongLinkType::toWrongLinkType)
+                .filter(WrongLinkType::isValid)
+                .distinct()
+                .toList();
     }
 
     /**
@@ -294,7 +353,8 @@ public class Collector {
         while( !dependenciesByType.isEmpty() ) {
             final Map<String, TypeDependencies> previousDependenciesByType = new HashMap<>(dependenciesByType);
 
-            for( final Map.Entry<String, TypeDependencies> neededTypeEntry : previousDependenciesByType.entrySet() ) {
+            for (final Entry<String, TypeDependencies> neededTypeEntry : previousDependenciesByType.entrySet())
+            {
                 final String type = neededTypeEntry.getKey();
                 final TypeDependencies dependencies = neededTypeEntry.getValue();
                 if( dependencies.needs.isEmpty() ) {
@@ -356,7 +416,7 @@ public class Collector {
      * @param orderedTypes
      *         The index of the returned list is the index of the type in orderedTypes
      */
-    private static List<Integer> collectTypeCount(final List<LinkedSpecificationItem> items,
+    static List<Integer> collectTypeCount(final List<LinkedSpecificationItem> items,
             final List<String> orderedTypes)
     {
         final List<Integer> typeCount = new ArrayList<>(Collections.nCopies(orderedTypes.size(), 0));
@@ -369,7 +429,7 @@ public class Collector {
         return typeCount;
     }
 
-    private static List<Integer> collectStatusCount(final List<LinkedSpecificationItem> items)
+    static List<Integer> collectStatusCount(final List<LinkedSpecificationItem> items)
     {
         final List<Integer> statusCount = new ArrayList<>(Collections.nCopies(ItemStatus.values().length, 0));
         for (final LinkedSpecificationItem item : items)
@@ -379,6 +439,27 @@ public class Collector {
         }
 
         return statusCount;
+    }
+
+    /**
+     * Collects the number of wrong links for each wrong link type.
+     *
+     * @param items
+     *         The items to process
+     * @param wrongLinkTypes
+     *         The list of wrong link types to count
+     * @return A list of counts where the index corresponds to the wrong link type index
+     */
+    static List<Integer> collectWrongLinkCount(final List<LinkedSpecificationItem> items,
+            final List<WrongLinkType> wrongLinkTypes)
+    {
+        return wrongLinkTypes.stream()
+                .map(wrongLinkType -> items.stream()
+                        .flatMap(item -> item.getLinks().entrySet().stream())
+                        .filter(entry -> WrongLinkType.toWrongLinkType(entry.getKey()) == wrongLinkType)
+                        .mapToInt(entry -> entry.getValue().size())
+                        .sum())
+                .toList();
     }
 
 
@@ -524,8 +605,10 @@ public class Collector {
      */
     static boolean mergeCoverages(final Map<String, Coverage> fromCoverages,
                                   final Map<String, Coverage> toCoverages) {
-        if( fromCoverages == null ) return false;
-        for( final Map.Entry<String, Coverage> fromCoverage : fromCoverages.entrySet() ) {
+        if (fromCoverages == null)
+            return false;
+        for (final Entry<String, Coverage> fromCoverage : fromCoverages.entrySet())
+        {
             final Coverage fromCoverageValue = fromCoverage.getValue();
             final Coverage toCoverageVales = toCoverages.get(fromCoverage.getKey());
             toCoverages.put(fromCoverage.getKey(), mergeCoverType(fromCoverageValue, toCoverageVales));

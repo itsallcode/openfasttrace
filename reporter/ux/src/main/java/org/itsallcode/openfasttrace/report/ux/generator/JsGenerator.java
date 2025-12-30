@@ -41,6 +41,7 @@ public class JsGenerator implements IGenerator {
         generateFooter(model);
     }
 
+    @SuppressWarnings("unused")
     private void generateHeader(final UxModel model) {
         printOpen("(function (window,undefined) {");
         printOpen("window.specitem = {");
@@ -64,6 +65,7 @@ public class JsGenerator implements IGenerator {
         printClose("},");
     }
 
+    @SuppressWarnings("unused")
     private void generateSpecItemsOpen(final UxModel model) {
         printOpen("specitems: [");
     }
@@ -73,8 +75,8 @@ public class JsGenerator implements IGenerator {
         println("index", item.getIndex());
         println("type", item.getTypeIndex());
         println("title", item.getTitle());
-        println("name", item.getName());
-        println("id", item.getId());
+        println("name", normalizeId(item.getName()));
+        println("id", normalizeId(item.getId()));
         println("tags", item.getTagIndex());
         println("version", item.getItem().getRevision());
         println("content", item.getItem().getItem().getDescription());
@@ -94,15 +96,17 @@ public class JsGenerator implements IGenerator {
         println("wrongLinkTypes", item.getWrongLinkTypes());
         println("wrongLinkTargets",
                 item.getWrongLinkTargets().entrySet().stream().map(entry ->
-                        String.format("%s[%s]", entry.getKey(), entry.getValue())).toList()
+                        String.format("%s[%s]", normalizeId(entry.getKey()), entry.getValue())).toList()
         );
         printClose("},");
     }
 
+    @SuppressWarnings("unused")
     private void generateSpecItemsClose(final UxModel model) {
         printClose("]");
     }
 
+    @SuppressWarnings("unused")
     private void generateFooter(final UxModel model) {
         printClose("}");
         printClose("})(window);");
@@ -148,20 +152,27 @@ public class JsGenerator implements IGenerator {
         indent -= INDENT;
     }
 
+    /**
+     * Removes all non valid characters in an id.
+     */
+    private String normalizeId( final String id ) {
+        return id.replaceAll("[^A-Za-z0-9~:_.-]", "");
+    }
+
     private String wrap(final String text, final int offset) {
-        final String value = quote(text);
-        if( value.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return " '" + value + "',";
+        if( text.length() < ( LINE_LENGTH - offset - INDENT - 2 ) ) return " '" + quote(text) + "',";
 
         final StringBuilder b = new StringBuilder();
         b.append(System.lineSeparator());
 
         indentBegin();
         final int fragmentLength = LINE_LENGTH - offset - INDENT - 3;
-        for( int i = 0; i < value.length(); i += fragmentLength ) {
+        for( int i = 0; i < text.length(); i += fragmentLength ) {
             b.append(" ".repeat(indent));
             b.append(i == 0 ? "'" : "+ '");
-            b.append(value, i, Math.min(i + fragmentLength, value.length()));
-            b.append(( i + fragmentLength ) < value.length() ? "'" + System.lineSeparator() : "',");
+            final String value = text.substring(i,Math.min(i + fragmentLength, text.length()));
+            b.append(quote(value));
+            b.append(( i + fragmentLength ) < text.length() ? "'" + System.lineSeparator() : "',");
         }
         indentEnd();
 

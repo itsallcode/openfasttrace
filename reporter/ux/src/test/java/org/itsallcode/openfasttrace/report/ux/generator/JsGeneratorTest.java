@@ -29,8 +29,8 @@ class JsGeneratorTest {
         final UxModel model = new Collector().collect(SampleData.LINKED_SAMPLE_ITEMS_WRONG_LINK).getUxModel();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         new JsGenerator().generate(out,model);
-        System.out.println(out);
         final String outWithoutProjectName = removeProjectNameFromJs(out.toString());
+        System.out.println(outWithoutProjectName);
         assertThat(outWithoutProjectName, equalsToResource(SAMPLE_OUTPUT_RESOURCE));
     }
 

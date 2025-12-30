@@ -239,7 +239,7 @@ public class Collector {
                 LinkStatus.COVERED_UNWANTED, LinkStatus.COVERED_OUTDATED, LinkStatus.COVERED_PREDATED);
 
         final Map<List<LinkedSpecificationItem>, LinkStatus> statusByLinkTargets = item.getLinks().entrySet().stream()
-                .filter(entry -> acceptedStatusTypes.contains(entry.getKey()))
+                .filter(linkStatusToLinks -> acceptedStatusTypes.contains(linkStatusToLinks.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 
         return statusByLinkTargets.entrySet().stream()
@@ -456,8 +456,8 @@ public class Collector {
         return wrongLinkTypes.stream()
                 .map(wrongLinkType -> items.stream()
                         .flatMap(item -> item.getLinks().entrySet().stream())
-                        .filter(entry -> WrongLinkType.toWrongLinkType(entry.getKey()) == wrongLinkType)
-                        .mapToInt(entry -> entry.getValue().size())
+                        .filter(linklinkStatus -> WrongLinkType.toWrongLinkType(linklinkStatus.getKey()) == wrongLinkType)
+                        .mapToInt(linkStatusToLinks -> linkStatusToLinks.getValue().size())
                         .sum())
                 .toList();
     }

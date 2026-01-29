@@ -1,19 +1,17 @@
 package org.itsallcode.openfasttrace.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.itsallcode.openfasttrace.api.core.LinkStatus.*;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.REQ;
-import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
+import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.core.DeepCoverageStatus;
 import org.itsallcode.openfasttrace.api.core.LinkStatus;
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
@@ -198,6 +196,16 @@ class TestLinker
         }
     }
 
+    private static void assertItemRefined( final LinkedSpecificationItem item, final boolean approved )
+    {
+        if(approved) {
+            assertThat( item.getId() + " is refined by approved item", item.isRefinedApproved(), is(true));
+        } else {
+            assertThat( item.getId() + " is refined by an item", item.isRefined(), is(true));
+        }
+    }
+
+
     private String createDebugInfoFromExpectedStatuses(
             final Map<LinkStatus, Integer> expectedStatuses)
     {
@@ -295,7 +303,7 @@ class TestLinker
                 .addCoveredId(REQ, "to-be-covered", 42) //
                 .build();
         final SpecificationItem unwanted = item() //
-                .id(REQ, "unwanted", 1) //
+                .id(ITEST, "unwanted", 1) //
                 .addCoveredId(REQ, "to-be-covered", 42) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered, unwanted);
@@ -312,6 +320,37 @@ class TestLinker
         }
         else
         {
+            fail("Covered item " + covered.getId() + " not found in linked items");
+        }
+    }
+
+    @Test
+    void testRefiningItemCoverItem()
+    {
+        final SpecificationItem covered = item() //
+                .id(REQ, "to-be-covered", 42) //
+                .addNeedsArtifactType(IMPL) //
+                .addNeedsArtifactType(UTEST) //
+                .build();
+        final SpecificationItem coveringReq = item() //
+                .id(REQ, "covering", 1) //
+                .addCoveredId(REQ, "to-be-covered", 42) //
+                .build();
+        final SpecificationItem coveringImpl = item() //
+                .id(IMPL, "covering", 1) //
+                .addCoveredId(REQ, "to-be-covered", 42) //
+                .build();
+        final List<LinkedSpecificationItem> linkedItems = linkItems(coveringReq, covered, coveringImpl);
+        final Optional<LinkedSpecificationItem> linkedCovered = findLinkedItem(covered,linkedItems);
+        if (linkedCovered.isPresent())
+        {
+            assertItemRefined(linkedCovered.get(), false);
+            assertItemRefined(linkedCovered.get(), true);
+            assertThat(linkedCovered.get().isCoveredShallow(),is(true));
+            assertThat(linkedCovered.get().isCoveredShallowWithApprovedItems(),is(true));
+            assertThat(linkedCovered.get().getDeepCoverageStatus(),equalTo(DeepCoverageStatus.COVERED));
+            assertThat(linkedCovered.get().getDeepCoverageStatusOnlyAcceptApprovedItems(),equalTo(DeepCoverageStatus.COVERED));
+        } else {
             fail("Covered item " + covered.getId() + " not found in linked items");
         }
     }

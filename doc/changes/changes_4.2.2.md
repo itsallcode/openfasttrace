@@ -1,4 +1,4 @@
-# OpenFastTrace 4.2.2, released UNKNOWN
+# OpenFastTrace 4.2.2, released 2025-02-02
 
 Code name: SystemVerilog file support
 

@@ -34,7 +34,7 @@
         <module>reporter/html</module>
         <module>reporter/aspec</module>
         <module>testutil</module>
-    </modules>k
+    </modules>
     <build>
         <plugins>
             <plugin>

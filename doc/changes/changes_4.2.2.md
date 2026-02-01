@@ -18,6 +18,8 @@ In this release we added support for SystemVerilog files.
 
 Please note that plugin updates are only relevant if you want to build OFT. If you run OFT, no update is required.
 
+* `org.codehaus.mojo:versions-maven-plugin:2.20.1` → `2.21.0`
+
 ## Bugfixes
 
 * #471: Add tag importer support for SystemVerilog files

@@ -66,10 +66,13 @@ jobs:
           echo "Maven settings.xml at: $SETTINGS"
           # Redact common sensitive tags + any <passphrase> if present
           sed -E \
-            -e 's#(<username>)[^<]*(</username>)#\1***REDACTED***\2#g' \
-            -e 's#(<password>)[^<]*(</password>)#\1***REDACTED***\2#g' \
-            -e 's#(<passphrase>)[^<]*(</passphrase>)#\1***REDACTED***\2#g' \
-            "$SETTINGS"
+          -e 's#(<username>)(</username>)#\1***EMPTY***\2#g; s#(<username>)[^<]+(</username>)#\1***REDACTED***\2#g' \
+          -e 's#(<password>)(</password>)#\1***EMPTY***\2#g; s#(<password>)[^<]+(</password>)#\1***REDACTED***\2#g' \
+          -e 's#(<passphrase>)(</passphrase>)#\1***EMPTY***\2#g; s#(<passphrase>)[^<]+(</passphrase>)#\1***REDACTED***\2#g' \
+          -e 's#(<token>)(</token>)#\1***EMPTY***\2#g; s#(<token>)[^<]+(</token>)#\1***REDACTED***\2#g' \
+          -e 's#(<privateKey>)(</privateKey>)#\1***EMPTY***\2#g; s#(<privateKey>)[^<]+(</privateKey>)#\1***REDACTED***\2#g' \
+          -e 's#(<secret>)(</secret>)#\1***EMPTY***\2#g; s#(<secret>)[^<]+(</secret>)#\1***REDACTED***\2#g' \
+          "$SETTINGS"
 
       - name: Cache SonarQube packages
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}

@@ -52,6 +52,25 @@ jobs:
           OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
           OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
 
+      # TODO: Remove this once OSSIndex CI issue is resolved
+      - name: Debug Maven settings.xml (redacted)
+        shell: bash
+        run: |
+          set -euo pipefail
+          SETTINGS="${HOME}/.m2/settings.xml"
+          if [[ ! -f "$SETTINGS" ]]; then
+            echo "No Maven settings.xml found at: $SETTINGS"
+            exit 0
+          fi
+          
+          echo "Maven settings.xml at: $SETTINGS"
+          # Redact common sensitive tags + any <passphrase> if present
+          sed -E \
+            -e 's#(<username>)[^<]*(</username>)#\1***REDACTED***\2#g' \
+            -e 's#(<password>)[^<]*(</password>)#\1***REDACTED***\2#g' \
+            -e 's#(<passphrase>)[^<]*(</passphrase>)#\1***REDACTED***\2#g' \
+            "$SETTINGS"
+
       - name: Cache SonarQube packages
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
         uses: actions/cache@v5

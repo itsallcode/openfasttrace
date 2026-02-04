@@ -84,6 +84,11 @@ jobs:
 
       - name: Build with Java ${{ matrix.java }}
         run: |
+          # TODO: Remove this once OSSIndex CI issue is resolved.
+          echo "Checking whether the correct Maven settings.xml is used by examination of effective settings:"
+          mvn -q --batch-mode help:effective-settings -Doutput=effective-settings.xml
+          grep -n "<id>ossindex</id>" -n effective-settings.xml || true
+
           mvn --batch-mode -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install \
               -Djava.version=${{ matrix.java }}
 

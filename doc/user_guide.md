@@ -889,7 +889,7 @@ exports all relevant collected information into a single XML file that can furth
 The XML exporter is called `aspec` reporter. `aspec` in this case means augmented specobject. An `aspec` report 
 can be generated  by calling OpenFastTrace in the following way:
 
-```bash
+```sh
 java -jar openfasttrace.jar trace -o aspec -f requirements.xml requirements
 ```
 

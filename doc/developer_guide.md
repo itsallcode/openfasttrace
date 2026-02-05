@@ -155,7 +155,7 @@ If you use a different IDE like IntelliJ, please import the formatter configurat
 
 We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:
 
-```bash
+```sh
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
@@ -163,19 +163,19 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 Display dependencies and plugins with newer versions:
 
-```bash
+```sh
 mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 Automatically upgrade dependencies:
 
-```bash
+```sh
 mvn -T 1C --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
 ## Run local sonar analysis
 
-```bash
+```sh
 mvn -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.token=[token]
 ```
@@ -187,11 +187,11 @@ See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.i
 This project is configured to produce exactly the same artifacts each time when building from the same Git commit. See the [Maven Guide to Configuring for Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html).
 
 * Verify correct configuration of the reproducible build (also included in phase `verify`):
-  ```bash
+  ```sh
   mvn initialize artifact:check-buildplan
   ```
 * Verify that the build produces exactly the same artifacts:
-  ```bash
+  ```sh
   mvn -T 1C clean install -DskipTests
   mvn -T 1C clean verify artifact:compare -DskipTests
   ```

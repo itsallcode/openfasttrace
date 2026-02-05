@@ -98,7 +98,7 @@ If you just want to run OFT:
 
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
-```bash
+```sh
 java -jar product/target/openfasttrace-4.2.0.jar trace /path/to/directory/being/traced
 ```
 

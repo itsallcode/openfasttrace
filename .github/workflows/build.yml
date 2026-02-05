@@ -46,11 +46,8 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: "maven"
           server-id: ossindex
-          server-username: OSSINDEX_USERNAME
-          server-password: OSSINDEX_TOKEN
-        env:
-          OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
-          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
+          server-username: ${{ secrets.OSSINDEX_USERNAME }}
+          server-password: ${{ secrets.OSSINDEX_TOKEN }}
 
       # TODO: Remove this once OSSIndex CI issue is resolved
       - name: Debug Maven settings.xml (redacted)

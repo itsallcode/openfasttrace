@@ -58,9 +58,9 @@ jobs:
         if: ${{ !inputs.skip-deploy-maven-central }}
         run: |
           mvn --batch-mode deploy -Pcentral-publishing \
-               -DskipPublishing=false \
-               -DautoPublish=${{ inputs.maven-central-auto-publish }} \
-               -DdeploymentName="Auto-deploy OFT via release.yml"
+               -DcentralPublishingSkipPublishing=false \
+               -DcentralPublishingAutoPublish=${{ inputs.maven-central-auto-publish }} \
+               -DcentralPublishingDeploymentName="Auto-deploy OFT via release.yml"
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_PORTAL_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PORTAL_TOKEN }}

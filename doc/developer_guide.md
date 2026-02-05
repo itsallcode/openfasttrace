@@ -296,7 +296,6 @@ Configure Maven Central credentials in `~/.m2/settings.xml`:
         </server>
     </servers>
 </settings>
-
 ```
 
 The following command will upload the bundle to Maven Central without publishing:

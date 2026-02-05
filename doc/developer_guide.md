@@ -58,7 +58,7 @@ If you want to build OFT:
 
 ## Configure Maven Toolchains
 
-OFT uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
+OFT uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file `~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
 
 ```xml
 <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
@@ -73,7 +73,7 @@ OFT uses Maven Toolchains to configure the correct JDK version (see the [documen
             <jdkHome>/usr/lib/jvm/java-17-openjdk-amd64/</jdkHome>
         </configuration>
     </toolchain>
-        <toolchain>
+    <toolchain>
         <type>jdk</type>
         <provides>
             <version>21</version>
@@ -155,7 +155,7 @@ If you use a different IDE like IntelliJ, please import the formatter configurat
 
 We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/guides/logging/overview.html) for logging. To configure log level and formatting, add the following system property:
 
-```bash
+```sh
 -Djava.util.logging.config.file=src/test/resources/logging.properties
 ```
 
@@ -163,19 +163,19 @@ We use [`java.util.logging`](https://docs.oracle.com/javase/8/docs/technotes/gui
 
 Display dependencies and plugins with newer versions:
 
-```bash
+```sh
 mvn --update-snapshots versions:display-dependency-updates versions:display-plugin-updates
 ```
 
 Automatically upgrade dependencies:
 
-```bash
+```sh
 mvn -T 1C --update-snapshots versions:use-latest-releases versions:update-properties
 ```
 
 ## Run local sonar analysis
 
-```bash
+```sh
 mvn -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.token=[token]
 ```
@@ -187,11 +187,11 @@ See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.i
 This project is configured to produce exactly the same artifacts each time when building from the same Git commit. See the [Maven Guide to Configuring for Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html).
 
 * Verify correct configuration of the reproducible build (also included in phase `verify`):
-  ```bash
+  ```sh
   mvn initialize artifact:check-buildplan
   ```
 * Verify that the build produces exactly the same artifacts:
-  ```bash
+  ```sh
   mvn -T 1C clean install -DskipTests
   mvn -T 1C clean verify artifact:compare -DskipTests
   ```
@@ -275,7 +275,7 @@ This structure ensures that only user-facing components are published to Maven C
 Build deployment bundle to check if the expected modules are included:
 
 ```sh
-mvn -T1C  deploy -Pcentral-publishing -DskipPublishing=true -DskipTests
+mvn -T1C  deploy -PcentralPublishing -DcentralPublishingSkipPublishing=true -DskipTests
 ```
 
 This will build `central-bundle.zip` in one of the modules. Find it with `find . -name "central-bundle.zip"`, then check it's content with `unzip -l api/target/central-publishing/central-bundle.zip`.
@@ -296,13 +296,12 @@ Configure Maven Central credentials in `~/.m2/settings.xml`:
         </server>
     </servers>
 </settings>
-
 ```
 
 The following command will upload the bundle to Maven Central without publishing:
 
 ```sh
-mvn -T1C clean deploy -Pcentral-publishing -DskipPublishing=true -DautoPublish=false -DskipTests
+mvn -T1C clean deploy -PcentralPublishing -DcentralPublishingSkipPublishing=true -DcentralPublishingAutoPublish=false -DskipTests
 ```
 
 Then go to https://central.sonatype.com/publishing/deployments and check that the deployment is marked as "validated" and that the expected components are included. Don't forget to click the "Drop" button to avoid accidentally publishing the release.

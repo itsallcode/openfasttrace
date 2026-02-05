@@ -25,9 +25,14 @@ It is maintained separately from the main parent POM for the following reasons:
     </parent>
     <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
+    <properties>
+        <centralPublishingSkipPublishing>false</centralPublishingSkipPublishing>
+        <centralPublishingAutoPublish>false</centralPublishingAutoPublish>
+        <centralPublishingDeploymentName>Manual deployment of OpenFastTrace</centralPublishingDeploymentName>
+    </properties>
     <profiles>
         <profile>
-            <id>central-publishing</id>
+            <id>centralPublishing</id>
             <build>
                 <plugins>
                     <plugin>
@@ -37,10 +42,10 @@ It is maintained separately from the main parent POM for the following reasons:
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
-                            <skipPublishing>false</skipPublishing>
-                            <autoPublish>false</autoPublish>
+                            <skipPublishing>${centralPublishingSkipPublishing}</skipPublishing>
+                            <autoPublish>${centralPublishingAutoPublish}</autoPublish>
                             <waitUntil>validated</waitUntil>
-                            <deploymentName>Manual deployment of OpenFastTrace</deploymentName>
+                            <deploymentName>${centralPublishingDeploymentName}</deploymentName>
                         </configuration>
                     </plugin>
                     <plugin>

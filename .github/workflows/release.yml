@@ -57,7 +57,7 @@ jobs:
       - name: Publish to Maven Central Repository
         if: ${{ !inputs.skip-deploy-maven-central }}
         run: |
-          mvn --batch-mode deploy -Pcentral-publishing \
+          mvn --batch-mode deploy -PcentralPublishing \
                -DcentralPublishingSkipPublishing=false \
                -DcentralPublishingAutoPublish=${{ inputs.maven-central-auto-publish }} \
                -DcentralPublishingDeploymentName="Auto-deploy OFT via release.yml"

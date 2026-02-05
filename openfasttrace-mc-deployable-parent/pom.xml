@@ -32,7 +32,7 @@ It is maintained separately from the main parent POM for the following reasons:
     </properties>
     <profiles>
         <profile>
-            <id>central-publishing</id>
+            <id>centralPublishing</id>
             <build>
                 <plugins>
                     <plugin>

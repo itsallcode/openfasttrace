@@ -275,7 +275,7 @@ This structure ensures that only user-facing components are published to Maven C
 Build deployment bundle to check if the expected modules are included:
 
 ```sh
-mvn -T1C  deploy -Pcentral-publishing -DcentralPublishingSkipPublishing=true -DskipTests
+mvn -T1C  deploy -PcentralPublishing -DcentralPublishingSkipPublishing=true -DskipTests
 ```
 
 This will build `central-bundle.zip` in one of the modules. Find it with `find . -name "central-bundle.zip"`, then check it's content with `unzip -l api/target/central-publishing/central-bundle.zip`.
@@ -302,7 +302,7 @@ Configure Maven Central credentials in `~/.m2/settings.xml`:
 The following command will upload the bundle to Maven Central without publishing:
 
 ```sh
-mvn -T1C clean deploy -Pcentral-publishing -DcentralPublishingSkipPublishing=true -DcentralPublishingAutoPublish=false -DskipTests
+mvn -T1C clean deploy -PcentralPublishing -DcentralPublishingSkipPublishing=true -DcentralPublishingAutoPublish=false -DskipTests
 ```
 
 Then go to https://central.sonatype.com/publishing/deployments and check that the deployment is marked as "validated" and that the expected components are included. Don't forget to click the "Drop" button to avoid accidentally publishing the release.

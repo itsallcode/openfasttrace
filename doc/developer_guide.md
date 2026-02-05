@@ -58,7 +58,7 @@ If you want to build OFT:
 
 ## Configure Maven Toolchains
 
-OFT uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file ` ~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
+OFT uses Maven Toolchains to configure the correct JDK version (see the [documentation](https://maven.apache.org/guides/mini/guide-using-toolchains.html) for details). To configure the Toolchains plugin create file `~/.m2/toolchains.xml` with the following content. Adapt the paths to your JDKs.
 
 ```xml
 <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
@@ -73,7 +73,7 @@ OFT uses Maven Toolchains to configure the correct JDK version (see the [documen
             <jdkHome>/usr/lib/jvm/java-17-openjdk-amd64/</jdkHome>
         </configuration>
     </toolchain>
-        <toolchain>
+    <toolchain>
         <type>jdk</type>
         <provides>
             <version>21</version>

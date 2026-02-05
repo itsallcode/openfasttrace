@@ -60,7 +60,7 @@ jobs:
           mvn --batch-mode deploy -PcentralPublishing \
                -DcentralPublishingSkipPublishing=false \
                -DcentralPublishingAutoPublish=${{ inputs.maven-central-auto-publish }} \
-               -DcentralPublishingDeploymentName="Auto-deploy OFT via release.yml"
+               -DcentralPublishingDeploymentName="Auto-deploy OpenFastTrace via release.yml"
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_PORTAL_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PORTAL_TOKEN }}

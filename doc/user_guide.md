@@ -2,7 +2,7 @@
 
 # OpenFastTrace (OFT) User Guide
 
-## In a Nutshell
+## In a Nutshell~~~~~~~~
 
 OFT is a requirement tracing tool. It helps you make sure that all defined requirements are covered in your code. It
 also helps you find outdated code passages.

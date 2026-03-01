@@ -760,6 +760,7 @@ recognized file types:
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
 * Perl (`.pl`, `.pm`)
+* Protobuf (`.proto`)
 * PHP (`.php`)
 * Python (`.py`)
 * R (`.r`)

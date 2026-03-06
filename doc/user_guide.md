@@ -32,13 +32,13 @@ The document is also helpful for people who just want to get an insight on what 
 * IT Support personnel
 * People responsible for picking tools (who we recommend should be users too)
 
-Of course requirement engineering and tracing are useful outside the software domains too.
+Of course, requirement engineering and tracing are useful outside the software domains too.
 
 ### What is Requirement Tracing?
 
 OpenFastTrace is a requirement tracing suite. Requirement tracing helps you to keep track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
-The foundation of all requirement tracing are links between documents, implementation, test, reports and whatever other artifacts your product consists of.
+The foundation of all requirement tracing is links between documents, implementation, test, reports and whatever other artifacts your product consists of.
 
 Let's assume you compiled a list of five main features your users asked for. They are very coarse but provide a nice overview of what your project is expected to achieve. Next you decide to write a few dozen user stories to flesh out the details of what your users want.
 
@@ -772,6 +772,7 @@ recognized file types:
 **Configuration and Serialization Formats** 
 
 * JSON (`.json`)
+* Protobuf (`.proto`)
 * TOML (`.toml`)
 
 **Markup languages**

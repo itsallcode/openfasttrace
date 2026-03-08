@@ -33,6 +33,7 @@ public class TagImporterFactory extends ImporterFactory
             "php", // PHP
             "proto", // Protocol Buffers
             "pl", "pm", // Perl
+            "proto", // Protobuf
             "py", // Python
             "robot", // Robot Framework
             "pu", "puml", "plantuml", // PlantUML

@@ -13,8 +13,9 @@
         <revision>4.2.2</revision>
         <java.version>17</java.version>
         <junit.version>6.1.0-M1</junit.version>
-        <junit.version>6.0.2</junit.version>
-        <maven.surefire.version>3.5.4</maven.surefire.version>
+
+        <junit.version>6.0.3</junit.version>
+        <maven.surefire.version>3.5.5</maven.surefire.version>
         <!-- explicit version used by jacoco agent property calc below -->
         <jacoco.version>0.8.14</jacoco.version>
         <!-- compute agent argument up front so that ${jacoco.agent} is available
@@ -26,6 +27,7 @@
         <!-- SonarCloud configuration -->
         <sonar.projectKey>org.itsallcode.openfasttrace:openfasttrace-root</sonar.projectKey>
         <sonar.organization>itsallcode</sonar.organization>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
@@ -220,7 +222,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>5.21.0</version>
+                <version>5.22.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -238,7 +240,7 @@
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>4.3.1</version>
+                <version>4.4.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -405,7 +407,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>3.10.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -676,7 +678,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2026.1</version>
+                            <version>1.2026.2</version>
                         </dependency>
                     </dependencies>
                 </plugin>

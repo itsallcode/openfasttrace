@@ -82,7 +82,7 @@ jobs:
               -Djava.version=${{ matrix.java }}
 
       - name: Archive oft binary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
         with:
           name: openfasttrace-binaries
@@ -96,7 +96,7 @@ jobs:
         run: ./oft-self-trace.sh
 
       - name: Upload self-tracing report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
         with:
           name: self-tracing-report

@@ -4,7 +4,11 @@ Code name: Protobuf file support
 
 ## Summary
 
-In this release we added support for Protobuf definition files. 
+In this release we added support for Protobuf definition files. We also introduced the OpenFastTrace Claude Skill, which enables the Claude LLM to author specifications, run traces, and perform selective tracing.
+
+## Features
+
+* #499: Introduced the OpenFastTrace Claude Skill for assisting with requirement tracing
 
 ## Bugfixes
 

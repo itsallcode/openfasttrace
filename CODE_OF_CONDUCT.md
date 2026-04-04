@@ -1,5 +1,6 @@
 # OpenFastTrace Project Code of Conduct
 
+* Treat others with respect.
 * Criticize ideas, not people.
 * Back up your arguments with facts and reasoning.
 * Keep discussions on topic and concise.

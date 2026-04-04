@@ -50,6 +50,7 @@ Sonarcloud status:
 * [🦮 Developer Guide](doc/developer_guide.md)
 * [🔌 Plugin Developer Guide](doc/plugin_developer_guide.md)
 * [🎁 Contributing Guide](CONTRIBUTING.md)
+* [🤝 Code of Conduct](CODE_OF_CONDUCT.md)
 * [💡 System Requirements](doc/spec/system_requirements.md)
 * [👜 Design](doc/spec/design.md)
 

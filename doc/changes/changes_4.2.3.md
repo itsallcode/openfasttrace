@@ -4,7 +4,14 @@ Code name: Protobuf file support
 
 ## Summary
 
-In this release we added support for Protobuf definition files. 
+In this release we added support for Protobuf definition files. We also introduced a Code of Conduct and updated the contribution guidelines with rules for AI-assisted coding.
+
+The new Code of Conduct emphasizes respectful communication and constructive collaboration within the project, focusing on ideas rather than people. The contribution guidelines now explicitly state how AI-assisted coding is accepted, requiring that human contributors remain responsible for all submissions and review AI-generated code thoroughly.
+
+## Documentation
+
+* #501: Updated contribution guideline with rules for AI-assisted coding
+* Added Code of Conduct
 
 ## Bugfixes
 

@@ -103,7 +103,7 @@ OFT has a trace mode and an exporter mode. The trace mode traces the requirement
 
 Requirement tracing is usually done in sensitive projects. Here are hints on how to ensure safe operation.
 
-OFT never changes any of its input files. Exports and reports are written to STDOUT by default. If you use the `-o` option, OFT will write the output to the specified file instead of STDOUT. In this case, existing exports or reports under that path will be overwritten.
+OFT never changes any of its input files. Exports and reports are written to STDOUT by default. If you use the `-f` option, OFT will write the output to the specified file instead of STDOUT. In this case, existing exports or reports under that path will be overwritten.
 
 Without previous user consent:
 

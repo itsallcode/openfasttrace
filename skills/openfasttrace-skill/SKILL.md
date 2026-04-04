@@ -1,6 +1,6 @@
 ### OpenFastTrace (OFT) Claude Skill
 
-OpenFastTrace (OFT) is a requirement tracing suite. This skill enables Claude to author specification files, run traces, and perform selective tracing for different levels of the project hierarchy.
+OpenFastTrace (OFT) is a requirement tracing suite. This skill enables AI coding agents to author specification files, run traces, and perform selective tracing for different levels of the project hierarchy.
 
 OFT uses text files (Markdown, RST) for specification and code markers to represent coverage links. These markers are embedded in comments within source code, tests, and configuration files. OFT scans files or directories and detects specification documents and coverage. It calculates a network of requirements and coverage and reports the results.
 

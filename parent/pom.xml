@@ -13,8 +13,21 @@
         <revision>4.2.2</revision>
         <java.version>17</java.version>
         <junit.version>6.1.0-M1</junit.version>
+
         <junit.version>6.0.3</junit.version>
         <maven.surefire.version>3.5.5</maven.surefire.version>
+        <!-- explicit version used by jacoco agent property calc below -->
+        <jacoco.version>0.8.14</jacoco.version>
+        <!-- compute agent argument up front so that ${jacoco.agent} is available
+             when Surefire expands its argLine (property interpolation happens before
+             plugin goals run). using ${user.home} instead of ${settings.localRepository}
+             because the latter is not yet available during property interpolation.
+             Use relative path for destfile to avoid issues with spaces in directory names. -->
+        <jacoco.agent>-javaagent:${user.home}\.m2\repository\org\jacoco\org.jacoco.agent\${jacoco.version}\org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=jacoco.exec</jacoco.agent>
+        <!-- SonarCloud configuration -->
+        <sonar.projectKey>org.itsallcode.openfasttrace:openfasttrace-root</sonar.projectKey>
+        <sonar.organization>itsallcode</sonar.organization>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
@@ -296,8 +309,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <!-- use the release option rather than source/target so that the compiler
+                         automatically sets the system module path appropriately when the
+                         running JDK is newer than the target version. this avoids the
+                         "location of system modules is not set" error seen with JDK 25. -->
+                    <release>${java.version}</release>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
@@ -347,6 +363,13 @@
                 <version>0.8.14</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>merge-results</id>
                         <phase>verify</phase>
                         <goals>
@@ -372,6 +395,11 @@
                         </goals>
                         <configuration>
                             <dataFile>${project.build.directory}/aggregate.exec</dataFile>
+                            <!-- SonarCloud prefers an XML report; include it so the scanner can
+                                 import coverage even if exec files are ignored or missing. -->
+                            <formats>
+                                <format>XML</format>
+                            </formats>
                         </configuration>
                     </execution>
                 </executions>
@@ -399,8 +427,12 @@
                             ${basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
-                    <argLine>
-                        <!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                    <!-- include JaCoCo agent along with the Mockito agent and any extra test
+                         arguments. the jacoco:prepare-agent goal will populate the
+                         ${jacoco.agent} property when invoked. without this the JVM that runs
+                         the tests is never instrumented and no .exec file is generated,
+                         which is exactly why SonarCloud sees 0% coverage. -->
+                    <argLine>${jacoco.agent} ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -414,7 +446,9 @@
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
-                    <argLine><!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                    <!-- same change for integration tests: we need the jacoco agent on the
+                         forked JVMs that run failsafe. -->
+                    <argLine>${jacoco.agent} ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
                 <executions>
                     <execution>

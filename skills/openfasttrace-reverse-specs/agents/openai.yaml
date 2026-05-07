@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenFastTrace Reverse Specs"
+  short_description: "Draft OFT specs from docs and code."
+  default_prompt: "Reverse-engineer missing OpenFastTrace system requirements and design documentation for this project."

@@ -31,7 +31,9 @@ public class TagImporterFactory extends ImporterFactory
             "lua", // Lua
             "m", "mm", // Objective C
             "php", // PHP
+            "proto", // Protocol Buffers
             "pl", "pm", // Perl
+            "proto", // Protobuf
             "py", // Python
             "robot", // Robot Framework
             "pu", "puml", "plantuml", // PlantUML

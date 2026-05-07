@@ -32,13 +32,13 @@ The document is also helpful for people who just want to get an insight on what 
 * IT Support personnel
 * People responsible for picking tools (who we recommend should be users too)
 
-Of course requirement engineering and tracing are useful outside the software domains too.
+Of course, requirement engineering and tracing are useful outside the software domains too.
 
 ### What is Requirement Tracing?
 
 OpenFastTrace is a requirement tracing suite. Requirement tracing helps you to keep track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
-The foundation of all requirement tracing are links between documents, implementation, test, reports and whatever other artifacts your product consists of.
+The foundation of all requirement tracing is links between documents, implementation, test, reports and whatever other artifacts your product consists of.
 
 Let's assume you compiled a list of five main features your users asked for. They are very coarse but provide a nice overview of what your project is expected to achieve. Next you decide to write a few dozen user stories to flesh out the details of what your users want.
 
@@ -761,6 +761,7 @@ recognized file types:
 * Objective C (`.m`, `.mm`)
 * Perl (`.pl`, `.pm`)
 * PHP (`.php`)
+* Protocol Buffers (`.proto`)
 * Python (`.py`)
 * R (`.r`)
 * Rust (`.rs`)
@@ -772,6 +773,7 @@ recognized file types:
 **Configuration and Serialization Formats** 
 
 * JSON (`.json`)
+* Protobuf (`.proto`)
 * TOML (`.toml`)
 
 **Markup languages**
@@ -828,27 +830,27 @@ The first line is the summary.
 
 It starts with the status of the requirement &mdash; OK in this case.
 
-> **ok** [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (impl, utest)
+> **ok** [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] `dsn~cli.tracing.default-format~1` (impl, utest)
 
 Next we have a couple of numbers.
 
 The first pair shows how many of the incoming good links this requirement has (two), and how many in total (two).
 
-> ok [ **in:  2 /  2 ✔** | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (impl, utest)
+> ok [ **in:  2 /  2 ✔** | out:  1 /  1 ✔ ] `dsn~cli.tracing.default-format~1` (impl, utest)
 
 Consequently, the next pair informs you how many (one) of the overall (one) outgoing links are good.
 
 Please note that OFT cannot predict the exact number of required incoming links, because often we are talking about one-to-many relations. So OFT does not try to. The checkmark and crossmark in the square brackets are only a quick indicator of if the existing links are okay. This goes so far that in case of zero links, no mark is displayed at all.
 
->  ok [ in:  2 /  2 ✔ | **out:  1 /  1 ✔** ] dsn~cli.tracing.default-format~1 (impl, utest)
+>  ok [ in:  2 /  2 ✔ | **out:  1 /  1 ✔** ] `dsn~cli.tracing.default-format~1` (impl, utest)
 
 The [Specification Item ID](#specification-item-id) in the middle is the unique technical ID of this requirement.
 
->  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] **dsn~cli.tracing.default-format~1** (impl, utest)
+>  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] **dsn****~****cli.tracing.default-format****~****1** (impl, utest)
 
 In the brackets you find, which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
 
->  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] dsn~cli.tracing.default-format~1 (**impl, utest**)
+>  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] `dsn~cli.tracing.default-format~1` (**impl, utest**)
 
 If it is not covered, the name is lead in by a minus:
 
@@ -870,7 +872,7 @@ The section with the arrows provides details about incoming and outgoing links. 
 
 The following line means that this design requirement is covered in the implementation.
 
-> [covered shallow  ] ← impl~cli.tracing.default-format-2215031703~0
+> [covered shallow  ] ← `impl~cli.tracing.default-format-2215031703~0`
 
 The ID of the implementation comes from the Tag Importer and is for its most part auto-generated. The artifact type `dsn` is simply replaced by `impl` here and a number is attached for disambiguation.
 

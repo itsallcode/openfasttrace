@@ -13,7 +13,7 @@ The relevant deployment nodes are:
 * `<host, process, container, service, database, browser, IDE, device, or file system location>`
 
 ## Deployment Diagram
-
+<!-- The granularity for the PlantUML diagram below should be coarse. High-level components and artifacts only. Do not go down to class level! Adapt as necessary.-->
 ```plantuml
 @startuml
 node "<Host>" {

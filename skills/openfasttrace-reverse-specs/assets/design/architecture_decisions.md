@@ -8,7 +8,7 @@ Record a decision when it is hard to change later, likely to be debated again, r
 
 ### `<Decision Question>`
 
-The project needs `<capability or quality>` while `<constraint or context>`.
+`<Description of the architectural choice, what makes it architecture-relevant and what the consequences are>`
 
 Considered alternatives:
 

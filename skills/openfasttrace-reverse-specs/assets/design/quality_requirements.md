@@ -11,7 +11,7 @@ Use this OFT hierarchy unless the project already defines a different one:
 1. `feat`: top-level feature
 2. `req`: user requirement
 3. `scn`: Given-When-Then acceptance scenario
-4. `constr`: intentional architecture constraint
+4. `constr`: architecture constraint
 5. `dsn`: design requirement covering scenarios and constraints
 6. `impl`: implementation
 7. `utest`: unit test

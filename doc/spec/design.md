@@ -1074,6 +1074,10 @@ Covers:
 
 Needs: impl
 
+# Quality Requirements
+
+See [Quality Requirements](design/quality_requirements.md).
+
 # Design Decisions
 
 ## How do we Implement the Command Line Interpreter

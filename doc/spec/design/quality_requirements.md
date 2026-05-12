@@ -27,36 +27,94 @@ Use OFT's forwarding notation if a technical requirement does not add new inform
 
 ## Code Quality
 
-| Principle          | Meaning                                                                                                          |
-|--------------------|------------------------------------------------------------------------------------------------------------------|
-| Clean Architecture | SOLID. Testable. Dependencies point inward. Reveal intent.                                                       |
-| KISS               | Simplest solution proven to work. Low cyclomatic complexity.                                                     |
-| DRY                | Extract duplication, don't copy-paste.                                                                           |
-| DAMP               | Readable test code. Parameterized tests for test with differnent input values for the same function under test.  |
-| BDD                | Given-When-Then tests.                                                                                           |
-| Red-Green-Clean    | Fail test first. Implement and pass test. Refactor until clean code.                                             |
-| Explicit Code      | Speaking package, class and method names. No abbreviations. Avoid explanatory comments unless stricly necessary. |
-| Thread Safe        | All objects and parameters that can be are immutable.  Avoid side effects.                                       |
-| OWASP              | Avoid typical sources of vulnerabilities.                                                                        |
+The following rules are written for both human contributors and coding agents. The anchor names are short reminders; the rules below are normative.
 
-### Test Quality
+### Production Code Rules
 
-1. Prefer test constants with explanation in comments over testing an algorithm with the same logic in the test.
-2. If possible each test method has only a single assert.
-3. Parameter validation is tested with multiple valid and invalid inputs. Testing valid and invalid input is done in separate test methods.
-4. Test algorithms against known-good constants instead of another algorithm
+#### Clean Architecture
 
-### Java Implementation Quality
- 
-1. APIs (not implementation) are documented with JavaDoc: interfaces, abstract classes, methods, parameters, return values, side effects (if any), purpose 
-2. All method parameters are final. Output parameters are only allowed when they are used in external libraries.
-3. Prefer explicit types over `var`.
+1. New code must keep dependencies pointing toward stable abstractions and module APIs instead of concrete implementation details.
+2. Code must be testable through public or package-visible seams already used in the code base. Do not require global state, hidden environment coupling, or hard-wired I/O to test behavior.
+3. Names and structure must reveal intent. If the design is hard to explain without a long comment, simplify the design first.
 
-### Java Tests Quality
+#### KISS
 
-1. Use Hamcrest matchers. Extract repeated complex assertions into a separate matcher class to improve reability of the tests.
-2. If multiple asserts are necessary and the latter asserts are not a follow-up symptom of the previous ones, the asserts must be wrapped in `assertAll`.
-3. When exceptions are asserted, then both type and message are validated.
+1. Choose the simplest implementation that satisfies the requirement and existing design constraints.
+2. Avoid speculative abstractions, premature generalization, and configuration options that are not required by the current requirements or design.
+3. Keep methods and control flow small enough that the behavior can be understood locally.
+
+#### DRY
+
+1. Do not copy-paste production logic across classes or modules.
+2. Extract shared behavior when duplication would cause multiple sources of truth for the same rule, algorithm, or parsing logic.
+3. Do not introduce an abstraction only to remove a few repeated lines when that abstraction makes the code harder to read.
+
+#### Explicit Code
+
+1. Use descriptive package, class, method, and variable names.
+2. Do not introduce new non-domain abbreviations. Established domain or technical abbreviations such as `OFT`, `CLI`, `XML`, or similar widely understood terms are allowed.
+3. Prefer code that explains itself through naming and structure.
+4. Comments are only allowed when they capture intent or context that the code cannot express clearly on its own.
+
+#### Thread Safe
+
+1. Prefer immutable objects and side-effect-free methods.
+2. Avoid shared mutable state unless it is required by the design.
+3. If mutable shared state is necessary, synchronization and ownership must be explicit in the code and justified by the implementation context.
+
+#### OWASP
+
+1. Keep the OWASP anchor as a secure-coding reminder and apply the following minimum controls:
+2. Validate untrusted input at module boundaries.
+3. Reject invalid, malformed, or unexpected input explicitly.
+4. Avoid unsafe file, path, process, deserialization, reflection, or XML handling patterns.
+5. Do not log secrets, credentials, or other sensitive data.
+6. When security-relevant behavior changes, add or update tests that cover the expected safe behavior.
+
+### Test Rules
+
+#### DAMP
+
+1. Optimize tests for readability over deduplication.
+2. Small duplication of literals or setup is allowed when it makes the test easier to understand.
+3. Use parameterized tests when the same behavior must be verified against multiple input and output combinations.
+4. Extract helpers, builders, or matchers only when they remove repeated test logic or significantly reduce noisy setup.
+
+#### BDD
+
+1. Tests must describe behavior in Given-When-Then form.
+2. The structure may be expressed through method naming, local variable naming, whitespace, or short comments.
+3. Each test must make the precondition, action, and expected outcome easy to identify.
+
+#### Red-Green-Clean
+
+1. For behavior changes, write or update the test before changing production code.
+2. The new or changed test must fail for the expected reason before production code is changed to satisfy it.
+3. Only after the failing test exists may production code be written or changed to make the test pass.
+4. After the test passes, refactor as needed while keeping the tests green.
+
+#### Test Quality
+
+1. Each test should verify one logical expectation where possible.
+2. If multiple assertions are required to validate one behavior, group them with `assertAll`.
+3. Prefer known-good constants and explicit expected values over re-implementing the production algorithm in the test.
+4. If a test constant needs explanation, add a short comment that explains why the value matters.
+5. Parameter validation tests are required when invalid-input handling or boundary behavior is non-trivial.
+6. When parameter validation is tested, cover both valid and invalid inputs and keep them in separate test methods or parameterized test groups.
+7. When exceptions are asserted, verify both the exception type and the relevant message content.
+
+### Java Implementation Rules
+
+1. Document externally consumed APIs with JavaDoc. This includes public interfaces, abstract classes, and public methods that form part of an externally consumed API.
+2. JavaDoc must describe purpose, parameters, return values, and observable side effects when they exist.
+3. Declare method parameters as `final`.
+4. Output parameters are only allowed when required by external libraries.
+5. Prefer explicit types over `var`.
+
+### Java Test Rules
+
+1. Use Hamcrest matchers for assertions.
+2. Extract repeated complex assertions into dedicated matcher classes when that improves readability.
 
 ## Dependency Policy
 

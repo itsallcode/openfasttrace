@@ -178,7 +178,7 @@ Out of scope:
 
 ### Update user documentation
 
-- [ ] Update the end user documentation in README.md
+- [ ] Update the end user documentation in `README.md` and / or `doc/user_guide/user_guide.md`
 
 ## Version and Changelog Update
 

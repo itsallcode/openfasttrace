@@ -1,4 +1,4 @@
-# OpenFastTrace 4.3.0, released 2026-05-11
+# OpenFastTrace 4.3.0, released 2026-05-??
 
 Code name: Spec-driven Development Skill
 

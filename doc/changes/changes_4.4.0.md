@@ -1,4 +1,4 @@
-# OpenFastTrace 4.3.0, released 2026-05-??
+# OpenFastTrace 4.4.0, released 2026-05-14
 
 Code name: Spec-driven Development Skill
 
@@ -8,6 +8,13 @@ In this release we added the OpenFastTrace Spec-driven Development Skill. The sk
 
 We also moved the skills to `.agents/skills` for best cross-vendor compatibility.
 
+The tag importer now supports  Kotlin script files (`.kts`).
+
+## Features
+
+* #507: Tag importer now support `.kts` files
+* #514: Added changeset skill
+
 ## Documentation
 
-* Added changeset skill
+* #514: Added changeset skill

@@ -25,7 +25,7 @@ public class TagImporterFactory extends ImporterFactory
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "yaml", "yml", // markup languages
             "java", // Java
-            "clj", "kt", "scala", // JVM languages
+            "clj", "kt", "kts", "scala", // JVM languages
             "js", "mjs", "cjs", "ejs", // JavaScript
             "ts", // TypeScript
             "lua", // Lua

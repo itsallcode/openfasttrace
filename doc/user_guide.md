@@ -756,7 +756,7 @@ recognized file types:
 * Groovy (`.groovy`)
 * Java (`.java`)
 * JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
-* TypeScript (`.ts`)
+* Kotlin (`.kt`, `.kts`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
 * Perl (`.pl`, `.pm`)
@@ -768,6 +768,7 @@ recognized file types:
 * Shell programming (`.sh`, `.bash`, `.zsh`)
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
+* TypeScript (`.ts`)
 * Windows batch files (`.bat`)
 
 **Configuration and Serialization Formats** 

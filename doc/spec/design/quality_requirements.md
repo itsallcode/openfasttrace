@@ -115,6 +115,9 @@ The following rules are written for both human contributors and coding agents. T
 
 1. Use Hamcrest matchers for assertions.
 2. Extract repeated complex assertions into dedicated matcher classes when that improves readability.
+3. Declare only the specific checked exceptions that are directly thrown by the code under test. Do not use generic exceptions (e.g., Exception, Throwable) in test method signatures.
+4. When asserting exceptions, the assertion should invoke exactly one method call—the method under test. Avoid nesting additional method calls inside the assertion. Prepare all inputs outside the assertion so the failure is attributable to a single call.
+5. Prefer @ParameterizedTest for testing multiple input variations instead of generating or mutating test data within a single test method (e.g., loops or inline variations).
 
 ## Dependency Policy
 

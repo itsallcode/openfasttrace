@@ -17,3 +17,4 @@ doc/**/*.html
 *.iml
 pom.xml.versionsBackup
 .DS_Store
+/.serena/

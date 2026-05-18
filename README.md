@@ -97,6 +97,8 @@ If you just want to run OFT:
 
 ## Running OpenFastTrace
 
+### Run JAR File
+
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```sh
@@ -106,6 +108,10 @@ java -jar product/target/openfasttrace-4.2.0.jar trace /path/to/directory/being/
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).
 
 For more details about how to run OFT please consult the [user guide](doc/user_guide.md).
+
+### Download and Execute in Continuous Integration
+
+If you want to run OFT in a CI build, you can use the OFT wrapper script [oftw.sh](product/oftw.sh). The script only requires Java 17 and Maven and downloads the OFT JAR from Maven Central if it is not yet available in the local Maven repository `$HOME/.m2/repository`.
 
 ## Development
 

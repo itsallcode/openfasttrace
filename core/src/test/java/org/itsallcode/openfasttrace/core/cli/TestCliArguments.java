@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
@@ -13,6 +14,7 @@ import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.HelpCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +44,28 @@ class TestCliArguments
     {
         this.arguments.setUnnamedValues(emptyList());
         assertThat(this.arguments.getCommand().isPresent(), is(false));
+    }
+
+    @Test
+    void testSetHelpRequestsHelpCommand()
+    {
+        this.arguments.setHelp(true);
+        assertThat(this.arguments.getCommand(), equalTo(Optional.of(HelpCommand.COMMAND_NAME)));
+    }
+
+    @Test
+    void testSetHRequestsHelpCommand()
+    {
+        this.arguments.setH(true);
+        assertThat(this.arguments.getCommand(), equalTo(Optional.of(HelpCommand.COMMAND_NAME)));
+    }
+
+    @Test
+    void testHelpRequestOverridesUnnamedCommand()
+    {
+        this.arguments.setUnnamedValues(List.of(TraceCommand.COMMAND_NAME));
+        this.arguments.setHelp(true);
+        assertThat(this.arguments.getCommand(), equalTo(Optional.of(HelpCommand.COMMAND_NAME)));
     }
 
     @Test

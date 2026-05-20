@@ -579,6 +579,9 @@ Where `command` is one of
 
 * `trace` - create a requirement trace document
 * `convert` - convert to a different requirements format
+* `help` - print the command line usage
+
+You can also print the command line usage with `-h` or `--help`.
 
 and `option` is one or more of the options listed below.
 

@@ -11,6 +11,7 @@ import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
+import org.itsallcode.openfasttrace.core.cli.commands.HelpCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.cli.logging.LogLevel;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
@@ -45,10 +46,11 @@ public class CliArguments
 
     // [impl->dsn~cli.plugins.log~1]
     private LogLevel logLevel;
+    private boolean helpRequested;
 
     /**
      * Create new {@link CliArguments}.
-     * 
+     *
      * @param directoryService
      *            the directory service used for evaluating command line
      *            arguments.
@@ -60,7 +62,7 @@ public class CliArguments
 
     /**
      * Get the output file path
-     * 
+     *
      * @return output file path
      */
     public Path getOutputPath()
@@ -74,7 +76,7 @@ public class CliArguments
 
     /**
      * Set the output file path
-     * 
+     *
      * @param outputFile
      *            output file path
      */
@@ -85,7 +87,7 @@ public class CliArguments
 
     /**
      * Set the output file path
-     * 
+     *
      * @param outputFile
      *            output file path
      */
@@ -101,6 +103,10 @@ public class CliArguments
      */
     public Optional<String> getCommand()
     {
+        if (this.helpRequested)
+        {
+            return Optional.of(HelpCommand.COMMAND_NAME);
+        }
         if (this.unnamedValues == null || this.unnamedValues.isEmpty())
         {
             return Optional.empty();
@@ -134,6 +140,26 @@ public class CliArguments
     public void setUnnamedValues(final List<String> unnamedValues)
     {
         this.unnamedValues = unnamedValues;
+    }
+
+    /**
+     * Request command line help.
+     * @param helpRequested
+     *            whether help was requested
+     */
+    public void setHelp(final boolean helpRequested)
+    {
+        this.helpRequested = helpRequested;
+    }
+
+    /**
+     * Request command line help.
+     * @param helpRequested
+     *            whether help was requested
+     */
+    public void setH(final boolean helpRequested)
+    {
+        setHelp(helpRequested);
     }
 
     /**

@@ -44,8 +44,25 @@ class CliExitIT
     @Test
     void testRunWithHelpCommand()
     {
+        assertHelpOutputFor(List.of("help"));
+    }
+
+    @Test
+    void testRunWithLongHelpOption()
+    {
+        assertHelpOutputFor(List.of("--help"));
+    }
+
+    @Test
+    void testRunWithShortHelpOption()
+    {
+        assertHelpOutputFor(List.of("-h"));
+    }
+
+    private void assertHelpOutputFor(final List<String> arguments)
+    {
         jarLauncher()
-                .args(List.of("help"))
+                .args(arguments)
                 .expectedExitCode(ExitStatus.OK.getCode())
                 .expectStdOut(startsWith("""
                         OpenFastTrace

@@ -923,6 +923,8 @@ The CLI expects one of the following commands as first unnamed command line para
 
     command = "trace" / "convert" / "help"
 
+The CLI also accepts `-h` and `--help` as aliases for the `help` command.
+
 Covers:
 
 * `req~cli.tracing.command~1`

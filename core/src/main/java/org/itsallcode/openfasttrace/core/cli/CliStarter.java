@@ -34,7 +34,7 @@ public class CliStarter
     public static void main(final String[] args)
     {
         final DirectoryService directoryService = new StandardDirectoryService();
-        mainDelegate(args, directoryService);
+        exit(mainDelegate(args, directoryService));
     }
 
     /**
@@ -46,21 +46,22 @@ public class CliStarter
      * @param directoryService
      *            directory service for getting the current directory. This
      *            allows injecting a mock in unit tests.
+     * @return exit status of the command.
      */
-    public static void mainDelegate(final String[] args, final DirectoryService directoryService)
+    public static ExitStatus mainDelegate(final String[] args, final DirectoryService directoryService)
     {
         final CliArguments arguments = parseCommandLineArguments(args, directoryService);
         final ArgumentValidator validator = new ArgumentValidator(arguments);
         if (validator.isValid())
         {
             LoggingConfigurator.create(arguments).configureLogging();
-            new CliStarter(arguments).run();
+            return new CliStarter(arguments).run();
         }
         else
         {
             printToStdError(
                     "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
-            exit(CLI_ERROR);
+            return CLI_ERROR;
         }
     }
 
@@ -90,33 +91,29 @@ public class CliStarter
 
     /**
      * Process the command line arguments and execute the commands.
+     *
+     * @return the exit status of the command.
      */
     // [impl->dsn~cli.command-selection~1]
-    public void run()
+    public ExitStatus run()
     {
         final String command = this.arguments.isHelpSet()
                 ? HelpCommand.COMMAND_NAME
                 : this.arguments.getCommand().orElse(MISSING_COMMAND);
-        ExitStatus exitStatus;
         switch (command)
         {
         case ConvertCommand.COMMAND_NAME:
-            exitStatus = new ConvertCommand(this.arguments).run() ? OK : FAILURE;
-            break;
+            return new ConvertCommand(this.arguments).run() ? OK : FAILURE;
         case TraceCommand.COMMAND_NAME:
-            exitStatus = new TraceCommand(this.arguments).run() ? OK : FAILURE;
-            break;
+            return new TraceCommand(this.arguments).run() ? OK : FAILURE;
         case HelpCommand.COMMAND_NAME:
-            exitStatus = new HelpCommand(true).run() ? OK : FAILURE;
-            break;
+            return new HelpCommand(true).run() ? OK : FAILURE;
         case MISSING_COMMAND:
         default:
             new HelpCommand(false).run();
             printToStdError("Compand missing trying to execute OFT. Choose one of: trace, convert, help");
-            exitStatus = CLI_ERROR;
-            break;
+            return CLI_ERROR;
         }
-        exit(exitStatus);
     }
 
     // [impl->dsn~cli.tracing.exit-status~1]

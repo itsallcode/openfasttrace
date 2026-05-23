@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 /**
  * This class implements an interpreter for command line arguments
- *
+ * <p
  * Users of this class must create a POJO that contains a setter method for each
  * command line argument that they want to use.
  * </p

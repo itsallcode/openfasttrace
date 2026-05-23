@@ -1,7 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import java.util.Optional;
-
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.cli.logging.LoggingConfigurator;
@@ -36,7 +34,7 @@ public class CliStarter
     public static void main(final String[] args)
     {
         final DirectoryService directoryService = new StandardDirectoryService();
-        main(args, directoryService);
+        mainDelegate(args, directoryService);
     }
 
     /**
@@ -49,7 +47,7 @@ public class CliStarter
      *            directory service for getting the current directory. This
      *            allows injecting a mock in unit tests.
      */
-    public static void main(final String[] args, final DirectoryService directoryService)
+    public static void mainDelegate(final String[] args, final DirectoryService directoryService)
     {
         final CliArguments arguments = parseCommandLineArguments(args, directoryService);
         final ArgumentValidator validator = new ArgumentValidator(arguments);

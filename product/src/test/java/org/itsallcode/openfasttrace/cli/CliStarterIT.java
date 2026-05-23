@@ -242,6 +242,7 @@ class CliStarterIT
     }
 
     // [itest->dsn~cli.tracing.output-format~1]]
+    @Test
     void testTraceOutputFormatPlain()
     {
         assertExitOkWithOutputFileOfLength(jarLauncher(TRACE_COMMAND, OUTPUT_FILE_PARAMETER,

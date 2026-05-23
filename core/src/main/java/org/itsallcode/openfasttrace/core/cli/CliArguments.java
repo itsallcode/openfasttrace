@@ -290,7 +290,7 @@ public class CliArguments
     /**
      * Get a list of artifact types to be applied as filter during import
      * 
-     * @return list of wanted artifact types
+     * @return set of wanted artifact types
      */
     public Set<String> getWantedArtifactTypes()
     {
@@ -327,7 +327,7 @@ public class CliArguments
     /**
      * Get a list of tags to be applied as filter during import
      * 
-     * @return list of wanted tags
+     * @return set of wanted tags
      */
     public Set<String> getWantedTags()
     {

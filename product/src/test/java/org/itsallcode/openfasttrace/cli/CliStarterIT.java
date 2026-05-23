@@ -20,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.opentest4j.MultipleFailuresError;
 
 @ExtendWith(SystemOutGuard.class)
@@ -74,11 +76,12 @@ class CliStarterIT
                 "oft: '" + ILLEGAL_COMMAND + "' is not an OFT command.");
     }
 
-    @Test
-    void testHelpPrintsUsage()
+    @ValueSource(strings = {HELP_COMMAND, "-h", "--help"})
+    @ParameterizedTest
+    void testHelpPrintsUsage(final String command)
     {
         final String nl = "\n";
-        assertExitOkWithStdOutStart(jarLauncher(HELP_COMMAND), "OpenFastTrace" + nl + nl + "Usage:");
+        assertExitOkWithStdOutStart(jarLauncher(command), "OpenFastTrace" + nl + nl + "Usage:");
     }
 
     // [itest->dsn~cli.command-selection~1]

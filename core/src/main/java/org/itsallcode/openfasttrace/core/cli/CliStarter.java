@@ -6,11 +6,14 @@ import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.cli.logging.LoggingConfigurator;
 
+import static org.itsallcode.openfasttrace.core.cli.ExitStatus.*;
+
 /**
  * The main entry point class for the command line application.
  */
 public class CliStarter
 {
+    private static final String MISSING_COMMAND = "missing";
     private final CliArguments arguments;
 
     /**
@@ -59,7 +62,7 @@ public class CliStarter
         {
             printToStdError(
                     "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
-            exit(ExitStatus.CLI_ERROR);
+            exit(CLI_ERROR);
         }
     }
 
@@ -75,7 +78,7 @@ public class CliStarter
         catch (final CliException e)
         {
             printToStdError("oft: " + e.getMessage());
-            exit(ExitStatus.CLI_ERROR);
+            exit(CLI_ERROR);
         }
         return arguments;
     }
@@ -93,37 +96,29 @@ public class CliStarter
     // [impl->dsn~cli.command-selection~1]
     public void run()
     {
-        final Optional<String> command = this.arguments.getCommand();
-        if (!command.isPresent())
-        {
-            new HelpCommand().run();
-            throw new IllegalStateException("Command missing trying to execute OFT mode.");
-        }
-        final Performable performable;
-        switch (command.get())
+        final String command = this.arguments.isHelpSet()
+                ? HelpCommand.COMMAND_NAME
+                : this.arguments.getCommand().orElse(MISSING_COMMAND);
+        ExitStatus exitStatus;
+        switch (command)
         {
         case ConvertCommand.COMMAND_NAME:
-            performable = new ConvertCommand(this.arguments);
+            exitStatus = new ConvertCommand(this.arguments).run() ? OK : FAILURE;
             break;
         case TraceCommand.COMMAND_NAME:
-            performable = new TraceCommand(this.arguments);
+            exitStatus = new TraceCommand(this.arguments).run() ? OK : FAILURE;
             break;
         case HelpCommand.COMMAND_NAME:
-            performable = new HelpCommand();
+            exitStatus = new HelpCommand(true).run() ? OK : FAILURE;
             break;
+        case MISSING_COMMAND:
         default:
-            new HelpCommand().run();
-            exit(ExitStatus.CLI_ERROR);
-            return;
+            new HelpCommand(false).run();
+            printToStdError("Compand missing trying to execute OFT. Choose one of: trace, convert, help");
+            exitStatus = CLI_ERROR;
+            break;
         }
-        if (performable.run())
-        {
-            exit(ExitStatus.OK);
-        }
-        else
-        {
-            exit(ExitStatus.FAILURE);
-        }
+        exit(exitStatus);
     }
 
     // [impl->dsn~cli.tracing.exit-status~1]

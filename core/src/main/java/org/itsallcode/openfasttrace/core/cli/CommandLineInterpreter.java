@@ -15,8 +15,8 @@ import java.util.stream.Stream;
  *
  * Users of this class must create a POJO that contains a setter method for each
  * command line argument that they want to use.
- *
- * Additionally they can add a setter called <code>setUnnamedValues</code> that
+ * </p
+ * Additionally, they can add a setter called <code>setUnnamedValues</code> that
  * will receive all argument values that are unnamed.
  */
 public class CommandLineInterpreter

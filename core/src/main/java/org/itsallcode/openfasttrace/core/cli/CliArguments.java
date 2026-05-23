@@ -45,6 +45,7 @@ public class CliArguments
 
     // [impl->dsn~cli.plugins.log~1]
     private LogLevel logLevel;
+    private boolean isHelpSet;
 
     /**
      * Create new {@link CliArguments}.
@@ -252,6 +253,38 @@ public class CliArguments
     public void setN(final Newline newline)
     {
         setNewline(newline);
+    }
+
+    /**
+     * Check if the help switch is set
+     *
+     * @return {@code true} if the help switch is set
+     */
+    public boolean isHelpSet()
+    {
+        return this.isHelpSet;
+    }
+
+    /**
+     * Set the help switch (no arguments)
+     *
+     * @param helpSet
+     *            {@code true} to set the help switch
+     */
+    public void setHelp(final boolean helpSet)
+    {
+        this.isHelpSet = helpSet;
+    }
+
+    /**
+     * Set the help switch (no arguments)
+     *
+     * @param helpSet
+     *            {@code true} to set the help switch
+     */
+    public void setH(final boolean helpSet)
+    {
+        setHelp(helpSet);
     }
 
     /**

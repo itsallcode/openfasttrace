@@ -50,35 +50,28 @@ public class CliStarter
      */
     public static ExitStatus mainDelegate(final String[] args, final DirectoryService directoryService)
     {
-        final CliArguments arguments = parseCommandLineArguments(args, directoryService);
-        final ArgumentValidator validator = new ArgumentValidator(arguments);
-        if (validator.isValid())
-        {
-            LoggingConfigurator.create(arguments).configureLogging();
-            return new CliStarter(arguments).run();
+        try {
+            final CliArguments arguments = parseCommandLineArguments(args, directoryService);
+            final ArgumentValidator validator = new ArgumentValidator(arguments);
+            if (validator.isValid()) {
+                LoggingConfigurator.create(arguments).configureLogging();
+                return new CliStarter(arguments).run();
+            } else {
+                printToStdError(
+                        "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
+                return CLI_ERROR;
+            }
         }
-        else
-        {
-            printToStdError(
-                    "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
+        catch (final CliException e) {
+            printToStdError("oft: " + e.getMessage());
             return CLI_ERROR;
         }
     }
 
-    @SuppressWarnings("java:S1166") // Exceptions are reported to the user
     private static CliArguments parseCommandLineArguments(final String[] args,
-            final DirectoryService directoryService)
-    {
+            final DirectoryService directoryService) throws CliException {
         final CliArguments arguments = new CliArguments(directoryService);
-        try
-        {
-            new CommandLineInterpreter(args, arguments).parse();
-        }
-        catch (final CliException e)
-        {
-            printToStdError("oft: " + e.getMessage());
-            exit(CLI_ERROR);
-        }
+        new CommandLineInterpreter(args, arguments).parse();
         return arguments;
     }
 

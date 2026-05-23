@@ -245,8 +245,8 @@ class CliStarterIT
     @Test
     void testTraceOutputFormatPlain()
     {
-        assertExitOkWithOutputFileOfLength(jarLauncher(TRACE_COMMAND, DOC_DIR.toString(), OUTPUT_FILE_PARAMETER,
-                this.outputFile.toString(), OUTPUT_FORMAT_PARAMETER, "plain"), 1000);
+        assertExitOkWithOutputFileStart(jarLauncher(TRACE_COMMAND, DOC_DIR.toString(), OUTPUT_FILE_PARAMETER,
+                this.outputFile.toString(), OUTPUT_FORMAT_PARAMETER, "plain"), "ok - 5 total");
     }
 
     @Test

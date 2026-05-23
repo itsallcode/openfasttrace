@@ -288,7 +288,7 @@ public class CliArguments
     }
 
     /**
-     * Get a list of artifact types to be applied as filter during import
+     * Get a list of artifact types to be applied as a filter during import
      * 
      * @return set of wanted artifact types
      */
@@ -298,7 +298,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of artifact types to be applied as filter during import
+     * Set a list of artifact types to be applied as a filter during import
      * 
      * @param artifactTypes
      *            list of wanted artifact types
@@ -314,7 +314,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of artifact types to be applied as filter during import
+     * Set a list of artifact types to be applied as a filter during import
      * 
      * @param artifactTypes
      *            list of wanted artifact types
@@ -325,7 +325,7 @@ public class CliArguments
     }
 
     /**
-     * Get a list of tags to be applied as filter during import
+     * Get a list of tags to be applied as a filter during import
      * 
      * @return set of wanted tags
      */
@@ -370,7 +370,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of tags to be applied as filter during import
+     * Set a list of tags to be applied as a filter during import
      * 
      * @param tags
      *            list of wanted tags
@@ -381,7 +381,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of tags to be applied as filter during import
+     * Set a list of tags to be applied as a filter during import
      * 
      * @param tags
      *            list of wanted tags

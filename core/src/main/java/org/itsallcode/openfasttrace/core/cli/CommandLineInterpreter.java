@@ -12,12 +12,13 @@ import java.util.stream.Stream;
 
 /**
  * This class implements an interpreter for command line arguments
- * <p
+ * <p>
  * Users of this class must create a POJO that contains a setter method for each
  * command line argument that they want to use.
- * </p
+ * </p><p>
  * Additionally, they can add a setter called <code>setUnnamedValues</code> that
  * will receive all argument values that are unnamed.
+ * </p>
  */
 public class CommandLineInterpreter
 {

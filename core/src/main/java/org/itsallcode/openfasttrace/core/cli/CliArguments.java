@@ -19,6 +19,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
  * This class implements a parameter object into which the command line parser
  * injects the results of parsing the command line.
  */
+@SuppressWarnings("java:S1448") // Setters are commandline arguments, lifting 35-method restriction.
 public class CliArguments
 {
     /** Filter in command line arguments matching items with no tags. */

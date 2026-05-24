@@ -26,7 +26,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class CliStarterInternalIT {
-    private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
+    private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            + System.lineSeparator() +"<specdocument>";
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
     private static final String HELP_COMMAND = "help";
@@ -95,11 +96,11 @@ class CliStarterInternalIT {
     @ValueSource(strings = {HELP_COMMAND, "-h", "--help"})
     @ParameterizedTest
     void testHelpPrintsUsage(final String command) {
-        final String nl = "\n";
         final ExitStatus status = runInternal(command);
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
-            () -> assertThat(getStdOut(), startsWith("OpenFastTrace" + nl + nl + "Usage:"))
+            () -> assertThat(getStdOut(), startsWith("OpenFastTrace" + System.lineSeparator() +
+                    System.lineSeparator() + "Usage:"))
         );
     }
 
@@ -136,7 +137,8 @@ class CliStarterInternalIT {
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
             () -> assertOutputFileExists(true),
-            () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n  <specobjects doctype=\"")
+            () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + System.lineSeparator()
+                    + "  <specobjects doctype=\"")
         );
     }
 

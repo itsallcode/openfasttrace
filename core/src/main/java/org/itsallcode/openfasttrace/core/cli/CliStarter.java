@@ -48,6 +48,7 @@ public class CliStarter
      *            allows injecting a mock in unit tests.
      * @return exit status of the command.
      */
+    @SuppressWarnings("java:S1166") // Intentional error report to console
     public static ExitStatus mainDelegate(final String[] args, final DirectoryService directoryService)
     {
         try {

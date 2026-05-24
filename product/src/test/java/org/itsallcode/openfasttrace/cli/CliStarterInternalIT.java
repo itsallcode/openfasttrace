@@ -137,7 +137,7 @@ class CliStarterInternalIT {
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
             () -> assertOutputFileExists(true),
-            () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + System.lineSeparator()
+            () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE + "\n"
                     + "  <specobjects doctype=\"")
         );
     }

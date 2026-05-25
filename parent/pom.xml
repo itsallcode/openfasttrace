@@ -20,6 +20,7 @@
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
         <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
         <test.args>-Duser.language=en</test.args>
+        <ossindex.skip>false</ossindex.skip>
     </properties>
     <licenses>
         <license>
@@ -485,6 +486,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <authId>ossindex</authId>
+                    <skip>${ossindex.skip}</skip>
                 </configuration>
                 <executions>
                     <execution>

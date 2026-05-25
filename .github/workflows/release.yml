@@ -49,7 +49,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Build
-        run: mvn --batch-mode -T 1C clean install
+        run: mvn --batch-mode -T 1C clean install -Dossindex.skip=true
 
       - name: List secret GPG keys
         run: gpg --list-secret-keys

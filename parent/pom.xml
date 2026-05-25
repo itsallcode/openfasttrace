@@ -400,7 +400,7 @@
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
                     <argLine>
-                        <!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                        <!-- Keep JaCoCo agent args and add Mockito agent (required for Java >= 18) --> @{argLine} ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -414,7 +414,7 @@
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
                     <useModulePath>true</useModulePath>
-                    <argLine><!-- Required for Java >= 18 --> ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                    <argLine><!-- Keep JaCoCo agent args and add Mockito agent (required for Java >= 18) --> @{argLine} ${test.args} -javaagent:${org.mockito:mockito-core:jar}</argLine>
                 </configuration>
                 <executions>
                     <execution>

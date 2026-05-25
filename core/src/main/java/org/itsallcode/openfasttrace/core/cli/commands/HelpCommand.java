@@ -11,13 +11,17 @@ public class HelpCommand implements Performable
 {
     /** The command line action for running this command. */
     public static final String COMMAND_NAME = "help";
+    /** Whether the OFT command was used correctly. */
+    private final boolean validUsage;
 
     /**
      * Create a new {@link HelpCommand}.
+     *
+     * @param validUsage whether the OFT command was used correctly
      */
-    public HelpCommand()
+    public HelpCommand(final boolean validUsage)
     {
-        // empty by intention
+        this.validUsage = validUsage;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class HelpCommand implements Performable
     {
         final String usage = loadResource("/usage.txt");
         System.out.println(usage);
-        return true;
+        return validUsage;
     }
 
     private String loadResource(final String resourceName)
@@ -52,5 +56,4 @@ public class HelpCommand implements Performable
         }
         return url;
     }
-
 }

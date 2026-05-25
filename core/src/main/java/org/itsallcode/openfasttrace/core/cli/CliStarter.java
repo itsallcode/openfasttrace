@@ -1,16 +1,17 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import java.util.Optional;
-
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.cli.logging.LoggingConfigurator;
+
+import static org.itsallcode.openfasttrace.core.cli.ExitStatus.*;
 
 /**
  * The main entry point class for the command line application.
  */
 public class CliStarter
 {
+    private static final String MISSING_COMMAND = "missing";
     private final CliArguments arguments;
 
     /**
@@ -33,7 +34,7 @@ public class CliStarter
     public static void main(final String[] args)
     {
         final DirectoryService directoryService = new StandardDirectoryService();
-        main(args, directoryService);
+        exit(mainDelegate(args, directoryService));
     }
 
     /**
@@ -45,38 +46,33 @@ public class CliStarter
      * @param directoryService
      *            directory service for getting the current directory. This
      *            allows injecting a mock in unit tests.
+     * @return exit status of the command.
      */
-    public static void main(final String[] args, final DirectoryService directoryService)
+    @SuppressWarnings("java:S1166") // Intentional error report to console
+    public static ExitStatus mainDelegate(final String[] args, final DirectoryService directoryService)
     {
-        final CliArguments arguments = parseCommandLineArguments(args, directoryService);
-        final ArgumentValidator validator = new ArgumentValidator(arguments);
-        if (validator.isValid())
-        {
-            LoggingConfigurator.create(arguments).configureLogging();
-            new CliStarter(arguments).run();
+        try {
+            final CliArguments arguments = parseCommandLineArguments(args, directoryService);
+            final ArgumentValidator validator = new ArgumentValidator(arguments);
+            if (validator.isValid()) {
+                LoggingConfigurator.create(arguments).configureLogging();
+                return new CliStarter(arguments).run();
+            } else {
+                printToStdError(
+                        "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
+                return CLI_ERROR;
+            }
         }
-        else
-        {
-            printToStdError(
-                    "oft: " + validator.getError() + "\n" + validator.getSuggestion() + "\n");
-            exit(ExitStatus.CLI_ERROR);
+        catch (final CliException e) {
+            printToStdError("oft: " + e.getMessage());
+            return CLI_ERROR;
         }
     }
 
-    @SuppressWarnings("java:S1166") // Exceptions are reported to the user
     private static CliArguments parseCommandLineArguments(final String[] args,
-            final DirectoryService directoryService)
-    {
+            final DirectoryService directoryService) throws CliException {
         final CliArguments arguments = new CliArguments(directoryService);
-        try
-        {
-            new CommandLineInterpreter(args, arguments).parse();
-        }
-        catch (final CliException e)
-        {
-            printToStdError("oft: " + e.getMessage());
-            exit(ExitStatus.CLI_ERROR);
-        }
+        new CommandLineInterpreter(args, arguments).parse();
         return arguments;
     }
 
@@ -89,40 +85,28 @@ public class CliStarter
 
     /**
      * Process the command line arguments and execute the commands.
+     *
+     * @return the exit status of the command.
      */
     // [impl->dsn~cli.command-selection~1]
-    public void run()
+    public ExitStatus run()
     {
-        final Optional<String> command = this.arguments.getCommand();
-        if (!command.isPresent())
-        {
-            new HelpCommand().run();
-            throw new IllegalStateException("Command missing trying to execute OFT mode.");
-        }
-        final Performable performable;
-        switch (command.get())
+        final String command = this.arguments.isHelpSet()
+                ? HelpCommand.COMMAND_NAME
+                : this.arguments.getCommand().orElse(MISSING_COMMAND);
+        switch (command)
         {
         case ConvertCommand.COMMAND_NAME:
-            performable = new ConvertCommand(this.arguments);
-            break;
+            return new ConvertCommand(this.arguments).run() ? OK : FAILURE;
         case TraceCommand.COMMAND_NAME:
-            performable = new TraceCommand(this.arguments);
-            break;
+            return new TraceCommand(this.arguments).run() ? OK : FAILURE;
         case HelpCommand.COMMAND_NAME:
-            performable = new HelpCommand();
-            break;
+            return new HelpCommand(true).run() ? OK : FAILURE;
+        case MISSING_COMMAND:
         default:
-            new HelpCommand().run();
-            exit(ExitStatus.CLI_ERROR);
-            return;
-        }
-        if (performable.run())
-        {
-            exit(ExitStatus.OK);
-        }
-        else
-        {
-            exit(ExitStatus.FAILURE);
+            new HelpCommand(false).run();
+            printToStdError("Compand missing trying to execute OFT. Choose one of: trace, convert, help");
+            return CLI_ERROR;
         }
     }
 

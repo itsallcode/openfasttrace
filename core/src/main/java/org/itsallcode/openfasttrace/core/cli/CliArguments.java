@@ -19,6 +19,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
  * This class implements a parameter object into which the command line parser
  * injects the results of parsing the command line.
  */
+@SuppressWarnings("java:S1448") // Setters are commandline arguments, lifting 35-method restriction.
 public class CliArguments
 {
     /** Filter in command line arguments matching items with no tags. */
@@ -45,6 +46,7 @@ public class CliArguments
 
     // [impl->dsn~cli.plugins.log~1]
     private LogLevel logLevel;
+    private boolean isHelpSet;
 
     /**
      * Create new {@link CliArguments}.
@@ -255,9 +257,41 @@ public class CliArguments
     }
 
     /**
-     * Get a list of artifact types to be applied as filter during import
+     * Check if the help switch is set
+     *
+     * @return {@code true} if the help switch is set
+     */
+    public boolean isHelpSet()
+    {
+        return this.isHelpSet;
+    }
+
+    /**
+     * Set the help switch (no arguments)
+     *
+     * @param helpSet
+     *            {@code true} to set the help switch
+     */
+    public void setHelp(final boolean helpSet)
+    {
+        this.isHelpSet = helpSet;
+    }
+
+    /**
+     * Set the help switch (no arguments)
+     *
+     * @param helpSet
+     *            {@code true} to set the help switch
+     */
+    public void setH(final boolean helpSet)
+    {
+        setHelp(helpSet);
+    }
+
+    /**
+     * Get a list of artifact types to be applied as a filter during import
      * 
-     * @return list of wanted artifact types
+     * @return set of wanted artifact types
      */
     public Set<String> getWantedArtifactTypes()
     {
@@ -265,7 +299,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of artifact types to be applied as filter during import
+     * Set a list of artifact types to be applied as a filter during import
      * 
      * @param artifactTypes
      *            list of wanted artifact types
@@ -281,7 +315,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of artifact types to be applied as filter during import
+     * Set a list of artifact types to be applied as a filter during import
      * 
      * @param artifactTypes
      *            list of wanted artifact types
@@ -292,9 +326,9 @@ public class CliArguments
     }
 
     /**
-     * Get a list of tags to be applied as filter during import
+     * Get a list of tags to be applied as a filter during import
      * 
-     * @return list of wanted tags
+     * @return set of wanted tags
      */
     public Set<String> getWantedTags()
     {
@@ -337,7 +371,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of tags to be applied as filter during import
+     * Set a list of tags to be applied as a filter during import
      * 
      * @param tags
      *            list of wanted tags
@@ -348,7 +382,7 @@ public class CliArguments
     }
 
     /**
-     * Set a list of tags to be applied as filter during import
+     * Set a list of tags to be applied as a filter during import
      * 
      * @param tags
      *            list of wanted tags

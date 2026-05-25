@@ -82,6 +82,15 @@ OFT uses Maven Toolchains to configure the correct JDK version (see the [documen
             <jdkHome>/usr/lib/jvm/java-21-openjdk-amd64/</jdkHome>
         </configuration>
     </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>25</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-25-openjdk-amd64/</jdkHome>
+        </configuration>
+    </toolchain>
 </toolchains>
 ```
 
@@ -134,6 +143,37 @@ Specify test class via system property `it.test` and module via command line opt
 ```sh
 mvn -Dit.test=CliStarterIT failsafe:integration-test -projects product
 ```
+
+### Check for Dependency Updates
+
+```sh
+mvn versions:display-dependency-updates versions:display-plugin-updates
+```
+
+### Check for Vulnerabilities in Dependencies
+
+Configure Ossindex credentials in `~/.m2/settings.xml`:
+
+```xml
+
+<settings>
+    <servers>
+        <server>
+            <id>ossindex</id>
+            <username>email@example.com</username>
+            <password>token</password>
+        </server>
+    </servers>
+</settings>
+```
+
+Then run
+
+```sh
+mvn -T 1C test-compile org.sonatype.ossindex.maven:ossindex-maven-plugin:audit org.sonatype.ossindex.maven:ossindex-maven-plugin:audit-aggregate
+```
+
+Ossindex also runs during `mvn verify`. Add `-Dossindex.skip=true` to skip it.
 
 ### Run Requirements Tracing
 

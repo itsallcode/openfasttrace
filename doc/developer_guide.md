@@ -176,8 +176,7 @@ mvn -T 1C --update-snapshots versions:use-latest-releases versions:update-proper
 ## Run local sonar analysis
 
 ```sh
-mvn -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-    -Dsonar.token=[token]
+mvn -T 1C clean package sonar:sonar -Dsonar.token=[token]
 ```
 
 See analysis results at [sonarcloud.io](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace).

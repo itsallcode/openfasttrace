@@ -11,12 +11,11 @@ import java.util.Properties;
  */
 public class VersionProvider
 {
-
     private static final String VERSION_PROPERTIES = "/version.properties";
     private static final String UNKNOWN_VERSION = "unknown";
 
     /**
-     * Default constructor.
+     * Create a new instance of the {@link VersionProvider}.
      */
     public VersionProvider()
     {

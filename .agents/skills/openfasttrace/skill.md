@@ -34,8 +34,8 @@ Needs: dsn, impl, utest
 
 General form: `oft <command> [options] <files/dirs>`
 
-- **Commands**: `trace` (generate report), `convert` (export format).
-- **Options**:
+- **Commands**: `trace` (generate report), `convert` (export format), `help` (usage and version).
+- **Options for `convert` and `trace`**:
   - `-o, --output-format`: `plain`, `html`, `aspec` (XML).
   - `-f, --output-file`: File path (default STDOUT).
   - `-a, --wanted-artifact-types`: Filter by type.
@@ -50,6 +50,6 @@ OFT is typically integrated into CI builds via plugins:
 
 ## LLM Interaction Guidelines
 
-- When identifying coverage, look for `impl~<ID>` or `utest~<ID>` in comments.
+- When identifying coverage, look for `impl~<ID>`, `utest~<ID>`, `itest~<ID>` and `stest~<ID>` in comments.
 - Place markers at the narrowest possible scope (method/class).
 - Ensure ID consistency across specifications and code.

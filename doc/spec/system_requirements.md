@@ -797,9 +797,20 @@ Needs: dsn
 #### Common
  
 ##### CLI Help
-`req~cli.help.version~1`
+`req~cli.help~1`
  
-`help`, `-h` and `--help` show a short help text with command line usage and the version of OFT.
+`help`, `-h` and `--help` show a short help text with command line usage.
+ 
+Covers:
+ 
+* [feat~command-line-interface~1](#command-line-interface)
+ 
+Needs: dsn
+ 
+##### CLI Version
+`req~cli.version~1`
+ 
+`help`, `-h` and `--help` show the version of OFT read from the resource file `version.properties`.
  
 Covers:
  

@@ -932,14 +932,25 @@ Needs: impl, itest
 
 ### Common
 
-#### CLI Help and Version
-`dsn~cli.help.version~1`
+#### CLI Help
+`dsn~cli.help~1`
 
-The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text including the current version of OpenFastTrace.
+The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text.
 
 Covers:
 
-* [`req~cli.help.version~1`](system_requirements.md#cli-help)
+* [`req~cli.help~1`](system_requirements.md#cli-help)
+
+Needs: impl, utest
+
+#### CLI Version
+`dsn~cli.version~1`
+
+The CLI provides the current version of OpenFastTrace.
+
+Covers:
+
+* [`req~cli.version~1`](system_requirements.md#cli-version)
 
 Needs: impl, utest
 

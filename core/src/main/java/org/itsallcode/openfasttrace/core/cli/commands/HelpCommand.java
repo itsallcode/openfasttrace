@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.core.cli.commands;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 /**
  * Handler for printing command line usage.
@@ -28,9 +29,24 @@ public class HelpCommand implements Performable
     @SuppressWarnings("java:S106") // Using System.out by intention
     public boolean run()
     {
-        final String usage = loadResource("/usage.txt");
+        final String version = loadVersion();
+        final String usage = loadResource("/usage.txt").replace("${version}", version);
         System.out.println(usage);
         return validUsage;
+    }
+
+    private String loadVersion()
+    {
+        final Properties properties = new Properties();
+        try (InputStream stream = getResource("/version.properties").openStream())
+        {
+            properties.load(stream);
+            return properties.getProperty("version", "unknown");
+        }
+        catch (final IOException exception)
+        {
+            return "unknown";
+        }
     }
 
     private String loadResource(final String resourceName)

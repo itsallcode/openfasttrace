@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import org.junit.jupiter.api.Test;
 
 class VersionProviderIT {
-    
     // [itest->dsn~cli.version~1]
     @Test
     void shouldLoadVersionFromProperties() {

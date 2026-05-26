@@ -45,7 +45,7 @@ public class VersionProvider
         }
         catch (final IOException exception)
         {
-            LOGGER.warning("Error loading version from resource file '" + resource + "'.");
+            LOGGER.warning("Error loading version from resource file: " + exception.getMessage());
             return UNKNOWN_VERSION;
         }
     }

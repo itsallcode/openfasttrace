@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Provides the version of OpenFastTrace from a resource file generated during
@@ -11,6 +12,7 @@ import java.util.Properties;
  */
 public class VersionProvider
 {
+    private static final Logger LOGGER = Logger.getLogger(VersionProvider.class.getName());
     private static final String VERSION_PROPERTIES = "/version.properties";
     private static final String UNKNOWN_VERSION = "unknown";
 
@@ -30,7 +32,6 @@ public class VersionProvider
     // [impl->dsn~cli.version~1]
     public String getVersion()
     {
-        final Properties properties = new Properties();
         final URL resource = getClass().getResource(VERSION_PROPERTIES);
         if (resource == null)
         {
@@ -38,11 +39,13 @@ public class VersionProvider
         }
         try (InputStream stream = resource.openStream())
         {
+            final Properties properties = new Properties();
             properties.load(stream);
             return properties.getProperty("version", UNKNOWN_VERSION);
         }
         catch (final IOException exception)
         {
+            LOGGER.warning("Error loading version from resource file '" + resource + "'.");
             return UNKNOWN_VERSION;
         }
     }

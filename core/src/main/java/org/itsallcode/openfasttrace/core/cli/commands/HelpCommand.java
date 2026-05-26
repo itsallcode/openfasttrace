@@ -7,6 +7,8 @@ import java.util.Properties;
 
 /**
  * Handler for printing command line usage.
+ *
+ * impl~cli.help.version~1
  */
 public class HelpCommand implements Performable
 {

@@ -795,7 +795,18 @@ Covers:
 Needs: dsn
 
 #### Common
-
+ 
+##### CLI Help
+`req~cli.help.version~1`
+ 
+`help`, `-h` and `--help` show a short help text with command line usage and the version of OFT.
+ 
+Covers:
+ 
+* [feat~command-line-interface~1](#command-line-interface)
+ 
+Needs: dsn
+ 
 ##### Input Selection
 `req~cli.input-selection~1`
 

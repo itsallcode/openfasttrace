@@ -932,6 +932,17 @@ Needs: impl, itest
 
 ### Common
 
+#### CLI Help and Version
+`dsn~cli.help.version~1`
+
+The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text including the current version of OpenFastTrace.
+
+Covers:
+
+* [`req~cli.help.version~1`](system_requirements.md#cli-help)
+
+Needs: impl, utest
+
 #### Input File Selection
 `dsn~cli.input-file-selection~1`
 

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(SystemOutGuard.class)
 class HelpCommandTest {
 
+    /** utest~cli.help.version~1 */
     @Test
     void testRunDisplaysVersion(@SysOut final Capturable out) {
         out.captureMuted();

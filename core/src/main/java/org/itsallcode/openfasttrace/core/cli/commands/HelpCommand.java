@@ -8,9 +8,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Handler for printing command line usage.
- *
- * impl~cli.help~1
  */
+// [impl->dsn~cli.help~1]
 public class HelpCommand implements Performable
 {
     /** The command line action for running this command. */

@@ -941,18 +941,18 @@ Covers:
 
 * [`req~cli.help~1`](system_requirements.md#cli-help)
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### CLI Version
 `dsn~cli.version~1`
 
-The CLI provides the current version of OpenFastTrace.
+The CLI provides the current version of OpenFastTrace read from the resource file `version.properties`.
 
 Covers:
 
 * [`req~cli.version~1`](system_requirements.md#cli-version)
 
-Needs: impl, utest
+Needs: impl, itest
 
 #### Input File Selection
 `dsn~cli.input-file-selection~1`

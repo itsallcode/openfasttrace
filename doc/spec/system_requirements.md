@@ -810,7 +810,7 @@ Needs: dsn
 ##### CLI Version
 `req~cli.version~1`
  
-`help`, `-h` and `--help` show the version of OFT read from the resource file `version.properties`.
+`help`, `-h` and `--help` show the version of OFT.
  
 Covers:
  

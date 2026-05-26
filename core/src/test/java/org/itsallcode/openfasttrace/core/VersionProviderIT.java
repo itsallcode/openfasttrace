@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class VersionProviderIT {
     
-    /** itest~cli.version~1 */
+    // [itest->dsn~cli.version~1]
     @Test
     void shouldLoadVersionFromProperties() {
         final String version = new VersionProvider().getVersion();

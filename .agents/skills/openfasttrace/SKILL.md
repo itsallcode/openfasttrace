@@ -37,7 +37,11 @@ Needs: dsn, impl, utest
 - **Forwarding**: `arch --> dsn : req~id~1` (delegates coverage without repeating).
 - **Exclusion**: Use `<!-- oft:off -->` and `<!-- oft:on -->` to skip parsing.
 
-## CLI Usage
+## Tracing
+
+Tracing can be performed via CLI, Maven, or Gradle.
+
+### CLI Usage
 
 General form: `oft <command> [options] <files/dirs>`
 
@@ -50,21 +54,70 @@ General form: `oft <command> [options] <files/dirs>`
   - `-v, --report-verbosity`: `quiet`, `minimal`, `summary`, `failures`, `failure_summaries`, `failure_details` (default), `all`.
   - `-i, --ignore-artifact-types`: Exclude types from import.
 
-## Tracing
+### Maven Integration
+
+- **User Guide**: [openfasttrace-maven-plugin](https://github.com/itsallcode/openfasttrace-maven-plugin)
+
+Add the `openfasttrace-maven-plugin` to your `pom.xml`:
+
+```xml
+<plugin>
+    <groupId>org.itsallcode.openfasttrace</groupId>
+    <artifactId>openfasttrace-maven-plugin</artifactId>
+    <version>VERSION</version>
+    <executions>
+        <execution>
+            <goals><goal>trace</goal></goals>
+        </execution>
+    </executions>
+    <configuration>
+        <reportFormat>html</reportFormat>
+        <reportFile>target/site/tracing.html</reportFile>
+    </configuration>
+</plugin>
+```
+
+- **Run**: `mvn openfasttrace:trace`
+
+### Gradle Integration
+
+- **User Guide**: [openfasttrace-gradle](https://github.com/itsallcode/openfasttrace-gradle)
+
+Apply the plugin in `build.gradle`:
+
+```gradle
+plugins {
+    id "org.itsallcode.openfasttrace" version "VERSION"
+}
+
+openfasttrace {
+    reportFormat = "html"
+}
+```
+
+- **Run**: `gradle trace`
 
 ### Partial Tracing & Filtering
 
-To trace only specific parts of the project:
+Partial tracing allows teams to focus on specific layers of the traceability chain, reducing noise and build time.
+
+**Example Scenario:**
+- **Product Owner (PO)**: Writes system requirements (`req`). Traces `feat` → `req` to ensure all features are specified.
+- **Architect**: Writes design specifications (`dsn`). Traces `feat` + `req` → `dsn` to ensure requirements are architecturally covered.
+- **Developer**: Writes implementation (`impl`) and tests (`utest`). Traces `feat`+ … + `dsn` → `impl`, `utest` to verify complete implementation and testing of the design.
+
+```text
+[PO] --(feat)--> [req]
+                   |
+[Architect] -------+--(feat, req)--> [dsn]
+                                       |
+[Developer] ---------------------------+--(feat, ..., dsn)--> [impl], [utest]
+```
+
+**Usage:**
 - Filter by artifact types: `oft trace -a req,dsn <dir>`
 - Filter by tags: `oft trace -t MyTag <dir>`
 - Combine filters to focus on specific components or requirement levels.
-
-### Build Framework Integration
-
-OFT is typically integrated into CI builds via plugins:
-
-- **Maven**: `openfasttrace-maven-plugin`
-- **Gradle**: `openfasttrace-gradle`
 
 ## LLM Interaction Guidelines
 

@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 import java.io.PrintStream;
 
+import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.report.html.view.IndentationHelper;
 import org.itsallcode.openfasttrace.report.html.view.Viewable;

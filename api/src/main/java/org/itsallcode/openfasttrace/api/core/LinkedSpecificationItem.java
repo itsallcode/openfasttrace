@@ -424,6 +424,20 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Check if the item has a transitive failure.
+     * <p>
+     * An item has a transitive failure if it is a defect, but has no direct
+     * defects (duplicates, bad links, or direct uncovered needs).
+     * </p>
+     *
+     * @return {@code true} if the item has a transitive failure.
+     */
+    public boolean isTransitiveFailure()
+    {
+        return isDefect() && !hasDuplicates() && !hasBadLinks() && areAllArtifactTypesCovered();
+    }
+
+    /**
      * Check if the item has one or more links.
      * 
      * @return {@code true} if the item has one or more links
@@ -445,7 +459,7 @@ public class LinkedSpecificationItem
         return false;
     }
 
-    private boolean areAllArtifactTypesCovered()
+    public boolean areAllArtifactTypesCovered()
     {
         return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
     }

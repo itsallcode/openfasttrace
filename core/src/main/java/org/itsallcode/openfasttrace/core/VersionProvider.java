@@ -14,7 +14,7 @@ public class VersionProvider
 {
     private static final Logger LOGGER = Logger.getLogger(VersionProvider.class.getName());
     private static final String VERSION_PROPERTIES = "/version.properties";
-    private static final String UNKNOWN_VERSION = "unknown";
+    private static final String UNKNOWN_VERSION = "(unknown version)";
 
     /**
      * Create a new instance of the {@link VersionProvider}.

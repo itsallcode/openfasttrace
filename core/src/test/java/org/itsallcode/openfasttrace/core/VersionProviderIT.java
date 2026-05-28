@@ -1,9 +1,7 @@
 package org.itsallcode.openfasttrace.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +21,14 @@ class VersionProviderIT
     void testLoadVersionFromProperties()
     {
         final String version = new VersionProvider().getVersion();
-        assertAll(() -> assertThat(version, is(not("unknown"))),
-                () -> assertThat(version, is(not("${version}"))));
+        assertThat(version,
+                anyOf(
+                        allOf(
+                                not(containsStringIgnoringCase("unknown")),
+                                not("${version}")
+                        ),
+                        matchesPattern("\\d+\\.\\d+\\.\\d+")
+                )
+        );
     }
 }

@@ -237,6 +237,16 @@ This project is configured to produce exactly the same artifacts each time when 
 
 The build will use the last Git commit timestamp as timestamp for files in `.jar` archives.
 
+## SBOM
+
+The Project generates and [SPDX](https://spdx.dev/) SBOM using the [SPDX Maven Plugin](https://github.com/spdx/spdx-maven-plugin).
+
+You can create the SBOM with the following command in the `product` module:
+
+```sh
+mvn spdx:createSPDX
+```
+
 ## Creating a Release
 
 **NOTE**: This currently only works for release version numbers, not SNAPSHOT versions.

@@ -24,7 +24,7 @@
     </properties>
     <licenses>
         <license>
-            <name>GNU General Public License v3.0</name>
+            <name>GPL-3.0-only</name>
             <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
             <distribution>repo</distribution>
         </license>
@@ -528,12 +528,35 @@
                 <version>2.21.0</version>
             </plugin>
             <plugin>
-                <!-- Deployment of this module not required -->
+                <!-- Deployment of this module is not required -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.4</version>
                 <configuration>
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>build-spdx</id>
+                        <goals>
+                            <goal>createSPDX</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>GPL-3.0-only</licenseDeclared>
+                    <licenseConcluded>GPL-3.0-only</licenseConcluded>
+                    <copyrightText>Copyright (c) itsallcode.org</copyrightText>
+                    <defaultFileConcludedLicense>GPL-3.0-only</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>GPL-3.0-only</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>Copyright (c) itsallcode.org</defaultFileCopyright>
                 </configuration>
             </plugin>
         </plugins>

@@ -754,7 +754,7 @@ recognized file types:
 * Configuration files (`.cfg`, `.conf`, `.ini`)
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
-* Java (`.java`)
+* Java (`.java`, `.fxml`)
 * JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
 * Kotlin (`.kt`, `.kts`)
 * Lua (`.lua`)

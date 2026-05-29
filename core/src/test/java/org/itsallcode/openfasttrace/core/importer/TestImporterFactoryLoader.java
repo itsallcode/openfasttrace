@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.core.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.same;
@@ -35,8 +36,6 @@ class TestImporterFactoryLoader
     private ImporterFactory supportedFactory2;
     @Mock
     private ImporterFactory unsupportedFactory;
-    @Mock
-    private ImporterContext contextMock;
 
     private ImporterFactoryLoader loader;
     private InputFile file;
@@ -57,6 +56,13 @@ class TestImporterFactoryLoader
     {
         simulateFactories();
         assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
+    }
+
+    @Test
+    void testSupportsFileWhenNoFactoryRegisteredReturnsFalse()
+    {
+        simulateFactories();
+        assertThat(this.loader.supportsFile(this.file), is(false));
     }
 
     @Test

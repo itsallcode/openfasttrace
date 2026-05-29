@@ -88,7 +88,13 @@ public class ImporterFactoryLoader
 
     private List<ImporterFactory> getMatchingFactories(final InputFile file)
     {
-        return this.serviceLoader.load()
+        final List<ImporterFactory> allFactories = this.serviceLoader.load().toList();
+        if (allFactories.isEmpty())
+        {
+            LOG.warning("No importers discovered. If you are running OpenFastTrace as a library, "
+                    + "ensure that the thread context classloader has access to the importer implementations.");
+        }
+        return allFactories.stream()
                 .filter(f -> f.supportsFile(file))
                 .toList();
     }

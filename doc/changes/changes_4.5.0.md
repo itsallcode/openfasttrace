@@ -13,3 +13,4 @@ We added FXML to the list of supported file formats for the tag importer.
 ## Features
 
 * #503: Added `-h` / `--help` to the command line.
+* #524: Added version number to help text.

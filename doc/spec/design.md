@@ -932,6 +932,32 @@ Needs: impl, itest
 
 ### Common
 
+#### CLI Help
+`dsn~cli.help~1`
+
+The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text.
+
+Covers:
+
+* [`req~cli.help~1`](system_requirements.md#cli-help)
+
+Needs: impl, itest
+
+#### CLI Version
+`dsn~cli.version~1`
+
+The CLI provides the current version of OpenFastTrace read from the resource file `version.properties` that is created during the build from the property `revision` in the core POM.
+
+Rationale:
+
+This makes the `revision` the single source of truth for the version of OpenFastTrace and avoids having to keep manually maintained copies of the version information.
+
+Covers:
+
+* [`req~cli.version~1`](system_requirements.md#cli-version)
+
+Needs: impl, itest
+
 #### Input File Selection
 `dsn~cli.input-file-selection~1`
 

@@ -1,8 +1,8 @@
 package org.itsallcode.openfasttrace.core.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.lenient;
@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
@@ -52,17 +52,17 @@ class TestImporterFactoryLoader
     }
 
     @Test
-    void testNoFactoryRegisteredReturnsNoImporter()
+    void testNoFactoryRegisteredThrowsException()
     {
         simulateFactories();
-        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
+        assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
     }
 
     @Test
-    void testSupportsFileWhenNoFactoryRegisteredReturnsFalse()
+    void testSupportsFileWhenNoFactoryRegisteredThrowsException()
     {
         simulateFactories();
-        assertThat(this.loader.supportsFile(this.file), is(false));
+        assertThrows(ImporterException.class, () -> this.loader.supportsFile(this.file));
     }
 
     @Test
@@ -88,7 +88,9 @@ class TestImporterFactoryLoader
 
     private void assertFactoryFound(final ImporterFactory expectedFactory)
     {
-        assertThat(this.loader.getImporterFactory(this.file).get(), sameInstance(expectedFactory));
+        assertThat(this.loader.getImporterFactory(this.file).orElseThrow(() ->
+                new AssertionError("Unable to find ImporterFactory.")
+        ), sameInstance(expectedFactory));
     }
 
     private void simulateFactories(final ImporterFactory... factories)

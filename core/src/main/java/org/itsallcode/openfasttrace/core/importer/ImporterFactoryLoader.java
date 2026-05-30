@@ -91,7 +91,7 @@ public class ImporterFactoryLoader
         final List<ImporterFactory> allFactories = this.serviceLoader.load().toList();
         if (allFactories.isEmpty())
         {
-            LOG.warning("No importers discovered. If you are running OpenFastTrace as a library, "
+            throw new ImporterException("No importers discovered. If you are running OpenFastTrace as a library, "
                     + "ensure that the thread context classloader has access to the importer implementations.");
         }
         return allFactories.stream()

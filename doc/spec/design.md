@@ -946,7 +946,7 @@ Needs: impl, itest
 #### CLI Version
 `dsn~cli.version~1`
 
-The CLI provides the current version of OpenFastTrace read from the resource file `version.properties` that is created druing the build from the property `revision` in the core POM.
+The CLI provides the current version of OpenFastTrace read from the resource file `version.properties` that is created during the build from the property `revision` in the core POM.
 
 Rationale:
 

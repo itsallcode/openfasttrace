@@ -4,7 +4,7 @@ Code name: 10 years of OFT
 
 ## Summary
 
-OpenFastTrace just turned ten counting from the first release. We are on Mastodon now: https://mastodon.social/@OpenFastTrace
+OpenFastTrace just turned ten on GitHub. We are on Mastodon now: https://mastodon.social/@OpenFastTrace
 
 In this release we added the option `-h` / `--help` to the command line. Also, the help message now prints the version of OpenFastTrace.
 

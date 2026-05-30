@@ -17,7 +17,7 @@ import org.mockito.Mockito;
  * Test to reproduce the classloader mismatch problem when discovering
  * importers.
  * <p>
- * This scenario will happen if OFT is used a library with a custom classloader.
+ * This scenario will happen if OFT is used as a library with a custom classloader.
  * What we want in that case is a very clear exception message because without
  * an importer, neither tracing nor converting have any chance to work.
  * </p>

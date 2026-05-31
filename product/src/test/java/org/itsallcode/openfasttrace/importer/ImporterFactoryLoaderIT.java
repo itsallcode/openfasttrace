@@ -42,4 +42,16 @@ class ImporterFactoryLoaderIT {
                 hasProperty("id", hasToString(startsWith("impl~foobar")))
         ));
     }
+
+    @Test
+    void testNoMatchingImportersFound(@TempDir Path tempDir) throws IOException {
+        final Path fileWithUnknownExtension = tempDir.resolve("file.unknown");
+        Files.createFile(fileWithUnknownExtension);
+        final Oft oft = Oft.create();
+        final ImportSettings settings = ImportSettings.builder()
+                .addInputs(tempDir)
+                .filter(FilterSettings.builder().build())
+                .build();
+        assertThat(oft.importItems(settings), emptyIterableOf(SpecificationItem.class));
+    }
 }

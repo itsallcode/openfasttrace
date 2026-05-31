@@ -23,7 +23,7 @@ public class TagImporterFactory extends ImporterFactory
             "feature", // Gherkin feature files
             "go", // Go
             "groovy", // Groovy
-            "json", "htm", "html", "xhtml", "yaml", "yml", // markup languages
+            "json", "htm", "html", "xhtml", "xml", "yaml", "yml", // markup languages
             "fxml", "java", // Java
             "clj", "kt", "kts", "scala", // JVM languages
             "js", "mjs", "cjs", "ejs", // JavaScript
@@ -54,6 +54,12 @@ public class TagImporterFactory extends ImporterFactory
     {
         // empty by intention
     }
+
+    @Override
+    public int getPriority() {
+        return 10000;
+    }
+
 
     @Override
     public boolean supportsFile(final InputFile path)

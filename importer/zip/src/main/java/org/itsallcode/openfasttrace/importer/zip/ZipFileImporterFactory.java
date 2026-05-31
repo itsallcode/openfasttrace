@@ -19,6 +19,11 @@ public class ZipFileImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
+    public int getPriority() {
+        return 10000;
+    }
+
+    @Override
     public Importer createImporter(final InputFile file, final ImportEventListener listener)
     {
         return new ZipFileImporter(getContext().getImporterService(), file, listener);

@@ -41,6 +41,11 @@ class ImporterFactoryTestBaseTest
     private static class DummyImporterFactory extends ImporterFactory
     {
         @Override
+        public int getPriority() {
+            return 99999999;
+        }
+
+        @Override
         public boolean supportsFile(final InputFile file)
         {
             throw new UnsupportedOperationException("Unimplemented method 'supportsFile'");

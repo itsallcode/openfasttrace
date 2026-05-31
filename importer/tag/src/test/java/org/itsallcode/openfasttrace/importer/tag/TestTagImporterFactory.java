@@ -32,7 +32,8 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
                 "foo.ts", "foo.json",
                 "foo.lua", "foo.m", "foo.mm", "foo.php", "foo.pl", "foo.pls", "foo.pm", "foo.proto", "foo.py",
                 "foo.sql", "foo.r",
-                "foo.rs", "foo.sh", "foo.sv", "foo.v", "foo.inc", "foo.yaml", "foo.yml", "foo.xhtml", "foo.zsh",
+                "foo.rs", "foo.sh", "foo.sv", "foo.v", "foo.inc", "foo.yaml", "foo.yml", "foo.xhtml", "foo.xml",
+                "foo.zsh",
                 "foo.clj", "foo.kt", "foo.scala",
                 "foo.pu", "foo.puml", "foo.plantuml", "foo.go", "foo.robot", "foo.tf", "foo.tfvars", "foo.toml");
     }

@@ -15,6 +15,12 @@ public class MarkdownImporterFactory extends RegexMatchingImporterFactory
     }
 
     @Override
+    public int getPriority()
+    {
+        return 1000;
+    }
+
+    @Override
     public Importer createImporter(final InputFile fileName, final ImportEventListener listener)
     {
         return new MarkdownImporter(fileName, listener);

@@ -1,8 +1,10 @@
 # OpenFastTrace 4.4.0, released 2026-05-??
 
-Code name: ???
+Code name: 10 years of OFT
 
 ## Summary
+
+OpenFastTrace just turned ten on GitHub. We are on Mastodon now: https://mastodon.social/@OpenFastTrace
 
 In this release we added the option `-h` / `--help` to the command line. Also, the help message now prints the version of OpenFastTrace.
 
@@ -18,5 +20,5 @@ When no importer factory is found for a given file format, the importer factory 
 
 * #352: Tag parsing in XML documents
 * #503: Added `-h` / `--help` to the command line.
-* #524: Added version number to help text.
 * #506: Exception when no importer was found.
+* #524: Added version number to help text.

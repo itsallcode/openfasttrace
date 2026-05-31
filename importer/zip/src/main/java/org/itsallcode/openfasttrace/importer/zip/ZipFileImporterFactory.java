@@ -20,7 +20,7 @@ public class ZipFileImporterFactory extends RegexMatchingImporterFactory
 
     @Override
     public int getPriority() {
-        return 10000;
+        return 20000;
     }
 
     @Override

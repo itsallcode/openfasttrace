@@ -45,11 +45,12 @@ class ImporterFactoryLoaderIT {
 
     @Test
     void testNoMatchingImportersFound(@TempDir Path tempDir) throws IOException {
-        final Path fileWithUnknownExtension = tempDir.resolve("file.unknown");
-        Files.createFile(fileWithUnknownExtension);
+        final Path pathTofileWithUnknownExtension = tempDir.resolve("file.unknown");
+        final Path fileWithUnknownExtension = Files.createFile(pathTofileWithUnknownExtension);
         final Oft oft = Oft.create();
         final ImportSettings settings = ImportSettings.builder()
-                .addInputs(tempDir)
+                // We must feed a file, not a path to trigger this code path.
+                .addInputs(fileWithUnknownExtension)
                 .filter(FilterSettings.builder().build())
                 .build();
         assertThat(oft.importItems(settings), emptyIterableOf(SpecificationItem.class));

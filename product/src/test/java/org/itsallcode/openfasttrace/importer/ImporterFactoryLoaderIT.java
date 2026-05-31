@@ -4,7 +4,11 @@ import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
 
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.core.Oft;
+import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -12,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -46,13 +51,14 @@ class ImporterFactoryLoaderIT {
     @Test
     void testNoMatchingImportersFound(@TempDir Path tempDir) throws IOException {
         final Path pathTofileWithUnknownExtension = tempDir.resolve("file.unknown");
-        final Path fileWithUnknownExtension = Files.createFile(pathTofileWithUnknownExtension);
-        final Oft oft = Oft.create();
+        Files.createFile(pathTofileWithUnknownExtension);
+        final InputFile inputFile = RealFileInput.forPath(pathTofileWithUnknownExtension);
         final ImportSettings settings = ImportSettings.builder()
-                // We must feed a file, not a path to trigger this code path.
-                .addInputs(fileWithUnknownExtension)
+                .addInputs(pathTofileWithUnknownExtension)
                 .filter(FilterSettings.builder().build())
                 .build();
-        assertThat(oft.importItems(settings), emptyIterableOf(SpecificationItem.class));
+        final ImporterContext importerContext = new ImporterContext(settings);
+        final ImporterFactoryLoader loader = new ImporterFactoryLoader(importerContext);
+        assertThat(loader.getImporterFactory(inputFile), equalTo(Optional.empty()));
     }
 }

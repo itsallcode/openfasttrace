@@ -18,6 +18,11 @@ class TestRestructuredTextImporterFactory extends ImporterFactoryTestBase<Restru
     }
 
     @Override
+    protected int getExpectedPriority() {
+        return 2000;
+    }
+
+    @Override
     protected List<String> getSupportedFilenames()
     {
         return asList("file.rst", "file.RST", "FILE.rst", "FILE.RST");

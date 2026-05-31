@@ -44,4 +44,10 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
         return asList("file.md", "file.jav", "file.ml", "file.1java", "file.java1", "file.java.md",
                 "file_java", "filejava");
     }
+
+    @Override
+    protected int getExpectedPriority()
+    {
+        return 10000;
+    }
 }

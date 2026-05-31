@@ -41,6 +41,7 @@ Sonarcloud status:
 * [➕ Changelog](doc/changes/changes.md)
 * [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
 * [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
+* [🐘 OpenFastTrace@mastodon.social](https://mastodon.social/@OpenFastTrace)
 * [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
 * [ℹ️ About us](doc/about_us.md)
 

@@ -22,7 +22,7 @@ class ImporterFactoryLoaderIT {
         final Oft oft = Oft.create();
         final String specObjectContent = """
                 <specdocument>
-                    <specobjects doctype=\"dsn\">
+                    <specobjects doctype="dsn">
                         <specobject>
                             <id>foobar</id>
                                  <version>1</version>

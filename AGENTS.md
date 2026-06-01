@@ -29,7 +29,7 @@ You are an expert Java developer specializing in requirement tracing and softwar
 
 - **Always**:
   - Review all changes with `./oft-self-trace.sh` to ensure tracing completeness.
-  - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>`.
+  - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>` (e.g., `feature/533_update_agents_md`).
   - Place coverage markers at the narrowest possible scope (method or class).
 - **Ask First**:
   - Before adding new external dependencies to `pom.xml`.
@@ -89,9 +89,9 @@ Needs: impl, utest
 
 ### Development Workflow
 
-1. **Branching**: `<type>/<number>_<description>` (e.g., `feature/533_update_agents_md`).
-2. **Implementation**: Tag all new code with coverage markers.
-3. **Verification**: `mvn verify` (includes OFT self-trace).
+1. **Create Branch** (see [Boundaries](#boundaries))
+2. **Implement**: Tag all new code with coverage markers.
+3. **Verify**: `mvn verify` (includes OFT self-trace).
 4. **Review**: All changes require human review per `CONTRIBUTING.md`.
 
 ### Agent Skills & Critical Files

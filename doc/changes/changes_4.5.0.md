@@ -1,4 +1,4 @@
-# OpenFastTrace 4.4.0, released 2026-05-??
+# OpenFastTrace 4.5.0, released 2026-06-01
 
 Code name: 10 years of OFT
 
@@ -16,9 +16,12 @@ File extensions can now be handled by multiple importers. Importers have a prior
 
 When no importer factory is found for a given file format, the importer factory loader will now throw an exception that explains the likely cause. This is helpful in case OFT is used as a library with a custom classloader and thus does not have the right context.
 
+Last but not least, we added the AGENTS.md file as the central entry point to guidance for LLM agents.
+
 ## Features
 
 * #352: Tag parsing in XML documents
 * #503: Added `-h` / `--help` to the command line.
 * #506: Exception when no importer was found.
 * #524: Added version number to help text.
+* #533: Added AGENTS.md

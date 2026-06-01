@@ -27,6 +27,11 @@ public class SpecobjectImporterFactory extends ImporterFactory
         this.xmlParserFactory = new XmlParserFactory();
     }
 
+    @Override
+    public int getPriority() {
+        return 3000;
+    }
+
     // [impl -> dsn~import.reqm2-file-detection~1]
     @Override
     public boolean supportsFile(final InputFile file)

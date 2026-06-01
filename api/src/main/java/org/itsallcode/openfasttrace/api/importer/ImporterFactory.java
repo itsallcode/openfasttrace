@@ -21,6 +21,18 @@ public abstract class ImporterFactory implements Initializable<ImporterContext>
     }
 
     /**
+     * Get the priority of this {@link ImporterFactory}.
+     * <p>
+     * The priority is used to determine the order in which importer factories
+     * are tried when importing a file. Lower priority values indicate higher
+     * precedence.
+     * </p>
+     * 
+     * @return priority of this importer factory
+     */
+    public abstract int getPriority();
+
+    /**
      * Returns {@code true} if this {@link ImporterFactory} supports
      * importing the given file based on its file extension.
      *

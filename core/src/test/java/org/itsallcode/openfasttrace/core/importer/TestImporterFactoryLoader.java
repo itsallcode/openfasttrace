@@ -1,15 +1,15 @@
 package org.itsallcode.openfasttrace.core.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
@@ -26,8 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * Test for {@link ImporterFactoryLoader}
  */
 @ExtendWith(MockitoExtension.class)
-class TestImporterFactoryLoader
-{
+class TestImporterFactoryLoader {
     @Mock
     private Loader<ImporterFactory> serviceLoaderMock;
     @Mock
@@ -41,8 +40,7 @@ class TestImporterFactoryLoader
     private InputFile file;
 
     @BeforeEach
-    void beforeEach()
-    {
+    void beforeEach() {
         this.loader = new ImporterFactoryLoader(this.serviceLoaderMock);
         this.file = RealFileInput.forPath(Paths.get("dir", "name"));
 
@@ -52,49 +50,62 @@ class TestImporterFactoryLoader
     }
 
     @Test
-    void testNoFactoryRegisteredThrowsException()
-    {
+    void testNoFactoryRegisteredThrowsException() {
         simulateFactories();
         assertThrows(ImporterException.class, () -> this.loader.getImporterFactory(this.file));
     }
 
     @Test
-    void testSupportsFileWhenNoFactoryRegisteredThrowsException()
-    {
+    void testSupportsFileWhenNoFactoryRegisteredThrowsException() {
         simulateFactories();
         assertThrows(ImporterException.class, () -> this.loader.supportsFile(this.file));
     }
 
     @Test
-    void testMatchingFactoryFoundOnlyOneAvailable()
-    {
+    void testMatchingFactoryFoundOnlyOneAvailable() {
         simulateFactories(this.supportedFactory1);
         assertFactoryFound(this.supportedFactory1);
     }
 
     @Test
-    void testMatchingFactoryFoundTwoAvailable()
-    {
+    void testMatchingFactoryFoundTwoAvailable() {
         simulateFactories(this.supportedFactory1, this.unsupportedFactory);
         assertFactoryFound(this.supportedFactory1);
     }
 
     @Test
-    void testMultipleMatchingFactoriesFoundReturnNoImporter()
-    {
-        simulateFactories(this.supportedFactory1, this.supportedFactory1);
-        assertTrue(this.loader.getImporterFactory(this.file).isEmpty());
+    void testMultipleMatchingFactoriesReturnsTopPriority(@Mock ImporterFactory priority1Factory,
+                                                         @Mock ImporterFactory priority2Factory,
+                                                         @Mock ImporterFactory priority3Factory) {
+        when(priority1Factory.supportsFile(same(this.file))).thenReturn(true);
+        when(priority2Factory.supportsFile(same(this.file))).thenReturn(true);
+        when(priority3Factory.supportsFile(same(this.file))).thenReturn(true);
+        when(priority1Factory.getPriority()).thenReturn(1);
+        when(priority2Factory.getPriority()).thenReturn(2);
+        when(priority3Factory.getPriority()).thenReturn(3);
+        simulateFactories(priority2Factory, priority1Factory, priority3Factory);
+        assertThat(this.loader.getImporterFactory(this.file).orElseThrow().getPriority(), equalTo(1));
     }
 
-    private void assertFactoryFound(final ImporterFactory expectedFactory)
-    {
-        assertThat(this.loader.getImporterFactory(this.file).orElseThrow(() ->
-                new AssertionError("Unable to find ImporterFactory.")
-        ), sameInstance(expectedFactory));
+    @Test
+    void testNoMatchingFactoriesReturnsEmpty(@Mock final ImporterFactory unused) {
+        when(unused.supportsFile(same(this.file))).thenReturn(false);
+        simulateFactories(unused);
+        assertThat(this.loader.getImporterFactory(this.file), equalTo(Optional.empty()));
     }
 
-    private void simulateFactories(final ImporterFactory... factories)
-    {
+    @Test
+    void testSupportsFile() {
+        simulateFactories(this.supportedFactory1);
+        assertThat(this.loader.supportsFile(this.file), equalTo(true));
+    }
+
+    private void assertFactoryFound(final ImporterFactory expectedFactory) {
+        assertThat(this.loader.getImporterFactory(this.file).orElseThrow(
+                () -> new AssertionError("Unable to find ImporterFactory.")), sameInstance(expectedFactory));
+    }
+
+    private void simulateFactories(final ImporterFactory... factories) {
         when(this.serviceLoaderMock.load()).thenReturn(Arrays.stream(factories));
     }
 }

@@ -26,6 +26,11 @@ class ImporterFactoryTestBaseTest
         }
 
         @Override
+        protected int getExpectedPriority() {
+            return 0;
+        }
+
+        @Override
         protected List<String> getSupportedFilenames()
         {
             throw new UnsupportedOperationException("Unimplemented method 'getSupportedFilenames'");
@@ -40,6 +45,11 @@ class ImporterFactoryTestBaseTest
 
     private static class DummyImporterFactory extends ImporterFactory
     {
+        @Override
+        public int getPriority() {
+            return 99999999;
+        }
+
         @Override
         public boolean supportsFile(final InputFile file)
         {

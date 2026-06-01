@@ -794,6 +794,7 @@ recognized file types:
 
 * HTML (`.html`, `.htm`, `.xhtml`)
 * YAML (`.yaml`, `.yml`)
+* XML (`xml`)
 
 **Modeling languages**
 

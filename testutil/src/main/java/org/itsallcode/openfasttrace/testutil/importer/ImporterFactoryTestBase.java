@@ -93,6 +93,18 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
                 "Context was not initialized");
     }
 
+    @Test
+    void testGetPriority() {
+        assertThat(createFactory().getPriority(), equalTo(getExpectedPriority()));
+    }
+
+    /**
+     * Get the priority the importer factory should report.
+     *
+     * @return expected priority
+     */
+    protected abstract int getExpectedPriority();
+
     private void assertSupported(final List<String> filenames, final boolean expectedResult)
     {
         final T factory = createFactory();

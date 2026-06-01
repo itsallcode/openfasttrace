@@ -94,6 +94,12 @@ class TestImporterFactoryLoader {
         assertThat(this.loader.getImporterFactory(this.file), equalTo(Optional.empty()));
     }
 
+    @Test
+    void testSupportsFile() {
+        simulateFactories(this.supportedFactory1);
+        assertThat(this.loader.supportsFile(this.file), equalTo(true));
+    }
+
     private void assertFactoryFound(final ImporterFactory expectedFactory) {
         assertThat(this.loader.getImporterFactory(this.file).orElseThrow(
                 () -> new AssertionError("Unable to find ImporterFactory.")), sameInstance(expectedFactory));

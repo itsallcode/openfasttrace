@@ -91,7 +91,7 @@ Needs: impl, utest
 
 1. **Create Branch** (see [Boundaries](#boundaries))
 2. **Implement**: Tag all new code with coverage markers.
-3. **Verify**: `mvn verify` (includes OFT self-trace).
+3. **Verify**: `mvn -T 1C verify` (includes OFT self-trace).
 4. **Review**: All changes require human review per `CONTRIBUTING.md`.
 
 ### Agent Skills & Critical Files

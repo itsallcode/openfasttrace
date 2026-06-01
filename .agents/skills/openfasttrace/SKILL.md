@@ -119,14 +119,6 @@ Partial tracing allows teams to focus on specific layers of the traceability cha
 - Filter by tags: `oft trace -t MyTag <dir>`
 - Combine filters to focus on specific components or requirement levels.
 
-## Required Skills & Knowledge
-
-- **Java Expertise:** Proficient in Java 17+ and "Clean Code" principles.
-- **Build Tools:** Advanced knowledge of Maven, multi-module projects, and toolchains.
-- **Testing:** Skilled in JUnit 5, Mockito, and integration testing.
-- **Requirement Tracing:** Understanding of traceability matrices and specification management.
-- **VCS:** Mastery of Git and GitHub-based collaborative workflows.
-
 ## LLM Interaction Guidelines
 
 - When identifying coverage, look for `impl~<ID>`, `utest~<ID>`, `itest~<ID>` and `stest~<ID>` in comments.

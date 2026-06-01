@@ -216,13 +216,13 @@
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>junit5-system-extensions</artifactId>
-                <version>1.2.2</version>
+                <version>1.2.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.itsallcode</groupId>
                 <artifactId>hamcrest-auto-matcher</artifactId>
-                <version>0.8.2</version>
+                <version>0.8.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

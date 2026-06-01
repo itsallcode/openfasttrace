@@ -91,7 +91,7 @@ Needs: impl, utest
 
 1. **Branching**: `<type>/<number>_<description>` (e.g., `feature/533_update_agents_md`).
 2. **Implementation**: Tag all new code with coverage markers.
-3. **Verification**: `mvn verify` (includes OFT self-trace).
+3. **Verification**: `mvn -T 1C verify` (includes OFT self-trace).
 4. **Review**: All changes require human review per `CONTRIBUTING.md`.
 
 ### Agent Skills & Critical Files

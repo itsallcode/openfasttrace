@@ -1,17 +1,11 @@
+---
+name: oft-contributor
+description: Expert Java developer for maintaining and evolving OpenFastTrace.
+---
+
 ### AGENTS.md — OpenFastTrace
 
 This file provides guidance for AI agents and LLMs working on the OpenFastTrace (OFT) project.
-
-### Agent Role & Persona
-
-You are an expert Java developer specializing in requirement tracing and software quality. Your goal is to help maintain and evolve OpenFastTrace, following "Clean Code" principles and ensuring high reliability.
-
-### Project Overview
-
-OpenFastTrace is a requirement tracing suite that tracks the implementation and verification of specifications.
-- **Stack:** Java 17+, Maven, JUnit 5, Mockito, Hamcrest Matchers.
-- **Architecture:** Modular system with Core, API, Importers, Exporters, and Reporters.
-- **Core Concept:** Requirements are parsed from various sources (e.g., Markdown, Source Code, XML), traced through the system, and written into reports.
 
 ### Key Commands
 
@@ -19,65 +13,95 @@ All commands should be run from the repository root.
 
 | Task                     | Command                                                                  |
 |:-------------------------|:-------------------------------------------------------------------------|
+| **Verify (All tests)**   | `mvn -T 1C verify`                                                       |
+| **Self-Trace**           | `./oft-self-trace.sh`                                                    |
 | **Build (full)**         | `mvn -T 1C clean package -DskipTests`                                    |
 | **Run Unit Tests**       | `mvn -T 1C test`                                                         |
-| **Verify (All tests)**   | `mvn -T 1C verify`                                                       |
 | **Run Single Test**      | `mvn test -Dtest=ClassName`                                              |
 | **Run Integration Test** | `mvn -Dit.test=CliStarterIT failsafe:integration-test -projects product` |
-| **Self-Trace**           | `./oft-self-trace.sh`                                                    |
 | **Check Dependencies**   | `mvn versions:display-dependency-updates`                                |
 
-### Self-trace
+### Agent Role & Persona
 
-When contributing to this project, you must also **use** OFT to trace your own changes.
+You are an expert Java developer specializing in requirement tracing and software quality. Your goal is to help maintain and evolve OpenFastTrace, following "Clean Code" principles and ensuring high reliability.
 
-1. **Tag Your Changes:** If you add a new feature or fix a requirement, add the corresponding coverage markers in the code comments (e.g., `// [impl-> req~example~1]`).
-2. **Verify Tracing:** After making changes, run the self-trace script:
-   ```sh
-   ./oft-self-trace.sh
-   ```
-   Ensure no new "uncovered" or "invalid" items are introduced.
-3. **Syntax & Usage:** For detailed syntax (Markdown, Tags) and CLI options, refer to the [OFT Skill Guide](.agents/skills/openfasttrace/SKILL.md).
+### Boundaries
 
-### Architecture & Module Map
-OFT is organized into several functional modules:
-- `openfasttrace-api`: Core interfaces and contracts.
-- `openfasttrace-core`: Main tracing logic.
-- `openfasttrace-importer-*`: Importers for different formats (Markdown, Tag, XML, etc.).
-- `openfasttrace-exporter-*`: Exporters for SpecObject format.
-- `openfasttrace-reporter-*`: Generators for HTML and PlainText reports.
-- `product`: The final executable "uber-JAR" assembly.
+- **Always**:
+  - Review all changes with `./oft-self-trace.sh` to ensure tracing completeness.
+  - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>`.
+  - Place coverage markers at the narrowest possible scope (method or class).
+- **Ask First**:
+  - Before adding new external dependencies to `pom.xml`.
+  - Before changing existing architectural patterns in `openfasttrace-core`.
+- **Never**:
+  - Never remove failing tests unless specifically instructed to do so. Fix the code instead.
+  - Never modify files in `.idea/` or other IDE-specific metadata folders.
+  - Never bypass `mvn verify` checks (e.g., by skipping static analysis or tests) during final validation.
+
+### Code Examples
+
+#### Requirement Tagging in Java
+Show coverage of a requirement (e.g., `req~help-command~1`) in the implementation:
+
+```java
+/**
+ * Handles the help command.
+ * // [impl->req~help-command~1]
+ */
+public class HelpCommand extends AbstractCommand {
+    // implementation details...
+}
+```
+
+#### Requirement Definition in Markdown
+Example of a specification item in `doc/spec/system_requirements.md`:
+
+```markdown
+### Help Command
+`req~help-command~1`
+
+The system shall provide a help command that displays usage information.
+
+Covers:
+
+- feat~cli~1
+
+Needs: impl, utest
+```
+
+### Project Stack & Structure
+
+- **Tech Stack**: Java 17+, Maven 3.8+, JUnit 5, Mockito, Hamcrest.
+- **Architecture**:
+  - `openfasttrace-api`: Core interfaces and contracts.
+  - `openfasttrace-core`: Main tracing logic and algorithms.
+  - `openfasttrace-importer-*`: Specialized importers (Markdown, Source Tag, XML, etc.).
+  - `openfasttrace-exporter-*`: Data exporters.
+  - `openfasttrace-reporter-*`: Report generators (HTML, PlainText, ASpec).
+  - `product`: Uber-JAR assembly and CLI entry point.
 
 ### Code Style & Conventions
 
-- **Clean Code:** Follow Robert C. Martin's "Clean Code" principles (meaningful names, small functions, single responsibility).
-- **Formatting:** Use the project's Eclipse formatter configuration. If not found in root, check `doc/itsallcode_formatter.xml` or individual module settings.
-- **Logging:** Use `java.util.logging`. Configuration for tests is in `core/src/test/resources/logging.properties`.
-- **Requirements:** Every new feature or fix should ideally be traced. Use `./oft-self-trace.sh` to check the tracing status.
-
-### Testing Strategy
-
-- **Framework:** JUnit 5 with Mockito for mocking.
-- **Verification:** Use `mvn verify` to ensure unit tests, integration tests, and static analysis pass.
-- **Coverage:** Aim for high coverage, especially in the `core` and `api` modules.
+- **Clean Code**: Meaningful names, small functions, single responsibility.
+- **Formatting**: Use the project's Eclipse formatter (`doc/itsallcode_formatter.xml`).
+- **Logging**: Use `java.util.logging`. Test config: `core/src/test/resources/logging.properties`.
 
 ### Development Workflow
 
-1. **Branching:** Work on a feature branch from `main`. Use the following naming convention: `<type>/<number>_<short-description-lower-snake-case>` (e.g., `feature/533_add_agents_md` or `fix/123_fix_parsing_error`).
-2. **Review:** All code changes must be reviewed.
-3. **CI:** GitHub Actions runs the `build.yml` workflow on every push.
-4. **AGENTS.md Updates:** If you change the build process, add new modules, or change conventions, update this file.
+1. **Branching**: `<type>/<number>_<description>` (e.g., `feature/533_update_agents_md`).
+2. **Implementation**: Tag all new code with coverage markers.
+3. **Verification**: `mvn verify` (includes OFT self-trace).
+4. **Review**: All changes require human review per `CONTRIBUTING.md`.
 
-### Agent Skills
+### Agent Skills & Critical Files
 
-For detailed technical skills, domain-specific knowledge (Specification Item syntax, artifact types), and LLM interaction guidelines, see: [`.agents/skills`](.agents/skills)
-
-### Critical Files
-
-- `pom.xml`: Root Maven configuration.
-- `README.md`: General project overview.
-- `doc/developer_guide.md`: Detailed technical documentation.
-- `doc/spec/system_requirements.md`: System and user requirements.
-- `doc/spec/design.md`: High-level design and architecture.
-- `CONTRIBUTING.md`: Guidelines for human and AI-assisted contributions.
-- `core/src/main/resources/usage.txt`: CLI usage documentation.
+- **Detailed Skills**: See [`.agents/skills`](.agents/skills) for domain knowledge (ID syntax, keywords).
+- **Key Resources**:
+  - `README.md`: General overview.
+  - `doc/developer_guide.md`: Detailed build and internal info.
+  - `doc/user_guide.md`: Comprehensive tool usage.
+  - `CONTRIBUTING.md`: Human-AI collaboration guidelines.
+  - `doc/spec/system_requirements.md`: System requirements specification.
+  - `doc/spec/design.md`: High-level design documentation.
+  - `core/src/main/resources/usage.txt`: CLI documentation.

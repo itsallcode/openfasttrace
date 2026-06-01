@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
@@ -84,6 +85,13 @@ class TestImporterFactoryLoader {
         when(priority3Factory.getPriority()).thenReturn(3);
         simulateFactories(priority2Factory, priority1Factory, priority3Factory);
         assertThat(this.loader.getImporterFactory(this.file).orElseThrow().getPriority(), equalTo(1));
+    }
+
+    @Test
+    void testNoMatchingFactoriesReturnsEmpty(@Mock final ImporterFactory unused) {
+        when(unused.supportsFile(same(this.file))).thenReturn(false);
+        simulateFactories(unused);
+        assertThat(this.loader.getImporterFactory(this.file), equalTo(Optional.empty()));
     }
 
     private void assertFactoryFound(final ImporterFactory expectedFactory) {

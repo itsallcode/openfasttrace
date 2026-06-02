@@ -30,7 +30,7 @@ class TestHtmlViewFactory
     }
 
     @Test
-    void testCreateFactoryWithPrintStream() throws UnsupportedEncodingException
+    void testCreateFactoryWithPrintStream()
     {
         factory = HtmlViewFactory.create(new PrintStream(outputStream, true, StandardCharsets.UTF_8),
                 HtmlReport.getCssUrl(), DetailsSectionDisplay.COLLAPSE);

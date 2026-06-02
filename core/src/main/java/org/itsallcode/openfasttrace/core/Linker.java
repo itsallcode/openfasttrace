@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.*;
 
@@ -35,7 +34,7 @@ public class Linker
     {
         return items.stream() //
                 .map(LinkedSpecificationItem::new) //
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

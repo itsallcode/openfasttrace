@@ -105,6 +105,7 @@ class TestInitializingServiceLoader
         @Override
         public void init(final Object context)
         {
+            // Intentionally empty.
         }
     }
 }

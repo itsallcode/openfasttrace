@@ -35,7 +35,7 @@ public class LinkedItemIndex
 
     private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
     {
-        return items.stream().map(LinkedSpecificationItem::new).collect(Collectors.toList());
+        return items.stream().map(LinkedSpecificationItem::new).toList();
     }
 
     /**

@@ -75,13 +75,13 @@ class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    void testTraceToStdOut() throws IOException
+    void testTraceToStdOut()
     {
         this.oft.reportToStdOut(this.trace);
         assertStandardReportStdOutResult();
     }
 
-    private void assertStandardReportStdOutResult() throws IOException
+    private void assertStandardReportStdOutResult()
     {
         assertStdOutStartsWith("ok - 5 total");
     }
@@ -107,8 +107,7 @@ class ITestOftAsReporter extends AbstractOftTest
         final List<SpecificationItem> filteredItems = this.oft.importItems(importSettings);
         final List<LinkedSpecificationItem> filteredSpecificationItems = this.oft
                 .link(filteredItems);
-        final Trace filteredTrace = this.oft.trace(filteredSpecificationItems);
-        return filteredTrace;
+        return this.oft.trace(filteredSpecificationItems);
     }
 
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)

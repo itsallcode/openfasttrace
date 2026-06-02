@@ -209,9 +209,9 @@ class HtmlSpecificationItem implements Viewable
 
     protected List<TracedLink> sortLinkStreamById(final Stream<TracedLink> tracedLinkStream)
     {
-        return tracedLinkStream //
-                .sorted(Comparator.comparing(a -> a.getOtherLinkEnd().getId().toString())) //
-                .collect(Collectors.toList());
+        return tracedLinkStream
+                .sorted(Comparator.comparing(a -> a.getOtherLinkEnd().getId().toString()))
+                .toList();
     }
 
     protected void renderLinkEntry(final List<TracedLink> outLinks, final String indentation)

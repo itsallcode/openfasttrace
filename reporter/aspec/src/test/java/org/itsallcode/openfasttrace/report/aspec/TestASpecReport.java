@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.ReportSettings;
@@ -464,14 +463,14 @@ class TestASpecReport
         builder.items(items);
         builder.defectItems(items.stream() //
                 .filter(LinkedSpecificationItem::isDefect) //
-                .collect(Collectors.toList()));
+                .toList());
         return builder.build();
     }
 
     private String item(final Field... fields)
     {
         final StringBuilder result = new StringBuilder();
-        final Map<Field.Type, List<Field>> fieldMap = new HashMap<>();
+        final Map<Field.Type, List<Field>> fieldMap = new EnumMap<>(Field.Type.class);
         for (final Field field : fields)
         {
             final List<Field> value = fieldMap.containsKey(field.type) ? fieldMap.get(field.type) : new ArrayList<>();

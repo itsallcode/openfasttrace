@@ -25,8 +25,7 @@ class TestConvertCommand
         final CliArguments args = new CliArguments(directoryServiceMock);
         args.setUnnamedValues(asList("convert", "input"));
         final ConvertCommand command = new ConvertCommand(args);
-        final ExporterException exception = assertThrows(ExporterException.class,
-                () -> command.run());
+        final ExporterException exception = assertThrows(ExporterException.class, command::run);
         assertThat(exception.getMessage(),
                 equalTo("Found no matching exporter for output format 'specobject'"));
     }

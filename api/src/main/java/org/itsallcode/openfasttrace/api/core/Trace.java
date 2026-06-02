@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.api.core;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The result of tracing requirements.
@@ -58,7 +57,7 @@ public class Trace
     {
         return this.defectItems.stream()
                 .map(LinkedSpecificationItem::getId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

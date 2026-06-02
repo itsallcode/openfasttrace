@@ -339,8 +339,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testMultipleForwardsInARow()
     {
-        final String forwardedFile = "fwd.md";
-        assertImport(forwardedFile, """
+        assertImport(FILENAME, """
                 ${title("A Collection of Different Forwards", 1)}
                 * `arch --> dsn : req~foo~1`
                 * arch  -->dsn  : req~bar~2   with a comment
@@ -351,19 +350,19 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
                                 .addNeedsArtifactType("dsn")
                                 .forwards(true)
-                                .location(forwardedFile, 2 + titleLocationOffset)
+                                .location(FILENAME, 2 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("dsn")
                                 .forwards(true)
-                                .location(forwardedFile, 3 + titleLocationOffset)
+                                .location(FILENAME, 3 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
                                 .addNeedsArtifactType("impl")
                                 .forwards(true)
-                                .location(forwardedFile, 4 + titleLocationOffset)
+                                .location(FILENAME, 4 + titleLocationOffset)
                                 .build()));
     }
 

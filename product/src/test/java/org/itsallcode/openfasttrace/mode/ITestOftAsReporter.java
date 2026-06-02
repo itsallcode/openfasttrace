@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -24,17 +23,16 @@ class ITestOftAsReporter extends AbstractOftTest
 {
     private Oft oft;
     private Trace trace;
-    private List<LinkedSpecificationItem> linkedItems;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
+    void beforeEach(@TempDir final Path tempDir)
     {
         prepareOutput(tempDir);
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         this.oft = Oft.create();
         final List<SpecificationItem> items = this.oft.importItems(settings);
-        this.linkedItems = this.oft.link(items);
-        this.trace = this.oft.trace(this.linkedItems);
+        final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
+        this.trace = this.oft.trace(linkedItems);
     }
 
     @Test

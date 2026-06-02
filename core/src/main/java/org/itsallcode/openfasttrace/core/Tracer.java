@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
@@ -33,7 +32,7 @@ public class Tracer
         builder.items(items);
         builder.defectItems(items.stream() //
                 .filter(LinkedSpecificationItem::isDefect) //
-                .collect(Collectors.toList()));
+                .toList());
         return builder.build();
     }
 }

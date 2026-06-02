@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -24,17 +23,16 @@ class ITestOftAsReporter extends AbstractOftTest
 {
     private Oft oft;
     private Trace trace;
-    private List<LinkedSpecificationItem> linkedItems;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
+    void beforeEach(@TempDir final Path tempDir)
     {
         prepareOutput(tempDir);
         final ImportSettings settings = ImportSettings.builder().addInputs(this.docDir).build();
         this.oft = Oft.create();
         final List<SpecificationItem> items = this.oft.importItems(settings);
-        this.linkedItems = this.oft.link(items);
-        this.trace = this.oft.trace(this.linkedItems);
+        final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
+        this.trace = this.oft.trace(linkedItems);
     }
 
     @Test
@@ -75,13 +73,13 @@ class ITestOftAsReporter extends AbstractOftTest
     }
 
     @Test
-    void testTraceToStdOut() throws IOException
+    void testTraceToStdOut()
     {
         this.oft.reportToStdOut(this.trace);
         assertStandardReportStdOutResult();
     }
 
-    private void assertStandardReportStdOutResult() throws IOException
+    private void assertStandardReportStdOutResult()
     {
         assertStdOutStartsWith("ok - 5 total");
     }
@@ -107,8 +105,7 @@ class ITestOftAsReporter extends AbstractOftTest
         final List<SpecificationItem> filteredItems = this.oft.importItems(importSettings);
         final List<LinkedSpecificationItem> filteredSpecificationItems = this.oft
                 .link(filteredItems);
-        final Trace filteredTrace = this.oft.trace(filteredSpecificationItems);
-        return filteredTrace;
+        return this.oft.trace(filteredSpecificationItems);
     }
 
     private long countItemsOfArtifactTypeInTrace(final String artifactType, final Trace trace)

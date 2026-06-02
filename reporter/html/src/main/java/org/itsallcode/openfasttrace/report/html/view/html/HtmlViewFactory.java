@@ -47,9 +47,9 @@ public class HtmlViewFactory extends AbstractViewFactory
 
     private static PrintStream createPrintStream(final OutputStream stream)
     {
-        if (stream instanceof PrintStream)
+        if (stream instanceof PrintStream printStream)
         {
-            return (PrintStream) stream;
+            return printStream;
         }
         else
         {

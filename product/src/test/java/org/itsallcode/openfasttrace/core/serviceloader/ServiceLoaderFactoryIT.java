@@ -56,7 +56,7 @@ class ServiceLoaderFactoryIT
             final ReporterFactory service = services.get(0);
             final ClassLoader pluginClassLoader = service.getClass().getClassLoader();
             assertAll(
-                    () -> assertThat(service.getClass().getName().toString(),
+                    () -> assertThat(service.getClass().getName(),
                             equalTo("org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory")),
                     () -> assertThat(pluginClassLoader.getName(),
                             startsWith("JarClassLoader-openfasttrace-reporter-plaintext")),

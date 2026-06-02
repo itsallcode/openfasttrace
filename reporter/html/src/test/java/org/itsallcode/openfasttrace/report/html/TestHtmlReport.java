@@ -42,20 +42,19 @@ class TestHtmlReport
         htmlReporterFactory.init(new ReporterContext(ReportSettings.createDefault()));
         final Reportable report = htmlReporterFactory.createImporter(traceMock);
         report.renderToStream(outputStream);
-        final String outputAsString = outputStream.toString();
-        return outputAsString;
+        return outputStream.toString();
     }
 
     @Test
     void testRenderSimpleTrace()
     {
         final LinkedSpecificationItem itemA = new LinkedSpecificationItem(
-                itemWithId(SpecificationItemId.createId("a", "a-item", 1)) //
-                        .description("Description A") //
+                itemWithId(SpecificationItemId.createId("a", "a-item", 1))
+                        .description("Description A")
                         .build());
         final LinkedSpecificationItem itemB = new LinkedSpecificationItem(
-                itemWithId(SpecificationItemId.createId("b", "b-item", 1)) //
-                        .description("Description b") //
+                itemWithId(SpecificationItemId.createId("b", "b-item", 1))
+                        .description("Description b")
                         .build());
         when(this.traceMock.getItems()).thenReturn(Arrays.asList(itemA, itemB));
         when(this.traceMock.count()).thenReturn(2);

@@ -2,7 +2,6 @@ package org.itsallcode.openfasttrace.report.html;
 
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
@@ -11,6 +10,8 @@ import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
 import org.itsallcode.openfasttrace.report.html.view.*;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
+
+import static java.util.Comparator.comparing;
 
 /**
  * An HTML report.
@@ -69,10 +70,11 @@ public class HtmlReport implements Reportable
 
     private List<LinkedSpecificationItem> getSortedItems()
     {
-        final List<LinkedSpecificationItem> items = this.trace.getItems();
-        items.sort(Comparator.comparing(LinkedSpecificationItem::getArtifactType)
-                .thenComparing(LinkedSpecificationItem::getTitleWithFallback));
-        return items;
+        return this.trace.getItems()
+                .stream()
+                .sorted(comparing(LinkedSpecificationItem::getArtifactType)
+                        .thenComparing(LinkedSpecificationItem::getTitleWithFallback))
+                .toList();
     }
 
     private void addSectionedItems(final ViewFactory factory, final ViewableContainer view,

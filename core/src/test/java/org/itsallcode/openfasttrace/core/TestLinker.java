@@ -45,13 +45,13 @@ class TestLinker
 
     private void assertItemUnderTestHasExactlyOneLinkWithStatus(
             final SpecificationItem itemUnderTest, final List<LinkedSpecificationItem> linkedItems,
-            final LinkStatus expected_status)
+            final LinkStatus expectedStatus)
     {
         final Optional<LinkedSpecificationItem> linkedItemUnderTest = findLinkedItem(itemUnderTest,
                 linkedItems);
         if (linkedItemUnderTest.isPresent())
         {
-            assertItemHasExactlyOneLinkWithStatus(linkedItemUnderTest.get(), expected_status);
+            assertItemHasExactlyOneLinkWithStatus(linkedItemUnderTest.get(), expectedStatus);
         }
         else
         {
@@ -92,7 +92,7 @@ class TestLinker
                 .addCoveredId(REQ, "this-is-newer-than-link", 1) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
-        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        final Map<LinkStatus, Integer> expectedStatuses = new EnumMap<>(LinkStatus.class);
         expectedStatuses.put(LinkStatus.OUTDATED, 1);
         expectedStatuses.put(LinkStatus.ORPHANED, 1);
         assertItemHasLinksWithStatus(findLinkedItem(covering, linkedItems).get(), expectedStatuses);
@@ -111,7 +111,7 @@ class TestLinker
                 .addCoveredId(REQ, "this-is-older-than-link", 2) //
                 .build();
         final List<LinkedSpecificationItem> linkedItems = linkItems(covering, covered);
-        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        final Map<LinkStatus, Integer> expectedStatuses = new EnumMap<>(LinkStatus.class);
         expectedStatuses.put(LinkStatus.PREDATED, 1);
         expectedStatuses.put(LinkStatus.ORPHANED, 1);
         assertItemHasLinksWithStatus(findLinkedItem(covering, linkedItems).get(), expectedStatuses);
@@ -171,7 +171,7 @@ class TestLinker
     private void assertItemHasExactlyOneLinkWithStatus(final LinkedSpecificationItem itemUnderTest,
             final LinkStatus expectedStatus)
     {
-        final Map<LinkStatus, Integer> expectedStatuses = new HashMap<>();
+        final Map<LinkStatus, Integer> expectedStatuses = new EnumMap<>(LinkStatus.class);
         expectedStatuses.put(expectedStatus, 1);
         assertItemHasLinksWithStatus(itemUnderTest, expectedStatuses);
     }
@@ -303,7 +303,7 @@ class TestLinker
                 linkedItems);
         if (linkedCovered.isPresent())
         {
-            final Map<LinkStatus, Integer> expectedLinksOnCovered = new HashMap<>();
+            final Map<LinkStatus, Integer> expectedLinksOnCovered = new EnumMap<>(LinkStatus.class);
             expectedLinksOnCovered.put(COVERED_SHALLOW, 1);
             expectedLinksOnCovered.put(COVERED_UNWANTED, 1);
             assertItemHasLinksWithStatus(linkedCovered.get(), expectedLinksOnCovered);

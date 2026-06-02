@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.api.core;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Specification items with links that can be followed.
@@ -147,8 +146,7 @@ public class LinkedSpecificationItem
             cacheOverCoveredArtifactType(item);
             addMyItemIdToCoveringItem(item);
             break;
-        case COVERED_OUTDATED:
-        case COVERED_PREDATED:
+        case COVERED_OUTDATED, COVERED_PREDATED:
             addMyItemIdToCoveringItem(item);
             break;
         default:
@@ -395,7 +393,7 @@ public class LinkedSpecificationItem
                 .stream() //
                 .filter(entry -> entry.getKey().isIncoming()) //
                 .flatMap(entry -> entry.getValue().stream()) //
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

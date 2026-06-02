@@ -487,8 +487,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testTwoConsecutiveSpecificationItems()
     {
-        final String filename = "file1.md";
-        assertImport(filename, """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 First description
 
@@ -507,13 +506,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("dsn", "foo", 1)
                                 .description("First description")
                                 .comment("First comment")
-                                .location(filename, 1)
+                                .location(FILENAME, 1)
                                 .build(),
                         item()
                                 .id("dsn", "bar", 2)
                                 .description("Second description")
                                 .rationale("Second rationale")
-                                .location(filename, 8)
+                                .location(FILENAME, 8)
                                 .build()));
     }
 

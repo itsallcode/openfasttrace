@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 class XmlParserTest
 {
     @Test
-    void testParsingSucceeds(@Mock final TreeContentHandler handlerMock) throws IOException
+    void testParsingSucceeds(@Mock final TreeContentHandler handlerMock)
     {
         final XmlParser parser = testee();
         parser.parse("path", new StringReader("<root/>"), handlerMock);
@@ -32,17 +32,19 @@ class XmlParserTest
     }
 
     @Test
-    void testParsingInvalidXmlFormatFails(@Mock final TreeContentHandler handlerMock) throws IOException
+    void testParsingInvalidXmlFormatFails(@Mock final TreeContentHandler handlerMock)
     {
         final XmlParser parser = testee();
         final StringReader reader = new StringReader("invalidContent");
         final XmlParserException exception = assertThrows(XmlParserException.class,
                 () -> parser.parse("path", reader, handlerMock));
-        assertThat(exception.getMessage(), equalTo("Failed to parse file 'path': Content is not allowed in prolog."));
+        assertThat(exception.getMessage(),
+                equalTo("Failed to parse file 'path': Content is not allowed in prolog."));
     }
 
     @Test
-    void testParsingFails(@Mock final Reader readerMock, @Mock final TreeContentHandler handlerMock) throws IOException
+    void testParsingFails(@Mock final Reader readerMock, @Mock final TreeContentHandler handlerMock)
+            throws IOException
     {
         final XmlParser parser = testee();
         when(readerMock.read(any(), anyInt(), anyInt())).thenThrow(new IOException("expected"));

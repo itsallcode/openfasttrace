@@ -11,7 +11,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 /**
  * Base class for importers of lightweight markup text.
  */
-public abstract class LightWeightMarkupImporter implements Importer, LineReaderCallback
+public abstract class AbstractLightWeightMarkupImporter implements Importer, LineReaderCallback
 {
     /** File to be imported */
     protected final InputFile file;
@@ -24,7 +24,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
     private LineContext currentContext;
 
     /**
-     * Create a new {@link LightWeightMarkupImporter}.
+     * Create a new {@link AbstractLightWeightMarkupImporter}.
      * 
      * @param file
      *            input file
@@ -34,7 +34,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
     // Possible 'this' escape before subclass is fully initialized:
     // LineParserStateMachine constructor does not use 'this'.
     @SuppressWarnings("this-escape")
-    protected LightWeightMarkupImporter(final InputFile file, final ImportEventListener listener)
+    protected AbstractLightWeightMarkupImporter(final InputFile file, final ImportEventListener listener)
     {
         this.file = file;
         this.listener = listener;
@@ -131,7 +131,7 @@ public abstract class LightWeightMarkupImporter implements Importer, LineReaderC
      * End a specification item gracefully.
      * <p>
      * As opposed to forcing an end at clean-up (see
-     * {@link LightWeightMarkupImporter#cleanUpLastItem()}.
+     * {@link AbstractLightWeightMarkupImporter#cleanUpLastItem()}.
      * </p>
      */
     protected void endItem()

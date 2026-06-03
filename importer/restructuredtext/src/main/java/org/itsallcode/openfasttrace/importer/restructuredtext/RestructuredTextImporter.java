@@ -4,7 +4,7 @@ import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachi
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
@@ -18,7 +18,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
  * is explicitly not the purpose of the importer.
  * </p>
  */
-public class RestructuredTextImporter extends LightWeightMarkupImporter
+public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
 

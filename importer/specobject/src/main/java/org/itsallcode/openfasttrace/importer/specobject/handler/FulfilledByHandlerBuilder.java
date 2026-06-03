@@ -14,11 +14,11 @@ class FulfilledByHandlerBuilder
 
     TreeContentHandler build()
     {
-        this.handler.addSubTreeHandler("ffbObj", this::createFulfillByObjectHandler);
+        this.handler.addSubTreeHandler("ffbObj", FulfilledByHandlerBuilder::createFulfillByObjectHandler);
         return this.handler;
     }
 
-    private CallbackContentHandler createFulfillByObjectHandler()
+    private static CallbackContentHandler createFulfillByObjectHandler()
     {
         return new CallbackContentHandler()
                 .addCharacterDataListener("ffbId", data -> {})

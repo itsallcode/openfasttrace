@@ -6,7 +6,7 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 /**
  * The {@link ItemBuilderFactory} class provides convenience methods for creating instances of {@link SpecificationItem}.
  */
-public class ItemBuilderFactory {
+public final class ItemBuilderFactory {
     private ItemBuilderFactory() {
         // prevent instantiation.
     }

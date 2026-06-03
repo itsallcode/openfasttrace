@@ -7,7 +7,7 @@ import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
  * This class implements a parameter object to control the settings of OFT's
  * export mode.
  */
-public class ExportSettings
+public final class ExportSettings
 {
     private final String outputFormat;
     private final Newline newline;
@@ -61,7 +61,7 @@ public class ExportSettings
     /**
      * Builder for {@link ExportSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private String outputFormat = ExporterConstants.DEFAULT_OUTPUT_FORMAT;
         private Newline newline = Newline.UNIX;

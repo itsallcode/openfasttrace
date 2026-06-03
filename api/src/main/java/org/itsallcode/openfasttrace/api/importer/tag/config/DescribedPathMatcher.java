@@ -7,7 +7,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 /**
  * A wrapper for {@link PathMatcher} providing a description.
  */
-public class DescribedPathMatcher
+public final class DescribedPathMatcher
 {
     private static final String REGEX_PREFIX = "regex:";
     private static final String GLOB_PREFIX = "glob:";
@@ -95,7 +95,7 @@ public class DescribedPathMatcher
 
         public ListBasedPathMatcher(final Set<Path> paths)
         {
-            this.paths = paths;
+            this.paths = Collections.unmodifiableSet(paths);
         }
 
         @Override

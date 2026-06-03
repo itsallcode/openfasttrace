@@ -34,7 +34,7 @@ public abstract class AbstractCommand implements Performable
         this.oft = Oft.create();
     }
 
-    private List<Path> toPaths(final List<String> inputs)
+    private static List<Path> toPaths(final List<String> inputs)
     {
         final List<Path> inputsAsPaths = new ArrayList<>();
         for (final String input : inputs)
@@ -88,7 +88,7 @@ public abstract class AbstractCommand implements Performable
     {
         final ImportSettings importSettings = ImportSettings
                 .builder()
-                .addInputs(this.toPaths(this.arguments.getInputs()))
+                .addInputs(toPaths(this.arguments.getInputs()))
                 .filter(createFilterSettingsFromArguments())
                 .build();
         return this.oft.importItems(importSettings);

@@ -24,6 +24,7 @@ public class CliArguments
 {
     /** Filter in command line arguments matching items with no tags. */
     public static final String NO_TAGS_MARKER = "_";
+    private static final String COMMA_SEPARATED_REGEX = ",(?U)\\s*";
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
     private List<String> unnamedValues;
@@ -135,7 +136,9 @@ public class CliArguments
      */
     public void setUnnamedValues(final List<String> unnamedValues)
     {
-        this.unnamedValues = unnamedValues;
+        this.unnamedValues = unnamedValues == null
+                ? List.of()
+                : Collections.unmodifiableList(unnamedValues);
     }
 
     /**
@@ -295,7 +298,7 @@ public class CliArguments
      */
     public Set<String> getWantedArtifactTypes()
     {
-        return this.wantedArtifactTypes;
+        return Collections.unmodifiableSet(this.wantedArtifactTypes);
     }
 
     /**
@@ -309,9 +312,9 @@ public class CliArguments
         this.wantedArtifactTypes = createSetFromCommaSeparatedString(artifactTypes);
     }
 
-    private HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
+    private static HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
     {
-        return new HashSet<>(Arrays.asList(commaSeparatedString.split(",\\s*")));
+        return new HashSet<>(Arrays.asList(commaSeparatedString.split(COMMA_SEPARATED_REGEX)));
     }
 
     /**
@@ -332,7 +335,7 @@ public class CliArguments
      */
     public Set<String> getWantedTags()
     {
-        return this.wantedTags;
+        return Collections.unmodifiableSet(this.wantedTags);
     }
 
     /**

@@ -39,7 +39,7 @@ enum AnsiSequence {
     public static final String SUFFIX = "m";
     private final int id;
 
-    private AnsiSequence(final int id) {
+    AnsiSequence(final int id) {
         this.id = id;
     }
 

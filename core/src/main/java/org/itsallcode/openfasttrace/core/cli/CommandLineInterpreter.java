@@ -29,7 +29,7 @@ public class CommandLineInterpreter
     private static final String MULTIPLE_CHAR_ARG_PREFIX = "--";
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
-    private final String[] arguments;
+    private final List<String> arguments;
     private final Map<String, Method> setters;
 
     /**
@@ -42,7 +42,7 @@ public class CommandLineInterpreter
      */
     public CommandLineInterpreter(final String[] arguments, final Object argumentsReceiver)
     {
-        this.arguments = arguments;
+        this.arguments = List.of(arguments);
         this.argumentsReceiver = argumentsReceiver;
         this.setters = findAllSettersInArgumentsReceiver(argumentsReceiver);
     }
@@ -64,7 +64,7 @@ public class CommandLineInterpreter
     {
         return method.getName()
                 .substring(SETTER_PREFIX.length())
-                .toLowerCase();
+                .toLowerCase(Locale.ENGLISH);
     }
 
     /**
@@ -76,7 +76,7 @@ public class CommandLineInterpreter
     public void parse() throws CliException
     {
         final List<String> unnamedArguments = new ArrayList<>();
-        final ListIterator<String> iterator = asList(this.arguments).listIterator();
+        final ListIterator<String> iterator = this.arguments.listIterator();
         while (iterator.hasNext())
         {
             final String argument = iterator.next();
@@ -145,7 +145,7 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private void reportUnexpectedNamedArgument(final String argument) throws CliException
+    private static void reportUnexpectedNamedArgument(final String argument) throws CliException
     {
         throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
@@ -201,7 +201,7 @@ public class CommandLineInterpreter
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T convertEnum(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertEnum(final String stringValue, final Class<T> type) throws CliException
     {
         @SuppressWarnings("rawtypes")
         final Class enumType = type;
@@ -219,13 +219,13 @@ public class CommandLineInterpreter
         }
     }
 
-    private void reportUnsupportedSetterArgumentCount(final Method setter) throws CliException
+    private static void reportUnsupportedSetterArgumentCount(final Method setter) throws CliException
     {
         throw new CliException("Unsupported argument count for setter '" + setter
                 + "'. Only one argument is allowed.");
     }
 
-    private void reportMissingParameterValue(final String argumentName) throws CliException
+    private static void reportMissingParameterValue(final String argumentName) throws CliException
     {
         throw new CliException("No value for argument '" + argumentName + "'");
     }

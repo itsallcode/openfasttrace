@@ -103,7 +103,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private Map<String, List<LinkedSpecificationItem>> groupItemsByAttributeType(
+    private static Map<String, List<LinkedSpecificationItem>> groupItemsByAttributeType(
             final List<LinkedSpecificationItem> items)
     {
         return items.stream().collect(
@@ -251,6 +251,10 @@ class ASpecReport implements Reportable
         {
             writeElement(writer, ELEMENT_COVERING_STATUS, CoveringStatus.UNEXPECTED.getLabel());
         }
+        else
+        {
+            throw new IllegalStateException("Unknown link status found trying to write ASpec report: " + linkStatus);
+        }
     }
 
     private void writeDependsOnIds(final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds)
@@ -349,7 +353,7 @@ class ASpecReport implements Reportable
         }
     }
 
-    private void writeElement(final XMLStreamWriter writer, final String elementName, final String content)
+    private static void writeElement(final XMLStreamWriter writer, final String elementName, final String content)
             throws XMLStreamException
     {
         writer.writeStartElement(elementName);
@@ -382,5 +386,4 @@ class ASpecReport implements Reportable
             return label;
         }
     }
-
 }

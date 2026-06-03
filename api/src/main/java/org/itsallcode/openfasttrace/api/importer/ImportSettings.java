@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.api.importer;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
@@ -30,7 +31,7 @@ public class ImportSettings
      */
     public List<Path> getInputs()
     {
-        return this.inputs;
+        return Collections.unmodifiableList(this.inputs);
     }
 
     /**
@@ -138,7 +139,7 @@ public class ImportSettings
          */
         public Builder pathConfigs(final List<PathConfig> pathConfigs)
         {
-            this.pathConfigs = pathConfigs;
+            this.pathConfigs = Collections.unmodifiableList(pathConfigs);
             return this;
         }
 

@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -18,6 +17,7 @@ public class ForwardingSpecificationItem
     public static final String ORIGINAL_MARKER = ":";
     /** Marker after which the artifact types are listed to which we forward. */
     public static final String FORWARD_MARKER = "-->";
+    private static final String COMMA_SEPARATED_REGEX = "(?U),\\s*";
     private final String skippedArtifactType;
     private final SpecificationItemId originalId;
     private final SpecificationItemId skippedId;
@@ -34,19 +34,19 @@ public class ForwardingSpecificationItem
         final int posForwardMarker = forward.indexOf(FORWARD_MARKER);
         final int posOriginalMarker = forward.indexOf(ORIGINAL_MARKER);
         this.skippedArtifactType = forward.substring(0, posForwardMarker).trim();
-        this.targetArtifactTypes = Arrays.asList(forward //
-                .substring(posForwardMarker + FORWARD_MARKER.length(), posOriginalMarker) //
-                .trim() //
-                .split(",\\s*"));
-        this.originalId = SpecificationItemId.parseId(forward //
-                .substring(posOriginalMarker + ORIGINAL_MARKER.length()) //
+        this.targetArtifactTypes = List.of(forward
+                .substring(posForwardMarker + FORWARD_MARKER.length(), posOriginalMarker)
+                .trim()
+                .split(COMMA_SEPARATED_REGEX));
+        this.originalId = SpecificationItemId.parseId(forward
+                .substring(posOriginalMarker + ORIGINAL_MARKER.length())
                 .trim());
         this.skippedId = SpecificationItemId.createId(this.skippedArtifactType,
                 this.originalId.getName(), this.originalId.getRevision());
     }
 
     /**
-     * The artifact type which forwards the needed coverage (in effect the one
+     * The artifact type that forwards the needed coverage (in effect the one
      * that is "skipped" during authoring)
      * 
      * @return the "skipped" artifact type

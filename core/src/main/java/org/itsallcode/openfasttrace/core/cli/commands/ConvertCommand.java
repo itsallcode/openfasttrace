@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.core.cli.CliArguments;
 /**
  * Handler for specification item conversion CLI command.
  */
-public class ConvertCommand extends AbstractCommand implements Performable
+public class ConvertCommand extends AbstractCommand
 {
     /** The command line action for running this command. */
     public static final String COMMAND_NAME = "convert";

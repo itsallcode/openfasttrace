@@ -6,6 +6,7 @@ import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConsta
 import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +17,7 @@ import org.itsallcode.openfasttrace.report.html.view.Viewable;
 
 class HtmlSpecificationItem implements Viewable
 {
+    public static final Pattern INSERT_DELETE_PATTERN = Pattern.compile("<(?:ins|del)>");
     private final LinkedSpecificationItem item;
     private final PrintStream stream;
     private final MarkdownConverter converter = new MarkdownConverter();
@@ -145,20 +147,19 @@ class HtmlSpecificationItem implements Viewable
         }
     }
 
-    private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
+    private static String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
     {
-        final Comparator<String> byTypeName = Comparator.comparing(a -> a.replaceFirst("<(?:ins|del)>", ""));
+        final Comparator<String> byTypeName = Comparator
+                .comparing(a -> INSERT_DELETE_PATTERN.matcher(a).replaceFirst(""));
 
         final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
                 .map(x -> "<ins>" + x + "</ins>");
-        return Stream.concat( //
-                Stream.concat( //
-                        uncoveredStream, //
-                        item.getCoveredArtifactTypes().stream() //
-                ), //
-                item.getOverCoveredArtifactTypes().stream().map(x -> "<del>" + x + "</del>") //
-        ) //
-                .sorted(byTypeName) //
+        return Stream.concat(
+                Stream.concat(
+                        uncoveredStream,
+                        item.getCoveredArtifactTypes().stream()),
+                item.getOverCoveredArtifactTypes().stream().map(x -> "<del>" + x + "</del>"))
+                .sorted(byTypeName)
                 .collect(Collectors.joining(", "));
     }
 

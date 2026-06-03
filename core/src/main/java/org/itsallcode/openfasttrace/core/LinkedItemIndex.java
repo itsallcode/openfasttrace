@@ -9,7 +9,7 @@ import org.itsallcode.openfasttrace.api.core.*;
  * An idex for {@link LinkedSpecificationItem} that allows retrieving items by
  * {@link SpecificationItemId}, optionally ignoring the revision.
  */
-public class LinkedItemIndex
+public final class LinkedItemIndex
 {
     private final Map<SpecificationItemId, LinkedSpecificationItem> idIndex;
     private final Map<SpecificationItemIdWithoutVersion, List<LinkedSpecificationItem>> idIndexIgnoringVersion;
@@ -143,11 +143,11 @@ public class LinkedItemIndex
         @Override
         public int hashCode()
         {
-            final int prime = 31;
+            final int PRIME = 31;
             int result = 1;
-            result = prime * result
+            result = PRIME * result
                     + ((this.artifcatType == null) ? 0 : this.artifcatType.hashCode());
-            result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+            result = PRIME * result + ((this.name == null) ? 0 : this.name.hashCode());
             return result;
         }
 

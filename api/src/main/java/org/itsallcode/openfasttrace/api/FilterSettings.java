@@ -82,12 +82,12 @@ public final class FilterSettings
     @Override
     public int hashCode()
     {
-        final int prime = 31;
+        final int PRIME = 31;
         int result = 1;
-        result = prime * result
+        result = PRIME * result
                 + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
-        result = prime * result + (this.withoutTags ? 1231 : 1237);
-        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
+        result = PRIME * result + (this.withoutTags ? 1231 : 1237);
+        result = PRIME * result + ((this.tags == null) ? 0 : this.tags.hashCode());
         return result;
     }
 
@@ -160,7 +160,7 @@ public final class FilterSettings
     /**
      * Builder for {@link FilterSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private Set<String> artifactTypes = Collections.emptySet();
         private Set<String> tags = Collections.emptySet();
@@ -180,7 +180,7 @@ public final class FilterSettings
          */
         public Builder artifactTypes(final Set<String> artifactTypes)
         {
-            this.artifactTypes = artifactTypes;
+            this.artifactTypes = Collections.unmodifiableSet(artifactTypes);
             return this;
         }
 
@@ -193,7 +193,7 @@ public final class FilterSettings
          */
         public Builder tags(final Set<String> tags)
         {
-            this.tags = tags;
+            this.tags = Collections.unmodifiableSet(tags);
             return this;
         }
 

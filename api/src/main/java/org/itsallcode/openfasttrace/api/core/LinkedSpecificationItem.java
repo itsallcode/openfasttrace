@@ -187,7 +187,7 @@ public class LinkedSpecificationItem
      */
     public Map<LinkStatus, List<LinkedSpecificationItem>> getLinks()
     {
-        return this.links;
+        return new EnumMap<>(this.links);
     }
 
     /**
@@ -249,7 +249,7 @@ public class LinkedSpecificationItem
      */
     public Set<String> getCoveredArtifactTypes()
     {
-        return this.coveredArtifactTypes;
+        return Collections.unmodifiableSet(this.coveredArtifactTypes);
     }
 
     /**
@@ -259,7 +259,7 @@ public class LinkedSpecificationItem
      */
     public Set<String> getCoveredApprovedArtifactTypes()
     {
-        return this.coveredArtifactTypesFromApprovedItems;
+        return Collections.unmodifiableSet(this.coveredArtifactTypesFromApprovedItems);
     }
 
     /**
@@ -270,7 +270,7 @@ public class LinkedSpecificationItem
     public Set<String> getOverCoveredArtifactTypes()
     {
 
-        return this.overCoveredArtifactTypes;
+        return Collections.unmodifiableSet(this.overCoveredArtifactTypes);
     }
 
     /**
@@ -416,9 +416,9 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || (getStatus() != ItemStatus.REJECTED) //
+                || ((getStatus() != ItemStatus.REJECTED) //
                         && (hasBadLinks()
-                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED)));
     }
 
     /**

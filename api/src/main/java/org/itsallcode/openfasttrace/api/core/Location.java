@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.api.core;
 
+import java.util.Objects;
+
 /**
  * The location of a coverage item.
  */
@@ -112,12 +114,7 @@ public final class Location
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + this.column;
-        result = prime * result + this.line;
-        result = prime * result + ((this.path == null) ? 0 : this.path.hashCode());
-        return result;
+        return Objects.hash(this.column, this.line, this.path);
     }
 
     @Override
@@ -162,8 +159,8 @@ public final class Location
     public String toString()
     {
         return this.path //
-                + (this.line != NO_LINE ? ":" + this.line : "") //
-                + (this.column != NO_COLUMN ? ":" + this.column : "");
+                + ((this.line != NO_LINE) ? (":" + this.line) : "") //
+                + ((this.column != NO_COLUMN) ? (":" + this.column) : "");
     }
 
     /**
@@ -180,7 +177,7 @@ public final class Location
      * A builder for {@link Location}. Use {@link Location#builder()} to create
      * a new builder and call {@link #build()} to build a {@link Location}.
      */
-    public static class Builder
+    public static final class Builder
     {
         private String path;
         private int line = NO_LINE;

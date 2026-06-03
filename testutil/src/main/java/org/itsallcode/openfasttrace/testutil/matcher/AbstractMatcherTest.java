@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
  *            type compared by the {@link TypeSafeDiagnosingMatcher} under
  *            test.
  */
-public abstract class MatcherTestBase<T>
+public abstract class AbstractMatcherTest<T>
 {
     /**
      * Creates a new instance of the test base.
      */
-    protected MatcherTestBase()
+    protected AbstractMatcherTest()
     {
         // Default constructor to fix compiler warning "missing-explicit-ctor"
     }

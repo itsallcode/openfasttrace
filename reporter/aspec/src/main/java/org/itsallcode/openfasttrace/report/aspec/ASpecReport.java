@@ -195,7 +195,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeCoveringSpecObjects(XMLStreamWriter writer, LinkedSpecificationItem item)
+    private static void writeCoveringSpecObjects(XMLStreamWriter writer, LinkedSpecificationItem item)
             throws XMLStreamException
     {
         writer.writeStartElement("coveringSpecObjects");

@@ -16,7 +16,7 @@ public final class ItemBuilderFactory {
      *
      * @return a new instance of {@link SpecificationItem.Builder}
      */
-    public static final SpecificationItem.Builder item() {
+    public static SpecificationItem.Builder item() {
         return SpecificationItem.builder();
     }
 
@@ -27,7 +27,7 @@ public final class ItemBuilderFactory {
      *
      * @return a new instance of {@link SpecificationItem.Builder} with the specified ID
      */
-    public static final SpecificationItem.Builder itemWithId(SpecificationItemId id) {
+    public static SpecificationItem.Builder itemWithId(SpecificationItemId id) {
         return SpecificationItem.builder().id(id);
     }
 
@@ -38,7 +38,7 @@ public final class ItemBuilderFactory {
      *
      * @return a new instance of {@link SpecificationItem.Builder} with the default filename and the specified line
      */
-    public static final SpecificationItem.Builder itemWithDefaultFilenameInLine(final int line) {
+    public static SpecificationItem.Builder itemWithDefaultFilenameInLine(final int line) {
         return SpecificationItem.builder().location("file", line);
     }
 }

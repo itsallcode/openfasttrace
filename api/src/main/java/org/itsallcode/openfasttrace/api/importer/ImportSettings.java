@@ -11,7 +11,7 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 /**
  * Configuration for an {@link Importer}.
  */
-public class ImportSettings
+public final class ImportSettings
 {
     private final List<Path> inputs;
     private final FilterSettings filter;
@@ -52,7 +52,7 @@ public class ImportSettings
      */
     public List<PathConfig> getPathConfigs()
     {
-        return this.pathConfigs;
+        return Collections.unmodifiableSet(this.pathConfigs);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ImportSettings
     /**
      * Builder for {@link ImportSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private final List<Path> inputs = new ArrayList<>();
         private FilterSettings filter = FilterSettings.createAllowingEverything();

@@ -35,7 +35,7 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
         super(fileName, listener);
     }
 
-    @SuppressWarnings("squid:S1386") // Transition table is OK be larger than 75 lines.
+    @SuppressWarnings("squid:S138") // Transition table is OK be larger than 75 lines.
     protected Transition[] configureTransitions()
     {
         // @formatter:off

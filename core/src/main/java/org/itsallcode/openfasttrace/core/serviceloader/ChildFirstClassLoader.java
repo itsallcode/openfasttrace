@@ -2,6 +2,8 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class loader will first try to load the class from the given URLs and
@@ -17,6 +19,8 @@ import java.net.URLClassLoader;
  */
 class ChildFirstClassLoader extends URLClassLoader
 {
+    private static final Logger LOGGER = Logger.getLogger(ChildFirstClassLoader.class);
+
     ChildFirstClassLoader(final String name, final URL[] urls, final ClassLoader parent)
     {
         super(name, urls, parent);
@@ -53,6 +57,8 @@ class ChildFirstClassLoader extends URLClassLoader
         }
         catch (final ClassNotFoundException ignore)
         {
+            LOGGER.log(Level.FINEST, () -> "Unable to find class " + name + " with child logger."
+                    + "Falling back to parent logger");
             // Class does not exist in the given URLs.
             // Let's try finding it in our parent classloader.
             // This will throw ClassNotFoundException on failure.

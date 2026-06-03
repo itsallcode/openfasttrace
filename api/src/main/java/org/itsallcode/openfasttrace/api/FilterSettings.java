@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.api;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ public final class FilterSettings
      */
     public Set<String> getArtifactTypes()
     {
-        return this.artifactTypes;
+        return Collections.unmodifiableSet(this.artifactTypes);
     }
 
     /**
@@ -36,7 +37,7 @@ public final class FilterSettings
      */
     public Set<String> getTags()
     {
-        return this.tags;
+        return Collections.unmodifiableSet(this.tags);
     }
 
     /**
@@ -82,13 +83,7 @@ public final class FilterSettings
     @Override
     public int hashCode()
     {
-        final int PRIME = 31;
-        int result = 1;
-        result = PRIME * result
-                + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
-        result = PRIME * result + (this.withoutTags ? 1231 : 1237);
-        result = PRIME * result + ((this.tags == null) ? 0 : this.tags.hashCode());
-        return result;
+        return Objects.hash(this.artifactTypes, this.tags, this.withoutTags);
     }
 
     @Override

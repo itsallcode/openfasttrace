@@ -13,8 +13,8 @@
         <revision>4.5.0</revision>
         <java.version>17</java.version>
         <junit.version>6.1.0-M1</junit.version>
-        <junit.version>6.0.3</junit.version>
-        <maven.surefire.version>3.5.5</maven.surefire.version>
+        <junit.version>6.1.0</junit.version>
+        <maven.surefire.version>3.5.6</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <reproducible.build.timestamp>${git.commit.time}</reproducible.build.timestamp>
@@ -387,7 +387,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -445,7 +445,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.6.3</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -562,7 +562,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.21.0</version>
+                    <version>3.22.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -653,7 +653,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2026.2</version>
+                            <version>1.2026.5</version>
                         </dependency>
                     </dependencies>
                 </plugin>

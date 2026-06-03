@@ -89,7 +89,7 @@ public abstract class ExporterFactory implements Initializable<ExporterContext>
         return createExporter(writer, itemStream, newline);
     }
 
-    private Writer createWriter(final Path file, final Charset charset)
+    private static Writer createWriter(final Path file, final Charset charset)
     {
         if (file == null)
         {

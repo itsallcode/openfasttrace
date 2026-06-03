@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -15,7 +16,8 @@ import java.util.stream.Stream;
  * <p>
  * Users of this class must create a POJO that contains a setter method for each
  * command line argument that they want to use.
- * </p><p>
+ * </p>
+ * <p>
  * Additionally, they can add a setter called <code>setUnnamedValues</code> that
  * will receive all argument values that are unnamed.
  * </p>
@@ -26,6 +28,7 @@ public class CommandLineInterpreter
 
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";
+    private static final Pattern SINGLE_CHAR_ARG_PREFIX_PATTERN = Pattern.compile(SINGLE_CHAR_ARG_PREFIX);
     private static final String MULTIPLE_CHAR_ARG_PREFIX = "--";
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
@@ -102,7 +105,8 @@ public class CommandLineInterpreter
     private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
             final String argument) throws CliException
     {
-        final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase(Locale.ENGLISH);
+        final String characters = SINGLE_CHAR_ARG_PREFIX_PATTERN.matcher(argument).replaceFirst("")
+                .toLowerCase(Locale.ENGLISH);
         final int lastPosition = characters.length() - 1;
 
         for (int position = 0; position <= lastPosition; ++position)
@@ -186,7 +190,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private <T> T convertArgument(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertArgument(final String stringValue, final Class<T> type) throws CliException
     {
         if (type.equals(String.class))
         {

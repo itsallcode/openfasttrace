@@ -166,7 +166,7 @@ class ASpecReport implements Reportable
         return matcher.replaceAll(this.newline.toString());
     }
 
-    private void writeTags(final XMLStreamWriter writer, final List<String> tags) throws XMLStreamException
+    private static void writeTags(final XMLStreamWriter writer, final List<String> tags) throws XMLStreamException
     {
         if (tags.isEmpty())
         {
@@ -211,7 +211,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeCoveringSpecObject(final XMLStreamWriter writer, final LinkStatus linkStatus,
+    private static void writeCoveringSpecObject(final XMLStreamWriter writer, final LinkStatus linkStatus,
             final LinkedSpecificationItem item) throws XMLStreamException
     {
         writer.writeStartElement("coveringSpecObject");
@@ -231,7 +231,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeCoveringStatus(XMLStreamWriter writer, LinkStatus linkStatus,
+    private static void writeCoveringStatus(XMLStreamWriter writer, LinkStatus linkStatus,
             DeepCoverageStatus deepCoverageStatus)
             throws XMLStreamException
     {
@@ -257,7 +257,7 @@ class ASpecReport implements Reportable
         }
     }
 
-    private void writeDependsOnIds(final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds)
+    private static void writeDependsOnIds(final XMLStreamWriter writer, final List<SpecificationItemId> dependOnIds)
             throws XMLStreamException
     {
         if (dependOnIds.isEmpty())
@@ -276,7 +276,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeCoveredIds(final XMLStreamWriter writer, final List<SpecificationItemId> coveredIds)
+    private static void writeCoveredIds(final XMLStreamWriter writer, final List<SpecificationItemId> coveredIds)
             throws XMLStreamException
     {
         if (coveredIds.isEmpty())
@@ -295,7 +295,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeNeedsArtifactTypes(final XMLStreamWriter writer, final List<String> needsArtifactTypes)
+    private static void writeNeedsArtifactTypes(final XMLStreamWriter writer, final List<String> needsArtifactTypes)
             throws XMLStreamException
     {
         if (needsArtifactTypes.isEmpty())
@@ -310,7 +310,8 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeCoveredTypes(final XMLStreamWriter writer, final Set<String> types) throws XMLStreamException
+    private static void writeCoveredTypes(final XMLStreamWriter writer, final Set<String> types)
+            throws XMLStreamException
     {
         if (types.isEmpty())
         {
@@ -324,7 +325,8 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeUncoveredTypes(final XMLStreamWriter writer, final List<String> types) throws XMLStreamException
+    private static void writeUncoveredTypes(final XMLStreamWriter writer, final List<String> types)
+            throws XMLStreamException
     {
         if (types.isEmpty())
         {
@@ -338,13 +340,14 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeElement(final XMLStreamWriter writer, final String elementName, final int content)
+    private static void writeElement(final XMLStreamWriter writer, final String elementName, final int content)
             throws XMLStreamException
     {
         writeElement(writer, elementName, String.valueOf(content));
     }
 
-    private void writeElementIfPresent(final XMLStreamWriter writer, final String elementName, final String content)
+    private static void writeElementIfPresent(final XMLStreamWriter writer, final String elementName,
+            final String content)
             throws XMLStreamException
     {
         if (content != null && !content.isEmpty())
@@ -361,7 +364,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeLocation(final XMLStreamWriter writer, final Location location) throws XMLStreamException
+    private static void writeLocation(final XMLStreamWriter writer, final Location location) throws XMLStreamException
     {
         if (location != null && location.getPath() != null && !location.getPath().isEmpty())
         {

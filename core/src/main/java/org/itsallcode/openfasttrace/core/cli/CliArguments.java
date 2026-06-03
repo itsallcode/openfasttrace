@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.core.cli;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
@@ -24,7 +25,7 @@ public class CliArguments
 {
     /** Filter in command line arguments matching items with no tags. */
     public static final String NO_TAGS_MARKER = "_";
-    private static final String COMMA_SEPARATED_REGEX = ",(?U)\\s*";
+    private static final Pattern COMMA_SEPARATED_PATTERN = Pattern.compile(",(?U)\\s*");
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
     private List<String> unnamedValues;
@@ -312,9 +313,9 @@ public class CliArguments
         this.wantedArtifactTypes = createSetFromCommaSeparatedString(artifactTypes);
     }
 
-    private static HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
+    private static Set<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
     {
-        return new HashSet<>(Arrays.asList(commaSeparatedString.split(COMMA_SEPARATED_REGEX)));
+        return Set.of(COMMA_SEPARATED_PATTERN.split(commaSeparatedString));
     }
 
     /**

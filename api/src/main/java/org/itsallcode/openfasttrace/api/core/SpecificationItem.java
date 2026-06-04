@@ -221,8 +221,9 @@ public final class SpecificationItem
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof final SpecificationItem that))
+        if (!(other instanceof final SpecificationItem that)) {
             return false;
+        }
         return forwards == that.forwards && Objects.equals(id, that.id) && Objects.equals(title, that.title)
                 && Objects.equals(description, that.description) && Objects.equals(rationale, that.rationale)
                 && Objects.equals(comment, that.comment) && Objects.equals(location, that.location)

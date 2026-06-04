@@ -140,6 +140,14 @@ public final class LinkedItemIndex
             this(linkedItem.getId());
         }
 
+        public String getName() {
+            return this.name;
+        }
+
+        public String getArtifcatType() {
+            return this.artifcatType;
+        }
+
         @Override
         public int hashCode()
         {
@@ -148,16 +156,17 @@ public final class LinkedItemIndex
 
         @Override
         public boolean equals(final Object other) {
-            if (!(other instanceof final SpecificationItemIdWithoutVersion that))
+            if (!(other instanceof final SpecificationItemIdWithoutVersion that)) {
                 return false;
+            }
             return Objects.equals(name, that.name) && Objects.equals(artifcatType, that.artifcatType);
         }
 
         @Override
-        public int compareTo(final SpecificationItemIdWithoutVersion specificationItemIdWithoutVersion) {
-            return (specificationItemIdWithoutVersion.artifcatType.compareTo(this.artifcatType) == 0)
-                    ? specificationItemIdWithoutVersion.name.compareTo(this.name)
-                    : specificationItemIdWithoutVersion.artifcatType.compareTo(this.artifcatType);
+        public int compareTo(final SpecificationItemIdWithoutVersion other) {
+            return Comparator.comparing(SpecificationItemIdWithoutVersion::getArtifcatType)
+                    .thenComparing(SpecificationItemIdWithoutVersion::getName)
+                    .compare(this, other);
         }
     }
 }

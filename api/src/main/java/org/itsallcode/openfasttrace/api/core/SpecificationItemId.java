@@ -1,16 +1,19 @@
 package org.itsallcode.openfasttrace.api.core;
 
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Specification item ID
- *
+ * <p>
  * Consists of an artifact type (e.g. "test"), a name and a revision number.
+ * </p>
  */
 // [impl->dsn~specification-item-id~1]
-public class SpecificationItemId implements Comparable<SpecificationItemId>
+public final class SpecificationItemId implements Comparable<SpecificationItemId>
 {
     private static final Logger LOG = Logger.getLogger(SpecificationItemId.class.getName());
 
@@ -89,67 +92,23 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     }
 
     @Override
-    public final int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.artifactType == null) ? 0 : this.artifactType.hashCode());
-        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + this.revision;
-        return result;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final SpecificationItemId that)) {
+            return false;
+        }
+        return revision == that.revision && Objects.equals(name, that.name)
+                && Objects.equals(artifactType, that.artifactType);
     }
 
     @Override
-    public final boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!(obj instanceof SpecificationItemId))
-        {
-            return false;
-        }
-        final SpecificationItemId other = (SpecificationItemId) obj;
-        if (this.artifactType == null)
-        {
-            if (other.artifactType != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.artifactType.equals(other.artifactType))
-        {
-            return false;
-        }
-        if (this.name == null)
-        {
-            if (other.name != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.name.equals(other.name))
-        {
-            return false;
-        }
-        return (other.revision == REVISION_WILDCARD) || (this.revision == other.revision);
+    public int hashCode() {
+        return Objects.hash(name, revision, artifactType);
     }
 
     @Override
     public String toString()
     {
-        final StringBuilder builder = new StringBuilder() //
-                .append(this.artifactType) //
-                .append(ARTIFACT_TYPE_SEPARATOR) //
-                .append(this.name) //
-                .append(REVISION_SEPARATOR) //
-                .append(this.revision);
-        return builder.toString();
+        return this.artifactType + ARTIFACT_TYPE_SEPARATOR +  this.name + REVISION_SEPARATOR + this.revision;
     }
 
     /**
@@ -401,22 +360,9 @@ public class SpecificationItemId implements Comparable<SpecificationItemId>
     @Override
     public int compareTo(final SpecificationItemId other)
     {
-        int compared = this.getArtifactType().compareTo(other.getArtifactType());
-        if (compared == 0)
-        {
-            compared = this.getName().compareTo(other.getName());
-            if (compared == 0)
-            {
-                if (this.getRevision() > other.getRevision())
-                {
-                    compared = 1;
-                }
-                else if (this.getRevision() < other.getRevision())
-                {
-                    compared = -1;
-                }
-            }
-        }
-        return compared;
+        return Comparator.comparing(SpecificationItemId::getArtifactType)
+                .thenComparing(SpecificationItemId::getName)
+                .thenComparingInt(SpecificationItemId::getRevision)
+                .compare(this, other);
     }
 }

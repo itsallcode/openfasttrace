@@ -66,7 +66,9 @@ public class SpecobjectImporterFactory extends ImporterFactory
         }
         catch (final IOException exception)
         {
-            LOG.fine(() -> "Unable to peek XML file '" + path + "' trying to determine if it contains ReqM2 format: " + exception.getMessage());
+            LOG.fine(() -> "Unable to peek XML file '" + path
+                    + "' trying to determine if it contains ReqM2 format: "
+                    + exception.getMessage());
             return false;
         }
     }

@@ -18,7 +18,7 @@ public class ForwardingSpecificationItem
     public static final String ORIGINAL_MARKER = ":";
     /** Marker after which the artifact types are listed to which we forward. */
     public static final String FORWARD_MARKER = "-->";
-    private static final Pattern COMMA_SEPARATED_PATTERN = Pattern.compile("(?U),\\s*");
+    private static final Pattern COMMA_SEPARATED_REGEX = Pattern.compile("(?U),\\s*");
     private final String skippedArtifactType;
     private final SpecificationItemId originalId;
     private final SpecificationItemId skippedId;
@@ -38,7 +38,7 @@ public class ForwardingSpecificationItem
         final String commaSeparatedTargetArtifactTypes = forward
                 .substring(posForwardMarker + FORWARD_MARKER.length(), posOriginalMarker)
                 .trim();
-        this.targetArtifactTypes = List.of(COMMA_SEPARATED_PATTERN.split(commaSeparatedTargetArtifactTypes));
+        this.targetArtifactTypes = List.of(COMMA_SEPARATED_REGEX.split(commaSeparatedTargetArtifactTypes));
         this.originalId = SpecificationItemId.parseId(forward
                 .substring(posOriginalMarker + ORIGINAL_MARKER.length())
                 .trim());

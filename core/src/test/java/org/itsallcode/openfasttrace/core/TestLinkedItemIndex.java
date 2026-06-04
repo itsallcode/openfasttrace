@@ -104,11 +104,11 @@ class TestLinkedItemIndex
     }
 
     @CsvSource({
-            "a, b, a, b, 1",
-            "a, b, b, a, 1",
+            "a, b, a, b, -1",
+            "a, b, b, a, -1",
             "a, a, a, a, 0",
-            "b, a, a, b, -1",
-            "a, a, b, a, -1"
+            "b, a, a, b, 1",
+            "a, a, b, a, 1"
     })
     @ParameterizedTest
     void testCompareSpecificationItemIdWithoutVersion(final String artifactTypeLeft, final String artifactTypeRight,

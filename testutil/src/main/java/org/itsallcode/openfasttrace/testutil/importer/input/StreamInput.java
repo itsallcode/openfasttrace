@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  * An implementation of {@link InputFile} that reads from a
  * {@link BufferedReader}. This is useful for tests to avoid using real files.
  */
-public class StreamInput implements InputFile
+public final class StreamInput implements InputFile
 {
     private final Path path;
     private final BufferedReader reader;

@@ -401,7 +401,7 @@ public class CliArguments
      * 
      * @return {@code true} if origin information should be shown in reports.
      */
-    public boolean getShowOrigin()
+    public boolean isShowOrigin()
     {
         return this.showOrigin;
     }

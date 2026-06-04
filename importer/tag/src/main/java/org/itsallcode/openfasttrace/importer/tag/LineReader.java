@@ -39,6 +39,7 @@ class LineReader
         }
     }
 
+    @SuppressWarnings("java:S2221") // Catching Exception is intentional.
     private void processLine(final LineConsumer consumer, final int currentLineNumber,
             final String line)
     {
@@ -49,7 +50,7 @@ class LineReader
         catch (final Exception exception)
         {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":"
-                    + currentLineNumber + " '" + line + "': " + exception.toString(), exception);
+                    + currentLineNumber + " '" + line + "': " + exception, exception);
         }
     }
 

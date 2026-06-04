@@ -22,7 +22,7 @@ import org.itsallcode.openfasttrace.api.report.Reportable;
  */
 public class PlainTextReport implements Reportable
 {
-    public static final Pattern PLUS_MINUS_PATTERN = Pattern.compile("[-+]");
+    private static final Pattern PLUS_MINUS_PATTERN = Pattern.compile("[-+]");
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
     private final Trace trace;

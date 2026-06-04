@@ -87,48 +87,11 @@ public final class FilterSettings
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
+    public boolean equals(final Object other) {
+        if (!(other instanceof final FilterSettings that))
             return false;
-        }
-        if (!(obj instanceof FilterSettings))
-        {
-            return false;
-        }
-        final FilterSettings other = (FilterSettings) obj;
-        if (this.artifactTypes == null)
-        {
-            if (other.artifactTypes != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.artifactTypes.equals(other.artifactTypes))
-        {
-            return false;
-        }
-        if (this.withoutTags != other.withoutTags)
-        {
-            return false;
-        }
-        if (this.tags == null)
-        {
-            if (other.tags != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.tags.equals(other.tags))
-        {
-            return false;
-        }
-        return true;
+        return withoutTags == that.withoutTags && Objects.equals(artifactTypes, that.artifactTypes)
+                && Objects.equals(tags, that.tags);
     }
 
     /**

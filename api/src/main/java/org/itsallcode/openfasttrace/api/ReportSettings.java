@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
  * This class implements a parameter object to control the settings of OFT's
  * report mode.
  */
-public class ReportSettings
+public final class ReportSettings
 {
     private final ReportVerbosity verbosity;
     private final boolean showOrigin;
@@ -112,12 +112,12 @@ public class ReportSettings
     /**
      * Builder for {@link ReportSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private DetailsSectionDisplay detailsSectionDisplay = DetailsSectionDisplay.COLLAPSE;
         private Newline newline = Newline.UNIX;
         private String outputFormat = ReportConstants.DEFAULT_REPORT_FORMAT;
-        private boolean showOrigin = false;
+        private boolean showOrigin;
         private ReportVerbosity verbosity = ReportVerbosity.FAILURE_DETAILS;
         private ColorScheme colorScheme = ColorScheme.BLACK_AND_WHITE;
 

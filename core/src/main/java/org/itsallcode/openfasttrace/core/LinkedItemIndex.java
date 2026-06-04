@@ -124,7 +124,7 @@ public final class LinkedItemIndex
         return items == null ? Collections.emptyList() : items;
     }
 
-    static final class SpecificationItemIdWithoutVersion
+    static final class SpecificationItemIdWithoutVersion implements Comparable<SpecificationItemIdWithoutVersion>
     {
         private final String name;
         private final String artifcatType;
@@ -143,53 +143,21 @@ public final class LinkedItemIndex
         @Override
         public int hashCode()
         {
-            final int PRIME = 31;
-            int result = 1;
-            result = PRIME * result
-                    + ((this.artifcatType == null) ? 0 : this.artifcatType.hashCode());
-            result = PRIME * result + ((this.name == null) ? 0 : this.name.hashCode());
-            return result;
+            return Objects.hash(this.artifcatType, this.name);
         }
 
         @Override
-        public boolean equals(final Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
+        public boolean equals(final Object other) {
+            if (!(other instanceof final SpecificationItemIdWithoutVersion that))
                 return false;
-            }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final SpecificationItemIdWithoutVersion other = (SpecificationItemIdWithoutVersion) obj;
-            if (this.artifcatType == null)
-            {
-                if (other.artifcatType != null)
-                {
-                    return false;
-                }
-            }
-            else if (!this.artifcatType.equals(other.artifcatType))
-            {
-                return false;
-            }
-            if (this.name == null)
-            {
-                if (other.name != null)
-                {
-                    return false;
-                }
-            }
-            else if (!this.name.equals(other.name))
-            {
-                return false;
-            }
-            return true;
+            return Objects.equals(name, that.name) && Objects.equals(artifcatType, that.artifcatType);
+        }
+
+        @Override
+        public int compareTo(final SpecificationItemIdWithoutVersion specificationItemIdWithoutVersion) {
+            return (specificationItemIdWithoutVersion.artifcatType.compareTo(this.artifcatType) == 0)
+                    ? specificationItemIdWithoutVersion.name.compareTo(this.name)
+                    : specificationItemIdWithoutVersion.artifcatType.compareTo(this.artifcatType);
         }
     }
 }

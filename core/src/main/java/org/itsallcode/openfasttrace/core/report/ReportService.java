@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.ReportException;
@@ -16,6 +18,7 @@ import org.itsallcode.openfasttrace.api.report.ReporterFactory;
  */
 public class ReportService
 {
+    private static final Logger LOGGER = Logger.getLogger(ReportService.class.getName());
     private final ReporterFactoryLoader reporterFactoryLoader;
 
     /**
@@ -73,7 +76,7 @@ public class ReportService
 
     // Using System.out by intention
     @SuppressWarnings("squid:S106")
-    private PrintStream getStdOutStream()
+    private static PrintStream getStdOutStream()
     {
         return System.out;
     }
@@ -89,6 +92,7 @@ public class ReportService
         }
         catch (final IOException exception)
         {
+            LOGGER.log(Level.SEVERE, "Failed to flush report output stream", exception);
             throw new ReportException(exception.getMessage());
         }
     }

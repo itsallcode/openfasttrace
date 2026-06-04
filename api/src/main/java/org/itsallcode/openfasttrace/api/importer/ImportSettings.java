@@ -52,7 +52,7 @@ public final class ImportSettings
      */
     public List<PathConfig> getPathConfigs()
     {
-        return Collections.unmodifiableSet(this.pathConfigs);
+        return Collections.unmodifiableList(this.pathConfigs);
     }
 
     /**

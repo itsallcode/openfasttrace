@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 class ChildFirstClassLoader extends URLClassLoader
 {
-    private static final Logger LOGGER = Logger.getLogger(ChildFirstClassLoader.class);
+    private static final Logger LOGGER = Logger.getLogger(ChildFirstClassLoader.class.getName());
 
     ChildFirstClassLoader(final String name, final URL[] urls, final ClassLoader parent)
     {

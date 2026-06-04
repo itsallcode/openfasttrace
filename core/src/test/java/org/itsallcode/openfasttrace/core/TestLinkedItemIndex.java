@@ -10,6 +10,8 @@ import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWith
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -99,5 +101,23 @@ class TestLinkedItemIndex
                         LinkedItemInstanceMatcher.sameItemInstance(this.duplicateIdItem1Mock),
                         LinkedItemInstanceMatcher
                                 .sameItemInstance(this.duplicateIdIgnoringVersionItemMock))));
+    }
+
+    @CsvSource({
+            "a, b, a, b, 1",
+            "a, b, b, a, 1",
+            "a, a, a, a, 0",
+            "b, a, a, b, -1",
+            "a, a, b, a, -1"
+    })
+    @ParameterizedTest
+    void testCompareSpecificationItemIdWithoutVersion(final String artifactTypeLeft, final String artifactTypeRight,
+                                                 final String nameLeft, final String nameRight, final int expected)
+    {
+        final SpecificationItemIdWithoutVersion left = new SpecificationItemIdWithoutVersion(
+                SpecificationItemId.createId(artifactTypeLeft, nameLeft, 0));
+        final SpecificationItemIdWithoutVersion right = new SpecificationItemIdWithoutVersion(
+                SpecificationItemId.createId(artifactTypeRight, nameRight, 0));
+        assertThat(left.compareTo(right), equalTo(expected));
     }
 }

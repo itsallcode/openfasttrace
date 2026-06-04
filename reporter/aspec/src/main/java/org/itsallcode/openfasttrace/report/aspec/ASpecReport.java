@@ -180,7 +180,7 @@ class ASpecReport implements Reportable
         writer.writeEndElement();
     }
 
-    private void writeItemCoverage(XMLStreamWriter writer, LinkedSpecificationItem item) throws XMLStreamException
+    private static void writeItemCoverage(XMLStreamWriter writer, LinkedSpecificationItem item) throws XMLStreamException
     {
         writer.writeStartElement("coverage");
         writeNeedsArtifactTypes(writer, item.getNeedsArtifactTypes());

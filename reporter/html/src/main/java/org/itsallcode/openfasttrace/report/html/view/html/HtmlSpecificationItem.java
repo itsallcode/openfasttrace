@@ -133,18 +133,30 @@ class HtmlSpecificationItem implements Viewable
 
     private void renderNeeds(final String indentation)
     {
-        if ((this.item.getNeedsArtifactTypes() != null
-                && !this.item.getNeedsArtifactTypes().isEmpty())
-                || (this.item.getUncoveredArtifactTypes() != null
-                        && !this.item.getUncoveredArtifactTypes().isEmpty())
-                || (this.item.getOverCoveredArtifactTypes() != null
-                        && !this.item.getOverCoveredArtifactTypes().isEmpty()))
+        if (atLeastOneNeededArtifactTypeCovered()
+                || hasUncoveredArtifactTypes()
+                || hasOvercoveredArtifactTypes())
         {
             this.stream.print(indentation);
             this.stream.print("    <h6>Needs: ");
             this.stream.print(translateArtifactTypeCoverage(this.item));
             this.stream.println("</h6>");
         }
+    }
+
+    private boolean atLeastOneNeededArtifactTypeCovered() {
+        return this.item.getNeedsArtifactTypes() != null
+                && !this.item.getNeedsArtifactTypes().isEmpty();
+    }
+
+    private boolean hasUncoveredArtifactTypes() {
+        return this.item.getUncoveredArtifactTypes() != null
+                && !this.item.getUncoveredArtifactTypes().isEmpty();
+    }
+
+    private boolean hasOvercoveredArtifactTypes() {
+        return this.item.getOverCoveredArtifactTypes() != null
+                && !this.item.getOverCoveredArtifactTypes().isEmpty();
     }
 
     private static String translateArtifactTypeCoverage(final LinkedSpecificationItem item)

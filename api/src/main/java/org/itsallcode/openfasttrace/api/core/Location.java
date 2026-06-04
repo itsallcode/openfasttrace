@@ -118,41 +118,10 @@ public final class Location
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
+    public boolean equals(final Object other) {
+        if (!(other instanceof final Location location))
             return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final Location other = (Location) obj;
-        if (this.column != other.column)
-        {
-            return false;
-        }
-        if (this.line != other.line)
-        {
-            return false;
-        }
-        if (this.path == null)
-        {
-            if (other.path != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.path.equals(other.path))
-        {
-            return false;
-        }
-        return true;
+        return line == location.line && column == location.column && Objects.equals(path, location.path);
     }
 
     @Override

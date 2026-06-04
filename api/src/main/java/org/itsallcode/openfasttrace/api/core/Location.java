@@ -119,8 +119,9 @@ public final class Location
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof final Location location))
+        if (!(other instanceof final Location location)) {
             return false;
+        }
         return line == location.line && column == location.column && Objects.equals(path, location.path);
     }
 

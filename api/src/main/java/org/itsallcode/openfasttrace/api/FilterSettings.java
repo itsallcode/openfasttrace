@@ -88,8 +88,9 @@ public final class FilterSettings
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof final FilterSettings that))
+        if (!(other instanceof final FilterSettings that)) {
             return false;
+        }
         return withoutTags == that.withoutTags && Objects.equals(artifactTypes, that.artifactTypes)
                 && Objects.equals(tags, that.tags);
     }

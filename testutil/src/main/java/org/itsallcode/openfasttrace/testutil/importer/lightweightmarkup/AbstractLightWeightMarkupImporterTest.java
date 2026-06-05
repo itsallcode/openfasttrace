@@ -79,6 +79,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
      * @param matcher
      *            matcher to verify the imported specification items
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     protected void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
@@ -95,6 +96,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
      * @param matcher
      *            matcher to verify the imported specification items
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {

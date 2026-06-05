@@ -27,7 +27,7 @@ public final class FilterSettings
      */
     public Set<String> getArtifactTypes()
     {
-        return Collections.unmodifiableSet(this.artifactTypes);
+        return this.artifactTypes;
     }
 
     /**
@@ -37,7 +37,7 @@ public final class FilterSettings
      */
     public Set<String> getTags()
     {
-        return Collections.unmodifiableSet(this.tags);
+        return this.tags;
     }
 
     /**

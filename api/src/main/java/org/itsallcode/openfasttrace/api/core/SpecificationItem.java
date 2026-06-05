@@ -31,10 +31,10 @@ public final class SpecificationItem
         this.comment = builder.comment;
         this.location = builder.location;
         this.status = builder.status;
-        this.coveredIds = builder.coveredIds;
-        this.dependOnIds = builder.dependOnIds;
-        this.needsArtifactTypes = builder.neededArtifactTypes;
-        this.tags = builder.tags;
+        this.coveredIds = Collections.unmodifiableList(builder.coveredIds);
+        this.dependOnIds = Collections.unmodifiableList(builder.dependOnIds);
+        this.needsArtifactTypes = Collections.unmodifiableList(builder.neededArtifactTypes);
+        this.tags = Collections.unmodifiableList(builder.tags);
         this.forwards = builder.forwards;
     }
 
@@ -141,7 +141,7 @@ public final class SpecificationItem
      */
     public List<SpecificationItemId> getDependOnIds()
     {
-        return Collections.unmodifiableList(this.dependOnIds);
+        return this.dependOnIds;
     }
 
     /**
@@ -152,7 +152,7 @@ public final class SpecificationItem
      */
     public List<String> getNeedsArtifactTypes()
     {
-        return Collections.unmodifiableList(this.needsArtifactTypes);
+        return this.needsArtifactTypes;
     }
 
     /**
@@ -206,7 +206,7 @@ public final class SpecificationItem
      */
     public List<String> getTags()
     {
-        return Collections.unmodifiableList(this.tags);
+        return this.tags;
     }
 
     /**

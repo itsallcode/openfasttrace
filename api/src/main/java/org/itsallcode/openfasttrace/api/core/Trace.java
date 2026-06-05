@@ -36,7 +36,7 @@ public final class Trace
      */
     public List<LinkedSpecificationItem> getDefectItems()
     {
-        return Collections.unmodifiableList(this.defectItems);
+        return this.defectItems;
     }
 
     /**
@@ -46,7 +46,7 @@ public final class Trace
      */
     public List<LinkedSpecificationItem> getItems()
     {
-        return Collections.unmodifiableList(this.items);
+        return this.items;
     }
 
     /**

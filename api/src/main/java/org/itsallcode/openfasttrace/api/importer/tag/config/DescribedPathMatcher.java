@@ -95,7 +95,7 @@ public final class DescribedPathMatcher
 
         public ListBasedPathMatcher(final Set<Path> paths)
         {
-            this.paths = Collections.unmodifiableSet(paths);
+            this.paths = Set.copyOf(paths);
         }
 
         @Override

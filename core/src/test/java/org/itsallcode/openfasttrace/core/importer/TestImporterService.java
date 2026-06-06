@@ -77,11 +77,9 @@ class TestImporterService
     private void runImporter()
     {
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
-
         verify(this.importerMock).runImport();
         verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
                 this.builderArg.capture());
-
         final SpecificationListBuilder builder = this.builderArg.getValue();
         assertThat(result, equalTo(builder.build()));
     }

@@ -20,9 +20,9 @@ public final class ImportSettings
 
     private ImportSettings(final Builder builder)
     {
-        this.inputs = builder.inputs;
+        this.inputs = Collections.unmodifiableList(builder.inputs);
         this.filter = builder.filter;
-        this.pathConfigs = builder.pathConfigs;
+        this.pathConfigs = Collections.unmodifiableList(builder.pathConfigs);
     }
 
     /**
@@ -32,7 +32,7 @@ public final class ImportSettings
      */
     public List<Path> getInputs()
     {
-        return Collections.unmodifiableList(this.inputs);
+        return this.inputs;
     }
 
     /**
@@ -57,7 +57,7 @@ public final class ImportSettings
     }
 
     /**
-     * Create a the default import settings
+     * Create the default import settings
      * 
      * @return default import settings
      */

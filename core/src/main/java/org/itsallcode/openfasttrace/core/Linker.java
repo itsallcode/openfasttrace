@@ -46,7 +46,6 @@ public class Linker
     // [impl->dsn~tracing.needed-coverage-status~1]
     public List<LinkedSpecificationItem> link()
     {
-
         for (final LinkedSpecificationItem linkedItem : this.linkedItems)
         {
             linkItem(linkedItem);

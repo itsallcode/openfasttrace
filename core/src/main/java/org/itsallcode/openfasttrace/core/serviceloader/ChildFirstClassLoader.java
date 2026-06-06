@@ -48,6 +48,7 @@ class ChildFirstClassLoader extends URLClassLoader
         return loadClassInternally(name, resolve);
     }
 
+    @SuppressWarnings("java:S3032") // Intentionally accessing non-standard classloader
     private Class<?> loadClassInternally(final String name, final boolean resolve) throws ClassNotFoundException
     {
         try
@@ -57,10 +58,11 @@ class ChildFirstClassLoader extends URLClassLoader
         }
         catch (final ClassNotFoundException ignore)
         {
-            LOGGER.log(Level.FINEST, () -> "Unable to find class " + name + " with child logger."
-                    + "Falling back to parent logger");
+            LOGGER.log(Level.FINEST, () -> "Unable to find class " + name + " with child classloader '"
+                    + this.getClass().getClassLoader().getName() + "'. "
+                    + "Falling back to parent classloader '" + super.getClass().getClassLoader().getName() + "'.");
             // Class does not exist in the given URLs.
-            // Let's try finding it in our parent classloader.
+            // Let's try finding it in our parent class's classloader.
             // This will throw ClassNotFoundException on failure.
             return super.loadClass(name, resolve);
         }

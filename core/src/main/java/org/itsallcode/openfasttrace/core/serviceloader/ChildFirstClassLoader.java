@@ -14,7 +14,9 @@ import java.util.logging.Logger;
  * included with OFT.
  * <p>
  * This is based on
- * https://medium.com/@isuru89/java-a-child-first-class-loader-cbd9c3d0305
+ * <a href="https://medium.com/@isuru89/java-a-child-first-class-loader-cbd9c3d0305">
+ *  "Java: A Child First Class Loader" by Isuru Weerarathna
+ * </a>
  * <p>
  */
 class ChildFirstClassLoader extends URLClassLoader

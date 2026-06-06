@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.api;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import org.jetbrains.annotations.Unmodifiable;
 
 /**
  * Settings for import filtering
@@ -26,7 +25,7 @@ public final class FilterSettings
      * 
      * @return artifact types that must be matched
      */
-    public getArtifactTypes()
+    public Set<String> getArtifactTypes()
     {
         return this.artifactTypes;
     }

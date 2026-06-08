@@ -92,9 +92,9 @@ public class ReportService
         }
         catch (final IOException exception)
         {
-            final String MESSAGE = "Failed to flush report output stream";
+            final String MESSAGE = "Failed to flush report output stream" + ": " + exception.getMessage();
             LOGGER.log(Level.SEVERE, MESSAGE, exception);
-            throw new ReportException(MESSAGE + exception.getMessage());
+            throw new ReportException(MESSAGE);
         }
     }
 

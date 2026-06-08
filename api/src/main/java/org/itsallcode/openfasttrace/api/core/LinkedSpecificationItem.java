@@ -243,7 +243,7 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get the artifact type which are covered.
+     * Get the artifact types that are covered.
      *
      * @return the set of covered artifact types.
      */

@@ -31,7 +31,7 @@ public final class SpecificationItem
         this.comment = builder.comment;
         this.location = builder.location;
         this.status = builder.status;
-        this.coveredIds = Collections.unmodifiableList(builder.coveredIds);
+        this.coveredIds = builder.coveredIds;
         this.dependOnIds = Collections.unmodifiableList(builder.dependOnIds);
         this.needsArtifactTypes = Collections.unmodifiableList(builder.neededArtifactTypes);
         this.tags = Collections.unmodifiableList(builder.tags);

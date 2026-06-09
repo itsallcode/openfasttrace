@@ -10,6 +10,9 @@ import javax.xml.stream.XMLStreamWriter;
  */
 public abstract class StreamWriterDelegate implements XMLStreamWriter
 {
+    /** Stream writer to delegate to. */
+    protected XMLStreamWriter out;
+
     /**
      * Creates a new instance of the delegate.
      *
@@ -20,9 +23,6 @@ public abstract class StreamWriterDelegate implements XMLStreamWriter
     {
         this.out = out;
     }
-
-    /** Stream writer to delegate to. */
-    protected XMLStreamWriter out;
 
     @Override
     public Object getProperty(final String name)

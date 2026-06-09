@@ -13,7 +13,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 // [impl->dsn~import.full-coverage-tag~1]
 // [impl->dsn~import.full-coverage-tag-with-needed-coverage~1]
-class LongTagImportingLineConsumer extends RegexLineConsumer
+class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
 {
     private static final Logger LOG = Logger
             .getLogger(LongTagImportingLineConsumer.class.getName());
@@ -64,7 +64,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         this.listener.endSpecificationItem();
     }
 
-    private List<String> parseCommaSeparatedList(final String input)
+    private static List<String> parseCommaSeparatedList(final String input)
     {
         if (input == null)
         {
@@ -104,7 +104,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
         }
     }
 
-    private int parseRevision(final String revision)
+    private static int parseRevision(final String revision)
     {
         return Optional.ofNullable(revision)
                 .map(Integer::parseInt)
@@ -125,12 +125,7 @@ class LongTagImportingLineConsumer extends RegexLineConsumer
     private String generateUniqueName(final SpecificationItemId coveredId, final int lineNumber,
             final int counter)
     {
-        final String uniqueName = new StringBuilder() //
-                .append(this.file.getPath()) //
-                .append(lineNumber) //
-                .append(counter) //
-                .append(coveredId) //
-                .toString();
+        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId;
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
         return coveredId.getName() + "-" + checksum;
     }

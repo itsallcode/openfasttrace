@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.report.html.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,7 +63,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
     }
 
     /**
-     * Render a the part of the view that comes before the children.
+     * Render the part of the view that comes before the children.
      * 
      * @param level
      *            indentation level
@@ -70,7 +71,7 @@ public abstract class AbstractViewContainer implements ViewableContainer
     protected abstract void renderBeforeChildren(final int level);
 
     /**
-     * Render a the children of this sub(view).
+     * Render the children of this sub(view).
      * 
      * @param level
      *            indentation level
@@ -106,6 +107,6 @@ public abstract class AbstractViewContainer implements ViewableContainer
     @Override
     public List<Viewable> getChildren()
     {
-        return this.children;
+        return Collections.unmodifiableList(this.children);
     }
 }

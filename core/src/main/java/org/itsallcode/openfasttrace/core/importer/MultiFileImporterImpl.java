@@ -117,7 +117,7 @@ public class MultiFileImporterImpl implements MultiFileImporter
                 .map(factory -> factory.createImporter(file, builder));
 
         LOG.finest(
-                () -> (importer.isPresent() ? "Created importer of type '" + importer.get().getClass().getSimpleName()
+                () -> (importer.isPresent() ? ("Created importer of type '" + importer.get().getClass().getSimpleName())
                         : "No import")
                         + "' for file '" + file + "'");
         return importer;

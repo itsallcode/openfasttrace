@@ -2,6 +2,8 @@ package org.itsallcode.openfasttrace.api.importer;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
@@ -10,7 +12,7 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 /**
  * Configuration for an {@link Importer}.
  */
-public class ImportSettings
+public final class ImportSettings
 {
     private final List<Path> inputs;
     private final FilterSettings filter;
@@ -18,9 +20,9 @@ public class ImportSettings
 
     private ImportSettings(final Builder builder)
     {
-        this.inputs = builder.inputs;
+        this.inputs = Collections.unmodifiableList(builder.inputs);
         this.filter = builder.filter;
-        this.pathConfigs = builder.pathConfigs;
+        this.pathConfigs = Collections.unmodifiableList(builder.pathConfigs);
     }
 
     /**
@@ -55,7 +57,7 @@ public class ImportSettings
     }
 
     /**
-     * Create a the default import settings
+     * Create the default import settings
      * 
      * @return default import settings
      */
@@ -77,7 +79,7 @@ public class ImportSettings
     /**
      * Builder for {@link ImportSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private final List<Path> inputs = new ArrayList<>();
         private FilterSettings filter = FilterSettings.createAllowingEverything();
@@ -109,10 +111,7 @@ public class ImportSettings
          */
         public Builder addInputs(final Path... inputs)
         {
-            for (final Path input : inputs)
-            {
-                this.inputs.add(input);
-            }
+            this.inputs.addAll(Arrays.asList(inputs));
             return this;
         }
 
@@ -138,7 +137,7 @@ public class ImportSettings
          */
         public Builder pathConfigs(final List<PathConfig> pathConfigs)
         {
-            this.pathConfigs = pathConfigs;
+            this.pathConfigs = Collections.unmodifiableList(pathConfigs);
             return this;
         }
 

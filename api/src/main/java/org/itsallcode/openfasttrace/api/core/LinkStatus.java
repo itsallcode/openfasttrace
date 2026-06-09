@@ -58,7 +58,7 @@ public enum LinkStatus
     private final String shortTag;
     private final String text;
 
-    private LinkStatus(final String shortTag, final String text)
+    LinkStatus(final String shortTag, final String text)
     {
         this.shortTag = shortTag;
         this.text = text;
@@ -92,8 +92,10 @@ public enum LinkStatus
      */
     public boolean isBadOutgoing()
     {
-        return (this == PREDATED) || (this == OUTDATED) || (this == AMBIGUOUS) || (this == UNWANTED)
-                || (this == ORPHANED);
+        return switch (this) {
+            case PREDATED, OUTDATED, AMBIGUOUS, UNWANTED, ORPHANED -> true;
+            default -> false;
+        };
     }
 
     /**

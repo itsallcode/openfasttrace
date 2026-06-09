@@ -10,7 +10,7 @@ class SingleSpecObjectsHandlerBuilder
     private final ImportEventListener listener;
     private final SpecificationItemId.Builder idBuilder;
     private final Location.Builder locationBuilder;
-    private String containedFileName = null;
+    private String containedFileName ;
     private int containedLine = -1;
 
     SingleSpecObjectsHandlerBuilder(final ImportEventListener listener,

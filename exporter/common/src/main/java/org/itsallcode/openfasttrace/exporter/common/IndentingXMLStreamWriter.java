@@ -22,7 +22,7 @@ public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter implemen
 
     private State state = State.SEEN_NOTHING;
 
-    private int depth = 0;
+    private int depth;
 
     /**
      * Create an new instance wrapping a delegate.

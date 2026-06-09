@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 
 // [impl->dsn~import.short-coverage-tag~1]
-class ShortTagImportingLineConsumer extends RegexLineConsumer
+class ShortTagImportingLineConsumer extends AbstractRegexLineConsumer
 {
     private static final Logger LOG = Logger.getLogger(ShortTagImportingLineConsumer.class.getName());
 
@@ -71,7 +71,7 @@ class ShortTagImportingLineConsumer extends RegexLineConsumer
                 nameWithPrefix, parsedRevision);
     }
 
-    private int parseRevision(final String name, final String revision)
+    private static int parseRevision(final String name, final String revision)
     {
         try
         {

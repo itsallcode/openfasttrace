@@ -5,9 +5,10 @@ import static org.itsallcode.openfasttrace.report.html.view.html.MarkdownLineSta
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 /**
- * A state machine for converting markdown to HTML.
+ * A state machine for converting Markdown to HTML.
  */
 public final class MarkdownLineStateMachine
 {
@@ -18,6 +19,8 @@ public final class MarkdownLineStateMachine
     private static final String P_PRE = "^    .*";
     private static final String P_LIST_CONT = ".+";
     private static final String P_TERM = "^$";
+    private static final Pattern ANY_NEWLINE = Pattern.compile("\n\r?|\r");
+    private static final Pattern BULLET_POINT_PREFIX = Pattern.compile("^ {0,3}[-+*]");
     private final List<MarkdownLineTransition> transitions = new ArrayList<>();
 
     MarkdownLineStateMachine()
@@ -25,7 +28,7 @@ public final class MarkdownLineStateMachine
         initializeTransitions();
     }
 
-    // Duplicate strings help making this easier to understand.
+    // Duplicate strings help make this easier to understand.
     @SuppressWarnings("squid:S1192")
     private void initializeTransitions()
     {
@@ -76,7 +79,7 @@ public final class MarkdownLineStateMachine
     {
         final StringBuilder builder = new StringBuilder();
         MarkdownLineState state = START;
-        for (final String line : input.split("(?:\n\r?|\r)", INCLUDE_EMPTY_STRINGS))
+        for (final String line : ANY_NEWLINE.split(input, INCLUDE_EMPTY_STRINGS))
         {
             for (final MarkdownLineTransition transition : this.transitions)
             {
@@ -96,7 +99,7 @@ public final class MarkdownLineStateMachine
         return builder.toString();
     }
 
-    private void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
+    private static void closeLastLineState(final StringBuilder builder, final MarkdownLineState state)
     {
         switch (state)
         {
@@ -120,23 +123,23 @@ public final class MarkdownLineStateMachine
         }
     }
 
-    private UnaryOperator<String> empty()
+    private static UnaryOperator<String> empty()
     {
         return s -> "";
     }
 
-    private UnaryOperator<String> trimEnum()
+    private static UnaryOperator<String> trimEnum()
     {
         return s -> s.substring(s.indexOf('.') + 1).trim();
     }
 
-    private UnaryOperator<String> trimPre()
+    private static UnaryOperator<String> trimPre()
     {
         return s -> s.substring(4);
     }
 
-    private UnaryOperator<String> trimBullet()
+    private static UnaryOperator<String> trimBullet()
     {
-        return s -> s.replaceFirst("^ {0,3}[-+*]", "").trim();
+        return s -> BULLET_POINT_PREFIX.matcher(s).replaceFirst("").trim();
     }
 }

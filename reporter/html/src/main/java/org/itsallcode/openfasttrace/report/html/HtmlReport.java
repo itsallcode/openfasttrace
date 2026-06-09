@@ -18,8 +18,8 @@ import static java.util.Comparator.comparing;
  */
 public class HtmlReport implements Reportable
 {
-    private final Trace trace;
     private static final String REPORT_CSS_FILE = "/css/report.css";
+    private final Trace trace;
     private final ReportSettings settings;
 
     /**
@@ -77,7 +77,7 @@ public class HtmlReport implements Reportable
                 .toList();
     }
 
-    private void addSectionedItems(final ViewFactory factory, final ViewableContainer view,
+    private static void addSectionedItems(final ViewFactory factory, final ViewableContainer view,
             final List<LinkedSpecificationItem> items)
     {
         String artifactType = "\0";

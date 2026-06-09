@@ -13,11 +13,11 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate
     private final String indent;
     private final String newLine;
     /** How deeply nested the current scope is. The root element is depth 1. */
-    private int depth = 0; // document scope
+    private int depth; // document scope
     /** stack[depth] indicates what's been written into the current scope. */
     private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
     /** Prefix that defines how deeply a line is indented. */
-    private char[] linePrefix = null;
+    private char[] linePrefix;
 
     /**
      * Create a new instance of the {@link IndentingXMLStreamWriter}.

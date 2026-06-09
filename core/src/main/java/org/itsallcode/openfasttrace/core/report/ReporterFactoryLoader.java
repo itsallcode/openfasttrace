@@ -48,17 +48,14 @@ public class ReporterFactoryLoader
     public ReporterFactory getReporterFactory(final String outputFormat)
     {
         final List<ReporterFactory> matchingReporters = getMatchingFactories(outputFormat);
-        switch (matchingReporters.size())
+        return switch (matchingReporters.size())
         {
-        case 0:
-            throw new ExporterException(
+        case 0 -> throw new ExporterException(
                     "Found no matching reporter for output format '" + outputFormat + "'");
-        case 1:
-            return matchingReporters.get(0);
-        default:
-            throw new ReportException("Found more than one matching reporter for output format '"
+        case 1 -> matchingReporters.get(0);
+        default -> throw new ReportException("Found more than one matching reporter for output format '"
                     + outputFormat + "'");
-        }
+        };
     }
 
     private List<ReporterFactory> getMatchingFactories(final String format)

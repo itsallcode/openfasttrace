@@ -51,7 +51,6 @@ public class SpecDocumentHandlerBuilder
             }
             LOG.warning(() -> "Found unknown element " + startElement);
         });
-
         this.handler.addElementListener("specdocument", elem -> {
             LOG.finest(() -> "Found specdocument element " + elem);
             if (!elem.isRootElement())
@@ -66,10 +65,8 @@ public class SpecDocumentHandlerBuilder
                 throw new ImporterException("Element " + elem + " does not have an attribute '"
                         + DOCTYPE_ATTRIBUTE_NAME + "' at " + elem.getLocation());
             }
-
             final String defaultDoctype = doctypeAttribute.getValue();
-            this.handler.pushDelegate(
-                    new SpecObjectsHandlerBuilder(this.file, defaultDoctype, this.listener)
+            this.handler.pushDelegate(new SpecObjectsHandlerBuilder(this.file, defaultDoctype, this.listener)
                             .build());
         });
 

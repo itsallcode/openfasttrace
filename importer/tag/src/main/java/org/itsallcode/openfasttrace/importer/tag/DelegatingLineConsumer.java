@@ -1,4 +1,5 @@
 package org.itsallcode.openfasttrace.importer.tag;
+import java.util.Collections;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
@@ -9,7 +10,7 @@ class DelegatingLineConsumer implements LineConsumer
 
     DelegatingLineConsumer(final List<LineConsumer> delegates)
     {
-        this.delegates = delegates;
+        this.delegates = Collections.unmodifiableList(delegates);
     }
 
     @Override

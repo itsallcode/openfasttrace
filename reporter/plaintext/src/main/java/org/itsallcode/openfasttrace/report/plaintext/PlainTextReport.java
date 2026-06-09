@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,10 +22,11 @@ import org.itsallcode.openfasttrace.api.report.Reportable;
  */
 public class PlainTextReport implements Reportable
 {
-    private final Trace trace;
+    private static final Pattern PLUS_MINUS_PATTERN = Pattern.compile("[-+]");
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
-    private int nonEmptySections = 0;
+    private final Trace trace;
+    private int nonEmptySections;
     private final ReportSettings settings;
     private final TextFormatter formatter;
 
@@ -156,7 +159,7 @@ public class PlainTextReport implements Reportable
 
     private String translateArtifactTypeCoverage(final LinkedSpecificationItem item)
     {
-        final Comparator<String> byTypeName = Comparator.comparing(a -> a.replaceFirst("[-+]", ""));
+        final Comparator<String> byTypeName = Comparator.comparing(a -> PLUS_MINUS_PATTERN.matcher(a).replaceFirst(""));
 
         final Stream<String> uncoveredStream = item.getUncoveredArtifactTypes().stream()
                 .map(x -> this.formatter.formatNotOk("-" + x));
@@ -205,7 +208,7 @@ public class PlainTextReport implements Reportable
         }
     }
 
-    private void renderMaturity(final PrintStream report, final LinkedSpecificationItem item)
+    private static void renderMaturity(final PrintStream report, final LinkedSpecificationItem item)
     {
         final ItemStatus status = item.getStatus();
         if (status != ItemStatus.APPROVED)
@@ -244,7 +247,7 @@ public class PlainTextReport implements Reportable
         renderItemDetailsEnd(report);
     }
 
-    private void renderOrigin(final PrintStream report, final Location location)
+    private static void renderOrigin(final PrintStream report, final Location location)
     {
         report.print("(");
         report.print(location.getPath());
@@ -322,7 +325,7 @@ public class PlainTextReport implements Reportable
     }
 
     private static String padStatus(final LinkStatus status) {
-        return String.format("%-17s", status.toString().toLowerCase());
+        return String.format("%-17s", status.toString().toLowerCase(Locale.ENGLISH));
     }
 
     private void renderTags(final PrintStream report, final LinkedSpecificationItem item)

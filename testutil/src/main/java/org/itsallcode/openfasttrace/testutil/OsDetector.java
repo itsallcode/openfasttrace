@@ -9,7 +9,7 @@ import org.itsallcode.openfasttrace.testutil.OsCheck.OSType;
  * Helper class to detect the operating system. Contains assumption methods for
  * JUnit.
  */
-public class OsDetector
+public final class OsDetector
 {
     private static final OsCheck OS_CHECK = new OsCheck();
 

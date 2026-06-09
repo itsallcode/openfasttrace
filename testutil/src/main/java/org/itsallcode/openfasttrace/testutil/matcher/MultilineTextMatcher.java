@@ -73,7 +73,7 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
         }
     }
 
-    private String describeLineCount(final int lineCount)
+    private static String describeLineCount(final int lineCount)
     {
         return "(" + lineCount + " lines)" + System.lineSeparator();
     }
@@ -105,7 +105,7 @@ public class MultilineTextMatcher extends TypeSafeMatcher<String>
         return new MultilineTextMatcher(String.join(System.lineSeparator(), lines));
     }
 
-    private List<String> splitPreservingNewLines(final String text)
+    private static List<String> splitPreservingNewLines(final String text)
     {
 
         final String lineSplittingRegEx = "(?<=" + LINE_ENDING + ")";

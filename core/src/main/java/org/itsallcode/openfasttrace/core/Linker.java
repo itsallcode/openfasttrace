@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.core;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class Linker
         this.staleIndex = new HashMap<>();
     }
 
-    private List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
+    private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
     {
         return items.stream() //
                 .map(LinkedSpecificationItem::new) //
@@ -45,12 +46,11 @@ public class Linker
     // [impl->dsn~tracing.needed-coverage-status~1]
     public List<LinkedSpecificationItem> link()
     {
-
         for (final LinkedSpecificationItem linkedItem : this.linkedItems)
         {
             linkItem(linkedItem);
         }
-        return this.linkedItems;
+        return Collections.unmodifiableList(this.linkedItems);
     }
 
     private void linkItem(final LinkedSpecificationItem item)
@@ -78,7 +78,7 @@ public class Linker
         }
     }
 
-    private void linkMatchingRevision(final LinkedSpecificationItem covering,
+    private static void linkMatchingRevision(final LinkedSpecificationItem covering,
             final LinkedSpecificationItem covered)
     {
         final String coveringArtifactType = covering.getArtifactType();
@@ -126,7 +126,7 @@ public class Linker
         return this.staleIndex.get(id);
     }
 
-    private void linkToOutdatedOrPredated(final LinkedSpecificationItem item,
+    private static void linkToOutdatedOrPredated(final LinkedSpecificationItem item,
             final SpecificationItemId id, final List<LinkedSpecificationItem> coveredLinkedItems)
     {
 

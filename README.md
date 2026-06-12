@@ -29,11 +29,12 @@ Sonarcloud status:
 [![Technical Dept](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=org.itsallcode.openfasttrace%3Aopenfasttrace-root&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=org.itsallcode.openfasttrace%3Aopenfasttrace-root)
 
-**User Guides**
+**User Guides and Tools**
 
 * [📖 User Guide](doc/user_guide.md)
 * [🔌 Extending OpenFastTrace With Plugins](doc/plugins.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
+* [🛠 IntelliJ Plugin (PyCharm, Clion, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
 
 **News and Discussions**
 

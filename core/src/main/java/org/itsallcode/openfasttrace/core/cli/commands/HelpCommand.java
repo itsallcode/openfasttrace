@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.core.cli.commands;
 
+import org.itsallcode.openfasttrace.core.VersionProvider;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -7,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Handler for printing command line usage.
  */
+// [impl->dsn~cli.help~1]
 public class HelpCommand implements Performable
 {
     /** The command line action for running this command. */
@@ -28,7 +31,8 @@ public class HelpCommand implements Performable
     @SuppressWarnings("java:S106") // Using System.out by intention
     public boolean run()
     {
-        final String usage = loadResource("/usage.txt");
+        final String version = new VersionProvider().getVersion();
+        final String usage = loadResource("/usage.txt").replace("${version}", version);
         System.out.println(usage);
         return validUsage;
     }

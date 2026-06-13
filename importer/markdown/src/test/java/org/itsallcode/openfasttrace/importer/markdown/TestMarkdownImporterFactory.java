@@ -18,6 +18,11 @@ class TestMarkdownImporterFactory extends ImporterFactoryTestBase<MarkdownImport
     }
 
     @Override
+    protected int getExpectedPriority() {
+        return 1000;
+    }
+
+    @Override
     protected List<String> getSupportedFilenames()
     {
         return asList("file.md", "file.MD", "FILE.md", "FILE.MD", "file.markdown", "file.MARKDOWN",

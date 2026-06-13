@@ -20,7 +20,7 @@ class TestStreamInput
     private static final String CONTENT = "file content 1\nabcöäüßÖÄÜ!\"§$%&/()=?`´'#+*~-_,.;:<>|^°";
 
     @Test
-    void testRelativeFileGetPath() throws IOException
+    void testRelativeFileGetPath()
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = StreamInput.forReader(path, null);
@@ -29,7 +29,7 @@ class TestStreamInput
     }
 
     @Test
-    void testAbsoluteFileGetPath() throws IOException
+    void testAbsoluteFileGetPath()
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = StreamInput.forReader(path, null);
@@ -38,15 +38,15 @@ class TestStreamInput
     }
 
     @Test
-    void testToPathUnsupported() throws IOException
+    void testToPathUnsupported()
     {
         final Path path = Paths.get("blah");
         final InputFile input = StreamInput.forReader(path, null);
-        assertThrows(UnsupportedOperationException.class, () -> input.toPath());
+        assertThrows(UnsupportedOperationException.class, input::toPath);
     }
 
     @Test
-    void testIsRealFileFalse() throws IOException
+    void testIsRealFileFalse()
     {
         final InputFile inputFile = StreamInput.forReader(Paths.get("blah"), null);
         assertThat(inputFile.isRealFile(), equalTo(false));
@@ -62,6 +62,8 @@ class TestStreamInput
 
     private String readContent(final InputFile inputFile) throws IOException
     {
-        return inputFile.createReader().lines().collect(joining("\n"));
+        try(final BufferedReader reader = inputFile.createReader()) {
+            return reader.lines().collect(joining("\n"));
+        }
     }
 }

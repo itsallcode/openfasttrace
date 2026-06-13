@@ -25,6 +25,7 @@ import org.junit.jupiter.params.provider.*;
  */
 public abstract class AbstractLightWeightMarkupImporterTest
 {
+    private static final String FILENAME = "the_file.md";
     private static final Path PATH = Path.of("/a/b/c.markdown");
     private static final String NL = System.lineSeparator();
     private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
@@ -78,6 +79,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
      * @param matcher
      *            matcher to verify the imported specification items
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     protected void assertImport(final String path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
@@ -94,6 +96,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
      * @param matcher
      *            matcher to verify the imported specification items
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
@@ -152,15 +155,15 @@ public abstract class AbstractLightWeightMarkupImporterTest
         assertImport(PATH, """
                 req~covers-list~4
                 Covers:
-                * `feat~item-a~1`
-                * `feat~item-b~2`
-                * `feat~item-c~3`
+                * `feat~item-A~1`
+                * `feat~item-B~2`
+                * `feat~item-C~3`
                 """,
                 contains(item()
                         .id("req", "covers-list", 4)
-                        .addCoveredId("feat", "item-a", 1)
-                        .addCoveredId("feat", "item-b", 2)
-                        .addCoveredId("feat", "item-c", 3)
+                        .addCoveredId("feat", "item-A", 1)
+                        .addCoveredId("feat", "item-B", 2)
+                        .addCoveredId("feat", "item-C", 3)
                         .location(PATH.toString(), 1)
                         .build()));
     }
@@ -287,7 +290,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testForwardingAfterDepends()
     {
-        assertImport("1.2.md", """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 Depends:
                 * req~foo~1
@@ -296,14 +299,14 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(
                         item()
                                 .id("dsn", "foo", 1)
-                                .location("1.2.md", 1)
+                                .location(FILENAME, 1)
                                 .addDependOnId("req", "foo", 1)
                                 .build(),
                         item()
                                 .id("dsn", "bar", 2)
                                 .addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("impl")
-                                .location("1.2.md", 4)
+                                .location(FILENAME, 4)
                                 .forwards(true)
                                 .build()));
     }
@@ -312,7 +315,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testForwardingAfterTags()
     {
-        assertImport("1.2.md", """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 Tags: vanilla, strawberry, mint
                 dsn-->impl:req~bar~2
@@ -320,7 +323,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(
                         item()
                                 .id("dsn", "foo", 1)
-                                .location("1.2.md", 1)
+                                .location(FILENAME, 1)
                                 .addTag("vanilla")
                                 .addTag("strawberry")
                                 .addTag("mint")
@@ -329,7 +332,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("dsn", "bar", 2)
                                 .addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("impl")
-                                .location("1.2.md", 3)
+                                .location(FILENAME, 3)
                                 .forwards(true)
                                 .build()));
     }
@@ -338,7 +341,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testMultipleForwardsInARow()
     {
-        assertImport("fwd.md", """
+        assertImport(FILENAME, """
                 ${title("A Collection of Different Forwards", 1)}
                 * `arch --> dsn : req~foo~1`
                 * arch  -->dsn  : req~bar~2   with a comment
@@ -349,19 +352,19 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("arch", "foo", 1).addCoveredId("req", "foo", 1)
                                 .addNeedsArtifactType("dsn")
                                 .forwards(true)
-                                .location("fwd.md", 2 + titleLocationOffset)
+                                .location(FILENAME, 2 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("arch", "bar", 2).addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("dsn")
                                 .forwards(true)
-                                .location("fwd.md", 3 + titleLocationOffset)
+                                .location(FILENAME, 3 + titleLocationOffset)
                                 .build(),
                         item()
                                 .id("dsn", "zoo", 3).addCoveredId("req", "zoo", 3)
                                 .addNeedsArtifactType("impl")
                                 .forwards(true)
-                                .location("fwd.md", 4 + titleLocationOffset)
+                                .location(FILENAME, 4 + titleLocationOffset)
                                 .build()));
     }
 
@@ -393,7 +396,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testForwardingAfterCovers()
     {
-        assertImport("1.2.md", """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 Covers:
                 * req~foo~1
@@ -402,14 +405,14 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(
                         item()
                                 .id("dsn", "foo", 1)
-                                .location("1.2.md", 1)
+                                .location(FILENAME, 1)
                                 .addCoveredId("req", "foo", 1)
                                 .build(),
                         item()
                                 .id("dsn", "bar", 2)
                                 .addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("impl")
-                                .location("1.2.md", 4)
+                                .location(FILENAME, 4)
                                 .forwards(true)
                                 .build()));
     }
@@ -418,7 +421,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testForwardingAfterNeeds()
     {
-        assertImport("1.2.md", """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 Needs: impl
                 dsn-->impl:req~bar~2
@@ -426,14 +429,14 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 contains(
                         item()
                                 .id("dsn", "foo", 1)
-                                .location("1.2.md", 1)
+                                .location(FILENAME, 1)
                                 .addNeedsArtifactType("impl")
                                 .build(),
                         item()
                                 .id("dsn", "bar", 2)
                                 .addCoveredId("req", "bar", 2)
                                 .addNeedsArtifactType("impl")
-                                .location("1.2.md", 3)
+                                .location(FILENAME, 3)
                                 .forwards(true)
                                 .build()));
     }
@@ -486,7 +489,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testTwoConsecutiveSpecificationItems()
     {
-        assertImport("file1.md", """
+        assertImport(FILENAME, """
                 dsn~foo~1
                 First description
 
@@ -505,13 +508,13 @@ public abstract class AbstractLightWeightMarkupImporterTest
                                 .id("dsn", "foo", 1)
                                 .description("First description")
                                 .comment("First comment")
-                                .location("file1.md", 1)
+                                .location(FILENAME, 1)
                                 .build(),
                         item()
                                 .id("dsn", "bar", 2)
                                 .description("Second description")
                                 .rationale("Second rationale")
-                                .location("file1.md", 8)
+                                .location(FILENAME, 8)
                                 .build()));
     }
 

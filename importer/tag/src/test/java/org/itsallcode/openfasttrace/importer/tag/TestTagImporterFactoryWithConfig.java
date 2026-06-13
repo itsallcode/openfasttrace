@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -78,7 +77,7 @@ class TestTagImporterFactoryWithConfig
     }
 
     @Test
-    void testFactoryCreatesImporterForSupportedFile(@TempDir final Path tempDir) throws IOException
+    void testFactoryCreatesImporterForSupportedFile(@TempDir final Path tempDir)
     {
         final File tempFile = tempDir.resolve("test").toFile();
         final String glob = tempFile.getAbsolutePath().replace('\\', '/');
@@ -87,7 +86,7 @@ class TestTagImporterFactoryWithConfig
     }
 
     @Test
-    void testFactoryForMissingFileThrowsException() throws IOException
+    void testFactoryForMissingFileThrowsException()
     {
         final Importer importer = createImporter(configure(glob(PATH1)), Paths.get(PATH1));
         assertThrows(ImporterException.class, importer::runImport);
@@ -121,10 +120,10 @@ class TestTagImporterFactoryWithConfig
 
     private PathConfig glob(final String globPattern)
     {
-        return PathConfig.builder() //
-                .patternPathMatcher("glob:" + globPattern) //
-                .coveredItemArtifactType("") //
-                .tagArtifactType("") //
+        return PathConfig.builder()
+                .patternPathMatcher("glob:" + globPattern)
+                .coveredItemArtifactType("")
+                .tagArtifactType("")
                 .build();
     }
 }

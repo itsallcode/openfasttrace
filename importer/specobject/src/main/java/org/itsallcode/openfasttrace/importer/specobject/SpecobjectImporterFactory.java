@@ -27,6 +27,11 @@ public class SpecobjectImporterFactory extends ImporterFactory
         this.xmlParserFactory = new XmlParserFactory();
     }
 
+    @Override
+    public int getPriority() {
+        return 3000;
+    }
+
     // [impl -> dsn~import.reqm2-file-detection~1]
     @Override
     public boolean supportsFile(final InputFile file)
@@ -61,7 +66,9 @@ public class SpecobjectImporterFactory extends ImporterFactory
         }
         catch (final IOException exception)
         {
-            LOG.fine(() -> "Unable to peek XML file '" + path + "' trying to determine if it contains ReqM2 format: " + exception.getMessage());
+            LOG.fine(() -> "Unable to peek XML file '" + path
+                    + "' trying to determine if it contains ReqM2 format: "
+                    + exception.getMessage());
             return false;
         }
     }

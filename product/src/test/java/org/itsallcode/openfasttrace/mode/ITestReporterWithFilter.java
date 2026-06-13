@@ -6,7 +6,6 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.*;
@@ -60,18 +59,17 @@ class ITestReporterWithFilter extends AbstractFileBasedTest
 
     private List<String> getIdsFromTraceWithFilterSettings(final FilterSettings filterSettings)
     {
-        final ImportSettings importSettings = ImportSettings.builder() //
-                .addInputs(this.tempDir) //
-                .filter(filterSettings) //
+        final ImportSettings importSettings = ImportSettings.builder()
+                .addInputs(this.tempDir)
+                .filter(filterSettings)
                 .build();
         final List<SpecificationItem> items = this.oft.importItems(importSettings);
         final List<LinkedSpecificationItem> linkedItems = this.oft.link(items);
         final Trace trace = this.oft.trace(linkedItems);
-        final List<String> filteredIds = trace.getItems() //
-                .stream() //
-                .map(item -> item.getId().toString()) //
-                .collect(Collectors.toList());
-        return filteredIds;
+        return trace.getItems()
+                .stream()
+                .map(item -> item.getId().toString())
+                .toList();
     }
 
     // [itest->dsn~filtering-by-tags-or-no-tags-during-import~1]

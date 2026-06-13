@@ -210,7 +210,7 @@ class TestCliArguments
     @Test
     void testShowOriginDisabledByDefault()
     {
-        assertThat(this.arguments.getShowOrigin(), is(false));
+        assertThat(this.arguments.isShowOrigin(), is(false));
     }
 
     // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -221,7 +221,7 @@ class TestCliArguments
     void testSetShowOrigin()
     {
         this.arguments.setShowOrigin(true);
-        assertThat(this.arguments.getShowOrigin(), is(true));
+        assertThat(this.arguments.isShowOrigin(), is(true));
     }
 
     // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -232,7 +232,7 @@ class TestCliArguments
     void testSetS()
     {
         this.arguments.setS(true);
-        assertThat(this.arguments.getShowOrigin(), is(true));
+        assertThat(this.arguments.isShowOrigin(), is(true));
     }
 
     // [utest->dsn~reporting.plain-text.ansi-color~1]

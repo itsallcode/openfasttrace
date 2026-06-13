@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.api.core;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Specification items with links that can be followed.
@@ -147,8 +146,7 @@ public class LinkedSpecificationItem
             cacheOverCoveredArtifactType(item);
             addMyItemIdToCoveringItem(item);
             break;
-        case COVERED_OUTDATED:
-        case COVERED_PREDATED:
+        case COVERED_OUTDATED, COVERED_PREDATED:
             addMyItemIdToCoveringItem(item);
             break;
         default:
@@ -189,7 +187,7 @@ public class LinkedSpecificationItem
      */
     public Map<LinkStatus, List<LinkedSpecificationItem>> getLinks()
     {
-        return this.links;
+        return new EnumMap<>(this.links);
     }
 
     /**
@@ -245,13 +243,13 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get the artifact type which are covered.
+     * Get the artifact types that are covered.
      *
      * @return the set of covered artifact types.
      */
     public Set<String> getCoveredArtifactTypes()
     {
-        return this.coveredArtifactTypes;
+        return Collections.unmodifiableSet(this.coveredArtifactTypes);
     }
 
     /**
@@ -261,7 +259,7 @@ public class LinkedSpecificationItem
      */
     public Set<String> getCoveredApprovedArtifactTypes()
     {
-        return this.coveredArtifactTypesFromApprovedItems;
+        return Collections.unmodifiableSet(this.coveredArtifactTypesFromApprovedItems);
     }
 
     /**
@@ -272,7 +270,7 @@ public class LinkedSpecificationItem
     public Set<String> getOverCoveredArtifactTypes()
     {
 
-        return this.overCoveredArtifactTypes;
+        return Collections.unmodifiableSet(this.overCoveredArtifactTypes);
     }
 
     /**
@@ -395,7 +393,7 @@ public class LinkedSpecificationItem
                 .stream() //
                 .filter(entry -> entry.getKey().isIncoming()) //
                 .flatMap(entry -> entry.getValue().stream()) //
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -418,9 +416,9 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || (getStatus() != ItemStatus.REJECTED) //
+                || ((getStatus() != ItemStatus.REJECTED) //
                         && (hasBadLinks()
-                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED)));
     }
 
     /**

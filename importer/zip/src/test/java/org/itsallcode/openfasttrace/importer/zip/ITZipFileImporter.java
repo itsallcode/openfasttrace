@@ -78,8 +78,7 @@ class ITZipFileImporter
         final InputFile file = StreamInput.forReader(this.zipFile.toPath(),
                 new BufferedReader(new StringReader("")));
         final ZipFileImporter importer = new ZipFileImporter(file, this.delegateImporterMock);
-        assertThrows(UnsupportedOperationException.class,
-                () -> importer.runImport());
+        assertThrows(UnsupportedOperationException.class, importer::runImport);
     }
 
     @Test

@@ -20,7 +20,7 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     private ImporterService importerServiceMock;
 
     @BeforeEach
-    public void configureMock()
+    void configureMock()
     {
         lenient().when(this.contextMock.getImporterService()).thenReturn(this.importerServiceMock);
     }
@@ -29,6 +29,12 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     void testConstructor()
     {
         assertThat(createFactory(), notNullValue());
+    }
+
+    @Override
+    protected int getExpectedPriority()
+    {
+        return 20000;
     }
 
     @Override

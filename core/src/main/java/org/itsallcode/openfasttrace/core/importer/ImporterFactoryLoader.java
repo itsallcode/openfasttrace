@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.core.importer;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -17,7 +18,6 @@ import org.itsallcode.openfasttrace.core.serviceloader.Loader;
 public class ImporterFactoryLoader
 {
     private static final Logger LOG = Logger.getLogger(ImporterFactoryLoader.class.getName());
-
     private final Loader<ImporterFactory> serviceLoader;
 
     /**
@@ -45,29 +45,27 @@ public class ImporterFactoryLoader
 
     /**
      * Finds a matching {@link ImporterFactory} that can handle the given
-     * {@link Path}. If no or more than one {@link ImporterFactory} is found,
-     * this throws an {@link ImporterException}.
+     * {@link Path}. If no {@link ImporterFactory} is found, this throws an
+     * {@link ImporterException}.
      *
      * @param file
      *            the file for which to get a {@link ImporterFactory}.
      * @return a matching {@link ImporterFactory} that can handle the given
      *         {@link Path}
      * @throws ImporterException
-     *             when no or more than one {@link ImporterFactory} is found.
+     *             when no {@link ImporterFactory} is found.
      */
     public Optional<ImporterFactory> getImporterFactory(final InputFile file)
     {
-        final List<ImporterFactory> matchingImporters = getMatchingFactories(file);
-        switch (matchingImporters.size())
+        final List<ImporterFactory> matchingImporters = getMatchingFactoriesInOrderOfPriority(file);
+        if (matchingImporters.isEmpty())
         {
-        case 0:
             LOG.info(() -> "Found no matching importer for file '" + file + "'");
             return Optional.empty();
-        case 1:
+        }
+        else
+        {
             return Optional.of(matchingImporters.get(0));
-        default:
-            LOG.info(() -> "Found more than one matching importer for file '" + file + "'");
-            return Optional.empty();
         }
     }
 
@@ -81,15 +79,22 @@ public class ImporterFactoryLoader
      */
     public boolean supportsFile(final InputFile file)
     {
-        final boolean supported = !getMatchingFactories(file).isEmpty();
+        final boolean supported = !getMatchingFactoriesInOrderOfPriority(file).isEmpty();
         LOG.finest(() -> "File " + file + " is supported = " + supported);
         return supported;
     }
 
-    private List<ImporterFactory> getMatchingFactories(final InputFile file)
+    private List<ImporterFactory> getMatchingFactoriesInOrderOfPriority(final InputFile file)
     {
-        return this.serviceLoader.load()
+        final List<ImporterFactory> allFactories = this.serviceLoader.load().toList();
+        if (allFactories.isEmpty())
+        {
+            throw new ImporterException("No importers discovered. If you are running OpenFastTrace as a library, "
+                    + "ensure that the thread context classloader has access to the importer implementations.");
+        }
+        return allFactories.stream()
                 .filter(f -> f.supportsFile(file))
+                .sorted(Comparator.comparingInt(ImporterFactory::getPriority))
                 .toList();
     }
 }

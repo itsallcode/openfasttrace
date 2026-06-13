@@ -101,7 +101,7 @@ public class ArgumentValidator
         return ok;
     }
 
-    private String listCommands()
+    private static String listCommands()
     {
         return AVAILABLE_COMMANDS.stream().map(text -> "'" + text + "'")
                 .collect(Collectors.joining(","));

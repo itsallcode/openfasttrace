@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.api;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,6 +35,7 @@ public final class FilterSettings
      * 
      * @return artifact types that must be matched
      */
+
     public Set<String> getTags()
     {
         return this.tags;
@@ -82,58 +84,16 @@ public final class FilterSettings
     @Override
     public int hashCode()
     {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((this.artifactTypes == null) ? 0 : this.artifactTypes.hashCode());
-        result = prime * result + (this.withoutTags ? 1231 : 1237);
-        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
-        return result;
+        return Objects.hash(this.artifactTypes, this.tags, this.withoutTags);
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
+    public boolean equals(final Object other) {
+        if (!(other instanceof final FilterSettings that)) {
             return false;
         }
-        if (!(obj instanceof FilterSettings))
-        {
-            return false;
-        }
-        final FilterSettings other = (FilterSettings) obj;
-        if (this.artifactTypes == null)
-        {
-            if (other.artifactTypes != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.artifactTypes.equals(other.artifactTypes))
-        {
-            return false;
-        }
-        if (this.withoutTags != other.withoutTags)
-        {
-            return false;
-        }
-        if (this.tags == null)
-        {
-            if (other.tags != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.tags.equals(other.tags))
-        {
-            return false;
-        }
-        return true;
+        return withoutTags == that.withoutTags && Objects.equals(artifactTypes, that.artifactTypes)
+                && Objects.equals(tags, that.tags);
     }
 
     /**
@@ -160,7 +120,7 @@ public final class FilterSettings
     /**
      * Builder for {@link FilterSettings}
      */
-    public static class Builder
+    public static final class Builder
     {
         private Set<String> artifactTypes = Collections.emptySet();
         private Set<String> tags = Collections.emptySet();
@@ -180,7 +140,7 @@ public final class FilterSettings
          */
         public Builder artifactTypes(final Set<String> artifactTypes)
         {
-            this.artifactTypes = artifactTypes;
+            this.artifactTypes = Set.copyOf(artifactTypes);
             return this;
         }
 
@@ -193,7 +153,7 @@ public final class FilterSettings
          */
         public Builder tags(final Set<String> tags)
         {
-            this.tags = tags;
+            this.tags = Set.copyOf(tags);
             return this;
         }
 

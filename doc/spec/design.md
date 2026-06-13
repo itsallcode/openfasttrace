@@ -178,7 +178,51 @@ Depending on the source format, a variety of [importers](#importers) takes care 
 
 The listener handles Common parts of the import like filtering out unnecessary items or attributes.
 
-A factory for importers decides which importer to use. Usually, by file extension.
+The following sequence diagram illustrates the interaction between `MultiFileImporter`, `ImporterFactoryLoader`, `ImporterFactory`, and `Importer` during the import process:
+
+```puml
+@startuml
+participant MultiFileImporterImpl as MFI
+participant ImporterFactoryLoader as IFL
+participant ImporterFactory as IF
+participant Importer as I
+participant SpecificationListBuilder as SLB
+
+[-> MFI : importFile(file)
+activate MFI
+MFI -> IFL : getImporterFactory(file)
+activate IFL
+IFL -> IF : supportsFile(file)
+activate IF
+return true
+IFL -> IF : getPriority()
+activate IF
+return priority
+note over IFL: Choose factory with\nlowest priority value
+return factory
+MFI -> IF : createImporter(file, specItemBuilder)
+activate IF
+create I
+IF -> I : new
+return importer
+MFI -> I : runImport()
+activate I
+I -> SLB : event(item)
+activate SLB
+return
+return
+return
+@enduml
+```
+
+A factory for importers decides which importer to use. When multiple importers support the same file, the one with the lowest priority value (highest precedence) is chosen. Usually, importers are selected based on file extension, but some importers may peek into the file content to determine compatibility.
+
+The default priorities for standard importers are:
+1. Markdown Importer: 1000
+2. reStructuredText Importer: 2000
+3. Specobject (ReqM2) Importer: 3000
+4. Tag Importer: 10000
+5. Zip Importer: 20000
 
 ### ReqM2 File Detection
 `dsn~import.reqm2-file-detection~1`
@@ -187,6 +231,8 @@ The `SpecobjectImporterFactory` detects ReqM2 files either
 
 1. via the file extension `.oreqm` or
 2. via the file extension `.xml` and the presence of the string `<specdocument` within the first 4096 bytes of the file.
+
+Since the Tag Importer also supports `.xml` files but has a higher priority value (10000 vs 3000), `.xml` files containing the `<specdocument` tag will be handled by the Specobject Importer. Only if the file does not contain the tag will it fall back to the Tag Importer.
 
 Covers:
 
@@ -931,6 +977,32 @@ Covers:
 Needs: impl, itest
 
 ### Common
+
+#### CLI Help
+`dsn~cli.help~1`
+
+The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text.
+
+Covers:
+
+* [`req~cli.help~1`](system_requirements.md#cli-help)
+
+Needs: impl, itest
+
+#### CLI Version
+`dsn~cli.version~1`
+
+The CLI provides the current version of OpenFastTrace read from the resource file `version.properties` that is created during the build from the property `revision` in the core POM.
+
+Rationale:
+
+This makes the `revision` the single source of truth for the version of OpenFastTrace and avoids having to keep manually maintained copies of the version information.
+
+Covers:
+
+* [`req~cli.version~1`](system_requirements.md#cli-version)
+
+Needs: impl, itest
 
 #### Input File Selection
 `dsn~cli.input-file-selection~1`

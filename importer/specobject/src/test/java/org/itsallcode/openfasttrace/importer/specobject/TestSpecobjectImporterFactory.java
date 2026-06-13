@@ -23,11 +23,15 @@ import org.mockito.Mock;
 class TestSpecobjectImporterFactory
         extends ImporterFactoryTestBase<SpecobjectImporterFactory>
 {
-
     @Override
     protected SpecobjectImporterFactory createFactory()
     {
         return new SpecobjectImporterFactory();
+    }
+
+    @Override
+    protected int getExpectedPriority() {
+        return 3000;
     }
 
     /**

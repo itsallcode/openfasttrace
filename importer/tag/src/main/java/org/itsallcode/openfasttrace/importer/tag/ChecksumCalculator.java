@@ -3,10 +3,11 @@ package org.itsallcode.openfasttrace.importer.tag;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;
 
-class ChecksumCalculator
+final class ChecksumCalculator
 {
     private ChecksumCalculator()
     {
+        // Prevent instantiation.
     }
 
     static long calculateCrc32(final String value)

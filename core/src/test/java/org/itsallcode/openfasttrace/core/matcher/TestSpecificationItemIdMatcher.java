@@ -2,13 +2,13 @@ package org.itsallcode.openfasttrace.core.matcher;
 
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.testutil.matcher.MatcherTestBase;
+import org.itsallcode.openfasttrace.testutil.matcher.AbstractMatcherTest;
 import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for {@link SpecificationItemIdMatcher}
  */
-class TestSpecificationItemIdMatcher extends MatcherTestBase<SpecificationItemId>
+class TestSpecificationItemIdMatcher extends AbstractMatcherTest<SpecificationItemId>
 {
     @Test
     void testMatches()

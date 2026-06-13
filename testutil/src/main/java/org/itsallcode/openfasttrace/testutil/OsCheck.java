@@ -69,6 +69,8 @@ public class OsCheck
         {
             return OSType.LINUX;
         }
-        return OSType.OTHER;
+        else {
+            return OSType.OTHER;
+        }
     }
 }

@@ -10,12 +10,12 @@ import org.itsallcode.openfasttrace.api.core.*;
  * map of specification items from them. The key to the map is the specification
  * item ID.
  */
-public class SpecificationListBuilder implements ImportEventListener
+public final class SpecificationListBuilder implements ImportEventListener
 {
     private final FilterSettings filterSettings;
     private final List<SpecificationItem> items = new LinkedList<>();
-    private SpecificationItem.Builder itemBuilder = null;
-    private SpecificationItemId id = null;
+    private SpecificationItem.Builder itemBuilder;
+    private SpecificationItemId id;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
@@ -139,7 +139,7 @@ public class SpecificationListBuilder implements ImportEventListener
     public List<SpecificationItem> build()
     {
         this.endSpecificationItem();
-        return this.items;
+        return Collections.unmodifiableList(this.items) ;
     }
 
     /**

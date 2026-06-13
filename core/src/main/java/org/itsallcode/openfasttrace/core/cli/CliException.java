@@ -5,7 +5,7 @@ package org.itsallcode.openfasttrace.core.cli;
  */
 public class CliException extends Exception
 {
-    private static final long serialVersionUID = 3126173961917546825L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create a new {@link CliException} caused by another exception

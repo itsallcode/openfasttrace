@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.*;
@@ -16,7 +15,7 @@ class TestSpecificationListBuilder
 {
     private static final String DESCRIPTION = "description";
     private static final String TITLE = "title";
-    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
+    private static final SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
     @Test
     void testBuildBasicItem()
@@ -168,7 +167,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "out-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A", "in-B"));
     }
 
@@ -202,7 +201,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "in-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A", "in-B", "in-D"));
     }
 

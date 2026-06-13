@@ -31,7 +31,7 @@ class TestLinkedSpecificationItem
     private SpecificationItem itemMock, coveredItemMock, otherItemMock;
 
     @BeforeEach
-    public void prepareAllTests()
+    void prepareAllTests()
     {
         this.linkedItem = new LinkedSpecificationItem(this.itemMock);
         this.coveredLinkedItem = new LinkedSpecificationItem(this.coveredItemMock);

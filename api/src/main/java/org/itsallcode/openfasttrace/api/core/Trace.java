@@ -1,12 +1,12 @@
 package org.itsallcode.openfasttrace.api.core;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The result of tracing requirements.
  */
-public class Trace
+public final class Trace
 {
     private final List<LinkedSpecificationItem> items;
     private final List<LinkedSpecificationItem> defectItems;
@@ -58,7 +58,7 @@ public class Trace
     {
         return this.defectItems.stream()
                 .map(LinkedSpecificationItem::getId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -95,7 +95,7 @@ public class Trace
      * A builder for {@link Trace}. Use {@link Trace#builder()} to create a new
      * builder and call {@link #build()} to build a {@link Trace}.
      */
-    public static class Builder
+    public static final class Builder
     {
         private List<LinkedSpecificationItem> items;
         private List<LinkedSpecificationItem> defectItems;
@@ -113,7 +113,7 @@ public class Trace
          */
         public Builder items(final List<LinkedSpecificationItem> items)
         {
-            this.items = items;
+            this.items = Collections.unmodifiableList(items);
             return this;
         }
 
@@ -126,7 +126,7 @@ public class Trace
          */
         public Builder defectItems(final List<LinkedSpecificationItem> defectItems)
         {
-            this.defectItems = defectItems;
+            this.defectItems = Collections.unmodifiableList(defectItems);
             return this;
         }
 

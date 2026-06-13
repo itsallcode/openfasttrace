@@ -148,7 +148,6 @@ class TestIndentingXMLStreamWriter
         delegateInOrder.verify(delegateMock).writeCharacters("  ");
         delegateInOrder.verify(delegateMock).writeEmptyElement(LOCAL_NAME);
         delegateInOrder.verify(delegateMock).writeCharacters("\n");
-        // delegateInOrder.verify(delegateMock).writeCharacters(" ");
         delegateInOrder.verify(delegateMock).writeEndElement();
         delegateInOrder.verifyNoMoreInteractions();
     }

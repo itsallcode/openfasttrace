@@ -7,7 +7,7 @@
 OFT is a requirement tracing tool. It helps you make sure that all defined requirements are covered in your code. It
 also helps you find outdated code passages.
 
-1. Create requirement and specification documents in Markdown including OFT-readable specification items
+1. Create requirement and specification documents in Markdown, including OFT-readable specification items
 2. Put tags into your source code that mark the coverage of items from the specification
 3. Use OFT to trace the requirements from the source to the final implementation
 
@@ -575,12 +575,25 @@ The OFT command line looks like this:
 
     oft command [option ...] [<input file or directory> ...]
 
+or
+
+    oft --help
+
 Where `command` is one of
 
 * `trace` - create a requirement trace document
 * `convert` - convert to a different requirements format
+* `help` - display a help message showing the command line usage and version of OFT
 
 and `option` is one or more of the options listed below.
+
+#### Display a Short Help Message
+
+The following commands are equivalent and all display the command line usage and the version of OFT.
+
+    oft -h
+    oft --help
+    oft help
 
 #### Import options
 
@@ -590,7 +603,7 @@ Import only specification items where the artifact type matches one of the liste
 
     -t, --wanted-tags [_,]<tag>[,...]
 
-Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as first entry in the list, specification items that have no tags at all are also imported.
+Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as the first entry in the list, specification items that have no tags at all are also imported.
 
 #### Tracing options
 
@@ -781,6 +794,7 @@ recognized file types:
 
 * HTML (`.html`, `.htm`, `.xhtml`)
 * YAML (`.yaml`, `.yml`)
+* XML (`xml`)
 
 **Modeling languages**
 
@@ -1197,14 +1211,32 @@ The OFT command line interface returns the following exit codes:
 
 The following editors and integrated development environments are well suited for authoring OFT documents. The list is not exhaustive, any editor with Markdown capabilities can be used.
 
-| Editor / IDE                                         | Syntax highl. | Preview | Outline | HTML export |
-| ---------------------------------------------------- | ------------- | ------- | ------- | ----------- |
-| [Gedit](https://wiki.gnome.org/Apps/Gedit)           | y             |         |         |             |
-| [Eclipse](https://eclipse.org) with WikiText plug-in | y             | y       | y       | y           |
-| [Eclipse](https://eclipse.org) with GMF plug-in      |               | y       |         |             |
-| [IntelliJ](https://www.jetbrains.com/idea/)          | y             | y       | y       | y           |
-| [Vim](https://www.vim.org/)                          | y             |         |         |             |
-| [Visual Studio Code](https://code.visualstudio.com/) | y             | y       | y       |             |
+| Editor / IDE                                         | Syntax<br/>highlighting | Preview | Outline | HTML<br/>export | OFT<br/>Plugin |
+|------------------------------------------------------|:-----------------------:|:-------:|:-------:|:---------------:|:--------------:|
+| [CLion](https://www.jetbrains.com/clion/)            |            y            |    y    |    y    |        y        |       y        |
+| [Gedit](https://wiki.gnome.org/Apps/Gedit)           |            y            |         |         |                 |                |
+| [Eclipse](https://eclipse.org)                       |            y            |    y    |    y    |        y        |       y        |
+| [IntelliJ](https://www.jetbrains.com/idea/)          |            y            |    y    |    y    |        y        |                |
+| [PyCharm](https://www.jetbrains.com/pycharm/)        |            y            |         |         |                 |       y        |
+| [Vim](https://www.vim.org/)                          |            y            |         |         |                 |                |
+| [Visual Studio Code](https://code.visualstudio.com/) |            y            |    y    |    y    |        y        |                |
+
+Please note that some IDEs may require additional plugins to support Markdown features.
+
+#### IDE Plugins
+
+We offer plugins for the following popular IDEs.
+
+* [JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
+
+Typical features include:
+
+* Syntax highlighting for OFT specification item IDs
+* Symbol search for OFT specification items
+* Navigation between OFT specification items
+* Templates for OFT specification items
+* Run configurations for OFT traces
+* In-IDE trace report
 
 ### Templates for IDEs
 

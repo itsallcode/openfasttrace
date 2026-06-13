@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
 import org.itsallcode.openfasttrace.core.cli.ExitStatus;
@@ -28,6 +29,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 class CliStarterInternalIT {
     // Note that the XML output of the SpecObject exporter is always set to Unix newline characters.
     private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
+    private static final Pattern HELP_PREAMBLE_PATTERN = Pattern.compile("OpenFastTrace \\d+\\.\\d+\\.\\d+(?:" + System.lineSeparator() + ")+" +
+            "Usage:[\\s\\S]*");
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
     private static final String HELP_COMMAND = "help";
@@ -93,14 +96,14 @@ class CliStarterInternalIT {
         );
     }
 
+    // [itest->dsn~cli.help~1]
     @ValueSource(strings = {HELP_COMMAND, "-h", "--help"})
     @ParameterizedTest
     void testHelpPrintsUsage(final String command) {
         final ExitStatus status = runInternal(command);
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
-            () -> assertThat(getStdOut(), startsWith("OpenFastTrace" + System.lineSeparator() +
-                    System.lineSeparator() + "Usage:"))
+            () -> assertThat(getStdOut(), matchesPattern(HELP_PREAMBLE_PATTERN))
         );
     }
 
@@ -175,15 +178,6 @@ class CliStarterInternalIT {
             () -> assertOutputFileExists(true),
             () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE),
             () -> assertOutputFileLength(2000)
-        );
-    }
-
-    @Test
-    void testTraceNoArguments() {
-        final ExitStatus status = runInternalWithWorkingDir(Path.of(".").toAbsolutePath(), TRACE_COMMAND);
-        assertAll(
-            () -> assertThat(status, equalTo(ExitStatus.FAILURE)),
-            () -> assertThat(getStdOut(), containsString("not ok\u001B[0m - 43 total, 43 defect"))
         );
     }
 

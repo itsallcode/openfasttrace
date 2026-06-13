@@ -28,7 +28,7 @@ class TestTracer
     LinkedSpecificationItem aMock, bMock, cMock;
 
     @BeforeEach
-    public void prepareTest()
+    void prepareTest()
     {
         lenient().when(this.aMock.getId()).thenReturn(ID_A);
         lenient().when(this.bMock.getId()).thenReturn(ID_B);

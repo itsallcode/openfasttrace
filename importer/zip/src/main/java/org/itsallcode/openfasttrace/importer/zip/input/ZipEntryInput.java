@@ -12,7 +12,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 /**
  * An {@link InputFile} for {@link ZipEntry} of a {@link ZipFile}.
  */
-public class ZipEntryInput implements InputFile
+public final class ZipEntryInput implements InputFile
 {
     private final ZipFile zip;
     private final ZipEntry entry;

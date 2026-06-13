@@ -46,10 +46,10 @@ class LineReader
         {
             consumer.readLine(currentLineNumber, line);
         }
-        catch (final Exception exception)
+        catch (final RuntimeException exception)
         {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":"
-                    + currentLineNumber + " '" + line + "': " + exception.toString(), exception);
+                    + currentLineNumber + " '" + line + "': " + exception, exception);
         }
     }
 

@@ -9,7 +9,7 @@ import org.itsallcode.openfasttrace.api.core.*;
  * An idex for {@link LinkedSpecificationItem} that allows retrieving items by
  * {@link SpecificationItemId}, optionally ignoring the revision.
  */
-public class LinkedItemIndex
+public final class LinkedItemIndex
 {
     private final Map<SpecificationItemId, LinkedSpecificationItem> idIndex;
     private final Map<SpecificationItemIdWithoutVersion, List<LinkedSpecificationItem>> idIndexIgnoringVersion;
@@ -35,7 +35,7 @@ public class LinkedItemIndex
 
     private static List<LinkedSpecificationItem> wrapItems(final List<SpecificationItem> items)
     {
-        return items.stream().map(LinkedSpecificationItem::new).collect(Collectors.toList());
+        return items.stream().map(LinkedSpecificationItem::new).toList();
     }
 
     /**
@@ -124,7 +124,7 @@ public class LinkedItemIndex
         return items == null ? Collections.emptyList() : items;
     }
 
-    static final class SpecificationItemIdWithoutVersion
+    static final class SpecificationItemIdWithoutVersion implements Comparable<SpecificationItemIdWithoutVersion>
     {
         private final String name;
         private final String artifcatType;
@@ -140,56 +140,33 @@ public class LinkedItemIndex
             this(linkedItem.getId());
         }
 
-        @Override
-        public int hashCode()
-        {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result
-                    + ((this.artifcatType == null) ? 0 : this.artifcatType.hashCode());
-            result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-            return result;
+        public String getName() {
+            return this.name;
+        }
+
+        public String getArtifcatType() {
+            return this.artifcatType;
         }
 
         @Override
-        public boolean equals(final Object obj)
+        public int hashCode()
         {
-            if (this == obj)
-            {
-                return true;
-            }
-            if (obj == null)
-            {
+            return Objects.hash(this.artifcatType, this.name);
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            if (!(other instanceof final SpecificationItemIdWithoutVersion that)) {
                 return false;
             }
-            if (getClass() != obj.getClass())
-            {
-                return false;
-            }
-            final SpecificationItemIdWithoutVersion other = (SpecificationItemIdWithoutVersion) obj;
-            if (this.artifcatType == null)
-            {
-                if (other.artifcatType != null)
-                {
-                    return false;
-                }
-            }
-            else if (!this.artifcatType.equals(other.artifcatType))
-            {
-                return false;
-            }
-            if (this.name == null)
-            {
-                if (other.name != null)
-                {
-                    return false;
-                }
-            }
-            else if (!this.name.equals(other.name))
-            {
-                return false;
-            }
-            return true;
+            return Objects.equals(name, that.name) && Objects.equals(artifcatType, that.artifcatType);
+        }
+
+        @Override
+        public int compareTo(final SpecificationItemIdWithoutVersion other) {
+            return Comparator.comparing(SpecificationItemIdWithoutVersion::getArtifcatType)
+                    .thenComparing(SpecificationItemIdWithoutVersion::getName)
+                    .compare(this, other);
         }
     }
 }

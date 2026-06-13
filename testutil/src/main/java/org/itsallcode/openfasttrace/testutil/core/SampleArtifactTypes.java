@@ -3,13 +3,8 @@ package org.itsallcode.openfasttrace.testutil.core;
 /**
  * Constants for sample artifact types used in tests.
  */
-public class SampleArtifactTypes
+public final class SampleArtifactTypes
 {
-    private SampleArtifactTypes()
-    {
-        // Not instantiable
-    }
-
     /** Architecture artifact type. */
     public static final String ARCH = "arch";
     /** Design artifact type. */
@@ -26,4 +21,9 @@ public class SampleArtifactTypes
     public static final String UTEST = "utest";
     /** User manual artifact type. */
     public static final String UMAN = "uman";
+
+    private SampleArtifactTypes()
+    {
+        // Not instantiable
+    }
 }

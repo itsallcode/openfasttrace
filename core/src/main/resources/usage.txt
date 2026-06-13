@@ -1,4 +1,4 @@
-OpenFastTrace
+OpenFastTrace ${version}
 
 Usage:
   oft command [option ...] [<input file or directory> ...]

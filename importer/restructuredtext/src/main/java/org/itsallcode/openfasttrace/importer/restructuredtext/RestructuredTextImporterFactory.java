@@ -15,6 +15,11 @@ public class RestructuredTextImporterFactory extends RegexMatchingImporterFactor
     }
 
     @Override
+    public int getPriority() {
+        return 2000;
+    }
+
+    @Override
     public Importer createImporter(final InputFile fileName, final ImportEventListener listener)
     {
         return new RestructuredTextImporter(fileName, listener);

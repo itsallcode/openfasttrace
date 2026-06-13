@@ -51,7 +51,7 @@ public class ZipFileImporter implements Importer
         }
     }
 
-    private InputFile createInput(final ZipFile zip, final ZipEntry entry)
+    private static InputFile createInput(final ZipFile zip, final ZipEntry entry)
     {
         return ZipEntryInput.forZipEntry(zip, entry);
     }

@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.core.importer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,8 +36,6 @@ class TestImporterService
     private ImporterFactory importerFactoryMock;
     @Mock
     private Importer importerMock;
-    @Mock
-    private ImporterContext contextMock;
 
     @Captor
     private ArgumentCaptor<SpecificationListBuilder> builderArg;
@@ -80,12 +77,10 @@ class TestImporterService
     private void runImporter()
     {
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
-
         verify(this.importerMock).runImport();
         verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
                 this.builderArg.capture());
-
         final SpecificationListBuilder builder = this.builderArg.getValue();
-        assertThat(result, sameInstance(builder.build()));
+        assertThat(result, equalTo(builder.build()));
     }
 }

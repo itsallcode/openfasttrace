@@ -4,16 +4,16 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
 
-abstract class RegexLineConsumer implements LineConsumer
+abstract class AbstractRegexLineConsumer implements LineConsumer
 {
     private final Pattern pattern;
 
-    RegexLineConsumer(final String patternRegex)
+    AbstractRegexLineConsumer(final String patternRegex)
     {
         this(Pattern.compile(patternRegex));
     }
 
-    private RegexLineConsumer(final Pattern pattern)
+    private AbstractRegexLineConsumer(final Pattern pattern)
     {
         this.pattern = pattern;
     }

@@ -4,6 +4,7 @@ package org.itsallcode.openfasttrace.core.cli.commands;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
@@ -34,7 +35,7 @@ public abstract class AbstractCommand implements Performable
         this.oft = Oft.create();
     }
 
-    private List<Path> toPaths(final List<String> inputs)
+    private static List<Path> toPaths(final List<String> inputs)
     {
         final List<Path> inputsAsPaths = new ArrayList<>();
         for (final String input : inputs)
@@ -66,16 +67,12 @@ public abstract class AbstractCommand implements Performable
         final Set<String> wantedTags = this.arguments.getWantedTags();
         if (wantedTags != null && !wantedTags.isEmpty())
         {
-            if (wantedTags.contains(CliArguments.NO_TAGS_MARKER))
-            {
-                builder.withoutTags(true);
-                wantedTags.remove(CliArguments.NO_TAGS_MARKER);
-            }
-            else
-            {
-                builder.withoutTags(false);
-            }
-            builder.tags(wantedTags);
+            final boolean withoutTags = wantedTags.contains(CliArguments.NO_TAGS_MARKER);
+            builder.withoutTags(withoutTags);
+            final Set<String> filteredTags = wantedTags.stream()
+                    .filter(tag -> !CliArguments.NO_TAGS_MARKER.equals(tag))
+                    .collect(Collectors.toSet());
+            builder.tags(filteredTags);
         }
     }
 
@@ -88,7 +85,7 @@ public abstract class AbstractCommand implements Performable
     {
         final ImportSettings importSettings = ImportSettings
                 .builder()
-                .addInputs(this.toPaths(this.arguments.getInputs()))
+                .addInputs(toPaths(this.arguments.getInputs()))
                 .filter(createFilterSettingsFromArguments())
                 .build();
         return this.oft.importItems(importSettings);

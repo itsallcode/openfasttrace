@@ -90,13 +90,14 @@ final class OriginLinkFormatter
         return PROTOCOL_PREFIX_PATTERN.matcher(path).matches();
     }
 
+    @SuppressWarnings("java:S1166") // No need to log the IllegalArgumentException.
     private static URI convertPathWithProtocolToUri(final String path)
     {
         try
         {
             return URI.create(path);
         }
-        catch (final IllegalArgumentException e)
+        catch (final IllegalArgumentException exception)
         {
             return null;
         }

@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-importer-specobject</artifactId>
     <name>OpenFastTrace Specobject Importer</name>
+    <description>Importer for OpenFastTrace specification items from Specobject (ReqM2 format)</description>
     <parent>
         <relativePath>../../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>

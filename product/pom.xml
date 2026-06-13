@@ -3,6 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace</artifactId>
     <name>OpenFastTrace Product</name>
+    <description>OpenFastTrace aggregated library (includes all official base modules)</description>
     <parent>
         <relativePath>../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>
@@ -131,6 +132,30 @@
                         <arg>-Xlint:-path</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-spdx</id>
+                        <goals>
+                            <goal>aggregateSPDX</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>${spdx.license}</licenseDeclared>
+                    <licenseConcluded>${spdx.license}</licenseConcluded>
+                    <copyrightText>${spdx.copyright}</copyrightText>
+                    <createExternalRefs>false</createExternalRefs>
+                    <defaultFileConcludedLicense>${spdx.license}</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>${spdx.license}</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>${spdx.copyright}</defaultFileCopyright>
                 </configuration>
             </plugin>
         </plugins>

@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-importer-xmlparser</artifactId>
     <name>OpenFastTrace Common XML Parser</name>
+    <description>Importer for OpenFastTrace specification items embedded into XML</description>
     <parent>
         <relativePath>../../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>

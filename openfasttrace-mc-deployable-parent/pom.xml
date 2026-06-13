@@ -16,6 +16,7 @@ It is maintained separately from the main parent POM for the following reasons:
     <artifactId>openfasttrace-mc-deployable-parent</artifactId>
     <version>${revision}</version>
     <name>OpenFastTrace Parent for modules deployed to Maven Central</name>
+    <description>Maven-central-specific deployment module for OpenFastTrace</description>
     <packaging>pom</packaging>
     <parent>
         <relativePath>../parent/pom.xml</relativePath>
@@ -23,7 +24,6 @@ It is maintained separately from the main parent POM for the following reasons:
         <artifactId>openfasttrace-parent</artifactId>
         <version>${revision}</version>
     </parent>
-    <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
         <centralPublishingSkipPublishing>false</centralPublishingSkipPublishing>

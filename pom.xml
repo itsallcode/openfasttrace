@@ -47,6 +47,30 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-spdx</id>
+                        <goals>
+                            <goal>aggregateSPDX</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>GPL-3.0-only</licenseDeclared>
+                    <licenseConcluded>GPL-3.0-only</licenseConcluded>
+                    <copyrightText>Copyright (c) itsallcode.org</copyrightText>
+                    <createExternalRefs>false</createExternalRefs>
+                    <defaultFileConcludedLicense>GPL-3.0-only</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>GPL-3.0-only</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>Copyright (c) itsallcode.org</defaultFileCopyright>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

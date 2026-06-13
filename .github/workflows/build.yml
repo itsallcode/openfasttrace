@@ -88,6 +88,21 @@ jobs:
             !product/target/openfasttrace-*-sources.jar
           if-no-files-found: error
 
+      - name: Generate SPDX SBOM
+        if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
+        run: |
+          mvn --batch-mode -pl product spdx:createSPDX \
+              -Dossindex.skip=true \
+              -Djava.version=${{ matrix.java }}
+
+      - name: Upload SPDX SBOM
+        uses: actions/upload-artifact@v7
+        if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
+        with:
+          name: openfasttrace-spdx
+          path: product/target/site/*.spdx.json
+          if-no-files-found: error
+
       - name: Run self-trace
         run: ./oft-self-trace.sh
 

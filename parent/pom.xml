@@ -547,6 +547,9 @@
                         <goals>
                             <goal>createSPDX</goal>
                         </goals>
+                        <phase>
+                            none
+                        </phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -559,6 +562,9 @@
                     <defaultFileConcludedLicense>${spdx.license}</defaultFileConcludedLicense>
                     <defaultLicenseInformationInFile>${spdx.license}</defaultLicenseInformationInFile>
                     <defaultFileCopyright>${spdx.copyright}</defaultFileCopyright>
+                    <includeCompileScope>true</includeCompileScope>
+                    <includeTestScope>false</includeTestScope>
+                    <includeTransitiveDependencies>false</includeTransitiveDependencies>
                 </configuration>
             </plugin>
         </plugins>

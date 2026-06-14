@@ -7,10 +7,9 @@
     <version>${revision}</version>
     <name>OpenFastTrace Parent</name>
     <packaging>pom</packaging>
-    <description>Free requirement tracking suite</description>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>4.5.0</revision>
+        <revision>4.6.0</revision>
         <java.version>17</java.version>
         <junit.version>6.1.0-M1</junit.version>
         <junit.version>6.1.0</junit.version>
@@ -21,11 +20,13 @@
         <project.build.outputTimestamp>${reproducible.build.timestamp}</project.build.outputTimestamp>
         <test.args>-Duser.language=en</test.args>
         <ossindex.skip>false</ossindex.skip>
+        <spdx.license>GPL-3.0-only</spdx.license>
+        <spdx.copyright>Copyright (c) itsallcode.org</spdx.copyright>
     </properties>
     <licenses>
         <license>
-            <name>GNU General Public License v3.0</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <name>GPL-3.0-only</name>
+            <url>https://spdx.org/licenses/GPL-3.0-only.html</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -528,12 +529,42 @@
                 <version>2.21.0</version>
             </plugin>
             <plugin>
-                <!-- Deployment of this module not required -->
+                <!-- Deployment of this module is not required -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.4</version>
                 <configuration>
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <executions>
+                    <execution>
+                        <id>build-spdx</id>
+                        <goals>
+                            <goal>createSPDX</goal>
+                        </goals>
+                        <phase>
+                            none
+                        </phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sbomType>build</sbomType>
+                    <includeTestScope>false</includeTestScope>
+                    <licenseDeclared>${spdx.license}</licenseDeclared>
+                    <licenseConcluded>${spdx.license}</licenseConcluded>
+                    <copyrightText>${spdx.copyright}</copyrightText>
+                    <createExternalRefs>false</createExternalRefs>
+                    <defaultFileConcludedLicense>${spdx.license}</defaultFileConcludedLicense>
+                    <defaultLicenseInformationInFile>${spdx.license}</defaultLicenseInformationInFile>
+                    <defaultFileCopyright>${spdx.copyright}</defaultFileCopyright>
+                    <includeCompileScope>true</includeCompileScope>
+                    <includeTestScope>false</includeTestScope>
+                    <includeTransitiveDependencies>true</includeTransitiveDependencies>
                 </configuration>
             </plugin>
         </plugins>

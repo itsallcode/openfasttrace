@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-exporter-specobject</artifactId>
     <name>OpenFastTrace Specobject Exporter</name>
+    <description>Specobject (ReqM2 exchange format) exporter</description>
     <parent>
         <relativePath>../../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>

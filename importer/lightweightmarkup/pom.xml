@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
     <name>OpenFastTrace Lightweight Markup Importer Base</name>
+    <description>Base module for OpenFastTrace importers based on lightweight markup languages (e.g., Markdown and RST)</description>
     <parent>
         <relativePath>../../openfasttrace-mc-deployable-parent/pom.xml</relativePath>
         <groupId>org.itsallcode.openfasttrace</groupId>

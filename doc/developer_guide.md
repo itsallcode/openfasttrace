@@ -241,7 +241,7 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
 
 The Project generates and [SPDX](https://spdx.dev/) SBOM using the [SPDX Maven Plugin](https://github.com/spdx/spdx-maven-plugin).
 
-The build order is very important when creating the SBOM. Since the plugin tries to extract the metadata of the submodules from POM files of installed Maven packages, those POM files need to be in the local Maven cache first. We don't want to download them during the build, since the latest ones are on the local machine. That means, we build the modules, install them in the local Maven cache and then create the SBOM.
+The build order is very important when creating the SBOM. Since the plugin tries to extract the metadata of the submodules from POM files of installed Maven packages, those POM files need to be in the local Maven repository first. We don't want to download them during the build, since the latest ones are on the local machine. That means, we build the modules, install them in the local Maven cache and then create the SBOM.
 
 
 You can create the SBOM with the following sequence of Maven commands module:

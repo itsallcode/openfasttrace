@@ -6,7 +6,7 @@ Code name: ??
 
 We moved some GitHub action permissions from workflow-level to job-level and fixed a number of Sonar findings that we accumulated with Sonar introducing new rules.
 
-And, we now create an SPDX SBOM.
+And, we now create an SPDX SBOM. You can find the SBOM of the product JAR attached to all new GitHub releases.
 
 ## Security
 

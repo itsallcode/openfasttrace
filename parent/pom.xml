@@ -564,7 +564,7 @@
                     <defaultFileCopyright>${spdx.copyright}</defaultFileCopyright>
                     <includeCompileScope>true</includeCompileScope>
                     <includeTestScope>false</includeTestScope>
-                    <includeTransitiveDependencies>false</includeTransitiveDependencies>
+                    <includeTransitiveDependencies>true</includeTransitiveDependencies>
                 </configuration>
             </plugin>
         </plugins>

@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
@@ -152,6 +151,6 @@ class TestTagImporterWithConfig
         final InputFile file = StreamInput.forReader(FILE,
                 new BufferedReader(new StringReader(content)));
 
-        TagImporter.create(Optional.of(this.configMock), file, this.listenerMock).runImport();
+        TagImporter.create(this.configMock, file, this.listenerMock).runImport();
     }
 }

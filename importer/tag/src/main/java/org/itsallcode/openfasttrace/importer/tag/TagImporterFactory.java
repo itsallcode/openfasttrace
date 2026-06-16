@@ -104,7 +104,7 @@ public class TagImporterFactory extends ImporterFactory
                     + DEFAULT_FILE_REGEX + " and " + getPathConfigs().toList());
         }
         final Optional<PathConfig> config = findConfig(path);
-        return TagImporter.create(config, path, listener);
+        return TagImporter.create(config.orElse(null), path, listener);
     }
 
     private Stream<PathConfig> getPathConfigs()

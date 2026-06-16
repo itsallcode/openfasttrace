@@ -2,7 +2,6 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
@@ -25,21 +24,21 @@ class TagImporter implements Importer
         this.file = file;
     }
 
-    static TagImporter create(final Optional<PathConfig> config, final InputFile file,
+    static TagImporter create(final PathConfig config, final InputFile file,
             final ImportEventListener listener)
     {
         final LineConsumer lineConsumer = createLineConsumer(config, file, listener);
         return new TagImporter(lineConsumer, file);
     }
 
-    private static LineConsumer createLineConsumer(final Optional<PathConfig> config,
-            final InputFile file, final ImportEventListener listener)
+    private static LineConsumer createLineConsumer(final PathConfig config, final InputFile file,
+            final ImportEventListener listener)
     {
         final List<LineConsumer> importers = new ArrayList<>();
         importers.add(new LongTagImportingLineConsumer(file, listener));
-        if (config.isPresent())
+        if (config != null)
         {
-            importers.add(new ShortTagImportingLineConsumer(config.get(), file, listener));
+            importers.add(new ShortTagImportingLineConsumer(config, file, listener));
         }
         return new DelegatingLineConsumer(importers);
     }

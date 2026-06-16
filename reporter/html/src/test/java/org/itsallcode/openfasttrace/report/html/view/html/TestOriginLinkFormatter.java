@@ -6,8 +6,10 @@ import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkForma
 import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkFormatter.formatAsSpan;
 
 import org.itsallcode.openfasttrace.api.core.Location;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 class TestOriginLinkFormatter
 {
@@ -66,33 +68,33 @@ class TestOriginLinkFormatter
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testFormatRegularAbsoluteUnixPath()
     {
-        OsDetector.assumeRunningOnUnix();
         assertPathAndLineRenderedToSpan("/foo/bar/baz", 1111,
                 "<a href=\"file:///foo/bar/baz\">/foo/bar/baz</a>:1111");
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testFormatRegularAbsoluteWindowsPath()
     {
-        OsDetector.assumeRunningOnWindows();
         assertPathAndLineRenderedToSpan("C:\\foo\\bar\\baz", 1111,
                 "<a href=\"file:///C:/foo/bar/baz\">C:\\foo\\bar\\baz</a>:1111");
     }
 
     @Test
+    @EnabledOnOs(OS.LINUX)
     void testFormatAbsoluteUnixPathWithSpecialCharactersLinux()
     {
-        OsDetector.assumeRunningOnLinux();
         assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
                 "<a href=\"file:///fo%20o/b%C3%A4r/baz\">/fo o/bär/baz</a>:12345678");
     }
 
     @Test
+    @EnabledOnOs(OS.MAC)
     void testFormatAbsoluteUnixPathWithSpecialCharactersMacOs()
     {
-        OsDetector.assumeRunningOnMacOs();
         assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
                 "<a href=\"file:///fo%20o/ba%CC%88r/baz\">/fo o/bär/baz</a>:12345678");
     }

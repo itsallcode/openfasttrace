@@ -15,9 +15,11 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -59,17 +61,17 @@ class TestImporterService
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testImportWindows()
     {
-        OsDetector.assumeRunningOnWindows();
         runImporter();
         assertThat(this.fileArg.getValue().getPath(), equalTo("dir\\file"));
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testImportUnix()
     {
-        OsDetector.assumeRunningOnUnix();
         runImporter();
         assertThat(this.fileArg.getValue().getPath(), equalTo("dir/file"));
     }

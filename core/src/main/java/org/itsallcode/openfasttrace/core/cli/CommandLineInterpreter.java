@@ -103,7 +103,7 @@ public class CommandLineInterpreter
     }
 
     private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
-            final String argument) throws CliException
+            final String argument)
     {
         final String characters = SINGLE_CHAR_ARG_PREFIX_PATTERN.matcher(argument).replaceFirst("")
                 .toLowerCase(Locale.ENGLISH);
@@ -131,7 +131,6 @@ public class CommandLineInterpreter
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
-            throws CliException
     {
         final String argumentName = argument.replace("-", "").toLowerCase(Locale.ENGLISH);
         if (this.setters.containsKey(argumentName))
@@ -149,13 +148,13 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private static void reportUnexpectedNamedArgument(final String argument) throws CliException
+    private static void reportUnexpectedNamedArgument(final String argument)
     {
         throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
 
     private void handleExpectedNamedArgument(final ListIterator<String> iterator,
-            final String argumentName) throws CliException
+            final String argumentName)
     {
         final Method setter = this.setters.get(argumentName);
         if (setter.getParameterTypes().length != 1)
@@ -190,7 +189,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private static <T> T convertArgument(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertArgument(final String stringValue, final Class<T> type)
     {
         if (type.equals(String.class))
         {
@@ -200,12 +199,11 @@ public class CommandLineInterpreter
         {
             return convertEnum(stringValue, type);
         }
-        throw new CliException(
-                "Type '" + type + "' not supported for converting argument '" + stringValue + "'");
+        throw new CliException("Type '" + type + "' not supported for converting argument '" + stringValue + "'");
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T convertEnum(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertEnum(final String stringValue, final Class<T> type)
     {
         @SuppressWarnings("rawtypes")
         final Class enumType = type;
@@ -223,13 +221,13 @@ public class CommandLineInterpreter
         }
     }
 
-    private static void reportUnsupportedSetterArgumentCount(final Method setter) throws CliException
+    private static void reportUnsupportedSetterArgumentCount(final Method setter)
     {
         throw new CliException("Unsupported argument count for setter '" + setter
                 + "'. Only one argument is allowed.");
     }
 
-    private static void reportMissingParameterValue(final String argumentName) throws CliException
+    private static void reportMissingParameterValue(final String argumentName)
     {
         throw new CliException("No value for argument '" + argumentName + "'");
     }
@@ -239,7 +237,7 @@ public class CommandLineInterpreter
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }
 
-    private void assignUnnamedArgument(final List<String> unnamedArguments) throws CliException
+    private void assignUnnamedArgument(final List<String> unnamedArguments)
     {
         final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
         if (unnamedArgumentSetter != null)
@@ -252,7 +250,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private void assignValue(final Method setter, final Object value) throws CliException
+    private void assignValue(final Method setter, final Object value)
     {
         try
         {
@@ -260,8 +258,7 @@ public class CommandLineInterpreter
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
         {
-            throw new CliException(
-                    "Error calling setter " + setter + " with argument '" + value + "'", e);
+            throw new CliException("Error calling setter " + setter + " with argument '" + value + "'", e);
         }
     }
 }

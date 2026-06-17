@@ -9,3 +9,7 @@ We moved some GitHub action permissions from workflow-level to job-level.
 ## Security
 
 * #
+
+## Refactoring
+
+* #543: Made `CliException` a `RuntimeException`

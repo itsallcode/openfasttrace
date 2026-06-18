@@ -78,9 +78,17 @@ public class MultiFileImporterImpl implements MultiFileImporter
     @Override
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
+        final int itemCountBefore = this.specItemBuilder.getItemCount();
+        final int fileCount = importDirWithGlobFilter(dir, glob);
+        final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
+        LOG.fine(() -> "Imported " + fileCount + " files containing " + itemCountImported
+                + " items from '" + dir + "'.");
+        return this;
+    }
+
+    private int importDirWithGlobFilter(final Path dir, final String glob) {
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);
         final AtomicInteger fileCount = new AtomicInteger(0);
-        final int itemCountBefore = this.specItemBuilder.getItemCount();
         try (Stream<Path> fileStream = Files.walk(dir))
         {
             fileStream.filter(path -> !path.toFile().isDirectory())
@@ -99,10 +107,7 @@ public class MultiFileImporterImpl implements MultiFileImporter
         {
             throw new ImporterException("Error walking directory " + dir, exception);
         }
-        final int itemCountImported = this.specItemBuilder.getItemCount() - itemCountBefore;
-        LOG.fine(() -> "Imported " + fileCount + " files containing " + itemCountImported
-                + " items from '" + dir + "'.");
-        return this;
+        return fileCount.intValue();
     }
 
     @Override

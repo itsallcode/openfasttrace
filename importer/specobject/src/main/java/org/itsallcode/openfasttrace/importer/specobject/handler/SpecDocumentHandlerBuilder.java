@@ -66,7 +66,6 @@ public class SpecDocumentHandlerBuilder
                 throw new ImporterException("Element " + elem + " does not have an attribute '"
                         + DOCTYPE_ATTRIBUTE_NAME + "' at " + elem.getLocation());
             }
-
             final String defaultDoctype = doctypeAttribute.getValue();
             this.handler.pushDelegate(
                     new SpecObjectsHandlerBuilder(this.file, defaultDoctype, this.listener)

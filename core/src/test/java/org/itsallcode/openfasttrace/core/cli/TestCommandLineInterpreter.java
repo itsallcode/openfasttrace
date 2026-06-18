@@ -189,9 +189,9 @@ class TestCommandLineInterpreter
     private void expectParseException(final Object argumentsReceiver, final List<String> arguments,
             final String expectedExceptionMessage)
     {
-        final CliException exception = assertThrows(CliException.class,
-                () -> new CommandLineInterpreter(arguments.toArray(new String[0]),
-                        argumentsReceiver).parse());
+        final CommandLineInterpreter interpreter = new CommandLineInterpreter(arguments.toArray(new String[0]),
+            argumentsReceiver);
+        final CliException exception = assertThrows(CliException.class, () -> interpreter.parse());
         assertThat(exception.getMessage(), equalTo(expectedExceptionMessage));
     }
 

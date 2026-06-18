@@ -35,6 +35,7 @@ class MarkdownImporter extends LightWeightMarkupImporter
         super(fileName, listener);
     }
 
+    @SuppressWarnings("java:S138") // Finite state machine is allowed to have long transitions list.
     protected Transition[] configureTransitions()
     {
         // @formatter:off

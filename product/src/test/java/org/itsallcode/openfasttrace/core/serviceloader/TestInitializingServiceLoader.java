@@ -8,6 +8,7 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
 import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
+import org.itsallcode.openfasttrace.api.importer.AbstractImporterFactory;
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
@@ -34,11 +35,12 @@ class TestInitializingServiceLoader
     void testNoServicesRegistered()
     {
         final Object context = new Object();
-        final Loader<InitializableServiceStub> voidServiceLoader = InitializingServiceLoader
-                .load(InitializableServiceStub.class, context);
-        final List<InitializableServiceStub> services = voidServiceLoader.load().toList();
-        assertThat(services, emptyIterable());
-        assertThat(voidServiceLoader.load().toList(), emptyIterable());
+        try(final Loader<InitializableServiceStub> voidServiceLoader = InitializingServiceLoader
+                .load(InitializableServiceStub.class, context)) {
+            final List<InitializableServiceStub> services = voidServiceLoader.load().toList();
+            assertThat(services, emptyIterable());
+            assertThat(voidServiceLoader.load().toList(), emptyIterable());
+        }
     }
 
     // [itest->dsn~plugins.loading.plugin-types~1]
@@ -57,7 +59,9 @@ class TestInitializingServiceLoader
                 instanceOf(ZipFileImporterFactory.class)));
         for (final ImporterFactory importerFactory : services)
         {
-            assertThat(importerFactory.getContext(), sameInstance(context));
+            assertThat(importerFactory, instanceOf(AbstractImporterFactory.class));
+            assertThat(((AbstractImporterFactory) importerFactory).getContext(),
+                    sameInstance(context));
         }
     }
 
@@ -96,15 +100,17 @@ class TestInitializingServiceLoader
     private <T extends Initializable<C>, C> List<T> getRegisteredServices(final Class<T> type,
             final C context)
     {
-        final Loader<T> serviceLoader = InitializingServiceLoader.load(type, context);
-        return serviceLoader.load().toList();
+        try(final Loader<T> serviceLoader = InitializingServiceLoader.load(type, context)) {
+            return serviceLoader.load().toList();
+        }
     }
 
-    class InitializableServiceStub implements Initializable<Object>
+    static final class InitializableServiceStub implements Initializable<Object>
     {
         @Override
         public void init(final Object context)
         {
+            // Stub method. Intentionally empty.
         }
     }
 }

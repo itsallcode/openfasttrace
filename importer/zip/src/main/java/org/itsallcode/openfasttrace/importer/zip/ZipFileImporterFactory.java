@@ -10,7 +10,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  * Importer factory for importing {@link ZipEntry}s of a {@link ZipFile}
  * using a {@link ZipFileImporter}.
  */
-public class ZipFileImporterFactory extends RegexMatchingImporterFactory
+public class ZipFileImporterFactory extends AbstractRegexMatchingImporterFactory
 {
     /** Creates a new instance. */
     public ZipFileImporterFactory()

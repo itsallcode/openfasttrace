@@ -19,13 +19,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * Base class for {@link ImporterFactory} tests.
+ * Base class for importer factory tests.
  *
  * @param <T>
  *            type of the factory under test
  */
 @ExtendWith(MockitoExtension.class)
-public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
+public abstract class ImporterFactoryTestBase<T extends AbstractImporterFactory>
 {
     /**
      * Mock of the importer context used in tests.

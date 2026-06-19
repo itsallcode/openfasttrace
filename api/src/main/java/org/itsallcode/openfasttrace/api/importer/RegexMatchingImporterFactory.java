@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 /**
- * Base class for {@link ImporterFactory}s that can import files matching a list
- * of regexp patterns.
+ * Base class for {@link ImporterFactory} implementations that can import files
+ * matching a list of regexp patterns.
  */
-public abstract class RegexMatchingImporterFactory extends ImporterFactory
+public abstract class RegexMatchingImporterFactory extends AbstractImporterFactory
 {
     private static final Logger LOG = Logger
             .getLogger(RegexMatchingImporterFactory.class.getName());

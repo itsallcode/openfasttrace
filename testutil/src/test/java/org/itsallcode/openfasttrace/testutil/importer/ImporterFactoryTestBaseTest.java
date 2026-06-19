@@ -43,7 +43,7 @@ class ImporterFactoryTestBaseTest
         }
     }
 
-    private static class DummyImporterFactory extends ImporterFactory
+    private static class DummyImporterFactory extends AbstractImporterFactory
     {
         @Override
         public int getPriority() {

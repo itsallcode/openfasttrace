@@ -11,7 +11,7 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
  * {@link ImporterFactory} for tags in source code files.
  */
 // [impl->dsn~import.full-coverage-tag~1]
-public class TagImporterFactory extends ImporterFactory
+public class TagImporterFactory extends AbstractImporterFactory
 {
     private static final String DEFAULT_FILE_REGEX = "(?i).*\\.java";
     private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList( //

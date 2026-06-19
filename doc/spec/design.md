@@ -217,6 +217,8 @@ return
 
 A factory for importers decides which importer to use. When multiple importers support the same file, the one with the lowest priority value (highest precedence) is chosen. Usually, importers are selected based on file extension, but some importers may peek into the file content to determine compatibility.
 
+`ImporterFactory` is the plugin interface discovered by the service loader. Importer implementations in OFT usually extend `AbstractImporterFactory` to reuse the default context handling.
+
 The default priorities for standard importers are:
 1. Markdown Importer: 1000
 2. reStructuredText Importer: 2000

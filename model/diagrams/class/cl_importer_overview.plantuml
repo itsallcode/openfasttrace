@@ -20,9 +20,13 @@ package org.itsallcode.openfasttrace {
             + runImport() : void
         }
         
-        class ImporterFactory <<abstract>> {
+        interface ImporterFactory <<interface>> {
             + supportsFile(inputFile: InputFile) : boolean
             + createImporter(inputFile: InputFile, listener: ImportEventListener) : Importer
+            + getContext() : ImporterContext
+        }
+
+        class AbstractImporterFactory <<abstract>> {
             * getContext() : ImporterContext
         }
 
@@ -49,7 +53,8 @@ package org.itsallcode.openfasttrace {
             ZipFileImporterFactory -left-> ZipFileImporter : <<create>>
         }
         
-        RegExMatchingImporterFactory -up-|> ImporterFactory
+        AbstractImporterFactory .up.|> ImporterFactory
+        RegExMatchingImporterFactory -up-|> AbstractImporterFactory
         ZipFileImporterFactory -up-|> RegExMatchingImporterFactory
         ImporterContext -down-> ImporterService : contains
         ImporterService -up-> MultiFileImporter : <<create>>

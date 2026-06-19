@@ -8,7 +8,7 @@ import javax.xml.stream.XMLStreamWriter;
  * This interface allows intercepting calls to a stream writer, pre-processing
  * them and then handing the rest of the work of to a given delegate.
  */
-public abstract class StreamWriterDelegate implements XMLStreamWriter
+public abstract class AbstractStreamWriterDelegate implements XMLStreamWriter
 {
     /** Stream writer to delegate to. */
     protected XMLStreamWriter out;
@@ -19,7 +19,7 @@ public abstract class StreamWriterDelegate implements XMLStreamWriter
      * @param out
      *            stream writer to delegate to
      */
-    protected StreamWriterDelegate(final XMLStreamWriter out)
+    protected AbstractStreamWriterDelegate(final XMLStreamWriter out)
     {
         this.out = out;
     }

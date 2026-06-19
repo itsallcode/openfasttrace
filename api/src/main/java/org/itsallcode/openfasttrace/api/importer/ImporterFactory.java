@@ -8,7 +8,6 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  */
 public interface ImporterFactory extends Initializable<ImporterContext>
 {
-
     /**
      * Get the priority of this {@link ImporterFactory}.
      * <p>
@@ -44,8 +43,7 @@ public interface ImporterFactory extends Initializable<ImporterContext>
     Importer createImporter(final InputFile file, final ImportEventListener listener);
 
     /**
-     * Get the {@link ImporterContext} set by the {@link #init(ImporterContext)}
-     * method.
+     * Get the {@link ImporterContext}.
      * 
      * @return the {@link ImporterContext}.
      */

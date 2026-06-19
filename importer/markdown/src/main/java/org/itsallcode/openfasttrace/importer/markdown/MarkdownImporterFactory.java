@@ -6,7 +6,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 /**
  * {@link ImporterFactory} for Markdown files
  */
-public class MarkdownImporterFactory extends RegexMatchingImporterFactory
+public class MarkdownImporterFactory extends AbstractRegexMatchingImporterFactory
 {
     /** Creates a new instance. */
     public MarkdownImporterFactory()

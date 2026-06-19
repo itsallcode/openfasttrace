@@ -35,7 +35,7 @@ package org.itsallcode.openfasttrace {
             + createImporter() : MultiFileImporter
         }
         
-        class RegExMatchingImporterFactory <<abstract>> {
+        class AbstractRegExMatchingImporterFactory <<abstract>> {
         }
         
         class ImporterContext {
@@ -54,8 +54,8 @@ package org.itsallcode.openfasttrace {
         }
         
         AbstractImporterFactory .up.|> ImporterFactory
-        RegExMatchingImporterFactory -up-|> AbstractImporterFactory
-        ZipFileImporterFactory -up-|> RegExMatchingImporterFactory
+        AbstractRegExMatchingImporterFactory -up-|> AbstractImporterFactory
+        ZipFileImporterFactory -up-|> AbstractRegExMatchingImporterFactory
         ImporterContext -down-> ImporterService : contains
         ImporterService -up-> MultiFileImporter : <<create>>
         ZipFileImporter -up-> MultiFileImporter : delegates

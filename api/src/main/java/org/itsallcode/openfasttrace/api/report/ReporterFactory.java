@@ -1,25 +1,13 @@
 package org.itsallcode.openfasttrace.api.report;
 
-import java.util.Objects;
-
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 
 /**
- * Super class for factories producing {@link Reportable}s.
+ * Interface for factories producing {@link Reportable}s.
  */
-public abstract class ReporterFactory implements Initializable<ReporterContext>
+public interface ReporterFactory extends Initializable<ReporterContext>
 {
-    private ReporterContext context;
-
-    /**
-     * Creates a new {@link ReporterFactory}.
-     */
-    protected ReporterFactory()
-    {
-        // empty by intention
-    }
-
     /**
      * Check if this {@link ReporterFactory} supports creating
      * {@link Reportable}s for the given format.
@@ -29,7 +17,7 @@ public abstract class ReporterFactory implements Initializable<ReporterContext>
      * @return {@code true} if this {@link ReporterFactory} supports the given
      *         format.
      */
-    public abstract boolean supportsFormat(final String format);
+    boolean supportsFormat(final String format);
 
     /**
      * Create a new {@link Reportable}.
@@ -38,22 +26,12 @@ public abstract class ReporterFactory implements Initializable<ReporterContext>
      *            the trace that will be reported.
      * @return the new {@link Reportable}.
      */
-    public abstract Reportable createImporter(final Trace trace);
-
-    @Override
-    public void init(final ReporterContext context)
-    {
-        this.context = context;
-    }
+    Reportable createImporter(final Trace trace);
 
     /**
-     * Get the {@link ReporterContext} set by the {@link #init(ReporterContext)}
-     * method.
+     * Get the {@link ReporterContext}.
      * 
      * @return the {@link ReporterContext}.
      */
-    public ReporterContext getContext()
-    {
-        return Objects.requireNonNull(this.context, "Context was not initialized");
-    }
+    ReporterContext getContext();
 }

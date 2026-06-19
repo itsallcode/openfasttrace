@@ -167,6 +167,9 @@ The Plugin loader supports loading factories for the following plugin types:
 * Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
 * Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`
 
+Reporter implementations usually extend `org.itsallcode.openfasttrace.api.report.AbstractReporterFactory`
+to reuse standard reporter context handling while keeping `ReporterFactory` as the service type.
+
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 

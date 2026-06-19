@@ -2,13 +2,14 @@ package org.itsallcode.openfasttrace.report.plaintext;
 
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.AbstractReporterFactory;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 
 /**
  * A {@link ReporterFactory} for plain text reports. This supports the
  * <code>plain</code> format.
  */
-public class PlaintextReporterFactory extends ReporterFactory
+public class PlaintextReporterFactory extends AbstractReporterFactory
 {
     private static final String PLAIN_REPORT_FORMAT = "plain";
 

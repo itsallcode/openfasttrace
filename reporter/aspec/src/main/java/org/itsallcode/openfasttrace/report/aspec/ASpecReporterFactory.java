@@ -2,13 +2,14 @@ package org.itsallcode.openfasttrace.report.aspec;
 
 import org.itsallcode.openfasttrace.api.core.Trace;
 import org.itsallcode.openfasttrace.api.report.Reportable;
+import org.itsallcode.openfasttrace.api.report.AbstractReporterFactory;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 
 /**
  * A {@link ReporterFactory} for SpecObject reports. This supports the
  * <code>specobject</code> format.
  */
-public class ASpecReporterFactory extends ReporterFactory
+public class ASpecReporterFactory extends AbstractReporterFactory
 {
     private static final String ASPEC_REPORT_FORMAT = "aspec";
 

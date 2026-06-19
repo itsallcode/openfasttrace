@@ -26,7 +26,7 @@ class TestReporterFactory
         assertThat(reporterFactory.getContext(), sameInstance(context));
     }
 
-    private static class TestingReporterFactory extends ReporterFactory
+    private static class TestingReporterFactory extends AbstractReporterFactory
     {
         @Override
         public boolean supportsFormat(String format)

@@ -3,8 +3,8 @@ package org.itsallcode.openfasttrace.api.exporter;
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 
 /**
- * Context for {@link ExporterFactory}. Currently only used to satisfy
- * {@link Initializable} interface.
+ * Context for {@link ExporterFactory} implementations. Currently only used to
+ * satisfy {@link Initializable} interface.
  */
 // Class is empty by intention
 @SuppressWarnings("squid:S2094")

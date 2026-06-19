@@ -170,6 +170,9 @@ The Plugin loader supports loading factories for the following plugin types:
 Reporter implementations usually extend `org.itsallcode.openfasttrace.api.report.AbstractReporterFactory`
 to reuse standard reporter context handling while keeping `ReporterFactory` as the service type.
 
+Exporter implementations usually extend `org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory`
+to reuse standard exporter and context handling while keeping `ExporterFactory` as the service type.
+
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 

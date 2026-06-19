@@ -22,6 +22,8 @@ This guide describes how to develop [plugins](plugins.md) for OpenFastTrace (OFT
 
    Importer plugins will usually extend [`org.itsallcode.openfasttrace.api.importer.AbstractImporterFactory`](https://github.com/itsallcode/openfasttrace/blob/main/api/src/main/java/org/itsallcode/openfasttrace/api/importer/AbstractImporterFactory.java) instead of implementing `ImporterFactory` directly so they inherit the standard context handling.
 
+   Exporter plugins will usually extend [`org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory`](https://github.com/itsallcode/openfasttrace/blob/main/api/src/main/java/org/itsallcode/openfasttrace/api/exporter/AbstractExporterFactory.java) instead of implementing `ExporterFactory` directly so they inherit the standard exporter and context handling.
+
 3. Create a file in `src/main/resources/$INTERFACE_FQN`, using the fully qualified class name of the interface as file name.
 
 4. Add the fully qualified class name of your new plugin class to the new file, e.g. `com.example.oft.import.MyImporter`

@@ -17,7 +17,7 @@ class ImporterFactoryTestBaseTest
         assertThat(new DummyImplementation(), notNullValue());
     }
 
-    private static class DummyImplementation extends ImporterFactoryTestBase<DummyImporterFactory>
+    private static class DummyImplementation extends AbstractImporterFactoryTestBase<DummyImporterFactory>
     {
         @Override
         protected DummyImporterFactory createFactory()

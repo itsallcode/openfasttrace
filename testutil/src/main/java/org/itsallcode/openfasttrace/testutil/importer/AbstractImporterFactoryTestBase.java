@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.lenient;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  *            type of the factory under test
  */
 @ExtendWith(MockitoExtension.class)
-public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
+public abstract class AbstractImporterFactoryTestBase<T extends ImporterFactory>
 {
     /**
      * Mock of the importer context used in tests.
@@ -36,7 +36,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     /**
      * Create a new instance of the test base.
      */
-    protected ImporterFactoryTestBase()
+    protected AbstractImporterFactoryTestBase()
     {
         // Default constructor to fix compiler warning "missing-explicit-ctor"
     }
@@ -44,7 +44,7 @@ public abstract class ImporterFactoryTestBase<T extends ImporterFactory>
     @BeforeEach
     void initMocks()
     {
-        lenient().when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
+        Mockito.lenient().when(this.contextMock.getImportSettings()).thenReturn(ImportSettings.createDefault());
     }
 
     @Test

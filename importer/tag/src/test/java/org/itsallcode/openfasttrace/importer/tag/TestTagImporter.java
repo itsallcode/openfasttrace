@@ -91,6 +91,15 @@ class TestTagImporter
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
                         itemACoveringB("implB~name2-1099447527~0", "dsn~name2~3"),
                         itemACoveringB("implC~name3-2846888323~0", "dsn~name3~4")),
+                parsedItem("[impl~combined~1->dsn~name1~2,dsn~name2~3]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
+                parsedItem("[ impl~combined~1 -> dsn~name1~2 , dsn~name2~3 >> test ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("test")),
 
                 parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
@@ -163,6 +172,7 @@ class TestTagImporter
                 noItemDetected("[impl~missing-revision~->dsn~name2~2]"),
                 noItemDetected("[impl~illegal?char~1->dsn~name2~2]"),
                 noItemDetected("[impl~negative-revision~-1->dsn~name2~2]"),
+                noItemDetected("[impl~missing-covered-id~1->dsn~name2~2,]"),
                 noItemDetected("[impl~missing-forward~1->dsn~name2~2>>]"),
                 noItemDetected("[impl~trailing-comma~1->dsn~name2~2>>test,]"),
                 noItemDetected("[impl~duplicate-comma~1->dsn~name2~2>>test,,other]"),

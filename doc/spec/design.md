@@ -881,6 +881,24 @@ Covers:
 
 Needs: impl, utest
 
+#### Full Coverage Tag Format Allows Multiple Coverage
+`dsn~import.full-coverage-tag-multiple-needed-coverage~1`
+
+OFT imports full coverage tags with multiple need coverage ids:
+
+    full-tag-multiple-coverage-id =
+        "[" *WSP reference *WSP "->" *WSP requirement-id *WSP *("," *WSP requirement-id) *WSP "]"
+
+Rationale:
+
+An item can cover multiple IDs. This avoids creating multiple IDs for the same item solely to represent multiple coverage relations. It also reduces the number of IDs that related items must reference for complete coverage, improving readability and maintainability.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~1`
+
+Needs: impl, utest
+
 #### Full Coverage Tag Format Allows Specifying a Revision
 `dsn~import.full-coverage-tag-with-revision~1`
 

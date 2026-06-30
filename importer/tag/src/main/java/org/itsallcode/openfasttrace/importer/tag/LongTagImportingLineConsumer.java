@@ -2,7 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -23,18 +25,21 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     private static final String OPTIONAL_WHITESPACE = "\\s*";
     private static final String TAG_PREFIX = "\\[";
     private static final String TAG_SUFFIX = "\\]";
-    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE + "(\\p{Alpha}+(?:"
-            + OPTIONAL_WHITESPACE
-            + "," + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
+    private static final String COVERED_IDS = SpecificationItemId.ID_PATTERN + "(?:"
+            + OPTIONAL_WHITESPACE + "," + OPTIONAL_WHITESPACE + SpecificationItemId.ID_PATTERN
+            + ")*";
+    private static final String NEEDS_COVERAGE = ">>" + OPTIONAL_WHITESPACE
+            + "(?<neededArtifactTypes>\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE + ","
+            + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE//
-            + "(" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
+            + "(?<artifactType>" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
             + "(?:" + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
             // [impl->dsn~import.full-coverage-tag-with-name-and-revision~1]
-            + "(" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
+            + "(?<customName>" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
             + SpecificationItemId.REVISION_SEPARATOR
-            + SpecificationItemId.ITEM_REVISION_PATTERN + ")?" //
+            + "(?<revision>" + SpecificationItemId.ITEM_REVISION_PATTERN + "))?" //
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE //
-            + "(" + SpecificationItemId.ID_PATTERN + ")" //
+            + "(?<coveredIds>" + COVERED_IDS + ")" //
             + OPTIONAL_WHITESPACE + "(?:" + NEEDS_COVERAGE + OPTIONAL_WHITESPACE + ")?" //
             + TAG_SUFFIX;
 
@@ -53,18 +58,27 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     {
         this.listener.beginSpecificationItem();
         this.listener.setLocation(this.file.getPath(), lineNumber);
-        final SpecificationItemId coveredId = SpecificationItemId.parseId(matcher.group(5));
-        final List<String> neededArtifactTypes = parseCommaSeparatedList(matcher.group(9));
-        final SpecificationItemId generatedId = createItemId(matcher, lineNumber, lineMatchCount, coveredId,
-                neededArtifactTypes);
-        logItem(lineNumber, coveredId, neededArtifactTypes, generatedId);
+        final List<SpecificationItemId> coveredIds = parseCoveredIds(matcher.group("coveredIds"));
+        final List<String> neededArtifactTypes = parseNeededArtifactTypes(matcher.group("neededArtifactTypes"));
+        final SpecificationItemId generatedId = createItemId(matcher, lineNumber, lineMatchCount,
+                coveredIds, neededArtifactTypes);
+        logItem(lineNumber, coveredIds, neededArtifactTypes, generatedId);
         this.listener.setId(generatedId);
-        this.listener.addCoveredId(coveredId);
-        neededArtifactTypes.forEach(listener::addNeededArtifactType);
+        coveredIds.forEach(this.listener::addCoveredId);
+        neededArtifactTypes.forEach(this.listener::addNeededArtifactType);
         this.listener.endSpecificationItem();
     }
 
-    private static List<String> parseCommaSeparatedList(final String input)
+    private static List<SpecificationItemId> parseCoveredIds(final String input)
+    {
+        return Arrays.stream(input.split(","))
+                .map(String::trim)
+                .filter(Predicate.not(String::isEmpty))
+                .map(SpecificationItemId::parseId)
+                .toList();
+    }
+
+    private static List<String> parseNeededArtifactTypes(final String input)
     {
         if (input == null)
         {
@@ -78,28 +92,28 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     }
 
     private SpecificationItemId createItemId(final Matcher matcher, final int lineNumber, final int lineMatchCount,
-            final SpecificationItemId coveredId, final List<String> neededArtifactTypes)
+            final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
     {
-        final String artifactType = matcher.group(1);
-        final String customName = matcher.group(2);
-        final String revision = matcher.group(4);
+        final String artifactType = matcher.group("artifactType");
+        final String customName = matcher.group("customName");
+        final String revision = matcher.group("revision");
         final String name = customName != null ? customName
-                : getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
+                : getItemName(lineNumber, lineMatchCount, coveredIds, neededArtifactTypes);
         return SpecificationItemId.createId(artifactType, name, parseRevision(revision));
     }
 
-    private void logItem(final int lineNumber, final SpecificationItemId coveredId,
+    private void logItem(final int lineNumber, final List<SpecificationItemId> coveredIds,
             final List<String> neededArtifactTypes, final SpecificationItemId generatedId)
     {
         if (neededArtifactTypes.isEmpty())
         {
             LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId);
+                    + "' covering ids " + coveredIds);
         }
         else
         {
             LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering id '" + coveredId + "', needs artifact types "
+                    + "' covering ids " + coveredIds + ", needs artifact types "
                     + neededArtifactTypes);
         }
     }
@@ -112,21 +126,32 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     }
 
     // [impl->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
-    private String getItemName(final int lineNumber, final int lineMatchCount, final SpecificationItemId coveredId,
-            final List<String> neededArtifactTypes)
+    private String getItemName(final int lineNumber, final int lineMatchCount,
+            final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
     {
         if (neededArtifactTypes.isEmpty())
         {
-            return generateUniqueName(coveredId, lineNumber, lineMatchCount);
+            return generateUniqueName(coveredIds, lineNumber, lineMatchCount);
         }
-        return coveredId.getName();
+        return joinCoveredIdNamesWithHyphen(coveredIds);
     }
 
-    private String generateUniqueName(final SpecificationItemId coveredId, final int lineNumber,
+    private String generateUniqueName(final List<SpecificationItemId> coveredIds, final int lineNumber,
             final int counter)
     {
-        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId;
+        final String CoveredIdStringsJoinedWithHyphen = coveredIds.stream()
+                .map(SpecificationItemId::toString)
+                .collect(java.util.stream.Collectors.joining("-"));
+        final String uniqueName = this.file.getPath() + lineNumber + counter
+                + CoveredIdStringsJoinedWithHyphen;
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
-        return coveredId.getName() + "-" + checksum;
+        return joinCoveredIdNamesWithHyphen(coveredIds) + "-" + checksum;
+    }
+
+    private static String joinCoveredIdNamesWithHyphen(final List<SpecificationItemId> coveredIds)
+    {
+        return coveredIds.stream()
+                .map(SpecificationItemId::getName)
+                .collect(java.util.stream.Collectors.joining("-"));
     }
 }

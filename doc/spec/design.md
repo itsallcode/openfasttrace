@@ -167,6 +167,12 @@ The Plugin loader supports loading factories for the following plugin types:
 * Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
 * Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`
 
+Reporter implementations usually extend `org.itsallcode.openfasttrace.api.report.AbstractReporterFactory`
+to reuse standard reporter context handling while keeping `ReporterFactory` as the service type.
+
+Exporter implementations usually extend `org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory`
+to reuse standard exporter and context handling while keeping `ExporterFactory` as the service type.
+
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 
@@ -216,6 +222,8 @@ return
 ```
 
 A factory for importers decides which importer to use. When multiple importers support the same file, the one with the lowest priority value (highest precedence) is chosen. Usually, importers are selected based on file extension, but some importers may peek into the file content to determine compatibility.
+
+`ImporterFactory` is the plugin interface discovered by the service loader. Importer implementations in OFT usually extend `AbstractImporterFactory` to reuse the default context handling.
 
 The default priorities for standard importers are:
 1. Markdown Importer: 1000

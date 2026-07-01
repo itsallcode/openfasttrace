@@ -12,7 +12,7 @@ import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 /**
  * An {@link ImporterFactory} for ReqM2/SpecObject XML files.
  */
-public class SpecobjectImporterFactory extends ImporterFactory
+public class SpecobjectImporterFactory extends AbstractImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(SpecobjectImporterFactory.class.getName());
     private static final int PEEK_CHARS = 4096;

@@ -5,13 +5,13 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.AbstractImporterFactoryTestBase;
 
 /**
  * Tests for {@link TagImporterFactory}
  */
 // [utest->dsn~import.full-coverage-tag~1]
-class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
+class TestTagImporterFactory extends AbstractImporterFactoryTestBase<TagImporterFactory>
 {
     @Override
     protected TagImporterFactory createFactory()

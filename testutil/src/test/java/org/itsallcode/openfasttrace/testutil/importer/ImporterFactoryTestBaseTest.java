@@ -17,7 +17,7 @@ class ImporterFactoryTestBaseTest
         assertThat(new DummyImplementation(), notNullValue());
     }
 
-    private static class DummyImplementation extends ImporterFactoryTestBase<DummyImporterFactory>
+    private static class DummyImplementation extends AbstractImporterFactoryTestBase<DummyImporterFactory>
     {
         @Override
         protected DummyImporterFactory createFactory()
@@ -43,7 +43,7 @@ class ImporterFactoryTestBaseTest
         }
     }
 
-    private static class DummyImporterFactory extends ImporterFactory
+    private static class DummyImporterFactory extends AbstractImporterFactory
     {
         @Override
         public int getPriority() {

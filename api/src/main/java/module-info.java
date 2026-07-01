@@ -13,6 +13,7 @@ module org.itsallcode.openfasttrace.api
     exports org.itsallcode.openfasttrace.api.exporter;
     exports org.itsallcode.openfasttrace.api.report;
     // Workaround: Required for the EqualsVerifier
+    opens org.itsallcode.openfasttrace.api;
     opens org.itsallcode.openfasttrace.api.core;
 
     requires java.logging;

@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.AbstractImporterFactoryTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
@@ -21,7 +21,7 @@ import org.mockito.Mock;
  * Tests for {@link SpecobjectImporterFactory}
  */
 class TestSpecobjectImporterFactory
-        extends ImporterFactoryTestBase<SpecobjectImporterFactory>
+        extends AbstractImporterFactoryTestBase<SpecobjectImporterFactory>
 {
     @Override
     protected SpecobjectImporterFactory createFactory()

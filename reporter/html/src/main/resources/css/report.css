@@ -2,7 +2,11 @@
   font-family: helvetica, arial;
 }
 
-html { scroll-padding-top: 2.5em; }
+html {
+  color: black;
+  background-color: white;
+  scroll-padding-top: 2.5em;
+}
 
 nav {
   width: 100%;
@@ -137,4 +141,62 @@ summary .title {
 
 .sitem p.origin {
   padding-left: 0.5em;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color: lightgrey;
+    background-color: #181818;
+  }
+
+  nav {
+    background-color: #303030;
+    border-bottom: 1px solid grey;
+  }
+
+  a {
+    color: #423ce5;
+  }
+
+  a:visited {
+    color: #8638b5;
+  }
+
+  del, ins, .red {
+    color: firebrick;
+  }
+
+  .green {
+    color: green;
+  }
+  .sitem {
+    border-left: 2px solid #606060;
+  }
+  .sitem pre {
+    /* todo */
+    background: #282828;
+  }
+  .artifact {
+    /* todo */
+    background: dimgrey;
+    color: white;
+  }
+  .tag {
+    /* todo */
+    border: 1px solid black;
+  }
+  small {
+    /* todo */
+    color: dimgrey;
+  }
+  summary .title {
+    /* todo */
+    color: lightgrey;
+  }
+  .id {
+     /* todo */
+    color: dimgrey;
+    border-top: 1px solid lightgrey;
+  }
 }

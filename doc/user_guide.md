@@ -708,7 +708,7 @@ To avoid conflict with the formats actual contents, you embed these definitions 
 Tags have the following format:
 
 ```
-[ <covered-artifact-type> -> <specification-object-id> ]
+[ <covered-artifact-type> -> <list-of-specification-object-ids> ]
 ```
 
 Spaces above were only added for readability. They are optional. In fact usually people prefer a more compact form.
@@ -737,7 +737,7 @@ Examples:
 // [impl~validate-password~2->dsn~validate-authentication-request~1]
 ```
 
-##### Forwarding Requirements
+##### Needed Coverage
 
 When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:
 

@@ -18,6 +18,7 @@ public class TagImporterFactory extends ImporterFactory
             "ads", "adb", // Ada
             "bat", // Windows batch files
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
+            "dox", // Doxygen
             "c#", "cs", // C#
             "cfg", "conf", "ini", // configuration files
             "feature", // Gherkin feature files

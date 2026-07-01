@@ -26,7 +26,7 @@ class TestTagImporterFactory extends ImporterFactoryTestBase<TagImporterFactory>
     {
         return asList("file.java", "FILE.java", "file.md.java", "file.ads", "file.adb", "foo.bash", "foo.bar.bash",
                 "foo.bat", "foo.java", "foo.c", "foo.C", "foo.c++", "foo.c#", "foo.cc", "foo.cfg",
-                "foo.conf", "foo.cpp", "foo.cs", "foo.feature", "foo.fxml", "foo.go",
+                "foo.conf", "foo.cpp", "foo.dox", "foo.cs", "foo.feature", "foo.fxml", "foo.go",
                 "foo.groovy", "foo.h", "foo.H", "foo.hh", "foo.h++",
                 "foo.htm", "foo.html", "foo.ini", "foo.js", "foo.kt", "foo.kts", "foo.mjs", "foo.cjs", "foo.ejs",
                 "foo.ts", "foo.json",

@@ -763,6 +763,7 @@ recognized file types:
 * C (`.c`, `.h`)
 * C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
 * C# (`.c#`, `cs`)
+* Doxygen (`.dox`)
 * Database related (`.sql`, `.pls`)
 * Configuration files (`.cfg`, `.conf`, `.ini`)
 * [Go](https://golang.org/) (`.go`)

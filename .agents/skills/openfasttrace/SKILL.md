@@ -20,7 +20,7 @@ OpenFastTrace is a tool for requirement tracing across various artifacts (specif
   - `Description: <text>`: Optional keyword to start description.
   - `Rationale: <text>`, `Comment: <text>`.
 
-## Syntax (Markdown)
+## Syntax: Markdown
 
 ```markdown
 ### Title
@@ -36,6 +36,32 @@ Needs: dsn, impl, utest
 
 - **Forwarding**: `arch --> dsn : req~id~1` (delegates coverage without repeating).
 - **Exclusion**: Use `<!-- oft:off -->` and `<!-- oft:on -->` to skip parsing.
+
+## Syntax: Coverage Tags (many file formats)
+
+Implementation covering design in a C++ file:
+
+```C++
+\\ [impl -> dsn~hash-sum-calculation~1]
+```
+
+Unit test in a Java file:
+
+```shell
+\\ [utest -> dsn~hash-sum-calculation~1]
+```
+
+Coverage in a YMAL file (e.g., GitHub workflow)
+
+```yaml
+# [bld -> dsn~create-sbom~2]
+```
+
+Require coverage:
+
+```plantuml
+# [req -> dsn~hash-sum-calculation~1 >> impl, utest]
+```
 
 ## Tracing
 

@@ -19,3 +19,7 @@ We moved some GitHub action permissions from workflow-level to job-level.
 * #546: Replaced `OsDetector` with JUnit5's `EnabledOnOs` annotation.
 * #544: Replaced optional parameter with null check
 * #543: Made `CliException` a `RuntimeException`
+
+## Features
+
+* #553 Tag importer supports multiple covered ids

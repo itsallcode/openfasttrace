@@ -71,6 +71,11 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
 
     private static List<SpecificationItemId> parseCoveredIds(final String input)
     {
+        if (input == null)
+        {
+            return emptyList();
+        }
+
         return Arrays.stream(input.split(","))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))

@@ -100,6 +100,20 @@ class TestTagImporter
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
                                 .addNeedsArtifactType("test")),
+                parsedItem("[ impl~combined~1 -> dsn~name1~2 , dsn~name2~3 >> utest,itest ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("utest")
+                                .addNeedsArtifactType("itest")),
+                parsedItem("[ impl~~1 -> dsn~name1~2 , dsn~name2~3 ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-name2-506723840~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
+                parsedItem("[ impl -> dsn~name1~2 , dsn~name2~3 ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-name2-506723840~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
 
                 parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),

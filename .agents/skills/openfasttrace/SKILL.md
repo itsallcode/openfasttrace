@@ -60,7 +60,13 @@ Coverage in a YMAL file (e.g., GitHub workflow)
 Require coverage:
 
 ```plantuml
-# [req -> dsn~hash-sum-calculation~1 >> impl, utest]
+' [req -> dsn~hash-sum-calculation~1 >> impl, utest]
+```
+
+Multiple coverage:
+
+```Java
+// [dsn -> req~local-stability~1,arch~dimensional-input~1]
 ```
 
 ## Tracing

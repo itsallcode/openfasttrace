@@ -6,6 +6,7 @@ import java.io.OutputStream;
  * Interface for coverage reports.
  */
 @FunctionalInterface
+@SuppressWarnings("java:S1711") // Replacing with Consumder would shade API intent.
 public interface Reportable
 {
     /**

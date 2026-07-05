@@ -141,8 +141,8 @@ public class CallbackContentHandler implements TreeContentHandler
         }
         catch (final Exception exception)
         {
-            throw new XmlParserException("Error handling '" + treeElement + "' with consumer '"
-                    + consumer + "': " + exception.getMessage(), exception);
+            throw new XmlParserException("Error handling " + treeElement + " with consumer "
+                    + consumer + ": " + exception.getMessage(), exception);
         }
     }
 

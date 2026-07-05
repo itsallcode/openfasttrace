@@ -3,10 +3,7 @@ package org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
-import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.assertImportWithFactory;
-import static org.itsallcode.openfasttrace.testutil.importer.ImportAssertions.runImporterOnText;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.stream.Stream;
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -100,7 +98,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
+        ImportAssertions.assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
     }
 
     private String processTextInput(final String input)
@@ -236,7 +234,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("tags")
     void testTags(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+        final List<SpecificationItem> items = ImportAssertions.runImporterOnText(Path.of("irrelevant-filename"),
                 "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getTags(), equalTo(expected));
@@ -538,7 +536,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @MethodSource("needsCoverage")
     void testNeedsCoverage(final String mdContent, final List<String> expected)
     {
-        final List<SpecificationItem> items = runImporterOnText(Path.of("irrelevant-filename"),
+        final List<SpecificationItem> items = ImportAssertions.runImporterOnText(Path.of("irrelevant-filename"),
                 "`a~b~1`\n" + mdContent,
                 getImporterFactory());
         assertThat(items.get(0).getNeedsArtifactTypes(), equalTo(expected));
@@ -570,7 +568,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         Needs: arch
                         """,
                 contains(item()
-                        .id(createId("req", "zellzustandsänderung", 1))
+                        .id(SpecificationItemId.createId("req", "zellzustandsänderung", 1))
                         .title("Die Implementierung muss den Zustand einzelner Zellen ändern")
                         .description("Ermöglicht die Aktualisierung des Zustands von lebenden und toten Zellen"
                                 + " in jeder Generation.")
@@ -591,12 +589,12 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 `req~item2~1
                 Item 2 description
                 """,
-                contains(item().id(createId("req", "item1", 1))
+                contains(item().id(SpecificationItemId.createId("req", "item1", 1))
                         .title("Item 1")
                         .description("Item 1 description")
                         .location("file", 2 + titleLocationOffset)
                         .build(),
-                        item().id(createId("req", "item2", 1))
+                        item().id(SpecificationItemId.createId("req", "item2", 1))
                                 .title("Item 2")
                                 .description("Item 2 description")
                                 .location("file", 6 + (2 * titleLocationOffset))
@@ -614,7 +612,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 * this must not be in needs section
                 """,
                 contains(item()
-                        .id(createId("feat", "the-feature", 1))
+                        .id(SpecificationItemId.createId("feat", "the-feature", 1))
                         .addNeedsArtifactType("arch")
                         .description("* this must not be in needs section")
                         .location("needs_with_extra_list_items.md", 1)
@@ -638,12 +636,12 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 Needs: itest
                 """,
                 contains(item()
-                        .id(createId("dsn", "needs", 3))
+                        .id(SpecificationItemId.createId("dsn", "needs", 3))
                         .description("Description with a bulleted list"
                                 + System.lineSeparator()
                                 + System.lineSeparator() + "* this"
                                 + System.lineSeparator() + "* that")
-                        .addCoveredId(createId("req", "needs", 2))
+                        .addCoveredId(SpecificationItemId.createId("req", "needs", 2))
                         .addNeedsArtifactType("itest")
                         .location("needs_after_covers.md", 1)
                         .build()));

@@ -37,6 +37,7 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
     }
 
     @Override
+    @SuppressWarnings("java:S138") // Transition table is OK be larger than 75 lines.
     protected Transition[] configureTransitions()
     {
         // @formatter:off

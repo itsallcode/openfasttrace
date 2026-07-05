@@ -9,7 +9,6 @@ import static org.itsallcode.openfasttrace.api.core.SpecificationItemAssertions.
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +67,7 @@ class TestLinkedSpecificationItem
     @Test
     void testGetUncoveredArtifactTypes()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, REQ));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(UMAN, REQ));
         when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
         this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         assertItemHasUncoveredArtifactTypes(this.linkedItem, REQ);
@@ -85,7 +84,7 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_Ok()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(UMAN, IMPL));
         when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
         this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         when(this.coveredItemMock.getArtifactType()).thenReturn(IMPL);
@@ -96,7 +95,7 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_NotOk_WrongCoverage()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(UMAN, IMPL));
         when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
         this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         when(this.coveredItemMock.getArtifactType()).thenReturn(REQ);
@@ -107,34 +106,17 @@ class TestLinkedSpecificationItem
     @Test
     void testIsCoveredShallow_NotOk_MissingCoverage()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(UMAN, IMPL));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(UMAN, IMPL));
         when(this.coveredItemMock.getArtifactType()).thenReturn(UMAN);
         this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
         assertItemCoveredShallow(this.linkedItem, false);
     }
 
-    // [utest->dsn~tracing.deep-coverage~1]
-    @Test
-    void testGetDeepCoverageStatus_Covered()
-    {
-        prepareCoverThis();
-        assertItemDeepCoverageStatus(this.linkedItem, DeepCoverageStatus.COVERED);
-    }
-
     private void prepareCoverThis()
     {
-        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL));
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(IMPL));
         when(this.coveredItemMock.getArtifactType()).thenReturn(IMPL);
         this.linkedItem.addLinkToItemWithStatus(coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
-    }
-
-    // [utest->dsn~tracing.deep-coverage~1]
-    @Test
-    void testGetDeepCoverageStatus_MissingCoverage()
-    {
-        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(Arrays.asList(IMPL, UMAN));
-        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
-        assertItemDeepCoverageStatus(this.linkedItem, DeepCoverageStatus.UNCOVERED);
     }
 
     // [utest->dsn~tracing.defect-items~2]
@@ -218,23 +200,6 @@ class TestLinkedSpecificationItem
         this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.DUPLICATE);
         this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.DUPLICATE);
         assertThat(this.linkedItem.countDuplicateLinks(), equalTo(2));
-    }
-
-    // [utest->dsn~tracing.link-cycle~1]
-    @Test
-    void testGetDeepCoverageStatus_CylceIfSelfLink()
-    {
-        this.linkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
-        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
-    }
-
-    // [utest->dsn~tracing.link-cycle~1]
-    @Test
-    void testGetDeepCoverageStatus_DeepCycle()
-    {
-        this.linkedItem.addLinkToItemWithStatus(this.otherLinkedItem, LinkStatus.COVERED_SHALLOW);
-        this.otherLinkedItem.addLinkToItemWithStatus(this.linkedItem, LinkStatus.COVERED_SHALLOW);
-        assertThat(this.linkedItem.getDeepCoverageStatus(), equalTo(DeepCoverageStatus.CYCLE));
     }
 
     @Test

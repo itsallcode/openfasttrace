@@ -8,6 +8,7 @@ import java.util.function.Predicate;
  * Specification items with links that can be followed.
  */
 // [impl->dsn~linked-specification-item~1]
+@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
@@ -325,11 +326,9 @@ public class LinkedSpecificationItem
      *
      * @return covered, uncovered or cycle.
      */
-    // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, false);
+        return DeepCoverageResolver.resolve(this, false);
     }
 
     /**
@@ -340,54 +339,10 @@ public class LinkedSpecificationItem
      */
     public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, true);
+        return DeepCoverageResolver.resolve(this, true);
     }
 
-    // [impl->dsn~tracing.link-cycle~1]
-    private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
-            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus)
-    {
-        DeepCoverageStatus status = worstStatusSeen;
-        status = adjustDeepCoverageStatusIfApprovedRequired(onlyAcceptApprovedItemStatus, status);
-
-        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
-        {
-            if (incomingItem.getId().equals(startId))
-            {
-                return DeepCoverageStatus.CYCLE;
-            }
-            else
-            {
-                final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus);
-                if (otherStatus == DeepCoverageStatus.CYCLE)
-                {
-                    return DeepCoverageStatus.CYCLE;
-                }
-                status = DeepCoverageStatus.getWorst(status, otherStatus);
-            }
-        }
-        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
-        {
-            return DeepCoverageStatus.UNCOVERED;
-        }
-        else
-        {
-            return status;
-        }
-    }
-
-    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(final boolean onlyAcceptApprovedItemStatus,
-            final DeepCoverageStatus deepCoveredStatus)
-    {
-        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
-                ? DeepCoverageStatus.UNCOVERED
-                : deepCoveredStatus;
-    }
-
-    private List<LinkedSpecificationItem> getIncomingItems()
+    List<LinkedSpecificationItem> getIncomingItems()
     {
         return this.links.entrySet() //
                 .stream() //

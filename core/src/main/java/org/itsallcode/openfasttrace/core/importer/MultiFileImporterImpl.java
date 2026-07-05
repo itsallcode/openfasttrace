@@ -67,8 +67,7 @@ public class MultiFileImporterImpl implements MultiFileImporter
             }
             else
             {
-                LOG.warning(() -> "No such input file or directory \"" + path.toString()
-                        + "\". Skipping.");
+                LOG.warning(() -> "No such input file or directory \"" + path + "\". Skipping.");
             }
         }
         return this;

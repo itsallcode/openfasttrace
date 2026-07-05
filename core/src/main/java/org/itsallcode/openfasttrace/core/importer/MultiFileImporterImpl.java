@@ -76,6 +76,7 @@ public class MultiFileImporterImpl implements MultiFileImporter
 
     // [impl->dsn~input-directory-recursive-traversal~1]
     @Override
+    @SuppressWarnings("java:S1941") // Item count needs to be captured before object is modified.
     public MultiFileImporter importRecursiveDir(final Path dir, final String glob)
     {
         final PathMatcher matcher = dir.getFileSystem().getPathMatcher("glob:" + glob);

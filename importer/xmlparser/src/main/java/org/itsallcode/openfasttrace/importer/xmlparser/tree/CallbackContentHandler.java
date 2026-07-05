@@ -117,6 +117,7 @@ public class CallbackContentHandler implements TreeContentHandler
     }
 
     @Override
+    @SuppressWarnings("java:S2221") // Intentionally catching all exceptions to provide better error messages.
     public void startElement(final TreeElement treeElement)
     {
         LOG.finest(() -> "Start element: " + treeElement);
@@ -140,8 +141,8 @@ public class CallbackContentHandler implements TreeContentHandler
         }
         catch (final Exception exception)
         {
-            throw new XmlParserException("Error handling " + treeElement + " with consumer "
-                    + consumer + ": " + exception.getMessage(), exception);
+            throw new XmlParserException("Error handling '" + treeElement + "' with consumer '"
+                    + consumer + "': " + exception.getMessage(), exception);
         }
     }
 

@@ -56,17 +56,36 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     @Override
     public void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        this.listener.beginSpecificationItem();
-        this.listener.setLocation(this.file.getPath(), lineNumber);
         final List<SpecificationItemId> coveredIds = parseCoveredIds(matcher.group("coveredIds"));
         final List<String> neededArtifactTypes = parseNeededArtifactTypes(matcher.group("neededArtifactTypes"));
-        final SpecificationItemId generatedId = createItemId(matcher, lineNumber, lineMatchCount,
-                coveredIds, neededArtifactTypes);
-        logItem(lineNumber, coveredIds, neededArtifactTypes, generatedId);
+
+        final List<SpecificationItemId> generatedIds = createItemIds(matcher, lineNumber, lineMatchCount, coveredIds,
+                neededArtifactTypes);
+
+        if (generatedIds.size() > 1)
+        {
+            assert generatedIds.size() == coveredIds.size();
+            for (int i = 0; i < generatedIds.size(); i++)
+            {
+                addSpecificationItem(lineNumber, generatedIds.get(i), List.of(coveredIds.get(i)), neededArtifactTypes);
+            }
+        }
+        else
+        {
+            addSpecificationItem(lineNumber, generatedIds.get(0), coveredIds, neededArtifactTypes);
+        }
+    }
+
+    private void addSpecificationItem(final int lineNumber, final SpecificationItemId generatedId,
+            final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
+    {
+        this.listener.beginSpecificationItem();
+        this.listener.setLocation(this.file.getPath(), lineNumber);
         this.listener.setId(generatedId);
         coveredIds.forEach(this.listener::addCoveredId);
         neededArtifactTypes.forEach(this.listener::addNeededArtifactType);
         this.listener.endSpecificationItem();
+        logItem(lineNumber, coveredIds, neededArtifactTypes, generatedId);
     }
 
     private static List<SpecificationItemId> parseCoveredIds(final String input)
@@ -96,15 +115,25 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
                 .toList();
     }
 
-    private SpecificationItemId createItemId(final Matcher matcher, final int lineNumber, final int lineMatchCount,
+    private List<SpecificationItemId> createItemIds(final Matcher matcher, final int lineNumber,
+            final int lineMatchCount,
             final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
     {
         final String artifactType = matcher.group("artifactType");
         final String customName = matcher.group("customName");
         final String revision = matcher.group("revision");
-        final String name = customName != null ? customName
-                : getItemName(lineNumber, lineMatchCount, coveredIds, neededArtifactTypes);
-        return SpecificationItemId.createId(artifactType, name, parseRevision(revision));
+        if (customName != null)
+        {
+            return List.of(SpecificationItemId.createId(artifactType, customName, parseRevision(revision)));
+        }
+
+        final List<SpecificationItemId> result = new java.util.ArrayList<>(coveredIds.size());
+        for (final SpecificationItemId coveredId : coveredIds)
+        {
+            final String name = getItemName(lineNumber, lineMatchCount, coveredId, neededArtifactTypes);
+            result.add(SpecificationItemId.createId(artifactType, name, parseRevision(revision)));
+        }
+        return result;
     }
 
     private void logItem(final int lineNumber, final List<SpecificationItemId> coveredIds,
@@ -131,32 +160,21 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     }
 
     // [impl->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
-    private String getItemName(final int lineNumber, final int lineMatchCount,
-            final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
+    private String getItemName(final int lineNumber, final int lineMatchCount, final SpecificationItemId coveredId,
+            final List<String> neededArtifactTypes)
     {
         if (neededArtifactTypes.isEmpty())
         {
-            return generateUniqueName(coveredIds, lineNumber, lineMatchCount);
+            return generateUniqueName(coveredId, lineNumber, lineMatchCount);
         }
-        return joinCoveredIdNamesWithHyphen(coveredIds);
+        return coveredId.getName();
     }
 
-    private String generateUniqueName(final List<SpecificationItemId> coveredIds, final int lineNumber,
+    private String generateUniqueName(final SpecificationItemId coveredId, final int lineNumber,
             final int counter)
     {
-        final String CoveredIdStringsJoinedWithHyphen = coveredIds.stream()
-                .map(SpecificationItemId::toString)
-                .collect(java.util.stream.Collectors.joining("-"));
-        final String uniqueName = this.file.getPath() + lineNumber + counter
-                + CoveredIdStringsJoinedWithHyphen;
+        final String uniqueName = this.file.getPath() + lineNumber + counter + coveredId;
         final String checksum = Long.toString(ChecksumCalculator.calculateCrc32(uniqueName));
-        return joinCoveredIdNamesWithHyphen(coveredIds) + "-" + checksum;
-    }
-
-    private static String joinCoveredIdNamesWithHyphen(final List<SpecificationItemId> coveredIds)
-    {
-        return coveredIds.stream()
-                .map(SpecificationItemId::getName)
-                .collect(java.util.stream.Collectors.joining("-"));
+        return coveredId.getName() + "-" + checksum;
     }
 }

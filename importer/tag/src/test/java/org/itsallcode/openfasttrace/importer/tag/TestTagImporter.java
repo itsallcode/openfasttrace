@@ -106,14 +106,49 @@ class TestTagImporter
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
                                 .addNeedsArtifactType("utest")
                                 .addNeedsArtifactType("itest")),
-                parsedItem("[ impl~~1 -> dsn~name1~2 , dsn~name2~3 ]",
-                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-name2-506723840~1"))
-                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+
+                parsedItems("[ impl~~1 -> dsn~name1~2 , dsn~name2~3 ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-2943155783~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2")),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2-3660411016~1"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
-                parsedItem("[ impl -> dsn~name1~2 , dsn~name2~3 ]",
-                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-name2-506723840~0"))
-                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                parsedItems("[ impl -> dsn~name1~2 , dsn~name2~3 ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1-2943155783~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2")),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2-3660411016~0"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
+                parsedItems("[ impl~~1 -> dsn~name1~2 , dsn~name2~3 >> test ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addNeedsArtifactType("test"),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("test")),
+                parsedItems("[ impl -> dsn~name1~2 , dsn~name2~3 >> test ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addNeedsArtifactType("test"),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("test")),
+                parsedItems("[ impl~~1 -> dsn~name1~2 , dsn~name2~3 >> utest,itest ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addNeedsArtifactType("utest")
+                                .addNeedsArtifactType("itest"),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("utest")
+                                .addNeedsArtifactType("itest")),
+                parsedItems("[ impl -> dsn~name1~2 , dsn~name2~3 >> utest,itest ]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name1~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
+                                .addNeedsArtifactType("utest")
+                                .addNeedsArtifactType("itest"),
+                        itemBuilder().id(SpecificationItemId.parseId("impl~name2~0"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))
+                                .addNeedsArtifactType("utest")
+                                .addNeedsArtifactType("itest")),
 
                 parsedItems("[implA->dsn~name1~2" + "]" + UNIX_NEWLINE + "[implB->dsn~name2~3" + "]",
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),

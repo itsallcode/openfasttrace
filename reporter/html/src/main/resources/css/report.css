@@ -146,17 +146,18 @@ summary .title {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color: lightgrey;
+    color: #dddddd;
     background-color: #181818;
   }
 
   nav {
     background-color: #303030;
+    color: white;
     border-bottom: 1px solid grey;
   }
 
   a {
-    color: #423ce5;
+    color: dodgerblue;
   }
 
   a:visited {
@@ -164,11 +165,11 @@ summary .title {
   }
 
   del, ins, .red {
-    color: firebrick;
+    color: tomato;
   }
 
   .green {
-    color: green;
+    color: lightgreen;
   }
   .sitem {
     border-left: 2px solid #606060;
@@ -188,7 +189,7 @@ summary .title {
   }
   small {
     /* todo */
-    color: dimgrey;
+    color: darkgrey;
   }
   summary .title {
     /* todo */
@@ -196,7 +197,7 @@ summary .title {
   }
   .id {
      /* todo */
-    color: dimgrey;
+    color: darkgrey;
     border-top: 1px solid lightgrey;
   }
 }

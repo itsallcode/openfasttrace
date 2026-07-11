@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.api;
 
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +26,7 @@ public final class FilterSettings
      */
     public Set<String> getArtifactTypes()
     {
-        return this.artifactTypes;
+        return Set.copyOf(this.artifactTypes);
     }
 
     /**
@@ -38,7 +37,7 @@ public final class FilterSettings
 
     public Set<String> getTags()
     {
-        return this.tags;
+        return Set.copyOf(this.tags);
     }
 
     /**
@@ -122,8 +121,8 @@ public final class FilterSettings
      */
     public static final class Builder
     {
-        private Set<String> artifactTypes = Collections.emptySet();
-        private Set<String> tags = Collections.emptySet();
+        private Set<String> artifactTypes = Set.of();
+        private Set<String> tags = Set.of();
         private boolean withoutTags = true;
 
         private Builder()
@@ -158,7 +157,7 @@ public final class FilterSettings
         }
 
         /**
-         * Configure if filter allows items that have no tags.
+         * Configure if the filter allows items that have no tags.
          * 
          * @param noTags
          *            {@code true} to match items without any tags

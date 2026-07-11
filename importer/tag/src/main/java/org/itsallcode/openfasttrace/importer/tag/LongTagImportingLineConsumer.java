@@ -15,6 +15,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 // [impl->dsn~import.full-coverage-tag~1]
 // [impl->dsn~import.full-coverage-tag-with-needed-coverage~1]
+// [impl->dsn~import.full-coverage-tag-multiple-needed-coverage~1]
 class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
 {
     private static final Logger LOG = Logger

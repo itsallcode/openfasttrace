@@ -91,6 +91,8 @@ class TestTagImporter
                         itemACoveringB("implA~name1-2943155783~0", "dsn~name1~2"),
                         itemACoveringB("implB~name2-1099447527~0", "dsn~name2~3"),
                         itemACoveringB("implC~name3-2846888323~0", "dsn~name3~4")),
+
+                // [utest->dsn~import.full-coverage-tag-multiple-needed-coverage~1]
                 parsedItem("[impl~combined~1->dsn~name1~2,dsn~name2~3" + "]",
                         itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))

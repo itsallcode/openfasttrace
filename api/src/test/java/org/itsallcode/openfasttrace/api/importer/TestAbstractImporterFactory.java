@@ -3,11 +3,11 @@ package org.itsallcode.openfasttrace.api.importer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 /**
  * Unit test for {@link AbstractImporterFactory}.
@@ -20,7 +20,7 @@ class TestAbstractImporterFactory
     @BeforeEach
     void setUp()
     {
-        context = Mockito.mock(ImporterContext.class);
+        context = mock(ImporterContext.class);
         importerFactory = new TestingImporterFactory();
     }
 

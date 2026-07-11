@@ -504,6 +504,17 @@ Covers:
 
 Needs: dsn
 
+#### Include Only Item Statuses
+`req~include-only-item-statuses~1`
+
+OFT gives users the option to include only specification items with a configurable set of statuses during processing.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Include Items Where at Least One Tag Matches
 `req~include-items-where-at-least-on-tag-matches~1`
 

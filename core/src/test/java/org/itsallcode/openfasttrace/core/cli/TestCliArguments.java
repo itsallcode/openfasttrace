@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -164,6 +165,33 @@ class TestCliArguments
         this.arguments.setA(value);
         assertThat(AFTER_SETTER, this.arguments.getWantedArtifactTypes(),
                 containsInAnyOrder("impl", "utest"));
+    }
+
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testWantedStatusesEmptyByDefault()
+    {
+        assertThat(BEFORE_SETTER, this.arguments.getWantedStatuses(), emptyIterable());
+    }
+
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testSetWantedStatuses()
+    {
+        final String value = "approved,proposed";
+        this.arguments.setWantedStatuses(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedStatuses(),
+                containsInAnyOrder(ItemStatus.APPROVED, ItemStatus.PROPOSED));
+    }
+
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testSetW()
+    {
+        final String value = "draft, proposed";
+        this.arguments.setW(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedStatuses(),
+                containsInAnyOrder(ItemStatus.DRAFT, ItemStatus.PROPOSED));
     }
 
     // [utest->dsn~filtering-by-tags-during-import~1]

@@ -268,6 +268,17 @@ Covers:
 
 Needs: impl, utest, itest
 
+#### Filtering by Item Status During Import
+`dsn~filtering-by-item-status-during-import~1`
+
+The [specification list builder](#specification-list-builder) can be configured to import a specification item only if its status matches at least one of the configured statuses.
+
+Covers:
+
+* `req~include-only-item-statuses~1`
+
+Needs: impl, utest, itest
+
 #### Filtering by Tags During Import
 `dsn~filtering-by-tags-during-import~1`
 

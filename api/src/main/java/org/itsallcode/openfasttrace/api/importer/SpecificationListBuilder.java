@@ -200,7 +200,15 @@ public final class SpecificationListBuilder implements ImportEventListener
     private boolean isAccepted(final SpecificationItem item)
     {
         return isAcceptedArtifactType(item.getArtifactType())
+                && isAcceptedStatus(item.getStatus())
                 && matchesTagsCriteria(item.getTags());
+    }
+
+    // [impl->dsn~filtering-by-item-status-during-import~1]
+    private boolean isAcceptedStatus(final ItemStatus status)
+    {
+        return !this.filterSettings.isStatusCriteriaSet()
+                || this.filterSettings.getWantedStatuses().contains(status);
     }
 
     // [impl->dsn~filtering-by-tags-during-import~1]

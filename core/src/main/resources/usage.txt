@@ -31,6 +31,8 @@ Common options:
                                Note that this option is ignored when -f is also
                                set.
   -f, --output-file path       The output file. Defaults to STDOUT.
+  -w, --wanted-statuses        Import only specification items that have a
+                               status contained in the comma-separated list
   -n, --newline format         Newline format. One of "unix", "windows", "oldmac"
   -t, --wanted-tags            Import only specification items that have at
                                least one tag contained in the comma-separated

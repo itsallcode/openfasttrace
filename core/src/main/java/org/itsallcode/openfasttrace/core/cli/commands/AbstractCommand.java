@@ -50,7 +50,17 @@ public abstract class AbstractCommand implements Performable
         final FilterSettings.Builder builder = FilterSettings.builder();
         setAttributeTypeFilter(builder);
         setTagFilter(builder);
+        setStatusFilter(builder);
         return builder.build();
+    }
+
+    private void setStatusFilter(final FilterSettings.Builder builder)
+    {
+        if (this.arguments.getWantedStatuses() != null
+                && !this.arguments.getWantedStatuses().isEmpty())
+        {
+            builder.wantedStatuses(this.arguments.getWantedStatuses());
+        }
     }
 
     private void setAttributeTypeFilter(final FilterSettings.Builder builder)

@@ -270,7 +270,7 @@ Keywords are followed by a colon that separates the keyword from the content. De
 
 ##### `Status`
 
-The `Status` keyword takes a single value from `draft`, `proposed`, `approved` to set the status of the item. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (see [XML Tracing Report](#xml-tracing-report)). Has to occur before the `Description`, `Rationale` or `Comment`. 
+The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, `rejected` to set the status of the item. The status can be used to filter specification items during import (see [Import options](#import-options)). Has to occur before the `Description`, `Rationale` or `Comment`. 
 
     ### A draft spec items
     `req~draft-item~1`
@@ -441,6 +441,18 @@ If you want to also import specification items that do not have any tags, add a 
     oft convert -t _,AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
      
 
+### Filtering by Status
+
+Sometimes you only want to see specification items that have reached a certain maturity level. For example, you might want to create a report that only includes approved requirements.
+
+To achieve this, you can filter by status using the `-w` or `--wanted-statuses` option:
+
+    oft trace -w approved doc/
+
+This tells OFT to only import specification items that have the status `approved`. You can also provide a comma-separated list of statuses:
+
+    oft trace -w approved,proposed doc/
+
 ### Tracing the Whole Chain
 
 If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifacts.
@@ -600,6 +612,10 @@ The following commands are equivalent and all display the command line usage and
     -a, --wanted-artifact-types <artifact type>[,...]
 
 Import only specification items where the artifact type matches one of the listed types.
+
+    -w, --wanted-statuses <status>[,...]
+
+Import only specification items that have a status contained in the comma-separated list of statuses.
 
     -t, --wanted-tags [_,]<tag>[,...]
 

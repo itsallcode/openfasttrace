@@ -149,6 +149,40 @@ class TestSpecificationListBuilder
         assertThat(builder.getItemCount(), equalTo(2));
     }
 
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testFilterSpecificationItemsByStatus()
+    {
+        final Set<ItemStatus> wantedStatuses = new HashSet<>();
+        wantedStatuses.add(ItemStatus.DRAFT);
+        final FilterSettings filterSettings = FilterSettings.builder() //
+                .wantedStatuses(wantedStatuses) //
+                .build();
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createWithFilter(filterSettings);
+        addItemWithStatus(builder, "in-A", ItemStatus.DRAFT);
+        addItemWithStatus(builder, "out-B", ItemStatus.APPROVED);
+        addItemWithStatus(builder, "out-C", ItemStatus.PROPOSED);
+        addItemWithStatus(builder, "out-D", ItemStatus.REJECTED);
+        addItemWithStatus(builder, "out-E", null); // becomes APPROVED by default
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
+                containsInAnyOrder("in-A"));
+    }
+
+    private void addItemWithStatus(final SpecificationListBuilder builder, final String name,
+            final ItemStatus status)
+    {
+        builder.beginSpecificationItem();
+        final SpecificationItemId id = SpecificationItemId.createId("dsn", name, 1);
+        builder.setId(id);
+        if (status != null)
+        {
+            builder.setStatus(status);
+        }
+        builder.endSpecificationItem();
+    }
+
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
     void testFilterSpecificationItemsByTags()

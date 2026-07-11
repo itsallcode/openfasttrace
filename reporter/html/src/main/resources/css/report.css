@@ -175,28 +175,22 @@ summary .title {
     border-left: 2px solid #606060;
   }
   .sitem pre {
-    /* todo */
     background: #282828;
   }
   .artifact {
-    /* todo */
     background: dimgrey;
     color: white;
   }
   .tag {
-    /* todo */
     border: 1px solid black;
   }
   small {
-    /* todo */
     color: darkgrey;
   }
   summary .title {
-    /* todo */
     color: lightgrey;
   }
   .id {
-     /* todo */
     color: darkgrey;
     border-top: 1px solid lightgrey;
   }

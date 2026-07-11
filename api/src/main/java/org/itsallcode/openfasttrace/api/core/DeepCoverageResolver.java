@@ -7,7 +7,7 @@ final class DeepCoverageResolver
 {
     private DeepCoverageResolver()
     {
-        // utility class
+        // Prevent instantiation.
     }
 
     /**
@@ -31,13 +31,11 @@ final class DeepCoverageResolver
     // [impl->dsn~tracing.link-cycle~1]
     private static DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
             final LinkedSpecificationItem item, final SpecificationItemId startId,
-            final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus)
+            final DeepCoverageStatus worstStatusSeen, final boolean onlyAcceptApprovedItemStatus)
     {
         DeepCoverageStatus status = worstStatusSeen;
         status = adjustDeepCoverageStatusIfApprovedRequired(item, onlyAcceptApprovedItemStatus,
                 status);
-
         for (final LinkedSpecificationItem incomingItem : item.getIncomingItems())
         {
             if (incomingItem.getId().equals(startId))

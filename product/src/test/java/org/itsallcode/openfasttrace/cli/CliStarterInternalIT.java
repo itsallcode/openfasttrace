@@ -337,7 +337,7 @@ class CliStarterInternalIT {
             () -> assertThat(getOutputFileContent(), containsString("2 total")),
             () -> assertThat(getOutputFileContent(), containsString("req~draft~1")),
             () -> assertThat(getOutputFileContent(), containsString("req~proposed~1")),
-            () -> assertThat(getOutputFileContent(), not(containsString("req~approved~1")))
+            () -> assertThat(getOutputFileContent(), not(containsString("approved")))
         );
     }
 

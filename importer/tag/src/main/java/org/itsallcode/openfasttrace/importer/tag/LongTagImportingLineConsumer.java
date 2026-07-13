@@ -95,7 +95,6 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
         {
             return emptyList();
         }
-
         return Arrays.stream(input.split(","))
                 .map(String::trim)
                 .filter(Predicate.not(String::isEmpty))
@@ -143,12 +142,12 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
         if (neededArtifactTypes.isEmpty())
         {
             LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering ids " + coveredIds);
+                    + "' covering IDs " + coveredIds);
         }
         else
         {
             LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + generatedId
-                    + "' covering ids " + coveredIds + ", needs artifact types "
+                    + "' covering IDs " + coveredIds + ", needs artifact types "
                     + neededArtifactTypes);
         }
     }

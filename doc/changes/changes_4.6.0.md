@@ -22,4 +22,4 @@ We moved some GitHub action permissions from workflow-level to job-level.
 
 ## Features
 
-* #553 Tag importer supports multiple covered ids
+* #553 Tag importer supports multiple covered IDs

@@ -7,7 +7,7 @@ Code name: Status Filter at Import
 We added a new feature to filter specification items by status at import time via `-w` or `--wanted-statuses` CLI parameters.
 This is helpful when your project uses specification documents for planning future requirements (marked by the status "draft" or "porposed").
 
-Big thanks to first-time contributor @Davidius86 who added a dark theme to OFT's HTML report. If your browser is set to a dark theme, the report will automatically swithc. He alo added Doxygen file support to the Tag importer and added a convenience notation that lets you cover multiple specification items in a single tag:
+Big thanks to first-time contributor @Davidius86 who added a dark theme to OFT's HTML report. If your browser is set to a dark theme, the report will automatically switch. He alo added Doxygen file support to the Tag importer and added a convenience notation that lets you cover multiple specification items in a single tag:
 
 ```C++
 // [impl -> dsn~a-covered-item~1, dsn~another~covered-item~2]
@@ -23,7 +23,7 @@ We moved some GitHub action permissions from workflow-level to job-level. Sonar 
  
 ## Security
 
-* #556: Updated Junit, PlantUML, Jacoco Maven plugin and Central publishing Plugin dependencies to fix vulnerabilities
+* #556: Updated JUnit, PlantUML, Jacoco Maven plugin and Central publishing Plugin dependencies to fix vulnerabilities
 
 ## Refactoring
 

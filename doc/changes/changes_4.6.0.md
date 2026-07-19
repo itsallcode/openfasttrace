@@ -1,4 +1,4 @@
-# OpenFastTrace 4.6.0, released 2026-07-??
+# OpenFastTrace 4.6.0, released 2026-07-19
 
 Code name: Status Filter at Import
 
@@ -6,6 +6,12 @@ Code name: Status Filter at Import
 
 We added a new feature to filter specification items by status at import time via `-w` or `--wanted-statuses` CLI parameters.
 This is helpful when your project uses specification documents for planning future requirements (marked by the status "draft" or "porposed").
+
+Big thanks to first-time contributor @Davidius86 who added a dark theme to OFT's HTML report. If your browser is set to a dark theme, the report will automatically swithc. He alo added Doxygen file support to the Tag importer and added a convenience notation that lets you cover multiple specification items in a single tag:
+
+```C++
+// [impl -> dsn~a-covered-item~1, dsn~another~covered-item~2]
+```
 
 We also updated test and build dependencies to fix vulnerabilities. Runtime code is not affected, so no update is required.
  
@@ -21,7 +27,6 @@ We moved some GitHub action permissions from workflow-level to job-level. Sonar 
 
 ## Refactoring
 
-* #554: Tag importer supports import from doxygen files
 * #552: Parameterized tests in `TestSpecobjectImporter`
 * #546: Replaced `OsDetector` with JUnit5's `EnabledOnOs` annotation.
 * #544: Replaced optional parameter with null check
@@ -29,4 +34,6 @@ We moved some GitHub action permissions from workflow-level to job-level. Sonar 
 
 ## Features
 
-* #553 Tag importer supports multiple covered IDs
+* #554: Tag importer supports import from doxygen files
+* #553: Tag importer supports multiple covered IDs
+* #519: Filter imports by specification item status (draft, proposed, approved and rejected)

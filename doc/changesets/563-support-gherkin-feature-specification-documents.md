@@ -1,28 +1,32 @@
-# GH-563 Support Gherkin .feature Files As OpenFastTrace Specification Documents
+# GH-563 Support Gherkin `.feature` Files As OpenFastTrace Specification Documents
 
 ## Goal
 
-Allow OpenFastTrace to import specification items from Gherkin scenarios in `.feature` files while preserving the current behavior for legacy coverage-tag-only imports, based on a shared tag-parsing module that is reusable for GH-562 and GH-563.
+Allow OpenFastTrace to import specification items from Gherkin `Scenario` and
+`Scenario Outline` blocks in `.feature` files. Preserve legacy coverage tags
+when they are written in Gherkin comments, while avoiding coverage-tag regular
+expression evaluation for executable Gherkin lines.
 
 ## Scope
 
 In scope:
 
-* Define and implement a two-PR approach where shared parser refactoring happens in a dedicated, smaller PR before GH-563 feature work.
-* Parse `Scenario` and `Scenario Outline` blocks as OFT specification items in `.feature` files.
-* Read one OFT specification ID from a dedicated Gherkin tag (`@id:<oft-id>`).
-* Parse `# Covers:` and `# Needs:` metadata inside the defined metadata scope.
-* Validate and report malformed or ambiguous Gherkin specification input.
-* Keep existing tag importer behavior backward compatible.
-* Add and update tests for both new behavior and regression coverage.
-* Update user-facing documentation for the new syntax.
+* Extract shared line scanning and long/short coverage-tag parsing into a
+  prerequisite module.
+* Add a dedicated Gherkin importer that composes the shared tag parser.
+* Import OFT scenario items identified by `@id:<oft-id>`.
+* Parse scoped `# Covers:` and `# Needs:` metadata strictly.
+* Preserve comment-based legacy coverage tags in `.feature` files and all
+  existing tag importer behavior for non-`.feature` inputs.
+* Update traced requirements, design, tests, and user documentation.
 
 Out of scope:
 
-* Changing the syntax or behavior of existing long and short coverage tags.
-* Importing `Feature`, `Rule`, `Background`, or `Examples` as specification items.
-* Adding new external parser dependencies.
-* Bundling large parser refactoring and Gherkin feature behavior into one PR.
+* Importing `Feature`, `Rule`, `Background`, or `Examples` as specification
+  items.
+* Supporting coverage tags in executable Gherkin lines.
+* Adding an external Gherkin parser dependency.
+* Moving Gherkin grammar or validation into the shared parser module.
 
 ## Design References
 
@@ -33,166 +37,120 @@ Out of scope:
 
 ## Strategy
 
-1. Create a separate refactoring PR first that extracts shared parsing logic into a new module under `importer/` (proposed module path: `importer/tag-importer-common`, artifact ID `openfasttrace-importer-tag-importer-common`).
-2. Move reusable parsing components from `openfasttrace-importer-tag` into the shared module (ID parsing helpers, metadata token parsing, line/region scanning primitives, validation helpers).
-3. Adopt the shared module in `openfasttrace-importer-tag` without behavior changes (pure refactoring and compatibility verification).
-4. Implement GH-562 and GH-563 feature-specific parser logic in their own PRs on top of the shared module.
-5. For GH-563, implement Gherkin scenario parsing as a deterministic state machine over lines so metadata scope and scenario boundaries are explicit and testable.
-6. Do not forward all Gherkin lines into tag-regex parsing; forward only comment lines (and only when the line shape can contain OFT directives).
-7. Enforce single-pass streaming parsing: each file is read once line-by-line, without full-file buffering.
-8. Keep memory usage bounded to current line plus minimal parser state/context needed for scenario and metadata scope handling.
-9. Add strict validation and clear error messages for missing, multiple, duplicate, and malformed OFT IDs and metadata entries.
-10. Prove compatibility via regression tests for legacy `.feature` coverage tags and non-feature source files.
+1. Merge a behavior-preserving refactoring PR that introduces a shared module
+   for line scanning and long/short coverage-tag parsing. It retains `.feature`
+   support in the tag importer.
+2. Atomically move `.feature` ownership from the tag importer to a new Gherkin
+   importer with higher precedence when the Gherkin importer is registered.
+3. Implement Gherkin parsing as a single-pass state machine. It receives every
+   line but forwards only comment lines to the shared coverage-tag parser.
+4. Keep all Gherkin syntax, state, validation, and `ImportEventListener`
+   mapping in the Gherkin importer.
 
-## Concrete Refactoring Proposal
+## Gherkin Syntax And Behavior
 
-### New Shared Module
-
-Create new module `importer/tag-importer-common` with artifact ID `openfasttrace-importer-tag-importer-common`.
-
-Primary purpose:
-
-* Provide reusable low-level parsing building blocks for importer implementations that parse OFT tags or OFT-like metadata in text files.
-* Keep importer-specific behavior (tag importer vs. Gherkin importer) outside of this module.
-* Support streaming importers that process files in one pass with bounded memory.
-
-### Proposed Packages And Classes
-
-Package `org.itsallcode.openfasttrace.importer.common.scan`
-
-* `LineScanner`: reads an `InputFile` line-by-line and emits `(lineNumber, lineContent)` events.
-* `LineHandler`: functional interface for line event consumers.
-* `CompositeLineHandler`: delegates one line event to multiple handlers in deterministic order.
-* `FilteringLineHandler`: delegates only if `LinePredicate` matches (used to avoid unnecessary downstream regex work).
-* `LinePredicates`: reusable predicates like `isCommentLine()`, `startsWithAnyPrefix(...)`.
-* `StreamingParserContext`: mutable bounded context holder for current parser state (current scenario header, collected tags/metadata for open scenario, line number), explicitly excluding full-file text storage.
-
-Package `org.itsallcode.openfasttrace.importer.common.regex`
-
-* `RegexLineHandler`: base class for handlers that detect repeated regex matches in a line and call `processMatch(matcher, lineNumber, lineMatchCount)`.
-* Responsibility split from current tag importer code: regex scanning mechanics are shared, concrete match interpretation stays in importer-specific subclasses.
-
-Package `org.itsallcode.openfasttrace.importer.common.oft`
-
-* `CoverageListParser`: parses comma-separated specification item IDs and returns validated `List<SpecificationItemId>`.
-* `NeededTypesParser`: parses comma-separated needed artifact types and returns normalized `List<String>`.
-* `GherkinOftTagParser`: parses OFT ID tags in Gherkin syntax (`@id:<spec-item-id>`), validates exactly one ID token per scenario tag region.
-* `MetadataDirectiveParser`: parses OFT directives in comments (`# Covers: ...`, `# Needs: ...`) and returns structured values.
-
-Package `org.itsallcode.openfasttrace.importer.common.validation`
-
-* `ImportValidationException`: common exception type for importer parsing/validation errors with location context.
-* `ParserErrorMessages`: centralized message templates so tag importer and Gherkin importer report errors consistently.
-
-### Extraction Mapping From Existing Code
-
-Refactoring PR should extract or adapt the following existing pieces from `importer/tag` into the shared module:
-
-* `LineReader` -> `LineScanner`
-* `LineReader.LineConsumer` -> `LineHandler`
-* `DelegatingLineConsumer` -> `CompositeLineHandler`
-* `AbstractRegexLineConsumer` -> `RegexLineHandler`
-* `LongTagImportingLineConsumer.parseCoveredIds(...)` logic -> `CoverageListParser`
-* `LongTagImportingLineConsumer.parseNeededArtifactTypes(...)` logic -> `NeededTypesParser`
-
-Keep these in `openfasttrace-importer-tag` (not shared):
-
-* `LongTagImportingLineConsumer`
-* `ShortTagImportingLineConsumer`
-* `TagImporter`
-* `TagImporterFactory`
-* `ChecksumCalculator` (tag importer specific ID-generation detail)
-
-### Responsibility Boundaries
-
-Shared module responsibilities:
-
-* Input scanning and regex match iteration mechanics.
-* Generic OFT token and list parsing with validation and normalization.
-* Reusable error abstraction and error message consistency.
-* Preserve streaming semantics (single pass, bounded context state).
-
-Importer module responsibilities:
-
-* File type decisions and importer factory registration.
-* Mapping parsed primitives to `ImportEventListener` events.
-* Importer-specific semantics and state machines (tag grammar, Gherkin scenario boundaries).
-* Routing optimization decisions, e.g. only forwarding comment lines to handlers that parse `Covers`/`Needs` directives.
-
-### PR-1 Refactoring Acceptance Criteria
-
-* `openfasttrace-importer-tag` compiles against `openfasttrace-importer-tag-importer-common`.
-* Existing tag importer behavior is unchanged (prove through current unit tests).
-* No new feature behavior is introduced in PR-1.
-* Public API exposure is minimized to package-private where possible.
-* Scanner and handler abstractions are usable in single-pass mode only; no API requires buffering complete file contents.
-
-### PR-2 And PR-3 Follow-Up
-
-* GH-562 PR: implement ticket-specific parsing behavior using shared module primitives.
-* GH-563 PR: implement Gherkin scenario specification import using shared module primitives and dedicated scenario state machine.
-* GH-563 PR: use `FilteringLineHandler` (or equivalent) so only comment lines are forwarded to OFT metadata/tag regex handlers.
+* A Gherkin scenario is an OFT item only when its immediately preceding,
+  contiguous Gherkin tag region contains exactly one
+  `@id:<SpecificationItemId>` tag. Other Gherkin tags are ignored.
+* Directives are recognized only in `#` comment lines after that ID tag region
+  and before the associated `Scenario:` or `Scenario Outline:` header.
+  Comments elsewhere are ignored by Gherkin metadata parsing.
+* `# Covers:` and `# Needs:` are case-sensitive. Each is optional but may occur
+  at most once. When present, it must contain a non-empty comma-separated list;
+  duplicate values and malformed IDs or artifact types are errors.
+* A repeated or invalid `@id` tag, or a scoped directive without exactly one
+  valid ID, fails the import with an `ImporterException` containing the file,
+  line, and reason. Scenarios without OFT metadata remain ignored.
+* The scenario header line is the item location. Text after `Scenario:` or
+  `Scenario Outline:` is the title. The importer streams the scenario-step
+  block into the description, excluding comments and `Examples`; it ends the
+  item at the next `Scenario`, `Scenario Outline`, `Feature`, `Rule`,
+  `Background`, `Examples`, or end of file.
+* The importer retains only active metadata and previously imported Gherkin IDs
+  for duplicate detection. It does not buffer a complete file or description.
 
 ## Task List
 
-- [ ] Create and checkout branch `feature/563_support_gherkin_feature_specification_documents`
+- [ ] Create and checkout branch
+      `feature/563_support_gherkin_feature_specification_documents`.
 
-### PR Split Proposal
+### PR 1: Shared Coverage-Tag Parser Refactoring
 
-- [ ] Create a dedicated refactoring PR (separate from GH-563 and GH-562) that introduces `importer/tag-importer-common` (`openfasttrace-importer-tag-importer-common`) as a reusable parsing module.
-- [ ] Limit the refactoring PR to code moves/extractions plus compatibility tests, with no functional behavior changes.
-- [ ] Make both follow-up tickets depend on the refactoring PR:
-	- GH-562 consumes the shared parsing module.
-	- GH-563 consumes the shared parsing module.
-- [ ] Merge the refactoring PR first, then continue with GH-562 and GH-563 feature PRs.
+- [ ] Add `importer/tag-importer-common` with artifact ID
+      `openfasttrace-importer-tag-importer-common` to the Maven reactor.
+- [ ] Add JPMS module `org.itsallcode.openfasttrace.importer.tag.common` and
+      export only `LineReader` (including its line-consumer contract) and
+      `CoverageTagParser` from
+      `org.itsallcode.openfasttrace.importer.tag.common`.
+- [ ] Move line scanning, line-handler composition, regex matching, long/short
+      coverage-tag parsing, and CRC32 ID generation from `importer/tag` into
+      the shared module without changing parsing semantics, generated IDs,
+      listener events, logging, or exception wrapping.
+- [ ] Define `CoverageTagParser.create(PathConfig, InputFile,
+      ImportEventListener)` to compose the long-tag parser and, when a path
+      configuration is present, the short-tag parser into one line consumer.
+      Keep parser implementation classes encapsulated.
+- [ ] Refactor `openfasttrace-importer-tag` into a thin adapter that creates
+      the shared parser and scans its input once with the shared `LineReader`.
+      Keep all supported extensions, including `.feature`, unchanged in this
+      refactoring PR.
+- [ ] Move scanner tests to the shared module and add focused shared-parser
+      tests for representative long and configured short tags, asserting
+      listener events, locations, generated IDs, coverage links, and needed
+      artifact types.
+- [ ] Keep the existing tag-importer parsing and factory/configuration tests as
+      regression tests, including `.feature` support, to prove that the
+      refactoring is behavior-preserving.
 
 ### Requirements And Design
 
-- [ ] Update [doc/spec/system_requirements.md](../spec/system_requirements.md) with additive requirements for importing OFT specification items from Gherkin `Scenario` and `Scenario Outline`.
-- [ ] Add explicit backward-compatibility requirement: existing `.feature` coverage-tag imports remain unchanged.
-- [ ] Add validation requirements for missing ID, invalid ID, duplicate IDs, multiple IDs per scenario, malformed `# Covers:`, and malformed `# Needs:`.
+- [ ] Add requirements for importing Gherkin scenarios and outlines, strict
+      scoped metadata validation, Gherkin importer selection, and comment-only
+      legacy coverage-tag compatibility.
 - [ ] Stop and ask user for review of the updated system requirements.
-- [ ] Update [doc/spec/design.md](../spec/design.md) with runtime design for the `.feature` parser flow, metadata scope boundaries, and error handling behavior.
-- [ ] Add or update `dsn` items that cover the new and changed requirements.
+- [ ] Add design items for factory precedence, the streaming Gherkin state
+      machine, metadata scope, event mapping, and shared-parser delegation.
 - [ ] Stop and ask user for review of the updated design.
 
-### Implementation
+### PR 2: Gherkin Importer
 
-- [ ] Add `importer/tag-importer-common` module with reusable parser building blocks and register it in the multi-module Maven build.
-- [ ] Add module dependency from `openfasttrace-importer-tag` to `openfasttrace-importer-tag-importer-common`.
-- [ ] Add module dependency from the new Gherkin importer to `openfasttrace-importer-tag-importer-common`.
-- [ ] Extract scanning infrastructure: move/adapt `LineReader` + nested consumer contract into `LineScanner`/`LineHandler`/`CompositeLineHandler` in the shared module.
-- [ ] Extract regex scanning infrastructure: move/adapt `AbstractRegexLineConsumer` into shared `RegexLineHandler`.
-- [ ] Extract reusable token parsers: move/adapt covered-ID and needed-types parsing into `CoverageListParser` and `NeededTypesParser`.
-- [ ] Add shared parser support for Gherkin OFT tags and metadata directives (`GherkinOftTagParser`, `MetadataDirectiveParser`).
-- [ ] In GH-563 implementation PR, add parser logic (using shared module components) to import specification items from Gherkin `Scenario` and `Scenario Outline` blocks.
-- [ ] Restrict GH-563 specification-item import logic to `.feature` input while preserving existing tag parsing in all supported extensions.
-- [ ] Add selective forwarding in GH-563 parser pipeline: only comment lines are passed to metadata/tag regex handlers.
-- [ ] Ensure GH-563 parser pipeline remains single-pass: no second read over input, no buffering of full file content.
-- [ ] Keep parser memory bounded to current line and minimal scenario/metadata state required to emit `ImportEventListener` events.
-- [ ] Parse scenario title as specification item title and scenario steps as description.
-- [ ] Parse metadata region between OFT ID tag and next boundary (next OFT ID tag, next scenario header, next feature header, or end of file).
-- [ ] Keep non-OFT Gherkin tags and unrelated comments ignored.
-- [ ] Keep old full/short coverage tag support behavior unchanged.
+- [ ] Add `importer/gherkin` with artifact ID
+      `openfasttrace-importer-gherkin`; register it in the Maven reactor and
+      product dependencies.
+- [ ] Provide a Gherkin importer factory for `.feature` files with priority
+      `9000`, ahead of the tag importer's priority `10000`.
+- [ ] Implement the defined single-pass Gherkin state machine and map imported
+      scenario fragments to `ImportEventListener` events.
+- [ ] Inject the shared coverage-tag parser and forward only lines whose
+      trimmed form starts with `#` to it.
+- [ ] Implement the specified `@id:`, `Covers`, `Needs`, title, description,
+      boundary, duplicate-ID, and error behavior.
+- [ ] Preserve the shared parser's existing `ImporterException` behavior for
+      legacy coverage tags; do not introduce a new shared validation exception.
 
 ### Verification
 
-- [ ] In the refactoring PR, run importer/tag unit tests as regression proof of no behavior changes.
-- [ ] Add unit tests in `importer/tag` for valid `.feature` scenarios with `@id:`, `# Covers:`, and `# Needs:`.
-- [ ] Add unit tests in `importer/tag` for invalid `.feature` inputs (missing/multiple/invalid IDs, malformed metadata, duplicate IDs).
-- [ ] Add regression tests proving legacy coverage tag imports still behave unchanged in `.feature` files and non-`.feature` files.
-- [ ] Add parser-pipeline tests proving non-comment lines are not forwarded to metadata/tag regex handlers.
-- [ ] Add parser-pipeline tests proving one-pass behavior (line scanner invoked once, no re-read) and no full-file buffering.
-- [ ] Add integration test coverage in `product` for mixed input artifacts that include both legacy tags and new Gherkin specification syntax.
-- [ ] Run `./oft-self-trace.sh` and ensure trace stays clean.
+- [ ] Add Gherkin importer unit tests for valid scenarios and outlines,
+      location/title/description extraction, coverage metadata, non-OFT tags,
+      and ignored ordinary scenarios.
+- [ ] Add validation tests for invalid or multiple IDs, orphan directives,
+      repeated or empty directives, malformed list entries, duplicate metadata
+      values, and duplicate Gherkin IDs. Assert exception type and relevant
+      message content.
+- [ ] Add regression tests proving comment coverage tags import in `.feature`
+      files, non-comment coverage-tag text is ignored in `.feature` files, and
+      tag importer behavior for non-`.feature` inputs is unchanged.
+- [ ] Add pipeline tests proving each Gherkin file is scanned once and only
+      comment lines reach the shared coverage-tag parser.
+- [ ] Add product-level tests for Gherkin importer precedence and mixed
+      scenario specifications with comment-based legacy coverage tags.
+- [ ] Run `./oft-self-trace.sh` and ensure the trace stays clean.
 - [ ] Run `mvn -T 1C verify` and ensure all quality gates pass.
 
-### Documentation
+### Documentation And Changelog
 
-- [ ] Extend [doc/user_guide.md](../user_guide.md) with the `.feature` specification syntax and examples.
-- [ ] Update [.agents/skills/openfasttrace/SKILL.md](../../.agents/skills/openfasttrace/SKILL.md) to document the new `.feature` syntax (`@id:...`, `# Covers:`, `# Needs:`), boundaries, and backward-compatibility expectations.
-- [ ] Add examples that show traceability links between Gherkin scenarios and design/implementation/test artifacts.
-
-### Version And Changelog
-
-- [ ] Add a changelog entry in [doc/changes/changes.md](../changes/changes.md) for GH-563.
+- [ ] Extend [doc/user_guide.md](../user_guide.md) with the `.feature` syntax,
+      placement rules, validation behavior, and examples.
+- [ ] Update [.agents/skills/openfasttrace/SKILL.md](../../.agents/skills/openfasttrace/SKILL.md)
+      with the Gherkin syntax and comment-only compatibility rule.
+- [ ] Add the GH-563 entry to [doc/changes/changes_4.6.0.md](../changes/changes_4.6.0.md).

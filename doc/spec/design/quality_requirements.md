@@ -110,6 +110,8 @@ The following rules are written for both human contributors and coding agents. T
 3. Declare method parameters as `final`.
 4. Output parameters are only allowed when required by external libraries.
 5. Prefer explicit types over `var`.
+6. Limit code lines to 120 characters. Do not wrap code earlier solely to fit a shorter line length.
+7. Limit comment lines, including JavaDoc, to 80 characters.
 
 ### Java Test Rules
 

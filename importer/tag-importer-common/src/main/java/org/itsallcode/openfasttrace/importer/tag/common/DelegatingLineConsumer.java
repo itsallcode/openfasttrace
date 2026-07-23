@@ -1,8 +1,9 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.importer.tag.common;
+
 import java.util.Collections;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 
 class DelegatingLineConsumer implements LineConsumer
 {

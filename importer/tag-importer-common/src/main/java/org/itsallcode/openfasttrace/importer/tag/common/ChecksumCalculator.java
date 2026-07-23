@@ -1,4 +1,4 @@
-package org.itsallcode.openfasttrace.importer.tag;
+package org.itsallcode.openfasttrace.importer.tag.common;
 
 import java.nio.charset.StandardCharsets;
 import java.util.zip.CRC32;

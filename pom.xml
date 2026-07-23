@@ -29,6 +29,7 @@
         <module>importer/xmlparser</module>
         <module>importer/restructuredtext</module>
         <module>importer/specobject</module>
+        <module>importer/tag-importer-common</module>
         <module>importer/tag</module>
         <module>importer/zip</module>
         <module>reporter/plaintext</module>

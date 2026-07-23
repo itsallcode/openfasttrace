@@ -1,13 +1,12 @@
 package org.itsallcode.openfasttrace.importer.tag;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.importer.tag.LineReader.LineConsumer;
+import org.itsallcode.openfasttrace.importer.tag.common.CoverageTagParser;
+import org.itsallcode.openfasttrace.importer.tag.common.LineReader;
+import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 
 /**
  * {@link Importer} for tags in source code files.
@@ -27,20 +26,7 @@ class TagImporter implements Importer
     static TagImporter create(final PathConfig config, final InputFile file,
             final ImportEventListener listener)
     {
-        final LineConsumer lineConsumer = createLineConsumer(config, file, listener);
-        return new TagImporter(lineConsumer, file);
-    }
-
-    private static LineConsumer createLineConsumer(final PathConfig config, final InputFile file,
-            final ImportEventListener listener)
-    {
-        final List<LineConsumer> importers = new ArrayList<>();
-        importers.add(new LongTagImportingLineConsumer(file, listener));
-        if (config != null)
-        {
-            importers.add(new ShortTagImportingLineConsumer(config, file, listener));
-        }
-        return new DelegatingLineConsumer(importers);
+        return new TagImporter(CoverageTagParser.create(config, file, listener), file);
     }
 
     @Override

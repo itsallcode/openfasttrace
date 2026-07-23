@@ -149,6 +149,12 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-tag-importer-common</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-tag</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>

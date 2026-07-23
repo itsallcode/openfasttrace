@@ -42,4 +42,26 @@ class ImporterFactoryLoaderIT {
                 hasProperty("id", hasToString(startsWith("impl~foobar")))
         ));
     }
+
+    // [itest->dsn~gherkin.importer-selection~1]
+    @Test
+    void testSelectsGherkinImporterBeforeTagImporter(@TempDir final Path tempDir) throws IOException {
+        final Oft oft = Oft.create();
+        Files.writeString(tempDir.resolve("login.feature"), """
+                @id:scn~login~1
+                Scenario: Login
+                  # [impl~login~1 -> dsn~login~1]
+                  Given [impl~must-not-be-imported~1 -> dsn~login~1]
+                """);
+        final ImportSettings settings = ImportSettings.builder()
+                .addInputs(tempDir)
+                .filter(FilterSettings.builder().build())
+                .build();
+
+        final List<SpecificationItem> items = oft.importItems(settings);
+
+        assertThat(items, containsInAnyOrder(
+                hasProperty("id", hasToString("scn~login~1")),
+                hasProperty("id", hasToString("impl~login~1"))));
+    }
 }

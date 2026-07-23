@@ -235,8 +235,49 @@ The default priorities for standard importers are:
 1. Markdown Importer: 1000
 2. reStructuredText Importer: 2000
 3. Specobject (ReqM2) Importer: 3000
-4. Tag Importer: 10000
-5. Zip Importer: 20000
+4. Gherkin Importer: 9000
+5. Tag Importer: 10000
+6. Zip Importer: 20000
+
+### Gherkin Import
+
+#### Importer Selection
+`dsn~gherkin.importer-selection~1`
+
+The Gherkin importer selects `.feature` files with priority 9000, ahead of the Tag Importer. This gives Gherkin syntax ownership to the dedicated importer while retaining the Tag Importer as the fallback for other source files.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest, itest
+
+#### Streaming Import
+`dsn~gherkin.streaming-import~1`
+
+The Gherkin importer scans each input file once. It imports only scenarios and scenario outlines with exactly one immediately preceding `@id:` tag, maps header location and title to import events, and streams non-comment scenario steps into the description until a Gherkin block boundary.
+
+Scoped `# Covers:` and `# Needs:` comments are validated between the tag region and header. Multiple `Covers` directives accumulate coverage IDs; `Needs` occurs at most once. The importer retains only active metadata and previously imported IDs.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+* `req~gherkin-metadata-validation~1`
+
+Needs: impl, utest
+
+#### Support Legacy Coverage Tags
+`dsn~gherkin.comment-coverage-tags~1`
+
+The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves legacy comment coverage tags without applying their regular expressions to executable Gherkin text.
+
+When a comment tag occurs inside an imported scenario, its listener events are buffered until the scenario ends. The shared parser emits complete specification-item event sequences, so emitting them immediately would interleave them with the open scenario item and corrupt the listener state.
+
+Covers:
+
+* `req~gherkin-comment-coverage-tags~1`
+
+Needs: impl, utest
 
 ### ReqM2 File Detection
 `dsn~import.reqm2-file-detection~1`
@@ -558,7 +599,7 @@ Needs: impl, itest
 #### HTML Reports Allows Configuring Details Display Status
 `dsn~reporting.html.details-display~1`
 
-OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
+OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.
 
 Covers:
 
@@ -699,13 +740,13 @@ Needs: impl, utest
 A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
-    
+
     type = 1*ALPHA
-    
+
     id = id-fragment *("." id-fragment)
-    
+
     id-fragment = UNICODE_ALPHA *(UNICODE_ALPHA / DIGIT / "_" / "-")
-    
+
     revision = 1*DIGIT
 
 Rationale:
@@ -750,9 +791,9 @@ Needs: impl, utest
 In Markdown specification item references have the following format:
 
     reference = (plain-reference / url-style-link)
-    
+
     plain-reference = requirement-id
-    
+
     url-style-link = "[" link-text "]" "(" "#" requirement-id ")"
 
 Covers:
@@ -767,9 +808,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links that cover a different specification item.
 
     covers-list = covers-header 1*(LINEBREAK covers-line)
-    
+
     covers-header = "Covers:" *WSP
-    
+
     covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -790,9 +831,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
-    
+
     depends-header = "Depends:" *WSP
-    
+
     depends-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -852,11 +893,11 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
 
     artifact-need-redirection = skipped-artifact-type *WSP "-->" *WSP target-artifact-list
         *WSP ":" *WSP original-requirement-id
-        
+
     skipped-artifact-type = artifact-type
-    
+
     target-artifact-list = artifact-type *("," *WSP artifact-type)
-        
+
     original-requirement-id = requirement-id
 
 The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
@@ -1234,7 +1275,7 @@ Needs: impl, utest
 
 ### Why is This Architecture Relevant?
 
-Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves. 
+Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves.
 
 ### Alternatives Considered
 

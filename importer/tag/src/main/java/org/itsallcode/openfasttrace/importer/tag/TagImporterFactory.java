@@ -21,7 +21,6 @@ public class TagImporterFactory extends AbstractImporterFactory
             "dox", // Doxygen
             "c#", "cs", // C#
             "cfg", "conf", "ini", // configuration files
-            "feature", // Gherkin feature files
             "go", // Go
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "xml", "yaml", "yml", // markup languages

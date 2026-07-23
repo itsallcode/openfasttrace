@@ -119,6 +119,47 @@ Needs: req
 
 OFT imports coverage tags from source code files.
 
+### Gherkin Import
+`feat~gherkin-import~1`
+
+OFT imports specification items from annotated Gherkin scenarios and scenario outlines in `.feature` files.
+
+Needs: req
+
+#### Import Gherkin Scenarios
+`req~gherkin-scenario-import~1`
+
+OFT imports a Gherkin `Scenario` or `Scenario Outline` as a specification item when its immediately preceding contiguous tag region contains exactly one `@id:<specification-item-id>` tag. The scenario header supplies the title and location; scenario steps form the description.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Validate Gherkin Metadata
+`req~gherkin-metadata-validation~1`
+
+OFT accepts optional, scoped `# Covers:` and `# Needs:` comments between an ID tag region and its scenario header. `Covers` may occur multiple times; `Needs` may occur once. Each directive must contain a non-empty, valid, duplicate-free list. Invalid IDs, artifact types, repeated IDs, duplicate scenario IDs, and orphan directives cause an import error that identifies the file and line.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Preserve Gherkin Comment Coverage Tags
+`req~gherkin-comment-coverage-tags~1`
+
+OFT imports legacy coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+* [feat~coverage-tag-import~1](#coverage-tag-import)
+
+Needs: dsn
+
 Rationale:
 
 Coverage tags indicate parts of the source code that implements a certain requirement.

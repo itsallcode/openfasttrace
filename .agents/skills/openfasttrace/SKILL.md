@@ -71,6 +71,28 @@ Multiple coverage:
 
 ## Tracing
 
+## Syntax: Gherkin
+
+Gherkin `.feature` files can define OFT scenario items. Put exactly one OFT ID
+in the contiguous tag region immediately before a `Scenario` or `Scenario
+Outline`. Optional `# Covers:` and `# Needs:` comments belong between the tags
+and the scenario header. Multiple `Covers` comments accumulate IDs; `Needs`
+may appear once.
+
+```gherkin
+@id:scn~user-login~1
+# Covers: req~authentication~1
+# Needs: dsn, itest
+Scenario: User logs in
+  Given a registered user
+  When valid credentials are entered
+  Then access is granted
+```
+
+Legacy coverage tags are recognized only in Gherkin comments, for example
+`# [impl~login~1 -> dsn~authentication~1]`. Executable Gherkin lines are not
+evaluated for coverage tags.
+
 Tracing can be performed via CLI, Maven, or Gradle.
 
 ### CLI Usage

@@ -22,6 +22,7 @@ if $oft_script trace \
     "$base_dir/importer/specobject/src" \
     "$base_dir/importer/zip/src" \
     "$base_dir/importer/tag-importer-common/src" \
+    "$base_dir/importer/gherkin/src" \
     "$base_dir/importer/tag/src" \
     "$base_dir/core/src/main" \
     "$base_dir/core/src/test/java" \

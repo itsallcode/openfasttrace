@@ -48,7 +48,8 @@ class GherkinImporterTest {
         final SpecificationItem item = items.get(0);
         assertThat(item.getTitle(), is("Login works"));
         assertThat(item.getLocation().getLine(), is(5));
-        assertThat(item.getDescription(), is("Given a registered user\n  When they log in\n  Then access is granted"));
+        assertThat(item.getDescription(), is(String.join(System.lineSeparator(),
+                "Given a registered user", "  When they log in", "  Then access is granted")));
         assertThat(item.getCoveredIds(), contains(hasToString("req~login~1")));
         assertThat(item.getNeedsArtifactTypes(), containsInAnyOrder("dsn", "itest"));
     }

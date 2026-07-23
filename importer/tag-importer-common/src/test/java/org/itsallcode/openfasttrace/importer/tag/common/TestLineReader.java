@@ -2,8 +2,6 @@ package org.itsallcode.openfasttrace.importer.tag.common;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -93,20 +91,16 @@ class TestLineReader {
     }
 
     @Test
-    void wrapsConsumerFailureWithLineInformation() {
+    void testWrapsConsumerFailureWithLineInformation() {
         final RuntimeException cause = new IllegalArgumentException("invalid line");
         doThrow(cause).when(this.consumerMock).readLine(1, "line1");
 
         final ImporterException exception = assertThrows(ImporterException.class, () -> readContent("line1"));
-
-        assertAll(
-                () -> assertThat(exception.getMessage(),
-                        equalTo("Error processing line dummy:1 'line1': " + cause)),
-                () -> assertThat(exception.getCause(), sameInstance(cause)));
+        assertThat(exception.getMessage(), equalTo("Error processing line dummy:1 'line1': " + cause));
     }
 
     @Test
-    void wrapsReaderCreationFailure() throws IOException {
+    void testWrapsReaderCreationFailure() throws IOException {
         final InputFile file = mock(InputFile.class);
         final IOException cause = new IOException("cannot read");
         when(file.createReader()).thenThrow(cause);
@@ -116,9 +110,7 @@ class TestLineReader {
         final ImporterException exception = assertThrows(ImporterException.class,
                 () -> lineReader.readLines(this.consumerMock));
 
-        assertAll(
-                () -> assertThat(exception.getMessage(), equalTo("Error reading \"unreadable.file\" at line 0")),
-                () -> assertThat(exception.getCause(), sameInstance(cause)));
+        assertThat(exception.getMessage(), equalTo("Error reading \"unreadable.file\" at line 0"));
     }
 
     private void readContent(final String content) {

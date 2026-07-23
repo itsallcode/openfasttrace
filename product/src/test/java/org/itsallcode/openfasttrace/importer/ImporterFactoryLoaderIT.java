@@ -50,8 +50,10 @@ class ImporterFactoryLoaderIT {
         Files.writeString(tempDir.resolve("login.feature"), """
                 @id:scn~login~1
                 Scenario: Login
-                  # [""" + "impl~login~1 -> dsn~login~1]\n" + """
-                  Given [""" + "impl~must-not-be-imported~1 -> dsn~login~1]\n");
+                  # [%s]
+                  Given [%s]
+                """.formatted("impl~login~1 -> dsn~login~1",
+                "impl~must-not-be-imported~1 -> dsn~login~1"));
         final ImportSettings settings = ImportSettings.builder()
                 .addInputs(tempDir)
                 .filter(FilterSettings.builder().build())

@@ -3,16 +3,23 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class GherkinImporterTest {
     private static final GherkinImporterFactory FACTORY = new GherkinImporterFactory();
@@ -98,16 +105,145 @@ class GherkinImporterTest {
         assertThat(exception.getMessage(), hasToString(org.hamcrest.Matchers.containsString("requires exactly one")));
     }
 
+    // [utest->dsn~gherkin.streaming-import~1]
+    @Test
+    void testIgnoresDirectivesOutsideAnIdMetadataRegion() {
+        final List<SpecificationItem> items = importText("""
+                # Covers: req~login~1
+                Scenario: Login
+                """);
+
+        assertThat(items, is(empty()));
+    }
+
+    // [utest->dsn~gherkin.streaming-import~1]
+    @Test
+    void testKeepsMetadataWhenAnUnrelatedCommentPrecedesTheScenario() {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1
+                # A human-readable comment
+                Scenario: Login
+                """);
+
+        assertThat(items, contains(hasProperty("id", hasToString("scn~login~1"))));
+    }
+
+    // [utest->dsn~gherkin.streaming-import~1]
+    @ParameterizedTest
+    @MethodSource("invalidMetadata")
+    void testRejectsInvalidMetadata(final String source, final String reason) {
+        final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
+
+        assertThat(exception.getMessage(), containsString(reason));
+    }
+
+    private static Stream<Arguments> invalidMetadata() {
+        return Stream.of(
+                Arguments.of("""
+                        @id:invalid
+                        Scenario: Login
+                        """, "invalid specification item ID"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        @id:scn~another-login~1
+                        Scenario: Login
+                        """, "multiple @id tags"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Needs: dsn
+                        # Needs: itest
+                        Scenario: Login
+                        """, "repeated Needs directive"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Covers:
+                        Scenario: Login
+                        """, "requires a non-empty list"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Covers: req~login~1,
+                        Scenario: Login
+                        """, "contains an empty value"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Covers: req~login~1, req~login~1
+                        Scenario: Login
+                        """, "contains duplicate value"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Needs: invalid-type
+                        Scenario: Login
+                        """, "invalid artifact type"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        # Needs: dsn, dsn
+                        Scenario: Login
+                        """, "contains duplicate value"),
+                Arguments.of("""
+                        @id:scn~login~1
+                        Scenario: Login
+                        Feature: Another feature
+                        @id:scn~login~1
+                        Scenario: Login again
+                        """, "duplicate Gherkin ID"));
+    }
+
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
     void testImportsCommentCoverageTagsButIgnoresExecutableCoverageTags() {
         final String source = """
-                # [""" + "impl~gherkin-comment~1 -> dsn~gherkin~1]\n" + """
+                @id:scn~ordinary~1
                 Scenario: ordinary
-                  Given [""" + "impl~gherkin-executable~1 -> dsn~gherkin~1]\n";
+                  # [%s]
+                  Given [%s]
+                """.formatted("impl~gherkin-comment~1 -> dsn~gherkin~1",
+                "impl~gherkin-executable~1 -> dsn~gherkin~1");
         final List<SpecificationItem> items = importText(source);
 
-        assertThat(items, contains(hasProperty("id", hasToString("impl~gherkin-comment~1"))));
+        assertThat(items, containsInAnyOrder(
+                hasProperty("id", hasToString("scn~ordinary~1")),
+                hasProperty("id", hasToString("impl~gherkin-comment~1"))));
+    }
+
+    @Test
+    void testReplaysAllBufferedEventTypes() {
+        final GherkinImporter.EventBuffer buffer = new GherkinImporter.EventBuffer();
+        final ImportEventListener listener = mock(ImportEventListener.class);
+        final SpecificationItemId id = SpecificationItemId.parseId("req~login~1");
+        final Location location = Location.create("file.feature", 2);
+
+        buffer.beginSpecificationItem();
+        buffer.setId(id);
+        buffer.setTitle("title");
+        buffer.setStatus(ItemStatus.DRAFT);
+        buffer.appendDescription("description");
+        buffer.appendRationale("rationale");
+        buffer.appendComment("comment");
+        buffer.addCoveredId(id);
+        buffer.addDependsOnId(id);
+        buffer.addNeededArtifactType("dsn");
+        buffer.addTag("tag");
+        buffer.setLocation("file.feature", 1);
+        buffer.setLocation(location);
+        buffer.setForwards(true);
+        buffer.endSpecificationItem();
+        buffer.replay(listener);
+
+        verify(listener).beginSpecificationItem();
+        verify(listener).setId(id);
+        verify(listener).setTitle("title");
+        verify(listener).setStatus(ItemStatus.DRAFT);
+        verify(listener).appendDescription("description");
+        verify(listener).appendRationale("rationale");
+        verify(listener).appendComment("comment");
+        verify(listener).addCoveredId(id);
+        verify(listener).addDependsOnId(id);
+        verify(listener).addNeededArtifactType("dsn");
+        verify(listener).addTag("tag");
+        verify(listener).setLocation("file.feature", 1);
+        verify(listener).setLocation(location);
+        verify(listener).setForwards(true);
+        verify(listener).endSpecificationItem();
     }
 
     private static List<SpecificationItem> importText(final String source) {

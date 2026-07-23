@@ -17,16 +17,19 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 // [impl->dsn~gherkin.streaming-import~1]
 // [impl->dsn~gherkin.comment-coverage-tags~1]
 final class GherkinImporter implements Importer, LineConsumer {
-    private static final Pattern ID_TAG = Pattern.compile("@id:(\\S+)");
-    private static final Pattern SCENARIO = Pattern.compile("^\\s*Scenario(?: Outline)?:\\s*(.*)$");
+    private static final int UNICODE = Pattern.UNICODE_CHARACTER_CLASS;
+    private static final Pattern ID_TAG = Pattern.compile("@id:([^\\s]+)", UNICODE);
+    private static final Pattern SCENARIO = Pattern.compile("^\\s*Scenario(?: Outline)?:(.*)$", UNICODE);
     private static final Pattern BOUNDARY = Pattern
-            .compile("^\\s*(?:Scenario(?: Outline)?|Feature|Rule|Background|Examples):");
-    private static final Pattern DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$");
+            .compile("^\\s*(?:Scenario(?: Outline)?|Feature|Rule|Background|Examples):", UNICODE);
+    private static final Pattern DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$", UNICODE);
+    private static final Pattern ARTIFACT_TYPE = Pattern.compile("\\p{IsAlphabetic}+");
 
     private final InputFile file;
     private final ImportEventListener listener;
     private final LineConsumer coverageTagParser;
-    // Legacy tags emit complete items and therefore must not interleave with an open scenario item.
+    // Legacy tags emit complete items and therefore must not interleave with an
+    // open scenario item.
     private final LineConsumer delayedCoverageTagParser;
     private final EventBuffer delayedCoverageEvents = new EventBuffer();
     private final Set<SpecificationItemId> importedIds = new LinkedHashSet<>();
@@ -59,7 +62,7 @@ final class GherkinImporter implements Importer, LineConsumer {
         final Matcher scenario = SCENARIO.matcher(line);
         if (scenario.matches()) {
             endScenario();
-            beginScenario(lineNumber, scenario.group(1));
+            beginScenario(lineNumber, scenario.group(1).trim());
             return;
         }
         if (BOUNDARY.matcher(line).find()) {
@@ -119,28 +122,50 @@ final class GherkinImporter implements Importer, LineConsumer {
         if (!covers && this.hasNeedsDirective) {
             fail(lineNumber, "repeated " + name + " directive");
         }
-        final String[] entries = values.trim().split(",", -1);
-        if (entries.length == 0 || values.trim().isEmpty()) {
+        final String[] entries = splitValues(lineNumber, name, values);
+        if (covers) {
+            readCoveredIds(lineNumber, entries);
+            return;
+        }
+        readNeededArtifactTypes(lineNumber, entries);
+        this.hasNeedsDirective = true;
+    }
+
+    private String[] splitValues(final int lineNumber, final String name, final String values) {
+        if (values.trim().isEmpty()) {
             fail(lineNumber, name + " directive requires a non-empty list");
         }
+        return values.trim().split(",", -1);
+    }
+
+    private void readCoveredIds(final int lineNumber, final String[] entries) {
         for (final String entry : entries) {
-            if (entry.trim().isEmpty()) {
-                fail(lineNumber, name + " directive contains an empty value");
-            }
-            if (covers) {
-                final SpecificationItemId id = parseId(lineNumber, entry.trim());
-                if (!this.coveredIds.add(id)) {
-                    fail(lineNumber, "Covers directive contains duplicate value '" + id + "'");
-                }
-            } else if (!entry.trim().matches("\\p{Alpha}+")) {
-                fail(lineNumber, "Needs directive contains invalid artifact type '" + entry.trim() + "'");
-            } else if (!this.neededArtifactTypes.add(entry.trim())) {
-                fail(lineNumber, "Needs directive contains duplicate value '" + entry.trim() + "'");
+            final String value = requireValue(lineNumber, "Covers", entry);
+            final SpecificationItemId id = parseId(lineNumber, value);
+            if (!this.coveredIds.add(id)) {
+                fail(lineNumber, "Covers directive contains duplicate value '" + id + "'");
             }
         }
-        if (!covers) {
-            this.hasNeedsDirective = true;
+    }
+
+    private void readNeededArtifactTypes(final int lineNumber, final String[] entries) {
+        for (final String entry : entries) {
+            final String value = requireValue(lineNumber, "Needs", entry);
+            if (!ARTIFACT_TYPE.matcher(value).matches()) {
+                fail(lineNumber, "Needs directive contains invalid artifact type '" + value + "'");
+            }
+            if (!this.neededArtifactTypes.add(value)) {
+                fail(lineNumber, "Needs directive contains duplicate value '" + value + "'");
+            }
         }
+    }
+
+    private String requireValue(final int lineNumber, final String name, final String entry) {
+        final String value = entry.trim();
+        if (value.isEmpty()) {
+            fail(lineNumber, name + " directive contains an empty value");
+        }
+        return value;
     }
 
     private SpecificationItemId parseId(final int lineNumber, final String value) {
@@ -190,7 +215,7 @@ final class GherkinImporter implements Importer, LineConsumer {
     }
 
     /** Buffers legacy coverage-tag events until the current scenario has ended. */
-    private static final class EventBuffer implements ImportEventListener {
+    static final class EventBuffer implements ImportEventListener {
         private final List<Consumer<ImportEventListener>> events = new ArrayList<>();
 
         @Override
@@ -200,57 +225,57 @@ final class GherkinImporter implements Importer, LineConsumer {
 
         @Override
         public void setId(final SpecificationItemId id) {
-            this.events.add(listener -> listener.setId(id));
+            this.events.add(target -> target.setId(id));
         }
 
         @Override
         public void setTitle(final String title) {
-            this.events.add(listener -> listener.setTitle(title));
+            this.events.add(target -> target.setTitle(title));
         }
 
         @Override
         public void setStatus(final ItemStatus status) {
-            this.events.add(listener -> listener.setStatus(status));
+            this.events.add(target -> target.setStatus(status));
         }
 
         @Override
         public void appendDescription(final String fragment) {
-            this.events.add(listener -> listener.appendDescription(fragment));
+            this.events.add(target -> target.appendDescription(fragment));
         }
 
         @Override
         public void appendRationale(final String fragment) {
-            this.events.add(listener -> listener.appendRationale(fragment));
+            this.events.add(target -> target.appendRationale(fragment));
         }
 
         @Override
         public void appendComment(final String fragment) {
-            this.events.add(listener -> listener.appendComment(fragment));
+            this.events.add(target -> target.appendComment(fragment));
         }
 
         @Override
         public void addCoveredId(final SpecificationItemId id) {
-            this.events.add(listener -> listener.addCoveredId(id));
+            this.events.add(target -> target.addCoveredId(id));
         }
 
         @Override
         public void addDependsOnId(final SpecificationItemId id) {
-            this.events.add(listener -> listener.addDependsOnId(id));
+            this.events.add(target -> target.addDependsOnId(id));
         }
 
         @Override
         public void addNeededArtifactType(final String artifactType) {
-            this.events.add(listener -> listener.addNeededArtifactType(artifactType));
+            this.events.add(target -> target.addNeededArtifactType(artifactType));
         }
 
         @Override
         public void addTag(final String tag) {
-            this.events.add(listener -> listener.addTag(tag));
+            this.events.add(target -> target.addTag(tag));
         }
 
         @Override
         public void setLocation(final String path, final int line) {
-            this.events.add(listener -> listener.setLocation(path, line));
+            this.events.add(target -> target.setLocation(path, line));
         }
 
         @Override
@@ -260,12 +285,12 @@ final class GherkinImporter implements Importer, LineConsumer {
 
         @Override
         public void setLocation(final Location location) {
-            this.events.add(listener -> listener.setLocation(location));
+            this.events.add(target -> target.setLocation(location));
         }
 
         @Override
         public void setForwards(final boolean forwards) {
-            this.events.add(listener -> listener.setForwards(forwards));
+            this.events.add(target -> target.setForwards(forwards));
         }
 
         void replay(final ImportEventListener listener) {

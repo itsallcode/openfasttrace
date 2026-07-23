@@ -47,9 +47,7 @@ class TestLongTagImportingLineConsumer {
     void importsLongTag(final int lineNumber, final String tag, final List<SpecificationItem> expectedItems) {
         final SpecificationListBuilder listener = SpecificationListBuilder.create();
         final LongTagImportingLineConsumer consumer = new LongTagImportingLineConsumer(inputFile(), listener);
-
         consumer.readLine(lineNumber, tag);
-
         assertThat(listener.build(), equalTo(expectedItems));
     }
 

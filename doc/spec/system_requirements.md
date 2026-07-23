@@ -119,6 +119,12 @@ Needs: req
 
 OFT imports coverage tags from source code files.
 
+Rationale:
+
+Coverage tags indicate parts of the source code that implements a certain requirement.
+
+Needs: req
+
 ### Gherkin Import
 `feat~gherkin-import~1`
 
@@ -156,15 +162,8 @@ OFT imports legacy coverage tags from comments in `.feature` files, but does not
 Covers:
 
 * [feat~gherkin-import~1](#gherkin-import)
-* [feat~coverage-tag-import~1](#coverage-tag-import)
 
 Needs: dsn
-
-Rationale:
-
-Coverage tags indicate parts of the source code that implements a certain requirement.
-
-Needs: req
 
 ### ReqM2 Export
 `feat~reqm2-export~1`
@@ -567,7 +566,7 @@ Covers:
 
 Needs: dsn
 
-#### Include Items That Don't Have Tags Or Where at Least One Tag Matches 
+#### Include Items That Don't Have Tags Or Where at Least One Tag Matches
 `req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
 
 OFT gives users the option to include only specification items that either do not have tags or have at least one tag from a configurable set of tags during processing.
@@ -589,7 +588,7 @@ Reports are the main way to find out if a projects requirements are covered prop
 Users can choose to display the requirement origin (e.g. file and line number) in reports:
 
 * In the body of a specification item
-* For each link to a specification item 
+* For each link to a specification item
 
 Rationale:
 
@@ -847,29 +846,29 @@ Covers:
 Needs: dsn
 
 #### Common
- 
+
 ##### CLI Help
 `req~cli.help~1`
- 
+
 `help`, `-h` and `--help` show a short help text with command line usage.
- 
+
 Covers:
- 
+
 * [feat~command-line-interface~1](#command-line-interface)
- 
+
 Needs: dsn
- 
+
 ##### CLI Version
 `req~cli.version~1`
- 
+
 `help`, `-h` and `--help` show the version of OFT.
- 
+
 Covers:
- 
+
 * [feat~command-line-interface~1](#command-line-interface)
- 
+
 Needs: dsn
- 
+
 ##### Input Selection
 `req~cli.input-selection~1`
 

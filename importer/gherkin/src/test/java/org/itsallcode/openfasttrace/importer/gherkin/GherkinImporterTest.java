@@ -68,7 +68,7 @@ class GherkinImporterTest {
         assertThat(items, is(empty()));
     }
 
-    // [utest->dsn~gherkin.metadata-validation~1]
+    // [utest->dsn~gherkin.streaming-import~1]
     @Test
     void testImportsMultipleCoversDirectives() {
         final String source = """
@@ -84,7 +84,7 @@ class GherkinImporterTest {
                 hasToString("req~login~1"), hasToString("req~security~1")));
     }
 
-    // [utest->dsn~gherkin.metadata-validation~1]
+    // [utest->dsn~gherkin.streaming-import~1]
     @Test
     void testRejectsDirectiveWithoutId() {
         final String source = """
@@ -101,11 +101,11 @@ class GherkinImporterTest {
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
     void testImportsCommentCoverageTagsButIgnoresExecutableCoverageTags() {
-        final List<SpecificationItem> items = importText("""
-                # [impl~gherkin-comment~1 -> dsn~gherkin~1]
+        final String source = """
+                # [""" + "impl~gherkin-comment~1 -> dsn~gherkin~1]\n" + """
                 Scenario: ordinary
-                  Given [impl~gherkin-executable~1 -> dsn~gherkin~1]
-                """);
+                  Given [""" + "impl~gherkin-executable~1 -> dsn~gherkin~1]\n";
+        final List<SpecificationItem> items = importText(source);
 
         assertThat(items, contains(hasProperty("id", hasToString("impl~gherkin-comment~1"))));
     }

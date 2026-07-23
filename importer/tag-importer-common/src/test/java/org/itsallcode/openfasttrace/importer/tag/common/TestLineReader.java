@@ -5,10 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -114,9 +111,10 @@ class TestLineReader {
         final IOException cause = new IOException("cannot read");
         when(file.createReader()).thenThrow(cause);
         when(file.toString()).thenReturn("unreadable.file");
+        final LineReader lineReader = LineReader.create(file);
 
         final ImporterException exception = assertThrows(ImporterException.class,
-                () -> LineReader.create(file).readLines(this.consumerMock));
+                () -> lineReader.readLines(this.consumerMock));
 
         assertAll(
                 () -> assertThat(exception.getMessage(), equalTo("Error reading \"unreadable.file\" at line 0")),

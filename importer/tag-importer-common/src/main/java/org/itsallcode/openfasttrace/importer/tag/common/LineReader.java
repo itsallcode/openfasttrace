@@ -9,7 +9,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 /**
  * Reads an input file line by line and forwards every line to a consumer.
  */
-public class LineReader {
+public final class LineReader {
     private final InputFile file;
 
     private LineReader(final InputFile file) {

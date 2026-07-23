@@ -19,6 +19,5 @@ final class GherkinImporter implements Importer {
     @Override
     public void runImport() {
         LineReader.create(this.file).readLines(this.lineConsumer);
-        this.lineConsumer.finish();
     }
 }

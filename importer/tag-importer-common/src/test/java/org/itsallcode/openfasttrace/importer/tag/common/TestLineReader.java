@@ -100,6 +100,16 @@ class TestLineReader {
     }
 
     @Test
+    void testWrapsConsumerFinishFailure() {
+        final RuntimeException cause = new IllegalArgumentException("cannot finish");
+        doThrow(cause).when(this.consumerMock).finish();
+
+        final ImporterException exception = assertThrows(ImporterException.class, () -> readContent(""));
+
+        assertThat(exception.getMessage(), equalTo("Error finishing dummy: " + cause));
+    }
+
+    @Test
     void testWrapsReaderCreationFailure() throws IOException {
         final InputFile file = mock(InputFile.class);
         final IOException cause = new IOException("cannot read");
@@ -126,6 +136,7 @@ class TestLineReader {
             inOrder.verify(this.consumerMock).readLine(lineNumber, line);
             lineNumber++;
         }
+        inOrder.verify(this.consumerMock).finish();
         inOrder.verifyNoMoreInteractions();
     }
 }

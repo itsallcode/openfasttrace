@@ -70,7 +70,8 @@ final class GherkinLineConsumer implements LineConsumer {
         readMetadata(lineNumber, line);
     }
 
-    void finish() {
+    @Override
+    public void finish() {
         endScenario();
     }
 

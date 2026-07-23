@@ -44,6 +44,7 @@ public final class LineReader {
                 currentLineNumber = reader.getLineNumber();
                 processLine(consumer, currentLineNumber, line);
             }
+            finish(consumer);
         } catch (final IOException exception) {
             throw new ImporterException("Error reading \"" + this.file + "\" at line " + currentLineNumber, exception);
         }
@@ -56,6 +57,15 @@ public final class LineReader {
         } catch (final RuntimeException exception) {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":" + currentLineNumber + " '"
                     + line + "': " + exception, exception);
+        }
+    }
+
+    private void finish(final LineConsumer consumer) {
+        try {
+            consumer.finish();
+        } catch (final RuntimeException exception) {
+            throw new ImporterException("Error finishing " + this.file.getPath() + ": " + exception,
+                    exception);
         }
     }
 
@@ -73,5 +83,12 @@ public final class LineReader {
          *                   line content without its line separator
          */
         void readLine(int lineNumber, String line);
+
+        /**
+         * Finish consuming the input after its last line has been read.
+         */
+        default void finish() {
+            // Default implementation intentionally does nothing.
+        }
     }
 }

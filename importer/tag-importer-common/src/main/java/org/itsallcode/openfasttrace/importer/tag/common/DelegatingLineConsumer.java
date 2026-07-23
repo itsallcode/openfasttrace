@@ -19,4 +19,10 @@ class DelegatingLineConsumer implements LineConsumer
     {
         this.delegates.forEach(delegate -> delegate.readLine(lineNumber, line));
     }
+
+    @Override
+    public void finish()
+    {
+        this.delegates.forEach(LineConsumer::finish);
+    }
 }

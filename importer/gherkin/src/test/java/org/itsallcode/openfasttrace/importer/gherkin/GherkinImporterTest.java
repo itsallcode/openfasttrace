@@ -3,15 +3,17 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InOrder;
 
 class GherkinImporterTest {
     private static final GherkinImporterFactory FACTORY = new GherkinImporterFactory();
@@ -207,30 +210,25 @@ class GherkinImporterTest {
                 hasProperty("id", hasToString("impl~gherkin-comment~1"))));
     }
 
+    // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
-    void testEventBufferReplaysBeginItem() { assertEvent(EventBuffer::beginSpecificationItem, ImportEventListener::beginSpecificationItem); }
-    @Test void testEventBufferReplaysId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.setId(id), l -> verify(l).setId(id)); }
-    @Test void testEventBufferReplaysTitle() { assertEvent(b -> b.setTitle("title"), l -> verify(l).setTitle("title")); }
-    @Test void testEventBufferReplaysStatus() { assertEvent(b -> b.setStatus(ItemStatus.DRAFT), l -> verify(l).setStatus(ItemStatus.DRAFT)); }
-    @Test void testEventBufferReplaysDescription() { assertEvent(b -> b.appendDescription("description"), l -> verify(l).appendDescription("description")); }
-    @Test void testEventBufferReplaysRationale() { assertEvent(b -> b.appendRationale("rationale"), l -> verify(l).appendRationale("rationale")); }
-    @Test void testEventBufferReplaysComment() { assertEvent(b -> b.appendComment("comment"), l -> verify(l).appendComment("comment")); }
-    @Test void testEventBufferReplaysCoveredId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.addCoveredId(id), l -> verify(l).addCoveredId(id)); }
-    @Test void testEventBufferReplaysDependencyId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.addDependsOnId(id), l -> verify(l).addDependsOnId(id)); }
-    @Test void testEventBufferReplaysNeededArtifactType() { assertEvent(b -> b.addNeededArtifactType("dsn"), l -> verify(l).addNeededArtifactType("dsn")); }
-    @Test void testEventBufferReplaysTag() { assertEvent(b -> b.addTag("tag"), l -> verify(l).addTag("tag")); }
-    @Test void testEventBufferReplaysPathLocation() { assertEvent(b -> b.setLocation("file.feature", 1), l -> verify(l).setLocation("file.feature", 1)); }
-    @Test void testEventBufferReplaysLocation() { final Location location = Location.create("file.feature", 2); assertEvent(b -> b.setLocation(location), l -> verify(l).setLocation(location)); }
-    @Test void testEventBufferReplaysForwards() { assertEvent(b -> b.setForwards(true), l -> verify(l).setForwards(true)); }
-    @Test void testEventBufferReplaysEndItem() { assertEvent(EventBuffer::endSpecificationItem, ImportEventListener::endSpecificationItem); }
-
-    private static void assertEvent(final Consumer<EventBuffer> addEvent,
-            final Consumer<ImportEventListener> verifyEvent) {
-        final EventBuffer buffer = new EventBuffer();
+    void testDelaysCommentCoverageTagsUntilAfterTheScenario() {
         final ImportEventListener listener = mock(ImportEventListener.class);
-        addEvent.accept(buffer);
-        buffer.replay(listener);
-        verifyEvent.accept(listener);
+        final InputFile file = StreamInput.forReader(Path.of("specification.feature"),
+                new BufferedReader(new StringReader("""
+                        @id:scn~ordinary~1
+                        Scenario: ordinary
+                          # [impl~gherkin-comment~1 -> dsn~gherkin~1]
+                          Given a step
+                        """)));
+
+        new GherkinImporter(file, listener).runImport();
+
+        final InOrder events = inOrder(listener);
+        events.verify(listener).beginSpecificationItem();
+        events.verify(listener).setId(SpecificationItemId.parseId("scn~ordinary~1"));
+        events.verify(listener).endSpecificationItem();
+        events.verify(listener).beginSpecificationItem();
     }
 
     private static List<SpecificationItem> importText(final String source) {

@@ -25,13 +25,18 @@ class TestShortTagImportingLineConsumer {
 
     static Stream<Arguments> shortTagImportingTests() {
         return Stream.of(
-                Arguments.of(3, "[[covered:2" + "]]", null,
-                        List.of(item("covered-3798966306", 3, "req~covered~2"))),
-                Arguments.of(4, "[[covered:2" + "]]", "prefix.",
-                        List.of(item("prefix.covered-1644633624", 4, "req~prefix.covered~2"))),
-                Arguments.of(5, "[[first:2" + "]]" + "[[second:3" + "]]", null,
-                        List.of(item("first-969050621", 5, "req~first~2"),
-                                item("second-2680780004", 5, "req~second~3"))));
+                testCase(3, "[[covered:2" + "]]", null,
+                        item("covered-3798966306", 3, "req~covered~2")),
+                testCase(4, "[[covered:2" + "]]", "prefix.",
+                        item("prefix.covered-1644633624", 4, "req~prefix.covered~2")),
+                testCase(5, "[[first:2" + "]]" + "[[second:3" + "]]", null,
+                        item("first-969050621", 5, "req~first~2"),
+                        item("second-2680780004", 5, "req~second~3")));
+    }
+
+    private static Arguments testCase(final int lineNumber, final String tag, final String coveredItemNamePrefix,
+            final SpecificationItem... expectedItems) {
+        return Arguments.of(lineNumber, tag, coveredItemNamePrefix, List.of(expectedItems));
     }
 
     @ParameterizedTest

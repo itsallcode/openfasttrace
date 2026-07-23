@@ -26,16 +26,20 @@ class TestLongTagImportingLineConsumer {
                 // [utest->dsn~import.full-coverage-tag-with-name-and-revision~1]
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
                 // [utest->dsn~import.full-coverage-tag-multiple-needed-coverage~1]
-                Arguments.of(3, "[impl~tag~1 -> dsn~first~2, dsn~second~3 >> utest, itest" + "]",
-                        List.of(item("impl~tag~1", 3, List.of("dsn~first~2", "dsn~second~3"),
-                                List.of("utest", "itest")))),
+                testCase(3, "[impl~tag~1 -> dsn~first~2, dsn~second~3 >> utest, itest" + "]",
+                        item("impl~tag~1", 3, List.of("dsn~first~2", "dsn~second~3"),
+                                List.of("utest", "itest"))),
                 // [utest->dsn~import.full-coverage-tag~1]
-                Arguments.of(4, "[impl -> dsn~covered~2" + "]",
-                        List.of(item("impl~covered-3014110766~0", 4, List.of("dsn~covered~2"), List.of()))),
+                testCase(4, "[impl -> dsn~covered~2" + "]",
+                        item("impl~covered-3014110766~0", 4, List.of("dsn~covered~2"), List.of())),
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage-readable-names~1]
-                Arguments.of(5, "[impl -> dsn~first~2, dsn~second~3 >> utest" + "]",
-                        List.of(item("impl~first~0", 5, List.of("dsn~first~2"), List.of("utest")),
-                                item("impl~second~0", 5, List.of("dsn~second~3"), List.of("utest")))));
+                testCase(5, "[impl -> dsn~first~2, dsn~second~3 >> utest" + "]",
+                        item("impl~first~0", 5, List.of("dsn~first~2"), List.of("utest")),
+                        item("impl~second~0", 5, List.of("dsn~second~3"), List.of("utest"))));
+    }
+
+    static Arguments testCase(final int lineNumber, final String tag, final SpecificationItem... expectedItems) {
+        return Arguments.of(lineNumber, tag, List.of(expectedItems));
     }
 
     @ParameterizedTest

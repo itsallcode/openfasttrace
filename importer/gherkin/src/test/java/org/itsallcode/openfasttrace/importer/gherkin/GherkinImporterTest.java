@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -207,44 +208,29 @@ class GherkinImporterTest {
     }
 
     @Test
-    void testReplaysAllBufferedEventTypes() {
-        final GherkinImporter.EventBuffer buffer = new GherkinImporter.EventBuffer();
+    void testEventBufferReplaysBeginItem() { assertEvent(EventBuffer::beginSpecificationItem, ImportEventListener::beginSpecificationItem); }
+    @Test void testEventBufferReplaysId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.setId(id), l -> verify(l).setId(id)); }
+    @Test void testEventBufferReplaysTitle() { assertEvent(b -> b.setTitle("title"), l -> verify(l).setTitle("title")); }
+    @Test void testEventBufferReplaysStatus() { assertEvent(b -> b.setStatus(ItemStatus.DRAFT), l -> verify(l).setStatus(ItemStatus.DRAFT)); }
+    @Test void testEventBufferReplaysDescription() { assertEvent(b -> b.appendDescription("description"), l -> verify(l).appendDescription("description")); }
+    @Test void testEventBufferReplaysRationale() { assertEvent(b -> b.appendRationale("rationale"), l -> verify(l).appendRationale("rationale")); }
+    @Test void testEventBufferReplaysComment() { assertEvent(b -> b.appendComment("comment"), l -> verify(l).appendComment("comment")); }
+    @Test void testEventBufferReplaysCoveredId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.addCoveredId(id), l -> verify(l).addCoveredId(id)); }
+    @Test void testEventBufferReplaysDependencyId() { final SpecificationItemId id = SpecificationItemId.parseId("req~login~1"); assertEvent(b -> b.addDependsOnId(id), l -> verify(l).addDependsOnId(id)); }
+    @Test void testEventBufferReplaysNeededArtifactType() { assertEvent(b -> b.addNeededArtifactType("dsn"), l -> verify(l).addNeededArtifactType("dsn")); }
+    @Test void testEventBufferReplaysTag() { assertEvent(b -> b.addTag("tag"), l -> verify(l).addTag("tag")); }
+    @Test void testEventBufferReplaysPathLocation() { assertEvent(b -> b.setLocation("file.feature", 1), l -> verify(l).setLocation("file.feature", 1)); }
+    @Test void testEventBufferReplaysLocation() { final Location location = Location.create("file.feature", 2); assertEvent(b -> b.setLocation(location), l -> verify(l).setLocation(location)); }
+    @Test void testEventBufferReplaysForwards() { assertEvent(b -> b.setForwards(true), l -> verify(l).setForwards(true)); }
+    @Test void testEventBufferReplaysEndItem() { assertEvent(EventBuffer::endSpecificationItem, ImportEventListener::endSpecificationItem); }
+
+    private static void assertEvent(final Consumer<EventBuffer> addEvent,
+            final Consumer<ImportEventListener> verifyEvent) {
+        final EventBuffer buffer = new EventBuffer();
         final ImportEventListener listener = mock(ImportEventListener.class);
-        final SpecificationItemId id = SpecificationItemId.parseId("req~login~1");
-        final Location location = Location.create("file.feature", 2);
-
-        buffer.beginSpecificationItem();
-        buffer.setId(id);
-        buffer.setTitle("title");
-        buffer.setStatus(ItemStatus.DRAFT);
-        buffer.appendDescription("description");
-        buffer.appendRationale("rationale");
-        buffer.appendComment("comment");
-        buffer.addCoveredId(id);
-        buffer.addDependsOnId(id);
-        buffer.addNeededArtifactType("dsn");
-        buffer.addTag("tag");
-        buffer.setLocation("file.feature", 1);
-        buffer.setLocation(location);
-        buffer.setForwards(true);
-        buffer.endSpecificationItem();
+        addEvent.accept(buffer);
         buffer.replay(listener);
-
-        verify(listener).beginSpecificationItem();
-        verify(listener).setId(id);
-        verify(listener).setTitle("title");
-        verify(listener).setStatus(ItemStatus.DRAFT);
-        verify(listener).appendDescription("description");
-        verify(listener).appendRationale("rationale");
-        verify(listener).appendComment("comment");
-        verify(listener).addCoveredId(id);
-        verify(listener).addDependsOnId(id);
-        verify(listener).addNeededArtifactType("dsn");
-        verify(listener).addTag("tag");
-        verify(listener).setLocation("file.feature", 1);
-        verify(listener).setLocation(location);
-        verify(listener).setForwards(true);
-        verify(listener).endSpecificationItem();
+        verifyEvent.accept(listener);
     }
 
     private static List<SpecificationItem> importText(final String source) {

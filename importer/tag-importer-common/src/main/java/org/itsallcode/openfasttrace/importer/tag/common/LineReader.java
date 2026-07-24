@@ -56,7 +56,7 @@ public final class LineReader {
             consumer.readLine(currentLineNumber, line);
         } catch (final RuntimeException exception) {
             throw new ImporterException("Error processing line " + this.file.getPath() + ":" + currentLineNumber + " '"
-                    + line + "': " + exception, exception);
+                    + line + "': " + exception.getMessage(), exception);
         }
     }
 
@@ -64,7 +64,7 @@ public final class LineReader {
         try {
             consumer.finish();
         } catch (final RuntimeException exception) {
-            throw new ImporterException("Error finishing " + this.file.getPath() + ": " + exception,
+            throw new ImporterException("Error finishing " + this.file.getPath() + ": " + exception.getMessage(),
                     exception);
         }
     }

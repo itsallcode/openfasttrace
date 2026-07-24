@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -47,15 +48,16 @@ class GherkinImporterTest {
 
         final List<SpecificationItem> items = importText(source);
 
-        assertThat(items, contains(
-                hasProperty("id", hasToString("scn~account-login~1"))));
         final SpecificationItem item = items.get(0);
-        assertThat(item.getTitle(), is("Login works"));
-        assertThat(item.getLocation().getLine(), is(5));
-        assertThat(item.getDescription(), is(String.join(System.lineSeparator(),
-                "Given a registered user", "  When they log in", "  Then access is granted")));
-        assertThat(item.getCoveredIds(), contains(hasToString("req~login~1")));
-        assertThat(item.getNeedsArtifactTypes(), containsInAnyOrder("dsn", "itest"));
+        assertAll(
+                () -> assertThat(items, contains(
+                        hasProperty("id", hasToString("scn~account-login~1")))),
+                () -> assertThat(item.getTitle(), is("Login works")),
+                () -> assertThat(item.getLocation().getLine(), is(5)),
+                () -> assertThat(item.getDescription(), is(String.join(System.lineSeparator(),
+                        "Given a registered user", "  When they log in", "  Then access is granted"))),
+                () -> assertThat(item.getCoveredIds(), contains(hasToString("req~login~1"))),
+                () -> assertThat(item.getNeedsArtifactTypes(), containsInAnyOrder("dsn", "itest")));
     }
 
     // [utest->dsn~gherkin.importer-selection~1]
@@ -64,8 +66,9 @@ class GherkinImporterTest {
         final InputFile file = StreamInput.forReader(Path.of("specification.feature"),
                 new java.io.BufferedReader(new java.io.StringReader("")));
 
-        assertThat(FACTORY.supportsFile(file), is(true));
-        assertThat(FACTORY.getPriority(), is(9000));
+        assertAll(
+                () -> assertThat(FACTORY.supportsFile(file), is(true)),
+                () -> assertThat(FACTORY.getPriority(), is(9000)));
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
@@ -107,7 +110,8 @@ class GherkinImporterTest {
 
         final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
 
-        assertThat(exception.getMessage(), hasToString(org.hamcrest.Matchers.containsString("requires exactly one")));
+        assertThat(exception.getMessage(), equalTo(
+                "Error processing line specification.feature:2 '# Needs: dsn': specification.feature:2: Needs directive requires exactly one preceding @id tag"));
     }
 
     // [utest->dsn~gherkin.streaming-import~1]

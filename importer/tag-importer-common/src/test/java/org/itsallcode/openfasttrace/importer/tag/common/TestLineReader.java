@@ -96,7 +96,7 @@ class TestLineReader {
         doThrow(cause).when(this.consumerMock).readLine(1, "line1");
 
         final ImporterException exception = assertThrows(ImporterException.class, () -> readContent("line1"));
-        assertThat(exception.getMessage(), equalTo("Error processing line dummy:1 'line1': " + cause));
+        assertThat(exception.getMessage(), equalTo("Error processing line dummy:1 'line1': invalid line"));
     }
 
     @Test
@@ -106,7 +106,7 @@ class TestLineReader {
 
         final ImporterException exception = assertThrows(ImporterException.class, () -> readContent(""));
 
-        assertThat(exception.getMessage(), equalTo("Error finishing dummy: " + cause));
+        assertThat(exception.getMessage(), equalTo("Error finishing dummy: cannot finish"));
     }
 
     @Test

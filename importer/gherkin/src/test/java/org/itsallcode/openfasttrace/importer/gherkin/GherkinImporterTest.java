@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -244,7 +245,7 @@ class GherkinImporterTest
         events.verify(listener).beginSpecificationItem();
         events.verify(listener).setId(SpecificationItemId.parseId("scn~ordinary~1"));
         events.verify(listener).endSpecificationItem();
-        events.verify(listener).beginSpecificationItem();
+        events.verify(listener).addSpecificationItem(any(SpecificationItem.class));
     }
 
     private static List<SpecificationItem> importText(final String source)

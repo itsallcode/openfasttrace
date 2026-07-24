@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
@@ -70,8 +71,11 @@ class TestTagImporterWithConfig
                                                              // avoid error in
                                                              // self-trace
         runImport("[type->" + itemName + "]");
-        verify(this.listenerMock)
-                .setId(SpecificationItemId.createId("type", "coveredname" + "-3264583751", 0));
+        verify(this.listenerMock).addSpecificationItem(SpecificationItem.builder()
+                .id(SpecificationItemId.createId("type", "coveredname" + "-3264583751", 0))
+                .location(FILE.toString(), 1)
+                .addCoveredId(SpecificationItemId.parseId(itemName))
+                .build());
     }
 
     @Test
@@ -139,11 +143,11 @@ class TestTagImporterWithConfig
     private void verifyTag(final int lineNumber, final SpecificationItemId coveredId,
             final SpecificationItemId tagItemId)
     {
-        this.inOrderListener.verify(this.listenerMock).beginSpecificationItem();
-        this.inOrderListener.verify(this.listenerMock).setLocation(FILE.toString(), lineNumber);
-        this.inOrderListener.verify(this.listenerMock).setId(tagItemId);
-        this.inOrderListener.verify(this.listenerMock).addCoveredId(coveredId);
-        this.inOrderListener.verify(this.listenerMock).endSpecificationItem();
+        this.inOrderListener.verify(this.listenerMock).addSpecificationItem(SpecificationItem.builder()
+                .id(tagItemId)
+                .location(FILE.toString(), lineNumber)
+                .addCoveredId(coveredId)
+                .build());
     }
 
     private void runImport(final String content)

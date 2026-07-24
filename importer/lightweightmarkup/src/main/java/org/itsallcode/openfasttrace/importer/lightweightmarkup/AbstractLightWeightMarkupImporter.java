@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
@@ -268,15 +269,15 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     {
         final ForwardingSpecificationItem forward = new ForwardingSpecificationItem(
                 this.stateMachine.getLastToken());
-        this.listener.beginSpecificationItem();
-        this.listener.setId(forward.getSkippedId());
-        this.listener.addCoveredId(forward.getOriginalId());
+        final SpecificationItem.Builder item = SpecificationItem.builder()
+                .id(forward.getSkippedId())
+                .addCoveredId(forward.getOriginalId())
+                .forwards(true)
+                .location(this.file.getPath(), this.currentContext.lineNumber());
         for (final String targetArtifactType : forward.getTargetArtifactTypes())
         {
-            this.listener.addNeededArtifactType(targetArtifactType.trim());
+            item.addNeedsArtifactType(targetArtifactType.trim());
         }
-        this.listener.setForwards(true);
-        this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
-        this.listener.endSpecificationItem();
+        this.listener.addSpecificationItem(item.build());
     }
 }

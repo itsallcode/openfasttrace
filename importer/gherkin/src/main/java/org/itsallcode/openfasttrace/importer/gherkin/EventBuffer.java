@@ -111,6 +111,6 @@ final class EventBuffer implements ImportEventListener
     @Override
     public void addSpecificationItem(final SpecificationItem item)
     {
-        throw new UnsupportedOperationException("Unimplemented method 'addSpecificationItem'");
+        this.events.add(target -> target.addSpecificationItem(item));
     }
 }

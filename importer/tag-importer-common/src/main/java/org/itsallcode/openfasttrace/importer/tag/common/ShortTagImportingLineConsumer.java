@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.tag.common;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
@@ -44,16 +45,11 @@ class ShortTagImportingLineConsumer extends AbstractRegexLineConsumer {
 
         LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId + "' covering id '"
                 + coveredId + "'");
-        addItem(lineNumber, coveredId, tagItemId);
-    }
-
-    private void addItem(final int lineNumber, final SpecificationItemId coveredId,
-            final SpecificationItemId tagItemId) {
-        this.listener.beginSpecificationItem();
-        this.listener.setLocation(this.file.toString(), lineNumber);
-        this.listener.setId(tagItemId);
-        this.listener.addCoveredId(coveredId);
-        this.listener.endSpecificationItem();
+        this.listener.addSpecificationItem(SpecificationItem.builder()
+                .id(tagItemId)
+                .location(this.file.toString(), lineNumber)
+                .addCoveredId(coveredId)
+                .build());
     }
 
     private SpecificationItemId createCoveredItem(final String name, final String revision) {

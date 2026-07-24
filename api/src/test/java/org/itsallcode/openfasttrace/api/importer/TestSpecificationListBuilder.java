@@ -1,8 +1,7 @@
 package org.itsallcode.openfasttrace.api.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.*;
@@ -55,6 +54,17 @@ class TestSpecificationListBuilder
         builder.addTag("bar");
         final List<SpecificationItem> items = builder.build();
         assertThat(items.get(0).getTags(), containsInAnyOrder("foo", "bar"));
+    }
+
+    @Test
+    void testAddSpecificationItem()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(ID).build();
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+
+        builder.addSpecificationItem(item);
+
+        assertThat(builder.build(), contains(item));
     }
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
@@ -164,7 +174,8 @@ class TestSpecificationListBuilder
         addItemWithStatus(builder, "out-B", ItemStatus.APPROVED);
         addItemWithStatus(builder, "out-C", ItemStatus.PROPOSED);
         addItemWithStatus(builder, "out-D", ItemStatus.REJECTED);
-        addItemWithStatus(builder, "out-E", null); // becomes APPROVED by default
+        addItemWithStatus(builder, "out-E", null); // becomes APPROVED by
+                                                   // default
         final List<SpecificationItem> items = builder.build();
         assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A"));
@@ -255,7 +266,6 @@ class TestSpecificationListBuilder
         assertAll(
                 () -> assertThat(item.getComment(), equalTo("a comment")),
                 () -> assertThat(item.getDescription(), equalTo("a description")),
-                () -> assertThat(item.getRationale(), equalTo("a   rationale"))
-        );
+                () -> assertThat(item.getRationale(), equalTo("a   rationale")));
     }
 }

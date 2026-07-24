@@ -135,7 +135,8 @@ public interface ImportEventListener
     /**
      * Add a complete specification item to the list of items being built. Use
      * this method if the specification item is already complete and does not
-     * need to be built from events.
+     * need to be built from events, e.g. when the item is specified in a single
+     * line and does not span multiple lines in the input file.
      * <p>
      * This is equivalent to the following sequence of method calls:
      * <ul>

@@ -163,10 +163,8 @@ class TestSpecificationListBuilder
     @Test
     void testFilterSpecificationItemsByStatus()
     {
-        final Set<ItemStatus> wantedStatuses = new HashSet<>();
-        wantedStatuses.add(ItemStatus.DRAFT);
-        final FilterSettings filterSettings = FilterSettings.builder() //
-                .wantedStatuses(wantedStatuses) //
+        final FilterSettings filterSettings = FilterSettings.builder()
+                .wantedStatuses(Set.of(ItemStatus.DRAFT))
                 .build();
         final SpecificationListBuilder builder = SpecificationListBuilder
                 .createWithFilter(filterSettings);
@@ -174,8 +172,8 @@ class TestSpecificationListBuilder
         addItemWithStatus(builder, "out-B", ItemStatus.APPROVED);
         addItemWithStatus(builder, "out-C", ItemStatus.PROPOSED);
         addItemWithStatus(builder, "out-D", ItemStatus.REJECTED);
-        addItemWithStatus(builder, "out-E", null); // becomes APPROVED by
-                                                   // default
+        // out-E becomes APPROVED by default
+        addItemWithStatus(builder, "out-E", null);
         final List<SpecificationItem> items = builder.build();
         assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A"));

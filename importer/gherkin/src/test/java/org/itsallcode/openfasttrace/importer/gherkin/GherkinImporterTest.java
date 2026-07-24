@@ -33,7 +33,7 @@ class GherkinImporterTest {
     void testImportsScenarioOutlineWithScopedMetadataAndSteps() {
         final String source = """
                 @smoke
-                @id:scn~account-login~1
+                @unrelated @id:scn~account-login~1 @anotherTag
                 # Covers: req~login~1
                 # Needs: dsn, itest
                 Scenario Outline: Login works

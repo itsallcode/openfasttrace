@@ -98,8 +98,8 @@ class TestEventBuffer {
     private static void assertEvent(final Consumer<EventBuffer> addEvent,
             final Consumer<ImportEventListener> verifyEvent) {
         final EventBuffer buffer = new EventBuffer();
-        final ImportEventListener listener = mock(ImportEventListener.class);
         addEvent.accept(buffer);
+        final ImportEventListener listener = mock(ImportEventListener.class);
         buffer.replay(listener);
         verifyEvent.accept(listener);
     }

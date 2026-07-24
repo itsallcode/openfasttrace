@@ -26,7 +26,8 @@ final class GherkinLineConsumer implements LineConsumer {
     private final InputFile file;
     private final ImportEventListener listener;
     private final LineConsumer coverageTagParser;
-    // Legacy tags emit complete items and must not interleave with an open scenario.
+    // Legacy tags emit complete items and must not interleave with an open
+    // scenario.
     private final LineConsumer delayedCoverageTagParser;
     private final EventBuffer delayedCoverageEvents = new EventBuffer();
     private final Set<SpecificationItemId> importedIds = new LinkedHashSet<>();
@@ -61,9 +62,9 @@ final class GherkinLineConsumer implements LineConsumer {
             clearMetadata();
             return;
         }
-        if (this.importingScenario) {
+        if (importingScenario) {
             if (!line.trim().startsWith("#")) {
-                this.listener.appendDescription(line + System.lineSeparator());
+                listener.appendDescription(line + System.lineSeparator());
             }
             return;
         }
@@ -76,7 +77,7 @@ final class GherkinLineConsumer implements LineConsumer {
     }
 
     private LineConsumer getCoverageTagParser() {
-        return this.importingScenario ? this.delayedCoverageTagParser : this.coverageTagParser;
+        return importingScenario ? delayedCoverageTagParser : coverageTagParser;
     }
 
     private void readMetadata(final int lineNumber, final String line) {
@@ -85,7 +86,7 @@ final class GherkinLineConsumer implements LineConsumer {
             return;
         }
         final Matcher directive = DIRECTIVE.matcher(line);
-        if (this.metadataRegion && directive.matches()) {
+        if (metadataRegion && directive.matches()) {
             readDirective(lineNumber, directive.group(1), directive.group(2));
             return;
         }
@@ -95,27 +96,27 @@ final class GherkinLineConsumer implements LineConsumer {
     }
 
     private void readTagRegion(final int lineNumber, final String tags) {
-        if (!this.tagRegion) {
+        if (!tagRegion) {
             clearMetadata();
         }
-        this.metadataRegion = true;
-        this.tagRegion = true;
+        metadataRegion = true;
+        tagRegion = true;
         final Matcher matcher = ID_TAG.matcher(tags);
         while (matcher.find()) {
-            if (this.pendingId != null) {
+            if (pendingId != null) {
                 fail(lineNumber, "multiple @id tags before a scenario");
             }
-            this.pendingId = parseId(lineNumber, matcher.group(1));
+            pendingId = parseId(lineNumber, matcher.group(1));
         }
     }
 
     private void readDirective(final int lineNumber, final String name, final String values) {
-        this.tagRegion = false;
-        if (this.pendingId == null) {
+        tagRegion = false;
+        if (pendingId == null) {
             fail(lineNumber, name + " directive requires exactly one preceding @id tag");
         }
         final boolean covers = "Covers".equals(name);
-        if (!covers && this.hasNeedsDirective) {
+        if (!covers && hasNeedsDirective) {
             fail(lineNumber, "repeated " + name + " directive");
         }
         final String[] entries = splitValues(lineNumber, name, values);
@@ -124,7 +125,7 @@ final class GherkinLineConsumer implements LineConsumer {
             return;
         }
         readNeededArtifactTypes(lineNumber, entries);
-        this.hasNeedsDirective = true;
+        hasNeedsDirective = true;
     }
 
     private String[] splitValues(final int lineNumber, final String name, final String values) {
@@ -172,41 +173,41 @@ final class GherkinLineConsumer implements LineConsumer {
     }
 
     private void beginScenario(final int lineNumber, final String title) {
-        if (this.pendingId == null) {
+        if (pendingId == null) {
             clearMetadata();
             return;
         }
-        if (!this.importedIds.add(this.pendingId)) {
-            fail(lineNumber, "duplicate Gherkin ID '" + this.pendingId + "'");
+        if (!importedIds.add(pendingId)) {
+            fail(lineNumber, "duplicate Gherkin ID '" + pendingId + "'");
         }
-        this.listener.beginSpecificationItem();
-        this.listener.setLocation(this.file.getPath(), lineNumber);
-        this.listener.setId(this.pendingId);
-        this.listener.setTitle(title);
-        this.coveredIds.forEach(this.listener::addCoveredId);
-        this.neededArtifactTypes.forEach(this.listener::addNeededArtifactType);
-        this.importingScenario = true;
+        listener.beginSpecificationItem();
+        listener.setLocation(file.getPath(), lineNumber);
+        listener.setId(pendingId);
+        listener.setTitle(title);
+        coveredIds.forEach(listener::addCoveredId);
+        neededArtifactTypes.forEach(listener::addNeededArtifactType);
+        importingScenario = true;
         clearMetadata();
     }
 
     private void endScenario() {
-        if (this.importingScenario) {
-            this.listener.endSpecificationItem();
-            this.importingScenario = false;
-            this.delayedCoverageEvents.replay(this.listener);
+        if (importingScenario) {
+            listener.endSpecificationItem();
+            importingScenario = false;
+            delayedCoverageEvents.replay(listener);
         }
     }
 
     private void clearMetadata() {
-        this.pendingId = null;
-        this.coveredIds = new LinkedHashSet<>();
-        this.neededArtifactTypes = new LinkedHashSet<>();
-        this.hasNeedsDirective = false;
-        this.metadataRegion = false;
-        this.tagRegion = false;
+        pendingId = null;
+        coveredIds = new LinkedHashSet<>();
+        neededArtifactTypes = new LinkedHashSet<>();
+        hasNeedsDirective = false;
+        metadataRegion = false;
+        tagRegion = false;
     }
 
     private void fail(final int lineNumber, final String reason) {
-        throw new IllegalArgumentException(this.file.getPath() + ":" + lineNumber + ": " + reason);
+        throw new IllegalArgumentException(file.getPath() + ":" + lineNumber + ": " + reason);
     }
 }

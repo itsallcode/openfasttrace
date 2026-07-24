@@ -352,6 +352,40 @@ Needs: impl, utest, itest
 
 RST and Markdown share a common underlying parser that operates on a line-by-line basis.
 
+##### Markdown Comment Coverage Tags
+`dsn~markdown.comment-coverage-tags~1`
+
+For a Markdown input file, the lightweight-markup importer delegates a line to
+the shared coverage-tag parser only when the complete line is a single-line
+HTML comment, apart from optional surrounding whitespace. It passes the first
+matching path configuration to the parser so that full tags always work and
+short tags work when configured. The dedicated Markdown importer keeps its
+priority ahead of the Tag Importer, and the existing markup state machine
+continues to process every input line.
+
+Covers:
+
+* `scn~markdown.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
+
+##### RST Comment Coverage Tags
+`dsn~rst.comment-coverage-tags~1`
+
+For an RST input file, the lightweight-markup importer delegates a line to the
+shared coverage-tag parser only when it begins with optional whitespace,
+`..`, and whitespace, and is not an RST directive. It passes the first
+matching path configuration to the parser so that full tags always work and
+short tags work when configured. The dedicated RST importer keeps its priority
+ahead of the Tag Importer, and the existing markup state machine continues to
+process every input line.
+
+Covers:
+
+* `scn~rst.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
+
 ##### Disabling OFT Parsing for Parts of a Markup File
 `dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1`
 
@@ -923,7 +957,7 @@ OFT imports coverage tags in the full tag format:
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -943,7 +977,7 @@ Especially when used for design document files like UML models, requiring covera
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -961,7 +995,7 @@ An item can cover multiple IDs. This avoids creating multiple IDs for the same i
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -981,7 +1015,7 @@ Specifying an explicit revision in coverage tags allows incrementing the revisio
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -1005,7 +1039,7 @@ Specifying an explicit name in coverage tags allows overriding the auto-generate
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -1020,7 +1054,7 @@ When you need to cover these items it's important that the name is predictable a
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -1040,7 +1074,7 @@ During import of short tags OFT requires the following configuration:
 
 Covers:
 
-* `req~import.short-coverage-tag-format~1`
+* `req~import.short-coverage-tag-format~2`
 
 Needs: impl, utest
 

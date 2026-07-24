@@ -4,7 +4,9 @@ import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachi
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.LineContext;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
@@ -30,12 +32,25 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
      * @param listener
      *            the listener to handle import events
      */
-    MarkdownImporter(final InputFile fileName, final ImportEventListener listener)
+    MarkdownImporter(final InputFile fileName, final ImportEventListener listener, final PathConfig pathConfig)
     {
-        super(fileName, listener);
+        super(fileName, listener, pathConfig);
     }
 
-    @SuppressWarnings("squid:S138") // Transition table is OK be larger than 75 lines.
+    // TODO: check if this is used
+    MarkdownImporter(final InputFile fileName, final ImportEventListener listener)
+    {
+        this(fileName, listener, null);
+    }
+
+    @Override
+    protected boolean isCoverageTagCommentCandidate(final LineContext context)
+    {
+        return context.currentLine().matches("\\s*<!--.*-->\\s*");
+    }
+
+    // Transition table is OK be larger than 75 lines.
+    @SuppressWarnings("squid:S138")
     protected Transition[] configureTransitions()
     {
         // @formatter:off

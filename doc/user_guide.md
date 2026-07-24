@@ -737,6 +737,40 @@ private validate(final AuthenticationRequest request){
 }
 ```
 
+##### Tags in Markdown and RST Documentation
+
+Markdown documentation files (`.md` and `.markdown`) and RST files (`.rst`)
+can cover specification items without being routed through the Tag Importer.
+Place a full tag in a standalone, single-line native comment:
+
+```markdown
+<!-- [doc->req~user-guide~1] -->
+```
+
+```rst
+.. [doc->req~user-guide~1]
+```
+
+Only complete, standalone Markdown HTML comments and single-line RST comments
+are recognized. Inline or multi-line comments and RST directives do not import
+coverage tags. Text outside a native comment that merely resembles a tag is
+also ignored.
+
+Configured short tags use the same comment forms:
+
+```markdown
+<!-- [[user-guide:1]] -->
+```
+
+```rst
+.. [[user-guide:1]]
+```
+
+A short tag is imported only when the file matches a `PathConfig` supplied in
+`ImportSettings`. The matching configuration defines the generated tag
+artifact type, covered artifact type, and optional covered-item name prefix;
+without it, Markdown and RST files still import full tags but not short tags.
+
 ##### Optional Elements
 
 Tags can optionally specify a revision number or name and revision number:

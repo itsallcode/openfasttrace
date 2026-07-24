@@ -2,9 +2,13 @@ package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LineParserState.*;
 
+import java.util.regex.Pattern;
+
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.LineContext;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
@@ -21,6 +25,9 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
+    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*\\.\\.\\s+.*");
+    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*\\.\\.\\s+\\S+::.*");
+    private static final Pattern INDENTED_CONTINUATION = Pattern.compile("\\s+\\S.*");
 
     /**
      * Creates a {@link RestructuredTextImporter} object with the given
@@ -31,9 +38,23 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
      * @param listener
      *            the listener to handle import events
      */
-    RestructuredTextImporter(final InputFile fileName, final ImportEventListener listener)
+    RestructuredTextImporter(final InputFile fileName, final ImportEventListener listener,
+            final PathConfig pathConfig)
     {
-        super(fileName, listener);
+        super(fileName, listener, pathConfig);
+    }
+
+    @Override
+    protected boolean isCoverageTagCommentCandidate(final LineContext context)
+    {
+        final String line = context.currentLine();
+        return COMMENT_PATTERN.matcher(line).matches() && !DIRECTIVE_PATTERN.matcher(line).matches()
+                && !hasIndentedContinuation(context.nextLine());
+    }
+
+    private static boolean hasIndentedContinuation(final String nextLine)
+    {
+        return nextLine != null && INDENTED_CONTINUATION.matcher(nextLine).matches();
     }
 
     @Override

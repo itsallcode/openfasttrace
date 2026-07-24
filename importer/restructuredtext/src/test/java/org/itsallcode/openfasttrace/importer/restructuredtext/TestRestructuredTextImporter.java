@@ -1,11 +1,23 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.nio.file.Path;
+import java.util.List;
+
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
+import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +25,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private static final ImporterFactory importerFactory = new RestructuredTextImporterFactory();
+    private static final String FULL_COVERAGE_TAG = "[doc" + "->req~guide~1]";
+    private static final ImporterFactory importerFactory = createImporterFactory();
 
     TestRestructuredTextImporter()
     {
@@ -24,6 +37,88 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
     protected ImporterFactory getImporterFactory()
     {
         return importerFactory;
+    }
+
+    private static ImporterFactory createImporterFactory()
+    {
+        final RestructuredTextImporterFactory factory = new RestructuredTextImporterFactory();
+        factory.init(new ImporterContext(ImportSettings.createDefault()));
+        return factory;
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testImportsCoverageTagFromStandaloneComment()
+    {
+        assertImport("guide.rst", """
+                Guide
+                =====
+                .. %s
+                req~ordinary~1
+                """.formatted(FULL_COVERAGE_TAG), contains(
+                        item().id("doc", "guide-1442787702", 0)
+                                .addCoveredId("req", "guide", 1)
+                                .location("guide.rst", 3).build(),
+                        item().id("req", "ordinary", 1).location("guide.rst", 4).build()));
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @ParameterizedTest
+    @ValueSource(strings = {
+            FULL_COVERAGE_TAG,
+            ".. directive:: " + FULL_COVERAGE_TAG,
+            "..\n   " + FULL_COVERAGE_TAG,
+            "   " + FULL_COVERAGE_TAG })
+    void testIgnoresCoverageTagsOutsideComments(final String line)
+    {
+        assertImport("guide.rst", line, emptyIterable());
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testIgnoresCoverageTagsInMultilineComments()
+    {
+        assertImport("guide.rst", """
+                .. %s
+                   continuation
+                """.formatted(FULL_COVERAGE_TAG), emptyIterable());
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testUsesFirstMatchingPathConfigurationForShortCoverageTags()
+    {
+        final PathConfig first = pathConfig("first.", "first");
+        final PathConfig second = pathConfig("second.", "second");
+        final List<SpecificationItem> items = importWithSettings(".. [[covered:3]]", first, second);
+
+        assertAll(
+                () -> assertThat(items.get(0).getId().getArtifactType(), equalTo("first")),
+                () -> assertThat(items.get(0).getCoveredIds(),
+                        equalTo(List.of(createId("req", "first.covered", 3)))));
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testDoesNotImportShortCoverageTagWithoutMatchingPathConfiguration()
+    {
+        assertThat(importWithSettings(".. [[covered:3]]",
+                PathConfig.builder().patternPathMatcher("glob:**.md").coveredItemArtifactType("req")
+                        .tagArtifactType("doc").build()), emptyIterable());
+    }
+
+    private static List<SpecificationItem> importWithSettings(final String input,
+            final PathConfig... pathConfigs)
+    {
+        final RestructuredTextImporterFactory factory = new RestructuredTextImporterFactory();
+        factory.init(new ImporterContext(ImportSettings.builder().pathConfigs(List.of(pathConfigs)).build()));
+        return ImportAssertions.runImporterOnText(Path.of("guide.rst"), input, factory);
+    }
+
+    private static PathConfig pathConfig(final String prefix, final String tagArtifactType)
+    {
+        return PathConfig.builder().patternPathMatcher("glob:**.rst").coveredItemArtifactType("req")
+                .coveredItemNamePrefix(prefix).tagArtifactType(tagArtifactType).build();
     }
 
     protected String formatTitle(final String title, final int level)

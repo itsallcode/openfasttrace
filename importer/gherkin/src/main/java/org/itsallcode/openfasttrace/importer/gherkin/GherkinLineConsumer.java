@@ -27,10 +27,6 @@ final class GherkinLineConsumer implements LineConsumer
     private final InputFile file;
     private final ImportEventListener listener;
     private final LineConsumer coverageTagParser;
-    // Legacy tags emit complete items and must not interleave with an open
-    // scenario.
-    private final LineConsumer delayedCoverageTagParser;
-    private final EventBuffer delayedCoverageEvents = new EventBuffer();
     private final Set<SpecificationItemId> importedIds = new LinkedHashSet<>();
     private SpecificationItemId pendingId;
     private Set<SpecificationItemId> coveredIds = new LinkedHashSet<>();
@@ -45,7 +41,6 @@ final class GherkinLineConsumer implements LineConsumer
         this.file = file;
         this.listener = listener;
         this.coverageTagParser = CoverageTagParser.create(null, file, listener);
-        this.delayedCoverageTagParser = CoverageTagParser.create(null, file, this.delayedCoverageEvents);
     }
 
     @Override
@@ -53,7 +48,7 @@ final class GherkinLineConsumer implements LineConsumer
     {
         if (line.trim().startsWith("#"))
         {
-            getCoverageTagParser().readLine(lineNumber, line);
+            this.coverageTagParser.readLine(lineNumber, line);
         }
         final Matcher scenario = SCENARIO.matcher(line);
         if (scenario.matches())
@@ -83,11 +78,6 @@ final class GherkinLineConsumer implements LineConsumer
     public void finish()
     {
         endScenario();
-    }
-
-    private LineConsumer getCoverageTagParser()
-    {
-        return this.importingScenario ? this.delayedCoverageTagParser : this.coverageTagParser;
     }
 
     private void readMetadata(final int lineNumber, final String line)
@@ -234,7 +224,6 @@ final class GherkinLineConsumer implements LineConsumer
         {
             this.listener.endSpecificationItem();
             this.importingScenario = false;
-            this.delayedCoverageEvents.replay(this.listener);
         }
     }
 

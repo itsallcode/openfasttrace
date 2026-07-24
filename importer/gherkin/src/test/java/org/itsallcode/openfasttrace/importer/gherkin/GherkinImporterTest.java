@@ -228,7 +228,7 @@ class GherkinImporterTest
 
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
-    void testDelaysCommentCoverageTagsUntilAfterTheScenario()
+    void testImportsCommentCoverageTagsWhileScenarioIsOpen()
     {
         final ImportEventListener listener = mock(ImportEventListener.class);
         final InputFile file = StreamInput.forReader(Path.of("specification.feature"),
@@ -244,8 +244,8 @@ class GherkinImporterTest
         final InOrder events = inOrder(listener);
         events.verify(listener).beginSpecificationItem();
         events.verify(listener).setId(SpecificationItemId.parseId("scn~ordinary~1"));
-        events.verify(listener).endSpecificationItem();
         events.verify(listener).addSpecificationItem(any(SpecificationItem.class));
+        events.verify(listener).endSpecificationItem();
     }
 
     private static List<SpecificationItem> importText(final String source)

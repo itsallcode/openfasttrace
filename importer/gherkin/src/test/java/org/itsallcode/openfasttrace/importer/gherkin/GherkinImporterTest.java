@@ -26,12 +26,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InOrder;
 
-class GherkinImporterTest {
+class GherkinImporterTest
+{
     private static final GherkinImporterFactory FACTORY = new GherkinImporterFactory();
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testImportsScenarioOutlineWithScopedMetadataAndSteps() {
+    void testImportsScenarioOutlineWithScopedMetadataAndSteps()
+    {
         final String source = """
                 @smoke
                 @unrelated @id:scn~account-login~1 @anotherTag
@@ -62,7 +64,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.importer-selection~1]
     @Test
-    void testFactorySupportsFeatureFilesWithHigherPrecedenceThanTagImporter() {
+    void testFactorySupportsFeatureFilesWithHigherPrecedenceThanTagImporter()
+    {
         final InputFile file = StreamInput.forReader(Path.of("specification.feature"),
                 new java.io.BufferedReader(new java.io.StringReader("")));
 
@@ -73,7 +76,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testIgnoresScenarioWithoutOftMetadata() {
+    void testIgnoresScenarioWithoutOftMetadata()
+    {
         final List<SpecificationItem> items = importText("""
                 Feature: login
                 Scenario: ordinary scenario
@@ -85,7 +89,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testImportsMultipleCoversDirectives() {
+    void testImportsMultipleCoversDirectives()
+    {
         final String source = """
                 @id:scn~account-login~1
                 # Covers: req~login~1
@@ -101,7 +106,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testRejectsDirectiveWithoutId() {
+    void testRejectsDirectiveWithoutId()
+    {
         final String source = """
                 @ordinary
                 # Needs: dsn
@@ -116,7 +122,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testIgnoresDirectivesOutsideAnIdMetadataRegion() {
+    void testIgnoresDirectivesOutsideAnIdMetadataRegion()
+    {
         final List<SpecificationItem> items = importText("""
                 # Covers: req~login~1
                 Scenario: Login
@@ -127,7 +134,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.streaming-import~1]
     @Test
-    void testKeepsMetadataWhenAnUnrelatedCommentPrecedesTheScenario() {
+    void testKeepsMetadataWhenAnUnrelatedCommentPrecedesTheScenario()
+    {
         final List<SpecificationItem> items = importText("""
                 @id:scn~login~1
                 # A human-readable comment
@@ -140,13 +148,15 @@ class GherkinImporterTest {
     // [utest->dsn~gherkin.streaming-import~1]
     @ParameterizedTest
     @MethodSource("invalidMetadata")
-    void testRejectsInvalidMetadata(final String source, final String reason) {
+    void testRejectsInvalidMetadata(final String source, final String reason)
+    {
         final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
 
         assertThat(exception.getMessage(), containsString(reason));
     }
 
-    private static Stream<Arguments> invalidMetadata() {
+    private static Stream<Arguments> invalidMetadata()
+    {
         return Stream.of(
                 Arguments.of("""
                         @id:invalid
@@ -199,7 +209,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
-    void testImportsCommentCoverageTagsButIgnoresExecutableCoverageTags() {
+    void testImportsCommentCoverageTagsButIgnoresExecutableCoverageTags()
+    {
         final String source = """
                 @id:scn~ordinary~1
                 Scenario: ordinary
@@ -216,7 +227,8 @@ class GherkinImporterTest {
 
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
-    void testDelaysCommentCoverageTagsUntilAfterTheScenario() {
+    void testDelaysCommentCoverageTagsUntilAfterTheScenario()
+    {
         final ImportEventListener listener = mock(ImportEventListener.class);
         final InputFile file = StreamInput.forReader(Path.of("specification.feature"),
                 new BufferedReader(new StringReader("""
@@ -235,7 +247,8 @@ class GherkinImporterTest {
         events.verify(listener).beginSpecificationItem();
     }
 
-    private static List<SpecificationItem> importText(final String source) {
+    private static List<SpecificationItem> importText(final String source)
+    {
         return ImportAssertions.runImporterOnText(Path.of("specification.feature"), source, FACTORY);
     }
 }

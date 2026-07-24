@@ -7,17 +7,20 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader;
 
 /** Imports annotated Gherkin scenarios while streaming the input once. */
 // [impl->dsn~gherkin.streaming-import~1]
-final class GherkinImporter implements Importer {
+final class GherkinImporter implements Importer
+{
     private final InputFile file;
     private final GherkinLineConsumer lineConsumer;
 
-    GherkinImporter(final InputFile file, final ImportEventListener listener) {
+    GherkinImporter(final InputFile file, final ImportEventListener listener)
+    {
         this.file = file;
         this.lineConsumer = new GherkinLineConsumer(file, listener);
     }
 
     @Override
-    public void runImport() {
+    public void runImport()
+    {
         LineReader.create(this.file).readLines(this.lineConsumer);
     }
 }

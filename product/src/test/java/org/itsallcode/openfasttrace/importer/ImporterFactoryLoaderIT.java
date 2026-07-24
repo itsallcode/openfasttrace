@@ -11,7 +11,6 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.core.Oft;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -75,8 +74,8 @@ class ImporterFactoryLoaderIT
     @ParameterizedTest
     @ValueSource(strings =
     { "markdown.md", "markdown.markdown", "restructuredtext.rst" })
-    void testSelectsLightWeightMarkupImportersBeforeTagImporter(final String fileName,
-            @TempDir final Path tempDir) throws IOException
+    void testSelectsLightWeightMarkupImportersBeforeTagImporter(final String fileName, @TempDir final Path tempDir)
+            throws IOException
     {
         final Oft oft = Oft.create();
         final String nonCommentTag = "[impl~must-not-be-imported~1"
@@ -87,11 +86,6 @@ class ImporterFactoryLoaderIT
                 """.formatted(coverageComment(fileName), nonCommentTag));
         final ImportSettings settings = ImportSettings.builder()
                 .addInputs(tempDir)
-                // TODO: check if this is necessary
-                .filter(FilterSettings.builder().build())
-                // The configured Tag Importer would accept all of these files.
-                // Their native importers must still win due to their priority.
-                .pathConfigs(List.of(tagImporterConfig()))
                 .build();
 
         final List<SpecificationItem> items = oft.importItems(settings);
@@ -106,15 +100,5 @@ class ImporterFactoryLoaderIT
     {
         final String coverageTag = "[impl~markdown-comment~1" + "->req~covered~1]";
         return fileName.endsWith(".rst") ? ".. " + coverageTag : "<!-- " + coverageTag + " -->";
-    }
-
-    private static PathConfig tagImporterConfig()
-    {
-        return PathConfig.builder()
-                .patternPathMatcher("glob:**")
-                .coveredItemArtifactType("req")
-                .coveredItemNamePrefix("")
-                .tagArtifactType("doc")
-                .build();
     }
 }

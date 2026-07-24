@@ -218,9 +218,9 @@ class GherkinImporterTest {
                 new BufferedReader(new StringReader("""
                         @id:scn~ordinary~1
                         Scenario: ordinary
-                          # [impl~gherkin-comment~1 -> dsn~gherkin~1]
+                          # [%s]
                           Given a step
-                        """)));
+                        """.formatted("impl~gherkin-comment~1 -> dsn~gherkin~1"))));
 
         new GherkinImporter(file, listener).runImport();
 

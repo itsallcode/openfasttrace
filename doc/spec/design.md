@@ -385,11 +385,7 @@ RST and Markdown share a common underlying parser that operates on a line-by-lin
 ##### Markdown Comment Coverage Tags
 `dsn~markdown.comment-coverage-tags~1`
 
-For a Markdown input file, the lightweight-markup importer delegates a line to
-the shared coverage-tag parser only when the complete line is a single-line
-HTML comment, apart from optional surrounding whitespace.
-The dedicated Markdown importer keeps its priority ahead of the Tag Importer,
-and the existing markup state machine continues to process every input line.
+For a Markdown input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when the complete line is a single-line HTML comment, apart from optional surrounding whitespace. The dedicated Markdown importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
 
 Covers:
 
@@ -400,12 +396,7 @@ Needs: impl, utest, itest
 ##### RST Comment Coverage Tags
 `dsn~rst.comment-coverage-tags~1`
 
-For an RST input file, the lightweight-markup importer delegates a line to the
-shared coverage-tag parser only when it begins with optional whitespace,
-`..`, and whitespace, and is not an RST directive.
-The dedicated RST importer keeps its priority
-ahead of the Tag Importer, and the existing markup state machine continues to
-process every input line.
+For an RST input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when it begins with optional whitespace, `..`, and whitespace, and is not an RST directive. The dedicated RST importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
 
 Covers:
 

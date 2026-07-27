@@ -117,13 +117,11 @@ Needs: req
 ### Coverage Tag Import
 `feat~coverage-tag-import~2`
 
-OFT imports coverage tags from source code files and supported documentation
-files.
+OFT imports coverage tags from source code files and supported documentation files.
 
 Rationale:
 
-Coverage tags indicate parts of source code or documentation that cover a
-certain requirement.
+Coverage tags indicate parts of source code or documentation that cover a certain requirement.
 
 Needs: req
 
@@ -397,14 +395,12 @@ Needs: dsn
 
 #### Coverage Tags
 
-Developers add coverage tags as comments to source code or supported
-documentation to indicate where certain specification items are covered.
+Developers add coverage tags as comments to source code or supported documentation to indicate where certain specification items are covered.
 
 ##### Import Full Coverage Tag Format
 `req~import.full-coverage-tag-format~2`
 
-OFT imports coverage tags from source files and supported documentation files
-in a full format that contains all necessary information for tracing.
+OFT imports coverage tags from source files and supported documentation files in a full format that contains all necessary information for tracing.
 
 Covers:
 
@@ -445,9 +441,7 @@ Needs: dsn
 
 **Given** an RST documentation artifact with coverage tags in standalone,
 single-line RST comments,
-
 **when** OFT imports the artifact,
-
 **then** it creates coverage items at the tag-line location while continuing to
 import ordinary RST specification items unchanged. Text that resembles a
 coverage tag outside such a comment does not create a coverage item.

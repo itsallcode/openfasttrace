@@ -738,9 +738,7 @@ private validate(final AuthenticationRequest request){
 
 ##### Tags in Markdown and RST Documentation
 
-Markdown documentation files (`.md` and `.markdown`) and RST files (`.rst`)
-can cover specification items without being routed through the Tag Importer.
-Place a full tag in a standalone, single-line native comment:
+Markdown documentation files (`.md` and `.markdown`) and RST files (`.rst`) can cover specification items without being routed through the Tag Importer. Place a full tag in a standalone, single-line native comment:
 
 ```markdown
 <!-- [doc->req~user-guide~1] -->
@@ -750,10 +748,7 @@ Place a full tag in a standalone, single-line native comment:
 .. [doc->req~user-guide~1]
 ```
 
-Only complete, standalone Markdown HTML comments and single-line RST comments
-are recognized. Inline or multi-line comments and RST directives do not import
-coverage tags. Text outside a native comment that merely resembles a tag is
-also ignored.
+Only complete, standalone Markdown HTML comments and single-line RST comments are recognized. Inline or multi-line comments and RST directives do not import coverage tags. Text outside a native comment that merely resembles a tag is also ignored.
 
 ##### Optional Elements
 

@@ -415,8 +415,7 @@ Needs: scn, dsn
 ##### Import Short Coverage Tag Format
 `req~import.short-coverage-tag-format~2`
 
-OFT imports coverage tags from source files and supported documentation files
-in a short format that requires additional configuration during import.
+OFT imports coverage tags from source files in a short format that requires additional configuration during import.
 
 Covers:
 
@@ -427,8 +426,8 @@ Needs: scn, dsn
 ##### Import Coverage Tags from Markdown Comments
 `scn~markdown.comment-coverage-tags~1`
 
-**Given** a Markdown documentation artifact with full and configured short coverage
-tags in standalone, single-line HTML comments,
+**Given** a Markdown documentation artifact with coverage tags in standalone,
+single-line HTML comments,
 
 **when** OFT imports the artifact,
 
@@ -446,8 +445,8 @@ Needs: dsn
 ##### Import Coverage Tags from RST Comments
 `scn~rst.comment-coverage-tags~1`
 
-**Given** an RST documentation artifact with full and configured short coverage
-tags in standalone, single-line RST comments,
+**Given** an RST documentation artifact with coverage tags in standalone,
+single-line RST comments,
 
 **when** OFT imports the artifact,
 

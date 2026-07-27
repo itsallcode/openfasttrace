@@ -14,4 +14,4 @@ coverage tags in their native comments.
 ## New Features
 
 * #563: Added Gherkin `.feature` specification import for annotated scenarios and scenario outlines.
-* #562: Added full and configured short coverage-tag import from Markdown and RST comments.
+* #562: Added coverage tag import from Markdown and RST comments.

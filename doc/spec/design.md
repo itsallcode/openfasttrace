@@ -100,7 +100,7 @@ For each specification artifact type OFT uses an importer. The importer uses the
 
 ### Shared Coverage Tag Parser
 
-The `importer/tag-importer-common` module provides the reusable line scanning and coverage-tag parsing used by importers. Its public API consists of `LineReader`, which forwards input lines to a consumer, and `CoverageTagParser`, which recognizes full coverage tags and optionally configured short coverage tags.
+The `importer/tag-importer-common` module provides the reusable line scanning and coverage-tag parsing used by importers. Its public API consists of `LineReader`, which forwards input lines to a consumer, and `CoverageTagParser`, which recognizes coverage tags.
 
 The tag importer remains responsible for selecting its input files and creating the shared parser. Parsing implementation classes remain encapsulated in the shared module so that future importers can reuse the same coverage-tag semantics without depending on tag-importer internals.
 

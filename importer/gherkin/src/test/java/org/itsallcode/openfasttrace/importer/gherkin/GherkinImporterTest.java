@@ -22,6 +22,7 @@ import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InOrder;
 
 class GherkinImporterTest
@@ -191,35 +192,17 @@ class GherkinImporterTest
         assertThat(items.get(0).getDescription(), is("Given a registered user"));
     }
 
-    @Test
-    void testIdTagWithLeadingTag()
+    // [utest->dsn~gherkin.id-detection~1]
+    @ParameterizedTest
+    @ValueSource(strings =
     {
-        final List<SpecificationItem> items = importText("""
-                @someTag@id:scn~login~1
-                Scenario: Login
-                """);
-
-        assertThat(items.get(0).getId(), hasToString("scn~login~1"));
-    }
-
-    @Test
-    void testIdTagDelimitedBySpace()
+            "@someTag@id:scn~login~1",
+            "@id:scn~login~1 @anotherTag",
+            "@someTag @id:scn~login~1",
+            "@id:scn~login~1@anotherTag" })
+    void testRecognizesIdTagInTagRegion(final String tagLine)
     {
-        final List<SpecificationItem> items = importText("""
-                @id:scn~login~1 @anotherTag
-                Scenario: Login
-                """);
-
-        assertThat(items.get(0).getId(), hasToString("scn~login~1"));
-    }
-
-    @Test
-    void testIdTagImmediatelyFollowedByAnotherTag()
-    {
-        final List<SpecificationItem> items = importText("""
-                @id:scn~login~1@anotherTag
-                Scenario: Login
-                """);
+        final List<SpecificationItem> items = importText(tagLine + "\nScenario: Login\n");
 
         assertThat(items.get(0).getId(), hasToString("scn~login~1"));
     }

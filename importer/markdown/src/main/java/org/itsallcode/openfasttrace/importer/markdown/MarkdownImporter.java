@@ -2,6 +2,8 @@ package org.itsallcode.openfasttrace.importer.markdown;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LineParserState.*;
 
+import java.util.regex.Pattern;
+
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
@@ -23,6 +25,7 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 class MarkdownImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new MdSectionTitlePattern();
+    private static final Pattern COVERAGE_TAG_COMMENT = Pattern.compile("\\s*<!--.*-->\\s*");
 
     /**
      * Creates a {@link MarkdownImporter} object with the given parameters.
@@ -46,7 +49,7 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
     @Override
     protected boolean isCoverageTagCommentCandidate(final LineContext context)
     {
-        return context.currentLine().matches("\\s*<!--.*-->\\s*");
+        return COVERAGE_TAG_COMMENT.matcher(context.currentLine()).matches();
     }
 
     // Transition table is OK be larger than 75 lines.

@@ -255,14 +255,44 @@ Needs: impl, utest, itest
 #### Streaming Import
 `dsn~gherkin.streaming-import~1`
 
-The Gherkin importer scans each input file once. It imports only scenarios and scenario outlines with exactly one immediately preceding `@id:` tag, maps header location and title to import events, and streams non-comment scenario steps into the description until a Gherkin block boundary.
-
-Scoped `# Covers:` and `# Needs:` comments are validated between the tag region and header. Multiple `Covers` directives accumulate coverage IDs; `Needs` occurs at most once. The importer retains only active metadata and previously imported IDs.
+The Gherkin importer scans each input file once and streams non-comment scenario steps into the description until a Gherkin block boundary.
 
 Covers:
 
 * `req~gherkin-scenario-import~1`
-* `req~gherkin-metadata-validation~1`
+
+Needs: impl, utest
+
+#### ID Detection
+`dsn~gherkin.id-detection~1`
+
+The importer imports only scenarios and scenario outlines with exactly one immediately preceding `@id:` tag. It uses the ID tag's line as the item location and the scenario header as the title. Invalid IDs cause only the affected scenario to be skipped. Duplicate item IDs are passed to the OFT core, which validates them after import.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest
+
+#### Covers Metadata Validation
+`dsn~gherkin.covers-metadata-validation~1`
+
+The importer accepts scoped `# Covers:` comments between an ID tag region and its scenario header. Multiple directives accumulate coverage IDs. A malformed Covers directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-covers-validation~1`
+
+Needs: impl, utest
+
+#### Needs Metadata Validation
+`dsn~gherkin.needs-metadata-validation~1`
+
+The importer accepts at most one scoped `# Needs:` comment between an ID tag region and its scenario header. A malformed or repeated Needs directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-needs-validation~1`
 
 Needs: impl, utest
 

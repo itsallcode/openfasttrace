@@ -7,6 +7,7 @@ import org.itsallcode.openfasttrace.importer.gherkin.GherkinImporterFactory;
  */
 module org.itsallcode.openfasttrace.importer.gherkin
 {
+    requires java.logging;
     requires transitive org.itsallcode.openfasttrace.api;
     requires org.itsallcode.openfasttrace.importer.tag.common;
 

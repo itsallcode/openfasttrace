@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -17,13 +16,11 @@ import java.util.stream.Stream;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
-import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InOrder;
 
@@ -32,6 +29,9 @@ class GherkinImporterTest
     private static final GherkinImporterFactory FACTORY = new GherkinImporterFactory();
 
     // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.id-detection~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
+    // [utest->dsn~gherkin.needs-metadata-validation~1]
     @Test
     void testImportsScenarioOutlineWithScopedMetadataAndSteps()
     {
@@ -56,7 +56,7 @@ class GherkinImporterTest
                 () -> assertThat(items, contains(
                         hasProperty("id", hasToString("scn~account-login~1")))),
                 () -> assertThat(item.getTitle(), is("Login works")),
-                () -> assertThat(item.getLocation().getLine(), is(5)),
+                () -> assertThat(item.getLocation().getLine(), is(2)),
                 () -> assertThat(item.getDescription(), is(String.join(System.lineSeparator(),
                         "Given a registered user", "  When they log in", "  Then access is granted"))),
                 () -> assertThat(item.getCoveredIds(), contains(hasToString("req~login~1"))),
@@ -76,6 +76,7 @@ class GherkinImporterTest
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
     @Test
     void testIgnoresScenarioWithoutOftMetadata()
     {
@@ -89,6 +90,7 @@ class GherkinImporterTest
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
     @Test
     void testImportsMultipleCoversDirectives()
     {
@@ -106,8 +108,10 @@ class GherkinImporterTest
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.id-detection~1]
+    // [utest->dsn~gherkin.needs-metadata-validation~1]
     @Test
-    void testRejectsDirectiveWithoutId()
+    void testSkipsScenarioWithDirectiveWithoutId()
     {
         final String source = """
                 @ordinary
@@ -115,10 +119,7 @@ class GherkinImporterTest
                 Scenario: Login
                 """;
 
-        final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
-
-        assertThat(exception.getMessage(), equalTo(
-                "Error processing line specification.feature:2 '# Needs: dsn': specification.feature:2: Needs directive requires exactly one preceding @id tag"));
+        assertThat(importText(source), is(empty()));
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
@@ -147,65 +148,110 @@ class GherkinImporterTest
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.id-detection~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
+    // [utest->dsn~gherkin.needs-metadata-validation~1]
     @ParameterizedTest
     @MethodSource("invalidMetadata")
-    void testRejectsInvalidMetadata(final String source, final String reason)
+    void testSkipsScenarioWithInvalidMetadata(final String source)
     {
-        final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
-
-        assertThat(exception.getMessage(), containsString(reason));
+        assertThat(importText(source), is(empty()));
     }
 
-    private static Stream<Arguments> invalidMetadata()
+    private static Stream<String> invalidMetadata()
     {
         return Stream.of(
-                Arguments.of("""
+                """
                         @id:invalid
                         Scenario: Login
-                        """, "invalid specification item ID"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         @id:scn~another-login~1
                         Scenario: Login
-                        """, "multiple @id tags"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Needs: dsn
                         # Needs: itest
                         Scenario: Login
-                        """, "repeated Needs directive"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Covers:
                         Scenario: Login
-                        """, "requires a non-empty list"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Covers: req~login~1,
                         Scenario: Login
-                        """, "contains an empty value"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Covers: req~login~1, req~login~1
                         Scenario: Login
-                        """, "contains duplicate value"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Needs: invalid-type
                         Scenario: Login
-                        """, "invalid artifact type"),
-                Arguments.of("""
+                        """,
+                """
                         @id:scn~login~1
                         # Needs: dsn, dsn
                         Scenario: Login
-                        """, "contains duplicate value"),
-                Arguments.of("""
-                        @id:scn~login~1
-                        Scenario: Login
-                        Feature: Another feature
-                        @id:scn~login~1
-                        Scenario: Login again
-                        """, "duplicate Gherkin ID"));
+                        """);
+    }
+
+    // [utest->dsn~gherkin.streaming-import~1]
+    @Test
+    void testOmitsTrailingEmptyScenarioLines()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1
+                Scenario: Login
+                  Given a registered user
+
+                """);
+
+        assertThat(items.get(0).getDescription(), is("Given a registered user"));
+    }
+
+    // [utest->dsn~gherkin.id-detection~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
+    // [utest->dsn~gherkin.needs-metadata-validation~1]
+    @Test
+    void testContinuesAfterInvalidScenarioMetadata()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~invalid~1
+                # Needs: dsn
+                # Needs: itest
+                Scenario: Invalid
+                @id:scn~valid~1
+                # Covers: req~login~1
+                # Needs: dsn
+                Scenario: Valid
+                """);
+
+        assertThat(items, contains(hasProperty("id", hasToString("scn~valid~1"))));
+    }
+
+    // [utest->dsn~gherkin.id-detection~1]
+    @Test
+    void testImportsScenariosWithDuplicateIds()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1
+                Scenario: First login
+                Feature: Another feature
+                @id:scn~login~1
+                Scenario: Second login
+                """);
+
+        assertThat(items, contains(
+                hasProperty("title", is("First login")),
+                hasProperty("title", is("Second login"))));
     }
 
     // [utest->dsn~gherkin.comment-coverage-tags~1]

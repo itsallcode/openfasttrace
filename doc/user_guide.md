@@ -522,7 +522,6 @@ Unfortunately, we are only human and humans make mistakes. Here is a non-exhaust
 
 | Mistake                         | How it manifests in OFT                            |
 |---------------------------------|----------------------------------------------------|
-| Copy and paste errors           | duplicates, covering the wrong item                |
 | Unimplemented feature           | missing leaves in the implementation               |
 | Missing tests                   | missing leaves in the test                         |
 | Typos in requirement IDs        | causing branches to be cut somewhere in the middle |
@@ -838,7 +837,7 @@ Scenario: A registered user logs in
   Then access is granted
 ```
 
-The scenario header becomes the item title and location; its executable steps become the description. `Covers` and `Needs` are case-sensitive and optional. Multiple `Covers` comments accumulate coverage IDs, while `Needs` may appear once; all lists must be non-empty and comma-separated. Invalid or duplicate IDs, types, or directives cause an import error.
+The ID tag becomes the item location and the scenario header becomes its title; executable steps become the description. `Covers` and `Needs` are case-sensitive and optional. Multiple `Covers` comments accumulate coverage IDs, while `Needs` may appear once; all lists must be non-empty and comma-separated. Invalid IDs, types, or directives skip only the affected scenario and emit a warning.
 
 Existing full coverage tags remain supported in Gherkin comments, for example `# [impl~login~1 -> dsn~authentication~1]`. OFT deliberately ignores coverage-tag-shaped text in executable Gherkin lines.
  

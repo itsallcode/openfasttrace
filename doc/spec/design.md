@@ -266,7 +266,7 @@ Covers:
 
 Needs: impl, utest
 
-#### Support Legacy Coverage Tags
+#### Support Coverage Tags
 `dsn~gherkin.comment-coverage-tags~1`
 
 The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves legacy comment coverage tags without applying their regular expressions to executable Gherkin text.

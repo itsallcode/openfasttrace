@@ -1,24 +1,25 @@
 package org.itsallcode.openfasttrace.importer;
 
-import org.itsallcode.openfasttrace.api.FilterSettings;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-
-import org.itsallcode.openfasttrace.core.Oft;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import org.itsallcode.openfasttrace.api.FilterSettings;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.core.Oft;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-class ImporterFactoryLoaderIT {
+class ImporterFactoryLoaderIT
+{
     @Test
-    void testFallBackToTagImporterWhenXmlIsNotSpecObjectFile(@TempDir Path tempDir) throws IOException {
+    void testFallBackToTagImporterWhenXmlIsNotSpecObjectFile(@TempDir final Path tempDir) throws IOException
+    {
         final Oft oft = Oft.create();
         final String specObjectContent = """
                 <specdocument>
@@ -39,13 +40,13 @@ class ImporterFactoryLoaderIT {
         final List<SpecificationItem> items = oft.importItems(settings);
         assertThat(items, containsInAnyOrder(
                 hasProperty("id", hasToString("dsn~foobar~1")),
-                hasProperty("id", hasToString(startsWith("impl~foobar")))
-        ));
+                hasProperty("id", hasToString(startsWith("impl~foobar")))));
     }
 
     // [itest->dsn~gherkin.importer-selection~1]
     @Test
-    void testSelectsGherkinImporterBeforeTagImporter(@TempDir final Path tempDir) throws IOException {
+    void testGherkinImporterAlsoImportsBasicCoverageTags(@TempDir final Path tempDir) throws IOException
+    {
         final Oft oft = Oft.create();
         Files.writeString(tempDir.resolve("login.feature"), """
                 @id:scn~login~1

@@ -21,7 +21,7 @@ final class GherkinLineConsumer implements LineConsumer
     private static final Pattern SCENARIO = Pattern.compile("^\\s*Scenario(?: Outline)?:(.*)$", UNICODE);
     private static final Pattern BOUNDARY = Pattern
             .compile("^\\s*(?:Scenario(?: Outline)?|Feature|Rule|Background|Examples):", UNICODE);
-    private static final Pattern DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$", UNICODE);
+    private static final Pattern OFT_DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$", UNICODE);
     private static final Pattern ARTIFACT_TYPE = Pattern.compile("\\p{IsAlphabetic}+");
 
     private final InputFile file;
@@ -87,7 +87,7 @@ final class GherkinLineConsumer implements LineConsumer
             readTagRegion(lineNumber, line.trim());
             return;
         }
-        final Matcher directive = DIRECTIVE.matcher(line);
+        final Matcher directive = OFT_DIRECTIVE.matcher(line);
         if (this.metadataRegion && directive.matches())
         {
             readDirective(lineNumber, directive.group(1), directive.group(2));

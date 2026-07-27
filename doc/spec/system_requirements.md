@@ -157,7 +157,7 @@ Needs: dsn
 #### Preserve Gherkin Comment Coverage Tags
 `req~gherkin-comment-coverage-tags~1`
 
-OFT imports legacy coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
+OFT imports basic coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
 
 Covers:
 

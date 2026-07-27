@@ -40,12 +40,6 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
         super(fileName, listener, pathConfig);
     }
 
-    // TODO: check if this is used
-    MarkdownImporter(final InputFile fileName, final ImportEventListener listener)
-    {
-        this(fileName, listener, null);
-    }
-
     @Override
     protected boolean isCoverageTagCommentCandidate(final LineContext context)
     {

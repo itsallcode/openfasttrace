@@ -25,8 +25,9 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
-    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*\\.\\.\\s+.*", Pattern.UNICODE_CHARACTER_CLASS);
-    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*\\.\\.\\s+\\S+::.*",
+    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*+\\.\\.\\s++.*",
+            Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*+\\.\\.\\s++[^\\s:]++::.*",
             Pattern.UNICODE_CHARACTER_CLASS);
     private static final Pattern INDENTED_CONTINUATION = Pattern.compile("\\s+\\S.*", Pattern.UNICODE_CHARACTER_CLASS);
 

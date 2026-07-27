@@ -429,9 +429,7 @@ Needs: scn, dsn
 
 **Given** a Markdown documentation artifact with full and configured short coverage
 tags in standalone, single-line HTML comments,
-
 **when** OFT imports the artifact,
-
 **then** it creates coverage items at the tag-line location while continuing to
 import ordinary Markdown specification items unchanged. Text that resembles a
 coverage tag outside such a comment does not create a coverage item.

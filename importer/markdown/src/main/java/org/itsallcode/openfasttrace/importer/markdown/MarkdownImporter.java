@@ -25,7 +25,8 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 class MarkdownImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new MdSectionTitlePattern();
-    private static final Pattern COVERAGE_TAG_COMMENT = Pattern.compile("\\s*<!--.*-->\\s*");
+    private static final Pattern COVERAGE_TAG_COMMENT = Pattern.compile("\\s*<!--.*-->\\s*",
+            Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Creates a {@link MarkdownImporter} object with the given parameters.
@@ -34,6 +35,9 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
      *            the input file to be imported
      * @param listener
      *            the listener to handle import events
+     * @param pathConfig
+     *            the path configuration for resolving relative paths (optional,
+     *            can be null)
      */
     MarkdownImporter(final InputFile fileName, final ImportEventListener listener, final PathConfig pathConfig)
     {

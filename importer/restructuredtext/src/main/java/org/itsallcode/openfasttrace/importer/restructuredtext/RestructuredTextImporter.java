@@ -25,9 +25,10 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
-    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*\\.\\.\\s+.*");
-    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*\\.\\.\\s+\\S+::.*");
-    private static final Pattern INDENTED_CONTINUATION = Pattern.compile("\\s+\\S.*");
+    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*\\.\\.\\s+.*", Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*\\.\\.\\s+\\S+::.*",
+            Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern INDENTED_CONTINUATION = Pattern.compile("\\s+\\S.*", Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Creates a {@link RestructuredTextImporter} object with the given
@@ -37,6 +38,9 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
      *            the input file to be imported
      * @param listener
      *            the listener to handle import events
+     * @param pathConfig
+     *            the path configuration for resolving relative paths (optional,
+     *            can be null)
      */
     RestructuredTextImporter(final InputFile fileName, final ImportEventListener listener,
             final PathConfig pathConfig)
@@ -58,7 +62,8 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
     }
 
     @Override
-    @SuppressWarnings("java:S138") // Transition table is OK be larger than 75 lines.
+    @SuppressWarnings("java:S138") // Transition table is OK be larger than 75
+                                   // lines.
     protected Transition[] configureTransitions()
     {
         // @formatter:off

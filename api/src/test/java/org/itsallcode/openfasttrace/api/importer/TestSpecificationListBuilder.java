@@ -61,9 +61,7 @@ class TestSpecificationListBuilder
     {
         final SpecificationItem item = SpecificationItem.builder().id(ID).build();
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
-
         builder.addSpecificationItem(item);
-
         assertThat(builder.build(), contains(item));
     }
 

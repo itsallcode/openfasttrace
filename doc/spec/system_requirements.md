@@ -137,7 +137,7 @@ Needs: req
 #### Import Gherkin Scenarios
 `req~gherkin-scenario-import~1`
 
-OFT imports a Gherkin `Scenario` or `Scenario Outline` as a specification item when its immediately preceding contiguous tag region contains exactly one `@id:<specification-item-id>` tag. The scenario header supplies the title and location; scenario steps form the description.
+OFT imports a Gherkin `Scenario` or `Scenario Outline` as a specification item when its immediately preceding contiguous tag region contains exactly one `@id:<specification-item-id>` tag. The ID supplies the item location, the scenario header supplies the title, and scenario steps form the description. An invalid ID skips only the affected scenario. Duplicate item IDs are passed to the OFT core for validation.
 
 Covers:
 
@@ -145,10 +145,21 @@ Covers:
 
 Needs: dsn
 
-#### Validate Gherkin Metadata
-`req~gherkin-metadata-validation~1`
+#### Validate Gherkin Covers Metadata
+`req~gherkin-covers-validation~1`
 
-OFT accepts optional, scoped `# Covers:` and `# Needs:` comments between an ID tag region and its scenario header. `Covers` may occur multiple times; `Needs` may occur once. Each directive must contain a non-empty, valid, duplicate-free list. Invalid IDs, artifact types, repeated IDs, duplicate scenario IDs, and orphan directives cause an import error that identifies the file and line.
+OFT accepts optional, scoped `# Covers:` comments between an ID tag region and its scenario header. Covers may occur multiple times. Each directive must contain a non-empty, valid, duplicate-free list of specification item IDs. An invalid Covers directive skips only the affected scenario.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Validate Gherkin Needs Metadata
+`req~gherkin-needs-validation~1`
+
+OFT accepts an optional, scoped `# Needs:` comment between an ID tag region and its scenario header. The directive may occur once and must contain a non-empty, valid, duplicate-free list of artifact types. An invalid or repeated Needs directive skips only the affected scenario.
 
 Covers:
 
@@ -159,7 +170,7 @@ Needs: dsn
 #### Preserve Gherkin Comment Coverage Tags
 `req~gherkin-comment-coverage-tags~1`
 
-OFT imports legacy coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
+OFT imports basic coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
 
 Covers:
 

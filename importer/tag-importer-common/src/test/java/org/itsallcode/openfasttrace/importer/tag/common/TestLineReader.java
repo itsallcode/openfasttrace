@@ -103,9 +103,7 @@ class TestLineReader {
     void testWrapsConsumerFinishFailure() {
         final RuntimeException cause = new IllegalArgumentException("cannot finish");
         doThrow(cause).when(this.consumerMock).finish();
-
         final ImporterException exception = assertThrows(ImporterException.class, () -> readContent(""));
-
         assertThat(exception.getMessage(), equalTo("Error finishing dummy: cannot finish"));
     }
 

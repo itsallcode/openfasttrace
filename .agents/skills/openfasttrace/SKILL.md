@@ -89,7 +89,7 @@ Scenario: User logs in
   Then access is granted
 ```
 
-Legacy coverage tags are recognized only in Gherkin comments, for example
+Basic coverage tags are recognized only in Gherkin comments, for example
 `# [impl~login~1 -> dsn~authentication~1]`. Executable Gherkin lines are not
 evaluated for coverage tags.
 

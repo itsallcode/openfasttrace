@@ -137,17 +137,6 @@ public interface ImportEventListener
      * this method if the specification item is already complete and does not
      * need to be built from events, e.g. when the item is specified in a single
      * line and does not span multiple lines in the input file.
-     * <p>
-     * This is equivalent to the following sequence of method calls:
-     * <ul>
-     * <li>{@link #beginSpecificationItem()}</li>
-     * <li>{@link #setId(SpecificationItemId)}</li>
-     * <li>{@link #addCoveredId(SpecificationItemId)}</li>
-     * <li>{@link #addNeededArtifactType(String)}</li>
-     * <li>{@link #setLocation(String, int)}</li>
-     * <li>...</li>
-     * <li>{@link #endSpecificationItem()}</li>
-     * </ul>
      *
      * @param item
      *            the complete specification item

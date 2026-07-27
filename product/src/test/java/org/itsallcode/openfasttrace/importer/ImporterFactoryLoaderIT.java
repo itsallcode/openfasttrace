@@ -47,7 +47,7 @@ class ImporterFactoryLoaderIT
 
     // [itest->dsn~gherkin.importer-selection~1]
     @Test
-    void testSelectsGherkinImporterBeforeTagImporter(@TempDir final Path tempDir) throws IOException
+    void testGherkinImporterAlsoImportsBasicCoverageTags(@TempDir final Path tempDir) throws IOException
     {
         final Oft oft = Oft.create();
         Files.writeString(tempDir.resolve("login.feature"), """
@@ -61,9 +61,7 @@ class ImporterFactoryLoaderIT
                 .addInputs(tempDir)
                 .filter(FilterSettings.builder().build())
                 .build();
-
         final List<SpecificationItem> items = oft.importItems(settings);
-
         assertThat(items, containsInAnyOrder(
                 hasProperty("id", hasToString("scn~login~1")),
                 hasProperty("id", hasToString("impl~login~1"))));

@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,28 +14,34 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 
 /** Stateful parser for the Gherkin lines of one input file. */
 // [impl->dsn~gherkin.streaming-import~1]
+// [impl->dsn~gherkin.id-detection~1]
+// [impl->dsn~gherkin.covers-metadata-validation~1]
+// [impl->dsn~gherkin.needs-metadata-validation~1]
 // [impl->dsn~gherkin.comment-coverage-tags~1]
 final class GherkinLineConsumer implements LineConsumer
 {
+    private static final Logger LOG = Logger.getLogger(GherkinLineConsumer.class.getName());
     private static final int UNICODE = Pattern.UNICODE_CHARACTER_CLASS;
-    private static final Pattern ID_TAG = Pattern.compile("@id:([^\\s]+)", UNICODE);
+    private static final Pattern ID_TAG = Pattern.compile("@id:(" + SpecificationItemId.ID_PATTERN.pattern() + ")",
+            UNICODE);
     private static final Pattern SCENARIO = Pattern.compile("^\\s*Scenario(?: Outline)?:(.*)$", UNICODE);
     private static final Pattern BOUNDARY = Pattern
             .compile("^\\s*(?:Scenario(?: Outline)?|Feature|Rule|Background|Examples):", UNICODE);
-    private static final Pattern DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$", UNICODE);
+    private static final Pattern OFT_DIRECTIVE = Pattern.compile("^\\s*#\\s*(Covers|Needs):(.*)$", UNICODE);
     private static final Pattern ARTIFACT_TYPE = Pattern.compile("\\p{IsAlphabetic}+");
 
     private final InputFile file;
     private final ImportEventListener listener;
     private final LineConsumer coverageTagParser;
-    private final Set<SpecificationItemId> importedIds = new LinkedHashSet<>();
     private SpecificationItemId pendingId;
     private Set<SpecificationItemId> coveredIds = new LinkedHashSet<>();
     private Set<String> neededArtifactTypes = new LinkedHashSet<>();
     private boolean hasNeedsDirective;
     private boolean metadataRegion;
     private boolean tagRegion;
+    private boolean invalidMetadata;
     private boolean importingScenario;
+    private int pendingIdLine;
 
     GherkinLineConsumer(final InputFile file, final ImportEventListener listener)
     {
@@ -54,7 +61,7 @@ final class GherkinLineConsumer implements LineConsumer
         if (scenario.matches())
         {
             endScenario();
-            beginScenario(lineNumber, scenario.group(1).trim());
+            beginScenario(scenario.group(1).trim());
             return;
         }
         if (BOUNDARY.matcher(line).find())
@@ -65,7 +72,7 @@ final class GherkinLineConsumer implements LineConsumer
         }
         if (this.importingScenario)
         {
-            if (!line.trim().startsWith("#"))
+            if (!line.trim().startsWith("#") && !line.trim().isEmpty())
             {
                 this.listener.appendDescription(line + System.lineSeparator());
             }
@@ -87,7 +94,7 @@ final class GherkinLineConsumer implements LineConsumer
             readTagRegion(lineNumber, line.trim());
             return;
         }
-        final Matcher directive = DIRECTIVE.matcher(line);
+        final Matcher directive = OFT_DIRECTIVE.matcher(line);
         if (this.metadataRegion && directive.matches())
         {
             readDirective(lineNumber, directive.group(1), directive.group(2));
@@ -107,28 +114,44 @@ final class GherkinLineConsumer implements LineConsumer
         }
         this.metadataRegion = true;
         this.tagRegion = true;
+        if (this.invalidMetadata)
+        {
+            return;
+        }
         final Matcher matcher = ID_TAG.matcher(tags);
         while (matcher.find())
         {
             if (this.pendingId != null)
             {
-                fail(lineNumber, "multiple @id tags before a scenario");
+                invalidateMetadata(lineNumber, "multiple @id tags before a scenario");
+                return;
             }
             this.pendingId = parseId(lineNumber, matcher.group(1));
+            if (this.pendingId == null)
+            {
+                return;
+            }
+            this.pendingIdLine = lineNumber;
         }
     }
 
     private void readDirective(final int lineNumber, final String name, final String values)
     {
         this.tagRegion = false;
+        if (this.invalidMetadata)
+        {
+            return;
+        }
         if (this.pendingId == null)
         {
-            fail(lineNumber, name + " directive requires exactly one preceding @id tag");
+            invalidateMetadata(lineNumber, name + " directive requires exactly one preceding @id tag");
+            return;
         }
         final boolean covers = "Covers".equals(name);
         if (!covers && this.hasNeedsDirective)
         {
-            fail(lineNumber, "repeated " + name + " directive");
+            invalidateMetadata(lineNumber, "repeated " + name + " directive");
+            return;
         }
         final String[] entries = splitValues(lineNumber, name, values);
         if (covers)
@@ -144,7 +167,8 @@ final class GherkinLineConsumer implements LineConsumer
     {
         if (values.trim().isEmpty())
         {
-            fail(lineNumber, name + " directive requires a non-empty list");
+            invalidateMetadata(lineNumber, name + " directive requires a non-empty list");
+            return new String[0];
         }
         return values.trim().split(",", -1);
     }
@@ -154,10 +178,19 @@ final class GherkinLineConsumer implements LineConsumer
         for (final String entry : entries)
         {
             final String value = requireValue(lineNumber, "Covers", entry);
+            if (value == null)
+            {
+                return;
+            }
             final SpecificationItemId id = parseId(lineNumber, value);
+            if (id == null)
+            {
+                return;
+            }
             if (!this.coveredIds.add(id))
             {
-                fail(lineNumber, "Covers directive contains duplicate value '" + id + "'");
+                invalidateMetadata(lineNumber, "Covers directive contains duplicate value '" + id + "'");
+                return;
             }
         }
     }
@@ -167,13 +200,19 @@ final class GherkinLineConsumer implements LineConsumer
         for (final String entry : entries)
         {
             final String value = requireValue(lineNumber, "Needs", entry);
+            if (value == null)
+            {
+                return;
+            }
             if (!ARTIFACT_TYPE.matcher(value).matches())
             {
-                fail(lineNumber, "Needs directive contains invalid artifact type '" + value + "'");
+                invalidateMetadata(lineNumber, "Needs directive contains invalid artifact type '" + value + "'");
+                return;
             }
             if (!this.neededArtifactTypes.add(value))
             {
-                fail(lineNumber, "Needs directive contains duplicate value '" + value + "'");
+                invalidateMetadata(lineNumber, "Needs directive contains duplicate value '" + value + "'");
+                return;
             }
         }
     }
@@ -183,7 +222,8 @@ final class GherkinLineConsumer implements LineConsumer
         final String value = entry.trim();
         if (value.isEmpty())
         {
-            fail(lineNumber, name + " directive contains an empty value");
+            invalidateMetadata(lineNumber, name + " directive contains an empty value");
+            return null;
         }
         return value;
     }
@@ -192,24 +232,21 @@ final class GherkinLineConsumer implements LineConsumer
     {
         if (!SpecificationItemId.ID_PATTERN.matcher(value).matches())
         {
-            fail(lineNumber, "invalid specification item ID '" + value + "'");
+            invalidateMetadata(lineNumber, "invalid specification item ID '" + value + "'");
+            return null;
         }
         return SpecificationItemId.parseId(value);
     }
 
-    private void beginScenario(final int lineNumber, final String title)
+    private void beginScenario(final String title)
     {
-        if (this.pendingId == null)
+        if (this.pendingId == null || this.invalidMetadata)
         {
             clearMetadata();
             return;
         }
-        if (!this.importedIds.add(this.pendingId))
-        {
-            fail(lineNumber, "duplicate Gherkin ID '" + this.pendingId + "'");
-        }
         this.listener.beginSpecificationItem();
-        this.listener.setLocation(this.file.getPath(), lineNumber);
+        this.listener.setLocation(this.file.getPath(), this.pendingIdLine);
         this.listener.setId(this.pendingId);
         this.listener.setTitle(title);
         this.coveredIds.forEach(this.listener::addCoveredId);
@@ -235,10 +272,17 @@ final class GherkinLineConsumer implements LineConsumer
         this.hasNeedsDirective = false;
         this.metadataRegion = false;
         this.tagRegion = false;
+        this.invalidMetadata = false;
+        this.pendingIdLine = 0;
     }
 
-    private void fail(final int lineNumber, final String reason)
+    private void invalidateMetadata(final int lineNumber, final String reason)
     {
-        throw new IllegalArgumentException(this.file.getPath() + ":" + lineNumber + ": " + reason);
+        LOG.warning(() -> "Skipping Gherkin scenario metadata in " + this.file.getPath() + " at line " + lineNumber
+                + ": " + reason);
+        this.pendingId = null;
+        this.coveredIds.clear();
+        this.neededArtifactTypes.clear();
+        this.invalidMetadata = true;
     }
 }

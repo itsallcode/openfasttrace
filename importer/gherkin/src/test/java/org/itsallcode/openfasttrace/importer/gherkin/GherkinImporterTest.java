@@ -213,6 +213,17 @@ class GherkinImporterTest
         assertThat(items.get(0).getId(), hasToString("scn~login~1"));
     }
 
+    @Test
+    void testIdTagImmediatelyFollowedByAnotherTag()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1@anotherTag
+                Scenario: Login
+                """);
+
+        assertThat(items.get(0).getId(), hasToString("scn~login~1"));
+    }
+
     // [utest->dsn~gherkin.streaming-import~1]
     // [utest->dsn~gherkin.id-detection~1]
     // [utest->dsn~gherkin.covers-metadata-validation~1]
@@ -237,10 +248,6 @@ class GherkinImporterTest
                         """,
                 """
                         # Needs: impl
-                        Scenario: Login
-                        """,
-                """
-                        @id:scn~login~1@anotherTag
                         Scenario: Login
                         """,
                 """

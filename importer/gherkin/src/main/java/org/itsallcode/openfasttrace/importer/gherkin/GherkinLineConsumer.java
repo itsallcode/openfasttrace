@@ -22,7 +22,8 @@ final class GherkinLineConsumer implements LineConsumer
 {
     private static final Logger LOG = Logger.getLogger(GherkinLineConsumer.class.getName());
     private static final int UNICODE = Pattern.UNICODE_CHARACTER_CLASS;
-    private static final Pattern ID_TAG = Pattern.compile("@id:([^\\s]+)", UNICODE);
+    private static final Pattern ID_TAG = Pattern.compile("@id:(" + SpecificationItemId.ID_PATTERN.pattern() + ")",
+            UNICODE);
     private static final Pattern SCENARIO = Pattern.compile("^\\s*Scenario(?: Outline)?:(.*)$", UNICODE);
     private static final Pattern BOUNDARY = Pattern
             .compile("^\\s*(?:Scenario(?: Outline)?|Feature|Rule|Background|Examples):", UNICODE);

@@ -58,9 +58,7 @@ class ImporterFactoryLoaderIT {
                 .addInputs(tempDir)
                 .filter(FilterSettings.builder().build())
                 .build();
-
         final List<SpecificationItem> items = oft.importItems(settings);
-
         assertThat(items, containsInAnyOrder(
                 hasProperty("id", hasToString("scn~login~1")),
                 hasProperty("id", hasToString("impl~login~1"))));

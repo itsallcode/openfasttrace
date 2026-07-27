@@ -14,9 +14,7 @@ class TestDelegatingLineConsumer {
         final LineConsumer firstDelegate = mock(LineConsumer.class);
         final LineConsumer secondDelegate = mock(LineConsumer.class);
         final DelegatingLineConsumer consumer = new DelegatingLineConsumer(List.of(firstDelegate, secondDelegate));
-
         consumer.readLine(2, "line");
-
         verify(firstDelegate).readLine(2, "line");
         verify(secondDelegate).readLine(2, "line");
     }

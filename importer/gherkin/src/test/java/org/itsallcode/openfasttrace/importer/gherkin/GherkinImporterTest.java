@@ -78,20 +78,6 @@ class GherkinImporterTest
     // [utest->dsn~gherkin.streaming-import~1]
     // [utest->dsn~gherkin.covers-metadata-validation~1]
     @Test
-    void testIgnoresScenarioWithoutOftMetadata()
-    {
-        final List<SpecificationItem> items = importText("""
-                Feature: login
-                Scenario: ordinary scenario
-                  Given nothing
-                """);
-
-        assertThat(items, is(empty()));
-    }
-
-    // [utest->dsn~gherkin.streaming-import~1]
-    // [utest->dsn~gherkin.covers-metadata-validation~1]
-    @Test
     void testImportsMultipleCoversDirectives()
     {
         final String source = """
@@ -120,18 +106,6 @@ class GherkinImporterTest
                 """;
 
         assertThat(importText(source), is(empty()));
-    }
-
-    // [utest->dsn~gherkin.streaming-import~1]
-    @Test
-    void testIgnoresDirectivesOutsideAnIdMetadataRegion()
-    {
-        final List<SpecificationItem> items = importText("""
-                # Covers: req~login~1
-                Scenario: Login
-                """);
-
-        assertThat(items, is(empty()));
     }
 
     // [utest->dsn~gherkin.streaming-import~1]
@@ -239,15 +213,44 @@ class GherkinImporterTest
         assertThat(items.get(0).getId(), hasToString("scn~login~1"));
     }
 
-    @Test
-    void testIdTagDelimitedByAtTagNotImported()
+    // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.id-detection~1]
+    // [utest->dsn~gherkin.covers-metadata-validation~1]
+    @ParameterizedTest
+    @MethodSource("scenariosWithoutUsableIdMetadata")
+    void testSkipsScenariosWithoutUsableIdMetadata(final String source)
     {
-        final List<SpecificationItem> items = importText("""
-                @id:scn~login~1@anotherTag
-                Scenario: Login
-                """);
+        assertThat(importText(source), is(empty()));
+    }
 
-        assertThat(items, is(empty()));
+    private static Stream<String> scenariosWithoutUsableIdMetadata()
+    {
+        return Stream.of(
+                """
+                        Feature: login
+                        Scenario: ordinary scenario
+                          Given nothing
+                        """,
+                """
+                        # Covers: req~login~1
+                        Scenario: Login
+                        """,
+                """
+                        # Needs: impl
+                        Scenario: Login
+                        """,
+                """
+                        @id:scn~login~1@anotherTag
+                        Scenario: Login
+                        """,
+                """
+                        @unrelatedTag
+                        Scenario: Login
+                        """,
+                """
+                        @id:invalidId
+                        Scenario: Login
+                        """);
     }
 
     // [utest->dsn~gherkin.id-detection~1]

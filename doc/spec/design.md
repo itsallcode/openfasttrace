@@ -299,7 +299,7 @@ Needs: impl, utest
 #### Support Coverage Tags
 `dsn~gherkin.comment-coverage-tags~1`
 
-The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves legacy comment coverage tags without applying their regular expressions to executable Gherkin text.
+The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves basic comment coverage tags without applying their regular expressions to executable Gherkin text.
 
 When a comment tag occurs inside an imported scenario, its listener events are buffered until the scenario ends. The shared parser emits complete specification-item event sequences, so emitting them immediately would interleave them with the open scenario item and corrupt the listener state.
 

@@ -3,7 +3,7 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -215,6 +215,39 @@ class GherkinImporterTest
                 """);
 
         assertThat(items.get(0).getDescription(), is("Given a registered user"));
+    }
+
+    @Test
+    void testIdTagWithLeadingTag()
+    {
+        final List<SpecificationItem> items = importText("""
+                @someTag@id:scn~login~1
+                Scenario: Login
+                """);
+
+        assertThat(items.get(0).getId(), hasToString("scn~login~1"));
+    }
+
+    @Test
+    void testIdTagDelimitedBySpace()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1 @anotherTag
+                Scenario: Login
+                """);
+
+        assertThat(items.get(0).getId(), hasToString("scn~login~1"));
+    }
+
+    @Test
+    void testIdTagDelimitedByAtTagNotImported()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~login~1@anotherTag
+                Scenario: Login
+                """);
+
+        assertThat(items, is(empty()));
     }
 
     // [utest->dsn~gherkin.id-detection~1]

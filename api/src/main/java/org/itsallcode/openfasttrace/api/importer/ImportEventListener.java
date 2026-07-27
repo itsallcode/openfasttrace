@@ -137,7 +137,6 @@ public interface ImportEventListener
      * this method if the specification item is already complete and does not
      * need to be built from events, e.g. when the item is specified in a single
      * line and does not span multiple lines in the input file.
-     * <p>
      *
      * @param item
      *            the complete specification item

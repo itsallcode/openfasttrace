@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.LineContext;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
@@ -39,14 +38,10 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
      *            the input file to be imported
      * @param listener
      *            the listener to handle import events
-     * @param pathConfig
-     *            the path configuration for resolving relative paths (optional,
-     *            can be null)
      */
-    RestructuredTextImporter(final InputFile fileName, final ImportEventListener listener,
-            final PathConfig pathConfig)
+    RestructuredTextImporter(final InputFile fileName, final ImportEventListener listener)
     {
-        super(fileName, listener, pathConfig);
+        super(fileName, listener);
     }
 
     @Override

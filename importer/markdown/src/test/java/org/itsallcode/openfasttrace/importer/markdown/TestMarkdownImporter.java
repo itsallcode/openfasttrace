@@ -102,7 +102,7 @@ class TestMarkdownImporter
         when(fileMock.getPath()).thenReturn("/the/file");
         when(fileMock.createReader()).thenReturn(readerMock);
         when(readerMock.readLine()).thenThrow(new IOException("Dummy exception"));
-        final MarkdownImporter importer = new MarkdownImporter(fileMock, listenerMock, null);
+        final MarkdownImporter importer = new MarkdownImporter(fileMock, listenerMock);
         final ImporterException exception = assertThrows(ImporterException.class, importer::runImport);
         assertThat(exception.getMessage(), equalTo("Error reading '/the/file' at line 0: Dummy exception"));
     }

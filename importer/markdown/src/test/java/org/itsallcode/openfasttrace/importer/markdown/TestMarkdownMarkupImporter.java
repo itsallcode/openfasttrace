@@ -1,23 +1,12 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.nio.file.Path;
-import java.util.List;
-
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
-import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,16 +45,16 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 <!-- %s -->
                 req~ordinary~1
                 """.formatted(FULL_COVERAGE_TAG), contains(
-                        item().id("doc", "guide-1257333065", 0)
-                                .addCoveredId("req", "guide", 1)
-                                .location("guide.md", 2).build(),
-                        item().id("req", "ordinary", 1).location("guide.md", 3).build()));
+                item().id("doc", "guide-1257333065", 0)
+                        .addCoveredId("req", "guide", 1)
+                        .location("guide.md", 2).build(),
+                item().id("req", "ordinary", 1).location("guide.md", 3).build()));
     }
 
     // [utest->dsn~markdown.comment-coverage-tags~1]
     @ParameterizedTest
-    @ValueSource(strings = {
-            FULL_COVERAGE_TAG,
+    @ValueSource(strings =
+    { FULL_COVERAGE_TAG,
             "before <!-- " + FULL_COVERAGE_TAG + " -->",
             "<!-- " + FULL_COVERAGE_TAG + " --> after",
             "<!-- " + FULL_COVERAGE_TAG,
@@ -77,39 +66,9 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
 
     // [utest->dsn~markdown.comment-coverage-tags~1]
     @Test
-    void testUsesFirstMatchingPathConfigurationForShortCoverageTags()
+    void testDoesNotImportShortCoverageTag()
     {
-        final PathConfig first = pathConfig("first.", "first");
-        final PathConfig second = pathConfig("second.", "second");
-        final List<SpecificationItem> items = importWithSettings("<!-- [[covered:3]] -->", first, second);
-
-        assertAll(
-                () -> assertThat(items.get(0).getId().getArtifactType(), equalTo("first")),
-                () -> assertThat(items.get(0).getCoveredIds(),
-                        equalTo(List.of(createId("req", "first.covered", 3)))));
-    }
-
-    // [utest->dsn~markdown.comment-coverage-tags~1]
-    @Test
-    void testDoesNotImportShortCoverageTagWithoutMatchingPathConfiguration()
-    {
-        assertThat(importWithSettings("<!-- [[covered:3]] -->",
-                PathConfig.builder().patternPathMatcher("glob:**.rst").coveredItemArtifactType("req")
-                        .tagArtifactType("doc").build()), emptyIterable());
-    }
-
-    private static List<SpecificationItem> importWithSettings(final String input,
-            final PathConfig... pathConfigs)
-    {
-        final MarkdownImporterFactory factory = new MarkdownImporterFactory();
-        factory.init(new ImporterContext(ImportSettings.builder().pathConfigs(List.of(pathConfigs)).build()));
-        return ImportAssertions.runImporterOnText(Path.of("guide.md"), input, factory);
-    }
-
-    private static PathConfig pathConfig(final String prefix, final String tagArtifactType)
-    {
-        return PathConfig.builder().patternPathMatcher("glob:**.md").coveredItemArtifactType("req")
-                .coveredItemNamePrefix(prefix).tagArtifactType(tagArtifactType).build();
+        assertImport("guide.md", "<!-- [[covered:3]] -->", emptyIterable());
     }
 
     protected String formatTitle(final String title, final int level)
@@ -278,7 +237,9 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.parseId("req~example~1"))
                         .location("file_without_code_block.md", 4)
-                        .description(endMarker) // End marker looks like part of the description in this case.
+                        // End marker looks like part of the description in this
+                        // case.
+                        .description(endMarker)
                         .build()));
     }
 
@@ -295,29 +256,29 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 """,
                 contains(item()
                         .id(SpecificationItemId.createId("req", "comment_with_code_block", 1))
-                        .comment("```" + System.lineSeparator()+ "This is a code block inside a comment."
-                                        + System.lineSeparator() + "```")
+                        .comment("```" + System.lineSeparator() + "This is a code block inside a comment."
+                                + System.lineSeparator() + "```")
                         .location("file_with_code_block_in_comment.md", 1)
                         .build()));
     }
 
-
     // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
-    void testDisablingMarkdownParsingForATextBlock() {
+    void testDisablingMarkdownParsingForATextBlock()
+    {
         assertImport("disable_parsing.md", """
                 `req~stop-parsing~1`
-                
+
                 The next part must not be parsed:
-                
+
                 <!-- oft:off -->
                 `req~do-not-parse-me~2`
-                
+
                 Invisible.
-                
+
                 Needs: utest
                 <!-- oft:on -->
-                
+
                 Needs: impl
                 """,
                 contains(item()

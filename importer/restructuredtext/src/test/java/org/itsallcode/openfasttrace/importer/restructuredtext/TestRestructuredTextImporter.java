@@ -1,23 +1,12 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.nio.file.Path;
-import java.util.List;
-
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
-import org.itsallcode.openfasttrace.api.importer.ImporterContext;
-import org.itsallcode.openfasttrace.api.importer.ImportSettings;
-import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
+import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,15 +45,16 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                 .. %s
                 req~ordinary~1
                 """.formatted(FULL_COVERAGE_TAG), contains(
-                        item().id("doc", "guide-1442787702", 0)
-                                .addCoveredId("req", "guide", 1)
-                                .location("guide.rst", 3).build(),
-                        item().id("req", "ordinary", 1).location("guide.rst", 4).build()));
+                item().id("doc", "guide-1442787702", 0)
+                        .addCoveredId("req", "guide", 1)
+                        .location("guide.rst", 3).build(),
+                item().id("req", "ordinary", 1).location("guide.rst", 4).build()));
     }
 
     // [utest->dsn~rst.comment-coverage-tags~1]
     @ParameterizedTest
-    @ValueSource(strings = {
+    @ValueSource(strings =
+    {
             FULL_COVERAGE_TAG,
             ".. directive:: " + FULL_COVERAGE_TAG,
             "..\n   " + FULL_COVERAGE_TAG,
@@ -86,39 +76,10 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 
     // [utest->dsn~rst.comment-coverage-tags~1]
     @Test
-    void testUsesFirstMatchingPathConfigurationForShortCoverageTags()
+    void testDoesNotImportShortCoverageTag()
     {
-        final PathConfig first = pathConfig("first.", "first");
-        final PathConfig second = pathConfig("second.", "second");
-        final List<SpecificationItem> items = importWithSettings(".. [[covered:3]]", first, second);
-
-        assertAll(
-                () -> assertThat(items.get(0).getId().getArtifactType(), equalTo("first")),
-                () -> assertThat(items.get(0).getCoveredIds(),
-                        equalTo(List.of(createId("req", "first.covered", 3)))));
-    }
-
-    // [utest->dsn~rst.comment-coverage-tags~1]
-    @Test
-    void testDoesNotImportShortCoverageTagWithoutMatchingPathConfiguration()
-    {
-        assertThat(importWithSettings(".. [[covered:3]]",
-                PathConfig.builder().patternPathMatcher("glob:**.md").coveredItemArtifactType("req")
-                        .tagArtifactType("doc").build()), emptyIterable());
-    }
-
-    private static List<SpecificationItem> importWithSettings(final String input,
-            final PathConfig... pathConfigs)
-    {
-        final RestructuredTextImporterFactory factory = new RestructuredTextImporterFactory();
-        factory.init(new ImporterContext(ImportSettings.builder().pathConfigs(List.of(pathConfigs)).build()));
-        return ImportAssertions.runImporterOnText(Path.of("guide.rst"), input, factory);
-    }
-
-    private static PathConfig pathConfig(final String prefix, final String tagArtifactType)
-    {
-        return PathConfig.builder().patternPathMatcher("glob:**.rst").coveredItemArtifactType("req")
-                .coveredItemNamePrefix(prefix).tagArtifactType(tagArtifactType).build();
+        assertImport("guide.rst", ".. [[covered:3]]",
+                emptyIterable());
     }
 
     protected String formatTitle(final String title, final int level)
@@ -242,20 +203,21 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
-    void testDisablingRstParsingForATextBlock() {
+    void testDisablingRstParsingForATextBlock()
+    {
         assertImport("disable_parsing.rst", """
                 `req~stop-parsing~1`
-                
+
                 The next part must not be parsed:
-                
+
                 .. oft:off
                 `req~do-not-parse-me~2`
-                
+
                 Invisible.
-                
+
                 Needs: utest
                 .. oft:on
-                
+
                 Needs: impl
                 """,
                 contains(item()

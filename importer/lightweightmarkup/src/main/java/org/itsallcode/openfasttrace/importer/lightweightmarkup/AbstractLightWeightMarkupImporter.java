@@ -1,16 +1,13 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
-import org.itsallcode.openfasttrace.importer.tag.common.CoverageTagParser;
-import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.*;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
+import org.itsallcode.openfasttrace.importer.tag.common.CoverageTagParser;
+import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 
 /**
  * Base class for importers of lightweight markup text.
@@ -30,24 +27,21 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
 
     /**
      * Create a new {@link AbstractLightWeightMarkupImporter}.
-     * 
+     *
      * @param file
      *            input file
      * @param listener
      *            import event listener
-     * @param pathConfig
-     *            optional configuration for short coverage tags
      */
     // Possible 'this' escape before subclass is fully initialized:
     // LineParserStateMachine constructor does not use 'this'.
     @SuppressWarnings("this-escape")
-    protected AbstractLightWeightMarkupImporter(final InputFile file, final ImportEventListener listener,
-            final PathConfig pathConfig)
+    protected AbstractLightWeightMarkupImporter(final InputFile file, final ImportEventListener listener)
     {
         this.file = file;
         this.listener = listener;
         this.stateMachine = new LineParserStateMachine(configureTransitions());
-        this.coverageTagParser = CoverageTagParser.create(pathConfig, file, listener);
+        this.coverageTagParser = CoverageTagParser.create(null, file, listener);
     }
 
     @Override
@@ -58,7 +52,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
 
     /**
      * Define the transitions of the parser statemachine.
-     * 
+     *
      * @return parser statemachine transitions
      */
     protected abstract Transition[] configureTransitions();
@@ -68,7 +62,8 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
      *
      * @param context
      *            current line and neighboring source lines
-     * @return {@code true} if the current line is a coverage-tag comment candidate
+     * @return {@code true} if the current line is a coverage-tag comment
+     *         candidate
      */
     protected abstract boolean isCoverageTagCommentCandidate(LineContext context);
 
@@ -87,7 +82,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
 
     /**
      * Define a transition in the parser statemachine.
-     * 
+     *
      * @param from
      *            state to be matched against the parsers current state
      * @param to

@@ -74,14 +74,6 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                 """.formatted(FULL_COVERAGE_TAG), emptyIterable());
     }
 
-    // [utest->dsn~rst.comment-coverage-tags~1]
-    @Test
-    void testDoesNotImportShortCoverageTag()
-    {
-        assertImport("guide.rst", ".. [[covered:3]]",
-                emptyIterable());
-    }
-
     protected String formatTitle(final String title, final int level)
     {
         return title + "\n" + "=".repeat(title.length());

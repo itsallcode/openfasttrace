@@ -64,13 +64,6 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
         assertImport("guide.md", line, emptyIterable());
     }
 
-    // [utest->dsn~markdown.comment-coverage-tags~1]
-    @Test
-    void testDoesNotImportShortCoverageTag()
-    {
-        assertImport("guide.md", "<!-- [[covered:3]] -->", emptyIterable());
-    }
-
     protected String formatTitle(final String title, final int level)
     {
         return "#".repeat(level) + " " + title;

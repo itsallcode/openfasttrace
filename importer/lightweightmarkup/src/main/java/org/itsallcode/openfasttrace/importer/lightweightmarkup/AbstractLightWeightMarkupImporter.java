@@ -77,7 +77,10 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
             // [impl->dsn~rst.comment-coverage-tags~1]
             this.coverageTagParser.readLine(context.lineNumber(), context.currentLine());
         }
-        this.stateMachine.step(this.currentContext.currentLine(), this.currentContext.nextLine());
+        else
+        {
+            this.stateMachine.step(this.currentContext.currentLine(), this.currentContext.nextLine());
+        }
     }
 
     /**

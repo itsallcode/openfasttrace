@@ -1,4 +1,4 @@
-# OpenFastTrace 4.7.0, released 2026-07-27
+# OpenFastTrace 4.7.0, released 2026-07-28
 
 Code name: Gherkin Importer
 

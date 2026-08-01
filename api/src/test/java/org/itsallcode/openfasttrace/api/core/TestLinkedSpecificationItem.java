@@ -160,6 +160,32 @@ class TestLinkedSpecificationItem
     }
 
     @Test
+    // [utest->dsn~tracing.transitive-failure~1]
+    void testIsTransitiveFailure_True()
+    {
+        // linkedItem needs IMPL
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(IMPL));
+        // coveredLinkedItem provides IMPL
+        when(this.coveredItemMock.getArtifactType()).thenReturn(IMPL);
+        this.linkedItem.addLinkToItemWithStatus(this.coveredLinkedItem, LinkStatus.COVERED_SHALLOW);
+
+        // coveredLinkedItem needs something but has no coverage -> is defect
+        when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
+
+        assertThat(this.linkedItem.isTransitiveFailure(), equalTo(true));
+    }
+
+    @Test
+    // [utest->dsn~tracing.transitive-failure~1]
+    void testIsTransitiveFailure_FalseBecauseDirectDefect()
+    {
+        // linkedItem needs IMPL but has no coverage -> direct defect
+        when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(IMPL));
+
+        assertThat(this.linkedItem.isTransitiveFailure(), equalTo(false));
+    }
+
+    @Test
     void testCountOutgoingLinks()
     {
         linkToNewItemsWithStatus(LinkStatus.COVERS, LinkStatus.PREDATED, LinkStatus.OUTDATED,

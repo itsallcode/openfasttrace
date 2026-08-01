@@ -88,11 +88,14 @@ class HtmlSpecificationItem implements Viewable
         this.stream.println("</small></summary>");
     }
 
+    // [impl->dsn~reporting.html.transitive-failure-mark~1]
     private String renderStatusMark()
     {
-        return this.item.isDefect()
-                ? (this.item.isTransitiveFailure() ? TRANSITIVE_FAILURE_MARK : CROSS_MARK)
-                : CHECK_MARK;
+        return this.item.isDefect() ? pickFailureMark() : CHECK_MARK;
+    }
+
+    private String pickFailureMark() {
+        return this.item.isTransitiveFailure() ? TRANSITIVE_FAILURE_MARK : CROSS_MARK;
     }
 
     // [impl->dsn~reporting.html.escape-html~1]

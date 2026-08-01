@@ -551,6 +551,22 @@ Covers:
 
 Needs: dsn
 
+#### Transitive Failure
+`req~tracing.transitive-failure~1`
+
+OFT identifies a specification item as having a _transitive failure_ if it is a [defect item](#defect-items) but has no direct defects.
+
+An item has direct defects if:
+* It has duplicates.
+* It has bad links (any outgoing coverage link has a different status than "Covers").
+* It has uncovered artifact types (not all artifact types in its "Needs" section are covered by outgoing links).
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Link Cycle
 `req~tracing.link-cycle~1`
 
@@ -773,6 +789,17 @@ OFT generates valid HTML format for the HTML report.
 Rationale:
 
 This ensures correct and consistent rendering of the HTML report.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
+##### HTML Report Transitive Failure Mark
+`req~reporting.html.transitive-failure-mark~1`
+
+The HTML report uses a special mark (❎) to indicate specification items with a [transitive failure](#transitive-failure).
 
 Covers:
 

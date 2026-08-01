@@ -512,6 +512,19 @@ Covers:
 
 Needs: impl, utest
 
+### Transitive Failure
+`dsn~tracing.transitive-failure~1`
+
+The [tracer](#tracer) identifies a [specification item](#specification-item) as having a _transitive failure_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
+
+A transitive failure occurs when a specification item itself fulfills all direct coverage requirements, but at least one of the items it covers (directly or indirectly) is a defect item.
+
+Covers:
+
+* `req~tracing.transitive-failure~1`
+
+Needs: impl, utest
+
 ### Link Cycle
 `dsn~tracing.link-cycle~1`
 
@@ -677,6 +690,17 @@ Rationale:
 Covers:
 
 * [`req~reporting.html.valid-html~1`](system_requirements.md#html-report-renders-valid-html)
+
+Needs: impl, utest
+
+#### HTML Report Transitive Failure Mark
+`dsn~reporting.html.transitive-failure-mark~1`
+
+The HTML report renders the transitive failure mark (❎) for items that have a [transitive failure](#transitive-failure).
+
+Covers:
+
+* `req~reporting.html.transitive-failure-mark~1`
 
 Needs: impl, utest
 

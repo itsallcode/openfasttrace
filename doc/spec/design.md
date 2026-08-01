@@ -541,17 +541,17 @@ Needs: impl, utest
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text.summary~2`
+`dsn~reporting.plain-text.summary~3`
 
 The summary in the plain text report includes:
 
 * Result status
 * Total number of specification items
-* Total number of specification items that are defect (if any)
+* Total number of direct and transitive defect specification items (if any)
 
 Covers:
 
-* `req~reporting.plain-text.summary~2`
+* `req~reporting.plain-text.summary~3`
 
 Needs: impl, utest
 
@@ -660,16 +660,6 @@ Covers:
 
 Needs: impl, utest
 
-#### Plain Text Report Summary Line
-`dsn~reporting.plain-text.summary-line~1`
-
-The plain text report summary line renders the number of direct and transitive defects.
-
-Covers:
-
-* `req~reporting.plain-text.summary-line~1`
-
-Needs: impl, utest
 
 ### HTML Report
 
@@ -727,14 +717,14 @@ Covers:
 
 Needs: impl, utest
 
-#### HTML Report Summary Line
-`dsn~reporting.html.summary-line~1`
+#### HTML Report Summary
+`dsn~reporting.html.summary~2`
 
-The HTML report summary line renders the number of direct and transitive defects.
+The HTML report summary renders the status, the number of total items, a progress bar and the number of direct and transitive defects.
 
 Covers:
 
-* `req~reporting.html.summary-line~1`
+* `req~reporting.html.summary~2`
 
 Needs: impl, utest
 

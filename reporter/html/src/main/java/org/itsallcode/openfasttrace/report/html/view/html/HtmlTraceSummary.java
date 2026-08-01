@@ -74,7 +74,7 @@ class HtmlTraceSummary implements Viewable
         }
     }
 
-    // [impl->dsn~reporting.html.summary-line~1]
+    // [impl->dsn~reporting.html.summary~2]
     private void renderDefectCount()
     {
         if (!this.trace.hasNoDefects())

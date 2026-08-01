@@ -639,7 +639,7 @@ Covers:
 Needs: dsn
 
 ### Reports
-Reports are the main way to find out if a projects requirements are covered properly.
+Reports are the main way to find out if a project's requirements are covered properly.
 
 #### Common Report Functions
 
@@ -666,16 +666,16 @@ Needs: dsn
 The plain text report is the most basic report variant. It serves two main purposes:
 
 1. Input in build chains
-2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
+2. Minimal requirement coverage view with the least dependency. Any text terminal can display the plain text report.
 
 ##### Plain Text Report Summary
-`req~reporting.plain-text.summary~2`
+`req~reporting.plain-text.summary~3`
 
-The summary in the plain text report includes:
+The summary in the plain-text report includes:
 
 * Result status
 * Total number of specification items
-* Total number of defect specification items (if any)
+* Total number of direct and transitive defect specification items (if any)
 
 Covers:
 
@@ -686,7 +686,7 @@ Needs: dsn
 ##### Plain Text Report Specification Item Overview
 `req~reporting.plain-text.specification-item-overview~2`
 
-An item summary consist in the plain text report includes
+An item summary in the plain-text report includes
 
   1. Status
   2. Number of broken incoming links
@@ -761,16 +761,6 @@ Covers:
 
 Needs: dsn
 
-##### Plain Text Report Summary Line
-`req~reporting.plain-text.summary-line~1`
-
-The plain text report summary line distinguishes between direct and transitive defects.
-
-Covers:
-
-* [feat~plain-text-report~1](#plain-text-report)
-
-Needs: dsn
 
 #### HTML Report
 
@@ -830,10 +820,15 @@ Covers:
 
 Needs: dsn
 
-##### HTML Report Summary Line
-`req~reporting.html.summary-line~1`
+##### HTML Report Summary
+`req~reporting.html.summary~2`
 
-The HTML report summary line distinguishes between direct and transitive defects.
+The summary in the HTML report includes:
+
+* Result status
+* Total number of specification items
+* Completion status as a progress bar
+* Total number of direct and transitive defect specification items (if any)
 
 Rationale:
 

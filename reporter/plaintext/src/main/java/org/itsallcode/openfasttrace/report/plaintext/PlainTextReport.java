@@ -138,8 +138,7 @@ public class PlainTextReport implements Reportable
         return this.formatter.formatNotOk(NOT_OK);
     }
 
-    // [impl->dsn~reporting.plain-text.summary~2]
-    // [impl->dsn~reporting.plain-text.summary-line~1]
+    // [impl->dsn~reporting.plain-text.summary~3]
     private void renderSummary(final PrintStream report)
     {
         report.print(translateStatus(this.trace.hasNoDefects()));

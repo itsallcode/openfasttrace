@@ -106,7 +106,7 @@ class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~2]
+    // [utest->dsn~reporting.plain-text.summary~3]
     void testReport_LevelSummary_OK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -115,8 +115,7 @@ class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.summary~2]
-    // [utest->dsn~reporting.plain-text.summary-line~1]
+    // [utest->dsn~reporting.plain-text.summary~3]
     void testReport_LevelSummary_NotOK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -165,7 +164,7 @@ class TestPlainTextReport
 
     @Test
     // [utest->dsn~reporting.plain-text.transitive-defect~1]
-    // [utest->dsn~reporting.plain-text.summary-line~1]
+    // [utest->dsn~reporting.plain-text.summary~3]
     void testReport_LevelMinimal_TransitiveDefect()
     {
         final LinkedSpecificationItem transitiveDefectMock = mock(LinkedSpecificationItem.class);

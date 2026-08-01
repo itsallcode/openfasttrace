@@ -35,6 +35,7 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     }
 
     @Test
+    // [utest->dsn~reporting.html.summary~2]
     void testRenderSummaryOk()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
@@ -54,6 +55,7 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     @ParameterizedTest
     @ValueSource(ints =
     { 0, 1, 50, 99 })
+    // [utest->dsn~reporting.html.summary~2]
     void testRenderPercentagesNotOk(final int value)
     {
         final int maximum = 100;
@@ -78,7 +80,7 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
     }
 
     @Test
-    // [utest->dsn~reporting.html.summary-line~1]
+    // [utest->dsn~reporting.html.summary~2]
     void testRenderTransitiveDefects()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(false);

@@ -25,7 +25,9 @@ public class PlainTextReport implements Reportable
     private static final Pattern PLUS_MINUS_PATTERN = Pattern.compile("[-+]");
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
+    /** Marker in the report when an item or the summary are clean. */
     public static final String OK = "ok";
+    /** Marker in the report when one or more items show defects. */
     public static final String NOT_OK = "not ok";
     private final Trace trace;
     private int nonEmptySections;

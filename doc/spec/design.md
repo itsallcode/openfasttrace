@@ -704,6 +704,17 @@ Covers:
 
 Needs: impl, utest
 
+#### HTML Report Summary Line
+`dsn~reporting.html.summary-line~1`
+
+The HTML report summary line renders the number of direct and transitive defects.
+
+Covers:
+
+* `req~reporting.html.summary-line~1`
+
+Needs: impl, utest
+
 ## Requirement Format Conversion
 
 ### ReqM2 Export

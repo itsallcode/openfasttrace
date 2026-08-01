@@ -807,6 +807,21 @@ Covers:
 
 Needs: dsn
 
+##### HTML Report Summary Line
+`req~reporting.html.summary-line~1`
+
+The HTML report summary line distinguishes between direct and transitive defects.
+
+Rationale:
+
+This allows users to quickly identify if a failure is caused by the item itself or inherited from its dependencies.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
 ### Requirement Format Conversion
 OFT supports conversion from one requirement format into another for example from Markdown to ReqM2.
 

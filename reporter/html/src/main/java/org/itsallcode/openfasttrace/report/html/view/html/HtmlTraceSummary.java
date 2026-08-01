@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 import java.io.PrintStream;
+import java.util.List;
 
 import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
 import org.itsallcode.openfasttrace.api.core.Trace;
@@ -73,13 +74,21 @@ class HtmlTraceSummary implements Viewable
         }
     }
 
+    // [impl->dsn~reporting.html.summary-line~1]
     private void renderDefectCount()
     {
         if (!this.trace.hasNoDefects())
         {
-            this.stream.print(" <span class=\".red\">");
-            this.stream.print(this.trace.countDefects());
-            this.stream.print(" defects</span>");
+            final List<LinkedSpecificationItem> defectItems = this.trace.getDefectItems();
+            final long transitiveCount = defectItems.stream()
+                    .filter(LinkedSpecificationItem::isTransitiveFailure).count();
+            final long directCount = defectItems.size() - transitiveCount;
+
+            this.stream.print(" <span class=\"red\">");
+            this.stream.print(directCount);
+            this.stream.print(" direct, ");
+            this.stream.print(transitiveCount);
+            this.stream.print(" transitive defects</span>");
         }
     }
 

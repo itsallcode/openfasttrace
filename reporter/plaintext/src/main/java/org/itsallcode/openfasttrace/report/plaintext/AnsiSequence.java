@@ -32,6 +32,8 @@ enum AnsiSequence {
     CYAN(36),
     /** White */
     WHITE(37),
+    /** Bright Black (Grey) */
+    BRIGHT_BLACK(90),
     /** Bright Red */
     BRIGHT_RED(91);
 

@@ -648,6 +648,29 @@ Covers:
 
 Needs: impl, utest
 
+#### Plain Text Report Transitive Failure
+`dsn~reporting.plain-text.transitive-failure~1`
+
+The plain text report renders the suffix `(transitive)` for transitive failures.
+The status `not ok` is rendered in grey for transitive failures.
+
+Covers:
+
+* `req~reporting.plain-text.transitive-failure~1`
+
+Needs: impl, utest
+
+#### Plain Text Report Summary Line
+`dsn~reporting.plain-text.summary-line~1`
+
+The plain text report summary line renders the number of direct and transitive defects.
+
+Covers:
+
+* `req~reporting.plain-text.summary-line~1`
+
+Needs: impl, utest
+
 ### HTML Report
 
 #### HTML Report Inlines CSS

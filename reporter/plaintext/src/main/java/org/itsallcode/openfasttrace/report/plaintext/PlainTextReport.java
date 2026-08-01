@@ -25,6 +25,8 @@ public class PlainTextReport implements Reportable
     private static final Pattern PLUS_MINUS_PATTERN = Pattern.compile("[-+]");
     private static final Comparator<LinkedSpecificationItem> LINKED_ITEM_BY_ID = Comparator
             .comparing(LinkedSpecificationItem::getId);
+    public static final String OK = "ok";
+    public static final String NOT_OK = "not ok";
     private final Trace trace;
     private int nonEmptySections;
     private final ReportSettings settings;
@@ -108,10 +110,34 @@ public class PlainTextReport implements Reportable
 
     private String translateStatus(final boolean ok)
     {
-        return ok ? this.formatter.formatOk("ok") : this.formatter.formatNotOk("not ok");
+        if (ok)
+        {
+            return this.formatter.formatOk(OK);
+        }
+        final List<LinkedSpecificationItem> defectItems = this.trace.getDefectItems();
+        if (!defectItems.isEmpty() && defectItems.stream().allMatch(LinkedSpecificationItem::isTransitiveFailure))
+        {
+            return this.formatter.formatTransitiveNotOk(NOT_OK);
+        }
+        return this.formatter.formatNotOk(NOT_OK);
+    }
+
+    // [impl->dsn~reporting.plain-text.transitive-failure~1]
+    private String translateItemStatus(final LinkedSpecificationItem item)
+    {
+        if (!item.isDefect())
+        {
+            return this.formatter.formatOk(OK);
+        }
+        if (item.isTransitiveFailure())
+        {
+            return this.formatter.formatTransitiveNotOk("not ok (transitive)");
+        }
+        return this.formatter.formatNotOk(NOT_OK);
     }
 
     // [impl->dsn~reporting.plain-text.summary~2]
+    // [impl->dsn~reporting.plain-text.summary-line~1]
     private void renderSummary(final PrintStream report)
     {
         report.print(translateStatus(this.trace.hasNoDefects()));
@@ -121,8 +147,15 @@ public class PlainTextReport implements Reportable
         if (this.trace.countDefects() != 0)
         {
             report.print(", ");
-            report.print(this.trace.countDefects());
-            report.print(" defect");
+            final List<LinkedSpecificationItem> defectItems = this.trace.getDefectItems();
+            final long transitiveCount = defectItems.stream()
+                    .filter(LinkedSpecificationItem::isTransitiveFailure).count();
+            final long directCount = defectItems.size() - transitiveCount;
+
+            report.print(directCount);
+            report.print(" direct, ");
+            report.print(transitiveCount);
+            report.print(" transitive defects");
         }
         report.print(this.settings.getNewline());
     }
@@ -147,7 +180,7 @@ public class PlainTextReport implements Reportable
     // [impl->dsn~reporting.plain-text.specification-item-overview~2]
     private void renderItemSummary(final PrintStream report, final LinkedSpecificationItem item)
     {
-        report.print(translateStatus(!item.isDefect()));
+        report.print(translateItemStatus(item));
         renderItemLinkCounts(report, item);
         report.print(this.formatter.formatStrong(item.getId().toString()));
         report.print(" ");

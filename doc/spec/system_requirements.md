@@ -749,6 +749,29 @@ Covers:
 
 Needs: dsn
 
+##### Plain Text Report Transitive Failure
+`req~reporting.plain-text.transitive-failure~1`
+
+The plain text report renders transitive failures less visually alarming than direct ones.
+Transitive failures are rendered with the suffix `(transitive)` and the status `not ok` is rendered in grey.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+##### Plain Text Report Summary Line
+`req~reporting.plain-text.summary-line~1`
+
+The plain text report summary line distinguishes between direct and transitive defects.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
 #### HTML Report
 
 ##### HTML Report is a Single File

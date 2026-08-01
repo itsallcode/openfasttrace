@@ -116,12 +116,16 @@ class TestPlainTextReport
 
     @Test
     // [utest->dsn~reporting.plain-text.summary~2]
+    // [utest->dsn~reporting.plain-text.summary-line~1]
     void testReport_LevelSummary_NotOK()
     {
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countDefects()).thenReturn(1);
-        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 defect");
+        final LinkedSpecificationItem directDefectMock = mock(LinkedSpecificationItem.class);
+        when(directDefectMock.isTransitiveFailure()).thenReturn(false);
+        when(this.traceMock.getDefectItems()).thenReturn(List.of(directDefectMock));
+        assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 direct, 0 transitive defects");
     }
 
     @Test
@@ -156,7 +160,32 @@ class TestPlainTextReport
                 "not ok [ in:  4 /  7 ✘ | out:  1 /  3 ✘ ] req~zoo~1 [rejected] (-impl, -utest) [has 1 duplicate]", //
                 "not ok [ in:  5 /  6 ✘ | out:  0 /  0   ] req~zoo~2 [draft] (dsn, +utest)", //
                 "", //
-                "not ok - 6 total, 4 defect");
+                "not ok - 6 total, 4 direct, 0 transitive defects");
+    }
+
+    @Test
+    // [utest->dsn~reporting.plain-text.transitive-failure~1]
+    // [utest->dsn~reporting.plain-text.summary-line~1]
+    void testReport_LevelMinimal_TransitiveFailure()
+    {
+        final LinkedSpecificationItem transitiveFailureMock = mock(LinkedSpecificationItem.class);
+        when(transitiveFailureMock.isDefect()).thenReturn(true);
+        when(transitiveFailureMock.isTransitiveFailure()).thenReturn(true);
+        when(transitiveFailureMock.getStatus()).thenReturn(ItemStatus.APPROVED);
+        when(transitiveFailureMock.getId()).thenReturn(SpecificationItemId.parseId("req~transitive~1"));
+        when(transitiveFailureMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
+        when(transitiveFailureMock.getUncoveredArtifactTypes()).thenReturn(Collections.emptyList());
+        when(transitiveFailureMock.getOverCoveredArtifactTypes()).thenReturn(Collections.emptySet());
+
+        when(this.traceMock.hasNoDefects()).thenReturn(false);
+        when(this.traceMock.getDefectItems()).thenReturn(List.of(transitiveFailureMock));
+        when(this.traceMock.countDefects()).thenReturn(1);
+        when(this.traceMock.count()).thenReturn(1);
+
+        assertReportOutput(ReportVerbosity.FAILURE_SUMMARIES,
+                "not ok (transitive) [ in:  0 /  0   | out:  0 /  0   ] req~transitive~1 (impl)",
+                "",
+                "not ok - 1 total, 0 direct, 1 transitive defects");
     }
 
     private void prepareFailedItemDetails()
@@ -209,7 +238,7 @@ class TestPlainTextReport
                 "  [orphaned         ] → req~zoo~2", //
                 "", //
                 "", //
-                "not ok - 2 total, 1 defect");
+                "not ok - 2 total, 1 direct, 0 transitive defects");
     }
 
     // [utest->dsn~reporting.plain-text.link-details~1]
@@ -239,7 +268,7 @@ class TestPlainTextReport
                 "  #: tag, another tag", //
                 "", //
                 "", //
-                "not ok - 2 total, 1 defect");
+                "not ok - 2 total, 1 direct, 0 transitive defects");
     }
 
     private void prepareMixedItemDetails()
@@ -304,6 +333,7 @@ class TestPlainTextReport
         lenient().when(linkedItemMock.countDuplicateLinks()).thenReturn(duplicates);
         lenient().when(linkedItemMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
         lenient().when(linkedItemMock.countOutgoingLinks()).thenReturn(outgoingLinks);
+        lenient().when(linkedItemMock.isTransitiveFailure()).thenReturn(false);
         return linkedItemMock;
     }
 
@@ -323,29 +353,29 @@ class TestPlainTextReport
 
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countDefects()).thenReturn(0);
-        final LinkedSpecificationItem itemAMock = createLinkedItemMock("a~a~1", //
-                "This is" + separator + "a multiline description", //
+        final LinkedSpecificationItem itemAMock = createLinkedItemMock("a~a~1",
+                "This is" + separator + "a multiline description",
                 0, 0, 0, 0, 0);
-        final LinkedSpecificationItem itemBMock = createLinkedItemMock("b~b~2", //
-                "Yet another" + separator + "multiline text", //
+        final LinkedSpecificationItem itemBMock = createLinkedItemMock("b~b~2",
+                "Yet another" + separator + "multiline text",
                 0, 0, 0, 0, 0);
         when(itemAMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(DSN)));
         when(itemBMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
         when(this.traceMock.hasNoDefects()).thenReturn(true);
         when(this.traceMock.getItems()).thenReturn(List.of(itemAMock, itemBMock));
 
-        assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator, false), //
-                matchesAllLines("ok [ in:  0 /  0   | out:  0 /  0   ] a~a~1 (dsn)" + separator//
-                        + "" + separator //
-                        + "  This is" + separator //
-                        + "  a multiline description" + separator //
+        assertThat(getReportOutputWithNewline(ReportVerbosity.ALL, separator, false),
+                matchesAllLines("ok [ in:  0 /  0   | out:  0 /  0   ] a~a~1 (dsn)" + separator
+                        + separator
+                        + "  This is" + separator
+                        + "  a multiline description" + separator
                         + separator //
-                        + "ok [ in:  0 /  0   | out:  0 /  0   ] b~b~2 (impl)" + separator //
-                        + "" + separator //
-                        + "  Yet another" + separator //
-                        + "  multiline text" + separator //
-                        + separator //
-                        + separator //
+                        + "ok [ in:  0 /  0   | out:  0 /  0   ] b~b~2 (impl)" + separator
+                        + separator
+                        + "  Yet another" + separator
+                        + "  multiline text" + separator
+                        + separator
+                        + separator
                         + "ok - 2 total" + separator));
 
     }

@@ -25,6 +25,11 @@ class NullTextFormatter implements TextFormatter {
     }
 
     @Override
+    public String formatTransitiveNotOk(final String text) {
+        return text;
+    }
+
+    @Override
     public String formatStrong(final String text) {
         return text;
     }

@@ -68,7 +68,7 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
             defectItems.add(this.directDefectMock);
         }
         when(this.traceMock.getDefectItems()).thenReturn(defectItems);
-        when(this.directDefectMock.isTransitiveFailure()).thenReturn(false);
+        when(this.directDefectMock.isTransitiveDefect()).thenReturn(false);
 
         renderTaceSummaryOnIndentationLevel(1);
         assertOutputLines("  " + CharacterConstants.CROSS_MARK + " " + maximum
@@ -86,8 +86,8 @@ class TestHtmlTraceSummary extends AbstractTestHtmlRenderer
         when(this.traceMock.countDefects()).thenReturn(2);
         when(this.traceMock.getDefectItems())
                 .thenReturn(List.of(this.directDefectMock, this.transitiveDefectMock));
-        when(this.directDefectMock.isTransitiveFailure()).thenReturn(false);
-        when(this.transitiveDefectMock.isTransitiveFailure()).thenReturn(true);
+        when(this.directDefectMock.isTransitiveDefect()).thenReturn(false);
+        when(this.transitiveDefectMock.isTransitiveDefect()).thenReturn(true);
 
         renderTaceSummaryOnIndentationLevel(0);
         assertOutputLines(CharacterConstants.CROSS_MARK

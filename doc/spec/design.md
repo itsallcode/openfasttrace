@@ -512,16 +512,16 @@ Covers:
 
 Needs: impl, utest
 
-### Transitive Failure
-`dsn~tracing.transitive-failure~1`
+### Transitive Defect
+`dsn~tracing.transitive-defect~1`
 
-The [tracer](#tracer) identifies a [specification item](#specification-item) as having a _transitive failure_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
+The [tracer](#tracer) identifies a [specification item](#specification-item) as having a _transitive defect_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
 
-A transitive failure occurs when a specification item itself fulfills all direct coverage requirements, but at least one of the items it covers (directly or indirectly) is a defect item.
+A transitive defect occurs when a specification item itself fulfills all direct coverage requirements, but at least one of the items it covers (directly or indirectly) is a defect item.
 
 Covers:
 
-* `req~tracing.transitive-failure~1`
+* `req~tracing.transitive-defect~1`
 
 Needs: impl, utest
 
@@ -648,15 +648,15 @@ Covers:
 
 Needs: impl, utest
 
-#### Plain Text Report Transitive Failure
-`dsn~reporting.plain-text.transitive-failure~1`
+#### Plain Text Report Transitive Defect
+`dsn~reporting.plain-text.transitive-defect~1`
 
-The plain text report renders the suffix `(transitive)` for transitive failures.
-The status `not ok` is rendered in grey for transitive failures.
+The plain text report renders the suffix `(transitive)` for transitive defects.
+The status `not ok` is rendered in grey for transitive defects.
 
 Covers:
 
-* `req~reporting.plain-text.transitive-failure~1`
+* `req~reporting.plain-text.transitive-defect~1`
 
 Needs: impl, utest
 
@@ -716,14 +716,14 @@ Covers:
 
 Needs: impl, utest
 
-#### HTML Report Transitive Failure Mark
-`dsn~reporting.html.transitive-failure-mark~1`
+#### HTML Report Transitive Defect Mark
+`dsn~reporting.html.transitive-defect-mark~1`
 
-The HTML report renders the transitive failure mark (❎) for items that have a [transitive failure](#transitive-failure).
+The HTML report renders the transitive defect mark (❎) for items that have a [transitive defect](#transitive-defect).
 
 Covers:
 
-* `req~reporting.html.transitive-failure-mark~1`
+* `req~reporting.html.transitive-defect-mark~1`
 
 Needs: impl, utest
 

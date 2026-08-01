@@ -81,7 +81,7 @@ class HtmlTraceSummary implements Viewable
         {
             final List<LinkedSpecificationItem> defectItems = this.trace.getDefectItems();
             final long transitiveCount = defectItems.stream()
-                    .filter(LinkedSpecificationItem::isTransitiveFailure).count();
+                    .filter(LinkedSpecificationItem::isTransitiveDefect).count();
             final long directCount = defectItems.size() - transitiveCount;
 
             this.stream.print(" <span class=\"red\">");

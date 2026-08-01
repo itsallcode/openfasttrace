@@ -125,8 +125,8 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
     }
 
     @Test
-    // [utest->dsn~reporting.html.transitive-failure-mark~1]
-    void testRenderTransitiveFailureMark()
+    // [utest->dsn~reporting.html.transitive-defect-mark~1]
+    void testRenderTransitiveDefectMark()
     {
         final SpecificationItem item = itemWithId(ITEM_A_ID) //
                 .addNeedsArtifactType(IMPL) //

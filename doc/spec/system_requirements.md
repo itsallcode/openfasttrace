@@ -551,10 +551,10 @@ Covers:
 
 Needs: dsn
 
-#### Transitive Failure
-`req~tracing.transitive-failure~1`
+#### Transitive Defect
+`req~tracing.transitive-defect~1`
 
-OFT identifies a specification item as having a _transitive failure_ if it is a [defect item](#defect-items) but has no direct defects.
+OFT identifies a specification item as having a _transitive defect_ if it is a [defect item](#defect-items) but has no direct defects.
 
 An item has direct defects if:
 * It has duplicates.
@@ -749,11 +749,11 @@ Covers:
 
 Needs: dsn
 
-##### Plain Text Report Transitive Failure
-`req~reporting.plain-text.transitive-failure~1`
+##### Plain Text Report Transitive Defect
+`req~reporting.plain-text.transitive-defect~1`
 
-The plain text report renders transitive failures less visually alarming than direct ones.
-Transitive failures are rendered with the suffix `(transitive)` and the status `not ok` is rendered in grey.
+The plain text report renders transitive defects less visually alarming than direct ones.
+Transitive defects are rendered with the suffix `(transitive)` and the status `not ok` is rendered in grey.
 
 Covers:
 
@@ -819,10 +819,10 @@ Covers:
 
 Needs: dsn
 
-##### HTML Report Transitive Failure Mark
-`req~reporting.html.transitive-failure-mark~1`
+##### HTML Report Transitive Defect Mark
+`req~reporting.html.transitive-defect-mark~1`
 
-The HTML report uses a special mark (❎) to indicate specification items with a [transitive failure](#transitive-failure).
+The HTML report uses a special mark (❎) to indicate specification items with a [transitive defect](#transitive-defect).
 
 Covers:
 

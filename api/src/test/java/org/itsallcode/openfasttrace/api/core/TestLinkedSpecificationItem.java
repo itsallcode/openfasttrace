@@ -160,8 +160,8 @@ class TestLinkedSpecificationItem
     }
 
     @Test
-    // [utest->dsn~tracing.transitive-failure~1]
-    void testIsTransitiveFailure_True()
+    // [utest->dsn~tracing.transitive-defect~1]
+    void testIsTransitiveDefect_True()
     {
         // linkedItem needs IMPL
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(IMPL));
@@ -172,17 +172,17 @@ class TestLinkedSpecificationItem
         // coveredLinkedItem needs something but has no coverage -> is defect
         when(this.coveredItemMock.getNeedsArtifactTypes()).thenReturn(List.of(DSN));
 
-        assertThat(this.linkedItem.isTransitiveFailure(), equalTo(true));
+        assertThat(this.linkedItem.isTransitiveDefect(), equalTo(true));
     }
 
     @Test
-    // [utest->dsn~tracing.transitive-failure~1]
-    void testIsTransitiveFailure_FalseBecauseDirectDefect()
+    // [utest->dsn~tracing.transitive-defect~1]
+    void testIsTransitiveDefect_FalseBecauseDirectDefect()
     {
         // linkedItem needs IMPL but has no coverage -> direct defect
         when(this.itemMock.getNeedsArtifactTypes()).thenReturn(List.of(IMPL));
 
-        assertThat(this.linkedItem.isTransitiveFailure(), equalTo(false));
+        assertThat(this.linkedItem.isTransitiveDefect(), equalTo(false));
     }
 
     @Test

@@ -19,7 +19,7 @@ class TestNullTextFormatter {
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.transitive-failure~1]
+    // [utest->dsn~reporting.plain-text.transitive-defect~1]
     void testFormatTransitiveNotOk() {
         assertThat(FORMATTER.formatTransitiveNotOk("not ok"), equalTo("not ok"));
     }

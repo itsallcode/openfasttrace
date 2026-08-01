@@ -123,7 +123,7 @@ class TestPlainTextReport
         when(this.traceMock.count()).thenReturn(2);
         when(this.traceMock.countDefects()).thenReturn(1);
         final LinkedSpecificationItem directDefectMock = mock(LinkedSpecificationItem.class);
-        when(directDefectMock.isTransitiveFailure()).thenReturn(false);
+        when(directDefectMock.isTransitiveDefect()).thenReturn(false);
         when(this.traceMock.getDefectItems()).thenReturn(List.of(directDefectMock));
         assertReportOutput(ReportVerbosity.SUMMARY, "ok - 2 total, 1 direct, 0 transitive defects");
     }
@@ -164,21 +164,21 @@ class TestPlainTextReport
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.transitive-failure~1]
+    // [utest->dsn~reporting.plain-text.transitive-defect~1]
     // [utest->dsn~reporting.plain-text.summary-line~1]
-    void testReport_LevelMinimal_TransitiveFailure()
+    void testReport_LevelMinimal_TransitiveDefect()
     {
-        final LinkedSpecificationItem transitiveFailureMock = mock(LinkedSpecificationItem.class);
-        when(transitiveFailureMock.isDefect()).thenReturn(true);
-        when(transitiveFailureMock.isTransitiveFailure()).thenReturn(true);
-        when(transitiveFailureMock.getStatus()).thenReturn(ItemStatus.APPROVED);
-        when(transitiveFailureMock.getId()).thenReturn(SpecificationItemId.parseId("req~transitive~1"));
-        when(transitiveFailureMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
-        when(transitiveFailureMock.getUncoveredArtifactTypes()).thenReturn(Collections.emptyList());
-        when(transitiveFailureMock.getOverCoveredArtifactTypes()).thenReturn(Collections.emptySet());
+        final LinkedSpecificationItem transitiveDefectMock = mock(LinkedSpecificationItem.class);
+        when(transitiveDefectMock.isDefect()).thenReturn(true);
+        when(transitiveDefectMock.isTransitiveDefect()).thenReturn(true);
+        when(transitiveDefectMock.getStatus()).thenReturn(ItemStatus.APPROVED);
+        when(transitiveDefectMock.getId()).thenReturn(SpecificationItemId.parseId("req~transitive~1"));
+        when(transitiveDefectMock.getCoveredArtifactTypes()).thenReturn(new HashSet<>(List.of(IMPL)));
+        when(transitiveDefectMock.getUncoveredArtifactTypes()).thenReturn(Collections.emptyList());
+        when(transitiveDefectMock.getOverCoveredArtifactTypes()).thenReturn(Collections.emptySet());
 
         when(this.traceMock.hasNoDefects()).thenReturn(false);
-        when(this.traceMock.getDefectItems()).thenReturn(List.of(transitiveFailureMock));
+        when(this.traceMock.getDefectItems()).thenReturn(List.of(transitiveDefectMock));
         when(this.traceMock.countDefects()).thenReturn(1);
         when(this.traceMock.count()).thenReturn(1);
 
@@ -333,7 +333,7 @@ class TestPlainTextReport
         lenient().when(linkedItemMock.countDuplicateLinks()).thenReturn(duplicates);
         lenient().when(linkedItemMock.countOutgoingBadLinks()).thenReturn(outgoingBadLinks);
         lenient().when(linkedItemMock.countOutgoingLinks()).thenReturn(outgoingLinks);
-        lenient().when(linkedItemMock.isTransitiveFailure()).thenReturn(false);
+        lenient().when(linkedItemMock.isTransitiveDefect()).thenReturn(false);
         return linkedItemMock;
     }
 

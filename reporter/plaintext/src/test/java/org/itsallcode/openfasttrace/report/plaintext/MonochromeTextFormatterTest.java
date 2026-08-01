@@ -19,7 +19,7 @@ class MonochromeTextFormatterTest {
     }
 
     @Test
-    // [utest->dsn~reporting.plain-text.transitive-failure~1]
+    // [utest->dsn~reporting.plain-text.transitive-defect~1]
     void testFormatTransitiveNotOk() {
         assertThat(FORMATTER.formatTransitiveNotOk("not ok"), equalTo("\u001B[3mnot ok\u001B[0m"));
     }

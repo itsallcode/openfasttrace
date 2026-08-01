@@ -2,6 +2,8 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class loader will first try to load the class from the given URLs and
@@ -12,11 +14,15 @@ import java.net.URLClassLoader;
  * included with OFT.
  * <p>
  * This is based on
- * https://medium.com/@isuru89/java-a-child-first-class-loader-cbd9c3d0305
+ * <a href="https://medium.com/@isuru89/java-a-child-first-class-loader-cbd9c3d0305">
+ *  "Java: A Child First Class Loader" by Isuru Weerarathna
+ * </a>
  * <p>
  */
 class ChildFirstClassLoader extends URLClassLoader
 {
+    private static final Logger LOGGER = Logger.getLogger(ChildFirstClassLoader.class.getName());
+
     ChildFirstClassLoader(final String name, final URL[] urls, final ClassLoader parent)
     {
         super(name, urls, parent);
@@ -44,6 +50,7 @@ class ChildFirstClassLoader extends URLClassLoader
         return loadClassInternally(name, resolve);
     }
 
+    @SuppressWarnings("java:S3032") // Intentionally accessing non-standard classloader
     private Class<?> loadClassInternally(final String name, final boolean resolve) throws ClassNotFoundException
     {
         try
@@ -53,8 +60,11 @@ class ChildFirstClassLoader extends URLClassLoader
         }
         catch (final ClassNotFoundException ignore)
         {
+            LOGGER.log(Level.FINEST, () -> "Unable to find class " + name + " with child classloader '"
+                    + this.getClass().getClassLoader().getName() + "'. "
+                    + "Falling back to parent classloader '" + super.getClass().getClassLoader().getName() + "'.");
             // Class does not exist in the given URLs.
-            // Let's try finding it in our parent classloader.
+            // Let's try finding it in our parent class's classloader.
             // This will throw ClassNotFoundException on failure.
             return super.loadClass(name, resolve);
         }

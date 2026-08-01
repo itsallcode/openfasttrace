@@ -9,7 +9,6 @@ import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Location;
@@ -25,25 +24,26 @@ class TestSpecificationItem
 {
     private static final String NOT_NEEDED_ARTIFACT_TYPE = "not_needed";
     private static final String NEEDED_ARTIFACT_TYPE = "needed";
-    final static String ARTIFACT_TYPE = "req";
-    final static String NAME = "foobar";
-    final static int REVISION = 1;
-    final static String ID_AS_TEXT = ARTIFACT_TYPE + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
+    static final String ARTIFACT_TYPE = "req";
+    static final String NAME = "foobar";
+    static final int REVISION = 1;
+    static final String ID_AS_TEXT = ARTIFACT_TYPE + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
             + NAME + SpecificationItemId.REVISION_SEPARATOR + REVISION;
-    final static SpecificationItemId ID = SpecificationItemId.parseId(ID_AS_TEXT);
-    final static String DESCRIPTION = "This is a description\nwith multiple lines";
-    final static String RATIONALE = "A rationale\nwith multiple lines";
-    final static String COMMENT = "A comment\nwith multiple lines";
-    final static List<SpecificationItemId> COVERED_IDS = parseIds("feat~foo~1", "feat~bar~2",
+    static final SpecificationItemId ID = SpecificationItemId.parseId(ID_AS_TEXT);
+    static final String DESCRIPTION = "This is a description\nwith multiple lines";
+    static final String RATIONALE = "A rationale\nwith multiple lines";
+    static final String COMMENT = "A comment\nwith multiple lines";
+    static final List<SpecificationItemId> COVERED_IDS = parseIds("feat~foo~1", "feat~bar~2",
             "constr~baz~3");
-    final static List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList("dsn", "uman");
-    final static List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req~blah~4", "req~zoo~5");
+    static final List<String> NEEDED_ARTIFACT_TYPES = Arrays.asList("dsn", "uman");
+    static final List<SpecificationItemId> DEPEND_ON_IDS = parseIds("req~blah~4", "req~zoo~5");
     private static final String TITLE = "The title";
 
     private static List<SpecificationItemId> parseIds(final String... ids)
     {
-        return Arrays.asList(ids).stream().map(SpecificationItemId::parseId)
-                .collect(Collectors.toList());
+        return Arrays.stream(ids)
+                .map(SpecificationItemId::parseId)
+                .toList();
     }
 
     // [utest.requirement_format~1]
@@ -213,7 +213,7 @@ class TestSpecificationItem
     void testBuildingWithOutIdThrowsExepction()
     {
         final Builder builder = item();
-        assertThrows(IllegalStateException.class, () -> builder.build());
+        assertThrows(IllegalStateException.class, builder::build);
     }
 
     // [utest->dsn~specification-item~3]

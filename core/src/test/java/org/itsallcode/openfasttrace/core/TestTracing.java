@@ -5,7 +5,6 @@ import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.*;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +62,7 @@ class TestTracing
         final List<SpecificationItem> items = buildTestItems(builders);
         final Oft oft = Oft.create();
         final List<LinkedSpecificationItem> linkedItems = oft.link(items);
-        final Trace trace = oft.trace(linkedItems);
-        return trace;
+        return oft.trace(linkedItems);
     }
 
     private List<SpecificationItem> buildTestItems(final SpecificationItem.Builder... builders)
@@ -80,7 +78,7 @@ class TestTracing
     // [utest->dsn~tracing.deep-coverage~1]
     // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
-    void testThreeLevelsOk() throws IOException
+    void testThreeLevelsOk()
     {
         final Trace trace = traceItems( //
                 this.grandParentBuilder.addNeedsArtifactType(PARENT_ARTIFACT_TYPE), //
@@ -110,7 +108,7 @@ class TestTracing
     // [utest->dsn~tracing.deep-coverage~1]
     // [utest->dsn~tracing.needed-coverage-status~1]
     @Test
-    void testTwoLevelsWithOneNeededArtifactTypeMissing() throws IOException
+    void testTwoLevelsWithOneNeededArtifactTypeMissing()
     {
         final Trace trace = traceItems( //
                 this.parentBuilder.addNeedsArtifactType(CHILD_A_ARTIFACT_TYPE)
@@ -131,7 +129,7 @@ class TestTracing
 
     // [utest->dsn~tracing.link-cycle~1]
     @Test
-    void testSelfCycle() throws IOException
+    void testSelfCycle()
     {
         final Trace trace = traceItems( //
                 this.childABuilder.addNeedsArtifactType("any").addCoveredId(childAId));
@@ -144,7 +142,7 @@ class TestTracing
 
     // [utest->dsn~tracing.link-cycle~1]
     @Test
-    void testTwoLevelsWithTwoLevelCycle() throws IOException
+    void testTwoLevelsWithTwoLevelCycle()
     {
         final Trace trace = traceItems( //
                 this.parentBuilder.addNeedsArtifactType(CHILD_A_ARTIFACT_TYPE)
@@ -166,7 +164,7 @@ class TestTracing
 
     // [utest->dsn~tracing.link-cycle~1]
     @Test
-    void testTwoLevelsWithThreeLevelCycle() throws IOException
+    void testTwoLevelsWithThreeLevelCycle()
     {
         final Trace trace = traceItems( //
                 this.grandParentBuilder.addNeedsArtifactType(PARENT_ARTIFACT_TYPE)
@@ -193,7 +191,7 @@ class TestTracing
 
     // [utest->dsn~tracing.link-cycle~1]
     @Test
-    void testTwoLevelsWithThreeLevelCycleAndWrongCoverageInLevelThree() throws IOException
+    void testTwoLevelsWithThreeLevelCycleAndWrongCoverageInLevelThree()
     {
         final Trace trace = traceItems( //
                 this.grandParentBuilder.addNeedsArtifactType(PARENT_ARTIFACT_TYPE)

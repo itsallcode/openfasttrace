@@ -1,12 +1,10 @@
 package org.itsallcode.openfasttrace.api.importer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
 import org.itsallcode.openfasttrace.api.core.*;
@@ -16,7 +14,7 @@ class TestSpecificationListBuilder
 {
     private static final String DESCRIPTION = "description";
     private static final String TITLE = "title";
-    private final static SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
+    private static final SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
     @Test
     void testBuildBasicItem()
@@ -56,6 +54,15 @@ class TestSpecificationListBuilder
         builder.addTag("bar");
         final List<SpecificationItem> items = builder.build();
         assertThat(items.get(0).getTags(), containsInAnyOrder("foo", "bar"));
+    }
+
+    @Test
+    void testAddSpecificationItem()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(ID).build();
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+        builder.addSpecificationItem(item);
+        assertThat(builder.build(), contains(item));
     }
 
     // [utest->dsn~filtering-by-artifact-types-during-import~1]
@@ -150,6 +157,39 @@ class TestSpecificationListBuilder
         assertThat(builder.getItemCount(), equalTo(2));
     }
 
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testFilterSpecificationItemsByStatus()
+    {
+        final FilterSettings filterSettings = FilterSettings.builder()
+                .wantedStatuses(Set.of(ItemStatus.DRAFT))
+                .build();
+        final SpecificationListBuilder builder = SpecificationListBuilder
+                .createWithFilter(filterSettings);
+        addItemWithStatus(builder, "in-A", ItemStatus.DRAFT);
+        addItemWithStatus(builder, "out-B", ItemStatus.APPROVED);
+        addItemWithStatus(builder, "out-C", ItemStatus.PROPOSED);
+        addItemWithStatus(builder, "out-D", ItemStatus.REJECTED);
+        // out-E becomes APPROVED by default
+        addItemWithStatus(builder, "out-E", null);
+        final List<SpecificationItem> items = builder.build();
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
+                containsInAnyOrder("in-A"));
+    }
+
+    private void addItemWithStatus(final SpecificationListBuilder builder, final String name,
+            final ItemStatus status)
+    {
+        builder.beginSpecificationItem();
+        final SpecificationItemId id = SpecificationItemId.createId("dsn", name, 1);
+        builder.setId(id);
+        if (status != null)
+        {
+            builder.setStatus(status);
+        }
+        builder.endSpecificationItem();
+    }
+
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
     void testFilterSpecificationItemsByTags()
@@ -168,7 +208,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "out-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A", "in-B"));
     }
 
@@ -202,7 +242,7 @@ class TestSpecificationListBuilder
         addItemWithTags(builder, "out-C", "exporter", "database");
         addItemWithTags(builder, "in-D");
         final List<SpecificationItem> items = builder.build();
-        assertThat(items.stream().map(SpecificationItem::getName).collect(Collectors.toList()),
+        assertThat(items.stream().map(SpecificationItem::getName).toList(),
                 containsInAnyOrder("in-A", "in-B", "in-D"));
     }
 
@@ -222,7 +262,6 @@ class TestSpecificationListBuilder
         assertAll(
                 () -> assertThat(item.getComment(), equalTo("a comment")),
                 () -> assertThat(item.getDescription(), equalTo("a description")),
-                () -> assertThat(item.getRationale(), equalTo("a   rationale"))
-        );
+                () -> assertThat(item.getRationale(), equalTo("a   rationale")));
     }
 }

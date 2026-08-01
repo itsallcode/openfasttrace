@@ -24,38 +24,39 @@ class TestSpecobjectImportExport
     @Test
     void testTraceContent()
     {
-        final String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //
-                + "<specdocument>\n" //
-                + "    <specobjects doctype=\"impl\">\n" //
-                + "        <specobject>\n" //
-                + "            <id>exampleB-3454416016</id>\n"
-                + "            <status>approved</status>\n" //
-                + "            <version>0</version>\n" //
-                + "            <sourcefile>source.java</sourcefile>\n" //
-                + "            <sourceline>1</sourceline>\n" //
-                + "            <providescoverage>\n" //
-                + "                <provcov>\n" //
-                + "                    <linksto>dsn:exampleB</linksto>\n"
-                + "                    <dstversion>1</dstversion>\n"
-                + "                </provcov>\n" //
-                + "            </providescoverage>\n" //
-                + "        </specobject>\n" //
-                + "    </specobjects>\n" //
-                + "    <specobjects doctype=\"dsn\">\n" //
-                + "        <specobject>\n" //
-                + "            <id>exampleB</id>\n" //
-                + "            <status>approved</status>\n" //
-                + "            <version>1</version>\n"
-                + "            <sourcefile>spec.md</sourcefile>\n"
-                + "            <sourceline>2</sourceline>\n"
-                + "            <description>Example requirement</description>\n"
-                + "            <needscoverage>\n" //
-                + "                <needsobj>utest</needsobj>\n"
-                + "                <needsobj>impl</needsobj>\n" //
-                + "            </needscoverage>\n" //
-                + "        </specobject>\n" //
-                + "    </specobjects>\n" //
-                + "</specdocument>";
+        final String content = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <specdocument>
+                    <specobjects doctype="impl">
+                        <specobject>
+                            <id>exampleB-3454416016</id>
+                            <status>approved</status>
+                            <version>0</version>
+                            <sourcefile>source.java</sourcefile>
+                            <sourceline>1</sourceline>
+                            <providescoverage>
+                                <provcov>
+                                    <linksto>dsn:exampleB</linksto>
+                                    <dstversion>1</dstversion>
+                                </provcov>
+                            </providescoverage>
+                        </specobject>
+                    </specobjects>
+                    <specobjects doctype="dsn">
+                        <specobject>
+                            <id>exampleB</id>
+                            <status>approved</status>
+                            <version>1</version>
+                            <sourcefile>spec.md</sourcefile>
+                            <sourceline>2</sourceline>
+                            <description>Example requirement</description>
+                            <needscoverage>
+                                <needsobj>utest</needsobj>
+                                <needsobj>impl</needsobj>
+                            </needscoverage>
+                        </specobject>
+                    </specobjects>
+                </specdocument>""";
 
         final Trace trace = trace(content);
         final SpecificationItemId dsnId = SpecificationItemId.createId("dsn", "exampleB", 1);

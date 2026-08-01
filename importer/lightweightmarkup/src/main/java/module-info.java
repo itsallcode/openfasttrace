@@ -9,4 +9,5 @@ module org.itsallcode.openfasttrace.importer.lightweightmarkup
 
     requires java.logging;
     requires transitive org.itsallcode.openfasttrace.api;
+    requires org.itsallcode.openfasttrace.importer.tag.common;
 }

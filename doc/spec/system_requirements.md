@@ -115,15 +115,66 @@ One of the OpenFastTrace design goals is to provide a Java-based drop-in replace
 Needs: req
 
 ### Coverage Tag Import
-`feat~coverage-tag-import~1`
+`feat~coverage-tag-import~2`
 
-OFT imports coverage tags from source code files.
+OFT imports coverage tags from source code files and supported documentation files.
 
 Rationale:
 
-Coverage tags indicate parts of the source code that implements a certain requirement.
+Coverage tags indicate parts of source code or documentation that cover a certain requirement.
 
 Needs: req
+
+### Gherkin Import
+`feat~gherkin-import~1`
+
+OFT imports specification items from annotated Gherkin scenarios and scenario outlines in `.feature` files.
+
+Needs: req
+
+#### Import Gherkin Scenarios
+`req~gherkin-scenario-import~1`
+
+OFT imports a Gherkin `Scenario` or `Scenario Outline` as a specification item when its immediately preceding contiguous tag region contains exactly one `@id:<specification-item-id>` tag. The ID supplies the item location, the scenario header supplies the title, and scenario steps form the description. An invalid ID skips only the affected scenario. Duplicate item IDs are passed to the OFT core for validation.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Validate Gherkin Covers Metadata
+`req~gherkin-covers-validation~1`
+
+OFT accepts optional, scoped `# Covers:` comments between an ID tag region and its scenario header. Covers may occur multiple times. Each directive must contain a non-empty, valid, duplicate-free list of specification item IDs. An invalid Covers directive skips only the affected scenario.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Validate Gherkin Needs Metadata
+`req~gherkin-needs-validation~1`
+
+OFT accepts an optional, scoped `# Needs:` comment between an ID tag region and its scenario header. The directive may occur once and must contain a non-empty, valid, duplicate-free list of artifact types. An invalid or repeated Needs directive skips only the affected scenario.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Preserve Gherkin Comment Coverage Tags
+`req~gherkin-comment-coverage-tags~1`
+
+OFT imports basic coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
 
 ### ReqM2 Export
 `feat~reqm2-export~1`
@@ -344,27 +395,61 @@ Needs: dsn
 
 #### Coverage Tags
 
-Developers add coverage tags as comments to the source code to indicate where certain specification items are covered.
+Developers add coverage tags as comments to source code or supported documentation to indicate where certain specification items are covered.
 
 ##### Import Full Coverage Tag Format
-`req~import.full-coverage-tag-format~1`
+`req~import.full-coverage-tag-format~2`
 
-OFT imports coverage tags from source files in a full format that contains all necessary information for tracing.
+OFT imports coverage tags from source files and supported documentation files in a full format that contains all necessary information for tracing.
 
 Covers:
 
-* [feat~coverage-tag-import~1](#coverage-tag-import)
+* [feat~coverage-tag-import~2](#coverage-tag-import)
 
-Needs: dsn
+Needs: scn, dsn
 
 ##### Import Short Coverage Tag Format
-`req~import.short-coverage-tag-format~1`
+`req~import.short-coverage-tag-format~2`
 
 OFT imports coverage tags from source files in a short format that requires additional configuration during import.
 
 Covers:
 
-* [feat~coverage-tag-import~1](#coverage-tag-import)
+* [feat~coverage-tag-import~2](#coverage-tag-import)
+
+Needs: scn, dsn
+
+##### Import Coverage Tags from Markdown Comments
+`scn~markdown.comment-coverage-tags~1`
+
+**Given** a Markdown documentation artifact with coverage tags in standalone,
+single-line HTML comments,
+**when** OFT imports the artifact,
+**then** it creates coverage items at the tag-line location while continuing to
+import ordinary Markdown specification items unchanged. Text that resembles a
+coverage tag outside such a comment does not create a coverage item.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
+* `req~import.short-coverage-tag-format~2`
+
+Needs: dsn
+
+##### Import Coverage Tags from RST Comments
+`scn~rst.comment-coverage-tags~1`
+
+**Given** an RST documentation artifact with coverage tags in standalone,
+single-line RST comments,
+**when** OFT imports the artifact,
+**then** it creates coverage items at the tag-line location while continuing to
+import ordinary RST specification items unchanged. Text that resembles a
+coverage tag outside such a comment does not create a coverage item.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
+* `req~import.short-coverage-tag-format~2`
 
 Needs: dsn
 
@@ -504,6 +589,17 @@ Covers:
 
 Needs: dsn
 
+#### Include Only Item Statuses
+`req~include-only-item-statuses~1`
+
+OFT gives users the option to include only specification items with a configurable set of statuses during processing.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Include Items Where at Least One Tag Matches
 `req~include-items-where-at-least-on-tag-matches~1`
 
@@ -515,7 +611,7 @@ Covers:
 
 Needs: dsn
 
-#### Include Items That Don't Have Tags Or Where at Least One Tag Matches 
+#### Include Items That Don't Have Tags Or Where at Least One Tag Matches
 `req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
 
 OFT gives users the option to include only specification items that either do not have tags or have at least one tag from a configurable set of tags during processing.
@@ -537,7 +633,7 @@ Reports are the main way to find out if a projects requirements are covered prop
 Users can choose to display the requirement origin (e.g. file and line number) in reports:
 
 * In the body of a specification item
-* For each link to a specification item 
+* For each link to a specification item
 
 Rationale:
 
@@ -795,6 +891,28 @@ Covers:
 Needs: dsn
 
 #### Common
+
+##### CLI Help
+`req~cli.help~1`
+
+`help`, `-h` and `--help` show a short help text with command line usage.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+
+Needs: dsn
+
+##### CLI Version
+`req~cli.version~1`
+
+`help`, `-h` and `--help` show the version of OFT.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+
+Needs: dsn
 
 ##### Input Selection
 `req~cli.input-selection~1`

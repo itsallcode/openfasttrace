@@ -7,7 +7,7 @@ import javax.xml.namespace.QName;
 /**
  * Factory for creating {@link QName} objects.
  */
-class QNameFactory
+final class QNameFactory
 {
     private QNameFactory()
     {

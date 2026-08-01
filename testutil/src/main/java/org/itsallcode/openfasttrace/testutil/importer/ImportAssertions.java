@@ -38,6 +38,7 @@ public final class ImportAssertions
      * @param importerFactory
      *            factory that generates the importer
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     public static void assertImportWithFactory(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher,
             final ImporterFactory importerFactory)
@@ -60,7 +61,7 @@ public final class ImportAssertions
     public static List<SpecificationItem> runImporterOnText(final Path path, final String text,
             final ImporterFactory importerFactory)
     {
-        LOGGER.finest("Importing text: ***\n" + text + "\n***");
+        LOGGER.finest(() -> "Importing text: ***\n" + text + "\n***");
         final BufferedReader reader = new BufferedReader(new StringReader(text));
         final InputFile file = StreamInput.forReader(path, reader);
         final SpecificationListBuilder specItemBuilder = SpecificationListBuilder.create();

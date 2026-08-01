@@ -10,12 +10,12 @@ import org.itsallcode.openfasttrace.api.core.*;
  * map of specification items from them. The key to the map is the specification
  * item ID.
  */
-public class SpecificationListBuilder implements ImportEventListener
+public final class SpecificationListBuilder implements ImportEventListener
 {
     private final FilterSettings filterSettings;
     private final List<SpecificationItem> items = new LinkedList<>();
-    private SpecificationItem.Builder itemBuilder = null;
-    private SpecificationItemId id = null;
+    private SpecificationItem.Builder itemBuilder;
+    private SpecificationItemId id;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
@@ -28,7 +28,7 @@ public class SpecificationListBuilder implements ImportEventListener
 
     /**
      * Creates a new {@link SpecificationListBuilder}.
-     * 
+     *
      * @return a new {@link SpecificationListBuilder}.
      */
     public static SpecificationListBuilder create()
@@ -39,7 +39,7 @@ public class SpecificationListBuilder implements ImportEventListener
     /**
      * Creates a new {@link SpecificationListBuilder} with the given
      * {@link FilterSettings}.
-     * 
+     *
      * @param filterSettings
      *            the filter settings for the new builder.
      * @return a new {@link SpecificationListBuilder}.
@@ -139,7 +139,7 @@ public class SpecificationListBuilder implements ImportEventListener
     public List<SpecificationItem> build()
     {
         this.endSpecificationItem();
-        return this.items;
+        return Collections.unmodifiableList(this.items);
     }
 
     /**
@@ -177,12 +177,18 @@ public class SpecificationListBuilder implements ImportEventListener
         {
             final SpecificationItem item = createNewSpecificationItem();
             // [impl->dsn~filtering-by-artifact-types-during-import~1]
-            if (isAccepted(item))
-            {
-                addNewItemToList(item);
-            }
+            addSpecificationItem(item);
         }
         resetState();
+    }
+
+    @Override
+    public void addSpecificationItem(final SpecificationItem item)
+    {
+        if (isAccepted(item))
+        {
+            addNewItemToList(item);
+        }
     }
 
     // [impl->dsn~cleaning-imported-multi-line-text-elements~1]
@@ -200,7 +206,15 @@ public class SpecificationListBuilder implements ImportEventListener
     private boolean isAccepted(final SpecificationItem item)
     {
         return isAcceptedArtifactType(item.getArtifactType())
+                && isAcceptedStatus(item.getStatus())
                 && matchesTagsCriteria(item.getTags());
+    }
+
+    // [impl->dsn~filtering-by-item-status-during-import~1]
+    private boolean isAcceptedStatus(final ItemStatus status)
+    {
+        return !this.filterSettings.isStatusCriteriaSet()
+                || this.filterSettings.getWantedStatuses().contains(status);
     }
 
     // [impl->dsn~filtering-by-tags-during-import~1]

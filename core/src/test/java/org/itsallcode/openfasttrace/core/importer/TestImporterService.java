@@ -3,7 +3,6 @@ package org.itsallcode.openfasttrace.core.importer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,9 +15,11 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -37,8 +38,6 @@ class TestImporterService
     private ImporterFactory importerFactoryMock;
     @Mock
     private Importer importerMock;
-    @Mock
-    private ImporterContext contextMock;
 
     @Captor
     private ArgumentCaptor<SpecificationListBuilder> builderArg;
@@ -62,17 +61,17 @@ class TestImporterService
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testImportWindows()
     {
-        OsDetector.assumeRunningOnWindows();
         runImporter();
         assertThat(this.fileArg.getValue().getPath(), equalTo("dir\\file"));
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testImportUnix()
     {
-        OsDetector.assumeRunningOnUnix();
         runImporter();
         assertThat(this.fileArg.getValue().getPath(), equalTo("dir/file"));
     }
@@ -80,12 +79,10 @@ class TestImporterService
     private void runImporter()
     {
         final List<SpecificationItem> result = this.importerService.importFile(this.file);
-
         verify(this.importerMock).runImport();
         verify(this.importerFactoryMock).createImporter(this.fileArg.capture(),
                 this.builderArg.capture());
-
         final SpecificationListBuilder builder = this.builderArg.getValue();
-        assertThat(result, sameInstance(builder.build()));
+        assertThat(result, equalTo(builder.build()));
     }
 }

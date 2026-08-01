@@ -24,7 +24,7 @@ class TestAbstractViewableContainer
     private Viewable viewMockB;
 
     @BeforeEach
-    public void prepareEachTest()
+    void prepareEachTest()
     {
         this.viewableContainer = new ViewContainerStub();
     }
@@ -97,11 +97,13 @@ class TestAbstractViewableContainer
         @Override
         protected void renderBeforeChildren(final int level)
         {
+            // Stub class. Method is not needed.
         }
 
         @Override
         protected void renderAfterChildren(final int level)
         {
+            // Stub class. Method is not needed.
         }
     }
 }

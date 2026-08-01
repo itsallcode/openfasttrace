@@ -9,18 +9,18 @@ import static org.mockito.Mockito.lenient;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.importer.ImporterService;
-import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.AbstractImporterFactoryTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporterFactory>
+class TestZipFileImporterFactory extends AbstractImporterFactoryTestBase<ZipFileImporterFactory>
 {
     @Mock
     private ImporterService importerServiceMock;
 
     @BeforeEach
-    public void configureMock()
+    void configureMock()
     {
         lenient().when(this.contextMock.getImporterService()).thenReturn(this.importerServiceMock);
     }
@@ -29,6 +29,12 @@ class TestZipFileImporterFactory extends ImporterFactoryTestBase<ZipFileImporter
     void testConstructor()
     {
         assertThat(createFactory(), notNullValue());
+    }
+
+    @Override
+    protected int getExpectedPriority()
+    {
+        return 20000;
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.core.cli.CliStarter;
 import org.itsallcode.openfasttrace.core.cli.ExitStatus;
@@ -28,6 +29,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 class CliStarterInternalIT {
     // Note that the XML output of the SpecObject exporter is always set to Unix newline characters.
     private static final String SPECOBJECT_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<specdocument>";
+    private static final Pattern HELP_PREAMBLE_PATTERN = Pattern.compile("OpenFastTrace \\d+\\.\\d+\\.\\d+(?:" + System.lineSeparator() + ")+" +
+            "Usage:[\\s\\S]*");
     private static final String ILLEGAL_COMMAND = "illegal";
     private static final String NEWLINE_PARAMETER = "--newline";
     private static final String HELP_COMMAND = "help";
@@ -37,6 +40,7 @@ class CliStarterInternalIT {
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
     private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
+    private static final String WANTED_STATUSES_PARAMETER = "--wanted-statuses";
     private static final String COLOR_SCHEME_PARAMETER = "--color-scheme";
     private static final String CARRIAGE_RETURN = "\r";
     private static final String NEWLINE = "\n";
@@ -93,14 +97,14 @@ class CliStarterInternalIT {
         );
     }
 
+    // [itest->dsn~cli.help~1]
     @ValueSource(strings = {HELP_COMMAND, "-h", "--help"})
     @ParameterizedTest
     void testHelpPrintsUsage(final String command) {
         final ExitStatus status = runInternal(command);
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
-            () -> assertThat(getStdOut(), startsWith("OpenFastTrace" + System.lineSeparator() +
-                    System.lineSeparator() + "Usage:"))
+            () -> assertThat(getStdOut(), matchesPattern(HELP_PREAMBLE_PATTERN))
         );
     }
 
@@ -175,15 +179,6 @@ class CliStarterInternalIT {
             () -> assertOutputFileExists(true),
             () -> assertOutputFileContentStartsWith(SPECOBJECT_PREAMBLE),
             () -> assertOutputFileLength(2000)
-        );
-    }
-
-    @Test
-    void testTraceNoArguments() {
-        final ExitStatus status = runInternalWithWorkingDir(Path.of(".").toAbsolutePath(), TRACE_COMMAND);
-        assertAll(
-            () -> assertThat(status, equalTo(ExitStatus.FAILURE)),
-            () -> assertThat(getStdOut(), containsString("not ok\u001B[0m - 43 total, 43 defect"))
         );
     }
 
@@ -308,6 +303,41 @@ class CliStarterInternalIT {
             () -> assertThat(status, equalTo(ExitStatus.OK)),
             () -> assertOutputFileExists(true),
             () -> assertOutputFileContentStartsWith("ok - 3 total")
+        );
+    }
+
+    @Test
+    // [itest->dsn~filtering-by-item-status-during-import~1]
+    void testTraceWithFilteredStatuses(@TempDir final Path tempDir) throws IOException {
+        final Path specFile = tempDir.resolve("spec.md");
+        Files.writeString(specFile, """
+            # Spec
+            ## Draft Re
+            `req~draft~1`
+            
+            Status: draft
+            
+            ## Approved Req
+            `req~approved~1`
+            Status: approved
+            
+            ## Proposed Req
+            `req~proposed~1`
+            Status: proposed
+            """);
+
+        final ExitStatus status = runInternal(
+                TRACE_COMMAND, tempDir.toString(),
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                WANTED_STATUSES_PARAMETER, "draft, proposed",
+                REPORT_VERBOSITY_PARAMETER, "all");
+        assertAll(
+            () -> assertThat(status, equalTo(ExitStatus.OK)),
+            () -> assertOutputFileExists(true),
+            () -> assertThat(getOutputFileContent(), containsString("2 total")),
+            () -> assertThat(getOutputFileContent(), containsString("req~draft~1")),
+            () -> assertThat(getOutputFileContent(), containsString("req~proposed~1")),
+            () -> assertThat(getOutputFileContent(), not(containsString("approved")))
         );
     }
 

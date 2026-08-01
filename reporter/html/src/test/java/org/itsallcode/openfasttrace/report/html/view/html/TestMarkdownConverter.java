@@ -12,7 +12,7 @@ class TestMarkdownConverter
     private MarkdownConverter converter;
 
     @BeforeEach
-    public void prepareEachTest()
+    void prepareEachTest()
     {
         this.converter = new MarkdownConverter();
     }

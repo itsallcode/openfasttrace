@@ -7,7 +7,7 @@ import java.util.*;
  * coverage for other items.
  */
 // [impl->dsn~specification-item~3]
-public class SpecificationItem
+public final class SpecificationItem
 {
     private final SpecificationItemId id;
     private final String title;
@@ -32,9 +32,9 @@ public class SpecificationItem
         this.location = builder.location;
         this.status = builder.status;
         this.coveredIds = builder.coveredIds;
-        this.dependOnIds = builder.dependOnIds;
-        this.needsArtifactTypes = builder.neededArtifactTypes;
-        this.tags = builder.tags;
+        this.dependOnIds = Collections.unmodifiableList(builder.dependOnIds);
+        this.needsArtifactTypes = Collections.unmodifiableList(builder.neededArtifactTypes);
+        this.tags = Collections.unmodifiableList(builder.tags);
         this.forwards = builder.forwards;
     }
 
@@ -220,161 +220,22 @@ public class SpecificationItem
     }
 
     @Override
-    public final int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.comment == null) ? 0 : this.comment.hashCode());
-        result = prime * result + ((this.coveredIds == null) ? 0 : this.coveredIds.hashCode());
-        result = prime * result + ((this.dependOnIds == null) ? 0 : this.dependOnIds.hashCode());
-        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
-        result = prime * result + (this.forwards ? 1231 : 1237);
-        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-        result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
-        result = prime * result
-                + ((this.needsArtifactTypes == null) ? 0 : this.needsArtifactTypes.hashCode());
-        result = prime * result + ((this.rationale == null) ? 0 : this.rationale.hashCode());
-        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
-        result = prime * result + ((this.tags == null) ? 0 : this.tags.hashCode());
-        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
-        return result;
+    public boolean equals(final Object other) {
+        if (!(other instanceof final SpecificationItem that)) {
+            return false;
+        }
+        return forwards == that.forwards && Objects.equals(id, that.id) && Objects.equals(title, that.title)
+                && Objects.equals(description, that.description) && Objects.equals(rationale, that.rationale)
+                && Objects.equals(comment, that.comment) && Objects.equals(location, that.location)
+                && status == that.status && Objects.equals(coveredIds, that.coveredIds)
+                && Objects.equals(dependOnIds, that.dependOnIds)
+                && Objects.equals(needsArtifactTypes, that.needsArtifactTypes) && Objects.equals(tags, that.tags);
     }
 
     @Override
-    public final boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!(obj instanceof SpecificationItem))
-        {
-            return false;
-        }
-        final SpecificationItem other = (SpecificationItem) obj;
-        if (this.comment == null)
-        {
-            if (other.comment != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.comment.equals(other.comment))
-        {
-            return false;
-        }
-        if (this.coveredIds == null)
-        {
-            if (other.coveredIds != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.coveredIds.equals(other.coveredIds))
-        {
-            return false;
-        }
-        if (this.dependOnIds == null)
-        {
-            if (other.dependOnIds != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.dependOnIds.equals(other.dependOnIds))
-        {
-            return false;
-        }
-        if (this.description == null)
-        {
-            if (other.description != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.description.equals(other.description))
-        {
-            return false;
-        }
-        if (this.forwards != other.forwards)
-        {
-            return false;
-        }
-        if (this.id == null)
-        {
-            if (other.id != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.id.equals(other.id))
-        {
-            return false;
-        }
-        if (this.location == null)
-        {
-            if (other.location != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.location.equals(other.location))
-        {
-            return false;
-        }
-        if (this.needsArtifactTypes == null)
-        {
-            if (other.needsArtifactTypes != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.needsArtifactTypes.equals(other.needsArtifactTypes))
-        {
-            return false;
-        }
-        if (this.rationale == null)
-        {
-            if (other.rationale != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.rationale.equals(other.rationale))
-        {
-            return false;
-        }
-        if (this.status != other.status)
-        {
-            return false;
-        }
-        if (this.tags == null)
-        {
-            if (other.tags != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.tags.equals(other.tags))
-        {
-            return false;
-        }
-        if (this.title == null)
-        {
-            if (other.title != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.title.equals(other.title))
-        {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, title, description, rationale, comment, location, status, coveredIds, dependOnIds,
+                needsArtifactTypes, tags, forwards);
     }
 
     /**
@@ -390,7 +251,7 @@ public class SpecificationItem
     /**
      * Builder for objects of type {@link SpecificationItem}
      */
-    public static class Builder
+    public static final class Builder
     {
         private SpecificationItemId id;
         private String title;

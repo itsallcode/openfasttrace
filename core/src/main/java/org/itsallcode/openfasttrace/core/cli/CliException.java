@@ -3,9 +3,9 @@ package org.itsallcode.openfasttrace.core.cli;
 /**
  * Exception thrown in case of command line validation errors.
  */
-public class CliException extends Exception
+public class CliException extends RuntimeException
 {
-    private static final long serialVersionUID = 3126173961917546825L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create a new {@link CliException} caused by another exception

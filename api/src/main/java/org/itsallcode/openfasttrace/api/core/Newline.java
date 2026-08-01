@@ -18,7 +18,7 @@ public enum Newline
     private static final Pattern ANY_NEWLINE_PATTERN = Pattern.compile(ANY_NEWLINE_REG_EX);
     private final String representation;
 
-    private Newline(final String representation)
+    Newline(final String representation)
     {
         this.representation = representation;
     }
@@ -38,18 +38,14 @@ public enum Newline
      */
     public static Newline fromRepresentation(final String representation)
     {
-        switch (representation)
+        return switch (representation)
         {
-        case "\n":
-            return UNIX;
-        case "\r\n":
-            return WINDOWS;
-        case "\r":
-            return OLDMAC;
-        default:
-            throw new IllegalArgumentException(
+        case  "\n" -> UNIX;
+        case "\r\n" -> WINDOWS;
+        case "\r" -> OLDMAC;
+        default -> throw new IllegalArgumentException(
                     "Line separator not supported: '" + representation + "'");
-        }
+        };
     }
 
     /**

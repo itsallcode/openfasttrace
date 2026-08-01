@@ -14,7 +14,7 @@ class MatcherTestBaseTest
         assertThat(new DummyMatcher(), notNullValue());
     }
 
-    private static class DummyMatcher extends MatcherTestBase<String>
+    private static class DummyMatcher extends AbstractMatcherTest<String>
     {
         @Override
         protected Matcher<String> createMatcher(final String object)

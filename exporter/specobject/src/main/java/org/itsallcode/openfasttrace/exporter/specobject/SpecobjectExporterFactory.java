@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory;
 import org.itsallcode.openfasttrace.api.exporter.Exporter;
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.exporter.ExporterFactory;
@@ -18,7 +19,7 @@ import org.itsallcode.openfasttrace.exporter.common.IndentingXMLStreamWriter;
  * {@link ExporterFactory} for creating {@link Exporter}s that support writing
  * specobject output files.
  */
-public class SpecobjectExporterFactory extends ExporterFactory
+public class SpecobjectExporterFactory extends AbstractExporterFactory
 {
     private static final String SUPPORTED_FORMAT = "specobject";
     private final XMLOutputFactory xmlOutputFactory;
@@ -31,7 +32,7 @@ public class SpecobjectExporterFactory extends ExporterFactory
     }
 
     @Override
-    protected Exporter createExporter(final Writer writer,
+    public Exporter createExporter(final Writer writer,
             final Stream<SpecificationItem> itemStream, final Newline newline)
     {
         final XMLStreamWriter xmlWriter = createXmlWriter(writer);

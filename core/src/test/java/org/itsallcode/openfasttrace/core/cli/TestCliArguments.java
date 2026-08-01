@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -166,6 +167,33 @@ class TestCliArguments
                 containsInAnyOrder("impl", "utest"));
     }
 
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testWantedStatusesEmptyByDefault()
+    {
+        assertThat(BEFORE_SETTER, this.arguments.getWantedStatuses(), emptyIterable());
+    }
+
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testSetWantedStatuses()
+    {
+        final String value = "approved,proposed";
+        this.arguments.setWantedStatuses(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedStatuses(),
+                containsInAnyOrder(ItemStatus.APPROVED, ItemStatus.PROPOSED));
+    }
+
+    // [utest->dsn~filtering-by-item-status-during-import~1]
+    @Test
+    void testSetW()
+    {
+        final String value = "draft, proposed";
+        this.arguments.setW(value);
+        assertThat(AFTER_SETTER, this.arguments.getWantedStatuses(),
+                containsInAnyOrder(ItemStatus.DRAFT, ItemStatus.PROPOSED));
+    }
+
     // [utest->dsn~filtering-by-tags-during-import~1]
     @Test
     void testWantedTagsEmptyByDefault()
@@ -210,7 +238,7 @@ class TestCliArguments
     @Test
     void testShowOriginDisabledByDefault()
     {
-        assertThat(this.arguments.getShowOrigin(), is(false));
+        assertThat(this.arguments.isShowOrigin(), is(false));
     }
 
     // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -221,7 +249,7 @@ class TestCliArguments
     void testSetShowOrigin()
     {
         this.arguments.setShowOrigin(true);
-        assertThat(this.arguments.getShowOrigin(), is(true));
+        assertThat(this.arguments.isShowOrigin(), is(true));
     }
 
     // [utest->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -232,7 +260,7 @@ class TestCliArguments
     void testSetS()
     {
         this.arguments.setS(true);
-        assertThat(this.arguments.getShowOrigin(), is(true));
+        assertThat(this.arguments.isShowOrigin(), is(true));
     }
 
     // [utest->dsn~reporting.plain-text.ansi-color~1]

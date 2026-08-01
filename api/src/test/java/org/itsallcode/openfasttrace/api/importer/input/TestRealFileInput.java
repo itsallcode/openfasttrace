@@ -26,7 +26,7 @@ class TestRealFileInput
     }
 
     @Test
-    void testRelativeFileGetPath() throws IOException
+    void testRelativeFileGetPath()
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = RealFileInput.forPath(path);
@@ -35,7 +35,7 @@ class TestRealFileInput
     }
 
     @Test
-    void testAbsoluteFileGetPath() throws IOException
+    void testAbsoluteFileGetPath()
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = RealFileInput.forPath(path);
@@ -44,7 +44,7 @@ class TestRealFileInput
     }
 
     @Test
-    void testRelativeFileToPath() throws IOException
+    void testRelativeFileToPath()
     {
         final Path path = Paths.get("blah");
         final InputFile inputFile = RealFileInput.forPath(path);
@@ -52,7 +52,7 @@ class TestRealFileInput
     }
 
     @Test
-    void testAbsoluteFileToPath() throws IOException
+    void testAbsoluteFileToPath()
     {
         final Path path = Paths.get("blah").toAbsolutePath();
         final InputFile inputFile = RealFileInput.forPath(path);
@@ -60,7 +60,7 @@ class TestRealFileInput
     }
 
     @Test
-    void testIsRealFileTrue() throws IOException
+    void testIsRealFileTrue()
     {
         final InputFile inputFile = RealFileInput.forPath(Paths.get("blah"));
         assertThat(inputFile.isRealFile(), equalTo(true));

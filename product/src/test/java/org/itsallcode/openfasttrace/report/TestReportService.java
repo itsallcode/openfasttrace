@@ -105,7 +105,7 @@ class TestReportService
         return readOnlyFilePath;
     }
 
-    private void makeFileReadOnly(final Path readOnlyFilePath) throws IOException
+    private void makeFileReadOnly(final Path readOnlyFilePath)
     {
         readOnlyFilePath.toFile().setReadOnly();
     }

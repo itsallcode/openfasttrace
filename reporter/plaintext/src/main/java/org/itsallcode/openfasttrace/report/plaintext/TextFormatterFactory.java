@@ -16,20 +16,12 @@ final class TextFormatterFactory {
      * @return text formatter
      */
     public static TextFormatter createFormatter(ColorScheme colorScheme) {
-        if(colorScheme == null)
-        {
-            return new NullTextFormatter();
-        }
-        switch (colorScheme) {
-            case BLACK_AND_WHITE:
-                return new NullTextFormatter();
-            case MONOCHROME:
-                return new MonochromeTextFormatter();
-            case COLOR:
-                return new ConsoleColorFormatter();
-            default:
-                throw new IllegalArgumentException("Unable to create text formatter for unknown color scheme '"
-                        + colorScheme + "'.");
-        }
+        return (colorScheme == null)
+                ? new NullTextFormatter()
+                : (switch (colorScheme) {
+                    case BLACK_AND_WHITE -> new NullTextFormatter();
+                    case MONOCHROME -> new MonochromeTextFormatter();
+                    case COLOR -> new ConsoleColorFormatter();
+                });
     }
 }

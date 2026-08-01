@@ -40,7 +40,7 @@ final class MarkdownSpanConverter
         return text;
     }
 
-    private static class RegexReplacement
+    private static final class RegexReplacement
     {
         private final Pattern pattern;
         private final String replacement;

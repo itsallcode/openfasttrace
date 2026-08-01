@@ -14,6 +14,7 @@ doc/**/*.html
 /**/*.iml
 /**/.project
 .idea/
+.junie/
 *.iml
 pom.xml.versionsBackup
 .DS_Store

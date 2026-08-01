@@ -12,7 +12,7 @@ import org.xml.sax.Attributes;
  * 
  * @see org.xml.sax.ContentHandler#endElement(String, String, String)
  */
-public class StartElementEvent
+public final class StartElementEvent
 {
     private final QName qName;
     private final Location location;

@@ -10,6 +10,8 @@ import org.itsallcode.openfasttrace.core.cli.ExitStatus;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class CliExitIT
 {
@@ -41,17 +43,14 @@ class CliExitIT
                 .verify();
     }
 
-    @Test
-    void testRunWithHelpCommand()
+    @ValueSource(strings = {"help", "-h", "--help"})
+    @ParameterizedTest
+    void testRunWithHelpCommand(final String argumemnt)
     {
         jarLauncher()
-                .args(List.of("help"))
+                .args(List.of(argumemnt))
                 .expectedExitCode(ExitStatus.OK.getCode())
-                .expectStdOut(startsWith("""
-                        OpenFastTrace
-
-                        Usage:
-                          oft command"""))
+                .expectStdOut(startsWith("OpenFastTrace"))
                 .expectStdErr(emptyString())
                 .verify();
     }

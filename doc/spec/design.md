@@ -98,6 +98,12 @@ The plugin loader discovers and loads available plugins.
 ## Importers
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
+### Shared Coverage Tag Parser
+
+The `importer/tag-importer-common` module provides the reusable line scanning and coverage-tag parsing used by importers. Its public API consists of `LineReader`, which forwards input lines to a consumer, and `CoverageTagParser`, which recognizes coverage tags.
+
+The tag importer remains responsible for selecting its input files and creating the shared parser. Parsing implementation classes remain encapsulated in the shared module so that future importers can reuse the same coverage-tag semantics without depending on tag-importer internals.
+
 ## Import Event Listener
 Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
@@ -167,6 +173,12 @@ The Plugin loader supports loading factories for the following plugin types:
 * Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
 * Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`
 
+Reporter implementations usually extend `org.itsallcode.openfasttrace.api.report.AbstractReporterFactory`
+to reuse standard reporter context handling while keeping `ReporterFactory` as the service type.
+
+Exporter implementations usually extend `org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory`
+to reuse standard exporter and context handling while keeping `ExporterFactory` as the service type.
+
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 
@@ -178,7 +190,124 @@ Depending on the source format, a variety of [importers](#importers) takes care 
 
 The listener handles Common parts of the import like filtering out unnecessary items or attributes.
 
-A factory for importers decides which importer to use. Usually, by file extension.
+The following sequence diagram illustrates the interaction between `MultiFileImporter`, `ImporterFactoryLoader`, `ImporterFactory`, and `Importer` during the import process:
+
+```puml
+@startuml
+participant MultiFileImporterImpl as MFI
+participant ImporterFactoryLoader as IFL
+participant ImporterFactory as IF
+participant Importer as I
+participant SpecificationListBuilder as SLB
+
+[-> MFI : importFile(file)
+activate MFI
+MFI -> IFL : getImporterFactory(file)
+activate IFL
+IFL -> IF : supportsFile(file)
+activate IF
+return true
+IFL -> IF : getPriority()
+activate IF
+return priority
+note over IFL: Choose factory with\nlowest priority value
+return factory
+MFI -> IF : createImporter(file, specItemBuilder)
+activate IF
+create I
+IF -> I : new
+return importer
+MFI -> I : runImport()
+activate I
+I -> SLB : event(item)
+activate SLB
+return
+return
+return
+@enduml
+```
+
+A factory for importers decides which importer to use. When multiple importers support the same file, the one with the lowest priority value (highest precedence) is chosen. Usually, importers are selected based on file extension, but some importers may peek into the file content to determine compatibility.
+
+`ImporterFactory` is the plugin interface discovered by the service loader. Importer implementations in OFT usually extend `AbstractImporterFactory` to reuse the default context handling.
+
+The default priorities for standard importers are:
+1. Markdown Importer: 1000
+2. reStructuredText Importer: 2000
+3. Specobject (ReqM2) Importer: 3000
+4. Gherkin Importer: 9000
+5. Tag Importer: 10000
+6. Zip Importer: 20000
+
+### Gherkin Import
+
+#### Importer Selection
+`dsn~gherkin.importer-selection~1`
+
+The Gherkin importer selects `.feature` files with priority 9000, ahead of the Tag Importer. This gives Gherkin syntax ownership to the dedicated importer while retaining the Tag Importer as the fallback for other source files.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest, itest
+
+#### Streaming Import
+`dsn~gherkin.streaming-import~1`
+
+The Gherkin importer scans each input file once and streams non-comment scenario steps into the description until a Gherkin block boundary.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest
+
+#### ID Detection
+`dsn~gherkin.id-detection~1`
+
+The importer imports only scenarios and scenario outlines with exactly one immediately preceding `@id:` tag. It uses the ID tag's line as the item location and the scenario header as the title. Invalid IDs cause only the affected scenario to be skipped. Duplicate item IDs are passed to the OFT core, which validates them after import.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest
+
+#### Covers Metadata Validation
+`dsn~gherkin.covers-metadata-validation~1`
+
+The importer accepts scoped `# Covers:` comments between an ID tag region and its scenario header. Multiple directives accumulate coverage IDs. A malformed Covers directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-covers-validation~1`
+
+Needs: impl, utest
+
+#### Needs Metadata Validation
+`dsn~gherkin.needs-metadata-validation~1`
+
+The importer accepts at most one scoped `# Needs:` comment between an ID tag region and its scenario header. A malformed or repeated Needs directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-needs-validation~1`
+
+Needs: impl, utest
+
+#### Support Coverage Tags
+`dsn~gherkin.comment-coverage-tags~1`
+
+The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves basic comment coverage tags without applying their regular expressions to executable Gherkin text.
+
+When a comment tag occurs inside an imported scenario, its listener events are buffered until the scenario ends. The shared parser emits complete specification-item event sequences, so emitting them immediately would interleave them with the open scenario item and corrupt the listener state.
+
+Covers:
+
+* `req~gherkin-comment-coverage-tags~1`
+
+Needs: impl, utest
 
 ### ReqM2 File Detection
 `dsn~import.reqm2-file-detection~1`
@@ -187,6 +316,8 @@ The `SpecobjectImporterFactory` detects ReqM2 files either
 
 1. via the file extension `.oreqm` or
 2. via the file extension `.xml` and the presence of the string `<specdocument` within the first 4096 bytes of the file.
+
+Since the Tag Importer also supports `.xml` files but has a higher priority value (10000 vs 3000), `.xml` files containing the `<specdocument` tag will be handled by the Specobject Importer. Only if the file does not contain the tag will it fall back to the Tag Importer.
 
 Covers:
 
@@ -211,6 +342,17 @@ When OFT is configured to restrict inclusion to one or more artifact types the [
 Covers:
 
 * `req~include-only-artifact-types~1`
+
+Needs: impl, utest, itest
+
+#### Filtering by Item Status During Import
+`dsn~filtering-by-item-status-during-import~1`
+
+The [specification list builder](#specification-list-builder) can be configured to import a specification item only if its status matches at least one of the configured statuses.
+
+Covers:
+
+* `req~include-only-item-statuses~1`
 
 Needs: impl, utest, itest
 
@@ -239,6 +381,28 @@ Needs: impl, utest, itest
 ### Line Parser for Lightweight Markup Import
 
 RST and Markdown share a common underlying parser that operates on a line-by-line basis.
+
+##### Markdown Comment Coverage Tags
+`dsn~markdown.comment-coverage-tags~1`
+
+For a Markdown input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when the complete line is a single-line HTML comment, apart from optional surrounding whitespace. The dedicated Markdown importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
+
+Covers:
+
+* `scn~markdown.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
+
+##### RST Comment Coverage Tags
+`dsn~rst.comment-coverage-tags~1`
+
+For an RST input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when it begins with optional whitespace, `..`, and whitespace, and is not an RST directive. The dedicated RST importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
+
+Covers:
+
+* `scn~rst.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
 
 ##### Disabling OFT Parsing for Parts of a Markup File
 `dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1`
@@ -487,7 +651,7 @@ Needs: impl, itest
 #### HTML Reports Allows Configuring Details Display Status
 `dsn~reporting.html.details-display~1`
 
-OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
+OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.
 
 Covers:
 
@@ -628,13 +792,13 @@ Needs: impl, utest
 A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
-    
+
     type = 1*ALPHA
-    
+
     id = id-fragment *("." id-fragment)
-    
+
     id-fragment = UNICODE_ALPHA *(UNICODE_ALPHA / DIGIT / "_" / "-")
-    
+
     revision = 1*DIGIT
 
 Rationale:
@@ -679,9 +843,9 @@ Needs: impl, utest
 In Markdown specification item references have the following format:
 
     reference = (plain-reference / url-style-link)
-    
+
     plain-reference = requirement-id
-    
+
     url-style-link = "[" link-text "]" "(" "#" requirement-id ")"
 
 Covers:
@@ -696,9 +860,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links that cover a different specification item.
 
     covers-list = covers-header 1*(LINEBREAK covers-line)
-    
+
     covers-header = "Covers:" *WSP
-    
+
     covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -719,9 +883,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
-    
+
     depends-header = "Depends:" *WSP
-    
+
     depends-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -781,11 +945,11 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
 
     artifact-need-redirection = skipped-artifact-type *WSP "-->" *WSP target-artifact-list
         *WSP ":" *WSP original-requirement-id
-        
+
     skipped-artifact-type = artifact-type
-    
+
     target-artifact-list = artifact-type *("," *WSP artifact-type)
-        
+
     original-requirement-id = requirement-id
 
 The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
@@ -811,7 +975,7 @@ OFT imports coverage tags in the full tag format:
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -831,7 +995,25 @@ Especially when used for design document files like UML models, requiring covera
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
+
+Needs: impl, utest
+
+#### Full Coverage Tag Format Allows Multiple Coverage
+`dsn~import.full-coverage-tag-multiple-needed-coverage~1`
+
+OFT imports full coverage tags with multiple need coverage ids:
+
+    full-tag-multiple-coverage-id =
+        "[" *WSP reference *WSP "->" *WSP requirement-id *WSP *("," *WSP requirement-id) *WSP "]"
+
+Rationale:
+
+An item can cover multiple IDs. This avoids creating multiple IDs for the same item solely to represent multiple coverage relations. It also reduces the number of IDs that related items must reference for complete coverage, improving readability and maintainability.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -851,7 +1033,7 @@ Specifying an explicit revision in coverage tags allows incrementing the revisio
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -875,7 +1057,7 @@ Specifying an explicit name in coverage tags allows overriding the auto-generate
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -890,7 +1072,7 @@ When you need to cover these items it's important that the name is predictable a
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -910,7 +1092,7 @@ During import of short tags OFT requires the following configuration:
 
 Covers:
 
-* `req~import.short-coverage-tag-format~1`
+* `req~import.short-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -931,6 +1113,32 @@ Covers:
 Needs: impl, itest
 
 ### Common
+
+#### CLI Help
+`dsn~cli.help~1`
+
+The CLI provides a help command and flags (`help`, `-h`, `--help`) that display a short help text.
+
+Covers:
+
+* [`req~cli.help~1`](system_requirements.md#cli-help)
+
+Needs: impl, itest
+
+#### CLI Version
+`dsn~cli.version~1`
+
+The CLI provides the current version of OpenFastTrace read from the resource file `version.properties` that is created during the build from the property `revision` in the core POM.
+
+Rationale:
+
+This makes the `revision` the single source of truth for the version of OpenFastTrace and avoids having to keep manually maintained copies of the version information.
+
+Covers:
+
+* [`req~cli.version~1`](system_requirements.md#cli-version)
+
+Needs: impl, itest
 
 #### Input File Selection
 `dsn~cli.input-file-selection~1`
@@ -1119,7 +1327,7 @@ Needs: impl, utest
 
 ### Why is This Architecture Relevant?
 
-Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves. 
+Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves.
 
 ### Alternatives Considered
 

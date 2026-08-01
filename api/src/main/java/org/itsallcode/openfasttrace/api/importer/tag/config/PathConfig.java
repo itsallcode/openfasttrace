@@ -13,7 +13,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
  * The configuration of a single path that is imported by the tag importer Use
  * {@link #builder()} to create a new instance.
  */
-public class PathConfig
+public final class PathConfig
 {
     private static final Logger LOG = Logger.getLogger(PathConfig.class.getName());
 
@@ -109,7 +109,7 @@ public class PathConfig
     /**
      * Builder for {@link PathConfig} objects.
      */
-    public static class Builder
+    public static final class Builder
     {
         private DescribedPathMatcher pathMatcher;
         private String coveredItemNamePrefix;

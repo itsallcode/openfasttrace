@@ -7,7 +7,7 @@
 OFT is a requirement tracing tool. It helps you make sure that all defined requirements are covered in your code. It
 also helps you find outdated code passages.
 
-1. Create requirement and specification documents in Markdown including OFT-readable specification items
+1. Create requirement and specification documents in Markdown, including OFT-readable specification items
 2. Put tags into your source code that mark the coverage of items from the specification
 3. Use OFT to trace the requirements from the source to the final implementation
 
@@ -270,7 +270,7 @@ Keywords are followed by a colon that separates the keyword from the content. De
 
 ##### `Status`
 
-The `Status` keyword takes a single value from `draft`, `proposed`, `approved` to set the status of the item. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used (see [XML Tracing Report](#xml-tracing-report)). Has to occur before the `Description`, `Rationale` or `Comment`. 
+The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, `rejected` to set the status of the item. The status can be used to filter specification items during import (see [Import options](#import-options)). Has to occur before the `Description`, `Rationale` or `Comment`. 
 
     ### A draft spec items
     `req~draft-item~1`
@@ -441,6 +441,18 @@ If you want to also import specification items that do not have any tags, add a 
     oft convert -t _,AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
      
 
+### Filtering by Status
+
+Sometimes you only want to see specification items that have reached a certain maturity level. For example, you might want to create a report that only includes approved requirements.
+
+To achieve this, you can filter by status using the `-w` or `--wanted-statuses` option:
+
+    oft trace -w approved doc/
+
+This tells OFT to only import specification items that have the status `approved`. You can also provide a comma-separated list of statuses:
+
+    oft trace -w approved,proposed doc/
+
 ### Tracing the Whole Chain
 
 If you plan to assess the coverage state of your product as a whole, you need to trace the full chain including all artifacts.
@@ -510,7 +522,6 @@ Unfortunately, we are only human and humans make mistakes. Here is a non-exhaust
 
 | Mistake                         | How it manifests in OFT                            |
 |---------------------------------|----------------------------------------------------|
-| Copy and paste errors           | duplicates, covering the wrong item                |
 | Unimplemented feature           | missing leaves in the implementation               |
 | Missing tests                   | missing leaves in the test                         |
 | Typos in requirement IDs        | causing branches to be cut somewhere in the middle |
@@ -575,12 +586,25 @@ The OFT command line looks like this:
 
     oft command [option ...] [<input file or directory> ...]
 
+or
+
+    oft --help
+
 Where `command` is one of
 
 * `trace` - create a requirement trace document
 * `convert` - convert to a different requirements format
+* `help` - display a help message showing the command line usage and version of OFT
 
 and `option` is one or more of the options listed below.
+
+#### Display a Short Help Message
+
+The following commands are equivalent and all display the command line usage and the version of OFT.
+
+    oft -h
+    oft --help
+    oft help
 
 #### Import options
 
@@ -588,9 +612,13 @@ and `option` is one or more of the options listed below.
 
 Import only specification items where the artifact type matches one of the listed types.
 
+    -w, --wanted-statuses <status>[,...]
+
+Import only specification items that have a status contained in the comma-separated list of statuses.
+
     -t, --wanted-tags [_,]<tag>[,...]
 
-Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as first entry in the list, specification items that have no tags at all are also imported.
+Import only specification items that have at least one of the listed tags. If you add a single underscore "_" as the first entry in the list, specification items that have no tags at all are also imported.
 
 #### Tracing options
 
@@ -695,7 +723,7 @@ To avoid conflict with the formats actual contents, you embed these definitions 
 Tags have the following format:
 
 ```
-[ <covered-artifact-type> -> <specification-object-id> ]
+[ <covered-artifact-type> -> <list-of-specification-object-ids> ]
 ```
 
 Spaces above were only added for readability. They are optional. In fact usually people prefer a more compact form.
@@ -707,6 +735,20 @@ private validate(final AuthenticationRequest request){
     // ...
 }
 ```
+
+##### Tags in Markdown and RST Documentation
+
+Markdown documentation files (`.md` and `.markdown`) and RST files (`.rst`) can cover specification items without being routed through the Tag Importer. Place a full tag in a standalone, single-line native comment:
+
+```markdown
+<!-- [doc->req~user-guide~1] -->
+```
+
+```rst
+.. [doc->req~user-guide~1]
+```
+
+Only complete, standalone Markdown HTML comments and single-line RST comments are recognized. Inline or multi-line comments and RST directives do not import coverage tags. Text outside a native comment that merely resembles a tag is also ignored.
 
 ##### Optional Elements
 
@@ -724,7 +766,7 @@ Examples:
 // [impl~validate-password~2->dsn~validate-authentication-request~1]
 ```
 
-##### Forwarding Requirements
+##### Needed Coverage
 
 When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:
 
@@ -750,11 +792,12 @@ recognized file types:
 * C (`.c`, `.h`)
 * C++ (`.C`, `.cpp`, `.c++`, `.cc`, `.H`, `.hpp`, `.h++`, `.hh`)
 * C# (`.c#`, `cs`)
+* Doxygen (`.dox`)
 * Database related (`.sql`, `.pls`)
 * Configuration files (`.cfg`, `.conf`, `.ini`)
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
-* Java (`.java`)
+* Java (`.java`, `.fxml`)
 * JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
 * Kotlin (`.kt`, `.kts`)
 * Lua (`.lua`)
@@ -781,6 +824,7 @@ recognized file types:
 
 * HTML (`.html`, `.htm`, `.xhtml`)
 * YAML (`.yaml`, `.yml`)
+* XML (`xml`)
 
 **Modeling languages**
 
@@ -791,6 +835,25 @@ Note that XML is at the moment not yet supported by the Tag Importer, because it
 **Test Specification languages**
 
 * [Gherkin](https://cucumber.io/docs/gherkin/) (`.feature`)
+
+#### Gherkin
+
+OFT imports Gherkin `Scenario` and `Scenario Outline` blocks in `.feature` files when the immediately preceding tag region contains one OFT ID tag. Place optional `Covers` and `Needs` comments after the tags and before the scenario header:
+
+```gherkin
+@smoke
+@id:scn~user-can-log-in~1
+# Covers: req~authentication~1
+# Needs: dsn, itest
+Scenario: A registered user logs in
+  Given a registered user
+  When they enter valid credentials
+  Then access is granted
+```
+
+The ID tag becomes the item location and the scenario header becomes its title; executable steps become the description. `Covers` and `Needs` are case-sensitive and optional. Multiple `Covers` comments accumulate coverage IDs, while `Needs` may appear once; all lists must be non-empty and comma-separated. Invalid IDs, types, or directives skip only the affected scenario and emit a warning.
+
+Existing full coverage tags remain supported in Gherkin comments, for example `# [impl~login~1 -> dsn~authentication~1]`. OFT deliberately ignores coverage-tag-shaped text in executable Gherkin lines.
  
 #### Markdown
 
@@ -1197,14 +1260,32 @@ The OFT command line interface returns the following exit codes:
 
 The following editors and integrated development environments are well suited for authoring OFT documents. The list is not exhaustive, any editor with Markdown capabilities can be used.
 
-| Editor / IDE                                         | Syntax highl. | Preview | Outline | HTML export |
-| ---------------------------------------------------- | ------------- | ------- | ------- | ----------- |
-| [Gedit](https://wiki.gnome.org/Apps/Gedit)           | y             |         |         |             |
-| [Eclipse](https://eclipse.org) with WikiText plug-in | y             | y       | y       | y           |
-| [Eclipse](https://eclipse.org) with GMF plug-in      |               | y       |         |             |
-| [IntelliJ](https://www.jetbrains.com/idea/)          | y             | y       | y       | y           |
-| [Vim](https://www.vim.org/)                          | y             |         |         |             |
-| [Visual Studio Code](https://code.visualstudio.com/) | y             | y       | y       |             |
+| Editor / IDE                                         | Syntax<br/>highlighting | Preview | Outline | HTML<br/>export | OFT<br/>Plugin |
+|------------------------------------------------------|:-----------------------:|:-------:|:-------:|:---------------:|:--------------:|
+| [CLion](https://www.jetbrains.com/clion/)            |            y            |    y    |    y    |        y        |       y        |
+| [Gedit](https://wiki.gnome.org/Apps/Gedit)           |            y            |         |         |                 |                |
+| [Eclipse](https://eclipse.org)                       |            y            |    y    |    y    |        y        |       y        |
+| [IntelliJ](https://www.jetbrains.com/idea/)          |            y            |    y    |    y    |        y        |                |
+| [PyCharm](https://www.jetbrains.com/pycharm/)        |            y            |         |         |                 |       y        |
+| [Vim](https://www.vim.org/)                          |            y            |         |         |                 |                |
+| [Visual Studio Code](https://code.visualstudio.com/) |            y            |    y    |    y    |        y        |                |
+
+Please note that some IDEs may require additional plugins to support Markdown features.
+
+#### IDE Plugins
+
+We offer plugins for the following popular IDEs.
+
+* [JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
+
+Typical features include:
+
+* Syntax highlighting for OFT specification item IDs
+* Symbol search for OFT specification items
+* Navigation between OFT specification items
+* Templates for OFT specification items
+* Run configurations for OFT traces
+* In-IDE trace report
 
 ### Templates for IDEs
 

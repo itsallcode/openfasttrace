@@ -35,7 +35,7 @@ public interface ImportEventListener
 
     /**
      * The importer found the status of the specification item
-     * 
+     *
      * @param status
      *            the status
      */
@@ -94,7 +94,7 @@ public interface ImportEventListener
 
     /**
      * Add a tag
-     * 
+     *
      * @param tag
      *            the tag
      */
@@ -102,7 +102,7 @@ public interface ImportEventListener
 
     /**
      * Set the location of the specification item in the imported file
-     * 
+     *
      * @param path
      *            the path of the imported file
      * @param line
@@ -117,19 +117,29 @@ public interface ImportEventListener
 
     /**
      * Set the location of the specification item in the imported file
-     * 
+     *
      * @param location
      *            the location
      */
     void setLocation(Location location);
 
     /**
-     * Set to {@code true} if the specification item forwards needed
-     * coverage
-     * 
+     * Set to {@code true} if the specification item forwards needed coverage
+     *
      * @param forwards
      *            {@code true} if the specification item forwards needed
      *            coverage
      */
     void setForwards(boolean forwards);
+
+    /**
+     * Add a complete specification item to the list of items being built. Use
+     * this method if the specification item is already complete and does not
+     * need to be built from events, e.g. when the item is specified in a single
+     * line and does not span multiple lines in the input file.
+     *
+     * @param item
+     *            the complete specification item
+     */
+    void addSpecificationItem(final SpecificationItem item);
 }

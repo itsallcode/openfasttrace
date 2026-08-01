@@ -3,10 +3,13 @@ package org.itsallcode.openfasttrace.core.cli;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -24,6 +27,7 @@ public class CliArguments
 {
     /** Filter in command line arguments matching items with no tags. */
     public static final String NO_TAGS_MARKER = "_";
+    private static final Pattern COMMA_SEPARATED_PATTERN = Pattern.compile(",(?U)\\s*");
     // [impl->dsn~cli.default-newline-format~1]
     private Newline newline = Newline.fromRepresentation(System.lineSeparator());
     private List<String> unnamedValues;
@@ -31,6 +35,7 @@ public class CliArguments
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
     private Set<String> wantedArtifactTypes = Collections.emptySet();
+    private Set<ItemStatus> wantedStatuses = Collections.emptySet();
     private Set<String> wantedTags = Collections.emptySet();
 
     // [impl->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -135,7 +140,9 @@ public class CliArguments
      */
     public void setUnnamedValues(final List<String> unnamedValues)
     {
-        this.unnamedValues = unnamedValues;
+        this.unnamedValues = unnamedValues == null
+                ? List.of()
+                : Collections.unmodifiableList(unnamedValues);
     }
 
     /**
@@ -295,7 +302,7 @@ public class CliArguments
      */
     public Set<String> getWantedArtifactTypes()
     {
-        return this.wantedArtifactTypes;
+        return Collections.unmodifiableSet(this.wantedArtifactTypes);
     }
 
     /**
@@ -309,9 +316,9 @@ public class CliArguments
         this.wantedArtifactTypes = createSetFromCommaSeparatedString(artifactTypes);
     }
 
-    private HashSet<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
+    private static Set<String> createSetFromCommaSeparatedString(final String commaSeparatedString)
     {
-        return new HashSet<>(Arrays.asList(commaSeparatedString.split(",\\s*")));
+        return Set.of(COMMA_SEPARATED_PATTERN.split(commaSeparatedString));
     }
 
     /**
@@ -326,13 +333,52 @@ public class CliArguments
     }
 
     /**
+     * Get a list of statuses to be applied as a filter during import
+     * 
+     * @return set of wanted statuses
+     */
+    public Set<ItemStatus> getWantedStatuses()
+    {
+        return Collections.unmodifiableSet(this.wantedStatuses);
+    }
+
+    /**
+     * Set a list of statuses to be applied as a filter during import
+     * 
+     * @param statuses
+     *            list of wanted statuses
+     */
+    public void setWantedStatuses(final String statuses)
+    {
+        this.wantedStatuses = createStatusSetFromCommaSeparatedString(statuses);
+    }
+
+    private static Set<ItemStatus> createStatusSetFromCommaSeparatedString(final String commaSeparatedString)
+    {
+        return COMMA_SEPARATED_PATTERN.splitAsStream(commaSeparatedString)
+                .map(ItemStatus::parseString)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Set a list of statuses to be applied as a filter during import
+     * 
+     * @param statuses
+     *            list of wanted statuses
+     */
+    public void setW(final String statuses)
+    {
+        setWantedStatuses(statuses);
+    }
+
+    /**
      * Get a list of tags to be applied as a filter during import
      * 
      * @return set of wanted tags
      */
     public Set<String> getWantedTags()
     {
-        return this.wantedTags;
+        return Collections.unmodifiableSet(this.wantedTags);
     }
 
     /**
@@ -397,7 +443,7 @@ public class CliArguments
      * 
      * @return {@code true} if origin information should be shown in reports.
      */
-    public boolean getShowOrigin()
+    public boolean isShowOrigin()
     {
         return this.showOrigin;
     }

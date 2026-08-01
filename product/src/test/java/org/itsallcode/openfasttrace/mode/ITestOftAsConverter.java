@@ -1,7 +1,6 @@
 package org.itsallcode.openfasttrace.mode;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -18,7 +17,7 @@ class ITestOftAsConverter extends AbstractOftTest
     private Oft oft;
 
     @BeforeEach
-    void beforeEach(@TempDir final Path tempDir) throws UnsupportedEncodingException
+    void beforeEach(@TempDir final Path tempDir)
     {
         prepareOutput(tempDir);
         this.oft = Oft.create();

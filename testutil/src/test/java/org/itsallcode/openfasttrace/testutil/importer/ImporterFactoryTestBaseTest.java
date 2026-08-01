@@ -17,12 +17,17 @@ class ImporterFactoryTestBaseTest
         assertThat(new DummyImplementation(), notNullValue());
     }
 
-    private static class DummyImplementation extends ImporterFactoryTestBase<DummyImporterFactory>
+    private static class DummyImplementation extends AbstractImporterFactoryTestBase<DummyImporterFactory>
     {
         @Override
         protected DummyImporterFactory createFactory()
         {
             throw new UnsupportedOperationException("Unimplemented method 'createFactory'");
+        }
+
+        @Override
+        protected int getExpectedPriority() {
+            return 0;
         }
 
         @Override
@@ -38,8 +43,13 @@ class ImporterFactoryTestBaseTest
         }
     }
 
-    private static class DummyImporterFactory extends ImporterFactory
+    private static class DummyImporterFactory extends AbstractImporterFactory
     {
+        @Override
+        public int getPriority() {
+            return 99999999;
+        }
+
         @Override
         public boolean supportsFile(final InputFile file)
         {

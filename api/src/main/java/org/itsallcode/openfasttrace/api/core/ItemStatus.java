@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.api.core;
 
+import java.util.Locale;
+
 /**
  * This enumeration represents the different statuses of an item.
  */
@@ -47,6 +49,6 @@ public enum ItemStatus
     @Override
     public String toString()
     {
-        return this.name().toLowerCase();
+        return this.name().toLowerCase(Locale.ENGLISH);
     }
 }

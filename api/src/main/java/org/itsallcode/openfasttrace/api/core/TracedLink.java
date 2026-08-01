@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.api.core;
 
+import java.util.Objects;
+
 /**
  * This class represents a link that had its status evaluated during a trace
  * run.
@@ -64,42 +66,15 @@ public final class TracedLink
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.otherLinkEnd == null) ? 0 : this.otherLinkEnd.hashCode());
-        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
-        return result;
+    public boolean equals(final Object o) {
+        if (!(o instanceof final TracedLink that)) {
+            return false;
+        }
+        return Objects.equals(otherLinkEnd, that.otherLinkEnd) && status == that.status;
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-        if (obj == null)
-        {
-            return false;
-        }
-        if (!(obj instanceof TracedLink))
-        {
-            return false;
-        }
-        final TracedLink other = (TracedLink) obj;
-        if (this.otherLinkEnd == null)
-        {
-            if (other.otherLinkEnd != null)
-            {
-                return false;
-            }
-        }
-        else if (!this.otherLinkEnd.equals(other.otherLinkEnd))
-        {
-            return false;
-        }
-        return this.status == other.status;
+    public int hashCode() {
+        return Objects.hash(otherLinkEnd, status);
     }
 }

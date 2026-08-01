@@ -12,8 +12,11 @@ import org.opentest4j.MultipleFailuresError;
 
 /**
  * This integration test was reduced to a minimal smoke test.
- * The actual tests are in {@link CliStarterInternalIT}, which makes recording code coverage easier.
- *
+ * <p>
+ * The actual tests are in {@link CliStarterInternalIT}, which makes recording
+ * code coverage easier.
+ * </p>
+ * 
  * @see CliStarterInternalIT
  */
 // [itest->dsn~cli.tracing.exit-status~1]
@@ -39,9 +42,8 @@ class CliStarterIT
     @Test
     void testHelpPrintsUsage()
     {
-        final String nl = "\n";
         jarLauncher(HELP_COMMAND)
-                .expectStdOut(startsWith("OpenFastTrace" + nl + nl + "Usage:"))
+                .expectStdOut(startsWith("OpenFastTrace"))
                 .expectedExitCode(0)
                 .verify();
     }

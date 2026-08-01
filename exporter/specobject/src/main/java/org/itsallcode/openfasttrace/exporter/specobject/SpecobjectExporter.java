@@ -41,7 +41,7 @@ class SpecobjectExporter implements Exporter
         this.originalWriter = originalWriter;
     }
 
-    private Map<String, List<SpecificationItem>> groupByDoctype(
+    private static Map<String, List<SpecificationItem>> groupByDoctype(
             final Stream<SpecificationItem> itemStream)
     {
         return itemStream.collect(

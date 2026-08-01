@@ -1,24 +1,24 @@
 package org.itsallcode.openfasttrace.api.importer;
 
-import java.util.Objects;
-
 import org.itsallcode.openfasttrace.api.core.serviceloader.Initializable;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
 /**
- * Super class for factories producing {@link Importer}s.
+ * Interface for factories producing {@link Importer}s.
  */
-public abstract class ImporterFactory implements Initializable<ImporterContext>
+public interface ImporterFactory extends Initializable<ImporterContext>
 {
-    private ImporterContext context;
-
     /**
-     * Create a new {@link ImporterFactory}.
+     * Get the priority of this {@link ImporterFactory}.
+     * <p>
+     * The priority is used to determine the order in which importer factories
+     * are tried when importing a file. Lower priority values indicate higher
+     * precedence.
+     * </p>
+     * 
+     * @return priority of this importer factory
      */
-    protected ImporterFactory()
-    {
-        // empty by intention
-    }
+    int getPriority();
 
     /**
      * Returns {@code true} if this {@link ImporterFactory} supports
@@ -28,7 +28,7 @@ public abstract class ImporterFactory implements Initializable<ImporterContext>
      *            the file to check.
      * @return {@code true} if the given file is supported for importing.
      */
-    public abstract boolean supportsFile(final InputFile file);
+    boolean supportsFile(final InputFile file);
 
     /**
      * Create an importer that is able to read the given file.
@@ -40,23 +40,12 @@ public abstract class ImporterFactory implements Initializable<ImporterContext>
      *            fragments
      * @return an importer instance
      */
-    public abstract Importer createImporter(final InputFile file,
-            final ImportEventListener listener);
-
-    @Override
-    public void init(final ImporterContext context)
-    {
-        this.context = context;
-    }
+    Importer createImporter(final InputFile file, final ImportEventListener listener);
 
     /**
-     * Get the {@link ImporterContext} set by the {@link #init(ImporterContext)}
-     * method.
+     * Get the {@link ImporterContext}.
      * 
      * @return the {@link ImporterContext}.
      */
-    public ImporterContext getContext()
-    {
-        return Objects.requireNonNull(this.context, "Context was not initialized");
-    }
+    ImporterContext getContext();
 }

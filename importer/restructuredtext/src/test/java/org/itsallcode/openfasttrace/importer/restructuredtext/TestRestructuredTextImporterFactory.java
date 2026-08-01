@@ -1,6 +1,6 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
-import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.AbstractImporterFactoryTestBase;
 
 import java.util.List;
 
@@ -9,12 +9,17 @@ import static java.util.Arrays.asList;
 /**
  * Tests for {@link RestructuredTextImporterFactory}
  */
-class TestRestructuredTextImporterFactory extends ImporterFactoryTestBase<RestructuredTextImporterFactory>
+class TestRestructuredTextImporterFactory extends AbstractImporterFactoryTestBase<RestructuredTextImporterFactory>
 {
     @Override
     protected RestructuredTextImporterFactory createFactory()
     {
         return new RestructuredTextImporterFactory();
+    }
+
+    @Override
+    protected int getExpectedPriority() {
+        return 2000;
     }
 
     @Override

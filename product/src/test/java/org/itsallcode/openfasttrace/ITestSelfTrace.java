@@ -44,15 +44,24 @@ class ITestSelfTrace
 
     protected String createSelfTraceReport(final Trace trace)
     {
-        String message = "Self trace has " + trace.countDefects() + " / " + trace.count()
-                + " defect items.\n\n";
+        final StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("Self trace has ")
+                .append(trace.countDefects())
+                .append(" / ")
+                .append(trace.count())
+                .append(" defects.\n\n");
         for (final LinkedSpecificationItem item : trace.getDefectItems())
         {
             final Location location = item.getLocation();
-            message += "at " + item.getId() + " (" + location.getPath() + ":" + location.getLine()
-                    + ")\n";
+            messageBuilder.append("at ")
+                    .append(item.getId())
+                    .append(" (")
+                    .append(location.getPath())
+                    .append(":")
+                    .append(location.getLine())
+                    .append(")\n");
         }
-        return message;
+        return messageBuilder.toString();
     }
 
     private ImportSettings buildOftSettings()
@@ -73,11 +82,11 @@ class ITestSelfTrace
     {
         try (final Stream<Path> stream = Files.walk(rootProjectDir.normalize(), 5))
         {
-            return stream //
-                    .filter(containsDir("bin").negate()) //
-                    .filter(path -> Files.isDirectory(path)) //
-                    .filter(endsWith(Paths.get("src/main")) //
-                            .or(endsWith(Paths.get("src/test/java")))) //
+            return stream
+                    .filter(containsDir("bin").negate())
+                    .filter(Files::isDirectory)
+                    .filter(endsWith(Paths.get("src/main"))
+                            .or(endsWith(Paths.get("src/test/java"))))
                     .toList();
         }
         catch (final IOException e)

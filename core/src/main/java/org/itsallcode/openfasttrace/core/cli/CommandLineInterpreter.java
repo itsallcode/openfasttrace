@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -15,7 +16,8 @@ import java.util.stream.Stream;
  * <p>
  * Users of this class must create a POJO that contains a setter method for each
  * command line argument that they want to use.
- * </p><p>
+ * </p>
+ * <p>
  * Additionally, they can add a setter called <code>setUnnamedValues</code> that
  * will receive all argument values that are unnamed.
  * </p>
@@ -26,10 +28,11 @@ public class CommandLineInterpreter
 
     private static final String UNNAMED_ARGUMENTS_SUFFIX = "unnamedvalues";
     private static final String SINGLE_CHAR_ARG_PREFIX = "-";
+    private static final Pattern SINGLE_CHAR_ARG_PREFIX_PATTERN = Pattern.compile(SINGLE_CHAR_ARG_PREFIX);
     private static final String MULTIPLE_CHAR_ARG_PREFIX = "--";
     private static final String SETTER_PREFIX = "set";
     private final Object argumentsReceiver;
-    private final String[] arguments;
+    private final List<String> arguments;
     private final Map<String, Method> setters;
 
     /**
@@ -42,7 +45,7 @@ public class CommandLineInterpreter
      */
     public CommandLineInterpreter(final String[] arguments, final Object argumentsReceiver)
     {
-        this.arguments = arguments;
+        this.arguments = List.of(arguments);
         this.argumentsReceiver = argumentsReceiver;
         this.setters = findAllSettersInArgumentsReceiver(argumentsReceiver);
     }
@@ -64,7 +67,7 @@ public class CommandLineInterpreter
     {
         return method.getName()
                 .substring(SETTER_PREFIX.length())
-                .toLowerCase();
+                .toLowerCase(Locale.ENGLISH);
     }
 
     /**
@@ -76,7 +79,7 @@ public class CommandLineInterpreter
     public void parse() throws CliException
     {
         final List<String> unnamedArguments = new ArrayList<>();
-        final ListIterator<String> iterator = asList(this.arguments).listIterator();
+        final ListIterator<String> iterator = this.arguments.listIterator();
         while (iterator.hasNext())
         {
             final String argument = iterator.next();
@@ -100,9 +103,10 @@ public class CommandLineInterpreter
     }
 
     private void handleChainedSingleCharacterArguments(final ListIterator<String> iterator,
-            final String argument) throws CliException
+            final String argument)
     {
-        final String characters = argument.replaceFirst(SINGLE_CHAR_ARG_PREFIX, "").toLowerCase(Locale.ENGLISH);
+        final String characters = SINGLE_CHAR_ARG_PREFIX_PATTERN.matcher(argument).replaceFirst("")
+                .toLowerCase(Locale.ENGLISH);
         final int lastPosition = characters.length() - 1;
 
         for (int position = 0; position <= lastPosition; ++position)
@@ -127,7 +131,6 @@ public class CommandLineInterpreter
     }
 
     private void handleNamedArgument(final ListIterator<String> iterator, final String argument)
-            throws CliException
     {
         final String argumentName = argument.replace("-", "").toLowerCase(Locale.ENGLISH);
         if (this.setters.containsKey(argumentName))
@@ -145,13 +148,13 @@ public class CommandLineInterpreter
         unnamedArguments.add(argument);
     }
 
-    private void reportUnexpectedNamedArgument(final String argument) throws CliException
+    private static void reportUnexpectedNamedArgument(final String argument)
     {
         throw new CliException("Unexpected parameter '" + argument + "' is not allowed");
     }
 
     private void handleExpectedNamedArgument(final ListIterator<String> iterator,
-            final String argumentName) throws CliException
+            final String argumentName)
     {
         final Method setter = this.setters.get(argumentName);
         if (setter.getParameterTypes().length != 1)
@@ -186,7 +189,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private <T> T convertArgument(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertArgument(final String stringValue, final Class<T> type)
     {
         if (type.equals(String.class))
         {
@@ -196,12 +199,11 @@ public class CommandLineInterpreter
         {
             return convertEnum(stringValue, type);
         }
-        throw new CliException(
-                "Type '" + type + "' not supported for converting argument '" + stringValue + "'");
+        throw new CliException("Type '" + type + "' not supported for converting argument '" + stringValue + "'");
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T convertEnum(final String stringValue, final Class<T> type) throws CliException
+    private static <T> T convertEnum(final String stringValue, final Class<T> type)
     {
         @SuppressWarnings("rawtypes")
         final Class enumType = type;
@@ -219,13 +221,13 @@ public class CommandLineInterpreter
         }
     }
 
-    private void reportUnsupportedSetterArgumentCount(final Method setter) throws CliException
+    private static void reportUnsupportedSetterArgumentCount(final Method setter)
     {
         throw new CliException("Unsupported argument count for setter '" + setter
                 + "'. Only one argument is allowed.");
     }
 
-    private void reportMissingParameterValue(final String argumentName) throws CliException
+    private static void reportMissingParameterValue(final String argumentName)
     {
         throw new CliException("No value for argument '" + argumentName + "'");
     }
@@ -235,7 +237,7 @@ public class CommandLineInterpreter
         return text.startsWith(SINGLE_CHAR_ARG_PREFIX);
     }
 
-    private void assignUnnamedArgument(final List<String> unnamedArguments) throws CliException
+    private void assignUnnamedArgument(final List<String> unnamedArguments)
     {
         final Method unnamedArgumentSetter = this.setters.get(UNNAMED_ARGUMENTS_SUFFIX);
         if (unnamedArgumentSetter != null)
@@ -248,7 +250,7 @@ public class CommandLineInterpreter
         }
     }
 
-    private void assignValue(final Method setter, final Object value) throws CliException
+    private void assignValue(final Method setter, final Object value)
     {
         try
         {
@@ -256,8 +258,7 @@ public class CommandLineInterpreter
         }
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
         {
-            throw new CliException(
-                    "Error calling setter " + setter + " with argument '" + value + "'", e);
+            throw new CliException("Error calling setter " + setter + " with argument '" + value + "'", e);
         }
     }
 }

@@ -9,7 +9,7 @@ import java.nio.file.Path;
 /**
  * An {@link InputFile} for a file on disk, represented by a {@link Path}.
  */
-public class RealFileInput implements InputFile
+public final class RealFileInput implements InputFile
 {
     private final Path path;
     private final Charset charset;

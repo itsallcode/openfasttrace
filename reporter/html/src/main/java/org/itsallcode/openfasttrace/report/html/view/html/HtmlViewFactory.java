@@ -15,7 +15,7 @@ import org.itsallcode.openfasttrace.report.html.view.*;
  * Factory that creates an HTML OFT view (e.g. for reports) and provides an
  * output stream.
  */
-public class HtmlViewFactory extends AbstractViewFactory
+public final class HtmlViewFactory extends AbstractViewFactory
 {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final URL cssUrl;
@@ -47,9 +47,9 @@ public class HtmlViewFactory extends AbstractViewFactory
 
     private static PrintStream createPrintStream(final OutputStream stream)
     {
-        if (stream instanceof PrintStream)
+        if (stream instanceof PrintStream printStream)
         {
-            return (PrintStream) stream;
+            return printStream;
         }
         else
         {

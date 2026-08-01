@@ -6,18 +6,18 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * A stream writer for XML that adds indentation.
  */
-public class IndentingXMLStreamWriter extends StreamWriterDelegate
+public class IndentingXMLStreamWriter extends AbstractStreamWriterDelegate
 {
     private static final int WROTE_MARKUP = 1;
     private static final int WROTE_DATA = 2;
     private final String indent;
     private final String newLine;
     /** How deeply nested the current scope is. The root element is depth 1. */
-    private int depth = 0; // document scope
+    private int depth; // document scope
     /** stack[depth] indicates what's been written into the current scope. */
     private int[] stack = new int[] { 0, 0, 0, 0 }; // nothing written yet
     /** Prefix that defines how deeply a line is indented. */
-    private char[] linePrefix = null;
+    private char[] linePrefix;
 
     /**
      * Create a new instance of the {@link IndentingXMLStreamWriter}.

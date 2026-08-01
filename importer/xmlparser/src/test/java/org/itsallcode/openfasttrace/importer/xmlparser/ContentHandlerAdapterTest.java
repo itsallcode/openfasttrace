@@ -52,7 +52,7 @@ class ContentHandlerAdapterTest
     }
 
     @Test
-    void testStartElementFailsForMissingLocator() throws SAXException
+    void testStartElementFailsForMissingLocator()
     {
         final ContentHandlerAdapter testee = testee();
         final IllegalStateException exception = assertThrows(IllegalStateException.class,
@@ -77,7 +77,7 @@ class ContentHandlerAdapterTest
     }
 
     @Test
-    void testEndElementFailsForMissingLocator() throws SAXException
+    void testEndElementFailsForMissingLocator()
     {
         final ContentHandlerAdapter testee = testee();
         final IllegalStateException exception = assertThrows(IllegalStateException.class,

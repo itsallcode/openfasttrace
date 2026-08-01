@@ -8,7 +8,7 @@ import org.xml.sax.Attributes;
 /**
  * A simplified wrapper for SAX {@link Attributes}.
  */
-public class Attribute
+public final class Attribute
 {
     private final String qName;
     private final String value;

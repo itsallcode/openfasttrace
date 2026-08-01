@@ -9,7 +9,7 @@ import org.itsallcode.openfasttrace.api.core.Location;
  * 
  * @see org.xml.sax.ContentHandler#endElement(String, String, String)
  */
-public class EndElementEvent
+public final class EndElementEvent
 {
     private final QName qName;
     private final Location location;

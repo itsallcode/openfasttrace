@@ -10,6 +10,8 @@ import org.itsallcode.openfasttrace.core.LinkedItemIndex.SpecificationItemIdWith
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,13 +20,13 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 @ExtendWith(MockitoExtension.class)
 class TestLinkedItemIndex
 {
-    private final static SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
+    private static final SpecificationItemId DUPLICATE_ID_1 = SpecificationItemId.createId("type",
             "name", 42);
-    private final static SpecificationItemId DUPLICATE_ID_2 = SpecificationItemId.createId("type",
+    private static final SpecificationItemId DUPLICATE_ID_2 = SpecificationItemId.createId("type",
             "name", 42);
-    private final static SpecificationItemId DUPLICATE_ID_INGORING_VERSION = SpecificationItemId
+    private static final SpecificationItemId DUPLICATE_ID_INGORING_VERSION = SpecificationItemId
             .createId("type", "name", 42 + 1);
-    private final static SpecificationItemId UNIQUE_ID = SpecificationItemId.createId("type2",
+    private static final SpecificationItemId UNIQUE_ID = SpecificationItemId.createId("type2",
             "name2", 42 + 1);
 
     @Mock
@@ -32,7 +34,7 @@ class TestLinkedItemIndex
             duplicateIdIgnoringVersionItemMock;
 
     @BeforeEach
-    public void prepareTest()
+    void prepareTest()
     {
         lenient().when(this.duplicateIdItem1Mock.getId()).thenReturn(DUPLICATE_ID_1);
         lenient().when(this.duplicateIdItem2Mock.getId()).thenReturn(DUPLICATE_ID_2);
@@ -99,5 +101,23 @@ class TestLinkedItemIndex
                         LinkedItemInstanceMatcher.sameItemInstance(this.duplicateIdItem1Mock),
                         LinkedItemInstanceMatcher
                                 .sameItemInstance(this.duplicateIdIgnoringVersionItemMock))));
+    }
+
+    @CsvSource({
+            "a, b, a, b, -1",
+            "a, b, b, a, -1",
+            "a, a, a, a, 0",
+            "b, a, a, b, 1",
+            "a, a, b, a, 1"
+    })
+    @ParameterizedTest
+    void testCompareSpecificationItemIdWithoutVersion(final String artifactTypeLeft, final String artifactTypeRight,
+                                                 final String nameLeft, final String nameRight, final int expected)
+    {
+        final SpecificationItemIdWithoutVersion left = new SpecificationItemIdWithoutVersion(
+                SpecificationItemId.createId(artifactTypeLeft, nameLeft, 0));
+        final SpecificationItemIdWithoutVersion right = new SpecificationItemIdWithoutVersion(
+                SpecificationItemId.createId(artifactTypeRight, nameRight, 0));
+        assertThat(left.compareTo(right), equalTo(expected));
     }
 }

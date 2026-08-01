@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.itsallcode.openfasttrace.api.FilterSettings;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -28,6 +29,17 @@ class TestFilterSettings
                 .artifactTypes(new HashSet<>(Arrays.asList(expectedArtifactTypes))) //
                 .build();
         assertThat(filterSettings.getArtifactTypes(), containsInAnyOrder(expectedArtifactTypes));
+        assertFilterSet(filterSettings, true);
+    }
+
+    @Test
+    void testBuilderWithStatuses()
+    {
+        final ItemStatus[] expectedStatuses = { ItemStatus.APPROVED, ItemStatus.DRAFT };
+        final FilterSettings filterSettings = FilterSettings.builder() //
+                .wantedStatuses(new HashSet<>(Arrays.asList(expectedStatuses))) //
+                .build();
+        assertThat(filterSettings.getWantedStatuses(), containsInAnyOrder(expectedStatuses));
         assertFilterSet(filterSettings, true);
     }
 

@@ -47,17 +47,17 @@ public class ExporterFactoryLoader
     public ExporterFactory getExporterFactory(final String outputFormat)
     {
         final List<ExporterFactory> matchingExporters = getMatchingFactories(outputFormat);
-        switch (matchingExporters.size())
+        return switch (matchingExporters.size())
         {
-        case 0:
+        case 0 ->
             throw new ExporterException(
                     "Found no matching exporter for output format '" + outputFormat + "'");
-        case 1:
-            return matchingExporters.get(0);
-        default:
+        case 1 ->
+            matchingExporters.get(0);
+        default ->
             throw new ExporterException("Found more than one matching exporter for output format '"
                     + outputFormat + "'");
-        }
+        };
     }
 
     private List<ExporterFactory> getMatchingFactories(final String format)

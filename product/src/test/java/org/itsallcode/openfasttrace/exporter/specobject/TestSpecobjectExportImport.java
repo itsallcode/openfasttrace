@@ -23,7 +23,6 @@ class TestSpecobjectExportImport
 {
     @Test
     void testExportImportSimpleSpecObjectWithMandatoryElements()
-            throws IOException, XMLStreamException
     {
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
@@ -34,7 +33,7 @@ class TestSpecobjectExportImport
     }
 
     @Test
-    void testExportImportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
+    void testExportImportSpecObjectWithOptionalElements()
     {
         final SpecificationItem item = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
@@ -53,7 +52,7 @@ class TestSpecobjectExportImport
     }
 
     @Test
-    void testExportImportTwoSpecObjects() throws IOException, XMLStreamException
+    void testExportImportTwoSpecObjects()
     {
         final SpecificationItem itemA = SpecificationItem.builder() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //

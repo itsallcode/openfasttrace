@@ -2,7 +2,6 @@ package org.itsallcode.openfasttrace.core.matcher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.collection.IsEmptyIterable;
@@ -31,7 +30,7 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
      *
      * @param id
      *            the expected id.
-     * @return a id matcher.
+     * @return an ID matcher.
      */
     public static Matcher<SpecificationItemId> equalTo(final SpecificationItemId id)
     {
@@ -43,8 +42,8 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
      * {@link SpecificationItemId}s in any order.
      *
      * @param expected
-     *            the expected ids.
-     * @return a id matcher.
+     *            the expected IDs.
+     * @return an ID matcher.
      */
     public static Matcher<Iterable<? extends SpecificationItemId>> equalIds(
             final Collection<SpecificationItemId> expected)
@@ -54,8 +53,8 @@ public class SpecificationItemIdMatcher extends ConfigurableMatcher<Specificatio
             return IsEmptyIterable.emptyIterable();
         }
         final List<Matcher<? super SpecificationItemId>> matchers = expected.stream()
-                .map(SpecificationItemIdMatcher::equalTo) //
-                .collect(Collectors.toList());
+                .<Matcher<? super SpecificationItemId>>map(SpecificationItemIdMatcher::equalTo)
+                .toList();
         return IsIterableContainingInAnyOrder.containsInAnyOrder(matchers);
     }
 }

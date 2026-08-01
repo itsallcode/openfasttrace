@@ -2,9 +2,12 @@ package org.itsallcode.openfasttrace.importer.restructuredtext;
 
 import static org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.LineParserState.*;
 
+import java.util.regex.Pattern;
+
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.importer.lightweightmarkup.LightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter;
+import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.LineContext;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
 
 /**
@@ -18,9 +21,14 @@ import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
  * is explicitly not the purpose of the importer.
  * </p>
  */
-public class RestructuredTextImporter extends LightWeightMarkupImporter
+public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
 {
     private static final LinePattern SECTION_TITLE = new RstSectionTitlePattern();
+    private static final Pattern COMMENT_PATTERN = Pattern.compile("\\s*+\\.\\.\\s++.*",
+            Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("\\s*+\\.\\.\\s++[^\\s:]++::.*",
+            Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern INDENTED_CONTINUATION = Pattern.compile("\\s+\\S.*", Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Creates a {@link RestructuredTextImporter} object with the given
@@ -37,6 +45,21 @@ public class RestructuredTextImporter extends LightWeightMarkupImporter
     }
 
     @Override
+    protected boolean isCoverageTagCommentCandidate(final LineContext context)
+    {
+        final String line = context.currentLine();
+        return COMMENT_PATTERN.matcher(line).matches() && !DIRECTIVE_PATTERN.matcher(line).matches()
+                && !hasIndentedContinuation(context.nextLine());
+    }
+
+    private static boolean hasIndentedContinuation(final String nextLine)
+    {
+        return nextLine != null && INDENTED_CONTINUATION.matcher(nextLine).matches();
+    }
+
+    @Override
+    // Transition table is OK be larger than 75 lines.
+    @SuppressWarnings("java:S138")
     protected Transition[] configureTransitions()
     {
         // @formatter:off

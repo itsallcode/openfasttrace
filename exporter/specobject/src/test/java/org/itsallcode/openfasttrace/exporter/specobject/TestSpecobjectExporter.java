@@ -1,6 +1,6 @@
 package org.itsallcode.openfasttrace.exporter.specobject;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.itsallcode.openfasttrace.testutil.matcher.MultilineTextMatcher.matchesAllLines;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
@@ -22,29 +22,31 @@ class TestSpecobjectExporter
 {
     // [itest->dsn~conversion.reqm2-export~1]
     @Test
-    void testExportSimpleSpecObjectWithMandatoryElements() throws IOException, XMLStreamException
+    void testExportSimpleSpecObjectWithMandatoryElements()
     {
         final SpecificationItem item = item() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
                 .description("the description") //
                 .build();
-        final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //
-                + "<specdocument>\n" //
-                + " <specobjects doctype=\"foo\">\n" //
-                + "  <specobject>\n" //
-                + "   <id>bar</id>\n" //
-                + "   <status>approved</status>\n" //
-                + "   <version>1</version>\n" //
-                + "   <description>the description</description>\n" //
-                + "  </specobject>\n" //
-                + " </specobjects>\n" //
-                + "</specdocument>\n";
+        final String expected = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <specdocument>
+                 <specobjects doctype="foo">
+                  <specobject>
+                   <id>bar</id>
+                   <status>approved</status>
+                   <version>1</version>
+                   <description>the description</description>
+                  </specobject>
+                 </specobjects>
+                </specdocument>
+                """;
         final String actual = exportToString(item);
         assertThat(actual, matchesAllLines(expected));
     }
 
     @Test
-    void testExportSpecObjectWithOptionalElements() throws IOException, XMLStreamException
+    void testExportSpecObjectWithOptionalElements()
     {
         final SpecificationItem item = item() //
                 .id(SpecificationItemId.createId("req", "me", 2)) //
@@ -59,43 +61,45 @@ class TestSpecobjectExporter
                 .addTag("the tag") //
                 .location("/the/file", 1024) //
                 .build();
-        final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //
-                + "<specdocument>\n" //
-                + " <specobjects doctype=\"req\">\n" //
-                + "  <specobject>\n" //
-                + "   <id>me</id>\n" //
-                + "   <shortdesc>My item title</shortdesc>\n" //
-                + "   <status>draft</status>\n" //
-                + "   <version>2</version>\n" //
-                + "   <sourcefile>/the/file</sourcefile>\n" //
-                + "   <sourceline>1024</sourceline>\n" // "
-                + "   <description>the description</description>\n" //
-                + "   <rationale>the rationale</rationale>\n" //
-                + "   <comment>the comment</comment>\n" //
-                + "   <tags>\n" //
-                + "    <tag>the tag</tag>\n" //
-                + "   </tags>\n" //
-                + "   <needscoverage>\n" //
-                + "    <needsobj>impl</needsobj>\n" //
-                + "   </needscoverage>\n" //
-                + "   <providescoverage>\n" //
-                + "    <provcov>\n" //
-                + "     <linksto>feat:covered</linksto>\n" //
-                + "     <dstversion>1</dstversion>\n" //
-                + "    </provcov>\n" //
-                + "   </providescoverage>\n" //
-                + "   <dependencies>\n" //
-                + "    <dependson>req~depend-on~1</dependson>\n" //
-                + "   </dependencies>\n" //
-                + "  </specobject>\n" //
-                + " </specobjects>\n" //
-                + "</specdocument>\n";
+        final String expected = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <specdocument>
+                 <specobjects doctype="req">
+                  <specobject>
+                   <id>me</id>
+                   <shortdesc>My item title</shortdesc>
+                   <status>draft</status>
+                   <version>2</version>
+                   <sourcefile>/the/file</sourcefile>
+                   <sourceline>1024</sourceline>
+                   <description>the description</description>
+                   <rationale>the rationale</rationale>
+                   <comment>the comment</comment>
+                   <tags>
+                    <tag>the tag</tag>
+                   </tags>
+                   <needscoverage>
+                    <needsobj>impl</needsobj>
+                   </needscoverage>
+                   <providescoverage>
+                    <provcov>
+                     <linksto>feat:covered</linksto>
+                     <dstversion>1</dstversion>
+                    </provcov>
+                   </providescoverage>
+                   <dependencies>
+                    <dependson>req~depend-on~1</dependson>
+                   </dependencies>
+                  </specobject>
+                 </specobjects>
+                </specdocument>
+                """;
         final String actual = exportToString(item);
         assertThat(actual, matchesAllLines(expected));
     }
 
     @Test
-    void testExportTwoSpecObjects() throws IOException, XMLStreamException
+    void testExportTwoSpecObjects()
     {
         final SpecificationItem itemA = item() //
                 .id(SpecificationItemId.createId("foo", "bar", 1)) //
@@ -111,29 +115,34 @@ class TestSpecobjectExporter
                 .rationale("another\nrationale") //
                 .comment("another\ncomment") //
                 .build();
-        final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //
-                + "<specdocument>\n" //
-                + " <specobjects doctype=\"foo\">\n" //
-                + "  <specobject>\n" //
-                + "   <id>bar</id>\n" //
-                + "   <status>proposed</status>\n" //
-                + "   <version>1</version>\n" //
-                + "   <description>the description</description>\n" //
-                + "   <rationale>the rationale</rationale>\n" //
-                + "   <comment>the comment</comment>\n" //
-                + "  </specobject>\n" //
-                + " </specobjects>\n" //
-                + " <specobjects doctype=\"baz\">\n" //
-                + "  <specobject>\n" //
-                + "   <id>zoo</id>\n" //
-                + "   <status>rejected</status>\n" //
-                + "   <version>2</version>\n" //
-                + "   <description>another\ndescription</description>\n" //
-                + "   <rationale>another\nrationale</rationale>\n" //
-                + "   <comment>another\ncomment</comment>\n" //
-                + "  </specobject>\n" //
-                + " </specobjects>\n" //
-                + "</specdocument>\n";
+        final String expected = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <specdocument>
+                 <specobjects doctype="foo">
+                  <specobject>
+                   <id>bar</id>
+                   <status>proposed</status>
+                   <version>1</version>
+                   <description>the description</description>
+                   <rationale>the rationale</rationale>
+                   <comment>the comment</comment>
+                  </specobject>
+                 </specobjects>
+                 <specobjects doctype="baz">
+                  <specobject>
+                   <id>zoo</id>
+                   <status>rejected</status>
+                   <version>2</version>
+                   <description>another
+                description</description>
+                   <rationale>another
+                rationale</rationale>
+                   <comment>another
+                comment</comment>
+                  </specobject>
+                 </specobjects>
+                </specdocument>
+                """;
         final String actual = exportToString(itemA, itemB);
         assertThat(actual, matchesAllLines(expected));
     }
@@ -158,10 +167,10 @@ class TestSpecobjectExporter
             final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
             final XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stream,
                     StandardCharsets.UTF_8.name());
-            new SpecobjectExporter(asList(items).stream(),
+            new SpecobjectExporter(stream(items),
                     new IndentingXMLStreamWriter(xmlWriter, " ", Newline.UNIX.toString()),
                     new OutputStreamWriter(stream), Newline.UNIX).runExport();
-            return new String(stream.toByteArray(), StandardCharsets.UTF_8);
+            return stream.toString(StandardCharsets.UTF_8);
         }
         catch (IOException | XMLStreamException | FactoryConfigurationError e)
         {

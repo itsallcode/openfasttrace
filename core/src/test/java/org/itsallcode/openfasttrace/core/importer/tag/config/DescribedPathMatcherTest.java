@@ -12,9 +12,11 @@ import java.util.List;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
 import org.itsallcode.openfasttrace.api.importer.tag.config.DescribedPathMatcher;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 class DescribedPathMatcherTest
 {
@@ -47,18 +49,18 @@ class DescribedPathMatcherTest
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testListBasedMatcherIsCaseInsensitiveUnderWindows()
     {
-        OsDetector.assumeRunningOnWindows();
         createListMatcher("rel/path");
         assertMatches("REL/path", true);
         assertMatches("rel/PATH", true);
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testListBasedMatcherIsCaseSensitiveUnderUnix()
     {
-        OsDetector.assumeRunningOnUnix();
         createListMatcher("rel/path");
         assertMatches("REL/path", false);
         assertMatches("rel/PATH", false);
@@ -83,17 +85,17 @@ class DescribedPathMatcherTest
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashWindows()
     {
-        OsDetector.assumeRunningOnWindows();
         createListMatcher("C:/abs/path");
         assertMatches("C:\\abs\\path", true);
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithForwardSlashUnix()
     {
-        OsDetector.assumeRunningOnUnix();
         createListMatcher("C:/abs/path");
         assertMatches("C:\\abs\\path", false);
     }
@@ -107,18 +109,18 @@ class DescribedPathMatcherTest
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashUnix()
     {
-        OsDetector.assumeRunningOnUnix();
         createListMatcher("C:\\abs\\path");
         assertMatches("C:/abs/path", false);
         assertMatches("C:\\abs\\path\\", false);
     }
 
     @Test
+    @EnabledOnOs(OS.WINDOWS)
     void testListBasedMatcherMatchesAbsoluteWindowsStylePathWithBackslashWindows()
     {
-        OsDetector.assumeRunningOnWindows();
         createListMatcher("C:\\abs\\path");
         assertMatches("C:/abs/path", true);
         assertMatches("C:\\abs\\path\\", true);

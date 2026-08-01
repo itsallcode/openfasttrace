@@ -10,7 +10,7 @@ import java.util.Comparator;
  * Provides static assertion methods that verify implementations of
  * {@link Comparator} and {@link Comparable} are consistent with the contract.
  */
-public class CompareAssertions
+public final class CompareAssertions
 {
     private CompareAssertions()
     {
@@ -73,6 +73,7 @@ public class CompareAssertions
         assertNullValue(comparator, o, nullValueSupported);
     }
 
+    @SuppressWarnings({"java:S1696", "java:S1166"}) // NullPointerExceptions are expected.
     private static <T> void assertNullValue(Comparator<? super T> comparator, T o,
             boolean nullValueSupported)
     {
@@ -81,7 +82,7 @@ public class CompareAssertions
             comparator.compare(o, null);
             assertTrue(nullValueSupported, "No NullPointerException but null value not supported!");
         }
-        catch (final NullPointerException ex)
+        catch (final NullPointerException exception)
         {
             assertFalse(nullValueSupported,
                     "NullPointerException thrown but null value supported!!");

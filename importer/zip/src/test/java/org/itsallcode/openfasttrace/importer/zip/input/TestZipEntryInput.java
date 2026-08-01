@@ -55,8 +55,7 @@ class TestZipEntryInput
         try (final ZipFile zip = getZipFile())
         {
             final InputFile input = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"));
-            assertThrows(UnsupportedOperationException.class,
-                    () -> input.toPath());
+            assertThrows(UnsupportedOperationException.class, input::toPath);
         }
     }
 
@@ -128,7 +127,9 @@ class TestZipEntryInput
 
     private String readContent(final InputFile inputFile) throws IOException
     {
-        return inputFile.createReader().lines().collect(joining("\n"));
+        try(final BufferedReader reader = inputFile.createReader()) {
+            return reader.lines().collect(joining("\n"));
+        }
     }
 
     private void addEntryToZip(final String entryName, final byte[] data) throws IOException

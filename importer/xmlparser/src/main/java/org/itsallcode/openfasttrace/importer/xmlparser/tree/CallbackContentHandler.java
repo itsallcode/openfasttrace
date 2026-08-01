@@ -117,6 +117,7 @@ public class CallbackContentHandler implements TreeContentHandler
     }
 
     @Override
+    @SuppressWarnings("java:S2221") // Intentionally catching all exceptions to provide better error messages.
     public void startElement(final TreeElement treeElement)
     {
         LOG.finest(() -> "Start element: " + treeElement);
@@ -138,14 +139,14 @@ public class CallbackContentHandler implements TreeContentHandler
         {
             consumer.accept(treeElement);
         }
-        catch (final Exception e)
+        catch (final Exception exception)
         {
             throw new XmlParserException("Error handling " + treeElement + " with consumer "
-                    + consumer + ": " + e.getMessage(), e);
+                    + consumer + ": " + exception.getMessage(), exception);
         }
     }
 
-    private boolean isCustomXMLNamespace(final String namespaceURI)
+    private static boolean isCustomXMLNamespace(final String namespaceURI)
     {
         return !"".equals(namespaceURI) && !OPENFASTTRACE_XML_NAMESPACE.equals(namespaceURI);
     }
@@ -201,7 +202,7 @@ public class CallbackContentHandler implements TreeContentHandler
         return this;
     }
 
-    private int parseInt(final String elementName, final String data)
+    private static int parseInt(final String elementName, final String data)
     {
         try
         {

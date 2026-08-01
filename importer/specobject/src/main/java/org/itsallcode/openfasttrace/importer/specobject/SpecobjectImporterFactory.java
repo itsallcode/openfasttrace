@@ -12,7 +12,7 @@ import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 /**
  * An {@link ImporterFactory} for ReqM2/SpecObject XML files.
  */
-public class SpecobjectImporterFactory extends ImporterFactory
+public class SpecobjectImporterFactory extends AbstractImporterFactory
 {
     private static final Logger LOG = Logger.getLogger(SpecobjectImporterFactory.class.getName());
     private static final int PEEK_CHARS = 4096;
@@ -25,6 +25,11 @@ public class SpecobjectImporterFactory extends ImporterFactory
     public SpecobjectImporterFactory()
     {
         this.xmlParserFactory = new XmlParserFactory();
+    }
+
+    @Override
+    public int getPriority() {
+        return 3000;
     }
 
     // [impl -> dsn~import.reqm2-file-detection~1]
@@ -61,7 +66,9 @@ public class SpecobjectImporterFactory extends ImporterFactory
         }
         catch (final IOException exception)
         {
-            LOG.fine(() -> "Unable to peek XML file '" + path + "' trying to determine if it contains ReqM2 format: " + exception.getMessage());
+            LOG.fine(() -> "Unable to peek XML file '" + path
+                    + "' trying to determine if it contains ReqM2 format: "
+                    + exception.getMessage());
             return false;
         }
     }

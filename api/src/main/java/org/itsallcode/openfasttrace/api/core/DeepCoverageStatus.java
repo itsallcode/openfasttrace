@@ -21,19 +21,19 @@ public enum DeepCoverageStatus
 
     private final int badness;
 
-    private DeepCoverageStatus(final int badness)
+    DeepCoverageStatus(final int badness)
     {
         this.badness = badness;
     }
 
     /**
-     * Get the worse of two coverage status
+     * Get the worst of two coverage statuses
      * 
      * @param a
      *            left status to compare
      * @param b
      *            right status to compare
-     * @return worse of both provided status
+     * @return worse of both provided statuses
      */
     public static DeepCoverageStatus getWorst(final DeepCoverageStatus a,
             final DeepCoverageStatus b)

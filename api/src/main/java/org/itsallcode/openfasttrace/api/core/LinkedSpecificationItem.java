@@ -3,12 +3,12 @@ package org.itsallcode.openfasttrace.api.core;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Specification items with links that can be followed.
  */
 // [impl->dsn~linked-specification-item~1]
+@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
@@ -147,8 +147,7 @@ public class LinkedSpecificationItem
             cacheOverCoveredArtifactType(item);
             addMyItemIdToCoveringItem(item);
             break;
-        case COVERED_OUTDATED:
-        case COVERED_PREDATED:
+        case COVERED_OUTDATED, COVERED_PREDATED:
             addMyItemIdToCoveringItem(item);
             break;
         default:
@@ -189,7 +188,7 @@ public class LinkedSpecificationItem
      */
     public Map<LinkStatus, List<LinkedSpecificationItem>> getLinks()
     {
-        return this.links;
+        return new EnumMap<>(this.links);
     }
 
     /**
@@ -245,13 +244,13 @@ public class LinkedSpecificationItem
     }
 
     /**
-     * Get the artifact type which are covered.
+     * Get the artifact types that are covered.
      *
      * @return the set of covered artifact types.
      */
     public Set<String> getCoveredArtifactTypes()
     {
-        return this.coveredArtifactTypes;
+        return Collections.unmodifiableSet(this.coveredArtifactTypes);
     }
 
     /**
@@ -261,7 +260,7 @@ public class LinkedSpecificationItem
      */
     public Set<String> getCoveredApprovedArtifactTypes()
     {
-        return this.coveredArtifactTypesFromApprovedItems;
+        return Collections.unmodifiableSet(this.coveredArtifactTypesFromApprovedItems);
     }
 
     /**
@@ -272,7 +271,7 @@ public class LinkedSpecificationItem
     public Set<String> getOverCoveredArtifactTypes()
     {
 
-        return this.overCoveredArtifactTypes;
+        return Collections.unmodifiableSet(this.overCoveredArtifactTypes);
     }
 
     /**
@@ -327,11 +326,9 @@ public class LinkedSpecificationItem
      *
      * @return covered, uncovered or cycle.
      */
-    // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, false);
+        return DeepCoverageResolver.resolve(this, false);
     }
 
     /**
@@ -342,60 +339,16 @@ public class LinkedSpecificationItem
      */
     public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, true);
+        return DeepCoverageResolver.resolve(this, true);
     }
 
-    // [impl->dsn~tracing.link-cycle~1]
-    private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
-            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus)
-    {
-        DeepCoverageStatus status = worstStatusSeen;
-        status = adjustDeepCoverageStatusIfApprovedRequired(onlyAcceptApprovedItemStatus, status);
-
-        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
-        {
-            if (incomingItem.getId().equals(startId))
-            {
-                return DeepCoverageStatus.CYCLE;
-            }
-            else
-            {
-                final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus);
-                if (otherStatus == DeepCoverageStatus.CYCLE)
-                {
-                    return DeepCoverageStatus.CYCLE;
-                }
-                status = DeepCoverageStatus.getWorst(status, otherStatus);
-            }
-        }
-        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
-        {
-            return DeepCoverageStatus.UNCOVERED;
-        }
-        else
-        {
-            return status;
-        }
-    }
-
-    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(final boolean onlyAcceptApprovedItemStatus,
-            final DeepCoverageStatus deepCoveredStatus)
-    {
-        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
-                ? DeepCoverageStatus.UNCOVERED
-                : deepCoveredStatus;
-    }
-
-    private List<LinkedSpecificationItem> getIncomingItems()
+    List<LinkedSpecificationItem> getIncomingItems()
     {
         return this.links.entrySet() //
                 .stream() //
                 .filter(entry -> entry.getKey().isIncoming()) //
                 .flatMap(entry -> entry.getValue().stream()) //
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -418,9 +371,9 @@ public class LinkedSpecificationItem
     public boolean isDefect()
     {
         return hasDuplicates() //
-                || (getStatus() != ItemStatus.REJECTED) //
+                || ((getStatus() != ItemStatus.REJECTED) //
                         && (hasBadLinks()
-                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED));
+                                || (getDeepCoverageStatus() != DeepCoverageStatus.COVERED)));
     }
 
     /**

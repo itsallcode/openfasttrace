@@ -20,7 +20,7 @@ Use these repository conventions unless the user explicitly says this project di
 
 For OFT syntax, tracing behavior, selective tracing, and common error handling, read the upstream OpenFastTrace skill first:
 
-`https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/skills/openfasttrace-skill/SKILL.md`
+`https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/.agends/skills/openfasttrace/SKILL.md`
 
 Do not restate OFT rules from memory when the upstream reference is available. Use it as the normative workflow for:
 
@@ -39,7 +39,7 @@ When the user gives you a new issue link, derive the work plan from:
 4. the quality requirements document
 5. the current code and tests
 
-Do not jump straight to code. First determine whether the issue changes:
+Do not jump straight to code. First, determine whether the issue changes:
 
 - user-visible behavior
 - traced requirements or scenarios

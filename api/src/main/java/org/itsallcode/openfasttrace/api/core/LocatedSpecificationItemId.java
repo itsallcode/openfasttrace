@@ -18,7 +18,7 @@ public final class LocatedSpecificationItemId
 
     private LocatedSpecificationItemId(final Builder builder)
     {
-        this.id = Objects.requireNonNull(builder.id, "id");
+        this.id = Objects.requireNonNull(builder.id, "specification item ID must not be null");
         this.range = builder.range;
         this.artifactTypeRange = builder.artifactTypeRange;
         this.nameRange = builder.nameRange;
@@ -107,7 +107,7 @@ public final class LocatedSpecificationItemId
     /**
      * Builder for {@link LocatedSpecificationItemId}.
      */
-    public static class Builder
+    public static final class Builder
     {
         private SpecificationItemId id;
         private SourceRange range;

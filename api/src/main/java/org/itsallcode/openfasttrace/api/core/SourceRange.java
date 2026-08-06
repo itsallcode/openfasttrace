@@ -29,7 +29,7 @@ public final class SourceRange
 
     /**
      * Get the inclusive start position.
-     * 
+     *
      * @return the inclusive start position
      */
     public SourcePosition getStart()
@@ -39,7 +39,7 @@ public final class SourceRange
 
     /**
      * Get the exclusive end position.
-     * 
+     *
      * @return the exclusive end position
      */
     public SourcePosition getEnd()

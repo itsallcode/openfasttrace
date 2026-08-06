@@ -8,13 +8,11 @@ import java.util.function.Predicate;
  * Specification items with links that can be followed.
  */
 // [impl->dsn~linked-specification-item~1]
-@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods
-                                // hurts expressiveness.
+@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
-    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
-            LinkStatus.class);
+    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
     private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();

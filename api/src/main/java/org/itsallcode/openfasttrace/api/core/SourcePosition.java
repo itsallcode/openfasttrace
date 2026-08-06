@@ -41,7 +41,7 @@ public final class SourcePosition
 
     /**
      * Get the zero-based UTF-16 character offset.
-     * 
+     *
      * @return the zero-based UTF-16 character offset
      */
     public int getColumn()

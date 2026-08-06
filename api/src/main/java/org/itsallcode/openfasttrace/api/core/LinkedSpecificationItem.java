@@ -8,7 +8,8 @@ import java.util.function.Predicate;
  * Specification items with links that can be followed.
  */
 // [impl->dsn~linked-specification-item~1]
-@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
+@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods
+                                // hurts expressiveness.
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
@@ -132,6 +133,7 @@ public class LinkedSpecificationItem
      * @param status
      *            the link status
      */
+    //@Deprecated
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
         this.links.computeIfAbsent(status, key -> new ArrayList<>());
@@ -312,7 +314,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if all needed attribute types are covered by approved items.
-     * 
+     *
      * @return {@code true} if all needed attribute types are covered by
      *         approved items
      */
@@ -356,6 +358,7 @@ public class LinkedSpecificationItem
      * <p>
      * An item counts as a defect if the following applies:
      * </p>
+     *
      * <pre>
      * has duplicates
      * or (not rejected
@@ -393,7 +396,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if the item has one or more links.
-     * 
+     *
      * @return {@code true} if the item has one or more links
      */
     public boolean hasLinks()
@@ -492,7 +495,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if this item has one ore more duplicates.
-     * 
+     *
      * @return {@code true} if this item has one ore more duplicates.
      */
     public boolean hasDuplicates()

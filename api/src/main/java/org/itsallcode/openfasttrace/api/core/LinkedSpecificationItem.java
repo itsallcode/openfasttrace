@@ -133,7 +133,6 @@ public class LinkedSpecificationItem
      * @param status
      *            the link status
      */
-    //@Deprecated
     public void addLinkToItemWithStatus(final LinkedSpecificationItem item, final LinkStatus status)
     {
         this.links.computeIfAbsent(status, key -> new ArrayList<>());
@@ -163,7 +162,7 @@ public class LinkedSpecificationItem
         if (coveringItem.getItem().getCoveredIds() != null
                 && !coveringItem.getItem().getCoveredIds().contains(getId()))
         {
-            coveringItem.getItem().getCoveredIds().add(getId());
+            coveringItem.getItem().addCoveredId(getId());
         }
     }
 

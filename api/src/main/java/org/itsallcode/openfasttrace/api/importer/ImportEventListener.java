@@ -23,7 +23,6 @@ public interface ImportEventListener
      * @param id
      *            the ID of the new item
      */
-    // @Deprecated
     void setId(final SpecificationItemId id);
 
     /**
@@ -84,7 +83,6 @@ public interface ImportEventListener
      * @param id
      *            the ID of the item that is covered
      */
-    // @Deprecated
     void addCoveredId(final SpecificationItemId id);
 
     /**
@@ -104,7 +102,6 @@ public interface ImportEventListener
      * @param id
      *            the ID of the item depends on
      */
-    // @Deprecated
     void addDependsOnId(final SpecificationItemId id);
 
     /**

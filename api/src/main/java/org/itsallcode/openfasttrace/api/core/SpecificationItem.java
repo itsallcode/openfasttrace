@@ -135,6 +135,28 @@ public final class SpecificationItem
     }
 
     /**
+     * Add a covered {@link SpecificationItemId} to the list of covered IDs
+     *
+     * @param coveredId
+     *            the covered ID to add
+     */
+    public void addCoveredId(final SpecificationItemId coveredId)
+    {
+        this.addCoveredId(locatedId(coveredId));
+    }
+
+    /**
+     * Add a covered {@link SpecificationItemId} to the list of covered IDs
+     *
+     * @param coveredId
+     *            the covered ID to add
+     */
+    public void addCoveredId(final LocatedSpecificationItemId coveredId)
+    {
+        this.coveredIds.add(coveredId);
+    }
+
+    /**
      * Get the list of {@link SpecificationItemId}s this item depends on
      *
      * @return list of IDs this item depends on
@@ -307,7 +329,6 @@ public final class SpecificationItem
          *            the ID
          * @return this builder instance
          */
-        // @Deprecated
         public Builder id(final SpecificationItemId id)
         {
             return this.id(locatedId(id));
@@ -416,7 +437,6 @@ public final class SpecificationItem
          *            the covered ID
          * @return this builder instance
          */
-        // @Deprecated
         public Builder addCoveredId(final SpecificationItemId coveredId)
         {
             return this.addCoveredId(locatedId(coveredId));
@@ -447,15 +467,9 @@ public final class SpecificationItem
          *            the ID the item to be build depends on
          * @return this builder instance
          */
-        // @Deprecated
         public Builder addDependOnId(final SpecificationItemId dependOnId)
         {
             return this.addDependOnId(locatedId(dependOnId));
-        }
-
-        private LocatedSpecificationItemId locatedId(final SpecificationItemId id)
-        {
-            return LocatedSpecificationItemId.builder().id(id).build();
         }
 
         /**
@@ -573,5 +587,10 @@ public final class SpecificationItem
             this.forwards = forwards;
             return this;
         }
+    }
+
+    private static LocatedSpecificationItemId locatedId(final SpecificationItemId id)
+    {
+        return LocatedSpecificationItemId.builder().id(id).build();
     }
 }

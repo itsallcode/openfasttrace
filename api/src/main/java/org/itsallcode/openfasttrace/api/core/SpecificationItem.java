@@ -140,7 +140,8 @@ public final class SpecificationItem
      * <b>Note:</b> This relies on mutating the internal state of the
      * specification item and will be removed in a future version. Use the
      * builder to create a new instance of the specification item with the
-     * additional covered ID instead.
+     * additional covered ID instead. This will be implemented in
+     * <a href="https://github.com/itsallcode/openfasttrace/issues/572">issue #572</a>.
      * </p>
      *
      * @param coveredId

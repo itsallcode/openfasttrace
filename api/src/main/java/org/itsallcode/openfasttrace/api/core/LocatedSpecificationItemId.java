@@ -26,6 +26,8 @@ public final class LocatedSpecificationItemId
     }
 
     /**
+     * Create a new builder for {@link LocatedSpecificationItemId}.
+     *
      * @return a new builder instance for {@link LocatedSpecificationItemId}.
      */
     public static Builder builder()
@@ -33,31 +35,51 @@ public final class LocatedSpecificationItemId
         return new Builder();
     }
 
-    /** @return the semantic ID */
+    /**
+     * Get the semantic ID of this located specification item.
+     *
+     * @return the semantic ID
+     */
     public SpecificationItemId getId()
     {
         return this.id;
     }
 
-    /** @return range of the complete source construct */
+    /**
+     * Get the source range of the complete source construct.
+     *
+     * @return range of the complete source construct
+     */
     public SourceRange getRange()
     {
         return this.range;
     }
 
-    /** @return source range of the artifact type, if represented in source */
+    /**
+     * Get the source range of the artifact type, if represented in source.
+     *
+     * @return source range of the artifact type, if represented in source
+     */
     public Optional<SourceRange> getArtifactTypeRange()
     {
         return Optional.ofNullable(this.artifactTypeRange);
     }
 
-    /** @return source range of the name, if represented in source */
+    /**
+     * Get the source range of the name, if represented in source.
+     *
+     * @return source range of the name, if represented in source
+     */
     public Optional<SourceRange> getNameRange()
     {
         return Optional.ofNullable(this.nameRange);
     }
 
-    /** @return source range of the revision, if represented in source */
+    /**
+     * Get the source range of the revision, if represented in source.
+     *
+     * @return source range of the revision, if represented in source
+     */
     public Optional<SourceRange> getRevisionRange()
     {
         return Optional.ofNullable(this.revisionRange);
@@ -163,6 +185,8 @@ public final class LocatedSpecificationItemId
         }
 
         /**
+         * Build a new instance of {@link LocatedSpecificationItemId}.
+         * 
          * @return a new instance of {@link LocatedSpecificationItemId}
          */
         public LocatedSpecificationItemId build()

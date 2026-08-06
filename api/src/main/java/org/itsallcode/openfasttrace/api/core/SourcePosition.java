@@ -29,13 +29,21 @@ public final class SourcePosition
         this.column = column;
     }
 
-    /** @return the zero-based line number */
+    /**
+     * Get the zero-based line number.
+     *
+     * @return the zero-based line number
+     */
     public int getLine()
     {
         return this.line;
     }
 
-    /** @return the zero-based UTF-16 character offset */
+    /**
+     * Get the zero-based UTF-16 character offset.
+     * 
+     * @return the zero-based UTF-16 character offset
+     */
     public int getColumn()
     {
         return this.column;

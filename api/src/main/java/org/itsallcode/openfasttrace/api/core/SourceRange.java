@@ -27,13 +27,21 @@ public final class SourceRange
         }
     }
 
-    /** @return the inclusive start position */
+    /**
+     * Get the inclusive start position.
+     * 
+     * @return the inclusive start position
+     */
     public SourcePosition getStart()
     {
         return this.start;
     }
 
-    /** @return the exclusive end position */
+    /**
+     * Get the exclusive end position.
+     * 
+     * @return the exclusive end position
+     */
     public SourcePosition getEnd()
     {
         return this.end;

@@ -87,6 +87,7 @@ Needs: impl, utest
 - **Clean Code**: Meaningful names, small functiKons, single responsibility.
 - **Formatting**: Use the project's Eclipse formatter (`doc/itsallcode_formatter.xml`).
 - **Logging**: Use `java.util.logging`. Test config: `core/src/test/resources/logging.properties`.
+- **Unit tests**: Prefix test method names with `test`. Test each conditional branch in a separate test method. When asserting an exception, verify both its type and message.
 
 ### Development Workflow
 

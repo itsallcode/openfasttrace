@@ -1,3 +1,8 @@
+---
+name: openfasttrace
+description: Work with OpenFastTrace requirement tracing, including specification items, artifact IDs, coverage markers, Markdown and Gherkin syntax, and trace validation. Use when Codex needs to create, edit, review, or validate OpenFastTrace-traced requirements, design, implementation, tests, or documentation.
+---
+
 # OpenFastTrace (OFT) Skill
 
 OpenFastTrace is a tool for requirement tracing across various artifacts (specifications, code, tests).

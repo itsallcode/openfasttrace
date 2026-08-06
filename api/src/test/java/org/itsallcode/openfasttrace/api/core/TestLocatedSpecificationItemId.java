@@ -48,7 +48,9 @@ class TestLocatedSpecificationItemId
     @Test
     void testRequiresAnId()
     {
-        assertThrows(NullPointerException.class, () -> LocatedSpecificationItemId.builder().build());
+        final LocatedSpecificationItemId.Builder builder = LocatedSpecificationItemId.builder();
+
+        assertThrows(NullPointerException.class, builder::build);
     }
 
     private static SourceRange range(final int startLine, final int startColumn, final int endLine,

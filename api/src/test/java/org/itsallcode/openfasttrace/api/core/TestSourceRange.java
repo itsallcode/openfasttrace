@@ -62,9 +62,11 @@ class TestSourceRange
     void testRejectsEndPrecedingStart(final int startLine, final int startColumn, final int endLine,
             final int endColumn)
     {
+        final SourcePosition start = new SourcePosition(startLine, startColumn);
+        final SourcePosition end = new SourcePosition(endLine, endColumn);
+
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new SourceRange(new SourcePosition(startLine, startColumn),
-                        new SourcePosition(endLine, endColumn)));
+                () -> new SourceRange(start, end));
 
         assertThat(exception.getMessage(),
                 equalTo("The range end " + endLine + ":" + endColumn + " must not precede its start " + startLine + ":"

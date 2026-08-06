@@ -4,9 +4,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * One occurrence of a specification item ID in an imported source artifact.
- * Component ranges are absent when the corresponding ID component was generated
- * by an importer instead of being present in the source.
+ * One occurrence of a specification item ID in an imported source artifact. Component ranges may be {@code null} if
+ * unknown.
  */
 public final class LocatedSpecificationItemId
 {
@@ -36,9 +35,9 @@ public final class LocatedSpecificationItemId
     }
 
     /**
-     * Get the semantic ID of this located specification item.
+     * Get the ID of this located specification item.
      *
-     * @return the semantic ID
+     * @return the item ID
      */
     public SpecificationItemId getId()
     {
@@ -120,10 +119,10 @@ public final class LocatedSpecificationItemId
         }
 
         /**
-         * Set the semantic ID
+         * Set the item ID
          *
          * @param id
-         *            the semantic ID
+         *            the item ID
          * @return this builder instance
          */
         public Builder id(final SpecificationItemId id)
@@ -186,7 +185,7 @@ public final class LocatedSpecificationItemId
 
         /**
          * Build a new instance of {@link LocatedSpecificationItemId}.
-         * 
+         *
          * @return a new instance of {@link LocatedSpecificationItemId}
          */
         public LocatedSpecificationItemId build()

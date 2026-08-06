@@ -18,12 +18,14 @@ public final class SourceRange
      */
     public SourceRange(final SourcePosition start, final SourcePosition end)
     {
-        this.start = Objects.requireNonNull(start, "start");
-        this.end = Objects.requireNonNull(end, "end");
-        if (end.getLine() < start.getLine()
-                || end.getLine() == start.getLine() && end.getColumn() < start.getColumn())
+        this.start = Objects.requireNonNull(start, "start must not be null");
+        this.end = Objects.requireNonNull(end, "end must not be null");
+        final boolean isEndBeforeStart = end.getLine() < start.getLine();
+        final boolean isSameLineAndEndBeforeStart = end.getLine() == start.getLine()
+                && end.getColumn() < start.getColumn();
+        if (isEndBeforeStart || isSameLineAndEndBeforeStart)
         {
-            throw new IllegalArgumentException("The range end must not precede its start");
+            throw new IllegalArgumentException("The range end " + end + " must not precede its start " + start);
         }
     }
 

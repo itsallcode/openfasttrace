@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -42,7 +44,7 @@ class TestSourceRange
         final NullPointerException exception = assertThrows(NullPointerException.class,
                 () -> new SourceRange(null, END));
 
-        assertThat(exception.getMessage(), equalTo("start"));
+        assertThat(exception.getMessage(), equalTo("start must not be null"));
     }
 
     @Test
@@ -51,25 +53,22 @@ class TestSourceRange
         final NullPointerException exception = assertThrows(NullPointerException.class,
                 () -> new SourceRange(START, null));
 
-        assertThat(exception.getMessage(), equalTo("end"));
+        assertThat(exception.getMessage(), equalTo("end must not be null"));
     }
 
-    @Test
-    void testRejectsEndOnEarlierLine()
+    @ParameterizedTest
+    @CsvSource(
+    { "4, 5, 2, 3", "2, 4, 2, 3", "2, 3, 2, 2" })
+    void testRejectsEndPrecedingStart(final int startLine, final int startColumn, final int endLine,
+            final int endColumn)
     {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new SourceRange(END, START));
+                () -> new SourceRange(new SourcePosition(startLine, startColumn),
+                        new SourcePosition(endLine, endColumn)));
 
-        assertThat(exception.getMessage(), equalTo("The range end must not precede its start"));
-    }
-
-    @Test
-    void testRejectsEndOnEarlierColumn()
-    {
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new SourceRange(new SourcePosition(2, 4), new SourcePosition(2, 3)));
-
-        assertThat(exception.getMessage(), equalTo("The range end must not precede its start"));
+        assertThat(exception.getMessage(),
+                equalTo("The range end " + endLine + ":" + endColumn + " must not precede its start " + startLine + ":"
+                        + startColumn));
     }
 
     @Test

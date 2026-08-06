@@ -85,8 +85,8 @@ class TestSpecobjectImporter
     {
         final ImportEventListener listenerMock = importFromString(input);
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setId(locatedId(expectedId));
         verify(listenerMock).setLocation(TestSpecobjectImporter.STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId(expectedId));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -101,6 +101,11 @@ class TestSpecobjectImporter
                 listenerMock);
         importer.runImport();
         return listenerMock;
+    }
+
+    private static LocatedSpecificationItemId locatedId(final String id)
+    {
+        return LocatedSpecificationItemId.builder().id(SpecificationItemId.parseId(id)).build();
     }
 
     @Test
@@ -122,13 +127,13 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).setStatus(ItemStatus.DRAFT);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setId(locatedId("req~complex~2"));
         verify(listenerMock).setTitle("my short description");
         verify(listenerMock).appendDescription("multiline description\none more line");
         verify(listenerMock).appendRationale("multiline rationale\nand another line");
         verify(listenerMock).appendComment("multiline comment\nyet another line");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -145,9 +150,9 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setId(locatedId("req~complex~2"));
         verify(listenerMock).setTitle("My item title");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -163,8 +168,8 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setId(locatedId("impl~strip_duplicate_prefix~0"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("impl~strip_duplicate_prefix~0"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -183,8 +188,8 @@ class TestSpecobjectImporter
                 + "  </specobject>\n" //
                 + "</specobjects>");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setId(locatedId("utest~takeOverLocation~99999999"));
         verify(listenerMock).setLocation(Location.create(expectedFileName, expectedLine));
-        verify(listenerMock).setId(SpecificationItemId.parseId("utest~takeOverLocation~99999999"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -204,10 +209,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("itest~with-tags~1"));
+        verify(listenerMock).setId(locatedId("itest~with-tags~1"));
         verify(listenerMock).addTag("tag 1");
         verify(listenerMock).addTag("tag 2");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -227,10 +232,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-needs-coverage~1"));
+        verify(listenerMock).setId(locatedId("req~with-needs-coverage~1"));
         verify(listenerMock).addNeededArtifactType("impl");
         verify(listenerMock).addNeededArtifactType("utest");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -250,10 +255,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).addDependsOnId(locatedId("req~dep-a~1"));
+        verify(listenerMock).addDependsOnId(locatedId("req~dep-b~2"));
+        verify(listenerMock).setId(locatedId("req~with-dependencies~1"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-dependencies~1"));
-        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-a~1"));
-        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-b~2"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -279,10 +284,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).addCoveredId(locatedId("feat~provides-a~1"));
+        verify(listenerMock).addCoveredId(locatedId("feat~provides-b~2"));
+        verify(listenerMock).setId(locatedId("req~with-fulfilled-by~1"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-fulfilled-by~1"));
-        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-a~1"));
-        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-b~2"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }

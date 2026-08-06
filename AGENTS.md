@@ -85,6 +85,7 @@ Needs: impl, utest
 ### Code Style & Conventions
 
 - **Clean Code**: Meaningful names, small functiKons, single responsibility.
+- **Type References**: Use plain class names with imports instead of fully qualified names such as `java.util.List`.
 - **Formatting**: Use the project's Eclipse formatter (`doc/itsallcode_formatter.xml`).
 - **Logging**: Use `java.util.logging`. Test config: `core/src/test/resources/logging.properties`.
 

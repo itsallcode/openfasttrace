@@ -13,8 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
@@ -92,6 +91,27 @@ class GherkinImporterTest
 
         assertThat(items.get(0).getCoveredIds(), contains(
                 hasToString("req~login~1"), hasToString("req~security~1")));
+    }
+
+    // [utest->dsn~located-specification-item-id-text-ranges~1]
+    @Test
+    void testImportsLocatedScenarioAndCoversIds()
+    {
+        final SpecificationItem item = importText("""
+                @tag @id:scn~login~1
+                # Covers: req~login~1, req~security~2
+                Scenario: Login
+                """).get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(0, 9, 20))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(1, 10, 21))),
+                () -> assertThat(item.getLocatedCoveredIds().get(1).getRange(), is(range(1, 23, 37))));
+    }
+
+    private static SourceRange range(final int line, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     // [utest->dsn~gherkin.streaming-import~1]

@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.importer.tag.common;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -9,8 +10,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
@@ -49,6 +49,25 @@ class TestLongTagImportingLineConsumer {
         final LongTagImportingLineConsumer consumer = new LongTagImportingLineConsumer(inputFile(), listener);
         consumer.readLine(lineNumber, tag);
         assertThat(listener.build(), equalTo(expectedItems));
+    }
+
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void importsLocatedLongTagIds()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
+                "😀 [impl~tag~1 -> dsn~covered~2" + "]");
+
+        final SpecificationItem item = listener.build().get(0);
+
+        assertThat(item.getLocatedId().getRange(), is(range(2, 4, 14)));
+        assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 18, 31)));
+    }
+
+    private static SourceRange range(final int line, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     private static SpecificationItem item(final String id, final int lineNumber, final List<String> coveredIds,

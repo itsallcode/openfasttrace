@@ -131,7 +131,7 @@ Text importers create zero-based UTF-16, start-inclusive and end-exclusive
 ranges for source ID occurrences and their represented components. Equal
 semantic IDs at distinct source occurrences remain separate values.
 
-Needs: impl
+Needs: impl, utest
 
 #### Coverage-tag Source Ranges
 `dsn~located-specification-item-id-tag-ranges~1`
@@ -140,7 +140,7 @@ Coverage-tag importers locate source-backed declared and covered ID components.
 They leave component ranges absent when a tag generates the corresponding ID
 component.
 
-Needs: impl
+Needs: impl, utest
 
 #### SpecObject ID Occurrences
 `dsn~located-specification-item-id-specobject~1`
@@ -148,7 +148,7 @@ Needs: impl
 The SpecObject importer emits located declared, covered, and dependency IDs
 without ranges because its XML event model does not expose character offsets.
 
-Needs: impl
+Needs: impl, utest
 
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.

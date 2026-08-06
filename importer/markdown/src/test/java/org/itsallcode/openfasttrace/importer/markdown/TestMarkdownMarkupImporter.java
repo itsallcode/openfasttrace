@@ -1,12 +1,18 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.is;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import java.nio.file.Path;
+import java.util.List;
+
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -62,6 +68,33 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     void testIgnoresCoverageTagsOutsideStandaloneHtmlComments(final String line)
     {
         assertImport("guide.md", line, emptyIterable());
+    }
+
+    // [utest->dsn~located-specification-item-id-text-ranges~1]
+    @Test
+    void testImportsLocatedDeclarationCoverageAndDependencyIds()
+    {
+        final SpecificationItem item = importText("""
+                req~subject~1
+                Covers:
+                * req~covered~2
+                Depends:
+                * req~dependency~3
+                """).get(0);
+
+        assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13)));
+        assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 2, 15)));
+        assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18)));
+    }
+
+    private static List<SpecificationItem> importText(final String source)
+    {
+        return ImportAssertions.runImporterOnText(Path.of("located.md"), source, importerFactory);
+    }
+
+    private static SourceRange range(final int line, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     protected String formatTitle(final String title, final int level)

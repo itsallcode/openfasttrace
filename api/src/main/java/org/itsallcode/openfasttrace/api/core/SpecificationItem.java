@@ -135,7 +135,13 @@ public final class SpecificationItem
     }
 
     /**
-     * Add a covered {@link SpecificationItemId} to the list of covered IDs
+     * Add a covered {@link SpecificationItemId} to the list of covered IDs.
+     * <p>
+     * <b>Note:</b> This relies on mutating the internal state of the
+     * specification item and will be removed in a future version. Use the
+     * builder to create a new instance of the specification item with the
+     * additional covered ID instead.
+     * </p>
      *
      * @param coveredId
      *            the covered ID to add
@@ -145,13 +151,7 @@ public final class SpecificationItem
         this.addCoveredId(locatedId(coveredId));
     }
 
-    /**
-     * Add a covered {@link SpecificationItemId} to the list of covered IDs
-     *
-     * @param coveredId
-     *            the covered ID to add
-     */
-    public void addCoveredId(final LocatedSpecificationItemId coveredId)
+    private void addCoveredId(final LocatedSpecificationItemId coveredId)
     {
         this.coveredIds.add(coveredId);
     }
@@ -589,6 +589,10 @@ public final class SpecificationItem
         }
     }
 
+    /**
+     * This creates a {@link LocatedSpecificationItemId} from a given
+     * {@link SpecificationItemId} as workaround for existing code.
+     */
     private static LocatedSpecificationItemId locatedId(final SpecificationItemId id)
     {
         return LocatedSpecificationItemId.builder().id(id).build();

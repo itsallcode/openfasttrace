@@ -143,6 +143,18 @@ Covers:
 
 Needs: dsn
 
+### Located Specification Item IDs
+`req~located-specification-item-ids~1`
+
+For every imported declared, covered, and dependency specification item ID,
+OFT shall retain the individual source occurrence. For source text, positions
+shall be zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges.
+Where an ID component is generated or its source is unavailable, its component
+range shall be absent. Equal semantic IDs at distinct source occurrences shall
+remain distinct occurrences.
+
+Needs: dsn
+
 #### Validate Gherkin Covers Metadata
 `req~gherkin-covers-validation~1`
 

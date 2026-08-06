@@ -7,8 +7,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 
@@ -66,25 +65,66 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
             assert generatedIds.size() == coveredIds.size();
             for (int i = 0; i < generatedIds.size(); i++)
             {
-                addSpecificationItem(lineNumber, generatedIds.get(i), List.of(coveredIds.get(i)), neededArtifactTypes);
+                addSpecificationItem(lineNumber, matcher, generatedIds.get(i), List.of(coveredIds.get(i)),
+                        neededArtifactTypes);
             }
         }
         else
         {
-            addSpecificationItem(lineNumber, generatedIds.get(0), coveredIds, neededArtifactTypes);
+            addSpecificationItem(lineNumber, matcher, generatedIds.get(0), coveredIds, neededArtifactTypes);
         }
     }
 
-    private void addSpecificationItem(final int lineNumber, final SpecificationItemId generatedId,
-            final List<SpecificationItemId> coveredIds, final List<String> neededArtifactTypes)
+    private void addSpecificationItem(final int lineNumber, final Matcher matcher,
+            final SpecificationItemId generatedId, final List<SpecificationItemId> coveredIds,
+            final List<String> neededArtifactTypes)
     {
         final SpecificationItem.Builder item = SpecificationItem.builder()
-                .id(generatedId)
+                .id(locatedGeneratedId(lineNumber, matcher, generatedId))
                 .location(this.file.getPath(), lineNumber);
-        coveredIds.forEach(item::addCoveredId);
+        int searchStart = 0;
+        for (final SpecificationItemId coveredId : coveredIds)
+        {
+            final int start = matcher.group("coveredIds").indexOf(coveredId.toString(), searchStart);
+            searchStart = start + coveredId.toString().length();
+            item.addCoveredId(locatedId(lineNumber, matcher.start("coveredIds") + start, coveredId));
+        }
         neededArtifactTypes.forEach(item::addNeedsArtifactType);
         this.listener.addSpecificationItem(item.build());
         logItem(lineNumber, coveredIds, neededArtifactTypes, generatedId);
+    }
+
+    private static LocatedSpecificationItemId locatedGeneratedId(final int lineNumber, final Matcher matcher,
+            final SpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-tag-ranges~1]
+        if (matcher.group("customName") == null)
+        {
+            return LocatedSpecificationItemId.builder().id(id).build();
+        }
+        final int start = matcher.start("artifactType");
+        final int end = matcher.end("revision");
+        return LocatedSpecificationItemId.builder().id(id).range(sourceRange(lineNumber, start, end))
+                .artifactTypeRange(sourceRange(lineNumber, start, matcher.end("artifactType")))
+                .nameRange(sourceRange(lineNumber, matcher.start("customName"), matcher.end("customName")))
+                .revisionRange(sourceRange(lineNumber, matcher.start("revision"), matcher.end("revision"))).build();
+    }
+
+    private static LocatedSpecificationItemId locatedId(final int lineNumber, final int start,
+            final SpecificationItemId id)
+    {
+        final String text = id.toString();
+        final int typeEnd = text.indexOf('~');
+        final int revisionStart = text.lastIndexOf('~') + 1;
+        return LocatedSpecificationItemId.builder().id(id).range(sourceRange(lineNumber, start, start + text.length()))
+                .artifactTypeRange(sourceRange(lineNumber, start, start + typeEnd))
+                .nameRange(sourceRange(lineNumber, start + typeEnd + 1, start + revisionStart - 1))
+                .revisionRange(sourceRange(lineNumber, start + revisionStart, start + text.length())).build();
+    }
+
+    private static SourceRange sourceRange(final int lineNumber, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(lineNumber - 1, start), new SourcePosition(lineNumber - 1, end));
     }
 
     private static List<SpecificationItemId> parseCoveredIds(final String input)

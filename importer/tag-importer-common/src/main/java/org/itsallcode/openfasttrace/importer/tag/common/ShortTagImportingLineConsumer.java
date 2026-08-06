@@ -3,8 +3,7 @@ package org.itsallcode.openfasttrace.importer.tag.common;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
@@ -46,10 +45,25 @@ class ShortTagImportingLineConsumer extends AbstractRegexLineConsumer {
         LOG.finest(() -> "File " + this.file + ":" + lineNumber + ": found '" + tagItemId + "' covering id '"
                 + coveredId + "'");
         this.listener.addSpecificationItem(SpecificationItem.builder()
-                .id(tagItemId)
+                .id(LocatedSpecificationItemId.builder().id(tagItemId).build())
                 .location(this.file.toString(), lineNumber)
-                .addCoveredId(coveredId)
+                .addCoveredId(locatedCoveredId(matcher, lineNumber, coveredId))
                 .build());
+    }
+
+    private static LocatedSpecificationItemId locatedCoveredId(final Matcher matcher, final int lineNumber,
+            final SpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-tag-ranges~1]
+        final int start = matcher.start(1);
+        final int end = matcher.end(2);
+        final SourceRange range = new SourceRange(new SourcePosition(lineNumber - 1, start),
+                new SourcePosition(lineNumber - 1, end));
+        return LocatedSpecificationItemId.builder().id(id).range(range)
+                .nameRange(new SourceRange(new SourcePosition(lineNumber - 1, start),
+                        new SourcePosition(lineNumber - 1, matcher.end(1))))
+                .revisionRange(new SourceRange(new SourcePosition(lineNumber - 1, matcher.start(2)),
+                        new SourcePosition(lineNumber - 1, end))).build();
     }
 
     private SpecificationItemId createCoveredItem(final String name, final String revision) {

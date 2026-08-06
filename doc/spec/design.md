@@ -110,6 +110,46 @@ Importers emit events if they find parts of a [specification item](#specificatio
 ### Specification List Builder
 The specification list builder is an import event listener that creates a list of specification items from import events.
 
+#### Located Specification Item ID Storage
+`dsn~located-specification-item-id-storage~1`
+
+`SpecificationItem` and `SpecificationListBuilder` preserve the individual
+declared, Covers, and Depends occurrences as `LocatedSpecificationItemId`
+values while retaining compatible semantic-ID accessors. Located-ID lists are
+immutable when observed through the public API.
+
+Covers:
+
+* req~located-specification-item-ids~1
+
+Needs: impl, utest
+
+#### Text Source Ranges
+`dsn~located-specification-item-id-text-ranges~1`
+
+Text importers create zero-based UTF-16, start-inclusive and end-exclusive
+ranges for source ID occurrences and their represented components. Equal
+semantic IDs at distinct source occurrences remain separate values.
+
+Needs: impl
+
+#### Coverage-tag Source Ranges
+`dsn~located-specification-item-id-tag-ranges~1`
+
+Coverage-tag importers locate source-backed declared and covered ID components.
+They leave component ranges absent when a tag generates the corresponding ID
+component.
+
+Needs: impl
+
+#### SpecObject ID Occurrences
+`dsn~located-specification-item-id-specobject~1`
+
+The SpecObject importer emits located declared, covered, and dependency IDs
+without ranges because its XML event model does not expose character offsets.
+
+Needs: impl
+
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
 

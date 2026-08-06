@@ -15,7 +15,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     private final FilterSettings filterSettings;
     private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder;
-    private SpecificationItemId id;
+    private LocatedSpecificationItemId id;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
@@ -68,6 +68,13 @@ public final class SpecificationListBuilder implements ImportEventListener
     @Override
     public void setId(final SpecificationItemId id)
     {
+        this.setId(LocatedSpecificationItemId.builder().id(id).build());
+    }
+
+    @Override
+    public void setId(final LocatedSpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-storage~1]
         this.id = id;
     }
 
@@ -80,8 +87,19 @@ public final class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addCoveredId(final SpecificationItemId id)
     {
+        // TODO: call new method
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
         if (isAcceptedArtifactType(id.getArtifactType()))
+        {
+            this.itemBuilder.addCoveredId(id);
+        }
+    }
+
+    @Override
+    public void addCoveredId(final LocatedSpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-storage~1]
+        if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {
             this.itemBuilder.addCoveredId(id);
         }
@@ -108,8 +126,19 @@ public final class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addDependsOnId(final SpecificationItemId id)
     {
+        // TODO: call new method
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
         if (isAcceptedArtifactType(id.getArtifactType()))
+        {
+            this.itemBuilder.addDependOnId(id);
+        }
+    }
+
+    @Override
+    public void addDependsOnId(final LocatedSpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-storage~1]
+        if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {
             this.itemBuilder.addDependOnId(id);
         }

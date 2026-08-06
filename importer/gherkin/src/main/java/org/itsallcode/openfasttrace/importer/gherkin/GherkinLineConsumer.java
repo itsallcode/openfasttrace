@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.tag.common.CoverageTagParser;
@@ -33,8 +33,8 @@ final class GherkinLineConsumer implements LineConsumer
     private final InputFile file;
     private final ImportEventListener listener;
     private final LineConsumer coverageTagParser;
-    private SpecificationItemId pendingId;
-    private Set<SpecificationItemId> coveredIds = new LinkedHashSet<>();
+    private LocatedSpecificationItemId pendingId;
+    private Set<LocatedSpecificationItemId> coveredIds = new LinkedHashSet<>();
     private Set<String> neededArtifactTypes = new LinkedHashSet<>();
     private boolean hasNeedsDirective;
     private boolean metadataRegion;
@@ -91,13 +91,13 @@ final class GherkinLineConsumer implements LineConsumer
     {
         if (line.trim().startsWith("@"))
         {
-            readTagRegion(lineNumber, line.trim());
+            readTagRegion(lineNumber, line);
             return;
         }
         final Matcher directive = OFT_DIRECTIVE.matcher(line);
         if (this.metadataRegion && directive.matches())
         {
-            readDirective(lineNumber, directive.group(1), directive.group(2));
+            readDirective(lineNumber, line, directive.group(1), directive.group(2));
             return;
         }
         if (!line.trim().startsWith("#"))
@@ -106,8 +106,9 @@ final class GherkinLineConsumer implements LineConsumer
         }
     }
 
-    private void readTagRegion(final int lineNumber, final String tags)
+    private void readTagRegion(final int lineNumber, final String line)
     {
+        final String tags = line.trim();
         if (!this.tagRegion)
         {
             clearMetadata();
@@ -126,7 +127,7 @@ final class GherkinLineConsumer implements LineConsumer
                 invalidateMetadata(lineNumber, "multiple @id tags before a scenario");
                 return;
             }
-            this.pendingId = parseId(lineNumber, matcher.group(1));
+            this.pendingId = locatedId(lineNumber, line, line.indexOf(tags) + matcher.start(1), matcher.group(1));
             if (this.pendingId == null)
             {
                 return;
@@ -135,7 +136,7 @@ final class GherkinLineConsumer implements LineConsumer
         }
     }
 
-    private void readDirective(final int lineNumber, final String name, final String values)
+    private void readDirective(final int lineNumber, final String line, final String name, final String values)
     {
         this.tagRegion = false;
         if (this.invalidMetadata)
@@ -156,7 +157,7 @@ final class GherkinLineConsumer implements LineConsumer
         final String[] entries = splitValues(lineNumber, name, values);
         if (covers)
         {
-            readCoveredIds(lineNumber, entries);
+            readCoveredIds(lineNumber, line, entries);
             return;
         }
         readNeededArtifactTypes(lineNumber, entries);
@@ -173,8 +174,9 @@ final class GherkinLineConsumer implements LineConsumer
         return values.trim().split(",", -1);
     }
 
-    private void readCoveredIds(final int lineNumber, final String[] entries)
+    private void readCoveredIds(final int lineNumber, final String line, final String[] entries)
     {
+        int searchStart = 0;
         for (final String entry : entries)
         {
             final String value = requireValue(lineNumber, "Covers", entry);
@@ -182,16 +184,19 @@ final class GherkinLineConsumer implements LineConsumer
             {
                 return;
             }
+            final int column = line.indexOf(value, searchStart);
+            searchStart = column + value.length();
             final SpecificationItemId id = parseId(lineNumber, value);
             if (id == null)
             {
                 return;
             }
-            if (!this.coveredIds.add(id))
+            if (this.coveredIds.stream().anyMatch(locatedId -> locatedId.getId().equals(id)))
             {
                 invalidateMetadata(lineNumber, "Covers directive contains duplicate value '" + id + "'");
                 return;
             }
+            this.coveredIds.add(locatedId(lineNumber, column, value, id));
         }
     }
 
@@ -284,5 +289,31 @@ final class GherkinLineConsumer implements LineConsumer
         this.coveredIds.clear();
         this.neededArtifactTypes.clear();
         this.invalidMetadata = true;
+    }
+
+    private LocatedSpecificationItemId locatedId(final int lineNumber, final String line, final int column,
+            final String value)
+    {
+        return locatedId(lineNumber, column, value, SpecificationItemId.parseId(value));
+    }
+
+    private static LocatedSpecificationItemId locatedId(final int lineNumber, final int column, final String value,
+            final SpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-text-ranges~1]
+        final int line = lineNumber - 1;
+        final SourceRange range = new SourceRange(new SourcePosition(line, column),
+                new SourcePosition(line, column + value.length()));
+        final int artifactEnd = value.indexOf('~');
+        final int revisionStart = value.lastIndexOf('~') + 1;
+        return LocatedSpecificationItemId.builder().id(id).range(range)
+                .artifactTypeRange(componentRange(line, column, column + artifactEnd))
+                .nameRange(componentRange(line, column + artifactEnd + 1, column + revisionStart - 1))
+                .revisionRange(componentRange(line, column + revisionStart, column + value.length())).build();
+    }
+
+    private static SourceRange componentRange(final int line, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 }

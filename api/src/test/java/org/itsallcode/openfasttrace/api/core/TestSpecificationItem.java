@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,28 @@ class TestSpecificationItem
                 () -> assertThat(item.getId(), equalTo(ID)),
                 () -> assertThat(item.getCoveredIds(), contains(COVERED_ID)),
                 () -> assertThat(item.getDependOnIds(), contains(DEPEND_ON_ID)));
+    }
+
+    // [utest->dsn~located-specification-item-id-storage~1]
+    @Test
+    void testLocatedCoveredIdsAreImmutable()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(locatedId(ID))
+                .addCoveredId(locatedId(COVERED_ID)).addDependOnId(locatedId(DEPEND_ON_ID)).build();
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> item.getLocatedCoveredIds().add(locatedId(ID)));
+    }
+
+    // [utest->dsn~located-specification-item-id-storage~1]
+    @Test
+    void testLocatedDependOnIdsAreImmutable()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(locatedId(ID))
+                .addCoveredId(locatedId(COVERED_ID)).addDependOnId(locatedId(DEPEND_ON_ID)).build();
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> item.getLocatedDependOnIds().add(locatedId(ID)));
     }
 
     private static LocatedSpecificationItemId locatedId(final SpecificationItemId id)

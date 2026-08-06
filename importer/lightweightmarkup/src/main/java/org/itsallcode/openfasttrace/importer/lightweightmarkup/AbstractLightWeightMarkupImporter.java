@@ -138,7 +138,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         final String idText = this.stateMachine.getLastToken();
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
-        this.listener.setId(id);
+        this.listener.setId(locatedId(idText, id));
         this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
         if (this.lastTitle != null)
         {
@@ -226,7 +226,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     {
         final SpecificationItemId.Builder builder = new SpecificationItemId.Builder(
                 this.stateMachine.getLastToken());
-        this.listener.addDependsOnId(builder.build());
+        this.listener.addDependsOnId(locatedId(this.stateMachine.getLastToken(), builder.build()));
     }
 
     /**
@@ -264,7 +264,28 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
      */
     protected void addCoverage()
     {
-        this.listener.addCoveredId(SpecificationItemId.parseId(this.stateMachine.getLastToken()));
+        final String idText = this.stateMachine.getLastToken();
+        this.listener.addCoveredId(locatedId(idText, SpecificationItemId.parseId(idText)));
+    }
+
+    private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-text-ranges~1]
+        final int column = this.currentContext.currentLine().indexOf(idText);
+        final SourceRange range = new SourceRange(new SourcePosition(this.currentContext.lineNumber() - 1, column),
+                new SourcePosition(this.currentContext.lineNumber() - 1, column + idText.length()));
+        final int artifactTypeEnd = idText.indexOf(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR);
+        final int revisionStart = idText.lastIndexOf(SpecificationItemId.REVISION_SEPARATOR) + 1;
+        return LocatedSpecificationItemId.builder().id(id).range(range)
+                .artifactTypeRange(range(column, column + artifactTypeEnd))
+                .nameRange(range(column + artifactTypeEnd + 1, column + revisionStart - 1))
+                .revisionRange(range(column + revisionStart, column + idText.length())).build();
+    }
+
+    private SourceRange range(final int start, final int end)
+    {
+        final int line = this.currentContext.lineNumber() - 1;
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     /**

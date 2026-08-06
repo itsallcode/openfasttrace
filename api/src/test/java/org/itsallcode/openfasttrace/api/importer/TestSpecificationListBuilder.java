@@ -16,6 +16,40 @@ class TestSpecificationListBuilder
     private static final String TITLE = "title";
     private static final SpecificationItemId ID = SpecificationItemId.parseId("feat~id~1");
 
+    // [utest->dsn~located-specification-item-id-storage~1]
+    @Test
+    void testPreservesLocatedIdOccurrences()
+    {
+        final SpecificationItemId coveredId = SpecificationItemId.parseId("req~covered~1");
+        final SpecificationItemId dependencyId = SpecificationItemId.parseId("req~dependency~1");
+        final LocatedSpecificationItemId locatedId = locatedId(ID, 0);
+        final LocatedSpecificationItemId firstCoveredId = locatedId(coveredId, 5);
+        final LocatedSpecificationItemId secondCoveredId = locatedId(coveredId, 20);
+        final LocatedSpecificationItemId locatedDependencyId = locatedId(dependencyId, 3);
+        final SpecificationListBuilder builder = SpecificationListBuilder.create();
+        builder.beginSpecificationItem();
+        builder.setId(locatedId);
+        builder.addCoveredId(firstCoveredId);
+        builder.addCoveredId(secondCoveredId);
+        builder.addDependsOnId(locatedDependencyId);
+
+        final SpecificationItem item = builder.build().get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId(), equalTo(locatedId)),
+                () -> assertThat(item.getLocatedCoveredIds(), contains(firstCoveredId, secondCoveredId)),
+                () -> assertThat(item.getLocatedDependOnIds(), contains(locatedDependencyId)),
+                () -> assertThat(item.getCoveredIds(), contains(coveredId, coveredId)),
+                () -> assertThat(item.getDependOnIds(), contains(dependencyId)));
+    }
+
+    private static LocatedSpecificationItemId locatedId(final SpecificationItemId id, final int column)
+    {
+        final SourceRange range = new SourceRange(new SourcePosition(0, column),
+                new SourcePosition(0, column + id.toString().length()));
+        return LocatedSpecificationItemId.builder().id(id).range(range).build();
+    }
+
     @Test
     void testBuildBasicItem()
     {

@@ -49,6 +49,16 @@ public final class SpecificationItem
     }
 
     /**
+     * Get the declared ID together with its source occurrence.
+     *
+     * @return declared located ID
+     */
+    public LocatedSpecificationItemId getLocatedId()
+    {
+        return this.id;
+    }
+
+    /**
      * Get the artifact type of the specification item
      *
      * @return artifact type
@@ -135,6 +145,16 @@ public final class SpecificationItem
     }
 
     /**
+     * Get covered IDs together with their source occurrences.
+     *
+     * @return located covered IDs
+     */
+    public List<LocatedSpecificationItemId> getLocatedCoveredIds()
+    {
+        return Collections.unmodifiableList(this.coveredIds);
+    }
+
+    /**
      * Add a covered {@link SpecificationItemId} to the list of covered IDs.
      * <p>
      * <b>Note:</b> This relies on mutating the internal state of the
@@ -165,6 +185,16 @@ public final class SpecificationItem
     public List<SpecificationItemId> getDependOnIds()
     {
         return this.dependOnIds.stream().map(LocatedSpecificationItemId::getId).toList();
+    }
+
+    /**
+     * Get dependency IDs together with their source occurrences.
+     *
+     * @return located dependency IDs
+     */
+    public List<LocatedSpecificationItemId> getLocatedDependOnIds()
+    {
+        return this.dependOnIds;
     }
 
     /**

@@ -68,6 +68,6 @@ public final class SourceRange
     @Override
     public String toString()
     {
-        return this.start + "-" + this.end;
+        return this.start + " … " + this.end;
     }
 }

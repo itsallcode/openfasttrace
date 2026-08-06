@@ -24,7 +24,7 @@ class TestSourceRange
         assertAll(
                 () -> assertThat(range.getStart(), equalTo(START)),
                 () -> assertThat(range.getEnd(), equalTo(END)),
-                () -> assertThat(range.toString(), equalTo("2:3-4:5")));
+                () -> assertThat(range.toString(), equalTo("2:3 … 4:5")));
     }
 
     @Test

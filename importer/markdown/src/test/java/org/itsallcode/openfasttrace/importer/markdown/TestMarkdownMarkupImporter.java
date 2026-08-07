@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -82,9 +83,10 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 * req~dependency~3
                 """).get(0);
 
-        assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13)));
-        assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 2, 15)));
-        assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18)));
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 2, 15))),
+                () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18))));
     }
 
     private static List<SpecificationItem> importText(final String source)

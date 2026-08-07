@@ -115,7 +115,7 @@ The specification list builder is an import event listener that creates a list o
 
 `SpecificationItem` and `SpecificationListBuilder` preserve the individual
 declared, Covers, and Depends occurrences as `LocatedSpecificationItemId`
-values while retaining compatible semantic-ID accessors. Located-ID lists are
+values while retaining compatible item ID accessors. Located-ID lists are
 immutable when observed through the public API.
 
 Covers:
@@ -129,7 +129,7 @@ Needs: impl, utest
 
 Text importers create zero-based UTF-16, start-inclusive and end-exclusive
 ranges for source ID occurrences and their represented components. Equal
-semantic IDs at distinct source occurrences remain separate values.
+item IDs at distinct source occurrences remain separate values.
 
 Needs: impl, utest
 

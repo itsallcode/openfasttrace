@@ -150,9 +150,15 @@ For every imported declared, covered, and dependency specification item ID,
 OFT shall retain the individual source occurrence. For source text, positions
 shall be zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges.
 Where an ID component is generated or its source is unavailable, its component
-range shall be absent. Equal semantic IDs at distinct source occurrences shall
+range shall be absent. Equal item IDs at distinct source occurrences shall
 remain distinct occurrences. Short coverage tags shall not generate source
 ranges for their generated or covered IDs.
+
+Rationale:
+
+The exact location of an item ID is required for IDE plugins in order to support
+features like syntax highlighting, find occurrences, jump to definition and auto-complete.
+Adding this feature to OFT helps avoid code duplications and improves reliability.
 
 Needs: dsn
 

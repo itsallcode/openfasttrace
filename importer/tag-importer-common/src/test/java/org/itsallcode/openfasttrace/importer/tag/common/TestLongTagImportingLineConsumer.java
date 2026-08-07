@@ -1,8 +1,8 @@
 package org.itsallcode.openfasttrace.importer.tag.common;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -70,8 +70,24 @@ class TestLongTagImportingLineConsumer
 
         final SpecificationItem item = listener.build().get(0);
 
-        assertThat(item.getLocatedId().getRange(), is(range(2, 4, 14)));
-        assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 18, 31)));
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(2, 4, 14))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 18, 31))));
+    }
+
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void importsLocatedLongTagIdWithGeneratedName()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
+                "😀 [impl -> dsn~covered~2" + "]");
+
+        final SpecificationItem item = listener.build().get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(nullValue())),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 12, 25))));
     }
 
     private static SourceRange range(final int line, final int start, final int end)

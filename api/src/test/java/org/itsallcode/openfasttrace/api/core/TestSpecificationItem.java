@@ -3,8 +3,11 @@ package org.itsallcode.openfasttrace.api.core;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -40,6 +43,53 @@ class TestSpecificationItem
                 () -> assertThat(item.getId(), equalTo(ID)),
                 () -> assertThat(item.getCoveredIds(), contains(COVERED_ID)),
                 () -> assertThat(item.getDependOnIds(), contains(DEPEND_ON_ID)));
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    void testToBuilderPreservesAllValues()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(locatedId(ID)).title("Title")
+                .description("Description").rationale("Rationale").comment("Comment").status(ItemStatus.DRAFT)
+                .location(Location.create("file.md", 7)).addCoveredId(locatedId(COVERED_ID))
+                .addDependOnId(locatedId(DEPEND_ON_ID)).addNeedsArtifactType("impl").addTag("important")
+                .forwards(true).build();
+
+        assertThat(item.toBuilder().build(), equalTo(item));
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    void testToBuilderDoesNotModifyOriginalItem()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(ID).addCoveredId(COVERED_ID).build();
+
+        final SpecificationItem copy = item.toBuilder().addCoveredId(DEPEND_ON_ID).build();
+
+        assertAll(
+                () -> assertThat(item.getCoveredIds(), contains(COVERED_ID)),
+                () -> assertThat(copy, not(equalTo(item))),
+                () -> assertThat(copy.getCoveredIds(), contains(COVERED_ID, DEPEND_ON_ID)));
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    void testBuilderReplacesCoveredIds()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(ID).addCoveredId(DEPEND_ON_ID)
+                .coveredIds(List.of(COVERED_ID)).build();
+
+        assertThat(item.getCoveredIds(), contains(COVERED_ID));
+    }
+
+    // [utest->dsn~specification-item~3]
+    @Test
+    void testBuilderReplacesDependencyIds()
+    {
+        final SpecificationItem item = SpecificationItem.builder().id(ID).addDependOnId(COVERED_ID)
+                .dependOnIds(List.of(DEPEND_ON_ID)).build();
+
+        assertThat(item.getDependOnIds(), contains(DEPEND_ON_ID));
     }
 
     // [utest->dsn~located-specification-item-id-storage~1]

@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.hamcrest.Matcher;
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -100,26 +101,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
     {
         final List<SpecificationItem> importedItems = ImportAssertions.runImporterOnText(path,
                 processTextInput(input), getImporterFactory());
-        assertThat(importedItems.stream().map(AbstractLightWeightMarkupImporterTest::withoutIdLocations)
+        assertThat(importedItems.stream().map(ItemBuilderFactory::withoutIdLocations)
                 .toList(), matcher);
-    }
-
-    private static SpecificationItem withoutIdLocations(final SpecificationItem item)
-    {
-        final SpecificationItem.Builder builder = SpecificationItem.builder()
-                .id(item.getId())
-                .title(item.getTitle())
-                .description(item.getDescription())
-                .rationale(item.getRationale())
-                .comment(item.getComment())
-                .status(item.getStatus())
-                .location(item.getLocation())
-                .forwards(item.isForwarding());
-        item.getCoveredIds().forEach(builder::addCoveredId);
-        item.getDependOnIds().forEach(builder::addDependOnId);
-        item.getNeedsArtifactTypes().forEach(builder::addNeedsArtifactType);
-        item.getTags().forEach(builder::addTag);
-        return builder.build();
     }
 
     private String processTextInput(final String input)

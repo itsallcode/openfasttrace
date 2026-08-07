@@ -41,4 +41,18 @@ public final class ItemBuilderFactory {
     public static SpecificationItem.Builder itemWithDefaultFilenameInLine(final int line) {
         return SpecificationItem.builder().location("file", line);
     }
+
+    /**
+     * Creates a copy of an item without source locations on its IDs.
+     *
+     * @param item item to copy
+     * @return copy without source locations on its IDs
+     */
+    public static SpecificationItem withoutIdLocations(final SpecificationItem item) {
+        return item.toBuilder()
+                .id(item.getId())
+                .coveredIds(item.getCoveredIds())
+                .dependOnIds(item.getDependOnIds())
+                .build();
+    }
 }

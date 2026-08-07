@@ -305,6 +305,28 @@ public final class SpecificationItem
     }
 
     /**
+     * Create a builder pre-populated with this item's values.
+     *
+     * @return builder initialized from this item
+     */
+    public Builder toBuilder()
+    {
+        final Builder builder = builder().id(this.id)
+                .title(this.title)
+                .description(this.description)
+                .rationale(this.rationale)
+                .comment(this.comment)
+                .status(this.status)
+                .location(this.location)
+                .forwards(this.forwards);
+        this.coveredIds.forEach(builder::addCoveredId);
+        this.dependOnIds.forEach(builder::addDependOnId);
+        this.needsArtifactTypes.forEach(builder::addNeedsArtifactType);
+        this.tags.forEach(builder::addTag);
+        return builder;
+    }
+
+    /**
      * Builder for objects of type {@link SpecificationItem}
      */
     public static final class Builder
@@ -474,6 +496,20 @@ public final class SpecificationItem
         }
 
         /**
+         * Replace the IDs of specification items covered by the item to build.
+         *
+         * @param coveredIds
+         *            the covered IDs
+         * @return this builder instance
+         */
+        public Builder coveredIds(final Collection<SpecificationItemId> coveredIds)
+        {
+            this.coveredIds.clear();
+            coveredIds.forEach(this::addCoveredId);
+            return this;
+        }
+
+        /**
          * Add the ID of a specification item covered by the item to build
          *
          * @param artifactType
@@ -513,6 +549,20 @@ public final class SpecificationItem
         public Builder addDependOnId(final LocatedSpecificationItemId dependOnId)
         {
             this.dependOnIds.add(dependOnId);
+            return this;
+        }
+
+        /**
+         * Replace the IDs of specification items the item to build depends on.
+         *
+         * @param dependOnIds
+         *            the dependency IDs
+         * @return this builder instance
+         */
+        public Builder dependOnIds(final Collection<SpecificationItemId> dependOnIds)
+        {
+            this.dependOnIds.clear();
+            dependOnIds.forEach(this::addDependOnId);
             return this;
         }
 

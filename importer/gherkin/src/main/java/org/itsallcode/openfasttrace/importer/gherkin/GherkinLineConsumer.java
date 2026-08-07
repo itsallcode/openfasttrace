@@ -108,7 +108,6 @@ final class GherkinLineConsumer implements LineConsumer
 
     private void readTagRegion(final int lineNumber, final String line)
     {
-        final String tags = line.trim();
         if (!this.tagRegion)
         {
             clearMetadata();
@@ -119,6 +118,7 @@ final class GherkinLineConsumer implements LineConsumer
         {
             return;
         }
+        final String tags = line.trim();
         final Matcher matcher = ID_TAG.matcher(tags);
         while (matcher.find())
         {
@@ -127,7 +127,7 @@ final class GherkinLineConsumer implements LineConsumer
                 invalidateMetadata(lineNumber, "multiple @id tags before a scenario");
                 return;
             }
-            this.pendingId = locatedId(lineNumber, line, line.indexOf(tags) + matcher.start(1), matcher.group(1));
+            this.pendingId = locatedId(lineNumber, line.indexOf(tags) + matcher.start(1), matcher.group(1));
             if (this.pendingId == null)
             {
                 return;
@@ -291,8 +291,7 @@ final class GherkinLineConsumer implements LineConsumer
         this.invalidMetadata = true;
     }
 
-    private LocatedSpecificationItemId locatedId(final int lineNumber, final String line, final int column,
-            final String value)
+    private static LocatedSpecificationItemId locatedId(final int lineNumber, final int column, final String value)
     {
         return locatedId(lineNumber, column, value, SpecificationItemId.parseId(value));
     }

@@ -1,9 +1,7 @@
 package org.itsallcode.openfasttrace.api.core;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -99,8 +97,9 @@ class TestSpecificationItem
         final SpecificationItem item = SpecificationItem.builder().id(locatedId(ID))
                 .addCoveredId(locatedId(COVERED_ID)).addDependOnId(locatedId(DEPEND_ON_ID)).build();
 
-        assertThrows(UnsupportedOperationException.class,
-                () -> item.getLocatedCoveredIds().add(locatedId(ID)));
+        final List<LocatedSpecificationItemId> immutableList = item.getLocatedCoveredIds();
+        final LocatedSpecificationItemId locatedId = locatedId(ID);
+        assertThrows(UnsupportedOperationException.class, () -> immutableList.add(locatedId));
     }
 
     // [utest->dsn~located-specification-item-id-storage~1]
@@ -110,8 +109,9 @@ class TestSpecificationItem
         final SpecificationItem item = SpecificationItem.builder().id(locatedId(ID))
                 .addCoveredId(locatedId(COVERED_ID)).addDependOnId(locatedId(DEPEND_ON_ID)).build();
 
-        assertThrows(UnsupportedOperationException.class,
-                () -> item.getLocatedDependOnIds().add(locatedId(ID)));
+        final List<LocatedSpecificationItemId> immutableList = item.getLocatedDependOnIds();
+        final LocatedSpecificationItemId locatedId = locatedId(ID);
+        assertThrows(UnsupportedOperationException.class, () -> immutableList.add(locatedId));
     }
 
     private static LocatedSpecificationItemId locatedId(final SpecificationItemId id)

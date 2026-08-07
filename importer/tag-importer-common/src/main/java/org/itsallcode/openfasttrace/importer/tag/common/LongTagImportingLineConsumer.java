@@ -16,9 +16,11 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 // [impl->dsn~import.full-coverage-tag-multiple-needed-coverage~1]
 class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
 {
-    private static final Logger LOG = Logger
-            .getLogger(LongTagImportingLineConsumer.class.getName());
-
+    private static final Logger LOG = Logger.getLogger(LongTagImportingLineConsumer.class.getName());
+    private static final String ARTIFACT_TYPE_GROUP = "artifactType";
+    private static final String CUSTOM_NAME_GROUP = "customName";
+    private static final String REVISION_GROUP = "revision";
+    private static final String COVERED_IDS_GROUP = "coveredIds";
     private static final String COVERING_ARTIFACT_TYPE_PATTERN = "\\p{Alpha}+";
     // [impl->dsn~import.full-coverage-tag-with-revision~1]
     private static final String OPTIONAL_WHITESPACE = "\\s*";
@@ -55,7 +57,7 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     @Override
     public void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        final List<SpecificationItemId> coveredIds = parseCoveredIds(matcher.group("coveredIds"));
+        final List<SpecificationItemId> coveredIds = parseCoveredIds(matcher.group(COVERED_IDS_GROUP));
         final List<String> neededArtifactTypes = parseNeededArtifactTypes(matcher.group("neededArtifactTypes"));
         final List<SpecificationItemId> generatedIds = createItemIds(matcher, lineNumber, lineMatchCount, coveredIds,
                 neededArtifactTypes);
@@ -85,9 +87,9 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
         int searchStart = 0;
         for (final SpecificationItemId coveredId : coveredIds)
         {
-            final int start = matcher.group("coveredIds").indexOf(coveredId.toString(), searchStart);
+            final int start = matcher.group(COVERED_IDS_GROUP).indexOf(coveredId.toString(), searchStart);
             searchStart = start + coveredId.toString().length();
-            item.addCoveredId(locatedId(lineNumber, matcher.start("coveredIds") + start, coveredId));
+            item.addCoveredId(locatedId(lineNumber, matcher.start(COVERED_IDS_GROUP) + start, coveredId));
         }
         neededArtifactTypes.forEach(item::addNeedsArtifactType);
         this.listener.addSpecificationItem(item.build());
@@ -98,16 +100,17 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
             final SpecificationItemId id)
     {
         // [impl->dsn~located-specification-item-id-tag-ranges~1]
-        if (matcher.group("customName") == null)
+        if (matcher.group(CUSTOM_NAME_GROUP) == null)
         {
             return LocatedSpecificationItemId.builder().id(id).build();
         }
-        final int start = matcher.start("artifactType");
-        final int end = matcher.end("revision");
+        final int start = matcher.start(ARTIFACT_TYPE_GROUP);
+        final int end = matcher.end(REVISION_GROUP);
         return LocatedSpecificationItemId.builder().id(id).range(sourceRange(lineNumber, start, end))
-                .artifactTypeRange(sourceRange(lineNumber, start, matcher.end("artifactType")))
-                .nameRange(sourceRange(lineNumber, matcher.start("customName"), matcher.end("customName")))
-                .revisionRange(sourceRange(lineNumber, matcher.start("revision"), matcher.end("revision"))).build();
+                .artifactTypeRange(sourceRange(lineNumber, start, matcher.end(ARTIFACT_TYPE_GROUP)))
+                .nameRange(sourceRange(lineNumber, matcher.start(CUSTOM_NAME_GROUP), matcher.end(CUSTOM_NAME_GROUP)))
+                .revisionRange(sourceRange(lineNumber, matcher.start(REVISION_GROUP), matcher.end(REVISION_GROUP)))
+                .build();
     }
 
     private static LocatedSpecificationItemId locatedId(final int lineNumber, final int start,
@@ -156,9 +159,9 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
             final int lineMatchCount, final List<SpecificationItemId> coveredIds,
             final List<String> neededArtifactTypes)
     {
-        final String artifactType = matcher.group("artifactType");
-        final String customName = matcher.group("customName");
-        final String revision = matcher.group("revision");
+        final String artifactType = matcher.group(ARTIFACT_TYPE_GROUP);
+        final String customName = matcher.group(CUSTOM_NAME_GROUP);
+        final String revision = matcher.group(REVISION_GROUP);
         if (customName != null)
         {
             return List.of(SpecificationItemId.createId(artifactType, customName, parseRevision(revision)));

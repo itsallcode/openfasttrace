@@ -33,14 +33,14 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
             + "(?<neededArtifactTypes>\\p{Alpha}+(?:" + OPTIONAL_WHITESPACE + ","
             + OPTIONAL_WHITESPACE + "\\p{Alpha}+)*)";
     private static final String TAG_REGEX = TAG_PREFIX + OPTIONAL_WHITESPACE
-            + "(?<artifactType>" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
+            + "(?<" + ARTIFACT_TYPE_GROUP + ">" + COVERING_ARTIFACT_TYPE_PATTERN + ")"
             + "(?:" + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
             // [impl->dsn~import.full-coverage-tag-with-name-and-revision~1]
-            + "(?<customName>" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
+            + "(?<" + CUSTOM_NAME_GROUP + ">" + SpecificationItemId.ITEM_NAME_PATTERN + ")?"
             + SpecificationItemId.REVISION_SEPARATOR
-            + "(?<revision>" + SpecificationItemId.ITEM_REVISION_PATTERN + "))?"
+            + "(?<" + REVISION_GROUP + ">" + SpecificationItemId.ITEM_REVISION_PATTERN + "))?"
             + OPTIONAL_WHITESPACE + "->" + OPTIONAL_WHITESPACE
-            + "(?<coveredIds>" + COVERED_IDS + ")"
+            + "(?<" + COVERED_IDS_GROUP + ">" + COVERED_IDS + ")"
             + OPTIONAL_WHITESPACE + "(?:" + NEEDS_COVERAGE + OPTIONAL_WHITESPACE + ")?"
             + TAG_SUFFIX;
 

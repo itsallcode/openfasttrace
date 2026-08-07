@@ -9,6 +9,7 @@ import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
@@ -99,7 +100,7 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                 () -> assertThat(item.getDependOnIds(), contains(createId("req", "dependency", 3))));
     }
 
-    private static java.util.List<SpecificationItem> importText(final String source)
+    private static List<SpecificationItem> importText(final String source)
     {
         return ImportAssertions.runImporterOnText(Path.of("located.rst"), source, importerFactory);
     }

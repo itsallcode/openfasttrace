@@ -66,6 +66,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void setId(final SpecificationItemId id)
     {
         this.setId(LocatedSpecificationItemId.builder().id(id).build());
@@ -85,6 +86,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void addCoveredId(final SpecificationItemId id)
     {
         this.addCoveredId(LocatedSpecificationItemId.builder().id(id).build());
@@ -120,6 +122,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void addDependsOnId(final SpecificationItemId id)
     {
         this.addDependsOnId(LocatedSpecificationItemId.builder().id(id).build());

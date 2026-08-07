@@ -121,13 +121,14 @@ class TestZipEntryInput
         {
             final InputFile inputFile = ZipEntryInput.forZipEntry(zip, new ZipEntry("file"),
                     StandardCharsets.UTF_8);
-            assertThat(readContent(inputFile), equalTo("��"));
+            assertThat(readContent(inputFile), equalTo("\uFFFD\uFFFD"));
         }
     }
 
     private String readContent(final InputFile inputFile) throws IOException
     {
-        try(final BufferedReader reader = inputFile.createReader()) {
+        try (final BufferedReader reader = inputFile.createReader())
+        {
             return reader.lines().collect(joining("\n"));
         }
     }

@@ -98,7 +98,28 @@ public abstract class AbstractLightWeightMarkupImporterTest
     protected void assertImport(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher)
     {
-        ImportAssertions.assertImportWithFactory(path, processTextInput(input), matcher, getImporterFactory());
+        final List<SpecificationItem> importedItems = ImportAssertions.runImporterOnText(path,
+                processTextInput(input), getImporterFactory());
+        assertThat(importedItems.stream().map(AbstractLightWeightMarkupImporterTest::withoutIdLocations)
+                .toList(), matcher);
+    }
+
+    private static SpecificationItem withoutIdLocations(final SpecificationItem item)
+    {
+        final SpecificationItem.Builder builder = SpecificationItem.builder()
+                .id(item.getId())
+                .title(item.getTitle())
+                .description(item.getDescription())
+                .rationale(item.getRationale())
+                .comment(item.getComment())
+                .status(item.getStatus())
+                .location(item.getLocation())
+                .forwards(item.isForwarding());
+        item.getCoveredIds().forEach(builder::addCoveredId);
+        item.getDependOnIds().forEach(builder::addDependOnId);
+        item.getNeedsArtifactTypes().forEach(builder::addNeedsArtifactType);
+        item.getTags().forEach(builder::addTag);
+        return builder.build();
     }
 
     private String processTextInput(final String input)

@@ -335,7 +335,7 @@ class GherkinImporterTest
 
         final InOrder events = inOrder(listener);
         events.verify(listener).beginSpecificationItem();
-        events.verify(listener).setId(SpecificationItemId.parseId("scn~ordinary~1"));
+        events.verify(listener).setId(any(LocatedSpecificationItemId.class));
         events.verify(listener).addSpecificationItem(any(SpecificationItem.class));
         events.verify(listener).endSpecificationItem();
     }

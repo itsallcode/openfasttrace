@@ -8,8 +8,7 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
@@ -67,14 +66,12 @@ class TestTagImporterWithConfig
     @Test
     void testFileWithNewTagFormatAlsoSupported()
     {
-        final String itemName = "coveredtype~coveredname~1"; // do not inline to
-                                                             // avoid error in
-                                                             // self-trace
+        final String itemName = "coveredtype~coveredname~1"; // do not inline to avoid error in self-trace
         runImport("[type->" + itemName + "]");
         verify(this.listenerMock).addSpecificationItem(SpecificationItem.builder()
                 .id(SpecificationItemId.createId("type", "coveredname" + "-3264583751", 0))
                 .location(FILE.toString(), 1)
-                .addCoveredId(SpecificationItemId.parseId(itemName))
+                .addCoveredId(locatedId(SpecificationItemId.parseId(itemName), 7, 18, 19, 30, 31, 32))
                 .build());
     }
 
@@ -148,6 +145,23 @@ class TestTagImporterWithConfig
                 .location(FILE.toString(), lineNumber)
                 .addCoveredId(coveredId)
                 .build());
+    }
+
+    private static LocatedSpecificationItemId locatedId(final SpecificationItemId id, final int start,
+            final int artifactTypeEnd, final int nameStart, final int nameEnd, final int revisionStart,
+            final int end)
+    {
+        return LocatedSpecificationItemId.builder().id(id)
+                .range(range(start, end))
+                .artifactTypeRange(range(start, artifactTypeEnd))
+                .nameRange(range(nameStart, nameEnd))
+                .revisionRange(range(revisionStart, end))
+                .build();
+    }
+
+    private static SourceRange range(final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(0, start), new SourcePosition(0, end));
     }
 
     private void runImport(final String content)

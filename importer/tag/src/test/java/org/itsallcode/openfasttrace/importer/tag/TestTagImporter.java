@@ -249,8 +249,27 @@ class TestTagImporter
         assertThat(result, hasSize(expectedItems.size()));
         if (!expectedItems.isEmpty())
         {
-            assertThat(result, AutoMatcher.contains(expectedItems.toArray(new SpecificationItem[0])));
+            assertThat(result.stream().map(TestTagImporter::withoutIdLocations).toList(),
+                    AutoMatcher.contains(expectedItems.toArray(new SpecificationItem[0])));
         }
+    }
+
+    private static SpecificationItem withoutIdLocations(final SpecificationItem item)
+    {
+        final SpecificationItem.Builder builder = SpecificationItem.builder()
+                .id(item.getId())
+                .title(item.getTitle())
+                .description(item.getDescription())
+                .rationale(item.getRationale())
+                .comment(item.getComment())
+                .status(item.getStatus())
+                .location(item.getLocation())
+                .forwards(item.isForwarding());
+        item.getCoveredIds().forEach(builder::addCoveredId);
+        item.getDependOnIds().forEach(builder::addDependOnId);
+        item.getNeedsArtifactTypes().forEach(builder::addNeedsArtifactType);
+        item.getTags().forEach(builder::addTag);
+        return builder.build();
     }
 
     private List<SpecificationItem> runImporter(final String content)

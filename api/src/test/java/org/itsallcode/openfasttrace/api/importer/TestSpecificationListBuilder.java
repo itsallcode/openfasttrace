@@ -43,6 +43,17 @@ class TestSpecificationListBuilder
                 () -> assertThat(item.getDependOnIds(), contains(dependencyId)));
     }
 
+    private static LocatedSpecificationItemId locatedId(final String artifactType, final String name,
+            final int revision)
+    {
+        return locatedId(SpecificationItemId.createId(artifactType, name, revision));
+    }
+
+    private static LocatedSpecificationItemId locatedId(final SpecificationItemId id)
+    {
+        return LocatedSpecificationItemId.builder().id(id).build();
+    }
+
     private static LocatedSpecificationItemId locatedId(final SpecificationItemId id, final int column)
     {
         final SourceRange range = new SourceRange(new SourcePosition(0, column),
@@ -67,7 +78,7 @@ class TestSpecificationListBuilder
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
         builder.beginSpecificationItem();
-        builder.setId(ID);
+        builder.setId(locatedId(ID));
         return builder;
     }
 
@@ -105,11 +116,11 @@ class TestSpecificationListBuilder
     {
         final SpecificationListBuilder builder = createListBuilderFilteringByArtifactTypes("dsn");
         builder.beginSpecificationItem();
-        builder.setId(SpecificationItemId.createId("impl", "ignore", 1));
+        builder.setId(locatedId("impl", "ignore", 1));
         builder.endSpecificationItem();
         builder.beginSpecificationItem();
         final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
-        builder.setId(importedId);
+        builder.setId(locatedId(importedId));
         builder.endSpecificationItem();
         final List<SpecificationItem> items = builder.build();
         assertThat(items.size(), equalTo(1));
@@ -133,7 +144,7 @@ class TestSpecificationListBuilder
                 "utest", "itest");
         builder.beginSpecificationItem();
         final SpecificationItemId id = SpecificationItemId.createId("dsn", "import", 1);
-        builder.setId(id);
+        builder.setId(locatedId(id));
         builder.addNeededArtifactType("impl");
         builder.addNeededArtifactType("utest");
         builder.addNeededArtifactType("itest");
@@ -152,9 +163,9 @@ class TestSpecificationListBuilder
                 "dsn");
         builder.beginSpecificationItem();
         final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
-        builder.setId(importedId);
-        builder.addCoveredId(acceptedId);
-        builder.addCoveredId(rejectedId);
+        builder.setId(locatedId(importedId));
+        builder.addCoveredId(locatedId(acceptedId));
+        builder.addCoveredId(locatedId(rejectedId));
         builder.endSpecificationItem();
         final List<SpecificationItem> items = builder.build();
         assertThat(items.get(0).getCoveredIds(), containsInAnyOrder(acceptedId));
@@ -170,9 +181,9 @@ class TestSpecificationListBuilder
                 "dsn");
         builder.beginSpecificationItem();
         final SpecificationItemId importedId = SpecificationItemId.createId("dsn", "import", 1);
-        builder.setId(importedId);
-        builder.addDependsOnId(acceptedId);
-        builder.addDependsOnId(rejectedId);
+        builder.setId(locatedId(importedId));
+        builder.addDependsOnId(locatedId(acceptedId));
+        builder.addDependsOnId(locatedId(rejectedId));
         builder.endSpecificationItem();
         final List<SpecificationItem> items = builder.build();
         assertThat(items.get(0).getDependOnIds(), containsInAnyOrder(acceptedId));
@@ -183,10 +194,10 @@ class TestSpecificationListBuilder
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
         builder.beginSpecificationItem();
-        builder.setId(ID);
+        builder.setId(locatedId(ID));
         builder.endSpecificationItem();
         builder.beginSpecificationItem();
-        builder.setId(ID);
+        builder.setId(locatedId(ID));
         builder.endSpecificationItem();
         assertThat(builder.getItemCount(), equalTo(2));
     }
@@ -216,7 +227,7 @@ class TestSpecificationListBuilder
     {
         builder.beginSpecificationItem();
         final SpecificationItemId id = SpecificationItemId.createId("dsn", name, 1);
-        builder.setId(id);
+        builder.setId(locatedId(id));
         if (status != null)
         {
             builder.setStatus(status);
@@ -251,7 +262,7 @@ class TestSpecificationListBuilder
     {
         builder.beginSpecificationItem();
         final SpecificationItemId idA = SpecificationItemId.createId("dsn", name, 1);
-        builder.setId(idA);
+        builder.setId(locatedId(idA));
         for (final String tag : tags)
         {
             builder.addTag(tag);
@@ -286,7 +297,7 @@ class TestSpecificationListBuilder
     {
         final SpecificationListBuilder builder = SpecificationListBuilder.create();
         builder.beginSpecificationItem();
-        builder.setId(SpecificationItemId.createId("foo", "bar", 1));
+        builder.setId(locatedId("foo", "bar", 1));
         builder.appendComment(" a comment ");
         builder.appendDescription("   a description\t \t");
         builder.appendRationale("\n\na   rationale\n  \n");

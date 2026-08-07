@@ -13,7 +13,7 @@ public interface ImportEventListener
     /**
      * The importer found a new specification item. The
      * {@link SpecificationItemId} must be defined using
-     * {@link #setId(SpecificationItemId)}.
+     * {@link #setId(LocatedSpecificationItemId)}.
      */
     void beginSpecificationItem();
 
@@ -22,7 +22,9 @@ public interface ImportEventListener
      *
      * @param id
      *            the ID of the new item
+     * @deprecated Use {@link #setId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void setId(final SpecificationItemId id);
 
     /**
@@ -82,7 +84,9 @@ public interface ImportEventListener
      *
      * @param id
      *            the ID of the item that is covered
+     * @deprecated Use {@link #addCoveredId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void addCoveredId(final SpecificationItemId id);
 
     /**
@@ -101,7 +105,9 @@ public interface ImportEventListener
      *
      * @param id
      *            the ID of the item depends on
+     * @deprecated Use {@link #addDependsOnId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void addDependsOnId(final SpecificationItemId id);
 
     /**

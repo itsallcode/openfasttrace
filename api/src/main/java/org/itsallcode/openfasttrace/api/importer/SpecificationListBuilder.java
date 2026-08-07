@@ -87,17 +87,13 @@ public final class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addCoveredId(final SpecificationItemId id)
     {
-        // TODO: call new method
-        // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAcceptedArtifactType(id.getArtifactType()))
-        {
-            this.itemBuilder.addCoveredId(id);
-        }
+        this.addCoveredId(LocatedSpecificationItemId.builder().id(id).build());
     }
 
     @Override
     public void addCoveredId(final LocatedSpecificationItemId id)
     {
+        // [impl->dsn~filtering-by-artifact-types-during-import~1]
         // [impl->dsn~located-specification-item-id-storage~1]
         if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {
@@ -126,17 +122,13 @@ public final class SpecificationListBuilder implements ImportEventListener
     @Override
     public void addDependsOnId(final SpecificationItemId id)
     {
-        // TODO: call new method
-        // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAcceptedArtifactType(id.getArtifactType()))
-        {
-            this.itemBuilder.addDependOnId(id);
-        }
+        this.addDependsOnId(LocatedSpecificationItemId.builder().id(id).build());
     }
 
     @Override
     public void addDependsOnId(final LocatedSpecificationItemId id)
     {
+        // [impl->dsn~filtering-by-artifact-types-during-import~1]
         // [impl->dsn~located-specification-item-id-storage~1]
         if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {

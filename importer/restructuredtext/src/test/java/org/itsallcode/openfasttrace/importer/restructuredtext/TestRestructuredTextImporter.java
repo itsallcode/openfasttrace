@@ -10,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.nio.file.Path;
 
-import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
@@ -101,11 +102,6 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
     private static java.util.List<SpecificationItem> importText(final String source)
     {
         return ImportAssertions.runImporterOnText(Path.of("located.rst"), source, importerFactory);
-    }
-
-    private static SourceRange range(final int line, final int start, final int end)
-    {
-        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     protected String formatTitle(final String title, final int level)

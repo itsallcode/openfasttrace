@@ -151,7 +151,8 @@ OFT shall retain the individual source occurrence. For source text, positions
 shall be zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges.
 Where an ID component is generated or its source is unavailable, its component
 range shall be absent. Equal semantic IDs at distinct source occurrences shall
-remain distinct occurrences.
+remain distinct occurrences. Short coverage tags shall not generate source
+ranges for their generated or covered IDs.
 
 Needs: dsn
 

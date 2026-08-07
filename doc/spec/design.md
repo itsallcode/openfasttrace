@@ -136,9 +136,10 @@ Needs: impl, utest
 #### Coverage-tag Source Ranges
 `dsn~located-specification-item-id-tag-ranges~1`
 
-Coverage-tag importers locate source-backed declared and covered ID components.
-They leave component ranges absent when a tag generates the corresponding ID
-component.
+The full coverage-tag importer locates source-backed declared and covered ID
+components. It leaves component ranges absent when a tag generates the
+corresponding ID component. The short coverage-tag importer creates item
+IDs without source ranges.
 
 Needs: impl, utest
 

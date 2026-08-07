@@ -8,11 +8,7 @@ import java.io.StringReader;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.itsallcode.openfasttrace.api.core.LocatedSpecificationItemId;
-import org.itsallcode.openfasttrace.api.core.SourcePosition;
-import org.itsallcode.openfasttrace.api.core.SourceRange;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
@@ -20,11 +16,13 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
 
-class TestCoverageTagParser {
+class TestCoverageTagParser
+{
     private static final String FILE = "source.file";
 
     @Test
-    void importsFullTag() {
+    void importsFullTag()
+    {
         final SpecificationListBuilder listener = SpecificationListBuilder.create();
         final LineConsumer parser = CoverageTagParser.create(null, inputFile(), listener);
 
@@ -36,7 +34,8 @@ class TestCoverageTagParser {
     }
 
     @Test
-    void importsConfiguredShortTag() {
+    void importsConfiguredShortTag()
+    {
         final PathConfig config = pathConfig();
         final SpecificationListBuilder listener = SpecificationListBuilder.create();
         final LineConsumer parser = CoverageTagParser.create(config, inputFile(), listener);
@@ -45,10 +44,11 @@ class TestCoverageTagParser {
 
         assertThat(listener.build(),
                 equalTo(List.of(item(SpecificationItemId.createId("utest", "prefix.covered-1743877134"),
-                        2, "[[covered:3]]", List.of("req~prefix.covered~3"), List.of()))));
+                        2, List.of("req~prefix.covered~3"), List.of()))));
     }
 
-    private static PathConfig pathConfig() {
+    private static PathConfig pathConfig()
+    {
         return PathConfig.builder()
                 .patternPathMatcher("glob:**")
                 .coveredItemArtifactType("req")
@@ -58,12 +58,27 @@ class TestCoverageTagParser {
     }
 
     private static SpecificationItem item(final SpecificationItemId id, final int lineNumber,
-            final String tag, final List<String> coveredIds, final List<String> neededArtifactTypes) {
+            final List<String> coveredIds, final List<String> neededArtifactTypes)
+    {
+        final SpecificationItem.Builder builder = SpecificationItem.builder()
+                .id(id)
+                .location(FILE, lineNumber);
+        coveredIds.stream().map(SpecificationItemId::parseId).forEach(builder::addCoveredId);
+        neededArtifactTypes.forEach(builder::addNeedsArtifactType);
+        return builder.build();
+    }
+
+    private static SpecificationItem item(final SpecificationItemId id, final int lineNumber,
+            final String tag, final List<String> coveredIds, final List<String> neededArtifactTypes)
+    {
         final SpecificationItem.Builder builder = SpecificationItem.builder()
                 .location(FILE, lineNumber);
-        if (tag.contains(id.toString())) {
+        if (tag.contains(id.toString()))
+        {
             builder.id(locatedId(lineNumber, tag.indexOf(id.toString()), id));
-        } else {
+        }
+        else
+        {
             builder.id(id);
         }
         coveredIds.stream().map(SpecificationItemId::parseId)
@@ -74,21 +89,14 @@ class TestCoverageTagParser {
     }
 
     private static LocatedSpecificationItemId locatedCoveredId(final int lineNumber, final String tag,
-            final SpecificationItemId id) {
-        if (!tag.startsWith("[[")) {
-            return locatedId(lineNumber, tag.indexOf(id.toString()), id);
-        }
-        final int nameStart = 2;
-        final int revisionStart = tag.indexOf(':') + 1;
-        final int end = tag.indexOf("]]", revisionStart);
-        return LocatedSpecificationItemId.builder().id(id)
-                .range(range(lineNumber - 1, nameStart, end))
-                .nameRange(range(lineNumber - 1, nameStart, revisionStart - 1))
-                .revisionRange(range(lineNumber - 1, revisionStart, end)).build();
+            final SpecificationItemId id)
+    {
+        return locatedId(lineNumber, tag.indexOf(id.toString()), id);
     }
 
     private static LocatedSpecificationItemId locatedId(final int lineNumber, final int start,
-            final SpecificationItemId id) {
+            final SpecificationItemId id)
+    {
         final String text = id.toString();
         final int typeEnd = text.indexOf('~');
         final int revisionStart = text.lastIndexOf('~') + 1;
@@ -98,11 +106,13 @@ class TestCoverageTagParser {
                 .revisionRange(range(lineNumber - 1, start + revisionStart, start + text.length())).build();
     }
 
-    private static SourceRange range(final int line, final int start, final int end) {
+    private static SourceRange range(final int line, final int start, final int end)
+    {
         return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
-    private static InputFile inputFile() {
+    private static InputFile inputFile()
+    {
         return StreamInput.forReader(Paths.get(FILE), new BufferedReader(new StringReader("")));
     }
 }

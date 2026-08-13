@@ -69,6 +69,8 @@ class ITestSelfTrace
         final Path baseDir = getProjectBaseDir();
         return ImportSettings.builder() //
                 .addInputs(baseDir.resolve("doc/spec/")) //
+                .addInputs(baseDir.resolve("product/pom.xml")) //
+                .addInputs(baseDir.resolve(".github/workflows/github_release.sh")) //
                 .addInputs(findInputDirectories(baseDir)) //
                 .build();
     }

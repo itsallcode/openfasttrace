@@ -80,6 +80,29 @@
     <build>
         <finalName>openfasttrace-${revision}</finalName>
         <plugins>
+            <!-- [impl->dsn~build.spdx-sbom-generation~1] -->
+            <plugin>
+                <groupId>org.spdx</groupId>
+                <artifactId>spdx-maven-plugin</artifactId>
+                <version>1.0.4</version>
+                <executions>
+                    <execution>
+                        <id>create-product-spdx-sbom</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>aggregateSPDX</goal>
+                        </goals>
+                        <configuration>
+                            <spdxFile>${project.build.directory}/${project.build.finalName}.spdx3.json</spdxFile>
+                            <outputFormat>JSON-LD</outputFormat>
+                            <sbomType>build</sbomType>
+                            <includeCompileScope>true</includeCompileScope>
+                            <includeRuntimeScope>true</includeRuntimeScope>
+                            <includeProvidedScope>true</includeProvidedScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

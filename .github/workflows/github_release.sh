@@ -15,6 +15,7 @@ echo "Read project version '$project_version' from $pom_file"
 
 # Calculate checksum
 readonly artifact_path="$base_dir/product/target/openfasttrace-${project_version}.jar"
+readonly sbom_path="$base_dir/product/target/openfasttrace-${project_version}.spdx3.json"
 echo "Calculate sha256sum for file '$artifact_path'"
 file_dir="$(dirname "$artifact_path")"
 readonly file_dir
@@ -40,7 +41,9 @@ echo "Title        : $title"
 echo "Changes file : $changes_file"
 echo "Artifact file: $artifact_path"
 echo "Checksum file: $checksum_file_path"
+echo "SBOM file    : $sbom_path"
 
-release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact_path" "$checksum_file_path")
+# [impl->dsn~build.spdx-sbom-release-asset~1]
+release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact_path" "$checksum_file_path" "$sbom_path")
 readonly release_url
 echo "Release URL: $release_url"

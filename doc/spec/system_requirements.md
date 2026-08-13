@@ -264,6 +264,39 @@ Needs: req
 
 ## Functional Requirements
 
+### Product SPDX Software Bill Of Materials
+`req~build.spdx-sbom~1`
+
+The Maven build creates one SPDX 3 JSON software bill of materials (SBOM) named `openfasttrace-<version>.spdx3.json`. It lists dependencies at Maven module granularity, includes compile, runtime, and provided scopes and retains available license metadata. GitHub releases include the SBOM as an asset.
+
+Needs: scn, dsn
+
+#### Generate Product SPDX SBOM
+`scn~build.spdx-sbom-generation~1`
+
+**Given** a Maven build of an OpenFastTrace release version,
+**when** it builds the product module,
+**then** it creates a `openfasttrace-<version>.spdx3.json` SPDX 3 SBOM for the product, including compile, runtime, and provided dependencies at module granularity and the available dependency license information.
+
+Covers:
+
+* [req~build.spdx-sbom~1](#product-spdx-software-bill-of-materials)
+
+Needs: dsn
+
+#### Publish Product SPDX SBOM
+`scn~build.spdx-sbom-release-asset~1`
+
+**Given** a successful OpenFastTrace release build with its product SBOM,
+**when** the GitHub release is created,
+**then** the release includes the generated `openfasttrace-<version>.spdx3.json` as an asset alongside the product JAR and its checksum.
+
+Covers:
+
+* [req~build.spdx-sbom~1](#product-spdx-software-bill-of-materials)
+
+Needs: dsn
+
 ### Anatomy of Specification Items
 
 #### Specification Item

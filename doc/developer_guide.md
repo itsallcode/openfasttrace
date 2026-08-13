@@ -122,7 +122,7 @@ Build OFT:
 mvn -T 1C package -DskipTests
 ```
 
-This will build the executable JAR including all modules at `product/target/openfasttrace-$VERSION.jar`.
+This will build the executable JAR including all modules at `product/target/openfasttrace-$VERSION.jar` and the SPDX 3 SBOM at `product/target/openfasttrace-$VERSION.spdx3.json`.
 
 #### Specify Java Version
 
@@ -259,7 +259,8 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
    * Run command `gh workflow run release.yml --repo itsallcode/openfasttrace --ref main`
    * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
 2. Update the title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace/releases).
-3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
+3. Download the JAR, checksum, and SPDX 3 SBOM from the release assets. The SBOM file is named `openfasttrace-$VERSION.spdx3.json`.
+4. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
 
 ## Module Overview
 

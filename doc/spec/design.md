@@ -844,6 +844,34 @@ Needs: impl, utest
 
 # Deployment View
 
+# Cross-cutting Concerns
+
+## Build
+
+### Product SPDX SBOM Generation
+`dsn~build.spdx-sbom-generation~1`
+
+The `product` module configures `org.spdx:spdx-maven-plugin` with the `aggregateSPDX` goal. The execution runs during the Maven lifecycle and creates `product/target/openfasttrace-${revision}.spdx3.json`. It uses SPDX 3 JSON-LD, aggregates the product's Maven modules, and includes compile, runtime, and provided dependency scopes.
+
+Covers:
+
+* `req~build.spdx-sbom~1`
+* `scn~build.spdx-sbom-generation~1`
+
+Needs: impl, itest
+
+### Product SPDX SBOM Release Asset
+`dsn~build.spdx-sbom-release-asset~1`
+
+The GitHub release script passes `product/target/openfasttrace-${revision}.spdx3.json` to `gh release create` with the product JAR and its checksum.
+
+Covers:
+
+* `req~build.spdx-sbom~1`
+* `scn~build.spdx-sbom-release-asset~1`
+
+Needs: impl, itest
+
 # Concepts
 
 ## Data Structures

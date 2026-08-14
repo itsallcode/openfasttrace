@@ -5,7 +5,8 @@
 Produce one SPDX 3 JSON software bill of materials (SBOM) for the OpenFastTrace
 product during the Maven build and attach it to every GitHub release. The SBOM
 must represent the product at module granularity, include compile, runtime, and
-provided dependencies, and retain available dependency-license information.
+provided dependencies, exclude test dependencies, and retain available
+dependency-license information.
 
 ## Scope
 
@@ -16,6 +17,7 @@ In scope:
 * Generate `openfasttrace-<version>.spdx3.json` as part of the regular Maven
   build.
 * Include compile, runtime, and provided dependencies.
+* Exclude test-scope dependencies from the released-product SBOM.
 * Ensure the release workflow uploads the SBOM with the product JAR and its
   checksum.
 
@@ -23,8 +25,6 @@ Out of scope:
 
 * File-level or snippet-level SPDX resolution.
 * SBOMs for individual OpenFastTrace modules.
-* Adding or correcting dependency license metadata not exposed by the resolved
-  Maven dependency metadata.
 * Changing OpenFastTrace runtime behavior or its public CLI/API.
 
 ## Design References
@@ -36,13 +36,13 @@ Out of scope:
 * [Product module](../../product/pom.xml)
 * [Release workflow](../../.github/workflows/release.yml)
 * [GitHub release script](../../.github/workflows/github_release.sh)
-* [SPDX Maven Plugin documentation](https://spdx.github.io/spdx-maven-plugin/aggregateSPDX-mojo.html)
+* [SPDX Maven Plugin documentation](https://spdx.github.io/spdx-maven-plugin/createSPDX-mojo.html)
 
 ## Strategy
 
 Configure the selected SPDX Maven Plugin in `product/pom.xml`, rather than in
 the shared parent, so the reactor creates exactly one SBOM for the distributable
-product. Bind `aggregateSPDX` to the normal Maven lifecycle, use SPDX 3 JSON-LD
+product. Bind `createSPDX` to the normal Maven lifecycle, use SPDX 3 JSON-LD
 output and the required product filename, and explicitly configure dependency
 scope inclusion to make the acceptance criteria independent of plugin defaults.
 
@@ -62,7 +62,7 @@ required dependency-scope controls. Its documented default lifecycle binding is
 
 ### Requirements And Design
 
-- [x] Add `req~build.spdx-sbom~1` to `doc/spec/system_requirements.md`, covering
+- [x] Add `req~build.spdx-sbom~2` to `doc/spec/system_requirements.md`, covering
       the product SBOM content, module granularity, required dependency scopes,
       SPDX 3 JSON filename, and release availability; add scenarios for a
       successful product build and a GitHub release asset.
@@ -80,9 +80,9 @@ required dependency-scope controls. Its documented default lifecycle binding is
 ### Implementation
 
 - [x] Add the approved SPDX Maven Plugin version and an execution to
-      `product/pom.xml`; configure `aggregateSPDX`, SPDX 3 JSON-LD output,
+      `product/pom.xml`; configure `createSPDX`, SPDX 3 JSON-LD output,
       `openfasttrace-${revision}.spdx3.json`, module granularity, and
-      compile/runtime/provided inclusion.
+      compile/runtime/provided inclusion and test-scope exclusion.
 - [x] Confirm the plugin generates only the product SBOM, contains the resolved
       direct and transitive dependencies at module level, and preserves all
       available declared license data; add narrowly scoped license overrides

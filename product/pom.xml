@@ -80,7 +80,7 @@
     <build>
         <finalName>openfasttrace-${revision}</finalName>
         <plugins>
-            <!-- [impl->dsn~build.spdx-sbom-generation~1] -->
+            <!-- [impl->dsn~build.spdx-sbom-generation~2] -->
             <plugin>
                 <groupId>org.spdx</groupId>
                 <artifactId>spdx-maven-plugin</artifactId>
@@ -90,15 +90,128 @@
                         <id>create-product-spdx-sbom</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>aggregateSPDX</goal>
+                            <goal>createSPDX</goal>
                         </goals>
                         <configuration>
                             <spdxFile>${project.build.directory}/${project.build.finalName}.spdx3.json</spdxFile>
                             <outputFormat>JSON-LD</outputFormat>
                             <sbomType>build</sbomType>
+                            <licenseDeclared>GPL-3.0-only</licenseDeclared>
+                            <licenseConcluded>GPL-3.0-only</licenseConcluded>
                             <includeCompileScope>true</includeCompileScope>
                             <includeRuntimeScope>true</includeRuntimeScope>
                             <includeProvidedScope>true</includeProvidedScope>
+                            <includeTestScope>false</includeTestScope>
+                            <licenseOverwrites>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-api</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-core</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-exporter-common</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-exporter-specobject</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-gherkin</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-lightweightmarkup</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-markdown</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-restructuredtext</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-specobject</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-tag</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-tag-importer-common</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-xmlparser</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-importer-zip</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-reporter-aspec</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-reporter-html</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-reporter-plaintext</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                                <licenseOverwrite>
+                                    <target>both</target>
+                                    <groupId>org.itsallcode.openfasttrace</groupId>
+                                    <artifactId>openfasttrace-testutil</artifactId>
+                                    <licenseString>GPL-3.0-only</licenseString>
+                                </licenseOverwrite>
+                            </licenseOverwrites>
                         </configuration>
                     </execution>
                 </executions>

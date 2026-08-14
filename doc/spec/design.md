@@ -849,14 +849,14 @@ Needs: impl, utest
 ## Build
 
 ### Product SPDX SBOM Generation
-`dsn~build.spdx-sbom-generation~1`
+`dsn~build.spdx-sbom-generation~2`
 
-The `product` module configures `org.spdx:spdx-maven-plugin` with the `aggregateSPDX` goal. The execution runs during the Maven lifecycle and creates `product/target/openfasttrace-${revision}.spdx3.json`. It uses SPDX 3 JSON-LD, aggregates the product's Maven modules, and includes compile, runtime, and provided dependency scopes.
+The `product` module configures `org.spdx:spdx-maven-plugin` with the `createSPDX` goal. The execution runs during the Maven lifecycle and creates `product/target/openfasttrace-${revision}.spdx3.json`. It uses SPDX 3 JSON-LD, includes compile, runtime, and provided dependency scopes, and excludes test scope. License overwrites set the OpenFastTrace modules to `GPL-3.0-only`, because the plugin cannot resolve the inherited GPL URL unambiguously.
 
 Covers:
 
-* `req~build.spdx-sbom~1`
-* `scn~build.spdx-sbom-generation~1`
+* `req~build.spdx-sbom~2`
+* `scn~build.spdx-sbom-generation~2`
 
 Needs: impl, itest
 
@@ -867,7 +867,7 @@ The GitHub release script passes `product/target/openfasttrace-${revision}.spdx3
 
 Covers:
 
-* `req~build.spdx-sbom~1`
+* `req~build.spdx-sbom~2`
 * `scn~build.spdx-sbom-release-asset~1`
 
 Needs: impl, itest

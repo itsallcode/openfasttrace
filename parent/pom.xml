@@ -25,7 +25,7 @@
     <licenses>
         <license>
             <name>GNU General Public License v3.0</name>
-            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+            <url>https://spdx.org/licenses/GPL-3.0-or-later.html</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

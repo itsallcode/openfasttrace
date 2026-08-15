@@ -1,4 +1,4 @@
-![oft-logo](../core/src/main/resources/openfasttrace_logo.svg)
+![oft-logo](../../core/src/main/resources/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 
@@ -416,7 +416,7 @@ In projects of a certain size you always reach the point where a single team is 
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
-![Covering selected tags](images/uml/object/obj_multiple_detailed_designs.svg)
+![Covering selected tags](../images/uml/object/obj_multiple_detailed_designs.svg)
 
 In our example it is the job of Andrea the architect to create a system architecture for the system specification coming from Soeren. Andrea defines a set of components which communicate with each other through well-defined, minimal interfaces. Each component is designed so that it can be independently developed and tested. Only an integration test is later necessary to prove that the components work together as designed. You tag each architectural requirement with the names of the affected components.
 
@@ -1147,7 +1147,7 @@ and the requirement type with the element `<doctype>`.
 
 If you are a software developer planning to integrate OFT into one of your programs or scripts, you will probably want to use the OFT API.
 
-Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interface [org.itsallcode.openfasttrace.core.Oft](../core/src/main/java/org/itsallcode/openfasttrace/core/Oft.java) in the source code.
+Below you find a few short examples of how to use the OFT API. For details check the JavaDoc documentation of the interface [org.itsallcode.openfasttrace.core.Oft](../../core/src/main/java/org/itsallcode/openfasttrace/core/Oft.java) in the source code.
 
 ### Using OFT From Java
 
@@ -1258,9 +1258,9 @@ oft.reportToStdOut(trace);
 
 Import, export and report each have an overloaded variant that can be configured using the following classes
 
-* [org.itsallcode.openfasttrace.api.importer.ImportSettings](../api/src/main/java/org/itsallcode/openfasttrace/api/importer/ImportSettings.java)
-* [org.itsallcode.openfasttrace.core.ExportSettings](../core/src/main/java/org/itsallcode/openfasttrace/core/ExportSettings.java)
-* [org.itsallcode.openfasttrace.api.ReportSettings](../api/src/main/java/org/itsallcode/openfasttrace/api/ReportSettings.java)
+* [org.itsallcode.openfasttrace.api.importer.ImportSettings](../../api/src/main/java/org/itsallcode/openfasttrace/api/importer/ImportSettings.java)
+* [org.itsallcode.openfasttrace.core.ExportSettings](../../core/src/main/java/org/itsallcode/openfasttrace/core/ExportSettings.java)
+* [org.itsallcode.openfasttrace.api.ReportSettings](../../api/src/main/java/org/itsallcode/openfasttrace/api/ReportSettings.java)
 
 Each of those classes comes with a builder which is called like this:
 

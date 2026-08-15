@@ -109,7 +109,7 @@ Needs: impl, utest
 - **Key Resources**:
   - `README.md`: General overview.
   - `doc/developer_guide.md`: Detailed build and internal info.
-  - `doc/user_guide.md`: Comprehensive tool usage.
+  - `doc/user_guide/user_guide.md`: Comprehensive tool usage.
   - `CONTRIBUTING.md`: Human-AI collaboration guidelines.
   - `doc/spec/system_requirements.md`: System requirements specification.
   - `doc/spec/design.md`: High-level design documentation.

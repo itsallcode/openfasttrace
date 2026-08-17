@@ -37,7 +37,7 @@ Sonarcloud status:
 * [🛠 IntelliJ Plugin (PyCharm, Clion, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
 * [🤖 Agent Skills](.agents/skills)
 * [🛡️ Security Policy](SECURITY.md)
-* [♻️ Project Lifecycle](doc/user_guide/project_lifecycle.md)
+* [♻️ Project Lifecycle and Deprecations](doc/user_guide/project_lifecycle.md)
 
 **News and Discussions**
 

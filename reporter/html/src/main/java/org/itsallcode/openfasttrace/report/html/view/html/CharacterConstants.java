@@ -4,6 +4,7 @@ final class CharacterConstants
 {
     public static final String CHECK_MARK = "<span class=\"green\">&check;</span>";
     public static final String CROSS_MARK = "<span class=\"red\">&cross;</span>";
+    public static final String TRANSITIVE_FAILURE_MARK = "<span class=\"red\">&#10062;</span>";
 
     private CharacterConstants()
     {

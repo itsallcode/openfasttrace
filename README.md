@@ -4,7 +4,7 @@
 
 OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing keeps track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
-You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide.md).
+You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide/user_guide.md).
 
 Below you see a screenshot of an HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
 
@@ -31,10 +31,13 @@ Sonarcloud status:
 
 **User Guides and Tools**
 
-* [📖 User Guide](doc/user_guide.md)
+* [📖 User Guide](doc/user_guide/user_guide.md)
 * [🔌 Extending OpenFastTrace With Plugins](doc/plugins.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 * [🛠 IntelliJ Plugin (PyCharm, Clion, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
+* [🤖 Agent Skills](.agents/skills)
+* [🛡️ Security Policy](SECURITY.md)
+* [♻️ Project Lifecycle and Deprecations](doc/user_guide/project_lifecycle.md)
 
 **News and Discussions**
 
@@ -68,7 +71,7 @@ Sonarcloud status:
 
 If you want to use OFT, you have the choice between using it as part of your build process &mdash; typically with Maven or Gradle. Or you can run OFT from the command line.
 
-Check the [user guide](doc/user_guide.md) for detailed information on how to use OpenFastTrack.
+Check the [user guide](doc/user_guide/user_guide.md) for detailed information on how to use OpenFastTrack.
 
 ## Getting OpenFastTrace
 
@@ -110,7 +113,7 @@ java -jar product/target/openfasttrace-4.2.0.jar trace /path/to/directory/being/
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).
 
-For more details about how to run OFT please consult the [user guide](doc/user_guide.md).
+For more details about how to run OFT please consult the [user guide](doc/user_guide/user_guide.md).
 
 ### Download and Execute in Continuous Integration
 

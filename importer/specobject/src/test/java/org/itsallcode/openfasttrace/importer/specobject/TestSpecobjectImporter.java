@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 import static org.mockito.Mockito.*;
 
 import java.io.BufferedReader;
@@ -19,25 +20,73 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.xmlparser.XmlParserFactory;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.FieldSource;
 
 class TestSpecobjectImporter
 {
     private static final String PSEUDO_FILENAME = "pseudo_filename";
     private static final Location STANDARD_LOCATION = Location.create(PSEUDO_FILENAME, 2);
 
-    @Test
-    void testImportOfMinimalSpecObject()
+    static List<Arguments> idImportChecks = List.of(
+            argumentSet("minimal import", """
+                    <specobjects doctype="req">
+                      <specobject>
+                        <id>minimal</id>
+                        <version>1</version>
+                      </specobject>
+                    </specobjects>""",
+                    "req~minimal~1"),
+
+            argumentSet("strip superfluous artifact type", """
+                    <specobjects doctype="impl">
+                      <specobject>
+                        <id>impl:strip_duplicate_prefix</id>
+                        <version>0</version>
+                      </specobject>
+                    </specobjects>""",
+                    "impl~strip_duplicate_prefix~0"),
+
+            argumentSet("ignore unknown XML elements", """
+                    <specobjects doctype="feat">
+                      <specobject>
+                        <id>ignore-selected-xml-elements</id>
+                        <version>12345</version>
+                        <creationdate>1970-01-01</creationdate>
+                        <source>john doe</source>
+                      </specobject>
+                    </specobjects>""",
+                    "feat~ignore-selected-xml-elements~12345"),
+
+            argumentSet("fullfilled-by is ignored", """
+                    <specobjects doctype="req">
+                      <specobject>
+                        <id>with-fulfilled-by</id>
+                        <version>1</version>
+                        <fulfilledby>
+                          <ffbObj>
+                            <ffbType>impl</ffbType>
+                            <ffbId>ffb-a</ffbId>
+                            <ffbVersion>1</ffbVersion>
+                          </ffbObj>
+                          <ffbObj>
+                            <ffbType>utest</ffbType>
+                            <ffbId>ffb-b</ffbId>
+                            <ffbVersion>2</ffbVersion>
+                          </ffbObj>
+                        </fulfilledby>
+                      </specobject>
+                    </specobjects>""", "req~with-fulfilled-by~1"));
+
+    @ParameterizedTest
+    @FieldSource("idImportChecks")
+    void testImportSeesTheCorrectId(final String input, final String expectedId)
     {
-        final ImportEventListener listenerMock = importFromString("""
-                <specobjects doctype="req">
-                  <specobject>
-                    <id>minimal</id>
-                    <version>1</version>
-                  </specobject>
-                </specobjects>""");
+        final ImportEventListener listenerMock = importFromString(input);
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~minimal~1"));
+        verify(listenerMock).setId(locatedId(expectedId));
+        verify(listenerMock).setLocation(TestSpecobjectImporter.STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -52,6 +101,11 @@ class TestSpecobjectImporter
                 listenerMock);
         importer.runImport();
         return listenerMock;
+    }
+
+    private static LocatedSpecificationItemId locatedId(final String id)
+    {
+        return LocatedSpecificationItemId.builder().id(SpecificationItemId.parseId(id)).build();
     }
 
     @Test
@@ -73,13 +127,13 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).setStatus(ItemStatus.DRAFT);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setId(locatedId("req~complex~2"));
         verify(listenerMock).setTitle("my short description");
         verify(listenerMock).appendDescription("multiline description\none more line");
         verify(listenerMock).appendRationale("multiline rationale\nand another line");
         verify(listenerMock).appendComment("multiline comment\nyet another line");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -96,29 +150,9 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~complex~2"));
+        verify(listenerMock).setId(locatedId("req~complex~2"));
         verify(listenerMock).setTitle("My item title");
-        verify(listenerMock).endSpecificationItem();
-        verifyNoMoreInteractions(listenerMock);
-    }
-
-    @Test
-    void testSelectedElementsAreIgnoredDuringImport()
-    {
-        final ImportEventListener listenerMock = importFromString("""
-                <specobjects doctype="feat">
-                  <specobject>
-                    <id>ignore-selected-xml-elements</id>
-                    <version>12345</version>
-                    <creationdate>1970-01-01</creationdate>
-                    <source>john doe</source>
-                  </specobject>
-                </specobjects>""");
-        verify(listenerMock).beginSpecificationItem();
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock)
-                .setId(SpecificationItemId.parseId("feat~ignore-selected-xml-elements~12345"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -134,8 +168,8 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setId(locatedId("impl~strip_duplicate_prefix~0"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("impl~strip_duplicate_prefix~0"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -146,16 +180,16 @@ class TestSpecobjectImporter
         final String expectedFileName = "/home/johndoe/openfasttrace/examples/specobject.xml";
         final int expectedLine = 42;
         final ImportEventListener listenerMock = importFromString("<specobjects doctype=\"utest\">\n" //
-                        + "  <specobject>\n" //
-                        + "    <id>takeOverLocation</id>\n" //
-                        + "    <version>99999999</version>\n" //
-                        + "    <sourcefile>" + expectedFileName + "</sourcefile>" //
-                        + "    <sourceline>" + expectedLine + "</sourceline>" // "
-                        + "  </specobject>\n" //
-                        + "</specobjects>");
+                + "  <specobject>\n" //
+                + "    <id>takeOverLocation</id>\n" //
+                + "    <version>99999999</version>\n" //
+                + "    <sourcefile>" + expectedFileName + "</sourcefile>" //
+                + "    <sourceline>" + expectedLine + "</sourceline>" // "
+                + "  </specobject>\n" //
+                + "</specobjects>");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).setId(locatedId("utest~takeOverLocation~99999999"));
         verify(listenerMock).setLocation(Location.create(expectedFileName, expectedLine));
-        verify(listenerMock).setId(SpecificationItemId.parseId("utest~takeOverLocation~99999999"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -175,10 +209,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("itest~with-tags~1"));
+        verify(listenerMock).setId(locatedId("itest~with-tags~1"));
         verify(listenerMock).addTag("tag 1");
         verify(listenerMock).addTag("tag 2");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -198,10 +232,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-needs-coverage~1"));
+        verify(listenerMock).setId(locatedId("req~with-needs-coverage~1"));
         verify(listenerMock).addNeededArtifactType("impl");
         verify(listenerMock).addNeededArtifactType("utest");
+        verify(listenerMock).setLocation(STANDARD_LOCATION);
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -221,39 +255,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).addDependsOnId(locatedId("req~dep-a~1"));
+        verify(listenerMock).addDependsOnId(locatedId("req~dep-b~2"));
+        verify(listenerMock).setId(locatedId("req~with-dependencies~1"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-dependencies~1"));
-        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-a~1"));
-        verify(listenerMock).addDependsOnId(SpecificationItemId.parseId("req~dep-b~2"));
-        verify(listenerMock).endSpecificationItem();
-        verifyNoMoreInteractions(listenerMock);
-    }
-
-    @Test
-    void testImportFulfilledByIsIgnored()
-    {
-        final ImportEventListener listenerMock = importFromString("""
-                <specobjects doctype="req">
-                  <specobject>
-                    <id>with-fulfilled-by</id>
-                    <version>1</version>
-                    <fulfilledby>
-                      <ffbObj>
-                        <ffbType>impl</ffbType>
-                        <ffbId>ffb-a</ffbId>
-                        <ffbVersion>1</ffbVersion>
-                      </ffbObj>
-                      <ffbObj>
-                        <ffbType>utest</ffbType>
-                        <ffbId>ffb-b</ffbId>
-                        <ffbVersion>2</ffbVersion>
-                      </ffbObj>
-                    </fulfilledby>
-                  </specobject>
-                </specobjects>""");
-        verify(listenerMock).beginSpecificationItem();
-        verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-fulfilled-by~1"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -279,10 +284,10 @@ class TestSpecobjectImporter
                   </specobject>
                 </specobjects>""");
         verify(listenerMock).beginSpecificationItem();
+        verify(listenerMock).addCoveredId(locatedId("feat~provides-a~1"));
+        verify(listenerMock).addCoveredId(locatedId("feat~provides-b~2"));
+        verify(listenerMock).setId(locatedId("req~with-fulfilled-by~1"));
         verify(listenerMock).setLocation(STANDARD_LOCATION);
-        verify(listenerMock).setId(SpecificationItemId.parseId("req~with-fulfilled-by~1"));
-        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-a~1"));
-        verify(listenerMock).addCoveredId(SpecificationItemId.parseId("feat~provides-b~2"));
         verify(listenerMock).endSpecificationItem();
         verifyNoMoreInteractions(listenerMock);
     }
@@ -290,7 +295,7 @@ class TestSpecobjectImporter
     @Test
     void testCustomTagsWithoutNamespacesLogsWarning()
     {
-        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        try (final RecordingLogHandler logHandler = new RecordingLogHandler())
         {
             importFromString("""
                     <specdocument>\
@@ -314,7 +319,7 @@ class TestSpecobjectImporter
     @Test
     void testCustomTagsWithNamespacesLogsNoWarning()
     {
-        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        try (final RecordingLogHandler logHandler = new RecordingLogHandler())
         {
             importFromString("""
                     <specdocument xmlns:x="http://extension">
@@ -336,7 +341,7 @@ class TestSpecobjectImporter
     @Test
     void testCustomTagsWithNamespacesPlusOftNamespaceLogsNoWarning()
     {
-        try( final RecordingLogHandler logHandler = new RecordingLogHandler() )
+        try (final RecordingLogHandler logHandler = new RecordingLogHandler())
         {
             importFromString("""
                     <specdocument xmlns="https://github.com/itsallcode/openfasttrace"
@@ -368,7 +373,8 @@ class TestSpecobjectImporter
             rootLogger.addHandler(this);
         }
 
-        @Override public void publish(final LogRecord logRecord)
+        @Override
+        public void publish(final LogRecord logRecord)
         {
             logRecords.add(logRecord);
             super.publish(logRecord);
@@ -379,7 +385,8 @@ class TestSpecobjectImporter
             return logRecords.stream();
         }
 
-        @Override public void close()
+        @Override
+        public void close()
         {
             Arrays.stream(rootLogger.getHandlers())
                     .filter((RecordingLogHandler.class::isInstance))

@@ -139,7 +139,7 @@ class ITZipFileImporter
         addEntryToZip("file1.c", new byte[] { (byte) 0x9F, (byte) 0x88 });
         final List<InputFile> importedFiles = runImporter(1);
         assertThat(importedFiles.get(0).getPath(), equalTo(this.zipFile.getPath() + "!file1.c"));
-        assertThat(this.actualFileContent.get(0), equalTo("��"));
+        assertThat(this.actualFileContent.get(0), equalTo("\uFFFD\uFFFD"));
     }
 
     private void addZipEntryDirectory(final String name) throws IOException

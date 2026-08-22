@@ -26,6 +26,7 @@ class AnsiSequenceTest {
                 Arguments.of(MAGENTA, 35),
                 Arguments.of(CYAN, 36),
                 Arguments.of(WHITE, 37),
+                Arguments.of(BRIGHT_BLACK, 90),
                 Arguments.of(BRIGHT_RED, 91)
         );
     }

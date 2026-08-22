@@ -8,11 +8,11 @@ import java.util.function.Predicate;
  * Specification items with links that can be followed.
  */
 // [impl->dsn~linked-specification-item~1]
+@SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
 public class LinkedSpecificationItem
 {
     private final SpecificationItem item;
-    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(
-            LinkStatus.class);
+    private final Map<LinkStatus, List<LinkedSpecificationItem>> links = new EnumMap<>(LinkStatus.class);
     private final Set<String> coveredArtifactTypes = new HashSet<>();
     private final Set<String> coveredArtifactTypesFromApprovedItems = new HashSet<>();
     private final Set<String> overCoveredArtifactTypes = new HashSet<>();
@@ -160,7 +160,7 @@ public class LinkedSpecificationItem
         if (coveringItem.getItem().getCoveredIds() != null
                 && !coveringItem.getItem().getCoveredIds().contains(getId()))
         {
-            coveringItem.getItem().getCoveredIds().add(getId());
+            coveringItem.getItem().addCoveredId(getId());
         }
     }
 
@@ -311,7 +311,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if all needed attribute types are covered by approved items.
-     * 
+     *
      * @return {@code true} if all needed attribute types are covered by
      *         approved items
      */
@@ -325,11 +325,9 @@ public class LinkedSpecificationItem
      *
      * @return covered, uncovered or cycle.
      */
-    // [impl->dsn~tracing.deep-coverage~1]
     public DeepCoverageStatus getDeepCoverageStatus()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, false);
+        return DeepCoverageResolver.resolve(this, false);
     }
 
     /**
@@ -340,54 +338,10 @@ public class LinkedSpecificationItem
      */
     public DeepCoverageStatus getDeepCoverageStatusOnlyAcceptApprovedItems()
     {
-        return getDeepCoverageStatusEndRecursionStartingAt(this.getId(),
-                DeepCoverageStatus.COVERED, true);
+        return DeepCoverageResolver.resolve(this, true);
     }
 
-    // [impl->dsn~tracing.link-cycle~1]
-    private DeepCoverageStatus getDeepCoverageStatusEndRecursionStartingAt(
-            final SpecificationItemId startId, final DeepCoverageStatus worstStatusSeen,
-            final boolean onlyAcceptApprovedItemStatus)
-    {
-        DeepCoverageStatus status = worstStatusSeen;
-        status = adjustDeepCoverageStatusIfApprovedRequired(onlyAcceptApprovedItemStatus, status);
-
-        for (final LinkedSpecificationItem incomingItem : getIncomingItems())
-        {
-            if (incomingItem.getId().equals(startId))
-            {
-                return DeepCoverageStatus.CYCLE;
-            }
-            else
-            {
-                final DeepCoverageStatus otherStatus = incomingItem
-                        .getDeepCoverageStatusEndRecursionStartingAt(startId, status, onlyAcceptApprovedItemStatus);
-                if (otherStatus == DeepCoverageStatus.CYCLE)
-                {
-                    return DeepCoverageStatus.CYCLE;
-                }
-                status = DeepCoverageStatus.getWorst(status, otherStatus);
-            }
-        }
-        if (status == DeepCoverageStatus.COVERED && !isCoveredShallow())
-        {
-            return DeepCoverageStatus.UNCOVERED;
-        }
-        else
-        {
-            return status;
-        }
-    }
-
-    private DeepCoverageStatus adjustDeepCoverageStatusIfApprovedRequired(final boolean onlyAcceptApprovedItemStatus,
-            final DeepCoverageStatus deepCoveredStatus)
-    {
-        return (onlyAcceptApprovedItemStatus && deepCoveredStatus == DeepCoverageStatus.COVERED && !isApproved())
-                ? DeepCoverageStatus.UNCOVERED
-                : deepCoveredStatus;
-    }
-
-    private List<LinkedSpecificationItem> getIncomingItems()
+    List<LinkedSpecificationItem> getIncomingItems()
     {
         return this.links.entrySet() //
                 .stream() //
@@ -401,6 +355,7 @@ public class LinkedSpecificationItem
      * <p>
      * An item counts as a defect if the following applies:
      * </p>
+     *
      * <pre>
      * has duplicates
      * or (not rejected
@@ -422,8 +377,23 @@ public class LinkedSpecificationItem
     }
 
     /**
+     * Check if the item has a transitive defect.
+     * <p>
+     * An item has a transitive defect if it is a defect but has no direct
+     * defects (duplicates, bad links, or direct uncovered needs).
+     * </p>
+     *
+     * @return {@code true} if the item has a transitive defect.
+     */
+    // [impl->dsn~tracing.transitive-defect~1]
+    public boolean isTransitiveDefect()
+    {
+        return isDefect() && !hasDuplicates() && !hasBadLinks() && areAllArtifactTypesCovered();
+    }
+
+    /**
      * Check if the item has one or more links.
-     * 
+     *
      * @return {@code true} if the item has one or more links
      */
     public boolean hasLinks()
@@ -443,7 +413,12 @@ public class LinkedSpecificationItem
         return false;
     }
 
-    private boolean areAllArtifactTypesCovered()
+    /**
+     * Check if all needed artifact types are covered.
+     *
+     * @return {@code true} if all needed artifact types are covered
+     */
+    public boolean areAllArtifactTypesCovered()
     {
         return this.getCoveredArtifactTypes().containsAll(this.getNeedsArtifactTypes());
     }
@@ -517,7 +492,7 @@ public class LinkedSpecificationItem
 
     /**
      * Check if this item has one ore more duplicates.
-     * 
+     *
      * @return {@code true} if this item has one ore more duplicates.
      */
     public boolean hasDuplicates()

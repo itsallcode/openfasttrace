@@ -19,3 +19,4 @@ doc/**/*.html
 pom.xml.versionsBackup
 .DS_Store
 /.serena/
+/.output.txt

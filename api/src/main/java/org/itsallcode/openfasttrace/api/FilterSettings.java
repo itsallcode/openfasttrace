@@ -1,8 +1,10 @@
 package org.itsallcode.openfasttrace.api;
 
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
+
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 
 /**
  * Settings for import filtering
@@ -10,12 +12,14 @@ import java.util.Set;
 public final class FilterSettings
 {
     private final Set<String> artifactTypes;
+    private final Set<ItemStatus> wantedStatuses;
     private final Set<String> tags;
     private final boolean withoutTags;
 
     private FilterSettings(final Builder builder)
     {
         this.artifactTypes = builder.artifactTypes;
+        this.wantedStatuses = builder.wantedStatuses;
         this.tags = builder.tags;
         this.withoutTags = builder.withoutTags;
     }
@@ -27,7 +31,17 @@ public final class FilterSettings
      */
     public Set<String> getArtifactTypes()
     {
-        return this.artifactTypes;
+        return Set.copyOf(this.artifactTypes);
+    }
+
+    /**
+     * Get the statuses the filter must match.
+     * 
+     * @return statuses that must be matched
+     */
+    public Set<ItemStatus> getWantedStatuses()
+    {
+        return Set.copyOf(this.wantedStatuses);
     }
 
     /**
@@ -38,7 +52,7 @@ public final class FilterSettings
 
     public Set<String> getTags()
     {
-        return this.tags;
+        return Set.copyOf(this.tags);
     }
 
     /**
@@ -62,6 +76,16 @@ public final class FilterSettings
     }
 
     /**
+     * Check if the status filter is set.
+     * 
+     * @return {@code true} if the status filter is set
+     */
+    public boolean isStatusCriteriaSet()
+    {
+        return this.wantedStatuses != null && !this.wantedStatuses.isEmpty();
+    }
+
+    /**
      * Check if the tag filter is set.
      * 
      * @return {@code true} if the tag filter is set
@@ -78,13 +102,13 @@ public final class FilterSettings
      */
     public boolean isAnyCriteriaSet()
     {
-        return isArtifactTypeCriteriaSet() || isTagCriteriaSet();
+        return isArtifactTypeCriteriaSet() || isStatusCriteriaSet() || isTagCriteriaSet();
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.artifactTypes, this.tags, this.withoutTags);
+        return Objects.hash(this.artifactTypes, this.wantedStatuses, this.tags, this.withoutTags);
     }
 
     @Override
@@ -93,7 +117,7 @@ public final class FilterSettings
             return false;
         }
         return withoutTags == that.withoutTags && Objects.equals(artifactTypes, that.artifactTypes)
-                && Objects.equals(tags, that.tags);
+                && Objects.equals(wantedStatuses, that.wantedStatuses) && Objects.equals(tags, that.tags);
     }
 
     /**
@@ -122,8 +146,9 @@ public final class FilterSettings
      */
     public static final class Builder
     {
-        private Set<String> artifactTypes = Collections.emptySet();
-        private Set<String> tags = Collections.emptySet();
+        private Set<String> artifactTypes = Set.of();
+        private Set<ItemStatus> wantedStatuses = EnumSet.noneOf(ItemStatus.class);
+        private Set<String> tags = Set.of();
         private boolean withoutTags = true;
 
         private Builder()
@@ -145,6 +170,19 @@ public final class FilterSettings
         }
 
         /**
+         * Set the list of statuses that the filter matches.
+         * 
+         * @param statuses
+         *            statuses that must be matched
+         * @return <code>this</code> for fluent programming
+         */
+        public Builder wantedStatuses(final Set<ItemStatus> statuses)
+        {
+            this.wantedStatuses = Set.copyOf(statuses);
+            return this;
+        }
+
+        /**
          * Set the list of tags that the filter matches.
          * 
          * @param tags
@@ -158,7 +196,7 @@ public final class FilterSettings
         }
 
         /**
-         * Configure if filter allows items that have no tags.
+         * Configure if the filter allows items that have no tags.
          * 
          * @param noTags
          *            {@code true} to match items without any tags

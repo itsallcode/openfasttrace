@@ -4,12 +4,12 @@ import static java.util.Arrays.asList;
 
 import java.util.List;
 
-import org.itsallcode.openfasttrace.testutil.importer.ImporterFactoryTestBase;
+import org.itsallcode.openfasttrace.testutil.importer.AbstractImporterFactoryTestBase;
 
 /**
  * Tests for {@link MarkdownImporterFactory}
  */
-class TestMarkdownImporterFactory extends ImporterFactoryTestBase<MarkdownImporterFactory>
+class TestMarkdownImporterFactory extends AbstractImporterFactoryTestBase<MarkdownImporterFactory>
 {
     @Override
     protected MarkdownImporterFactory createFactory()

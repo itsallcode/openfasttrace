@@ -7,12 +7,25 @@ package org.itsallcode.openfasttrace.api.report;
 public enum ReportVerbosity
 {
     //@formatter:off
-    /** No output, only set exit state */           QUIET,
-    /** Output "OK", "FAIL" only */                 MINIMAL,
-    /** Summary only */                             SUMMARY,
-    /** List of defect specification items */       FAILURES,
-    /** Summaries of defect specification items */  FAILURE_SUMMARIES,
-    /** Details of unclean items */                 FAILURE_DETAILS,
-    /** Details for all items */                    ALL
+    /** No output, only set exit state */
+    QUIET,
+    /** Output "OK", "FAIL" only */
+    MINIMAL,
+    /** Summary only */
+    SUMMARY,
+    /** List of defect specification items */
+    FAILURES,
+    /** List of non-transitive defect specification items */
+    DIRECT_FAILURES,
+    /** Summaries of defect specification items */
+    FAILURE_SUMMARIES,
+    /** Summaries of non-transitive defect specification items */
+    DIRECT_FAILURE_SUMMARIES,
+    /** Details of unclean items */
+    FAILURE_DETAILS,
+    /** Details of non-transitive unclean items */
+    DIRECT_FAILURE_DETAILS,
+    /** Details for all items */
+    ALL
     //@formatter:on
 }

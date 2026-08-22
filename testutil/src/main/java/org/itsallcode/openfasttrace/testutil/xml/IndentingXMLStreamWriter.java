@@ -6,7 +6,7 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * A stream writer for XML that adds indentation.
  */
-public class IndentingXMLStreamWriter extends StreamWriterDelegate
+public class IndentingXMLStreamWriter extends AbstractStreamWriterDelegate
 {
     private static final int WROTE_MARKUP = 1;
     private static final int WROTE_DATA = 2;

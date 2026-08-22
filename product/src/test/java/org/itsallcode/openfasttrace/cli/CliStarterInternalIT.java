@@ -40,6 +40,7 @@ class CliStarterInternalIT {
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
     private static final String WANTED_ARTIFACT_TYPES_PARAMETER = "--wanted-artifact-types";
+    private static final String WANTED_STATUSES_PARAMETER = "--wanted-statuses";
     private static final String COLOR_SCHEME_PARAMETER = "--color-scheme";
     private static final String CARRIAGE_RETURN = "\r";
     private static final String NEWLINE = "\n";
@@ -302,6 +303,41 @@ class CliStarterInternalIT {
             () -> assertThat(status, equalTo(ExitStatus.OK)),
             () -> assertOutputFileExists(true),
             () -> assertOutputFileContentStartsWith("ok - 3 total")
+        );
+    }
+
+    @Test
+    // [itest->dsn~filtering-by-item-status-during-import~1]
+    void testTraceWithFilteredStatuses(@TempDir final Path tempDir) throws IOException {
+        final Path specFile = tempDir.resolve("spec.md");
+        Files.writeString(specFile, """
+            # Spec
+            ## Draft Re
+            `req~draft~1`
+            
+            Status: draft
+            
+            ## Approved Req
+            `req~approved~1`
+            Status: approved
+            
+            ## Proposed Req
+            `req~proposed~1`
+            Status: proposed
+            """);
+
+        final ExitStatus status = runInternal(
+                TRACE_COMMAND, tempDir.toString(),
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                WANTED_STATUSES_PARAMETER, "draft, proposed",
+                REPORT_VERBOSITY_PARAMETER, "all");
+        assertAll(
+            () -> assertThat(status, equalTo(ExitStatus.OK)),
+            () -> assertOutputFileExists(true),
+            () -> assertThat(getOutputFileContent(), containsString("2 total")),
+            () -> assertThat(getOutputFileContent(), containsString("req~draft~1")),
+            () -> assertThat(getOutputFileContent(), containsString("req~proposed~1")),
+            () -> assertThat(getOutputFileContent(), not(containsString("approved")))
         );
     }
 

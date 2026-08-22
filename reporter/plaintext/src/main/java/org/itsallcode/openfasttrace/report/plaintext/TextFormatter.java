@@ -20,6 +20,14 @@ interface TextFormatter {
     String formatNotOk(final String text);
 
     /**
+     * Format a text span that represents a transitive bad result.
+     *
+     * @param text text span to be formatted
+     * @return formatted text
+     */
+    String formatTransitiveNotOk(final String text);
+
+    /**
      * Format a text span that represents a strongly emphasized text.
      *
      * @param text text span to be formatted

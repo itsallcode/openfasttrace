@@ -6,7 +6,6 @@
         "source.generate.finalModifiers": "explicit",
         "source.fixAll": "explicit"
     },
-    "java.saveActions.organizeImports": true,
     "java.sources.organizeImports.starThreshold": 3,
     "java.sources.organizeImports.staticStarThreshold": 3,
     "java.configuration.updateBuildConfiguration": "automatic",

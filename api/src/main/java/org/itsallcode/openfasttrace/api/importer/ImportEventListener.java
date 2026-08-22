@@ -13,7 +13,7 @@ public interface ImportEventListener
     /**
      * The importer found a new specification item. The
      * {@link SpecificationItemId} must be defined using
-     * {@link #setId(SpecificationItemId)}.
+     * {@link #setId(LocatedSpecificationItemId)}.
      */
     void beginSpecificationItem();
 
@@ -22,8 +22,21 @@ public interface ImportEventListener
      *
      * @param id
      *            the ID of the new item
+     * @deprecated Use {@link #setId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void setId(final SpecificationItemId id);
+
+    /**
+     * The importer found the declared ID together with its source occurrence.
+     *
+     * @param id
+     *            located ID occurrence
+     */
+    default void setId(final LocatedSpecificationItemId id)
+    {
+        setId(id.getId());
+    }
 
     /**
      * The importer found the title of a specification item
@@ -35,7 +48,7 @@ public interface ImportEventListener
 
     /**
      * The importer found the status of the specification item
-     * 
+     *
      * @param status
      *            the status
      */
@@ -71,16 +84,42 @@ public interface ImportEventListener
      *
      * @param id
      *            the ID of the item that is covered
+     * @deprecated Use {@link #addCoveredId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void addCoveredId(final SpecificationItemId id);
+
+    /**
+     * Add a covered ID together with its source occurrence.
+     *
+     * @param id
+     *            located covered ID occurrence
+     */
+    default void addCoveredId(final LocatedSpecificationItemId id)
+    {
+        addCoveredId(id.getId());
+    }
 
     /**
      * Add the ID of a specification item that this item depends on
      *
      * @param id
      *            the ID of the item depends on
+     * @deprecated Use {@link #addDependsOnId(LocatedSpecificationItemId)} instead.
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     void addDependsOnId(final SpecificationItemId id);
+
+    /**
+     * Add a dependency ID together with its source occurrence.
+     *
+     * @param id
+     *            located dependency ID occurrence
+     */
+    default void addDependsOnId(final LocatedSpecificationItemId id)
+    {
+        addDependsOnId(id.getId());
+    }
 
     /**
      * The importer detected that the current specification object needs to be
@@ -94,7 +133,7 @@ public interface ImportEventListener
 
     /**
      * Add a tag
-     * 
+     *
      * @param tag
      *            the tag
      */
@@ -102,7 +141,7 @@ public interface ImportEventListener
 
     /**
      * Set the location of the specification item in the imported file
-     * 
+     *
      * @param path
      *            the path of the imported file
      * @param line
@@ -117,19 +156,29 @@ public interface ImportEventListener
 
     /**
      * Set the location of the specification item in the imported file
-     * 
+     *
      * @param location
      *            the location
      */
     void setLocation(Location location);
 
     /**
-     * Set to {@code true} if the specification item forwards needed
-     * coverage
-     * 
+     * Set to {@code true} if the specification item forwards needed coverage
+     *
      * @param forwards
      *            {@code true} if the specification item forwards needed
      *            coverage
      */
     void setForwards(boolean forwards);
+
+    /**
+     * Add a complete specification item to the list of items being built. Use
+     * this method if the specification item is already complete and does not
+     * need to be built from events, e.g. when the item is specified in a single
+     * line and does not span multiple lines in the input file.
+     *
+     * @param item
+     *            the complete specification item
+     */
+    void addSpecificationItem(final SpecificationItem item);
 }

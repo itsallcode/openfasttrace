@@ -9,10 +9,10 @@
     <packaging>pom</packaging>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>4.6.0</revision>
+        <revision>4.10.0</revision>
         <java.version>17</java.version>
         <junit.version>6.1.0-M1</junit.version>
-        <junit.version>6.1.0</junit.version>
+        <junit.version>6.1.2</junit.version>
         <maven.surefire.version>3.5.6</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -150,6 +150,18 @@
             </dependency>
             <dependency>
                 <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-gherkin</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
+                <artifactId>openfasttrace-importer-tag-importer-common</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.itsallcode.openfasttrace</groupId>
                 <artifactId>openfasttrace-importer-tag</artifactId>
                 <version>${revision}</version>
                 <scope>compile</scope>
@@ -278,7 +290,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -298,8 +310,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
@@ -331,6 +342,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <release>${java.version}</release>
                     <charset>UTF-8</charset>
                     <doclint><!-- Intentionally empty -->
                     </doclint>
@@ -346,7 +358,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.15</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -438,7 +450,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.7.3</version>
                 <configuration>
                     <flattenMode>oss</flattenMode> <!-- Use 'oss' mode for Maven Central -->
                 </configuration>
@@ -602,7 +613,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -617,7 +628,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.7.3</version>
+                    <version>1.8.0</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
                         <flattenMode>resolveCiFriendliesOnly</flattenMode>
@@ -639,7 +650,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- This plugin's configuration is used to store Eclipse 
+                <!-- This plugin's configuration is used to store Eclipse
                     m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -683,7 +694,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2026.5</version>
+                            <version>1.2026.6</version>
                         </dependency>
                     </dependencies>
                 </plugin>

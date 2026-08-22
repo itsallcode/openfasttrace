@@ -3,8 +3,9 @@ package org.itsallcode.openfasttrace.api.report;
 import org.itsallcode.openfasttrace.api.ReportSettings;
 
 /**
- * Common context shared by all {@link ReporterFactory}s. This allows reporters
- * to access common infrastructure, e.g. the {@link ReportSettings}.
+ * Common context shared by all {@link ReporterFactory} implementations. This
+ * allows reporters to access common infrastructure, e.g. the
+ * {@link ReportSettings}.
  */
 public class ReporterContext
 {

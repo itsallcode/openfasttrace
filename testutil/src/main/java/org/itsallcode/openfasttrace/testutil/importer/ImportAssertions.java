@@ -38,6 +38,7 @@ public final class ImportAssertions
      * @param importerFactory
      *            factory that generates the importer
      */
+    @SuppressWarnings("java:S4968") // Match type definition comes from Hamcrest. Cannot change.
     public static void assertImportWithFactory(final Path path, final String input,
             final Matcher<Iterable<? extends SpecificationItem>> matcher,
             final ImporterFactory importerFactory)

@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.specobject;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.assertTraceContainsDefectIds;
 import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.assertTraceSize;
 import static org.itsallcode.openfasttrace.testutil.core.TraceAssertions.getItemFromTraceForId;
@@ -21,6 +22,28 @@ import org.junit.jupiter.api.Test;
 
 class TestSpecobjectImportExport
 {
+    // [utest->dsn~located-specification-item-id-specobject~1]
+    @Test
+    void testImportsLocatedIdsWithoutSourceRanges()
+    {
+        final SpecificationItem item = parse("""
+                <specobjects doctype="req">
+                  <specobject>
+                    <id>example</id><version>1</version>
+                    <providescoverage><provcov><linksto>feat:covered</linksto><dstversion>2</dstversion></provcov></providescoverage>
+                    <dependencies><dependson>req:dependency, v3</dependson></dependencies>
+                  </specobject>
+                </specobjects>""").get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is((SourceRange) null)),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is((SourceRange) null)),
+                () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is((SourceRange) null)),
+                () -> assertThat(item.getLocatedId().getArtifactTypeRange().isEmpty(), is(true)),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getNameRange().isEmpty(), is(true)),
+                () -> assertThat(item.getLocatedDependOnIds().get(0).getRevisionRange().isEmpty(), is(true)));
+    }
+
     @Test
     void testTraceContent()
     {

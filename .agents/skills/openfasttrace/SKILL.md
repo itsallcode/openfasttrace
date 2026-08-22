@@ -1,3 +1,8 @@
+---
+name: openfasttrace
+description: Work with OpenFastTrace requirement tracing, including specification items, artifact IDs, coverage markers, Markdown and Gherkin syntax, and trace validation. Use when Codex needs to create, edit, review, or validate OpenFastTrace-traced requirements, design, implementation, tests, or documentation.
+---
+
 # OpenFastTrace (OFT) Skill
 
 OpenFastTrace is a tool for requirement tracing across various artifacts (specifications, code, tests).
@@ -20,7 +25,7 @@ OpenFastTrace is a tool for requirement tracing across various artifacts (specif
   - `Description: <text>`: Optional keyword to start description.
   - `Rationale: <text>`, `Comment: <text>`.
 
-## Syntax (Markdown)
+## Syntax: Markdown
 
 ```markdown
 ### Title
@@ -37,7 +42,61 @@ Needs: dsn, impl, utest
 - **Forwarding**: `arch --> dsn : req~id~1` (delegates coverage without repeating).
 - **Exclusion**: Use `<!-- oft:off -->` and `<!-- oft:on -->` to skip parsing.
 
+## Syntax: Coverage Tags (many file formats)
+
+Implementation covering design in a C++ file:
+
+```C++
+\\ [impl -> dsn~hash-sum-calculation~1]
+```
+
+Unit test in a Java file:
+
+```shell
+\\ [utest -> dsn~hash-sum-calculation~1]
+```
+
+Coverage in a YMAL file (e.g., GitHub workflow)
+
+```yaml
+# [bld -> dsn~create-sbom~2]
+```
+
+Require coverage:
+
+```plantuml
+' [req -> dsn~hash-sum-calculation~1 >> impl, utest]
+```
+
+Multiple coverage:
+
+```Java
+// [dsn -> req~local-stability~1,arch~dimensional-input~1]
+```
+
 ## Tracing
+
+## Syntax: Gherkin
+
+Gherkin `.feature` files can define OFT scenario items. Put exactly one OFT ID
+in the contiguous tag region immediately before a `Scenario` or `Scenario
+Outline`. Optional `# Covers:` and `# Needs:` comments belong between the tags
+and the scenario header. Multiple `Covers` comments accumulate IDs; `Needs`
+may appear once.
+
+```gherkin
+@id:scn~user-login~1
+# Covers: req~authentication~1
+# Needs: dsn, itest
+Scenario: User logs in
+  Given a registered user
+  When valid credentials are entered
+  Then access is granted
+```
+
+Basic coverage tags are recognized only in Gherkin comments, for example
+`# [impl~login~1 -> dsn~authentication~1]`. Executable Gherkin lines are not
+evaluated for coverage tags.
 
 Tracing can be performed via CLI, Maven, or Gradle.
 

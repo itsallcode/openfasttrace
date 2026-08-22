@@ -11,16 +11,16 @@ import org.itsallcode.openfasttrace.api.importer.tag.config.PathConfig;
  * {@link ImporterFactory} for tags in source code files.
  */
 // [impl->dsn~import.full-coverage-tag~1]
-public class TagImporterFactory extends ImporterFactory
+public class TagImporterFactory extends AbstractImporterFactory
 {
     private static final String DEFAULT_FILE_REGEX = "(?i).*\\.java";
-    private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList( //
+    private static final List<String> SUPPORTED_DEFAULT_EXTENSIONS = Arrays.asList(
             "ads", "adb", // Ada
             "bat", // Windows batch files
             "c", "C", "cc", "cpp", "c++", "h", "H", "h++", "hh", "hpp", // C/C++
+            "dox", // Doxygen
             "c#", "cs", // C#
             "cfg", "conf", "ini", // configuration files
-            "feature", // Gherkin feature files
             "go", // Go
             "groovy", // Groovy
             "json", "htm", "html", "xhtml", "xml", "yaml", "yml", // markup languages
@@ -104,7 +104,7 @@ public class TagImporterFactory extends ImporterFactory
                     + DEFAULT_FILE_REGEX + " and " + getPathConfigs().toList());
         }
         final Optional<PathConfig> config = findConfig(path);
-        return TagImporter.create(config, path, listener);
+        return TagImporter.create(config.orElse(null), path, listener);
     }
 
     private Stream<PathConfig> getPathConfigs()

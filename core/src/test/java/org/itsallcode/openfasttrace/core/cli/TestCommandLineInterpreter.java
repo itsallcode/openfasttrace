@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -42,7 +41,7 @@ class TestCommandLineInterpreter
     @Test
     void testMissingValueForStringParameter()
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("-a"),
+        expectParseException(new CommandLineArgumentsStub(), List.of("-a"),
                 "No value for argument 'a'");
     }
 
@@ -52,7 +51,7 @@ class TestCommandLineInterpreter
             "--unexpectedParameter" })
     void testUnexpectedArgumentName(final String parameter)
     {
-        expectParseException(new CommandLineArgumentsStub(), asList(parameter),
+        expectParseException(new CommandLineArgumentsStub(), List.of(parameter),
                 "Unexpected parameter '" + parameter + "' is not allowed");
     }
 
@@ -87,7 +86,7 @@ class TestCommandLineInterpreter
     @Test
     void testInvalidEnumParamter()
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("-c", "INVALID_VALUE"),
+        expectParseException(new CommandLineArgumentsStub(), List.of("-c", "INVALID_VALUE"),
                 "Cannot convert value 'INVALID_VALUE' to enum org.itsallcode.openfasttrace.core.cli.CommandLineArgumentsStub$StubEnum. Allowed values: [VALUE1, VALUE2]");
     }
 
@@ -96,20 +95,20 @@ class TestCommandLineInterpreter
     {
         final String[] args = { "value_1", "value_2" };
         final CommandLineArgumentsStub stub = parseArguments(args);
-        assertThat(stub.getUnnamedValues(), equalTo(asList(args)));
+        assertThat(stub.getUnnamedValues(), equalTo(List.of(args)));
     }
 
     @Test
     void testNoSetterForUnnamedParameters()
     {
-        expectParseException(new CliArgsWithoutUnnamedParameters(), asList("value_1", "value_2"),
+        expectParseException(new CliArgsWithoutUnnamedParameters(), List.of("value_1", "value_2"),
                 "Unnamed arguments '[value_1, value_2]' are not allowed");
     }
 
     @Test
     void testSetterWithoutArgument()
     {
-        expectParseException(new CliArgsWithNoArgSetter(), asList("--invalid"),
+        expectParseException(new CliArgsWithNoArgSetter(), List.of("--invalid"),
                 "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.core.cli.TestCommandLineInterpreter$CliArgsWithNoArgSetter.setInvalid()'."
                         + " Only one argument is allowed.");
     }
@@ -117,7 +116,7 @@ class TestCommandLineInterpreter
     @Test
     void testSetterWithTooManyArguments()
     {
-        expectParseException(new CliArgsMultiArgSetter(), asList("--invalid"),
+        expectParseException(new CliArgsMultiArgSetter(), List.of("--invalid"),
                 "Unsupported argument count for setter 'public void org.itsallcode.openfasttrace.core.cli.TestCommandLineInterpreter$CliArgsMultiArgSetter.setInvalid(java.lang.String,int)'."
                         + " Only one argument is allowed.");
     }
@@ -125,14 +124,14 @@ class TestCommandLineInterpreter
     @Test
     void testSetterWithUnsupportedArgumentType()
     {
-        expectParseException(new CliArgsUnsupportedSetterArg(), asList("--invalid", "3.14"),
+        expectParseException(new CliArgsUnsupportedSetterArg(), List.of("--invalid", "3.14"),
                 "Type 'float' not supported for converting argument '3.14'");
     }
 
     @Test
     void testArgumentFollowedByArgument()
     {
-        expectParseException(new CommandLineArgumentsStub(), asList("-a", "--unexpected"),
+        expectParseException(new CommandLineArgumentsStub(), List.of("-a", "--unexpected"),
                 "No value for argument 'a'");
     }
 
@@ -141,7 +140,7 @@ class TestCommandLineInterpreter
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "-c", "VALUE2");
-        assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2")));
+        assertThat(stub.getUnnamedValues(), equalTo(List.of("value_1", "value_2")));
         assertThat(stub.isB(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
         assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
@@ -152,7 +151,7 @@ class TestCommandLineInterpreter
     {
         final CommandLineArgumentsStub stub = parseArguments("-a", "value_a", "value_1", "-b",
                 "value_2", "value_3", "-c", "VALUE2");
-        assertThat(stub.getUnnamedValues(), equalTo(asList("value_1", "value_2", "value_3")));
+        assertThat(stub.getUnnamedValues(), equalTo(List.of("value_1", "value_2", "value_3")));
         assertThat(stub.isB(), equalTo(true));
         assertThat(stub.getA(), equalTo("value_a"));
         assertThat(stub.getC(), equalTo(StubEnum.VALUE2));
@@ -173,7 +172,7 @@ class TestCommandLineInterpreter
     void testChainedSingleCharacterParametersMustFailIfNonBooleanMisplaced()
     {
         final CommandLineArgumentsStub stub = new CommandLineArgumentsStub();
-        expectParseException(stub, asList("-bad", "value_a"), "No value for argument 'a'");
+        expectParseException(stub, List.of("-bad", "value_a"), "No value for argument 'a'");
     }
 
     private CommandLineArgumentsStub parseArguments(final String... args) throws CliException
@@ -189,9 +188,9 @@ class TestCommandLineInterpreter
     private void expectParseException(final Object argumentsReceiver, final List<String> arguments,
             final String expectedExceptionMessage)
     {
-        final CliException exception = assertThrows(CliException.class,
-                () -> new CommandLineInterpreter(arguments.toArray(new String[0]),
-                        argumentsReceiver).parse());
+        final CommandLineInterpreter interpreter = new CommandLineInterpreter(arguments.toArray(new String[0]),
+                argumentsReceiver);
+        final CliException exception = assertThrows(CliException.class, interpreter::parse);
         assertThat(exception.getMessage(), equalTo(expectedExceptionMessage));
     }
 

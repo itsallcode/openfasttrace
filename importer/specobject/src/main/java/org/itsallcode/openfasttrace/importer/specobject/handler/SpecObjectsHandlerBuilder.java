@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.api.core.Location;
+import org.itsallcode.openfasttrace.api.core.LocatedSpecificationItemId;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
@@ -48,7 +49,8 @@ class SpecObjectsHandlerBuilder
 
     private void handleEndElement()
     {
-        this.listener.setId(this.idBuilder.build());
+        // [impl->dsn~located-specification-item-id-specobject~1]
+        this.listener.setId(LocatedSpecificationItemId.builder().id(this.idBuilder.build()).build());
         this.listener.setLocation(this.locationBuilder.build());
         this.listener.endSpecificationItem();
         this.idBuilder = null;

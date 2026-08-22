@@ -6,7 +6,7 @@ import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 /**
  * {@link ImporterFactory} for reStructuredText files
  */
-public class RestructuredTextImporterFactory extends RegexMatchingImporterFactory
+public class RestructuredTextImporterFactory extends AbstractRegexMatchingImporterFactory
 {
     /** Creates a new instance. */
     public RestructuredTextImporterFactory()
@@ -15,7 +15,8 @@ public class RestructuredTextImporterFactory extends RegexMatchingImporterFactor
     }
 
     @Override
-    public int getPriority() {
+    public int getPriority()
+    {
         return 2000;
     }
 

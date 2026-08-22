@@ -15,7 +15,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     private final FilterSettings filterSettings;
     private final List<SpecificationItem> items = new LinkedList<>();
     private SpecificationItem.Builder itemBuilder;
-    private SpecificationItemId id;
+    private LocatedSpecificationItemId id;
     private StringBuilder description = new StringBuilder();
     private StringBuilder rationale = new StringBuilder();
     private StringBuilder comment = new StringBuilder();
@@ -28,7 +28,7 @@ public final class SpecificationListBuilder implements ImportEventListener
 
     /**
      * Creates a new {@link SpecificationListBuilder}.
-     * 
+     *
      * @return a new {@link SpecificationListBuilder}.
      */
     public static SpecificationListBuilder create()
@@ -39,7 +39,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     /**
      * Creates a new {@link SpecificationListBuilder} with the given
      * {@link FilterSettings}.
-     * 
+     *
      * @param filterSettings
      *            the filter settings for the new builder.
      * @return a new {@link SpecificationListBuilder}.
@@ -66,8 +66,16 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void setId(final SpecificationItemId id)
     {
+        this.setId(LocatedSpecificationItemId.builder().id(id).build());
+    }
+
+    @Override
+    public void setId(final LocatedSpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-storage~1]
         this.id = id;
     }
 
@@ -78,10 +86,18 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void addCoveredId(final SpecificationItemId id)
     {
+        this.addCoveredId(LocatedSpecificationItemId.builder().id(id).build());
+    }
+
+    @Override
+    public void addCoveredId(final LocatedSpecificationItemId id)
+    {
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAcceptedArtifactType(id.getArtifactType()))
+        // [impl->dsn~located-specification-item-id-storage~1]
+        if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {
             this.itemBuilder.addCoveredId(id);
         }
@@ -106,10 +122,18 @@ public final class SpecificationListBuilder implements ImportEventListener
     }
 
     @Override
+    @SuppressWarnings("removal") // Need to implement method from interface for backward compatibility
     public void addDependsOnId(final SpecificationItemId id)
     {
+        this.addDependsOnId(LocatedSpecificationItemId.builder().id(id).build());
+    }
+
+    @Override
+    public void addDependsOnId(final LocatedSpecificationItemId id)
+    {
         // [impl->dsn~filtering-by-artifact-types-during-import~1]
-        if (isAcceptedArtifactType(id.getArtifactType()))
+        // [impl->dsn~located-specification-item-id-storage~1]
+        if (isAcceptedArtifactType(id.getId().getArtifactType()))
         {
             this.itemBuilder.addDependOnId(id);
         }
@@ -139,7 +163,7 @@ public final class SpecificationListBuilder implements ImportEventListener
     public List<SpecificationItem> build()
     {
         this.endSpecificationItem();
-        return Collections.unmodifiableList(this.items) ;
+        return Collections.unmodifiableList(this.items);
     }
 
     /**
@@ -177,12 +201,18 @@ public final class SpecificationListBuilder implements ImportEventListener
         {
             final SpecificationItem item = createNewSpecificationItem();
             // [impl->dsn~filtering-by-artifact-types-during-import~1]
-            if (isAccepted(item))
-            {
-                addNewItemToList(item);
-            }
+            addSpecificationItem(item);
         }
         resetState();
+    }
+
+    @Override
+    public void addSpecificationItem(final SpecificationItem item)
+    {
+        if (isAccepted(item))
+        {
+            addNewItemToList(item);
+        }
     }
 
     // [impl->dsn~cleaning-imported-multi-line-text-elements~1]
@@ -200,7 +230,15 @@ public final class SpecificationListBuilder implements ImportEventListener
     private boolean isAccepted(final SpecificationItem item)
     {
         return isAcceptedArtifactType(item.getArtifactType())
+                && isAcceptedStatus(item.getStatus())
                 && matchesTagsCriteria(item.getTags());
+    }
+
+    // [impl->dsn~filtering-by-item-status-during-import~1]
+    private boolean isAcceptedStatus(final ItemStatus status)
+    {
+        return !this.filterSettings.isStatusCriteriaSet()
+                || this.filterSettings.getWantedStatuses().contains(status);
     }
 
     // [impl->dsn~filtering-by-tags-during-import~1]

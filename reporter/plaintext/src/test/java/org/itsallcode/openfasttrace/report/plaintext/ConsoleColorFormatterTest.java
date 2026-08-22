@@ -20,6 +20,12 @@ class ConsoleColorFormatterTest {
         assertThat(FORMATTER.formatNotOk("not ok"), equalTo("\u001B[91mnot ok\u001B[0m"));
     }
 
+    // [utest->dsn~reporting.plain-text.transitive-defect~1]
+    @Test
+    void testFormatTransitiveNotOk() {
+        assertThat(FORMATTER.formatTransitiveNotOk("not ok"), equalTo("\u001B[90mnot ok\u001B[0m"));
+    }
+
     // [utest->dsn~reporting.plain-text.ansi-color~1]
     // [utest-> dsn~reporting.plain-text.ansi-font-style~1]
     @Test

@@ -92,8 +92,10 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (!(o instanceof final SpecificationItemId that)) {
+    public boolean equals(final Object o)
+    {
+        if (!(o instanceof final SpecificationItemId that))
+        {
             return false;
         }
         return revision == that.revision && Objects.equals(name, that.name)
@@ -101,19 +103,20 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Objects.hash(name, revision, artifactType);
     }
 
     @Override
     public String toString()
     {
-        return this.artifactType + ARTIFACT_TYPE_SEPARATOR +  this.name + REVISION_SEPARATOR + this.revision;
+        return this.artifactType + ARTIFACT_TYPE_SEPARATOR + this.name + REVISION_SEPARATOR + this.revision;
     }
 
     /**
      * Get this item with a wildcard as revision.
-     * 
+     *
      * @return a copy of this ID with a wildcard as revision.
      */
     public SpecificationItemId toRevisionWildcard()
@@ -145,8 +148,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
      *            the revision
      * @return the specification item ID
      */
-    public static SpecificationItemId createId(final String artifactType, final String name,
-            final int revision)
+    public static SpecificationItemId createId(final String artifactType, final String name, final int revision)
     {
         return new SpecificationItemId.Builder().artifactType(artifactType).name(name)
                 .revision(revision).build();

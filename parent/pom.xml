@@ -547,14 +547,13 @@
                         <goals>
                             <goal>createSPDX</goal>
                         </goals>
-                        <phase>
-                            none
-                        </phase>
+                        <phase>package</phase>
                     </execution>
                 </executions>
                 <configuration>
+                    <spdxFile>${project.reporting.outputDirectory}/${project.groupId}_${project.artifactId}-${project.version}.spdx3.json</spdxFile>
                     <sbomType>build</sbomType>
-                    <includeTestScope>false</includeTestScope>
+                    <outputFormat>JSON-LD</outputFormat>
                     <licenseDeclared>${spdx.license}</licenseDeclared>
                     <licenseConcluded>${spdx.license}</licenseConcluded>
                     <copyrightText>${spdx.copyright}</copyrightText>

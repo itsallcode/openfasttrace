@@ -13,18 +13,21 @@ project_version=$(grep "<revision>" "$pom_file" | sed --regexp-extended 's/\s*<r
 readonly project_version
 echo "Read project version '$project_version' from $pom_file"
 
-# Calculate checksum
 readonly artifact_path="$base_dir/product/target/openfasttrace-${project_version}.jar"
-echo "Calculate sha256sum for file '$artifact_path'"
-file_dir="$(dirname "$artifact_path")"
-readonly file_dir
-file_name=$(basename "$artifact_path")
-readonly file_name
-cd "$file_dir"
-readonly checksum_file_name="${file_name}.sha256"
-sha256sum "$file_name" > "$checksum_file_name"
-readonly checksum_file_path="$file_dir/$checksum_file_name"
-cd "$base_dir"
+readonly sbom_path="$base_dir/product/target/site/org.itsallcode.openfasttrace_openfasttrace-${project_version}.spdx3.json"
+
+calculate_checksum() {
+    local file_path="$1"
+    local checksum_file_path="${file_path}.sha256"
+    readonly file_path checksum_file_path
+    echo "Calculate sha256sum for file '$file_path'"
+    (cd "$(dirname "$file_path")" && sha256sum "$(basename "$file_path")") > "$checksum_file_path"
+}
+
+calculate_checksum "$artifact_path"
+readonly artifact_checksum_path="${artifact_path}.sha256"
+calculate_checksum "$sbom_path"
+readonly sbom_checksum_path="${sbom_path}.sha256"
 
 
 # Create GitHub release
@@ -39,8 +42,11 @@ echo "Git tag      : $tag"
 echo "Title        : $title"
 echo "Changes file : $changes_file"
 echo "Artifact file: $artifact_path"
-echo "Checksum file: $checksum_file_path"
+echo "Checksum file: $artifact_checksum_path"
+echo "SBOM file    : $sbom_path"
+echo "Checksum file: $sbom_checksum_path"
 
-release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" "$artifact_path" "$checksum_file_path")
+release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" \
+    "$artifact_path" "$artifact_checksum_path" "$sbom_path" "$sbom_checksum_path")
 readonly release_url
 echo "Release URL: $release_url"

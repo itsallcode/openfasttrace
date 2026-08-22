@@ -35,7 +35,7 @@ jobs:
       DEFAULT_OS: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -88,19 +88,12 @@ jobs:
             !product/target/openfasttrace-*-sources.jar
           if-no-files-found: error
 
-      - name: Generate SPDX SBOM
-        if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
-        run: |
-          mvn --batch-mode -pl product spdx:createSPDX \
-              -Dossindex.skip=true \
-              -Djava.version=${{ matrix.java }}
-
       - name: Upload SPDX SBOM
         uses: actions/upload-artifact@v7
         if: ${{ env.DEFAULT_OS == matrix.os && env.DEFAULT_JAVA == matrix.java }}
         with:
           name: openfasttrace-spdx
-          path: product/target/site/*.spdx.json
+          path: product/target/site/*.spdx3.json
           if-no-files-found: error
 
       - name: Run self-trace
@@ -123,7 +116,7 @@ jobs:
     permissions:
       contents: read
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         persist-credentials: false
     - uses: actions/setup-java@v5

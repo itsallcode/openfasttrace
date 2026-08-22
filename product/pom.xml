@@ -138,16 +138,9 @@
                 <groupId>org.spdx</groupId>
                 <artifactId>spdx-maven-plugin</artifactId>
                 <version>1.0.3</version>
-                <executions>
-                    <execution>
-                        <id>aggregate-spdx</id>
-                        <goals>
-                            <goal>aggregateSPDX</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <sbomType>build</sbomType>
+                    <outputFormat>JSON-LD</outputFormat>
                     <includeTestScope>false</includeTestScope>
                     <licenseDeclared>${spdx.license}</licenseDeclared>
                     <licenseConcluded>${spdx.license}</licenseConcluded>

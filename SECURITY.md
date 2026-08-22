@@ -10,4 +10,4 @@ To report a vulnerability, please use the [GitHub Security Advisory reporting fe
 
 ## Software Bill of Materials (SBOM)
 
-To enhance transparency and security, SPDX SBOMs (Software Bill of Materials) are included with the GitHub releases starting from version 4.6.0. These files provide a comprehensive list of all components and dependencies used in the project.
+Starting with version 4.10.0, each GitHub release includes an SPDX Software Bill of Materials (SBOM) for the OpenFastTrace product JAR and a SHA-256 checksum for the SBOM.

@@ -104,7 +104,7 @@ class TestRealFileInput
         final Path path = tempDir.resolve("file");
         Files.write(path, new byte[] { (byte) 0x9F, (byte) 0x88 });
         final InputFile inputFile = RealFileInput.forPath(path, StandardCharsets.UTF_8);
-        assertThat(readContent(inputFile), equalTo("��"));
+        assertThat(readContent(inputFile), equalTo("\uFFFD\uFFFD"));
     }
 
     private Path writeTempFile(final String content, final Charset charset) throws IOException

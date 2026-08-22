@@ -1,12 +1,19 @@
 package org.itsallcode.openfasttrace.importer.markdown;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.is;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import java.nio.file.Path;
+import java.util.List;
+
+import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private static final ImporterFactory importerFactory = new MarkdownImporterFactory();
+    private static final String FULL_COVERAGE_TAG = "[doc" + "->req~guide~1]";
+    private static final ImporterFactory importerFactory = createImporterFactory();
 
     TestMarkdownMarkupImporter()
     {
@@ -26,6 +34,69 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
     protected ImporterFactory getImporterFactory()
     {
         return importerFactory;
+    }
+
+    private static ImporterFactory createImporterFactory()
+    {
+        final MarkdownImporterFactory factory = new MarkdownImporterFactory();
+        factory.init(new ImporterContext(ImportSettings.createDefault()));
+        return factory;
+    }
+
+    // [utest->dsn~markdown.comment-coverage-tags~1]
+    @Test
+    void testImportsCoverageTagFromStandaloneHtmlComment()
+    {
+        assertImport("guide.md", """
+                # Guide
+                <!-- %s -->
+                req~ordinary~1
+                """.formatted(FULL_COVERAGE_TAG), contains(
+                item().id("doc", "guide-1257333065", 0)
+                        .addCoveredId("req", "guide", 1)
+                        .location("guide.md", 2).build(),
+                item().id("req", "ordinary", 1).location("guide.md", 3).build()));
+    }
+
+    // [utest->dsn~markdown.comment-coverage-tags~1]
+    @ParameterizedTest
+    @ValueSource(strings =
+    { FULL_COVERAGE_TAG,
+            "before <!-- " + FULL_COVERAGE_TAG + " -->",
+            "<!-- " + FULL_COVERAGE_TAG + " --> after",
+            "<!-- " + FULL_COVERAGE_TAG,
+            FULL_COVERAGE_TAG + " -->" })
+    void testIgnoresCoverageTagsOutsideStandaloneHtmlComments(final String line)
+    {
+        assertImport("guide.md", line, emptyIterable());
+    }
+
+    // [utest->dsn~located-specification-item-id-text-ranges~1]
+    @Test
+    void testImportsLocatedDeclarationCoverageAndDependencyIds()
+    {
+        final SpecificationItem item = importText("""
+                req~subject~1
+                Covers:
+                * req~covered~2
+                Depends:
+                * req~dependency~3
+                """).get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 2, 15))),
+                () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18))));
+    }
+
+    private static List<SpecificationItem> importText(final String source)
+    {
+        return ImportAssertions.runImporterOnText(Path.of("located.md"), source, importerFactory);
+    }
+
+    private static SourceRange range(final int line, final int start, final int end)
+    {
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     protected String formatTitle(final String title, final int level)
@@ -194,7 +265,9 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 contains(item()
                         .id(SpecificationItemId.parseId("req~example~1"))
                         .location("file_without_code_block.md", 4)
-                        .description(endMarker) // End marker looks like part of the description in this case.
+                        // End marker looks like part of the description in this
+                        // case.
+                        .description(endMarker)
                         .build()));
     }
 
@@ -211,29 +284,29 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 """,
                 contains(item()
                         .id(SpecificationItemId.createId("req", "comment_with_code_block", 1))
-                        .comment("```" + System.lineSeparator()+ "This is a code block inside a comment."
-                                        + System.lineSeparator() + "```")
+                        .comment("```" + System.lineSeparator() + "This is a code block inside a comment."
+                                + System.lineSeparator() + "```")
                         .location("file_with_code_block_in_comment.md", 1)
                         .build()));
     }
 
-
     // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
-    void testDisablingMarkdownParsingForATextBlock() {
+    void testDisablingMarkdownParsingForATextBlock()
+    {
         assertImport("disable_parsing.md", """
                 `req~stop-parsing~1`
-                
+
                 The next part must not be parsed:
-                
+
                 <!-- oft:off -->
                 `req~do-not-parse-me~2`
-                
+
                 Invisible.
-                
+
                 Needs: utest
                 <!-- oft:on -->
-                
+
                 Needs: impl
                 """,
                 contains(item()

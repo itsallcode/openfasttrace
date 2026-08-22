@@ -98,11 +98,58 @@ The plugin loader discovers and loads available plugins.
 ## Importers
 For each specification artifact type OFT uses an importer. The importer uses the specification artifact as data source and reads specification items from it.
 
+### Shared Coverage Tag Parser
+
+The `importer/tag-importer-common` module provides the reusable line scanning and coverage-tag parsing used by importers. Its public API consists of `LineReader`, which forwards input lines to a consumer, and `CoverageTagParser`, which recognizes coverage tags.
+
+The tag importer remains responsible for selecting its input files and creating the shared parser. Parsing implementation classes remain encapsulated in the shared module so that future importers can reuse the same coverage-tag semantics without depending on tag-importer internals.
+
 ## Import Event Listener
 Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
 
 ### Specification List Builder
 The specification list builder is an import event listener that creates a list of specification items from import events.
+
+#### Located Specification Item ID Storage
+`dsn~located-specification-item-id-storage~1`
+
+`SpecificationItem` and `SpecificationListBuilder` preserve the individual
+declared, Covers, and Depends occurrences as `LocatedSpecificationItemId`
+values while retaining compatible item ID accessors. Located-ID lists are
+immutable when observed through the public API.
+
+Covers:
+
+* req~located-specification-item-ids~1
+
+Needs: impl, utest
+
+#### Text Source Ranges
+`dsn~located-specification-item-id-text-ranges~1`
+
+Text importers create zero-based UTF-16, start-inclusive and end-exclusive
+ranges for source ID occurrences and their represented components. Equal
+item IDs at distinct source occurrences remain separate values.
+
+Needs: impl, utest
+
+#### Coverage-tag Source Ranges
+`dsn~located-specification-item-id-tag-ranges~1`
+
+The full coverage-tag importer locates source-backed declared and covered ID
+components. It leaves component ranges absent when a tag generates the
+corresponding ID component. The short coverage-tag importer creates item
+IDs without source ranges.
+
+Needs: impl, utest
+
+#### SpecObject ID Occurrences
+`dsn~located-specification-item-id-specobject~1`
+
+The SpecObject importer emits located declared, covered, and dependency IDs
+without ranges because its XML event model does not expose character offsets.
+
+Needs: impl, utest
 
 ## Command Line Interpreter
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
@@ -167,6 +214,12 @@ The Plugin loader supports loading factories for the following plugin types:
 * Exporters: `org.itsallcode.openfasttrace.api.exporter.ExporterFactory`
 * Reports: `org.itsallcode.openfasttrace.api.report.ReporterFactory`
 
+Reporter implementations usually extend `org.itsallcode.openfasttrace.api.report.AbstractReporterFactory`
+to reuse standard reporter context handling while keeping `ReporterFactory` as the service type.
+
+Exporter implementations usually extend `org.itsallcode.openfasttrace.api.exporter.AbstractExporterFactory`
+to reuse standard exporter and context handling while keeping `ExporterFactory` as the service type.
+
 Covers:
 * [`req~plugins.types~1`](system_requirements.md#supported-plugin-types)
 
@@ -217,12 +270,85 @@ return
 
 A factory for importers decides which importer to use. When multiple importers support the same file, the one with the lowest priority value (highest precedence) is chosen. Usually, importers are selected based on file extension, but some importers may peek into the file content to determine compatibility.
 
+`ImporterFactory` is the plugin interface discovered by the service loader. Importer implementations in OFT usually extend `AbstractImporterFactory` to reuse the default context handling.
+
 The default priorities for standard importers are:
 1. Markdown Importer: 1000
 2. reStructuredText Importer: 2000
 3. Specobject (ReqM2) Importer: 3000
-4. Tag Importer: 10000
-5. Zip Importer: 20000
+4. Gherkin Importer: 9000
+5. Tag Importer: 10000
+6. Zip Importer: 20000
+
+### Gherkin Import
+
+#### Importer Selection
+`dsn~gherkin.importer-selection~1`
+
+The Gherkin importer selects `.feature` files with priority 9000, ahead of the Tag Importer. This gives Gherkin syntax ownership to the dedicated importer while retaining the Tag Importer as the fallback for other source files.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest, itest
+
+#### Streaming Import
+`dsn~gherkin.streaming-import~1`
+
+The Gherkin importer scans each input file once and streams non-comment scenario steps into the description until a Gherkin block boundary.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest
+
+#### ID Detection
+`dsn~gherkin.id-detection~1`
+
+The importer imports only scenarios and scenario outlines with exactly one immediately preceding `@id:` tag. It uses the ID tag's line as the item location and the scenario header as the title. Invalid IDs cause only the affected scenario to be skipped. Duplicate item IDs are passed to the OFT core, which validates them after import.
+
+Covers:
+
+* `req~gherkin-scenario-import~1`
+
+Needs: impl, utest
+
+#### Covers Metadata Validation
+`dsn~gherkin.covers-metadata-validation~1`
+
+The importer accepts scoped `# Covers:` comments between an ID tag region and its scenario header. Multiple directives accumulate coverage IDs. A malformed Covers directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-covers-validation~1`
+
+Needs: impl, utest
+
+#### Needs Metadata Validation
+`dsn~gherkin.needs-metadata-validation~1`
+
+The importer accepts at most one scoped `# Needs:` comment between an ID tag region and its scenario header. A malformed or repeated Needs directive causes only the affected scenario to be skipped.
+
+Covers:
+
+* `req~gherkin-needs-validation~1`
+
+Needs: impl, utest
+
+#### Support Coverage Tags
+`dsn~gherkin.comment-coverage-tags~1`
+
+The Gherkin importer delegates only comment lines to the shared coverage-tag parser. This preserves basic comment coverage tags without applying their regular expressions to executable Gherkin text.
+
+When a comment tag occurs inside an imported scenario, its listener events are buffered until the scenario ends. The shared parser emits complete specification-item event sequences, so emitting them immediately would interleave them with the open scenario item and corrupt the listener state.
+
+Covers:
+
+* `req~gherkin-comment-coverage-tags~1`
+
+Needs: impl, utest
 
 ### ReqM2 File Detection
 `dsn~import.reqm2-file-detection~1`
@@ -260,6 +386,17 @@ Covers:
 
 Needs: impl, utest, itest
 
+#### Filtering by Item Status During Import
+`dsn~filtering-by-item-status-during-import~1`
+
+The [specification list builder](#specification-list-builder) can be configured to import a specification item only if its status matches at least one of the configured statuses.
+
+Covers:
+
+* `req~include-only-item-statuses~1`
+
+Needs: impl, utest, itest
+
 #### Filtering by Tags During Import
 `dsn~filtering-by-tags-during-import~1`
 
@@ -285,6 +422,28 @@ Needs: impl, utest, itest
 ### Line Parser for Lightweight Markup Import
 
 RST and Markdown share a common underlying parser that operates on a line-by-line basis.
+
+##### Markdown Comment Coverage Tags
+`dsn~markdown.comment-coverage-tags~1`
+
+For a Markdown input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when the complete line is a single-line HTML comment, apart from optional surrounding whitespace. The dedicated Markdown importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
+
+Covers:
+
+* `scn~markdown.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
+
+##### RST Comment Coverage Tags
+`dsn~rst.comment-coverage-tags~1`
+
+For an RST input file, the lightweight-markup importer delegates a line to the shared coverage-tag parser only when it begins with optional whitespace, `..`, and whitespace, and is not an RST directive. The dedicated RST importer keeps its priority ahead of the Tag Importer, and the existing markup state machine continues to process every input line.
+
+Covers:
+
+* `scn~rst.comment-coverage-tags~1`
+
+Needs: impl, utest, itest
 
 ##### Disabling OFT Parsing for Parts of a Markup File
 `dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1`
@@ -394,6 +553,19 @@ Covers:
 
 Needs: impl, utest
 
+### Transitive Defect
+`dsn~tracing.transitive-defect~1`
+
+The [tracer](#tracer) identifies a [specification item](#specification-item) as having a _transitive defect_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
+
+A transitive defect occurs when a specification item itself fulfills all direct coverage requirements, but at least one of the items it covers (directly or indirectly) is a defect item.
+
+Covers:
+
+* `req~tracing.transitive-defect~1`
+
+Needs: impl, utest
+
 ### Link Cycle
 `dsn~tracing.link-cycle~1`
 
@@ -405,22 +577,57 @@ Covers:
 
 Needs: impl, utest
 
+## Report Verbosity
+
+### Verbosity Level Direct Failures
+`dsn~reporting.verbosity.direct-failures~1`
+
+The verbosity level `direct_failures` renders only IDs of items that are not ok and do not have a transitive defect.
+
+Covers:
+
+* `req~reporting.verbosity.direct-failures~1`
+
+Needs: impl, utest
+
+### Verbosity Level Direct Failure Summaries
+`dsn~reporting.verbosity.direct-failure-summaries~1`
+
+The verbosity level `direct_failure_summaries` renders only summaries of items that are not ok and do not have a transitive defect.
+
+Covers:
+
+* `req~reporting.verbosity.direct-failure-summaries~1`
+
+Needs: impl, utest
+
+### Verbosity Level Direct Failure Details
+`dsn~reporting.verbosity.direct-failure-details~1`
+
+The verbosity level `direct_failure_details` renders only summaries and details of items that are not ok and do not have a transitive defect.
+
+Covers:
+
+* `req~reporting.verbosity.direct-failure-details~1`
+
+Needs: impl, utest
+
 ## Tracing Reports
 
 ### Plain Text Report
 
 #### Plain Text Report Summary
-`dsn~reporting.plain-text.summary~2`
+`dsn~reporting.plain-text.summary~3`
 
 The summary in the plain text report includes:
 
 * Result status
 * Total number of specification items
-* Total number of specification items that are defect (if any)
+* Total number of direct and transitive defect specification items (if any)
 
 Covers:
 
-* `req~reporting.plain-text.summary~2`
+* `req~reporting.plain-text.summary~3`
 
 Needs: impl, utest
 
@@ -517,6 +724,19 @@ Covers:
 
 Needs: impl, utest
 
+#### Plain Text Report Transitive Defect
+`dsn~reporting.plain-text.transitive-defect~1`
+
+The plain text report renders the suffix `(transitive)` for transitive defects.
+The status `not ok` is rendered in grey for transitive defects.
+
+Covers:
+
+* `req~reporting.plain-text.transitive-defect~1`
+
+Needs: impl, utest
+
+
 ### HTML Report
 
 #### HTML Report Inlines CSS
@@ -533,7 +753,7 @@ Needs: impl, itest
 #### HTML Reports Allows Configuring Details Display Status
 `dsn~reporting.html.details-display~1`
 
-OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.  
+OFT allows configuring the specification item detail section display status (expanded or collapsed). Default is collapsed.
 
 Covers:
 
@@ -559,6 +779,28 @@ Rationale:
 Covers:
 
 * [`req~reporting.html.valid-html~1`](system_requirements.md#html-report-renders-valid-html)
+
+Needs: impl, utest
+
+#### HTML Report Transitive Defect Mark
+`dsn~reporting.html.transitive-defect-mark~1`
+
+The HTML report renders the transitive defect mark (❎) for items that have a [transitive defect](#transitive-defect).
+
+Covers:
+
+* `req~reporting.html.transitive-defect-mark~1`
+
+Needs: impl, utest
+
+#### HTML Report Summary
+`dsn~reporting.html.summary~2`
+
+The HTML report summary renders the status, the number of total items, a progress bar and the number of direct and transitive defects.
+
+Covers:
+
+* `req~reporting.html.summary~2`
 
 Needs: impl, utest
 
@@ -674,13 +916,13 @@ Needs: impl, utest
 A requirement ID has the following format
 
     requirement-id = type "~" id "~" revision
-    
+
     type = 1*ALPHA
-    
+
     id = id-fragment *("." id-fragment)
-    
+
     id-fragment = UNICODE_ALPHA *(UNICODE_ALPHA / DIGIT / "_" / "-")
-    
+
     revision = 1*DIGIT
 
 Rationale:
@@ -725,9 +967,9 @@ Needs: impl, utest
 In Markdown specification item references have the following format:
 
     reference = (plain-reference / url-style-link)
-    
+
     plain-reference = requirement-id
-    
+
     url-style-link = "[" link-text "]" "(" "#" requirement-id ")"
 
 Covers:
@@ -742,9 +984,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links that cover a different specification item.
 
     covers-list = covers-header 1*(LINEBREAK covers-line)
-    
+
     covers-header = "Covers:" *WSP
-    
+
     covers-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -765,9 +1007,9 @@ Needs: impl, utest
 The Markdown Importer supports the following format for links to a different specification item which the current depends on.
 
     depends-list = depends-header 1*(LINEBREAK depends-line)
-    
+
     depends-header = "Depends:" *WSP
-    
+
     depends-line = *WSP "*" *WSP reference
 
 Only one traced reference per line is supported. Any optional text after the reference is ignored if it is separated by at least one whitespace character
@@ -827,11 +1069,11 @@ The Markdown Importer supports forwarding required coverage from one artifact ty
 
     artifact-need-redirection = skipped-artifact-type *WSP "-->" *WSP target-artifact-list
         *WSP ":" *WSP original-requirement-id
-        
+
     skipped-artifact-type = artifact-type
-    
+
     target-artifact-list = artifact-type *("," *WSP artifact-type)
-        
+
     original-requirement-id = requirement-id
 
 The following example shows an architectural specification item that forwards the needed coverage directly to the detailed design and an integration test:
@@ -857,7 +1099,7 @@ OFT imports coverage tags in the full tag format:
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -877,7 +1119,25 @@ Especially when used for design document files like UML models, requiring covera
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
+
+Needs: impl, utest
+
+#### Full Coverage Tag Format Allows Multiple Coverage
+`dsn~import.full-coverage-tag-multiple-needed-coverage~1`
+
+OFT imports full coverage tags with multiple need coverage ids:
+
+    full-tag-multiple-coverage-id =
+        "[" *WSP reference *WSP "->" *WSP requirement-id *WSP *("," *WSP requirement-id) *WSP "]"
+
+Rationale:
+
+An item can cover multiple IDs. This avoids creating multiple IDs for the same item solely to represent multiple coverage relations. It also reduces the number of IDs that related items must reference for complete coverage, improving readability and maintainability.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -897,7 +1157,7 @@ Specifying an explicit revision in coverage tags allows incrementing the revisio
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -921,7 +1181,7 @@ Specifying an explicit name in coverage tags allows overriding the auto-generate
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -936,7 +1196,7 @@ When you need to cover these items it's important that the name is predictable a
 
 Covers:
 
-* `req~import.full-coverage-tag-format~1`
+* `req~import.full-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -956,7 +1216,7 @@ During import of short tags OFT requires the following configuration:
 
 Covers:
 
-* `req~import.short-coverage-tag-format~1`
+* `req~import.short-coverage-tag-format~2`
 
 Needs: impl, utest
 
@@ -1191,7 +1451,7 @@ Needs: impl, utest
 
 ### Why is This Architecture Relevant?
 
-Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves. 
+Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves.
 
 ### Alternatives Considered
 

@@ -14,8 +14,9 @@ import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.report.html.view.ViewableContainer;
 import org.itsallcode.openfasttrace.report.html.view.html.HtmlViewFactory;
 import org.itsallcode.openfasttrace.testutil.AbstractFileBasedTest;
-import org.itsallcode.openfasttrace.testutil.OsDetector;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 class TestHtmlReportCssInlining extends AbstractFileBasedTest
@@ -48,9 +49,9 @@ class TestHtmlReportCssInlining extends AbstractFileBasedTest
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void testInliningUnreadableCssThrowsException(@TempDir final Path tempDir) throws IOException
     {
-        OsDetector.assumeRunningOnUnix();
         final File cssFile = tempDir.resolve("test.css").toFile();
         cssFile.setReadable(false);
         final HtmlViewFactory factory = HtmlViewFactory.create(new ByteArrayOutputStream(), cssFile.toURI().toURL(),

@@ -25,6 +25,11 @@ final class ConsoleColorFormatter implements TextFormatter {
     }
 
     @Override
+    public String formatTransitiveNotOk(final String text) {
+        return BRIGHT_BLACK + text + RESET;
+    }
+
+    @Override
     public String formatStrong(final String text) {
         return AnsiSequence.combine(BOLD, CYAN) + text + RESET;
     }

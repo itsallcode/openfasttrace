@@ -1,12 +1,13 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
-import org.itsallcode.openfasttrace.api.core.ItemStatus;
-import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.linereader.*;
 import org.itsallcode.openfasttrace.importer.lightweightmarkup.statemachine.*;
+import org.itsallcode.openfasttrace.importer.tag.common.CoverageTagParser;
+import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
 
 /**
  * Base class for importers of lightweight markup text.
@@ -19,13 +20,14 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     protected final ImportEventListener listener;
     /** State machine for a line-by-line parser */
     protected final LineParserStateMachine stateMachine;
+    private final LineConsumer coverageTagParser;
     private String lastTitle;
     private boolean inSpecificationItem;
     private LineContext currentContext;
 
     /**
      * Create a new {@link AbstractLightWeightMarkupImporter}.
-     * 
+     *
      * @param file
      *            input file
      * @param listener
@@ -39,6 +41,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         this.file = file;
         this.listener = listener;
         this.stateMachine = new LineParserStateMachine(configureTransitions());
+        this.coverageTagParser = CoverageTagParser.create(null, file, listener);
     }
 
     @Override
@@ -49,21 +52,37 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
 
     /**
      * Define the transitions of the parser statemachine.
-     * 
+     *
      * @return parser statemachine transitions
      */
     protected abstract Transition[] configureTransitions();
+
+    /**
+     * Tells whether a line is a native comment that can contain a coverage tag.
+     *
+     * @param context
+     *            current line and neighboring source lines
+     * @return {@code true} if the current line is a coverage-tag comment
+     *         candidate
+     */
+    protected abstract boolean isCoverageTagCommentCandidate(LineContext context);
 
     @Override
     public void nextLine(final LineContext context)
     {
         this.currentContext = context;
+        if (isCoverageTagCommentCandidate(context))
+        {
+            // [impl->dsn~markdown.comment-coverage-tags~1]
+            // [impl->dsn~rst.comment-coverage-tags~1]
+            this.coverageTagParser.readLine(context.lineNumber(), context.currentLine());
+        }
         this.stateMachine.step(this.currentContext.currentLine(), this.currentContext.nextLine());
     }
 
     /**
      * Define a transition in the parser statemachine.
-     * 
+     *
      * @param from
      *            state to be matched against the parsers current state
      * @param to
@@ -119,7 +138,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         final String idText = this.stateMachine.getLastToken();
         final SpecificationItemId id = new SpecificationItemId.Builder(idText).build();
         this.listener.beginSpecificationItem();
-        this.listener.setId(id);
+        this.listener.setId(locatedId(idText, id));
         this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
         if (this.lastTitle != null)
         {
@@ -207,7 +226,7 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     {
         final SpecificationItemId.Builder builder = new SpecificationItemId.Builder(
                 this.stateMachine.getLastToken());
-        this.listener.addDependsOnId(builder.build());
+        this.listener.addDependsOnId(locatedId(this.stateMachine.getLastToken(), builder.build()));
     }
 
     /**
@@ -245,7 +264,28 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
      */
     protected void addCoverage()
     {
-        this.listener.addCoveredId(SpecificationItemId.parseId(this.stateMachine.getLastToken()));
+        final String idText = this.stateMachine.getLastToken();
+        this.listener.addCoveredId(locatedId(idText, SpecificationItemId.parseId(idText)));
+    }
+
+    private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id)
+    {
+        // [impl->dsn~located-specification-item-id-text-ranges~1]
+        final int column = this.currentContext.currentLine().indexOf(idText);
+        final SourceRange range = new SourceRange(new SourcePosition(this.currentContext.lineNumber() - 1, column),
+                new SourcePosition(this.currentContext.lineNumber() - 1, column + idText.length()));
+        final int artifactTypeEnd = idText.indexOf(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR);
+        final int revisionStart = idText.lastIndexOf(SpecificationItemId.REVISION_SEPARATOR) + 1;
+        return LocatedSpecificationItemId.builder().id(id).range(range)
+                .artifactTypeRange(range(column, column + artifactTypeEnd))
+                .nameRange(range(column + artifactTypeEnd + 1, column + revisionStart - 1))
+                .revisionRange(range(column + revisionStart, column + idText.length())).build();
+    }
+
+    private SourceRange range(final int start, final int end)
+    {
+        final int line = this.currentContext.lineNumber() - 1;
+        return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
     /**
@@ -268,15 +308,15 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     {
         final ForwardingSpecificationItem forward = new ForwardingSpecificationItem(
                 this.stateMachine.getLastToken());
-        this.listener.beginSpecificationItem();
-        this.listener.setId(forward.getSkippedId());
-        this.listener.addCoveredId(forward.getOriginalId());
+        final SpecificationItem.Builder item = SpecificationItem.builder()
+                .id(forward.getSkippedId())
+                .addCoveredId(forward.getOriginalId())
+                .forwards(true)
+                .location(this.file.getPath(), this.currentContext.lineNumber());
         for (final String targetArtifactType : forward.getTargetArtifactTypes())
         {
-            this.listener.addNeededArtifactType(targetArtifactType.trim());
+            item.addNeedsArtifactType(targetArtifactType.trim());
         }
-        this.listener.setForwards(true);
-        this.listener.setLocation(this.file.getPath(), this.currentContext.lineNumber());
-        this.listener.endSpecificationItem();
+        this.listener.addSpecificationItem(item.build());
     }
 }

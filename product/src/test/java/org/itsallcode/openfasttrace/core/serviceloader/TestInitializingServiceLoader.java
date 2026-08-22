@@ -14,6 +14,7 @@ import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporterFactory;
 import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
+import org.itsallcode.openfasttrace.importer.gherkin.GherkinImporterFactory;
 import org.itsallcode.openfasttrace.importer.restructuredtext.RestructuredTextImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
@@ -48,11 +49,12 @@ class TestInitializingServiceLoader
         final ImporterContext context = new ImporterContext(null);
         final List<ImporterFactory> services = getRegisteredServices(ImporterFactory.class,
                 context);
-        assertThat(services, hasSize(5));
+        assertThat(services, hasSize(6));
         assertThat(services, containsInAnyOrder(
                 instanceOf(MarkdownImporterFactory.class),
                 instanceOf(RestructuredTextImporterFactory.class),
                 instanceOf(SpecobjectImporterFactory.class),
+                instanceOf(GherkinImporterFactory.class),
                 instanceOf(TagImporterFactory.class),
                 instanceOf(ZipFileImporterFactory.class)));
         for (final ImporterFactory importerFactory : services)

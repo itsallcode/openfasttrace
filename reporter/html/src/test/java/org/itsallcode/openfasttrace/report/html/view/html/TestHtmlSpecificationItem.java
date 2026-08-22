@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
+import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.TRANSITIVE_FAILURE_MARK;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.IMPL;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.ITEST;
 import static org.itsallcode.openfasttrace.testutil.core.SampleArtifactTypes.UTEST;
@@ -121,6 +122,28 @@ class TestHtmlSpecificationItem extends AbstractTestHtmlRenderer
         final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
         final Viewable view = this.factory.createSpecificationItem(linkedItem);
         view.render(indentationLevel);
+    }
+
+    @Test
+    // [utest->dsn~reporting.html.transitive-defect-mark~1]
+    void testRenderTransitiveDefectMark()
+    {
+        final SpecificationItem item = itemWithId(ITEM_A_ID) //
+                .addNeedsArtifactType(IMPL) //
+                .build();
+        final LinkedSpecificationItem linkedItem = new LinkedSpecificationItem(item);
+
+        // Sub item provides IMPL but needs UTEST (and is not covered) -> defect
+        final SpecificationItem subItem = itemWithId(ITEM_B_ID) //
+                .addNeedsArtifactType(UTEST) //
+                .build();
+        final LinkedSpecificationItem linkedSubItem = new LinkedSpecificationItem(subItem);
+
+        linkedItem.addLinkToItemWithStatus(linkedSubItem, LinkStatus.COVERED_SHALLOW);
+
+        final Viewable view = this.factory.createSpecificationItem(linkedItem);
+        view.render(0);
+        assertThat(this.outputStream.toString(), containsString(TRANSITIVE_FAILURE_MARK));
     }
 
     @Test

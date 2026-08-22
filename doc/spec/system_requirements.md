@@ -115,15 +115,85 @@ One of the OpenFastTrace design goals is to provide a Java-based drop-in replace
 Needs: req
 
 ### Coverage Tag Import
-`feat~coverage-tag-import~1`
+`feat~coverage-tag-import~2`
 
-OFT imports coverage tags from source code files.
+OFT imports coverage tags from source code files and supported documentation files.
 
 Rationale:
 
-Coverage tags indicate parts of the source code that implements a certain requirement.
+Coverage tags indicate parts of source code or documentation that cover a certain requirement.
 
 Needs: req
+
+### Gherkin Import
+`feat~gherkin-import~1`
+
+OFT imports specification items from annotated Gherkin scenarios and scenario outlines in `.feature` files.
+
+Needs: req
+
+#### Import Gherkin Scenarios
+`req~gherkin-scenario-import~1`
+
+OFT imports a Gherkin `Scenario` or `Scenario Outline` as a specification item when its immediately preceding contiguous tag region contains exactly one `@id:<specification-item-id>` tag. The ID supplies the item location, the scenario header supplies the title, and scenario steps form the description. An invalid ID skips only the affected scenario. Duplicate item IDs are passed to the OFT core for validation.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+### Located Specification Item IDs
+`req~located-specification-item-ids~1`
+
+For every imported declared, covered, and dependency specification item ID,
+OFT shall retain the individual source occurrence. For source text, positions
+shall be zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges.
+Where an ID component is generated or its source is unavailable, its component
+range shall be absent. Equal item IDs at distinct source occurrences shall
+remain distinct occurrences. Short coverage tags shall not generate source
+ranges for their generated or covered IDs.
+
+Rationale:
+
+The exact location of an item ID is required for IDE plugins in order to support
+features like syntax highlighting, find occurrences, jump to definition and auto-complete.
+Adding this feature to OFT helps avoid code duplications and improves reliability.
+
+Needs: dsn
+
+#### Validate Gherkin Covers Metadata
+`req~gherkin-covers-validation~1`
+
+OFT accepts optional, scoped `# Covers:` comments between an ID tag region and its scenario header. Covers may occur multiple times. Each directive must contain a non-empty, valid, duplicate-free list of specification item IDs. An invalid Covers directive skips only the affected scenario.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Validate Gherkin Needs Metadata
+`req~gherkin-needs-validation~1`
+
+OFT accepts an optional, scoped `# Needs:` comment between an ID tag region and its scenario header. The directive may occur once and must contain a non-empty, valid, duplicate-free list of artifact types. An invalid or repeated Needs directive skips only the affected scenario.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
+
+#### Preserve Gherkin Comment Coverage Tags
+`req~gherkin-comment-coverage-tags~1`
+
+OFT imports basic coverage tags from comments in `.feature` files, but does not evaluate coverage tags in executable Gherkin lines.
+
+Covers:
+
+* [feat~gherkin-import~1](#gherkin-import)
+
+Needs: dsn
 
 ### ReqM2 Export
 `feat~reqm2-export~1`
@@ -344,27 +414,61 @@ Needs: dsn
 
 #### Coverage Tags
 
-Developers add coverage tags as comments to the source code to indicate where certain specification items are covered.
+Developers add coverage tags as comments to source code or supported documentation to indicate where certain specification items are covered.
 
 ##### Import Full Coverage Tag Format
-`req~import.full-coverage-tag-format~1`
+`req~import.full-coverage-tag-format~2`
 
-OFT imports coverage tags from source files in a full format that contains all necessary information for tracing.
+OFT imports coverage tags from source files and supported documentation files in a full format that contains all necessary information for tracing.
 
 Covers:
 
-* [feat~coverage-tag-import~1](#coverage-tag-import)
+* [feat~coverage-tag-import~2](#coverage-tag-import)
 
-Needs: dsn
+Needs: scn, dsn
 
 ##### Import Short Coverage Tag Format
-`req~import.short-coverage-tag-format~1`
+`req~import.short-coverage-tag-format~2`
 
 OFT imports coverage tags from source files in a short format that requires additional configuration during import.
 
 Covers:
 
-* [feat~coverage-tag-import~1](#coverage-tag-import)
+* [feat~coverage-tag-import~2](#coverage-tag-import)
+
+Needs: scn, dsn
+
+##### Import Coverage Tags from Markdown Comments
+`scn~markdown.comment-coverage-tags~1`
+
+**Given** a Markdown documentation artifact with coverage tags in standalone,
+single-line HTML comments,
+**when** OFT imports the artifact,
+**then** it creates coverage items at the tag-line location while continuing to
+import ordinary Markdown specification items unchanged. Text that resembles a
+coverage tag outside such a comment does not create a coverage item.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
+* `req~import.short-coverage-tag-format~2`
+
+Needs: dsn
+
+##### Import Coverage Tags from RST Comments
+`scn~rst.comment-coverage-tags~1`
+
+**Given** an RST documentation artifact with coverage tags in standalone,
+single-line RST comments,
+**when** OFT imports the artifact,
+**then** it creates coverage items at the tag-line location while continuing to
+import ordinary RST specification items unchanged. Text that resembles a
+coverage tag outside such a comment does not create a coverage item.
+
+Covers:
+
+* `req~import.full-coverage-tag-format~2`
+* `req~import.short-coverage-tag-format~2`
 
 Needs: dsn
 
@@ -466,6 +570,22 @@ Covers:
 
 Needs: dsn
 
+#### Transitive Defect
+`req~tracing.transitive-defect~1`
+
+OFT identifies a specification item as having a _transitive defect_ if it is a [defect item](#defect-items) but has no direct defects.
+
+An item has direct defects if:
+* It has duplicates.
+* It has bad links (any outgoing coverage link has a different status than "Covers").
+* It has uncovered artifact types (not all artifact types in its "Needs" section are covered by outgoing links).
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Link Cycle
 `req~tracing.link-cycle~1`
 
@@ -504,6 +624,17 @@ Covers:
 
 Needs: dsn
 
+#### Include Only Item Statuses
+`req~include-only-item-statuses~1`
+
+OFT gives users the option to include only specification items with a configurable set of statuses during processing.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Include Items Where at Least One Tag Matches
 `req~include-items-where-at-least-on-tag-matches~1`
 
@@ -515,7 +646,7 @@ Covers:
 
 Needs: dsn
 
-#### Include Items That Don't Have Tags Or Where at Least One Tag Matches 
+#### Include Items That Don't Have Tags Or Where at Least One Tag Matches
 `req~include-items-that-do-not-have-tags-or-where-at-least-one-tag-matches~1`
 
 OFT gives users the option to include only specification items that either do not have tags or have at least one tag from a configurable set of tags during processing.
@@ -527,7 +658,7 @@ Covers:
 Needs: dsn
 
 ### Reports
-Reports are the main way to find out if a projects requirements are covered properly.
+Reports are the main way to find out if a project's requirements are covered properly.
 
 #### Common Report Functions
 
@@ -537,7 +668,7 @@ Reports are the main way to find out if a projects requirements are covered prop
 Users can choose to display the requirement origin (e.g. file and line number) in reports:
 
 * In the body of a specification item
-* For each link to a specification item 
+* For each link to a specification item
 
 Rationale:
 
@@ -550,20 +681,57 @@ Covers:
 
 Needs: dsn
 
+#### Report Verbosity
+
+OFT allows users to control the verbosity of the tracing report.
+
+##### Report Verbosity Direct Failures
+`req~reporting.verbosity.direct-failures~1`
+
+The verbosity level `direct_failures` lists only the IDs of specification items with direct defects.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+##### Report Verbosity Direct Failure Summaries
+`req~reporting.verbosity.direct-failure-summaries~1`
+
+The verbosity level `direct_failure_summaries` lists only the summaries of specification items with direct defects.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+##### Report Verbosity Direct Failure Details
+`req~reporting.verbosity.direct-failure-details~1`
+
+The verbosity level `direct_failure_details` lists only the summaries and details of specification items with direct defects.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
 #### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
 
 1. Input in build chains
-2. Minimal requirement coverage view with the least dependencies. Any text terminal can display the plain text report.
+2. Minimal requirement coverage view with the least dependency. Any text terminal can display the plain text report.
 
 ##### Plain Text Report Summary
-`req~reporting.plain-text.summary~2`
+`req~reporting.plain-text.summary~3`
 
-The summary in the plain text report includes:
+The summary in the plain-text report includes:
 
 * Result status
 * Total number of specification items
-* Total number of defect specification items (if any)
+* Total number of direct and transitive defect specification items (if any)
 
 Covers:
 
@@ -574,7 +742,7 @@ Needs: dsn
 ##### Plain Text Report Specification Item Overview
 `req~reporting.plain-text.specification-item-overview~2`
 
-An item summary consist in the plain text report includes
+An item summary in the plain-text report includes
 
   1. Status
   2. Number of broken incoming links
@@ -637,6 +805,19 @@ Covers:
 
 Needs: dsn
 
+##### Plain Text Report Transitive Defect
+`req~reporting.plain-text.transitive-defect~1`
+
+The plain text report renders transitive defects less visually alarming than direct ones.
+Transitive defects are rendered with the suffix `(transitive)` and the status `not ok` is rendered in grey.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
+
 #### HTML Report
 
 ##### HTML Report is a Single File
@@ -677,6 +858,37 @@ OFT generates valid HTML format for the HTML report.
 Rationale:
 
 This ensures correct and consistent rendering of the HTML report.
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
+##### HTML Report Transitive Defect Mark
+`req~reporting.html.transitive-defect-mark~1`
+
+The HTML report uses a special mark (❎) to indicate specification items with a [transitive defect](#transitive-defect).
+
+Covers:
+
+* [feat~html-report~1](#html-report)
+
+Needs: dsn
+
+##### HTML Report Summary
+`req~reporting.html.summary~2`
+
+The summary in the HTML report includes:
+
+* Result status
+* Total number of specification items
+* Completion status as a progress bar
+* Total number of direct and transitive defect specification items (if any)
+
+Rationale:
+
+This allows users to quickly identify if a failure is caused by the item itself or inherited from its dependencies.
 
 Covers:
 
@@ -795,29 +1007,29 @@ Covers:
 Needs: dsn
 
 #### Common
- 
+
 ##### CLI Help
 `req~cli.help~1`
- 
+
 `help`, `-h` and `--help` show a short help text with command line usage.
- 
+
 Covers:
- 
+
 * [feat~command-line-interface~1](#command-line-interface)
- 
+
 Needs: dsn
- 
+
 ##### CLI Version
 `req~cli.version~1`
- 
+
 `help`, `-h` and `--help` show the version of OFT.
- 
+
 Covers:
- 
+
 * [feat~command-line-interface~1](#command-line-interface)
- 
+
 Needs: dsn
- 
+
 ##### Input Selection
 `req~cli.input-selection~1`
 

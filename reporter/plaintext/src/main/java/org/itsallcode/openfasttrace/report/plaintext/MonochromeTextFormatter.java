@@ -29,6 +29,11 @@ public class MonochromeTextFormatter implements TextFormatter {
     }
 
     @Override
+    public String formatTransitiveNotOk(final String text) {
+        return ITALIC + text + RESET;
+    }
+
+    @Override
     public String formatStrong(final String text) {
         return BOLD + text + RESET;
     }

@@ -2,6 +2,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CHECK_MARK;
 import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.CROSS_MARK;
+import static org.itsallcode.openfasttrace.report.html.view.html.CharacterConstants.TRANSITIVE_FAILURE_MARK;
 
 import java.io.PrintStream;
 import java.util.Comparator;
@@ -77,7 +78,7 @@ class HtmlSpecificationItem implements Viewable
         this.stream.print("    <summary title=\"");
         this.stream.print(id);
         this.stream.print("\">");
-        this.stream.print(this.item.isDefect() ? CROSS_MARK : CHECK_MARK);
+        this.stream.print(renderStatusMark());
         this.stream.print(" <b>");
         this.stream.print(escapedTitle());
         this.stream.print("</b><small>, rev. ");
@@ -85,6 +86,16 @@ class HtmlSpecificationItem implements Viewable
         this.stream.print(", ");
         this.stream.print(id.getArtifactType());
         this.stream.println("</small></summary>");
+    }
+
+    // [impl->dsn~reporting.html.transitive-defect-mark~1]
+    private String renderStatusMark()
+    {
+        return this.item.isDefect() ? pickFailureMark() : CHECK_MARK;
+    }
+
+    private String pickFailureMark() {
+        return this.item.isTransitiveDefect() ? TRANSITIVE_FAILURE_MARK : CROSS_MARK;
     }
 
     // [impl->dsn~reporting.html.escape-html~1]

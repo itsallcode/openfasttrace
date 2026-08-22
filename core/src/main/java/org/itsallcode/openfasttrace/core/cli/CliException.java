@@ -3,7 +3,7 @@ package org.itsallcode.openfasttrace.core.cli;
 /**
  * Exception thrown in case of command line validation errors.
  */
-public class CliException extends Exception
+public class CliException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 

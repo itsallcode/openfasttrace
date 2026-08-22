@@ -4,10 +4,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.ColorScheme;
 import org.itsallcode.openfasttrace.api.DetailsSectionDisplay;
 import org.itsallcode.openfasttrace.api.cli.DirectoryService;
+import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -33,6 +35,7 @@ public class CliArguments
     private String outputFormat;
     private ReportVerbosity reportVerbosity;
     private Set<String> wantedArtifactTypes = Collections.emptySet();
+    private Set<ItemStatus> wantedStatuses = Collections.emptySet();
     private Set<String> wantedTags = Collections.emptySet();
 
     // [impl->dsn~reporting.plain-text.specification-item-origin~1]]
@@ -327,6 +330,45 @@ public class CliArguments
     public void setA(final String artifactTypes)
     {
         setWantedArtifactTypes(artifactTypes);
+    }
+
+    /**
+     * Get a list of statuses to be applied as a filter during import
+     * 
+     * @return set of wanted statuses
+     */
+    public Set<ItemStatus> getWantedStatuses()
+    {
+        return Collections.unmodifiableSet(this.wantedStatuses);
+    }
+
+    /**
+     * Set a list of statuses to be applied as a filter during import
+     * 
+     * @param statuses
+     *            list of wanted statuses
+     */
+    public void setWantedStatuses(final String statuses)
+    {
+        this.wantedStatuses = createStatusSetFromCommaSeparatedString(statuses);
+    }
+
+    private static Set<ItemStatus> createStatusSetFromCommaSeparatedString(final String commaSeparatedString)
+    {
+        return COMMA_SEPARATED_PATTERN.splitAsStream(commaSeparatedString)
+                .map(ItemStatus::parseString)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Set a list of statuses to be applied as a filter during import
+     * 
+     * @param statuses
+     *            list of wanted statuses
+     */
+    public void setW(final String statuses)
+    {
+        setWantedStatuses(statuses);
     }
 
     /**

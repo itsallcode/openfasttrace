@@ -1,12 +1,20 @@
 # Security Policy
 
+We value the work of security researchers and users who help us keep OpenFastTrace secure. Thank you for your support!
+
+## Supported Versions
+
+We provide security updates for the latest major version. For a detailed overview of supported versions and End-of-Life (EoL) dates, please see our [Project Lifecycle](doc/user_guide/project_lifecycle.md).
+
 ## Reporting a Vulnerability
 
-We are very grateful for any security reports and see them as a valuable way to improve the quality and reliability of our codebase. As a non-profit open-source project, we appreciate the time and effort the community puts into helping us keep OpenFastTrace secure.
+If you discover a potential security issue, please report it privately via [GitHub Security Advisories](https://github.com/itsallcode/openfasttrace/security/advisories/new). We follow coordinated disclosure and aim to:
 
-Please note that we do not offer bug bounties.
+- **Respond** to your report within 48 hours.
+- **Provide a fix** within 30 days.
+- **Disclose** the details publicly once a fix is available and users have had time to update.
 
-To report a vulnerability, please use the [GitHub Security Advisory reporting feature](https://github.com/itsallcode/openfasttrace/security/advisories/new) or contact the maintainers directly. We strive to address all security concerns in a timely and professional manner.
+While we don't offer bug bounties, we'd be happy to publicly acknowledge your contribution in the advisory.
 
 ## Software Bill of Materials (SBOM)
 

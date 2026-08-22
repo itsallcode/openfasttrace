@@ -1,11 +1,20 @@
 package org.itsallcode.openfasttrace.importer.restructuredtext;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.is;
 import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.nio.file.Path;
+import java.util.List;
+
+import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
-import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
+import org.itsallcode.openfasttrace.api.importer.*;
+import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.lightweightmarkup.AbstractLightWeightMarkupImporterTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +22,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 {
-    private static final ImporterFactory importerFactory = new RestructuredTextImporterFactory();
+    private static final String FULL_COVERAGE_TAG = "[doc" + "->req~guide~1]";
+    private static final ImporterFactory importerFactory = createImporterFactory();
 
     TestRestructuredTextImporter()
     {
@@ -24,6 +34,75 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
     protected ImporterFactory getImporterFactory()
     {
         return importerFactory;
+    }
+
+    private static ImporterFactory createImporterFactory()
+    {
+        final RestructuredTextImporterFactory factory = new RestructuredTextImporterFactory();
+        factory.init(new ImporterContext(ImportSettings.createDefault()));
+        return factory;
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testImportsCoverageTagFromStandaloneComment()
+    {
+        assertImport("guide.rst", """
+                Guide
+                =====
+                .. %s
+                req~ordinary~1
+                """.formatted(FULL_COVERAGE_TAG), contains(
+                item().id("doc", "guide-1442787702", 0)
+                        .addCoveredId("req", "guide", 1)
+                        .location("guide.rst", 3).build(),
+                item().id("req", "ordinary", 1).location("guide.rst", 4).build()));
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @ParameterizedTest
+    @ValueSource(strings =
+    {
+            FULL_COVERAGE_TAG,
+            ".. directive:: " + FULL_COVERAGE_TAG,
+            "..\n   " + FULL_COVERAGE_TAG,
+            "   " + FULL_COVERAGE_TAG })
+    void testIgnoresCoverageTagsOutsideComments(final String line)
+    {
+        assertImport("guide.rst", line, emptyIterable());
+    }
+
+    // [utest->dsn~rst.comment-coverage-tags~1]
+    @Test
+    void testIgnoresCoverageTagsInMultilineComments()
+    {
+        assertImport("guide.rst", """
+                .. %s
+                   continuation
+                """.formatted(FULL_COVERAGE_TAG), emptyIterable());
+    }
+
+    // [utest->dsn~located-specification-item-id-text-ranges~1]
+    @Test
+    void testImportsLocatedDeclarationCoverageAndDependencyIds()
+    {
+        final SpecificationItem item = importText("""
+                req~subject~1
+                Covers:
+                * req~covered~2
+                Depends:
+                * req~dependency~3
+                """).get(0);
+
+        assertAll(
+                () -> assertThat(item.getId(), is(createId("req", "subject", 1))),
+                () -> assertThat(item.getCoveredIds(), contains(createId("req", "covered", 2))),
+                () -> assertThat(item.getDependOnIds(), contains(createId("req", "dependency", 3))));
+    }
+
+    private static List<SpecificationItem> importText(final String source)
+    {
+        return ImportAssertions.runImporterOnText(Path.of("located.rst"), source, importerFactory);
     }
 
     protected String formatTitle(final String title, final int level)
@@ -147,20 +226,21 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~disabling-oft-parsing-for-parts-of-a-markup-file~1]
     @Test
-    void testDisablingRstParsingForATextBlock() {
+    void testDisablingRstParsingForATextBlock()
+    {
         assertImport("disable_parsing.rst", """
                 `req~stop-parsing~1`
-                
+
                 The next part must not be parsed:
-                
+
                 .. oft:off
                 `req~do-not-parse-me~2`
-                
+
                 Invisible.
-                
+
                 Needs: utest
                 .. oft:on
-                
+
                 Needs: impl
                 """,
                 contains(item()

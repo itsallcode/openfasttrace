@@ -117,6 +117,7 @@ public class CallbackContentHandler implements TreeContentHandler
     }
 
     @Override
+    @SuppressWarnings("java:S2221") // Intentionally catching all exceptions to provide better error messages.
     public void startElement(final TreeElement treeElement)
     {
         LOG.finest(() -> "Start element: " + treeElement);

@@ -31,6 +31,7 @@ You are an expert Java developer specializing in requirement tracing and softwar
   - Review all changes with `./oft-self-trace.sh` to ensure tracing completeness.
   - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>` (e.g., `feature/533_update_agents_md`).
   - Place coverage markers at the narrowest possible scope (method or class).
+  - Follow the quality requirements in `doc/spec/design/quality_requirements.md`.
 - **Ask First**:
   - Before adding new external dependencies to `pom.xml`.
   - Before changing existing architectural patterns in `openfasttrace-core`.
@@ -84,8 +85,16 @@ Needs: impl, utest
 ### Code Style & Conventions
 
 - **Clean Code**: Meaningful names, small functiKons, single responsibility.
+- **Type References**: Use plain class names with imports instead of fully qualified names such as `java.util.List`.
 - **Formatting**: Use the project's Eclipse formatter (`doc/itsallcode_formatter.xml`).
 - **Logging**: Use `java.util.logging`. Test config: `core/src/test/resources/logging.properties`.
+
+#### Unit Tests
+
+- Prefix test method names with `test`.
+- Test each conditional branch in a separate test method.
+- When asserting an exception, verify both its type and message.
+- Keep only one invocation that may throw a runtime exception in the `assertThrows` lambda; prepare all inputs beforehand.
 
 ### Development Workflow
 
@@ -100,7 +109,7 @@ Needs: impl, utest
 - **Key Resources**:
   - `README.md`: General overview.
   - `doc/developer_guide.md`: Detailed build and internal info.
-  - `doc/user_guide.md`: Comprehensive tool usage.
+  - `doc/user_guide/user_guide.md`: Comprehensive tool usage.
   - `CONTRIBUTING.md`: Human-AI collaboration guidelines.
   - `doc/spec/system_requirements.md`: System requirements specification.
   - `doc/spec/design.md`: High-level design documentation.

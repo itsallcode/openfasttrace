@@ -29,7 +29,7 @@ If you find a bug, please let us know by writing an [issue ticket](https://githu
 If you are a programmer, a code contribution in form of an automatic unit test case would be most appreciated, since this will make reproduction of the issue easier and prevent future regressions.
 
 ## Contributing to the User Guide
-Maybe you are good at explaining how to use OFT to end users? Help us improve the [user guide](doc/user_guide.md)!
+Maybe you are good at explaining how to use OFT to end users? Help us improve the [user guide](doc/user_guide/user_guide.md)!
 
 ## Translations
 We plan to make OFT multilingual. If you want to provide a translation, feel free to contact us. Messages in OFT and the user guide are prime candidates for translation.

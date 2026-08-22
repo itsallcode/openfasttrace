@@ -10,8 +10,12 @@ Commands:
 Tracing options:
   -o, --output-format          Report format, one of "plain", "html", "aspec"
                                Defaults to "plain"
-  -v, --report-verbosity       Set how verbose the output is. Ranges from
-                               "quiet" to "all".
+  -v, --report-verbosity       Set how verbose the output is. One of "quiet",
+                               "minimal", "summary", "failures",
+                               "direct_failures", "failure_summaries",
+                               "direct_failure_summaries", "failure_details",
+                               "direct_failure_details", "all".
+                               Defaults to "failure_details"
   --details-section-display status
                                Initial display status of the details section
                                in the HTML report. One of "collapse" or "expand".
@@ -31,6 +35,8 @@ Common options:
                                Note that this option is ignored when -f is also
                                set.
   -f, --output-file path       The output file. Defaults to STDOUT.
+  -w, --wanted-statuses        Import only specification items that have a
+                               status contained in the comma-separated list
   -n, --newline format         Newline format. One of "unix", "windows", "oldmac"
   -t, --wanted-tags            Import only specification items that have at
                                least one tag contained in the comma-separated

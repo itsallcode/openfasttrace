@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.specobject.handler;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
+import org.itsallcode.openfasttrace.api.core.LocatedSpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.importer.xmlparser.tree.CallbackContentHandler;
 import org.itsallcode.openfasttrace.importer.xmlparser.tree.TreeContentHandler;
@@ -22,7 +23,9 @@ class ProvidesCoverageHandlerBuilder
         this.handler.addElementListener("provcov",
                 elem -> this.providesCoverageIdBuilder = new Builder(), //
                 endElem -> {
-                    this.listener.addCoveredId(this.providesCoverageIdBuilder.build());
+                    // [impl->dsn~located-specification-item-id-specobject~1]
+                    this.listener.addCoveredId(LocatedSpecificationItemId.builder()
+                            .id(this.providesCoverageIdBuilder.build()).build());
                     this.providesCoverageIdBuilder = null;
                 });
 

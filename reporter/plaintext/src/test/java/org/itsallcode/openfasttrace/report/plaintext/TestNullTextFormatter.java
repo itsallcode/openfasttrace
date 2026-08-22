@@ -19,6 +19,12 @@ class TestNullTextFormatter {
     }
 
     @Test
+    // [utest->dsn~reporting.plain-text.transitive-defect~1]
+    void testFormatTransitiveNotOk() {
+        assertThat(FORMATTER.formatTransitiveNotOk("not ok"), equalTo("not ok"));
+    }
+
+    @Test
     void testFormatStrong() {
         assertThat(FORMATTER.formatStrong("strong"), equalTo("strong"));
     }

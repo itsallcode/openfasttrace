@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class ServiceLoaderFactoryIT
     void loadServiceFromWrongJar() throws IOException
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
-                Pattern.compile("openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\-javadoc.jar"));
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d+\\.\\d+\\.\\d+-javadoc.jar"));
         try (Loader<ReporterFactory> loader = createLoader())
         {
             final List<ReporterFactory> service = loader.load().toList();
@@ -48,7 +49,7 @@ class ServiceLoaderFactoryIT
     void loadServiceFromJar() throws IOException
     {
         preparePlugin(Path.of("../reporter/plaintext/target"),
-                Pattern.compile("openfasttrace-reporter-plaintext-\\d\\.\\d\\.\\d\\.jar"));
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d+\\.\\d+\\.\\d+\\.jar"));
         try (Loader<ReporterFactory> loader = createLoader())
         {
             final List<ReporterFactory> services = loader.load().toList();
@@ -76,8 +77,10 @@ class ServiceLoaderFactoryIT
 
     private Optional<Path> findMatchingFile(final Path dir, final Pattern filePattern) throws IOException
     {
-        return Files.list(dir).filter(file -> filePattern.matcher(file.getFileName().toString()).matches())
-                .findFirst();
+        try(final Stream<Path> files = Files.list(dir)) {
+            return files.filter(file -> filePattern.matcher(file.getFileName().toString()).matches())
+                    .findFirst();
+        }
     }
 
     private void preparePlugin(final Path pluginJar) throws IOException

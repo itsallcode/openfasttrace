@@ -6,11 +6,11 @@ Code name: Lifecycle Information and SPDX3 SBOM
 
 The project lifecycle documentation now describes planned deprecations and removals in OFT 5.0.0, including migration guidance for the SpecObject format and short coverage tags.
 
-We also publish the SPDX3 SBOM with the release now.
+Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 checksum for the SBOM.
 
 ## Feature
 
-* #542: CI and release now contain SPDX version 3 SBOM.
+* #542: CI and releases now provide an SPDX 3 SBOM.
 
 ## Documentation
 

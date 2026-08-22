@@ -20,7 +20,7 @@ calculate_checksum() {
     local file_path="$1"
     local checksum_file_path="${file_path}.sha256"
     readonly file_path checksum_file_path
-    echo "Calculate sha256sum for file '$file_path'"
+    echo "Calculating SHA-256 checksum for '$file_path'"
     (cd "$(dirname "$file_path")" && sha256sum "$(basename "$file_path")") > "$checksum_file_path"
 }
 
@@ -42,9 +42,9 @@ echo "Git tag      : $tag"
 echo "Title        : $title"
 echo "Changes file : $changes_file"
 echo "Artifact file: $artifact_path"
-echo "Checksum file: $artifact_checksum_path"
+echo "Artifact checksum: $artifact_checksum_path"
 echo "SBOM file    : $sbom_path"
-echo "Checksum file: $sbom_checksum_path"
+echo "SBOM checksum: $sbom_checksum_path"
 
 release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" \
     "$artifact_path" "$artifact_checksum_path" "$sbom_path" "$sbom_checksum_path")

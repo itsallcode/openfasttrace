@@ -241,16 +241,16 @@ The build will use the last Git commit timestamp as timestamp for files in `.jar
 
 The project generates an [SPDX](https://spdx.dev/) SBOM using the [SPDX Maven Plugin](https://github.com/spdx/spdx-maven-plugin).
 
-The SPDX plugin runs during Maven's `verify` phase. It creates the module SBOMs before aggregating them into the product SBOM.
+The SPDX plugin runs during Maven's `package` phase and creates an SBOM for each Maven module. The product SBOM describes the product and its production dependencies.
 
-Build and install OFT and create the SBOM with a single command:
+Build OFT and create the SBOMs with a single command:
 
 ```shell
-mvn install
+mvn package
 ```
 
 > [!IMPORTANT]
-> OFT does not include 3rd-party packages in the production JAR. The JRE we depend on is a runtime dependency on the machine OFT is executed. Therefore our SBOM only contains the OFT modules. We also did not include the test packages because they are not relevant for OFT users. 
+> OFT does not include third-party packages in the production JAR. The JRE is provided by the machine on which OFT runs. Therefore, the product SBOM contains only OFT modules. Test dependencies are excluded because they are not relevant to OFT users.
 
 ## Creating a Release
 

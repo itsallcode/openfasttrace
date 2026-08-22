@@ -37,8 +37,9 @@ class SpdxSbomIT
                 () -> assertThat("product identity", sbom, containsString("\"name\" : \"OpenFastTrace Product\"")),
                 () -> assertThat("API module", sbom, containsString("\"name\" : \"OpenFastTrace API\"")),
                 () -> assertThat("core module", sbom, containsString("\"name\" : \"OpenFastTrace Core\"")),
-                () -> assertThat("JUnit test dependency", sbom, not(containsString("JUnit"))),
-                () -> assertThat("Maven build plugin", sbom, not(containsString("maven-compiler-plugin"))));
+                () -> assertThat("absence of JUnit test dependencies", sbom, not(containsString("JUnit"))),
+                () -> assertThat("absence of Maven build plugins", sbom,
+                        not(containsString("maven-compiler-plugin"))));
     }
 
     private List<Path> findGeneratedSboms() throws IOException

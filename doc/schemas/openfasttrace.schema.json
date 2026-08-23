@@ -1,0 +1,574 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/itsallcode/openfasttrace/blob/main/doc/schemas/openfasttrace.schema.json",
+  "title": "OpenFastTrace JSON formats",
+  "description": "Schema for OpenFastTrace exchange (OFTX) and report (OFTR) documents. Properties whose value equals the declared default are omitted from serialized documents.",
+  "type": "object",
+  "required": [
+    "header"
+  ],
+  "properties": {
+    "header": {
+      "$ref": "#/$defs/header"
+    },
+    "items": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    },
+    "traceSummary": {
+      "$ref": "#/$defs/summary"
+    }
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "title": "OFTX exchange document",
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/exchangeHeader"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exchangeItem"
+          }
+        },
+        "traceSummary": false
+      }
+    },
+    {
+      "title": "OFTR report document",
+      "required": [
+        "traceSummary"
+      ],
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/reportHeader"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "header": {
+      "type": "object",
+      "required": [
+        "formatVersion",
+        "oftVersion"
+      ],
+      "properties": {
+        "formatVersion": {
+          "type": "string",
+          "description": "Version of the OFT JSON format."
+        },
+        "oftVersion": {
+          "type": "string",
+          "description": "Version of OpenFastTrace that created the document."
+        },
+        "format": {
+          "enum": [
+            "exchange",
+            "report"
+          ]
+        },
+        "reproducible": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether running OFT again with the recorded parameters can reproduce the document bit-identically."
+        },
+        "parameters": {
+          "$ref": "#/$defs/parameters",
+          "default": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "exchangeHeader": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        },
+        {
+          "properties": {
+            "format": {
+              "const": "exchange"
+            },
+            "parameters": {
+              "$ref": "#/$defs/exchangeParameters"
+            }
+          }
+        }
+      ]
+    },
+    "reportHeader": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        },
+        {
+          "properties": {
+            "format": {
+              "const": "report"
+            },
+            "parameters": {
+              "$ref": "#/$defs/reportParameters"
+            }
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/input"
+          }
+        },
+        "output": {
+          "$ref": "#/$defs/output",
+          "default": {}
+        },
+        "filters": {
+          "$ref": "#/$defs/filters",
+          "default": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "exchangeParameters": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/parameters"
+        },
+        {
+          "properties": {
+            "output": {
+              "$ref": "#/$defs/exchangeOutput"
+            }
+          }
+        }
+      ]
+    },
+    "reportParameters": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/parameters"
+        },
+        {
+          "properties": {
+            "output": {
+              "$ref": "#/$defs/reportOutput"
+            }
+          }
+        }
+      ]
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "type",
+        "path"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "file",
+            "directory"
+          ]
+        },
+        "reference": {
+          "default": "relative",
+          "enum": [
+            "absolute",
+            "relative"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "enum": [
+            "oftx",
+            "oftr"
+          ]
+        },
+        "showOrigin": {
+          "type": "boolean",
+          "default": false
+        },
+        "newline": {
+          "description": "Explicit newline format. If omitted, the platform newline is used.",
+          "enum": [
+            "unix",
+            "windows",
+            "oldmac"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "exchangeOutput": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/output"
+        },
+        {
+          "properties": {
+            "format": {
+              "const": "oftx"
+            }
+          }
+        }
+      ]
+    },
+    "reportOutput": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/output"
+        },
+        {
+          "properties": {
+            "format": {
+              "const": "oftr"
+            }
+          }
+        }
+      ]
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "artifactTypes": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "tags": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "statuses": {
+          "$ref": "#/$defs/statuses",
+          "default": []
+        },
+        "includeUntagged": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "default": ""
+        },
+        "description": {
+          "type": "string",
+          "default": ""
+        },
+        "rationale": {
+          "type": "string",
+          "default": ""
+        },
+        "comment": {
+          "type": "string",
+          "default": ""
+        },
+        "tags": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "status": {
+          "$ref": "#/$defs/status",
+          "default": "approved"
+        },
+        "needs": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "covers": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "depends": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "forwards": {
+          "type": "boolean",
+          "default": false
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "trace": {
+          "$ref": "#/$defs/trace"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exchangeItem": {
+      "$ref": "#/$defs/item",
+      "properties": {
+        "trace": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "totalItems",
+        "passedItems",
+        "completionPercent",
+        "directDefects",
+        "transitiveDefects"
+      ],
+      "properties": {
+        "totalItems": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passedItems": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completionPercent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "directDefects": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "transitiveDefects": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "defect": {
+          "enum": [
+            "direct",
+            "transitive"
+          ]
+        },
+        "deepCoverage": {
+          "enum": [
+            "covered",
+            "uncovered",
+            "cycle"
+          ],
+          "default": "covered"
+        },
+        "coveredArtifactTypes": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "uncoveredArtifactTypes": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "overCoveredArtifactTypes": {
+          "$ref": "#/$defs/uniqueStrings",
+          "default": []
+        },
+        "incomingLinks": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/incomingLink"
+          }
+        },
+        "outgoingLinks": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/outgoingLink"
+          }
+        },
+        "duplicateLinks": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/duplicateLink"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "link": {
+      "type": "object",
+      "required": [
+        "id",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "incomingLink": {
+      "$ref": "#/$defs/link",
+      "properties": {
+        "status": {
+          "enum": [
+            "coveredShallow",
+            "coveredUnwanted",
+            "coveredPredated",
+            "coveredOutdated"
+          ]
+        }
+      }
+    },
+    "outgoingLink": {
+      "$ref": "#/$defs/link",
+      "properties": {
+        "status": {
+          "enum": [
+            "covers",
+            "predated",
+            "outdated",
+            "ambiguous",
+            "unwanted",
+            "orphaned"
+          ]
+        }
+      }
+    },
+    "duplicateLink": {
+      "$ref": "#/$defs/link",
+      "properties": {
+        "status": {
+          "const": "duplicate"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "file"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "item": {
+          "$ref": "#/$defs/range"
+        },
+        "id": {
+          "$ref": "#/$defs/locatedId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "locatedId": {
+      "type": "object",
+      "required": [
+        "range"
+      ],
+      "properties": {
+        "range": {
+          "$ref": "#/$defs/range"
+        },
+        "artifactType": {
+          "$ref": "#/$defs/range"
+        },
+        "name": {
+          "$ref": "#/$defs/range"
+        },
+        "revision": {
+          "$ref": "#/$defs/range"
+        }
+      },
+      "additionalProperties": false
+    },
+    "range": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/position"
+        },
+        "end": {
+          "$ref": "#/$defs/position"
+        }
+      },
+      "additionalProperties": false
+    },
+    "position": {
+      "type": "object",
+      "required": [
+        "line",
+        "column"
+      ],
+      "properties": {
+        "line": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "status": {
+      "enum": [
+        "approved",
+        "proposed",
+        "draft",
+        "rejected"
+      ]
+    },
+    "statuses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/status"
+      },
+      "uniqueItems": true
+    }
+  }
+}

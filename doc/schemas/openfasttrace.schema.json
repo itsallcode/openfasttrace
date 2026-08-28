@@ -334,7 +334,7 @@
         "trace": false
       }
     },
-    "summary": {
+    "traceSummary": {
       "type": "object",
       "required": [
         "totalItems",

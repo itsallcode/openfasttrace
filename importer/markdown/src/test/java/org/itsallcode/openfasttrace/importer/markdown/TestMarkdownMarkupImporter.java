@@ -242,6 +242,25 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 emptyIterable());
     }
 
+    @Test
+    void testWhenCodeBlockDirectlyFollowsTitleThenFollowingSpecificationItemMustBeDetected()
+    {
+        assertImport("code_block_after_title.md", """
+                ## A diagram before any requirement
+
+                ```mermaid
+                graph TD
+                  A --> B
+                ```
+
+                `req~example~1`
+                """,
+                contains(item()
+                        .id(SpecificationItemId.parseId("req~example~1"))
+                        .location("code_block_after_title.md", 8)
+                        .build()));
+    }
+
     @ParameterizedTest
     @CsvSource(
     {

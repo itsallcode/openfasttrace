@@ -12,6 +12,10 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 
 * #542: CI and releases now provide an SPDX 3 SBOM.
 
+## Bugfixes
+
+* #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title.
+
 ## Documentation
 
 * #579: Documented planned deprecations and removals.

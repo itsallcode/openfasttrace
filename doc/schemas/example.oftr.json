@@ -7,20 +7,20 @@
     "parameters": {
       "inputs": [
         {
-          "type": "directory", "reference": "relative", "path": "doc"
+          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "doc"
         },
         {
-          "type": "directory", "reference": "relative", "path": "src/main/java"
+          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "src/main/java"
         },
         {
-          "type": "directory", "reference": "relative", "path": "src/test/java"
+          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "src/test/java"
         },
         {
-          "type": "file", "reference": "relative", "path": "pom.xml"
+          "type": "file", "reference": "relativeToWorkingDirectory", "path": "pom.xml"
         }
       ],
       "output": {
-        "format": "oftr",
+        "format": "oftReport",
         "showOrigin": true,
         "newline": "unix"
       },

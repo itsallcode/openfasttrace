@@ -19,7 +19,7 @@
       }
     },
     "traceSummary": {
-      "$ref": "#/$defs/summary"
+      "$ref": "#/$defs/traceSummary"
     }
   },
   "additionalProperties": false,
@@ -78,12 +78,32 @@
           "default": false,
           "description": "Whether running OFT again with the recorded parameters can reproduce the document bit-identically."
         },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp of the document (ISO 8601). Only allowed if reproducible is false."
+        },
         "parameters": {
           "$ref": "#/$defs/parameters",
           "default": {}
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "reproducible": {
+            "const": true
+          }
+        },
+        "required": [
+          "reproducible"
+        ]
+      },
+      "then": {
+        "properties": {
+          "timestamp": false
+        }
+      }
     },
     "exchangeHeader": {
       "allOf": [
@@ -182,10 +202,10 @@
           ]
         },
         "reference": {
-          "default": "relative",
+          "default": "relativeToWorkingDirectory",
           "enum": [
             "absolute",
-            "relative"
+            "relativeToWorkingDirectory"
           ]
         },
         "path": {
@@ -200,8 +220,8 @@
       "properties": {
         "format": {
           "enum": [
-            "oftx",
-            "oftr"
+            "oftExchange",
+            "oftReport"
           ]
         },
         "showOrigin": {
@@ -227,7 +247,7 @@
         {
           "properties": {
             "format": {
-              "const": "oftx"
+              "const": "oftExchange"
             }
           }
         }
@@ -241,7 +261,7 @@
         {
           "properties": {
             "format": {
-              "const": "oftr"
+              "const": "oftReport"
             }
           }
         }

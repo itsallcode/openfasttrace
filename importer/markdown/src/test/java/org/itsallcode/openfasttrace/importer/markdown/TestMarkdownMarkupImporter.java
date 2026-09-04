@@ -254,11 +254,18 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 ```
 
                 `req~example~1`
+
+                `req~example~2`
                 """,
-                contains(item()
-                        .id(SpecificationItemId.parseId("req~example~1"))
-                        .location("code_block_after_title.md", 8)
-                        .build()));
+                contains(
+                        item()
+                                .id(SpecificationItemId.parseId("req~example~1"))
+                                .location("code_block_after_title.md", 8)
+                                .build(),
+                        item()
+                                .id(SpecificationItemId.parseId("req~example~2"))
+                                .location("code_block_after_title.md", 10)
+                                .build()));
     }
 
     @ParameterizedTest

@@ -25,6 +25,8 @@ public enum ReportVerbosity
     FAILURE_DETAILS,
     /** Details of non-transitive unclean items */
     DIRECT_FAILURE_DETAILS,
+    /** Details for all items, without the specification item description */
+    OVERVIEW,
     /** Details for all items */
     ALL
     //@formatter:on

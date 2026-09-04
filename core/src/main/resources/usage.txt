@@ -14,7 +14,7 @@ Tracing options:
                                "minimal", "summary", "failures",
                                "direct_failures", "failure_summaries",
                                "direct_failure_summaries", "failure_details",
-                               "direct_failure_details", "all".
+                               "direct_failure_details", "overview", "all".
                                Defaults to "failure_details"
   --details-section-display status
                                Initial display status of the details section

@@ -361,6 +361,32 @@ class TestPlainTextReport
                 "not ok - 2 total, 1 direct, 0 transitive defects");
     }
 
+    // [utest->dsn~reporting.verbosity.overview~1]
+    @Test
+    void testReport_LevelOverview()
+    {
+        when(this.traceMock.count()).thenReturn(2);
+        when(this.traceMock.countDefects()).thenReturn(1);
+        prepareMixedItemDetails();
+
+        assertReportOutput(ReportVerbosity.OVERVIEW, //
+                "not ok [ in:  1 /  1 ✔ | out:  2 /  4 ✘ ] dsn~failure~0 (impl, uman, -utest) [has 3 duplicates]", //
+                "", //
+                "  [covered shallow  ] ← imp~failure~0", //
+                "  [covers           ] → req~bar~1", //
+                "  [unwanted         ] → req~baz~1", //
+                "  [covers           ] → req~foo~1", //
+                "  [outdated         ] → req~zoo~1", //
+                "  [orphaned         ] → req~zoo~2", //
+                "", //
+                "ok [ in:  0 /  0   | out:  0 /  0   ] req~success~20170126 (dsn)", //
+                "", //
+                "  #: tag, another tag", //
+                "", //
+                "", //
+                "not ok - 2 total, 1 direct, 0 transitive defects");
+    }
+
     private void prepareMixedItemDetails()
     {
         final LinkedSpecificationItem itemAMock = createLinkedItemMock("req~success~20170126", //

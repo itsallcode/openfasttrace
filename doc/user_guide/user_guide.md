@@ -648,6 +648,7 @@ The verbosity of the tracing report.
 * `direct_failure_summaries` - list of summaries for specification items with non-transitive defects
 * `failure_details` - summaries and details for defect specification items
 * `direct_failure_details` - summaries and details for specification items with non-transitive defects
+* `overview` - summaries, link details and tags for all specification items, without the description
 * `all` - summaries and details for all specification items
 
 Defaults to `failure_details`.

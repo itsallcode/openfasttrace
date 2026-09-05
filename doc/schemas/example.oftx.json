@@ -7,16 +7,16 @@
     "parameters": {
       "inputs": [
         {
-          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "doc"
+          "type": "directory", "path": "doc"
         },
         {
-          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "src/main/java"
+          "type": "directory", "path": "src/main/java"
         },
         {
-          "type": "directory", "reference": "relativeToWorkingDirectory", "path": "src/test/java"
+          "type": "directory", "path": "src/test/java"
         },
         {
-          "type": "file", "reference": "relativeToWorkingDirectory", "path": "pom.xml"
+          "type": "file", "path": "pom.xml"
         }
       ],
       "output": {

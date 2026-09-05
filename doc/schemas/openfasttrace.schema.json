@@ -201,13 +201,6 @@
             "directory"
           ]
         },
-        "reference": {
-          "default": "relativeToWorkingDirectory",
-          "enum": [
-            "absolute",
-            "relativeToWorkingDirectory"
-          ]
-        },
         "path": {
           "type": "string",
           "minLength": 1

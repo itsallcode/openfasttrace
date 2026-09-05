@@ -39,7 +39,7 @@
     "directDefects": 1,
     "transitiveDefects": 1
   },
-  "items": [
+  "specificationItems": [
     {
       "id": "feat~oft.json-based-export~1",
       "title": "JSON-based export",

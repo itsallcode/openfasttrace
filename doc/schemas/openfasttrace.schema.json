@@ -11,7 +11,7 @@
     "header": {
       "$ref": "#/$defs/header"
     },
-    "items": {
+    "specificationItems": {
       "type": "array",
       "default": [],
       "items": {
@@ -30,7 +30,7 @@
         "header": {
           "$ref": "#/$defs/exchangeHeader"
         },
-        "items": {
+        "specificationItems": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/exchangeItem"

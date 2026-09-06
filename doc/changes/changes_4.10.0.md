@@ -11,6 +11,7 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 ## Feature
 
 * #542: CI and releases now provide an SPDX 3 SBOM.
+* #586: Publish to Homebrew
 
 ## Bugfixes
 

@@ -15,7 +15,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>4.2.0</version>
+        <version>4.9.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:4.2.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:4.9.0"
 }
 ```
 
@@ -275,6 +275,44 @@ mvn package
    * or go to [GitHub Actions](https://github.com/itsallcode/openfasttrace/actions/workflows/release.yml) and start the `release.yml` workflow on branch `main`.
 2. Update the title and description of the newly created [GitHub release](https://github.com/itsallcode/openfasttrace/releases).
 3. After some time the release will be available at [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/).
+4. Verify Homebrew release
+   1. Check that Homebrew detects the release:
+      ```shell
+      brew livecheck openfasttrace
+      ```
+   2. Homebrew/core's autobump service automatically opens a pull request to update the `openfasttrace` formula. Review the formula update and its CI results, respond to any maintainer feedback, and merge the pull request when it is ready.
+   3. After the formula update is merged, confirm that Homebrew reports the new version:
+       ```shell
+       brew info openfasttrace
+       ```
+
+The Homebrew follow-up is performed in Homebrew/core. It does not require Homebrew credentials, formula-update automation, or additional changes in this repository.
+
+## Homebrew Formula
+
+OpenFastTrace is published in [Homebrew/core](https://github.com/Homebrew/homebrew-core) as the `openfasttrace` formula. It installs the portable release JAR and exposes the `oft` command with an OpenJDK 17 runtime.
+
+### Updating the Formula
+
+1. Fork `Homebrew/homebrew-core`, tap it locally with `brew tap --force homebrew/core`, and create a branch from the current `main` branch.
+2. Update `Formula/o/openfasttrace.rb` with the immutable GitHub Release JAR URL and its SHA-256 checksum from the matching `.jar.sha256` release asset.
+3. Follow Homebrew's [Formula Cookbook](https://docs.brew.sh/Formula-Cookbook) and [pull request guidance](https://docs.brew.sh/How-To-Open-a-Homebrew-Pull-Request), including its required AI-use disclosure when applicable.
+
+### Testing the Formula
+
+From the Homebrew/core checkout, validate the formula with:
+
+```shell
+HOMEBREW_NO_INSTALL_FROM_API=1 brew install --build-from-source openfasttrace
+brew test openfasttrace
+brew audit --new --strict --online openfasttrace
+```
+
+The formula's GitHub Release JAR URL is discoverable by Homebrew's default livecheck strategy. After the initial formula is merged, Homebrew/core's autobump service maintains new release versions. Confirm discovery locally when updating the formula:
+
+```shell
+brew livecheck openfasttrace
+```
 
 ## Module Overview
 

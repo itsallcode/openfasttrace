@@ -12,6 +12,7 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 
 * #542: CI and releases now provide an SPDX 3 SBOM.
 * #586: Publish to Homebrew
+* #589: Add "overview" report verbosity mode to the plain-text reporter
 
 ## Bugfixes
 

@@ -17,6 +17,7 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 ## Bugfixes
 
 * #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title.
+* #577: Fixed the Gherkin importer dropping a scenario when it directly follows another tagged scenario, with no boundary line between them.
 
 ## Documentation
 

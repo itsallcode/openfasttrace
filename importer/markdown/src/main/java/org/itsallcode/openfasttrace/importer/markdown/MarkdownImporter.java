@@ -63,6 +63,7 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
                 transition(TITLE      , TITLE      , MdPattern.UNDERLINE  , () -> {}                           ),
                 transition(TITLE      , TITLE      , MdPattern.EMPTY      , () -> {}                           ),
                 transition(TITLE      , START      , MdPattern.FORWARD    , () -> {forward(); resetTitle();}   ),
+                transition(TITLE      , CODE_BLOCK , MdPattern.CODE_BEGIN , this::resetTitle                   ),
                 transition(TITLE      , START      , MdPattern.EVERYTHING , this::resetTitle                   ),
 
                 transition(SPEC_ITEM  , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),

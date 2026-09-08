@@ -11,6 +11,11 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 ## Feature
 
 * #542: CI and releases now provide an SPDX 3 SBOM.
+* #589: Add "overview" report verbosity mode to the plain-text reporter
+
+## Bugfixes
+
+* #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title.
 
 ## Documentation
 

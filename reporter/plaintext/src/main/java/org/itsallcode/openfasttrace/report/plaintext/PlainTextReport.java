@@ -104,6 +104,11 @@ public class PlainTextReport implements Reportable
             report.print(this.settings.getNewline());
             renderSummary(report);
             break;
+        case OVERVIEW:
+            renderOverview(report, this.settings.showOrigin());
+            report.print(this.settings.getNewline());
+            renderSummary(report);
+            break;
         default:
             throw new IllegalStateException("Unable to create stream for unknown verbosity level "
                     + this.settings.getReportVerbosity());
@@ -298,7 +303,7 @@ public class PlainTextReport implements Reportable
     {
         this.trace.getDefectItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin));
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin, true));
     }
 
     // [impl->dsn~reporting.verbosity.direct-failure-details~1]
@@ -307,21 +312,32 @@ public class PlainTextReport implements Reportable
         this.trace.getDefectItems().stream() //
                 .filter(PlainTextReport::isDirectDefect) //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin));
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin, true));
     }
 
     private void renderAll(final PrintStream report, final boolean showOrigin)
     {
         this.trace.getItems().stream() //
                 .sorted(LINKED_ITEM_BY_ID) //
-                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin));
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin, true));
+    }
+
+    // [impl->dsn~reporting.verbosity.overview~1]
+    private void renderOverview(final PrintStream report, final boolean showOrigin)
+    {
+        this.trace.getItems().stream() //
+                .sorted(LINKED_ITEM_BY_ID) //
+                .forEachOrdered(item -> renderItemDetails(report, item, showOrigin, false));
     }
 
     private void renderItemDetails(final PrintStream report, final LinkedSpecificationItem item,
-            final boolean showOrigin)
+            final boolean showOrigin, final boolean showDescription)
     {
         renderItemSummary(report, item);
-        renderDescription(report, item);
+        if (showDescription)
+        {
+            renderDescription(report, item);
+        }
         if (showOrigin)
         {
             renderOrigin(report, item);

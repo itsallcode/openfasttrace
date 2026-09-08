@@ -612,6 +612,17 @@ Covers:
 
 Needs: impl, utest
 
+### Verbosity Level Overview
+`dsn~reporting.verbosity.overview~1`
+
+The verbosity level `overview` renders summaries, link details and tags for all items, omitting their description.
+
+Covers:
+
+* `req~reporting.verbosity.overview~1`
+
+Needs: impl, utest
+
 ## Tracing Reports
 
 ### Plain Text Report

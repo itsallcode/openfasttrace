@@ -110,7 +110,7 @@ General form: `oft <command> [options] <files/dirs>`
   - `-f, --output-file`: File path (default STDOUT).
   - `-a, --wanted-artifact-types`: Filter by type (Partial Tracing).
   - `-t, --wanted-tags`: Filter by tags (Partial Tracing). Use `_` for items without tags (e.g., `-t _,MyTag`).
-  - `-v, --report-verbosity`: `quiet`, `minimal`, `summary`, `failures`, `failure_summaries`, `failure_details` (default), `all`.
+  - `-v, --report-verbosity`: `quiet`, `minimal`, `summary`, `failures`, `failure_summaries`, `failure_details` (default), `overview`, `all`.
   - `-i, --ignore-artifact-types`: Exclude types from import.
 
 ### Maven Integration

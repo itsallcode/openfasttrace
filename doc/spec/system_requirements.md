@@ -718,6 +718,17 @@ Covers:
 
 Needs: dsn
 
+##### Report Verbosity Overview
+`req~reporting.verbosity.overview~1`
+
+The verbosity level `overview` lists summaries, link details and tags of all specification items, without their description.
+
+Covers:
+
+* [feat~plain-text-report~1](#plain-text-report)
+
+Needs: dsn
+
 #### Plain Text Report
 The plain text report is the most basic report variant. It serves two main purposes:
 

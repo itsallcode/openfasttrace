@@ -300,6 +300,31 @@ class GherkinImporterTest
                 hasProperty("title", is("Second login"))));
     }
 
+    // [utest->dsn~gherkin.streaming-import~1]
+    // [utest->dsn~gherkin.id-detection~1]
+    @Test
+    void testImportsConsecutiveTaggedScenariosWithoutAnInterveningBoundary()
+    {
+        final List<SpecificationItem> items = importText("""
+                @id:scn~first~1
+                # Needs: itest
+                Scenario: First scenario
+                  Given a precondition
+
+                @id:scn~second~1
+                # Needs: itest
+                Scenario: Second scenario
+                  Given another precondition
+                """);
+
+        assertAll(
+                () -> assertThat(items, contains(
+                        hasProperty("id", hasToString("scn~first~1")),
+                        hasProperty("id", hasToString("scn~second~1")))),
+                () -> assertThat(items.get(0).getDescription(), is("Given a precondition")),
+                () -> assertThat(items.get(1).getDescription(), is("Given another precondition")));
+    }
+
     // [utest->dsn~gherkin.comment-coverage-tags~1]
     @Test
     void testImportsCommentCoverageTagsButIgnoresExecutableCoverageTags()

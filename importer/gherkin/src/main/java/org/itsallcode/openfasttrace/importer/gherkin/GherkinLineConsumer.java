@@ -72,6 +72,17 @@ final class GherkinLineConsumer implements LineConsumer
         }
         if (this.importingScenario)
         {
+            if (line.trim().startsWith("@"))
+            {
+                // A tag line is a Gherkin block boundary [dsn~gherkin.streaming-import~1] just as much as
+                // Scenario/Feature/Rule/Background/Examples are: it starts the metadata for the next
+                // scenario [dsn~gherkin.id-detection~1]. Without ending the current scenario here, this
+                // line would be swallowed as its description instead, and the next scenario would never
+                // get a pending id.
+                endScenario();
+                readMetadata(lineNumber, line);
+                return;
+            }
             if (!line.trim().startsWith("#") && !line.trim().isEmpty())
             {
                 this.listener.appendDescription(line + System.lineSeparator());

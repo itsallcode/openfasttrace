@@ -79,10 +79,10 @@ OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.c
 
 ### Getting Pre-Built Packages
 
-Pre-Built JAR files (called `openfasttrace-4.2.0.jar`) are available from the following places:
+Pre-Built JAR files (called `openfasttrace-4.9.0.jar`) are available from the following places:
 
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/4.2.0/openfasttrace-4.2.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/4.2.0/openfasttrace-4.2.0.jar)
+* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/4.9.0/openfasttrace-4.9.0.jar)
+* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/4.9.0/openfasttrace-4.9.0.jar)
  
 Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
@@ -101,6 +101,20 @@ If you just want to run OFT:
 
     apt-get install openjdk-17-jre
 
+### Installation via Homebrew
+
+On macOS or Linux, install OpenFastTrace with [Homebrew](https://brew.sh/):
+
+```shell
+brew install openfasttrace
+```
+
+The formula installs the OpenJDK 17 runtime dependency and provides the `oft` command. For example:
+
+```shell
+oft trace /path/to/directory/being/traced
+```
+
 ## Running OpenFastTrace
 
 ### Run JAR File
@@ -108,7 +122,7 @@ If you just want to run OFT:
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```sh
-java -jar product/target/openfasttrace-4.2.0.jar trace /path/to/directory/being/traced
+java -jar product/target/openfasttrace-4.9.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).

@@ -1,3 +1,11 @@
+---
+layout: default
+title: Using OFT From Java
+parent: OFT API
+grand_parent: User Guide
+nav_order: 1
+---
+
 ### Using OFT From Java
 
 The Java interface uses the "fluent programming" paradigm to make the code more compact and easy to read.

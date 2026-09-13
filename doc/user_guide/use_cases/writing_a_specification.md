@@ -1,3 +1,11 @@
+---
+layout: default
+title: Writing a Specification
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 1
+---
+
 ### Writing a Specification
 
 Preconditions:

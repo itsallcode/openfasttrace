@@ -1,3 +1,11 @@
+---
+layout: default
+title: Filtering by Status
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 5
+---
+
 ### Filtering by Status
 
 Sometimes you only want to see specification items that have reached a certain maturity level. For example, you might want to create a report that only includes approved requirements.

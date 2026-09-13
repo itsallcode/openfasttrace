@@ -3,6 +3,7 @@ layout: default
 title: Tool Support
 parent: User Guide
 has_children: true
+nav_order: 6
 ---
 
 ## Tool Support

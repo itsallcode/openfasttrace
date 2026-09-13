@@ -3,6 +3,7 @@ layout: default
 title: Use Cases
 parent: User Guide
 has_children: true
+nav_order: 3
 ---
 
 ## Use Cases

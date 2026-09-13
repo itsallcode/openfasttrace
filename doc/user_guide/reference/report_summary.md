@@ -1,3 +1,11 @@
+---
+layout: default
+title: Report Summary
+parent: Reference
+grand_parent: User Guide
+nav_order: 5
+---
+
 ### Report Summary
 
 At the end of the report, a summary is displayed that informs you about the overall state of the trace.

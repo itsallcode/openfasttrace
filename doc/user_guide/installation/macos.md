@@ -1,3 +1,11 @@
+---
+layout: default
+title: macOS Installation
+parent: Installation
+grand_parent: User Guide
+nav_order: 2
+---
+
 ## macOS Installation
 
 OpenFastTrace can be installed on macOS using Homebrew or manually via a JAR file.

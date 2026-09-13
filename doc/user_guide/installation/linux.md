@@ -1,3 +1,11 @@
+---
+layout: default
+title: Linux Installation
+parent: Installation
+grand_parent: User Guide
+nav_order: 1
+---
+
 ## Linux Installation
 
 There are several ways to install OpenFastTrace on Linux, depending on your distribution and preference.

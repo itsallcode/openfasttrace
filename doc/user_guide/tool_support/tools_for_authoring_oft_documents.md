@@ -1,3 +1,11 @@
+---
+layout: default
+title: Tools for Authoring OFT Documents
+parent: Tool Support
+grand_parent: User Guide
+nav_order: 1
+---
+
 ### Tools for Authoring OFT Documents
 
 The following editors and integrated development environments are well suited for authoring OFT documents. The list is not exhaustive, any editor with Markdown capabilities can be used.

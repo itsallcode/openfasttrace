@@ -1,3 +1,11 @@
+---
+layout: default
+title: What is Requirement Tracing?
+parent: Introduction
+grand_parent: User Guide
+nav_order: 2
+---
+
 ### What is Requirement Tracing?
 
 OpenFastTrace is a requirement tracing suite. Requirement tracing helps you to keep track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.

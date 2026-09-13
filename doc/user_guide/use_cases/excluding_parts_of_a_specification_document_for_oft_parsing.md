@@ -1,3 +1,11 @@
+---
+layout: default
+title: Excluding Parts of a Specification Document for OFT Parsing
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 2
+---
+
 ### Excluding Parts of a Specification Document for OFT Parsing
 
 Sometimes you want specific sections or a whole document to be excluded from OFT parsing. One reason could be that it is a document that contains an OFT example, that should not contribute to the trace. Or, you could have data in a document and don't want to risk that something accidentally looks like an OFT artifact.

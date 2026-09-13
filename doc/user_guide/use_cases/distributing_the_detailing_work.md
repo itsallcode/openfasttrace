@@ -1,3 +1,11 @@
+---
+layout: default
+title: Distributing the Detailing Work
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 4
+---
+
 ### Distributing the Detailing Work
 
 In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence, the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.

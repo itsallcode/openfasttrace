@@ -2,6 +2,8 @@
 layout: default
 title: Product Lifecycle
 parent: User Guide
+has_children: true
+nav_order: 7
 ---
 
 # Product Lifecycle

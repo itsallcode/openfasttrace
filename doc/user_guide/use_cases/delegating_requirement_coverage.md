@@ -1,3 +1,11 @@
+---
+layout: default
+title: Delegating Requirement Coverage
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 3
+---
+
 ### Delegating Requirement Coverage
 
 Consider a situation where you are responsible for the high-level software architecture of your project. You define the component breakdown, the interfaces and the interworking of the components. You get your requirements from a system requirement specification, but it turns out many of those incoming requirements are at a detail level that does not require design decisions on inter-component-level but rather affects the internals of a single component.

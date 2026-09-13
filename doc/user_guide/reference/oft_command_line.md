@@ -1,3 +1,11 @@
+---
+layout: default
+title: OFT Command Line
+parent: Reference
+grand_parent: User Guide
+nav_order: 1
+---
+
 ### OFT Command Line
 
 The OFT command line looks like this:

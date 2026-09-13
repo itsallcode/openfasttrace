@@ -1,3 +1,11 @@
+---
+layout: default
+title: Console Tracing Report
+parent: Reference
+grand_parent: User Guide
+nav_order: 4
+---
+
 ### Console Tracing Report
 
 The Console Tracing Report is the standard report format of OFT. Its main purpose is to quickly debug broken tracing links. In this section you learn how to read this report.

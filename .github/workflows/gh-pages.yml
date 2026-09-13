@@ -22,6 +22,8 @@ jobs:
   build:
     permissions:
       contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,6 +37,9 @@ jobs:
         with:
           source: ./doc
           destination: ./_site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:

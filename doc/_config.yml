@@ -27,6 +27,9 @@ search:
   tokenizer_separator: /[\s/]+/
   rel_prefix: true
 
+# Footer content
+footer_content: ""
+
 # Color scheme
 color_scheme: light
 

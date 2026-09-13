@@ -7,6 +7,12 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to GitHub Pages"
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: "pages"
@@ -45,8 +51,8 @@ jobs:
           path: ./_site/
 
   deploy:
-    # Publishing only on release. Optionally on manual.
-    if: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.deploy) }}
+    # Publishing on push to main, release or manual dispatch.
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && (inputs.deploy || inputs.deploy == null)) }}
     permissions:
       id-token: write
       pages: write

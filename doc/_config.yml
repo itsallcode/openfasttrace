@@ -1,0 +1,26 @@
+title: OpenFastTrace
+description: Requirement tracing suite for Agile Development
+remote_theme: just-the-docs/just-the-docs
+
+# Site settings
+url: "https://openfasttrace.itsallcode.org"
+
+# Navigation bar logo
+logo: "/images/openfasttrace_logo.svg"
+
+# Aux links for the sidebar
+aux_links:
+  "OpenFastTrace on GitHub":
+    - https://github.com/itsallcode/openfasttrace
+
+# Heading anchor links
+heading_anchors: true
+
+# Search configuration
+search_enabled: true
+search:
+  tokenizer_separator: /[\s/]+/
+  rel_prefix: true
+
+# Color scheme
+color_scheme: light

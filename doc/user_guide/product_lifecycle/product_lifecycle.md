@@ -1,4 +1,4 @@
-# Project Lifecycle
+# Product Lifecycle
 
 This is a free and open-source project. Updates are publicly available and free of charge.
 
@@ -37,12 +37,16 @@ Migrate to OFT's full coverage tags, and you can drop the per-directory tag-impo
 
 ## Security Updates
 
-Users need to check the [changelog](../changes/changes.md) to stay informed about security updates. You need to install the provided security updates in a timely manner to keep your setup secure. This is also true for any dependencies of this software that do not come bundled. An example is the Java Runtime Environment.
+Users need to check the [changelog](../../changes/changes.md) to stay informed about security updates. You need to install the provided security updates in a timely manner to keep your setup secure. This is also true for any dependencies of this software that do not come bundled. An example is the Java Runtime Environment.
 
 Itsallcode.org provides security updates until the EoL listed above.
 
-Please refer to our [security policy](../../SECURITY.md) for details on coordinated vulnerability disclosure.
+Please refer to our [security policy](../../../SECURITY.md) for details on coordinated vulnerability disclosure.
 
 ### Retaining Updates
 
 Itsallcode.org distributes updates via GitHub releases. Even if the project should be archived, the releases remain accessible for download. Itsallcode.org will keep each security update accessible for at least 10 years.
+
+---
+
+← [Templates for IDEs](../tool_support/templates_for_ides.md) | ↑ [User Guide](../user_guide.md)

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Developer Guide
+nav_order: 3
+has_children: true
+---
+
 # OpenFastTrace Developer Guide
 
 This document contains technical information for developers contributing to OpenFastTrace (short OFT).

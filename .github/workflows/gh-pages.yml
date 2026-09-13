@@ -3,7 +3,16 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
+  release:
+    types: [published]
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to GitHub Pages"
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: "pages"
@@ -30,9 +39,15 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./_site/
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: github-pages-preview
+          path: ./_site/
 
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # Publishing only on release. Optionally on manual.
+    if: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.deploy) }}
     permissions:
       id-token: write
       pages: write

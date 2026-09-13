@@ -4,4 +4,4 @@ You can create OpenFastTrace artifacts faster with templates for your IDE. See [
 
 ---
 
-← [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md) | ↑ [Tool Support](tool_support.md)
+← [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md) | ↑ [Tool Support](tool_support.md) | [Product Lifecycle](../product_lifecycle/product_lifecycle.md) →

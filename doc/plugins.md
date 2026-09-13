@@ -1,3 +1,9 @@
+---
+layout: default
+title: Plugins
+nav_order: 6
+---
+
 # Extending OpenFastTrace With Plugins
 
 OpenFastTrace (OFT) is designed to be extensible. You can add new importers, exporters, and reporters by using plugins.

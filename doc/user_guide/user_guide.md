@@ -1,4 +1,11 @@
-![oft-logo](../../core/src/main/resources/openfasttrace_logo.svg)
+---
+layout: default
+title: User Guide
+nav_order: 2
+has_children: true
+---
+
+![oft-logo](../images/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 
@@ -47,3 +54,5 @@ OFT is a requirement tracing tool. It helps you make sure that all defined requi
 ## [Tool Support](tool_support/tool_support.md)
 * [Tools for Authoring OFT Documents](tool_support/tools_for_authoring_oft_documents.md)
 * [Templates for IDEs](tool_support/templates_for_ides.md)
+
+## [Product Lifecycle](product_lifecycle/product_lifecycle.md)

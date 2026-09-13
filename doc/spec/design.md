@@ -1,7 +1,9 @@
-<head>
-    <link href="oft_spec.css" rel="stylesheet" />
-    <title>OpenFastTrace Design</title>
-</head>
+---
+layout: default
+title: Design
+nav_order: 2
+parent: Specification
+---
 
 # Introduction
 

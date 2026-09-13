@@ -1,7 +1,9 @@
-<head>
-    <link href="oft_spec.css" rel="stylesheet"/>
-    <title>System Requirement Specification OpenFastTrace</title>
-</head>
+---
+layout: default
+title: System Requirements
+nav_order: 1
+parent: Specification
+---
 
 # System Requirement Specification OpenFastTrace
 

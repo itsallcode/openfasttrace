@@ -1,5 +1,8 @@
 title: OpenFastTrace
 description: Requirement tracing suite for Agile Development
+source: doc
+destination: _site
+
 remote_theme: just-the-docs/just-the-docs
 
 plugins:
@@ -9,6 +12,7 @@ plugins:
 
 # Site settings
 url: "https://openfasttrace.itsallcode.org"
+baseurl: ""
 
 # Navigation bar logo
 logo: "/images/openfasttrace_logo.svg"

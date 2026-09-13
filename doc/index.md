@@ -2,6 +2,7 @@
 layout: default
 title: Home
 nav_order: 1
+permalink: /
 description: OpenFastTrace is a requirement tracing suite for Agile Development.
 ---
 

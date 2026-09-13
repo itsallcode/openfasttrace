@@ -61,40 +61,11 @@ Requirement tracing is a safety net for non-trivial software projects:
 
 ### Concepts and Terms
 
-There are some often used terms in the OFT documentation that stand for concepts you should be familiar with when using OFT.
+OpenFastTrace uses unified terminology for all documents. Please refer to the [central terminology document](../terminology.md) for core definitions of terms like [specification item](../terminology.md#specification-item), [coverage](../terminology.md#coverage), and [artifact](../terminology.md#artifact).
 
-#### Specification Item
+The following sections provide detailed information on the parts of a [specification item ID](../terminology.md#specification-item-id).
 
-"Specification Item" is the general term we use to denominate all normative pieces of specifications and markers to their coverage in the implementation.
-
-Examples:
-* Feature definitions
-* Requirements in a system requirement specification
-* Markers in implementation and tests that signal [coverage](#coverage)
-
-We use this term to better distinguish between the accepted use of the word "requirement" which most people only use for specification items found in requirement documents and the broader use that includes coverage markers.
-
-#### Specification Item ID
-
-The identifier (ID) of a [specification item](#specification-item) is a project-globally unique key which is used to refer to a specification item.
-
-The specification item ID consists of the following parts:
-* [Artifact type](#specification-item-artifact-type)
-* [Name](#specification-item-name)
-* [Revision](#specification-item-revision)
-
-All parts are integral to the ID. The name alone is neither unique nor complete. In OFT's native document formats the ID is represented as a character string where the three parts are separated by the tilde (`~`) symbol.
-
-Examples:
-
-    feat~html-export~1
-    req~html5-exporter~1
-    dsn~html5-exporter~1
-    utest~html5-exporter~4
-
-The following sections explain the each of the three parts in detail.
-
-##### Specification Item Artifact Type
+#### Specification Item Artifact Type
 
 The artifact type serves two purposes:
 
@@ -103,7 +74,7 @@ The artifact type serves two purposes:
 
 Artifact types are represented by character strings consisting out of ASCII letters. No other characters are allowed.
 
-While not enforced by OFT the following strings are well established:
+While not enforced by OFT, the following strings are well-established:
 
 * `feat` - high-level feature
 * `req` - user requirement
@@ -116,11 +87,11 @@ While not enforced by OFT the following strings are well established:
 * `uman` - user manual
 * `oman` - operation manual
 
-If you don't distinguish between architectural and detailed design we recommend using `dsn` for both. The OFT specification for example does it that way.
+If you don't distinguish between architectural and detailed design, we recommend using `dsn` for both. The OFT specification, for example, does it that way.
 
 How many types you introduce, how you name and stack them is up to you. When we designed OFT, we were clear about the fact that we would not be able to cover all possible artifact types one could imagine, so we did not hardcode them into OFT.
 
-##### Specification Item Name
+#### Specification Item Name
 
 The name part of the ID must be a character string consisting of Unicode letters and/or numbers separated by underscore (`_`), hyphen (`-`) or dot (`.`). Whitespaces are not allowed.
 
@@ -133,7 +104,7 @@ We recommend using a dot `.` to create a hierarchy of items:
     exporter.html5.colors
     exporter.csv.column_names
 
-##### Specification Item Revision
+#### Specification Item Revision
 
 The revision number of a specification item is a positive integer number that can be started at zero but by convention usually is started at one.
 
@@ -145,35 +116,6 @@ If you change a requirement that lists all browsers that an HTML export needs to
 
 If on the other hand you only added a missing period at the end of a sentence, the requirement content did not really change and there is no need to invalidate existing coverage. 
 
-#### Informative Passages
-
-Informative passages of a specification provide explanations and context that is necessary for understanding the subject. They do not require coverage though.
-
-#### Normative Passages
-
-Normative passages contain requirements (or in OFT terms ["specification items"](#specification-item)). Unlike [informative passages](#informative-passages) they require that someone details, implements or verifies the contained specification items.
-
-#### Coverage
-
-The term "coverage" describes the relation between [specification items](#specification-item) that require detailing, implementation or verification and the items providing just that. This is done by listing all [artifact types](#specification-item-artifact-type) where the author of a specification item expects to see coverage for that item.
-
-A specification item is covered when for each of the required artifact types at least one item exists that covers the original item.
-
-#### Deep Coverage
-
-Deep coverage is a special form of coverage. Achieving deep coverage means that not only is a [specification item](#specification-item) covered by all required [artifact types](#specification-item-artifact-type), but also the covering items are all covered.
-
-If an item has shallow coverage but its covering items are not fully covered themselves, it has a [transitive defect](#transitive-defects).
-
-#### Terminating Specification Item
-
-A [specification item](#specification-item) terminates a chain of items if it does not require coverage in any [artifact type](#specification-item-artifact-type).
-
-Example:
-
-    "feat" --needs--> "req" --needs--> "dsn" --needs--> "impl" (terminates chain)
-                                                 |----> "utest" (terminates chain)
-                                                 '----> "itest" (terminates chain)
 
 ## Use Cases
 
@@ -184,7 +126,7 @@ Preconditions:
 
 OFT's native format for writing specifications is [Markdown](https://daringfireball.net/projects/markdown/). Markdown is an easy to learn, easy to read markup format that can be written with any text editor and is typically rendered to HTML. For your convenience we recommend using an editor that provides at least syntax highlighting. A preview function is also helpful. In the best case it features an outline view too. Check ["Tools for Authoring OFT Documents"](#tools-for-authoring-oft-documents) for some suggestions.
 
-While OFT introduces additional syntax rules so that it can distinguish between [informative](#informative-passages) and [normative passages](#normative-passages), all elements are valid Markdown.
+While OFT introduces additional syntax rules so that it can distinguish between [informative](../terminology.md#informative-passage) and [normative passages](../terminology.md#normative-passage), all elements are valid Markdown.
 
 Let's start with a minimal requirement:
 
@@ -192,7 +134,7 @@ Let's start with a minimal requirement:
     
     This is the description of the requirement.
 
-Simple as this. This is already a valid and complete OFT requirement. Of course, you can enrich the requirement with other information but at the heart of it every requirement is an ID and a description.
+Simple as this. This is already a valid and complete OFT requirement. Of course, you can enrich the requirement with other information, but at the heart of it every requirement is an ID and a description.
 
 It is mostly a matter of taste whether you prefer your specification items to have a title or not. The same requirement above with a title looks like this:
 
@@ -211,9 +153,9 @@ Since version 3.8.0 OFT also supports titles with underlines. Since Markdown onl
 
 The upside of giving requirements a title is that they appear in Markdown outline views. The downside is that they introduce redundancy in your specification and therefore have the tendency to become inconsistent with the content of the specification item. If you think in software design terms, the titles violate the ["Don't Repeat Yourself" principle (DRY)](https://en.wikipedia.org/wiki/Don't_repeat_yourself).
 
-The number of hash marks in front of the title must adhere to the rules of Markdown, meaning that if you want to put a [specification item](#specification-item) inside a section with a level two header, the item title must start with three hash marks.
+The number of hash marks in front of the title must adhere to the rules of Markdown, meaning that if you want to put a [specification item](../terminology.md#specification-item) inside a section with a level two header, the item title must start with three hash marks.
 
-At the moment the specification item above is a [terminating item](#terminating-specification-item) because it does not require coverage by any [artifact type](#specification-item-artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
+At the moment the specification item above is a [terminating item](../terminology.md#terminating-specification-item) because it does not require coverage by any [artifact type](../terminology.md#artifact-type). Since a user level requirement always needs coverage in other artifact types, we are going to add this next.
 
     ### The Requirement Title
     `req~this-is-the-id~1`
@@ -224,7 +166,7 @@ At the moment the specification item above is a [terminating item](#terminating-
 
 Now the item must be covered in the design ("dsn") and user manual ("uman"). Remember you can introduce your own artifact types depending on the needs of your project.
 
-Of course, you can embed specification items into normal Markdown text. This adds the necessary [informative](#informative-passages) context that is required to understand the [normative passages](#normative-passages).
+Of course, you can embed specification items into normal Markdown text. This adds the necessary [informative](../terminology.md#informative-passage) context that is required to understand the [normative passages](../terminology.md#normative-passage).
 
     # ACME portable hole
        
@@ -285,7 +227,7 @@ The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, 
 
 The `Covers` keyword states which items are covered by the current specification item. It is followed by a list of items that are covered, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
 
-Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement that covers that feature, could be written as
+Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement that covers that feature could be written as
 
     ### Rubber ducky is made from latex
     `req~rubber-ducky-made-from-latex~1`
@@ -316,7 +258,7 @@ Please note that you cannot mix the two styles in one specification item.
 
 ##### `Depends`
 
-The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting witch a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used. This has no effect on the coverage of specification items.
+The `Depends` keyword defines dependencies between specification items. It is followed by a list of items the current specification item depends on, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. At the moment this has no effect on the HTML or plaintext output, but only if the `-o aspec` option is used. This has no effect on the coverage of specification items.
 
     ### Depending specification item
     `req~depending-item~1`
@@ -374,9 +316,9 @@ Consider a situation where you are responsible for the high-level software archi
 
 In those cases it would be a waste of time to repeat the original requirement in your architecture just to hand them down to the detailed design of a component. Instead, what you need is a fast way to express "yes, I read that requirement, and I am sure it does not need design decisions in the high-level architecture."
 
-To achieve this OFT features a shorthand notation for delegating the job of covering a specification item to one or more different artifact types.
+To achieve this, OFT features a shorthand notation for delegating the job of covering a specification item to one or more different artifact types.
 
-In the following example a requirement in the system requirement specification (artifact type `req`) stated that the web user interface of your product should use the corporate design. This clearly does not require an architectural decision (`arch`), so you forward it directly to the detailed design (`dsn`) level.  
+In the following example, a requirement in the system requirement specification (artifact type `req`) stated that the web user interface of your product should use the corporate design. This clearly does not require an architectural decision (`arch`), so you forward it directly to the detailed design (`dsn`) level.  
 
     arch --> dsn : req~web-ui-uses-corporate-design~1
 
@@ -412,7 +354,7 @@ To avoid confusion, it is best to have all forwards in a separate section with t
 
 ### Distributing the Detailing Work
 
-In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.
+In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence, the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
@@ -430,7 +372,7 @@ A typical requirement would then look like this (shortened to emphasize the "nee
     
     Tags: AuthenticationProvider
 
-The development teams distribute the components among themselves and use the tags to filter for only the [specification items](#specification-item) they are responsible for. The teams then cover all of these in the detailed design and deliver everything to an integrator. The sum of all detailed designs must then cover the architectural design.
+The development teams distribute the components among themselves and use the tags to filter for only the [specification items](../terminology.md#specification-item) they are responsible for. The teams then cover all of these in the detailed design and deliver everything to an integrator. The sum of all detailed designs must then cover the architectural design.
 
 Wan and Wu from the web service team in our example run an OFT convert job like this to pick the parts of the architecture they are affected by:
 
@@ -520,7 +462,7 @@ Requirement engineering calls this the "traceability matrix". That term is a bit
 
 What we want to achieve in any role that has to do with requirement engineering is healthy trees with their leaves attached all the way to the trunks. We don't want twigs without leaves, and we definitely don't want leaves lying on the ground.
 
-Unfortunately, we are only human and humans make mistakes. Here is a non-exhaustive list of typical mistakes that happen when maintaining a traceability matrix:
+Unfortunately, we are only human, and humans make mistakes. Here is a non-exhaustive list of typical mistakes that happen when maintaining a traceability matrix:
 
 | Mistake                         | How it manifests in OFT                            |
 |---------------------------------|----------------------------------------------------|
@@ -554,7 +496,7 @@ Copy & paste often leads to "ambiguous" coverage, where two items are defined wi
 
 Coverage is "unwanted" when the specification item that it points to didn't ask for it. Check for typos in both IDs. The most common mistake here is that either the required artifact types or the coveraging artifact types are wrong.
 
-"Orphaned" finally means that this item claims to cover a requirement that does not exist. Or ceased to exist. In this case first check for typos and if it is not a typo, check the history of the documents to see if there is maybe coverage left for something that has been obsoleted higher up in a specification.
+"Orphaned" finally means that this item claims to cover a requirement that does not exist. Or ceased to exist. In this case first check for typos, and if it is not a typo, check the history of the documents to see if there is maybe coverage left for something that has been obsoleted higher up in a specification.
 
 
 #### Incoming Link Statuses
@@ -568,7 +510,7 @@ Coverage is "unwanted" when the specification item that it points to didn't ask 
 
 If you see "covered shallow" on an incoming link, this means that there is at least one specification item providing the required coverage.
 
-"Covered unwanted" means that another item covers the one you are looking at, but it shouldn't, because that coverage was not required. In most cases you are looking at a copy & paste error. Sometimes it is simply a typo the in artifact types. In rarer circumstances this happens the person who wrote the higher level item disagreed with the one who did the coverage. The last variant can be solved by talking to each other.
+"Covered unwanted" means that another item covers the one you are looking at, but it shouldn't, because that coverage was not required. In most cases you are looking at a copy & paste error. Sometimes it is simply a typo in the artifact types. In rarer circumstances this happens the person who wrote the higher level item disagreed with the one who did the coverage. The last variant can be solved by talking to each other.
 
 "Covered predated" means some other specification item claims to cover a newer version of this item than is currently present in the spec. "Covered outdated" is the opposite situation. The problem resolution is the same as in the [section above](#outgoing-link-statuses) where the predated and outdated incoming links were discussed.
 
@@ -863,7 +805,7 @@ Existing full coverage tags remain supported in Gherkin comments, for example `#
  
 #### Markdown
 
-The main importer of OFT accepts markdown files with the extensions `.md` and `.markdown`.
+The main importer of OFT accepts Markdown files with the extensions `.md` and `.markdown`.
 
 #### SpecObject
 
@@ -914,11 +856,11 @@ Please note that OFT cannot predict the exact number of required incoming links,
 
 >  ok [ in:  2 /  2 ✔ | **out:  1 /  1 ✔** ] `dsn~cli.tracing.default-format~1` (impl, utest)
 
-The [Specification Item ID](#specification-item-id) in the middle is the unique technical ID of this requirement.
+The [Specification Item ID](../terminology.md#specification-item-id) in the middle is the unique technical ID of this requirement.
 
 >  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] **dsn****~****cli.tracing.default-format****~****1** (impl, utest)
 
-In the brackets you find, which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
+In the brackets you find which artifact types this item expects as coverage. If the type is covered correctly, you see just the name there. 
 
 >  ok [ in:  2 /  2 ✔ | out:  1 /  1 ✔ ] `dsn~cli.tracing.default-format~1` (**impl, utest**)
 
@@ -1037,13 +979,13 @@ A `<specobject>` entry has the following form:
 ```
 
 `<id>` and `<version>` provide ID and version of the requirement. In OFT terminology the term revision is equal to 
-version used in the aspec report. `<shortdesc>` and `<description>` provide title and  description of the requirement. 
+ the version used in the aspec report. `<shortdesc>` and `<description>` provide title and  description of the requirement. 
 `<sourcefile>` and `<sourceline>` are the name and line number of the original file from  which the requirement has been 
 imported. `<coverage>` contains more information about the coverage of the requirement and lists other requirements 
 covering the requirement.
 
 `<covering>` contains requirements that have been marked as dependency. If parts of the information described above is 
-not available the corresponding XML element is omitted in the generated report.
+not available, the corresponding XML element is omitted in the generated report.
 
 The `<coverage>` XML element has the following form:
 
@@ -1067,18 +1009,18 @@ The `<coverage>` XML element has the following form:
 </coverage>
 ```
 
-The `<coverage>` elements provides the following sub elements:
+The `<coverage>` elements provide the following sub elements:
 
 * `<needscoverage>`: List of requirement types that are required to cover the requirement
-* `<shallowCoverageStatus>`: `COVERED` if for all needed requirement types another valid requirement covers the requirement. 
+* `<shallowCoverageStatus>`: `COVERED` if for all necessary requirement types, another valid requirement covers the requirement. 
    Valid in this case also means that the covering requirement has status `approved`.
-  `UNCOVERED` if not all required requirement types covered successfully.
+  `UNCOVERED` if not all required requirement types were covered successfully.
 * `<deepCoverageStatus>`: `COVERED` if all request requirement types are successfully covered by other requirements
    that are themselves successfully covered transitively. `UNCOVERED` if the requirement is not successfully covered 
    transitively.
 * `<coveringSpecObjects>`: The `<coveringspecobjects>` element contains a sub element for each covering requirement.
-* `<coveredTypes>`: List of requirement types that are shallow covered.
-* `<uncoveredTypes>`: List of requirement types that are not shallow covered.
+* `<coveredTypes>`: List of requirement types that are shallowly covered.
+* `<uncoveredTypes>`: List of requirement types that are not shallowly covered.
 
 The element `<coveringSpecObjects>` describes all covering requirements:
 
@@ -1096,20 +1038,13 @@ The element `<coveringSpecObjects>` describes all covering requirements:
 </coveringSpecObjects>
 ```
 
-The element `<coveringSpecObjects>` describes each requirement that provides a coverage to the enclosing requirement. Each
-covering requirement is described via the element `<coveringSpecObject>`. `<id>` and `<version>` provide the requirement
-ID and version of the requirement. `<doctype>` provides the requirement type of the requirement. `<ownCoverageStatus>`
-describes if the covering requirement is shallow covered. A shallowly covered requirement is marked as `COVERED`.
-An uncovered requirement is reported as `UNCOVERED`. `<deepCoverageStatus>` reports a transitive
-covered requirement with value `COVERED` and an uncovered requirement with value `UNCOVERED`. If the covering
-requirement itself transitively covers the enclosing requirement, `<coveringStatus>` reports the value `COVERING`.
-If the covering requirement does not cover the enclosing requirement `<coveringStatus>` reports `UNCOVERED`. If the
-covering requirement references the enclosing requirement with a wrong version `coveringStatus` reports 
-`COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has
-an unexpected requirement type) the `<coveringStatus>` is reported as `UNEXPECTED`.
+The element `<coveringSpecObjects>` describes each requirement that provides a coverage to the enclosing requirement. Each covering requirement is described via the element `<coveringSpecObject>`. `<id>` and `<version>` provide the requirement ID and version of the requirement. `<doctype>` provides the requirement type of the requirement. `<ownCoverageStatus>` describes if the covering requirement is shallowly covered. A shallowly covered requirement is marked as `COVERED`.
 
-A requirement described by the XML element `<specobject>` lists all other requirements that it covers in the element
-`<covering>`:
+An uncovered requirement is reported as `UNCOVERED`. `<deepCoverageStatus>` reports a transitive covered requirement with value `COVERED` and an uncovered requirement with value `UNCOVERED`. If the covering requirement itself transitively covers the enclosing requirement, `<coveringStatus>` reports the value `COVERING`.
+
+If the covering requirement does not cover the enclosing requirement `<coveringStatus>` reports `UNCOVERED`. If the covering requirement references the enclosing requirement with a wrong version `coveringStatus` reports `COVERING_WRONG_VERSION`. If the covering requirement is not expected to cover the enclosing requirement (e.g. it has an unexpected requirement type), the `<coveringStatus>` is reported as `UNEXPECTED`.
+
+A requirement described by the XML element `<specobject>` lists all other requirements that it covers in the element `<covering>`:
 
 ```xml
 <covering>

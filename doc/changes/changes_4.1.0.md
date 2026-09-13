@@ -7,7 +7,7 @@ Code name: Third-party plugins
 This release adds support for loading third-party plugins from external JAR files. See the documentation for details:
 
 * [Installation](../plugins.md)
-* [Plugin developer guide](../plugin_developer_guide.md)
+* [Plugin developer guide](../developer_guide/plugin_developer_guide.md)
 
 The release also adds command line option `--log-level` that allows configuring the log level. Possible values are `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`. The default log level is `WARNING`.
 

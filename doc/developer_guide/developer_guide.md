@@ -2,13 +2,13 @@
 
 This document contains technical information for developers contributing to OpenFastTrace (short OFT).
 
-If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../CONTRIBUTING.md).
+If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../../CONTRIBUTING.md).
 
 ## Getting the OpenFastTrace Library
 
 ### Getting OFT via Maven
 
-To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) project add this to your `pom.xml`:
+To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) project add this to your `../../pom.xml`:
 
 ```xml
 <dependencies>
@@ -189,7 +189,7 @@ Import as a Maven project using *"File" &rarr; "Import..." &rarr; "Maven" &rarr;
 
 All subprojects come with formatter and save actions configuration for Eclipse.
 
-If you use a different IDE like IntelliJ, please import the formatter configuration [itsallcode_formatter.xml](itsallcode_formatter.xml).
+If you use a different IDE like IntelliJ, please import the formatter configuration [itsallcode_formatter.xml](../itsallcode_formatter.xml).
 
 ## Configure Logging
 
@@ -262,9 +262,9 @@ mvn package
 2. Create a new "prepare-release" branch.
 3. Update the version in
     * `openfasttrace-parent/pom.xml` (`revision` property)
-    * `README.md`
+    * `../../README.md`
     * `doc/developer_guide.md`
-4. Add changes in a new version to `doc/changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
+4. Add changes in a new version to `../changes/changes.md` and `doc/changes/changes_$VERSION.md` and update the release date.
 5. Commit and push changes.
 6. Create a new pull request, have it reviewed and merged to `main`.
 

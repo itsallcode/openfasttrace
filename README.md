@@ -32,6 +32,7 @@ Sonarcloud status:
 **User Guides and Tools**
 
 * [📖 User Guide](doc/user_guide/user_guide.md)
+* [📚 Terminology](doc/terminology.md)
 * [🔌 Extending OpenFastTrace With Plugins](doc/plugins.md)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 * [🛠 IntelliJ Plugin (PyCharm, Clion, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
@@ -52,8 +53,8 @@ Sonarcloud status:
 **Information for Contributors**
 
 * [🎟️ Project Board](https://github.com/orgs/itsallcode/projects/3/views/1)
-* [🦮 Developer Guide](doc/developer_guide.md)
-* [🔌 Plugin Developer Guide](doc/plugin_developer_guide.md)
+* [🦮 Developer Guide](doc/developer_guide/developer_guide.md)
+* [🔌 Plugin Developer Guide](doc/developer_guide/plugin_developer_guide.md)
 * [🎁 Contributing Guide](CONTRIBUTING.md)
 * [🤝 Code of Conduct](CODE_OF_CONDUCT.md)
 * [🤖 AI Agent Guide](AGENTS.md)
@@ -84,7 +85,7 @@ Pre-Built JAR files (called `openfasttrace-4.9.0.jar`) are available from the fo
 * [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/4.9.0/openfasttrace-4.9.0.jar)
 * [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/4.9.0/openfasttrace-4.9.0.jar)
  
-Check our [developer guide](doc/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
+Check our [developer guide](doc/developer_guide/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
 
 ## Installation
 
@@ -135,6 +136,6 @@ If you want to run OFT in a CI build, you can use the OFT wrapper script [oftw.s
 
 ## Development
 
-If you want to learn how to build OpenFastTrace, please check our [Developer Guide](doc/developer_guide.md).
+If you want to learn how to build OpenFastTrace, please check our [Developer Guide](doc/developer_guide/developer_guide.md).
 
 You would like to contribute to OFT? Please check out our [Contributor Guide](CONTRIBUTING.md) to get started. 

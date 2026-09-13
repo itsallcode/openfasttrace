@@ -6,7 +6,7 @@ permalink: /
 description: OpenFastTrace is a requirement tracing suite for Agile Development.
 ---
 
-# <img src="/images/openfasttrace_logo.svg" alt="OFT logo" width="150"/> OpenFastTrace
+# <img src="images/openfasttrace_logo.svg" alt="OFT logo" width="150"/> OpenFastTrace
 
 ## What is OpenFastTrace?
 

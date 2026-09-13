@@ -108,8 +108,9 @@ Needs: impl, utest
 - **Detailed Skills**: See [`.agents/skills`](.agents/skills) for domain knowledge (ID syntax, keywords).
 - **Key Resources**:
   - `README.md`: General overview.
-  - `doc/developer_guide.md`: Detailed build and internal info.
+  - `doc/developer_guide/developer_guide.md`: Detailed build and internal info.
   - `doc/user_guide/user_guide.md`: Comprehensive tool usage.
+  - `doc/terminology.md`: Unified terminology for all documents.
   - `CONTRIBUTING.md`: Human-AI collaboration guidelines.
   - `doc/spec/system_requirements.md`: System requirements specification.
   - `doc/spec/design.md`: High-level design documentation.

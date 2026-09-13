@@ -1,7 +1,9 @@
-<head>
-    <link href="oft_spec.css" rel="stylesheet" />
-    <title>OpenFastTrace Design</title>
-</head>
+---
+layout: default
+title: Design
+nav_order: 2
+parent: Specification
+---
 
 # Introduction
 
@@ -12,7 +14,7 @@ This document's structure is derived from the "[arc42][bib.arc42]" architectural
 If you build your own modifications based on this document, please keep the attrbiutions.
 
 ## Terminology
-The terminology from the [system requirement specification][bib.srs] applies.
+The terminology from the [central terminology document][bib.terminology] applies.
 
 ## Conventions
 
@@ -105,7 +107,7 @@ The `importer/tag-importer-common` module provides the reusable line scanning an
 The tag importer remains responsible for selecting its input files and creating the shared parser. Parsing implementation classes remain encapsulated in the shared module so that future importers can reuse the same coverage-tag semantics without depending on tag-importer internals.
 
 ## Import Event Listener
-Importers emit events if they find parts of a [specification item](#specification-item) in the artifact they are importing.
+Importers emit events if they find parts of a [specification item](../terminology.md#specification-item) in the artifact they are importing.
 
 ### Specification List Builder
 The specification list builder is an import event listener that creates a list of specification items from import events.
@@ -155,7 +157,7 @@ Needs: impl, utest
 The command line interpreter (CLI) takes parameters given to OFT and parses them. It is responsible for making sense of the parameter contents and issuing help and error messages about the command line syntax.
 
 ## Linker
-The linker is responsible for turning the imported [specification items](#specification-item) collected by the [importers](#importers) into [linked specification items](#linked-specification-item).
+The linker is responsible for turning the imported [specification items](../terminology.md#specification-item) collected by the [importers](#importers) into [linked specification items](#linked-specification-item).
 
 ## Tracer
 The tracer consumes the list of [linked specification items](#linked-specification-item) and evaluates the link status for each link.
@@ -166,7 +168,7 @@ The reporter consumes the link status list and the specification item list and g
 API users select reporters via their name as strings. This allows plugging in custom reporters in a loosely coupled fashion.
 
 ## Exporters
-The exporter transforms the internal representation of [specification items](#specification-item) into the desired target format (e.g. Markdown).
+The exporter transforms the internal representation of [specification items](../terminology.md#specification-item) into the desired target format (e.g. Markdown).
 
 API users select exporters via their name as strings.
 
@@ -227,7 +229,7 @@ Needs: impl, itest
 
 ## Import
 
-Depending on the source format, a variety of [importers](#importers) takes care of reading the input [specification items](#specification-item). Each importer emits events which an [import event listener](#import-event-listener) consumes.
+Depending on the source format, a variety of [importers](#importers) takes care of reading the input [specification items](../terminology.md#specification-item). Each importer emits events which an [import event listener](#import-event-listener) consumes.
 
 The listener handles Common parts of the import like filtering out unnecessary items or attributes.
 
@@ -467,7 +469,7 @@ Needs: impl, utest
 The [linker](#linker) component iterates over all needed artifact types of all specification items and determines if and which coverage exists for each.
 
 Comment:
-Note that the linker only takes care of swallow coverage. [Deep coverage](#deep-coverage) is determined by the [tracer](#tracer) component.
+Note that the linker only takes care of swallow coverage. [Deep coverage](../terminology.md#deep-coverage) is determined by the [tracer](#tracer) component.
 
 Covers:
 
@@ -527,7 +529,7 @@ Needs: impl, utest
 ### Duplicate Items
 `dsn~tracing.tracing.duplicate-items~1`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as a _duplicate_ if other items with an identical [specification item ID](#specification-item-id) exist.
+The [tracer](#tracer) marks a [specification item](../terminology.md#specification-item) as a _duplicate_ if other items with an identical [specification item ID](../terminology.md#specification-item-id) exist.
 
 Covers:
 
@@ -538,7 +540,7 @@ Needs: impl, utest
 ### Defect Items
 `dsn~tracing.defect-items~2`
 
-The [tracer](#tracer) marks a [specification item](#specification-item) as _defect_ if the following criteria apply to the item
+The [tracer](#tracer) marks a [specification item](../terminology.md#specification-item) as _defect_ if the following criteria apply to the item
 
     has duplicates
     or (not rejected
@@ -556,7 +558,7 @@ Needs: impl, utest
 ### Transitive Defect
 `dsn~tracing.transitive-defect~1`
 
-The [tracer](#tracer) identifies a [specification item](#specification-item) as having a _transitive defect_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
+The [tracer](#tracer) identifies a [specification item](../terminology.md#specification-item) as having a _transitive defect_ if it is a [defect item](#defect-items) but none of the direct defect criteria apply.
 
 A transitive defect occurs when a specification item itself fulfills all direct coverage requirements, but at least one of the items it covers (directly or indirectly) is a defect item.
 
@@ -796,7 +798,7 @@ Needs: impl, utest
 #### HTML Report Transitive Defect Mark
 `dsn~reporting.html.transitive-defect-mark~1`
 
-The HTML report renders the transitive defect mark (❎) for items that have a [transitive defect](#transitive-defect).
+The HTML report renders the transitive defect mark (❎) for items that have a [transitive defect](../terminology.md#transitive-defect).
 
 Covers:
 
@@ -893,7 +895,7 @@ Needs: impl, utest
 #### Linked Specification Item
 `dsn~linked-specification-item~1`
 
-A `LinkedSpecificationItem` is a container for a [SpecificationItem](#specification-item) that is enriched with references to other `LinkedSpecificationItem`s.
+A `LinkedSpecificationItem` is a container for a [SpecificationItem](../terminology.md#specification-item) that is enriched with references to other `LinkedSpecificationItem`s.
 
 Rationale:
 This allows navigating between specification items.
@@ -1473,13 +1475,15 @@ Clean-up in every importer individually. That was the case up to and including O
 The following documents or are referenced in this specification.
 
 [bib.srs]: system_requirements.md "OpenFastTrace System Requirement Specification"
+[bib.terminology]: terminology.md "OpenFastTrace Terminology"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"
 [bib.arc42]: http://arc42.org
 
 ## Specifications
 
 * [System Requirement Specification OpenFastTrace][bib.srs], Sebastian Bär
-* [Augmented BNF for Syntax Specifications: ABNF][bib.abnf] , D. Crocker, P. Overell, January 2008
+* [OpenFastTrace Terminology][bib.terminology]
+* [Augmented BNF for Syntax Specifications: ABNF][bib.abnf], D. Crocker, P. Overell, January 2008
 
 ## Web Sites
 

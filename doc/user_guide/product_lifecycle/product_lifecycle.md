@@ -1,3 +1,9 @@
+---
+layout: default
+title: Product Lifecycle
+parent: User Guide
+---
+
 # Product Lifecycle
 
 This is a free and open-source project. Updates are publicly available and free of charge.

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Reference
+parent: User Guide
+has_children: true
+---
+
 ## Reference
 
 The reference section provides detailed technical information about the OpenFastTrace command line interface, build system integration, supported formats, and report structures.

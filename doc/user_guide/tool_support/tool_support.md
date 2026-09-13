@@ -1,3 +1,10 @@
+---
+layout: default
+title: Tool Support
+parent: User Guide
+has_children: true
+---
+
 ## Tool Support
 
 ---

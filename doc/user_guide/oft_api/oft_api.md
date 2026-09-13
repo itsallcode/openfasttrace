@@ -1,3 +1,10 @@
+---
+layout: default
+title: OFT API
+parent: User Guide
+has_children: true
+---
+
 ## OFT API
 
 If you are a software developer planning to integrate OFT into one of your programs or scripts, you will probably want to use the OFT API.

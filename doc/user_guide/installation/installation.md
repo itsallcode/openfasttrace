@@ -1,3 +1,10 @@
+---
+layout: default
+title: Installation
+parent: User Guide
+has_children: true
+---
+
 ## Installation
 
 OpenFastTrace (OFT) can be used in two primary ways: integrated into your build environment or as a standalone tool for interactive use.

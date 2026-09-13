@@ -1,3 +1,10 @@
+---
+layout: default
+title: Introduction
+parent: User Guide
+has_children: true
+---
+
 ## Introduction
 
 ---

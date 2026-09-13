@@ -1,3 +1,10 @@
+---
+layout: default
+title: Use Cases
+parent: User Guide
+has_children: true
+---
+
 ## Use Cases
 
 The following use cases describe common tasks and workflows when using OpenFastTrace.

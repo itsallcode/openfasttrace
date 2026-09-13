@@ -1,3 +1,9 @@
+---
+layout: default
+title: Terminology
+nav_order: 5
+---
+
 # OpenFastTrace Terminology
 
 ## A

@@ -1,6 +1,12 @@
+---
+layout: default
+title: Plugin Developer Guide
+parent: Developer Guide
+---
+
 # Plugin Developer Guide
 
-This guide describes how to develop [plugins](plugins.md) for OpenFastTrace (OFT).
+This guide describes how to develop [plugins](../plugins.md) for OpenFastTrace (OFT).
 
 ## Initial Setup
 

@@ -1,7 +1,9 @@
-<head>
-    <link href="oft_spec.css" rel="stylesheet"/>
-    <title>System Requirement Specification OpenFastTrace</title>
-</head>
+---
+layout: default
+title: System Requirements
+nav_order: 1
+parent: Specification
+---
 
 # System Requirement Specification OpenFastTrace
 
@@ -946,7 +948,7 @@ The return value of the OFT executable reflects the overall tracing result.
 
 Covers:
 
-* [feat~requirement-tracing~1](#requirement-tracing~1
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 

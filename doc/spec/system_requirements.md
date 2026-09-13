@@ -946,7 +946,7 @@ The return value of the OFT executable reflects the overall tracing result.
 
 Covers:
 
-* [feat~requirement-tracing~1](#requirement-tracing~1
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 

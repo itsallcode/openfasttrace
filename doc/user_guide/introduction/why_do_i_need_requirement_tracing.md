@@ -1,0 +1,12 @@
+### Why do I Need Requirement Tracing?
+
+Requirement tracing is a safety net for non-trivial software projects:
+
+* protects you from forgetting planned parts of your product
+* finds orphaned code, documents and resources
+* helps you track progress towards milestones
+* allows you to prove due diligence during quality audits and customer reviews
+
+---
+
+← [What is Requirement Tracing?](what_is_requirement_tracing.md) | ↑ [Introduction](introduction.md) | [Concepts and Terms](concepts_and_terms.md) →

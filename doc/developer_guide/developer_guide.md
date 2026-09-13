@@ -122,7 +122,7 @@ Build OFT:
 mvn -T 1C package -DskipTests
 ```
 
-This will build the executable JAR including all modules at `product/target/openfasttrace-$VERSION.jar`.
+This will build the executable JAR including all modules at `product/target/openfasttrace-<version>.jar`. (Please check for the latest version in the releases if you are downloading a pre-built JAR.)
 
 #### Specify Java Version
 

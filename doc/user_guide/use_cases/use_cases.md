@@ -4,6 +4,7 @@ title: Use Cases
 parent: User Guide
 has_children: true
 nav_order: 3
+has_toc: false
 ---
 
 ## Use Cases
@@ -22,4 +23,4 @@ The following use cases describe common tasks and workflows when using OpenFastT
 
 ---
 
-← [Windows Installation](../installation/windows.md) | ↑ [User Guide](../user_guide.md) | [Writing a Specification](writing_a_specification.md) →
+← [Windows Installation](../installation/windows.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Writing a Specification](writing_a_specification.md) →

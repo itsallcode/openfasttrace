@@ -51,4 +51,4 @@ See also:
 
 ---
 
-← [Tracing the Whole Chain](tracing_the_whole_chain.md) | ↑ [Use Cases](use_cases.md) | [HTML Tracing Reports](html_tracing_reports.md) →
+← [Tracing the Whole Chain](tracing_the_whole_chain.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [HTML Tracing Reports](html_tracing_reports.md) →

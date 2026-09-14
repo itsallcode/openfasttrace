@@ -20,4 +20,4 @@ This tells OFT to only import specification items that have the status `approved
 
 ---
 
-← [Distributing the Detailing Work](distributing_the_detailing_work.md) | ↑ [Use Cases](use_cases.md) | [Tracing the Whole Chain](tracing_the_whole_chain.md) →
+← [Distributing the Detailing Work](distributing_the_detailing_work.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Tracing the Whole Chain](tracing_the_whole_chain.md) →

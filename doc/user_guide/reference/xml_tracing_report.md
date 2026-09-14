@@ -176,4 +176,4 @@ and the requirement type with the element `<doctype>`.
 
 ---
 
-← [Report Summary](report_summary.md) | ↑ [Reference](reference.md) | [OFT API](../oft_api/oft_api.md) →
+← [Report Summary](report_summary.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [OFT API](../oft_api/oft_api.md) →

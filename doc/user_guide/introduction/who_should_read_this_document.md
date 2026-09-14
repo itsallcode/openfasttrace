@@ -29,4 +29,4 @@ Of course, requirement engineering and tracing are useful outside the software d
 
 ---
 
-← [Introduction](introduction.md) | ↑ [Introduction](introduction.md) | [What is Requirement Tracing?](what_is_requirement_tracing.md) →
+← [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [What is Requirement Tracing?](what_is_requirement_tracing.md) →

@@ -40,4 +40,4 @@ If you want to also import specification items that do not have any tags, add a 
 
 ---
 
-← [Delegating Requirement Coverage](delegating_requirement_coverage.md) | ↑ [Use Cases](use_cases.md) | [Filtering by Status](filtering_by_status.md) →
+← [Delegating Requirement Coverage](delegating_requirement_coverage.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Filtering by Status](filtering_by_status.md) →

@@ -17,4 +17,4 @@ Requirement tracing is a safety net for non-trivial software projects:
 
 ---
 
-← [What is Requirement Tracing?](what_is_requirement_tracing.md) | ↑ [Introduction](introduction.md) | [Concepts and Terms](concepts_and_terms.md) →
+← [What is Requirement Tracing?](what_is_requirement_tracing.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Concepts and Terms](concepts_and_terms.md) →

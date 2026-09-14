@@ -3,6 +3,7 @@ layout: default
 title: Developer Guide
 nav_order: 3
 has_children: true
+has_toc: false
 ---
 
 # OpenFastTrace Developer Guide
@@ -10,6 +11,8 @@ has_children: true
 This document contains technical information for developers contributing to OpenFastTrace (short OFT).
 
 If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../../CONTRIBUTING.md).
+
+{% include child_list.html %}
 
 ## Getting the OpenFastTrace Library
 

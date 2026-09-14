@@ -85,4 +85,4 @@ Just in case you are wondering about the extra spaces in some places of the repo
 
 ---
 
-← [Input Format Support](input_format_support.md) | ↑ [Reference](reference.md) | [Report Summary](report_summary.md) →
+← [Input Format Support](input_format_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Report Summary](report_summary.md) →

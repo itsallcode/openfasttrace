@@ -61,4 +61,4 @@ alias oft='java -jar /path/to/openfasttrace-<version>.jar'
 
 ---
 
-← [Installation](installation.md) | ↑ [Installation](installation.md) | [macOS Installation](macos.md) →
+← [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; [macOS Installation](macos.md) →

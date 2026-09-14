@@ -48,3 +48,13 @@ exclude:
 include:
   - CNAME
   - assets
+
+defaults:
+  - scope:
+      path: "changes"
+    values:
+      nav_exclude: true
+  - scope:
+      path: "changes/changes.md"
+    values:
+      nav_exclude: false

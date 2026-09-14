@@ -28,4 +28,4 @@ ReStructured text example:
 
 ---
 
-← [Writing a Specification](writing_a_specification.md) | ↑ [Use Cases](use_cases.md) | [Delegating Requirement Coverage](delegating_requirement_coverage.md) →
+← [Writing a Specification](writing_a_specification.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Delegating Requirement Coverage](delegating_requirement_coverage.md) →

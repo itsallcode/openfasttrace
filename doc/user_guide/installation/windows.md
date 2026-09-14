@@ -41,4 +41,4 @@ java -jar "C:\path\to\openfasttrace-<version>.jar" %*
 
 ---
 
-← [macOS Installation](macos.md) | ↑ [Installation](installation.md) | [Use Cases](../use_cases/use_cases.md) →
+← [macOS Installation](macos.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Use Cases](../use_cases/use_cases.md) →

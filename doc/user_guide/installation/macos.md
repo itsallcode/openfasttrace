@@ -49,4 +49,4 @@ alias oft='java -jar /path/to/openfasttrace-<version>.jar'
 
 ---
 
-← [Linux Installation](linux.md) | ↑ [Installation](installation.md) | [Windows Installation](windows.md) →
+← [Linux Installation](linux.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Windows Installation](windows.md) →

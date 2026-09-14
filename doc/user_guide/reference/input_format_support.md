@@ -171,4 +171,4 @@ The SpecObject format is extended with support of namespaces to allow adding cus
 
 ---
 
-← [Build Integration](build_integration.md) | ↑ [Reference](reference.md) | [Console Tracing Report](console_tracing_report.md) →
+← [Build Integration](build_integration.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Console Tracing Report](console_tracing_report.md) →

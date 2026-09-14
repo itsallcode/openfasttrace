@@ -39,4 +39,4 @@ Typical features include:
 
 ---
 
-← [Tool Support](tool_support.md) | ↑ [Tool Support](tool_support.md) | [Templates for IDEs](templates_for_ides.md) →
+← [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Templates for IDEs](templates_for_ides.md) →

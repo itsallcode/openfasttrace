@@ -70,4 +70,4 @@ Duplicate links are special. They don't have a clear direction, since OFT cannot
 
 ---
 
-← [HTML Tracing Reports](html_tracing_reports.md) | ↑ [Use Cases](use_cases.md) | [Reference](../reference/reference.md) →
+← [HTML Tracing Reports](html_tracing_reports.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Reference](../reference/reference.md) →

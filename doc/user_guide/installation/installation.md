@@ -4,6 +4,7 @@ title: Installation
 parent: User Guide
 has_children: true
 nav_order: 2
+has_toc: false
 ---
 
 ## Installation
@@ -27,4 +28,4 @@ Depending on your operating system, there are different ways to install OpenFast
 
 ---
 
-← [Concepts and Terms](../introduction/concepts_and_terms.md) | ↑ [User Guide](../user_guide.md) | [Linux Installation](linux.md) →
+← [Concepts and Terms](../introduction/concepts_and_terms.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Linux Installation](linux.md) →

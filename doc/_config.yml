@@ -20,6 +20,14 @@ aux_links:
   "OpenFastTrace on GitHub":
     - https://github.com/itsallcode/openfasttrace
 
+# GitHub edit link
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub."
+gh_edit_repository: "https://github.com/itsallcode/openfasttrace"
+gh_edit_branch: "main"
+gh_edit_source: "doc"
+gh_edit_view_mode: "edit"
+
 # Heading anchor links
 heading_anchors: true
 

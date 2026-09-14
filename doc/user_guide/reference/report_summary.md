@@ -20,4 +20,4 @@ Here, "direct" means that the item itself has a coverage defect, and "transitive
 
 ---
 
-← [Console Tracing Report](console_tracing_report.md) | ↑ [Reference](reference.md) | [XML Tracing Report](xml_tracing_report.md) →
+← [Console Tracing Report](console_tracing_report.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [XML Tracing Report](xml_tracing_report.md) →

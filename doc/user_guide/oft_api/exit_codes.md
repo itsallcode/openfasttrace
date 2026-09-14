@@ -16,4 +16,4 @@ The OFT command line interface returns the following exit codes:
 
 ---
 
-← [Using OFT From Java](using_oft_from_java.md) | ↑ [OFT API](oft_api.md) | [Tool Support](../tool_support/tool_support.md) →
+← [Using OFT From Java](using_oft_from_java.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [OFT API](oft_api.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Tool Support](../tool_support/tool_support.md) →

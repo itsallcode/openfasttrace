@@ -127,4 +127,4 @@ ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build()
 
 ---
 
-← [OFT API](oft_api.md) | ↑ [OFT API](oft_api.md) | [Exit Codes](exit_codes.md) →
+← [OFT API](oft_api.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [OFT API](oft_api.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Exit Codes](exit_codes.md) →

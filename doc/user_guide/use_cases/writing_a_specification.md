@@ -179,7 +179,7 @@ Tags are described in detail later in this document, see section [Distributing t
 
 ---
 
-← [Use Cases](use_cases.md) | ↑ [Use Cases](use_cases.md) | [Excluding Parts of a Specification Document for OFT Parsing](excluding_parts_of_a_specification_document_for_oft_parsing.md) →
+← [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Excluding Parts of a Specification Document for OFT Parsing](excluding_parts_of_a_specification_document_for_oft_parsing.md) →
 
 ### Quality Scenarios
 

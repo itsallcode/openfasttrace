@@ -136,4 +136,4 @@ Log level for console logging. One of `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFI
 
 ---
 
-← [Reference](reference.md) | ↑ [Reference](reference.md) | [Build Integration](build_integration.md) →
+← [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Build Integration](build_integration.md) →

@@ -15,4 +15,4 @@ To integrate requirement tracing with OFT into your CI build, we recommend using
 
 ---
 
-← [OFT Command Line](oft_command_line.md) | ↑ [Reference](reference.md) | [Input Format Support](input_format_support.md) →
+← [OFT Command Line](oft_command_line.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Input Format Support](input_format_support.md) →

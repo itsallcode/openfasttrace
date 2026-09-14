@@ -24,4 +24,4 @@ Step-by-step you repeat this pattern for your design document and all resulting 
 
 ---
 
-← [Who Should Read This Document?](who_should_read_this_document.md) | ↑ [Introduction](introduction.md) | [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) →
+← [Who Should Read This Document?](who_should_read_this_document.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) →

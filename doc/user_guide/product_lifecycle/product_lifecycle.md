@@ -4,6 +4,7 @@ title: Product Lifecycle
 parent: User Guide
 has_children: true
 nav_order: 7
+has_toc: false
 ---
 
 # Product Lifecycle
@@ -57,4 +58,4 @@ Itsallcode.org distributes updates via GitHub releases. Even if the project shou
 
 ---
 
-← [Templates for IDEs](../tool_support/templates_for_ides.md) | ↑ [User Guide](../user_guide.md)
+← [Templates for IDEs](../tool_support/templates_for_ides.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md)

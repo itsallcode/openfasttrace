@@ -65,4 +65,4 @@ If, on the other hand, you only added a missing period at the end of a sentence,
 
 ---
 
-← [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) | ↑ [Introduction](introduction.md) | [Installation](../installation/installation.md) →
+← [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Installation](../installation/installation.md) →

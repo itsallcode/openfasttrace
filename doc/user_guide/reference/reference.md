@@ -4,6 +4,7 @@ title: Reference
 parent: User Guide
 has_children: true
 nav_order: 4
+has_toc: false
 ---
 
 ## Reference
@@ -19,4 +20,4 @@ The reference section provides detailed technical information about the OpenFast
 
 ---
 
-← [Understanding and Fixing Broken Requirement Branches](../use_cases/understanding_and_fixing_broken_requirement_branches.md) | ↑ [User Guide](../user_guide.md) | [OFT Command Line](oft_command_line.md) →
+← [Understanding and Fixing Broken Requirement Branches](../use_cases/understanding_and_fixing_broken_requirement_branches.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [OFT Command Line](oft_command_line.md) →

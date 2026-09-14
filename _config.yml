@@ -15,7 +15,7 @@ url: "https://openfasttrace.itsallcode.org"
 baseurl: ""
 
 # Navigation bar logo
-logo: "/images/openfasttrace_logo.svg"
+logo: "assets/images/openfasttrace_logo.svg"
 
 # Aux links for the sidebar
 aux_links:
@@ -48,3 +48,4 @@ exclude:
 
 include:
   - CNAME
+  - assets

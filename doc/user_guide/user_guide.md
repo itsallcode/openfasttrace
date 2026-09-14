@@ -5,7 +5,7 @@ nav_order: 2
 has_children: true
 ---
 
-![oft-logo](../images/openfasttrace_logo.svg)
+![oft-logo](../assets/images/openfasttrace_logo.svg)
 
 # OpenFastTrace (OFT) User Guide
 

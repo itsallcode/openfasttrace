@@ -1,7 +1,5 @@
 title: OpenFastTrace
 description: Requirement tracing suite for Agile Development
-source: doc
-destination: _site
 
 remote_theme: just-the-docs/just-the-docs
 
@@ -15,7 +13,7 @@ url: "https://openfasttrace.itsallcode.org"
 baseurl: ""
 
 # Navigation bar logo
-logo: "/images/openfasttrace_logo.svg"
+logo: "assets/images/openfasttrace_logo.svg"
 
 # Aux links for the sidebar
 aux_links:
@@ -45,6 +43,8 @@ exclude:
   - .jekyll-metadata
   - Gemfile
   - Gemfile.lock
+  - itsallcode_formatter.xml
 
 include:
   - CNAME
+  - assets

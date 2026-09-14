@@ -35,7 +35,7 @@ jobs:
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: .
+          source: doc
           destination: ./_site
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

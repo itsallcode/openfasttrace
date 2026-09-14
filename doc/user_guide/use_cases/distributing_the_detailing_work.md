@@ -12,7 +12,7 @@ In projects of a certain size you always reach the point where a single team is 
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
-![Covering selected tags](../../images/uml/object/obj_multiple_detailed_designs.svg)
+![Covering selected tags](../../assets/images/uml/object/obj_multiple_detailed_designs.svg)
 
 In our example it is the job of Andrea the architect to create a system architecture for the system specification coming from Soeren. Andrea defines a set of components which communicate with each other through well-defined, minimal interfaces. Each component is designed so that it can be independently developed and tested. Only an integration test is later necessary to prove that the components work together as designed. You tag each architectural requirement with the names of the affected components.
 

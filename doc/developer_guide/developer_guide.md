@@ -12,7 +12,7 @@ This document contains technical information for developers contributing to Open
 
 If you want to know more about how to contribute to OFT, please check out our [Contributor Guide](../../CONTRIBUTING.md).
 
-{% include child_list.html %}
+* [Plugin Developer Guide](plugin_developer_guide.md)
 
 ## Getting the OpenFastTrace Library
 

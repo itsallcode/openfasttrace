@@ -9,7 +9,8 @@ has_toc: false
 
 ## Tool Support
 
-{% include child_list.html %}
+* [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md)
+* [Templates for IDEs](templates_for_ides.md)
 
 ---
 

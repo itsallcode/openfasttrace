@@ -1,3 +1,10 @@
+---
+layout: default
+title: Quality Requirements
+nav_order: 3
+parent: Specification
+---
+
 # Quality Requirements
 
 This chapter documents architecture-relevant quality requirements and technical quality goals.

@@ -10,4 +10,6 @@ has_toc: false
 
 This section contains the formal specifications for OpenFastTrace.
 
-{% include child_list.html %}
+* [System Requirements](system_requirements.md)
+* [Design](design.md)
+* [Quality Requirements](design/quality_requirements.md)

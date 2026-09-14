@@ -3,6 +3,7 @@ layout: default
 title: Introduction
 parent: User Guide
 has_children: true
+nav_order: 1
 ---
 
 ## Introduction

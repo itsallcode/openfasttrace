@@ -8,7 +8,7 @@ You can learn more about requirement tracing and how to use OpenFastTrace in the
 
 Below you see a screenshot of an HTML tracing report where OFT traces itself. You see a summary followed by a detail view of the traced requirements. 
 
-<img src="doc/images/oft_screenshot_tracing_report.png" style="box-shadow: 5px 10px 18px #888888;" alt="OFT HTML tracing report">
+<img src="doc/assets/images/oft_screenshot_tracing_report.png" style="box-shadow: 5px 10px 18px #888888;" alt="OFT HTML tracing report">
 
 ## Project Information
 

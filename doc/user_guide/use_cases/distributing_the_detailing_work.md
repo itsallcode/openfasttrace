@@ -1,10 +1,18 @@
+---
+layout: default
+title: Distributing the Detailing Work
+parent: Use Cases
+grand_parent: User Guide
+nav_order: 4
+---
+
 ### Distributing the Detailing Work
 
 In projects of a certain size you always reach the point where a single team is not enough to process the workload. As a consequence, the teams must find a way to distribute the work. A popular approach is splitting the architecture into components that are as independent as possible. Each team is then responsible for one or more distinct components. While the act of assigning the work should never be done inside the specification, at least the specification can prepare criteria on which to split the work.
 
 One proven way to do this is to use tags. The teams then decide for which specification items with which tags they are responsible.
 
-![Covering selected tags](../../images/uml/object/obj_multiple_detailed_designs.svg)
+![Covering selected tags](../../assets/images/uml/object/obj_multiple_detailed_designs.svg)
 
 In our example it is the job of Andrea the architect to create a system architecture for the system specification coming from Soeren. Andrea defines a set of components which communicate with each other through well-defined, minimal interfaces. Each component is designed so that it can be independently developed and tested. Only an integration test is later necessary to prove that the components work together as designed. You tag each architectural requirement with the names of the affected components.
 

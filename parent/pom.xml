@@ -688,7 +688,7 @@
                             </includes>
                         </sourceFiles>
                         <format>svg</format>
-                        <outputDirectory>${basedir}/doc/images/uml</outputDirectory>
+                        <outputDirectory>${basedir}/doc/assets/images/uml</outputDirectory>
                     </configuration>
                     <dependencies>
                         <dependency>

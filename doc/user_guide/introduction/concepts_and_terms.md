@@ -1,3 +1,11 @@
+---
+layout: default
+title: Concepts and Terms
+parent: Introduction
+grand_parent: User Guide
+nav_order: 4
+---
+
 ### Concepts and Terms
 
 OpenFastTrace uses unified terminology for all documents. Please refer to the [central terminology document](../../terminology.md) for core definitions of terms like [specification item](../../terminology.md#specification-item), [coverage](../../terminology.md#coverage), and [artifact](../../terminology.md#artifact).

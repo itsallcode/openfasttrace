@@ -1,3 +1,11 @@
+---
+layout: default
+title: Windows Installation
+parent: Installation
+grand_parent: User Guide
+nav_order: 3
+---
+
 ## Windows Installation
 
 On Windows, OpenFastTrace is typically run manually via the JAR file.

@@ -1,7 +1,5 @@
 title: OpenFastTrace
 description: Requirement tracing suite for Agile Development
-source: doc
-destination: _site
 
 remote_theme: just-the-docs/just-the-docs
 
@@ -45,6 +43,7 @@ exclude:
   - .jekyll-metadata
   - Gemfile
   - Gemfile.lock
+  - itsallcode_formatter.xml
 
 include:
   - CNAME

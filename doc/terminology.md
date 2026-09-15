@@ -33,6 +33,9 @@ A [specification item](#specification-item) that explicitly demands coverage by 
 ### Deep Coverage
 Full coverage of a [specification item](#specification-item) including all its transitive providers down to [terminating specification items](#terminating-specification-item).
 
+### Direct Defect
+Coverage gap or error directly related to a [specification item](#specification-item) itself, such as missing, outdated, predated, or unwanted coverage.
+
 ## F
 
 ### Forwarding
@@ -56,7 +59,7 @@ Content that defines [specification items](#specification-item) or coverage link
 ### OpenFastTrace
 The requirement tracing tool suite.
 
-## OFT
+### OFT
 
 See [OpenFastTrace](#openfasttrace)
 
@@ -88,7 +91,7 @@ The unique name part of a [specification item ID](#specification-item-id).
 ### Specification Item Revision
 Number in the [specification item ID](#specification-item-id) used to invalidate coverage when an item's meaning changes.
 
-## SRS
+### SRS
 
 See [System Requirement Specification](#system-requirement-specification)
 
@@ -107,7 +110,7 @@ Label for categorizing [specification items](#specification-item), used for filt
 A [specification item](#specification-item) that does not require further coverage (e.g., code, tests).
 
 ### Transitive Defect
-Coverage gap caused by an undercovered provider in the trace chain.
+Coverage gap caused by an [undercovered](#undercovered) [provider](#coverage-provider) in the trace chain.
 
 ## U
 

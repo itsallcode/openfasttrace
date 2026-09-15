@@ -1,0 +1,83 @@
+{
+  "header": {
+    "formatVersion": "1.0",
+    "oftVersion": "4.10.0",
+    "format": "exchange",
+    "reproducible": true,
+    "parameters": {
+      "inputs": [
+        {
+          "type": "directory", "path": "doc"
+        },
+        {
+          "type": "directory", "path": "src/main/java"
+        },
+        {
+          "type": "directory", "path": "src/test/java"
+        },
+        {
+          "type": "file", "path": "pom.xml"
+        }
+      ],
+      "output": {
+        "format": "oftExchange",
+        "showOrigin": true,
+        "newline": "unix"
+      },
+      "filters": {
+        "artifactTypes": ["feat", "req", "dsn"],
+        "tags": ["import", "export", "report"],
+        "statuses": ["approved", "proposed"],
+        "includeUntagged": true
+      }
+    }
+  },
+  "specificationItems": [
+    {
+      "id": "feat~oft.json-based-export~1",
+      "title": "JSON-based export",
+      "description": "Export artifacts in JSON format",
+      "rationale": "This feature allows exporting artifacts in JSON format for better compatibility and integration with other systems.",
+      "comment": "Deprecates OSPEC format",
+      "tags": ["export"],
+      "status": "approved",
+      "needs": ["req"],
+      "source": {
+        "file": "doc/spec/system_requirements.md",
+        "item": {
+          "start": {"line": 15, "column": 1},
+          "end": {"line": 20, "column": 44}
+        },
+        "id": {
+          "range": {
+            "start": {"line": 15, "column": 1},
+            "end": {"line": 15, "column": 29}
+          },
+          "artifactType": {
+            "start": {"line": 15, "column": 1},
+            "end": {"line": 15, "column": 5}
+          },
+          "name": {
+            "start": {"line": 15, "column": 6},
+            "end": {"line": 15, "column": 27}
+          },
+          "revision": {
+            "start": {"line": 15, "column": 28},
+            "end": {"line": 15, "column": 29}
+          }
+        }
+      }
+    },
+    {
+      "id": "req~oft.oft-json-header~1",
+      "title": "OFT JSON header",
+      "description": "Shared header for OFTX and OFTR formats",
+      "rationale": "Information about how the document was generated and processed.",
+      "tags": ["export", "report"],
+      "needs": ["dsn"],
+      "covers": [
+        "feat~oft.json-based-export~1"
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.core.cli;
 import static java.util.Arrays.asList;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -88,17 +89,13 @@ public class ArgumentValidator
 
     private boolean validateConvertCommand()
     {
-        boolean ok = false;
-        final String format = this.arguments.getOutputFormat();
-        if (format != null && !new ExporterFactoryLoader(null).isFormatSupported(format))
+        final String format = Objects.requireNonNull(this.arguments.getOutputFormat());
+        if (!new ExporterFactoryLoader(null).isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
+            return false;
         }
-        else
-        {
-            ok = true;
-        }
-        return ok;
+        return true;
     }
 
     private static String listCommands()

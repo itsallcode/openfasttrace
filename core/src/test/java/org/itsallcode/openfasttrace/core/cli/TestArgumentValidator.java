@@ -1,6 +1,5 @@
 package org.itsallcode.openfasttrace.core.cli;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -11,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class TestArgumentValidator
@@ -35,14 +36,14 @@ class TestArgumentValidator
     @Test
     void testTraceCommandGivenIsValid()
     {
-        cliArgs.setUnnamedValues(asList("trace"));
+        cliArgs.setUnnamedValues(List.of("trace"));
         assertValidatorResult("", "");
     }
 
     @Test
     void testTraceCommandQuietAndNoOutputFileGivenIsValid()
     {
-        cliArgs.setUnnamedValues(asList("trace"));
+        cliArgs.setUnnamedValues(List.of("trace"));
         cliArgs.setV(ReportVerbosity.QUIET);
         assertValidatorResult("", "");
     }
@@ -50,7 +51,7 @@ class TestArgumentValidator
     @Test
     void testTraceCommandQuietAndOutputFileGivenIsNotValid()
     {
-        cliArgs.setUnnamedValues(asList("trace"));
+        cliArgs.setUnnamedValues(List.of("trace"));
         cliArgs.setV(ReportVerbosity.QUIET);
         cliArgs.setOutputFile("outputFile");
         assertValidatorResult(
@@ -61,7 +62,7 @@ class TestArgumentValidator
     @Test
     void testConvertCommandGivenIsValid()
     {
-        cliArgs.setUnnamedValues(asList("convert"));
+        cliArgs.setUnnamedValues(List.of("convert"));
         cliArgs.setOutputFormat("unsupportedFormat");
         assertValidatorResult("export format 'unsupportedFormat' is not supported.", "");
     }
@@ -69,7 +70,7 @@ class TestArgumentValidator
     @Test
     void testUnknownCommandGivenIsNotValid()
     {
-        cliArgs.setUnnamedValues(asList("unknownCommand"));
+        cliArgs.setUnnamedValues(List.of("unknownCommand"));
         assertValidatorResult("'unknownCommand' is not an OFT command.",
                 "Choose one of 'help','convert','trace'.");
     }

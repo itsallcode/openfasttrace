@@ -33,63 +33,58 @@ public class ArgumentValidator
      */
     public ArgumentValidator(final CliArguments arguments)
     {
-        this.arguments = arguments;
+        this.arguments = Objects.requireNonNull(arguments);
         this.valid = validate();
     }
 
     private boolean validate()
     {
         final Optional<String> command = this.arguments.getCommand();
-        boolean ok = false;
         if (this.arguments.isHelpSet())
         {
-            ok = true;
+            return true;
         }
         else if (command.isEmpty())
         {
             this.error = "Missing command";
             this.suggestion = "Add one of " + listCommands();
+            return false;
         }
         else if (HelpCommand.COMMAND_NAME.equals(command.get()))
         {
-            ok = true;
+            return true;
         }
         else if (TraceCommand.COMMAND_NAME.equals(command.get()))
         {
-            ok = validateTraceCommand();
+            return validateTraceCommand();
         }
         else if (ConvertCommand.COMMAND_NAME.equals(command.get()))
         {
-            ok = validateConvertCommand();
+            return validateConvertCommand();
         }
         else
         {
             this.error = "'" + command.orElse(null) + "' is not an OFT command.";
             this.suggestion = "Choose one of " + listCommands() + ".";
+            return false;
         }
-
-        return ok;
     }
 
     private boolean validateTraceCommand()
     {
-        boolean ok = false;
         if (this.arguments.getReportVerbosity() == ReportVerbosity.QUIET
                 && this.arguments.getOutputPath() != null)
         {
             this.error = "combining stream verbosity 'quiet' and output to file is not supported.";
             this.suggestion = "remove output file parameter.";
+            return false;
         }
-        else
-        {
-            ok = true;
-        }
-        return ok;
+        return true;
     }
 
     private boolean validateConvertCommand()
     {
-        final String format = Objects.requireNonNull(this.arguments.getOutputFormat());
+        final String format = Objects.requireNonNull(this.arguments.getOutputFormat(), "<null>");
         if (!new ExporterFactoryLoader(null).isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";

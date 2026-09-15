@@ -34,6 +34,7 @@ public final class Trace
      * 
      * @return all defect items found during tracing.
      */
+    @SuppressWarnings("java:S2384") // LinkedSpecificationItems are currently mutable intentionally.
     public List<LinkedSpecificationItem> getDefectItems()
     {
         return this.defectItems;
@@ -44,6 +45,7 @@ public final class Trace
      * 
      * @return all items found during tracing.
      */
+    @SuppressWarnings("java:S2384") // LinkedSpecificationItems are currently mutable intentionally.
     public List<LinkedSpecificationItem> getItems()
     {
         return this.items;

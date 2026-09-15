@@ -1,15 +1,25 @@
+---
+layout: default
+title: Plugins
+nav_order: 6
+---
+
 # Extending OpenFastTrace With Plugins
 
-Version 4.1.0 adds support for extending OFT with third-party plugins.
+OpenFastTrace (OFT) is designed to be extensible. You can add new importers, exporters, and reporters by using plugins.
 
-## Installing Plugins
+## Installation
 
-You install a plugin by copying its JAR files to `$HOME/.oft/plugins/<plugin-name>/*.jar`. OFT will automatically load plugins from this location. To check which plugins are available, start OFT with command line argument `--log-level INFO`. This will log all available plugins and their location.
+OFT automatically loads plugins from JAR files located in a predefined location at startup.
 
-## Available Plugins
+To install a plugin, copy the plugin's JAR file to the following directory depending on your operating system:
 
-Currently no third-party plugins are available. If you want to add a new plugin, please create a [GitHub issue](https://github.com/itsallcode/openfasttrace/issues/new?assignees=&labels=&projects=&template=New_plugin.md).
+* **Linux**: `$HOME/.oft/plugins/`
+* **Windows**: `%APPDATA%/oft/plugins/`
+* **macOS**: `$HOME/Library/Application Support/oft/plugins/`
 
-| Plugin Name | Plugin Type | Description |
-|-------------|-------------|-------------|
-| N/A         | N/A         | Currently, no third-party plugins are available for OpenFastTrace. |
+After copying the JAR file, the plugin will be available the next time you run OFT.
+
+## Developing Plugins
+
+If you want to develop your own plugins for OFT, please refer to the [Plugin Developer Guide](developer_guide/plugin_developer_guide.md).

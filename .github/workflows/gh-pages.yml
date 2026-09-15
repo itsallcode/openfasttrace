@@ -3,7 +3,16 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
+  release:
+    types: [published]
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to GitHub Pages"
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: "pages"
@@ -13,6 +22,8 @@ jobs:
   build:
     permissions:
       contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,15 +35,24 @@ jobs:
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./doc
+          source: doc
           destination: ./_site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./_site/
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: github-pages-preview
+          path: ./_site/
 
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # Publishing on push to main, release or manual dispatch.
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && (inputs.deploy || inputs.deploy == null)) }}
     permissions:
       id-token: write
       pages: write

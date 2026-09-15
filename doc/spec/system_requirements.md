@@ -1,7 +1,9 @@
-<head>
-    <link href="oft_spec.css" rel="stylesheet"/>
-    <title>System Requirement Specification OpenFastTrace</title>
-</head>
+---
+layout: default
+title: System Requirements
+nav_order: 1
+parent: Specification
+---
 
 # System Requirement Specification OpenFastTrace
 
@@ -26,36 +28,9 @@ It looks strange first that "useful" needs to be spelled out as a goal. The reas
 
 OFT aims to help developers independently of their platform. I should not matter if you are developing on Linux, a Mac, BSD, Windows. Also it should not matter which programming language or development environment you are using. OFT aims to be portable and provide interfaces that allow integration into your existing toolchain.
 
-### Terms and Abbreviations
+### Terminology
 
-The following list gives you an overview of terms and abbreviations commonly used in OFT documents.
-
-* Artifact: a container for specification items
-* Artifact type: the role of an artifact in a specification hierarchy
-* Coverage: Specification items covering other specification items
-* Coverage provider: a specification item that provides coverage
-* Coverage requester: a specification item that needs coverage
-* OFT: OpenFastTrace (this project)
-* ReqM2: A requirement tracing suite
-* Specification item: holds either a requirement or coverage
-* Specification artifact: a data source containing specification items (e.g. file, ticket system,
-    database)
-
-In the following subsections central terms are explained in more detail.
-
-#### Specification Items
-
-In OFT requirements and artifacts covering them are represented by [specification items](#specification-item). Each item is a container for attributes of requirements and covering artifacts like the name, artifact type and the location where OFT found them.
-
-A specification item can also contain information about its relationships to other specification items. For more details about those relationships check [section "tracing"](#tracing).
-
-#### Coverage
-
-Coverage is a measure of how well the tracing result matches the required relations between specification items.
-
-Full coverage is what a project aims to achieve: all required relations between specification items exist.
-
-An item is undercovered if at least one of the required relations is missing. It is overcovered if at least one relation exists that is not required.
+OpenFastTrace uses unified terminology for all documents. Please refer to the [central terminology document](../terminology.md) for definitions of terms like [specification item](../terminology.md#specification-item), [coverage](../terminology.md#coverage), and [artifact](../terminology.md#artifact).
 
 ## Features
 
@@ -973,7 +948,7 @@ The return value of the OFT executable reflects the overall tracing result.
 
 Covers:
 
-* [feat~requirement-tracing~1](#requirement-tracing~1
+* [feat~requirement-tracing~1](#requirement-tracing)
 
 Needs: dsn
 

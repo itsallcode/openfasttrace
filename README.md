@@ -2,7 +2,7 @@
 
 ## What is OpenFastTrace?
 
-OpenFastTrace (short OFT) is a requirement tracing suite. Requirement tracing keeps track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
+OpenFastTrace (short OFT) is a requirement management and tracing suite. Requirement tracing keeps track of whether you actually implemented everything you planned to in your specifications. It also identifies obsolete parts of your product and helps you to get rid of them.
 
 You can learn more about requirement tracing and how to use OpenFastTrace in the [user guide](doc/user_guide/user_guide.md).
 
@@ -31,29 +31,30 @@ Sonarcloud status:
 
 **User Guides and Tools**
 
-* [📖 User Guide](doc/user_guide/user_guide.md)
-* [📚 Terminology](doc/terminology.md)
-* [🔌 Extending OpenFastTrace With Plugins](doc/plugins.md)
+* [📖 User Guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.html)
+* [📚 Terminology](https://openfasttrace.itsallcode.org/terminology.html)
+* [🔌 Extending OpenFastTrace With Plugins](https://openfasttrace.itsallcode.org/plugins.html)
 * [💲 Command Line Usage](core/src/main/resources/usage.txt)
 * [🛠 IntelliJ Plugin (PyCharm, Clion, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
 * [🤖 Agent Skills](.agents/skills)
 * [🛡️ Security Policy](SECURITY.md)
-* [♻️ Project Lifecycle and Deprecations](doc/user_guide/project_lifecycle.md)
+* [♻️ Project Lifecycle and Deprecations](doc/user_guide/product_lifecycle/product_lifecycle.md)
 
 **News and Discussions**
 
+* [🌐 Homepage](https://openfasttrace.itsallcode.org)
 * [📢 Blog](https://blog.itsallcode.org/)
 * [➕ Changelog](doc/changes/changes.md)
 * [📅 Upcoming Milestones](https://github.com/orgs/itsallcode/projects/3/views/3)
 * [🗨️ Discussion Board](https://github.com/itsallcode/openfasttrace/discussions)
 * [🐘 OpenFastTrace@mastodon.social](https://mastodon.social/@OpenFastTrace)
 * [✨ OpenFastTrace Stories](https://github.com/itsallcode/openfasttrace/wiki/OFT-Stories)
-* [ℹ️ About us](doc/about_us.md)
+* [ℹ️ About us](https://openfasttrace.itsallcode.org/about_us.html)
 
 **Information for Contributors**
 
 * [🎟️ Project Board](https://github.com/orgs/itsallcode/projects/3/views/1)
-* [🦮 Developer Guide](doc/developer_guide/developer_guide.md)
+* [🦮 Developer Guide](https://openfasttrace.itsallcode.org/developer_guide/developer_guide.html)
 * [🔌 Plugin Developer Guide](doc/developer_guide/plugin_developer_guide.md)
 * [🎁 Contributing Guide](CONTRIBUTING.md)
 * [🤝 Code of Conduct](CODE_OF_CONDUCT.md)
@@ -94,27 +95,9 @@ Check our [developer guide](doc/developer_guide/developer_guide.md#getting-the-o
 OpenFastTrace 4.0.0 and above only needs a Java 17 (or later) runtime environment to run. OpenFastTrace until version 3.x.x supported Java 11. Versions prior to that ran with Java 8.
 Note that only the latest version of OFT is actively supported.
 
-#### Installation of Runtime Dependencies on Linux
-
-##### Ubuntu or Debian
-
-If you just want to run OFT:
-
-    apt-get install openjdk-17-jre
-
-### Installation via Homebrew
-
-On macOS or Linux, install OpenFastTrace with [Homebrew](https://brew.sh/):
-
-```shell
-brew install openfasttrace
-```
-
-The formula installs the OpenJDK 17 runtime dependency and provides the `oft` command. For example:
-
-```shell
-oft trace /path/to/directory/being/traced
-```
+* [Installation on Linux](doc/user_guide/installation/linux.md)
+* [Installation on macOS](doc/user_guide/installation/macos.md)
+* [Installation on Windows](doc/user_guide/installation/windows.md)
 
 ## Running OpenFastTrace
 

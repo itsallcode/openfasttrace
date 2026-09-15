@@ -65,7 +65,6 @@
             <xs:element
                     name="specobject"
                     type="specobject"
-                    minOccurs="1"
                     maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute

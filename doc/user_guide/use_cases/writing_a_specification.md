@@ -161,7 +161,7 @@ The `Depends` keyword defines dependencies between specification items. It is fo
 This keyword is *optional*. Starts the text passage that describes a specification item. The description is automatically started with any non-empty text that does not start with another keyword. Has to occur before `Comment` or `Rationale`. The specification item 
 
     ### Specification item
-    `feat~specification-item~1`
+    `feat~specification-item~4`
     
     Description:
     This is the description.
@@ -169,7 +169,7 @@ This keyword is *optional*. Starts the text passage that describes a specificati
 is functionally equivalent to
 
     ### Specification item
-    `feat~specification-item~1`
+    `feat~specification-item~4`
     
     This is the description.
 

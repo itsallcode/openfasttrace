@@ -1,13 +1,19 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
  * Specification items with links that can be followed.
  */
-// [impl->dsn~linked-specification-item~1]
+// [impl->dsn~linked-specification-item~4]
 @SuppressWarnings("java:S1448") // This is a facade class. Reducing methods hurts expressiveness.
 public class LinkedSpecificationItem
 {
@@ -160,7 +166,10 @@ public class LinkedSpecificationItem
         if (coveringItem.getItem().getCoveredIds() != null
                 && !coveringItem.getItem().getCoveredIds().contains(getId()))
         {
-            coveringItem.getItem().addCoveredId(getId());
+            coveringItem.getItem()
+                .toBuilder()
+                .addCoveredId(getId())
+                .build();
         }
     }
 

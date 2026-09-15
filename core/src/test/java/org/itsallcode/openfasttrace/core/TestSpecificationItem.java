@@ -1,21 +1,20 @@
 package org.itsallcode.openfasttrace.core;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Location;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.core.matcher.SpecificationItemIdMatcher;
+import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -71,7 +70,7 @@ class TestSpecificationItem
         assertThat(item.getComment(), equalTo(COMMENT));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuildComplexSpecificationItem()
     {
@@ -118,7 +117,7 @@ class TestSpecificationItem
         assertThat(item.needsCoverageByArtifactType(NOT_NEEDED_ARTIFACT_TYPE), equalTo(false));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testNeedsCoverage()
     {
@@ -128,7 +127,7 @@ class TestSpecificationItem
         assertThat(builder.build().needsCoverage(), equalTo(true));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testLocationIsNullByDefault()
     {
@@ -178,14 +177,14 @@ class TestSpecificationItem
         assertThat(item.getDependOnIds(), equalTo(parseIds("foo~bar~3")));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testDefaultStatusIsApproved()
     {
         assertThat(createTestItemBuilder().build().getStatus(), equalTo(ItemStatus.APPROVED));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuildWithStatus()
     {
@@ -193,14 +192,14 @@ class TestSpecificationItem
                 equalTo(ItemStatus.REJECTED));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testByDefaultTagListIsEmpty()
     {
         assertThat(createTestItemBuilder().build().getTags(), emptyIterable());
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testTagBuilder()
     {
@@ -208,7 +207,7 @@ class TestSpecificationItem
                 containsInAnyOrder("the_tag"));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuildingWithOutIdThrowsExepction()
     {
@@ -216,14 +215,14 @@ class TestSpecificationItem
         assertThrows(IllegalStateException.class, builder::build);
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testForwardsIsFalseByDefault()
     {
         assertThat(createSimpleItem().build().isForwarding(), equalTo(false));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testSetForwards()
     {

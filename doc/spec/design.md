@@ -864,7 +864,7 @@ Needs: impl, utest
 ### Internal Data Structures
 
 #### Specification Item
-`dsn~specification-item~3`
+`dsn~specification-item~4`
 
 A `SpecificationItem` consists of the following parts:
 
@@ -887,7 +887,7 @@ See `req~forwarding_needed_coverage~1` for an explanation of the "forwards" fiel
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~4`
 * `req~forwarding_needed_coverage~1`
 
 Needs: impl, utest
@@ -902,7 +902,7 @@ This allows navigating between specification items.
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~4`
 
 Needs: impl, utest
 
@@ -917,7 +917,7 @@ A `SpecificationItemId` consists of:
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~4`
 
 Needs: impl, utest
 

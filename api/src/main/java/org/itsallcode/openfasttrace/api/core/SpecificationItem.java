@@ -1,12 +1,16 @@
 package org.itsallcode.openfasttrace.api.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A specification item that requires coverage from other items and provides
  * coverage for other items.
  */
-// [impl->dsn~specification-item~3]
+// [impl->dsn~specification-item~4]
 public final class SpecificationItem
 {
     private final LocatedSpecificationItemId id;
@@ -31,10 +35,10 @@ public final class SpecificationItem
         this.comment = builder.comment;
         this.location = builder.location;
         this.status = builder.status;
-        this.coveredIds = builder.coveredIds;
-        this.dependOnIds = Collections.unmodifiableList(builder.dependOnIds);
-        this.needsArtifactTypes = Collections.unmodifiableList(builder.neededArtifactTypes);
-        this.tags = Collections.unmodifiableList(builder.tags);
+        this.coveredIds = Collections.unmodifiableList(new ArrayList<>(builder.coveredIds));
+        this.dependOnIds = Collections.unmodifiableList(new ArrayList<>(builder.dependOnIds));
+        this.needsArtifactTypes = Collections.unmodifiableList(new ArrayList<>(builder.neededArtifactTypes));
+        this.tags = Collections.unmodifiableList(new ArrayList<>(builder.tags));
         this.forwards = builder.forwards;
     }
 
@@ -152,29 +156,6 @@ public final class SpecificationItem
     public List<LocatedSpecificationItemId> getLocatedCoveredIds()
     {
         return Collections.unmodifiableList(this.coveredIds);
-    }
-
-    /**
-     * Add a covered {@link SpecificationItemId} to the list of covered IDs.
-     * <p>
-     * <b>Note:</b> This relies on mutating the internal state of the
-     * specification item and will be removed in a future version. Use the
-     * builder to create a new instance of the specification item with the
-     * additional covered ID instead. This will be implemented in
-     * <a href="https://github.com/itsallcode/openfasttrace/issues/572">issue #572</a>.
-     * </p>
-     *
-     * @param coveredId
-     *            the covered ID to add
-     */
-    public void addCoveredId(final SpecificationItemId coveredId)
-    {
-        this.addCoveredId(locatedId(coveredId));
-    }
-
-    private void addCoveredId(final LocatedSpecificationItemId coveredId)
-    {
-        this.coveredIds.add(coveredId);
     }
 
     /**

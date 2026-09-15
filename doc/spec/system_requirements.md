@@ -242,7 +242,7 @@ Needs: req
 ### Anatomy of Specification Items
 
 #### Specification Item
-`req~specification-item~2`
+`req~specification-item~4`
 
 A specification item consists of the following parts:
 

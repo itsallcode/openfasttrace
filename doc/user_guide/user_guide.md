@@ -4,6 +4,7 @@ title: User Guide
 nav_order: 2
 has_children: true
 has_toc: false
+redirect_from: doc/user_guide.md
 ---
 
 ![oft-logo](../assets/images/openfasttrace_logo.svg)

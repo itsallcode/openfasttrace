@@ -6,7 +6,13 @@ Code name: Lifecycle Information and SPDX3 SBOM
 
 The project lifecycle documentation now describes planned deprecations and removals in OFT 5.0.0, including migration guidance for the SpecObject format and short coverage tags.
 
-Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 checksum for the SBOM.
+Each release now includes an SPDX 3 SBOM for the product JAR and the SHA-256 checksum for the SBOM.
+
+Special thanks for their contributions to @adityaanikam, @ezweibel and @koppor.
+
+## Deprecation Warning
+
+We now have a draft for the OFT-native machine-readable exchange and report format under `doc/schemas`. We will implement this in the course of the next few releases. With OFT 5.0.0 this will replace the SpecObject format inherited from ReqM2. OFT 5.0.0 is planned to be released in Q4 2027.
 
 ## Feature
 
@@ -18,6 +24,7 @@ Each release now includes an SPDX 3 SBOM for the product JAR and a SHA-256 check
 
 * #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title.
 * #577: Fixed the Gherkin importer dropping a scenario when it directly follows another tagged scenario, with no boundary line between them.
+* #600: Fixed link to AI agent skill
 
 ## Documentation
 

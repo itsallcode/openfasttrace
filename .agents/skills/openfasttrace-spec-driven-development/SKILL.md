@@ -20,7 +20,7 @@ Use these repository conventions unless the user explicitly says this project di
 
 For OFT syntax, tracing behavior, selective tracing, and common error handling, read the upstream OpenFastTrace skill first:
 
-`https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/.agends/skills/openfasttrace/SKILL.md`
+`https://raw.githubusercontent.com/itsallcode/openfasttrace/refs/heads/main/.agents/skills/openfasttrace/SKILL.md`
 
 Do not restate OFT rules from memory when the upstream reference is available. Use it as the normative workflow for:
 

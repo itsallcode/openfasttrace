@@ -1,4 +1,4 @@
-# OpenFastTrace 4.10.0, released 2026-08-??
+# OpenFastTrace 4.10.0, released 2026-09-20
 
 Code name: Lifecycle Information and SPDX3 SBOM
 
@@ -16,16 +16,17 @@ We now have a draft for the OFT-native machine-readable exchange and report form
 
 ## Feature
 
-* #542: CI and releases now provide an SPDX 3 SBOM.
+* #542: CI and releases now provide an SPDX 3 SBOM
 * #586: Publish to Homebrew
 * #589: Add "overview" report verbosity mode to the plain-text reporter
 
 ## Bugfixes
 
-* #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title.
-* #577: Fixed the Gherkin importer dropping a scenario when it directly follows another tagged scenario, with no boundary line between them.
+* #582: Fixed the Markdown importer silently dropping all specification items after a fenced code block that directly follows a section title
+* #577: Fixed the Gherkin importer dropping a scenario when it directly follows another tagged scenario, with no boundary line between them
 * #600: Fixed link to AI agent skill
 
 ## Documentation
 
-* #579: Documented planned deprecations and removals.
+* #579: Documented planned deprecations and removals
+* #602: Added a dedicated unix manpage

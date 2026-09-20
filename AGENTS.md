@@ -32,6 +32,7 @@ You are an expert Java developer specializing in requirement tracing and softwar
   - Follow the branching strategy: `<type>/<number>_<short-description-lower-snake-case>` (e.g., `feature/533_update_agents_md`).
   - Place coverage markers at the narrowest possible scope (method or class).
   - Follow the quality requirements in `doc/spec/design/quality_requirements.md`.
+  - When changing the `oft` command-line interface, update `core/src/main/resources/usage.txt`, the User Guide, and `doc/man/man_1.md`.
 - **Ask First**:
   - Before adding new external dependencies to `pom.xml`.
   - Before changing existing architectural patterns in `openfasttrace-core`.

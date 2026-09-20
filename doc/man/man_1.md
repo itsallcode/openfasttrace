@@ -99,8 +99,7 @@ fulfills that demand.
 ## CONVERT OPTIONS
 
 `-o`, `--output-format FORMAT`
-: Select the requirements format. `FORMAT` is `specobject`, which is the
-  default.
+: Select the requirements format. The default for `FORMAT` is `specobject`.
 
   SpecObject is a legacy ReqM2 format. The SpecObject importer and exporter,
   along with the `aspec` reporter, are scheduled for removal in OFT 5.0.0.
@@ -191,13 +190,35 @@ oft trace --wanted-artifact-types feat,req spec src
 
 ## FILES
 
-Markdown files with the `.md` or `.markdown` extension are native
-specification artifacts. In Markdown, place a full coverage tag in a standalone
-HTML comment, for example:
+Markdown files with the `.md` or `.markdown` extension and reStructuredText
+files with the `.rst` extension are native specification artifacts. Use these
+formats to define specification items and their coverage requests in
+specification documents.
+
+Gherkin `.feature` files can also define scenario specification items. Legacy
+SpecObject requirements are read from `.xml` files.
+
+Coverage tags annotate coverage providers, chiefly implementation source files,
+test files, and result documentation. OFT recognizes them in comments in
+supported programming, configuration, markup, and modeling files. A coverage
+tag can also occur in a native specification document when appropriate.
+
+In Markdown, place a full coverage tag in a standalone HTML comment, for
+example:
 
 ```markdown
 <!-- [impl->dsn~validate-authentication-request~1] -->
 ```
+
+In reStructuredText, place a full coverage tag in a standalone, single-line
+comment:
+
+```rst
+.. [impl->dsn~validate-authentication-request~1]
+```
+
+See the User Guide for the complete list of supported extensions and comment
+syntaxes.
 
 ## SEE ALSO
 

@@ -4,7 +4,7 @@ We value the work of security researchers and users who help us keep OpenFastTra
 
 ## Supported Versions
 
-We provide security updates for the latest major version. For a detailed overview of supported versions and End-of-Life (EoL) dates, please see our [Project Lifecycle](doc/user_guide/project_lifecycle.md).
+We provide security updates for the latest major version. For a detailed overview of supported versions and End-of-Life (EoL) dates, please see our [Product Lifecycle](doc/user_guide/product_lifecycle/productct_lifecycle.md).
 
 ## Reporting a Vulnerability
 

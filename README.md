@@ -73,7 +73,7 @@ Sonarcloud status:
 
 If you want to use OFT, you have the choice between using it as part of your build process &mdash; typically with Maven or Gradle. Or you can run OFT from the command line.
 
-Check the [user guide](doc/user_guide/user_guide.md) for detailed information on how to use OpenFastTrack.
+Check the [user guide](doc/user_guide/user_guide.md) for detailed information on how to use OpenFastTrace.
 
 ## Getting OpenFastTrace
 

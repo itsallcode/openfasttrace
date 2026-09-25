@@ -71,22 +71,9 @@ Sonarcloud status:
 
 ## Using OpenFastTrace
 
-If you want to use OFT, you have the choice between using it as part of your build process &mdash; typically with Maven or Gradle. Or you can run OFT from the command line.
+If you want to use OFT, you have the choice between using it as part of your build process — typically with Maven or Gradle. Or you can run OFT from the command line.
 
-Check the [user guide](doc/user_guide/user_guide.md) for detailed information on how to use OpenFastTrace.
-
-## Getting OpenFastTrace
-
-OpenFastTrace at it's core is a Java Archive (short "[JAR](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)"). This file contains the OpenFastTrace Library and an entry point for [running OFT from the command line](#running-openfasttrace).
-
-### Getting Pre-Built Packages
-
-Pre-Built JAR files (called `openfasttrace-4.9.0.jar`) are available from the following places:
-
-* [Maven Central](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace/4.9.0/openfasttrace-4.9.0.jar)
-* [GitHub](https://github.com/itsallcode/openfasttrace/releases/download/4.9.0/openfasttrace-4.9.0.jar)
- 
-Check our [developer guide](doc/developer_guide/developer_guide.md#getting-the-openfasttrace-library) to learn how to use the OFT JAR as dependency in your own code with popular build tools.
+Check the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.md) for detailed information on how to use OpenFastTrace.
 
 ## Installation
 
@@ -95,9 +82,11 @@ Check our [developer guide](doc/developer_guide/developer_guide.md#getting-the-o
 OpenFastTrace 4.0.0 and above only needs a Java 17 (or later) runtime environment to run. OpenFastTrace until version 3.x.x supported Java 11. Versions prior to that ran with Java 8.
 Note that only the latest version of OFT is actively supported.
 
-* [Installation on Linux](doc/user_guide/installation/linux.md)
-* [Installation on macOS](doc/user_guide/installation/macos.md)
-* [Installation on Windows](doc/user_guide/installation/windows.md)
+### Installation
+
+You can get OFT via our [Debian APT repository](https://itsallcode/itsallcode-apt-repository), through [Homebrew](https://formulae.brew.sh/formula/openfasttrace), as [Maven plugin](https://central.sonatype.com/artifact/org.itsallcode/openfasttrace-maven-plugin) or [Gradle plugin](https://plugins.gradle.org/plugin/org.itsallcode.openfasttrace). Or you can get the [jar archive]((https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)) via [releases on GitHub](releases).
+
+Check the chapter about [Installation](https://openfasttrace.itsallcode.org/user_guide/installation/installation.html) in the user guide for details.
 
 ## Running OpenFastTrace
 
@@ -106,12 +95,12 @@ Note that only the latest version of OFT is actively supported.
 The most basic variant to run OpenFastTrace is directly from the JAR file via the command line:
 
 ```sh
-java -jar product/target/openfasttrace-4.9.0.jar trace /path/to/directory/being/traced
+java -jar product/target/openfasttrace-4.10.0.jar trace /path/to/directory/being/traced
 ```
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).
 
-For more details about how to run OFT please consult the [user guide](doc/user_guide/user_guide.md).
+For more details about how to run OFT please consult the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.md).
 
 ### Download and Execute in Continuous Integration
 
@@ -119,6 +108,6 @@ If you want to run OFT in a CI build, you can use the OFT wrapper script [oftw.s
 
 ## Development
 
-If you want to learn how to build OpenFastTrace, please check our [Developer Guide](doc/developer_guide/developer_guide.md).
+If you want to learn how to build OpenFastTrace, please check our [Developer Guide](https://openfasttrace.itsallcode.org/developer_guide/developer_guide.md).
 
 You would like to contribute to OFT? Please check out our [Contributor Guide](CONTRIBUTING.md) to get started. 

@@ -14,22 +14,17 @@ import java.util.stream.Stream;
 class ServiceLoaderFactory
 {
     private static final Logger LOGGER = Logger.getLogger(ServiceLoaderFactory.class.getName());
-    private final Path pluginsDirectory;
-    private final boolean searchCurrentClasspath;
+    private final ServiceLoaderConfig config;
 
     /**
      * Create a new factory for service {@link Loader}.
      * 
-     * @param pluginsDirectory
-     *            directory to search for plugins
-     * @param searchCurrentClasspath
-     *            whether to search the current classpath for plugins. This is
-     *            useful for testing to avoid loading plugins twice.
+     * @param config
+     *            configuration for the service loader
      */
-    ServiceLoaderFactory(final Path pluginsDirectory, final boolean searchCurrentClasspath)
+    ServiceLoaderFactory(final ServiceLoaderConfig config)
     {
-        this.pluginsDirectory = pluginsDirectory;
-        this.searchCurrentClasspath = searchCurrentClasspath;
+        this.config = config;
     }
 
     /**
@@ -39,13 +34,7 @@ class ServiceLoaderFactory
      */
     static ServiceLoaderFactory createDefault()
     {
-        final Path pluginsDirectory = getHomeDirectory().resolve(".oft").resolve("plugins");
-        return new ServiceLoaderFactory(pluginsDirectory, true);
-    }
-
-    private static Path getHomeDirectory()
-    {
-        return Path.of(System.getProperty("user.home"));
+        return new ServiceLoaderFactory(ServiceLoaderConfig.createDefault());
     }
 
     /**
@@ -78,10 +67,12 @@ class ServiceLoaderFactory
      * @return a list of service origins
      */
     // [impl->dsn~plugins.loading~1]
+    // [impl->dsn~plugins.loading.configuration~1]
     List<ServiceOrigin> findServiceOrigins()
     {
         final List<ServiceOrigin> origins = new ArrayList<>(findPluginOrigins());
-        if (searchCurrentClasspath)
+        origins.addAll(findAdditionalPluginOrigins());
+        if (this.config.isSearchCurrentClasspath())
         {
             origins.add(ServiceOrigin.forCurrentClassPath());
         }
@@ -89,8 +80,16 @@ class ServiceLoaderFactory
         return origins;
     }
 
+    private Collection<ServiceOrigin> findAdditionalPluginOrigins()
+    {
+        return this.config.getPlugins().stream()
+                .map(plugin -> ServiceOrigin.forJars(plugin.getName(), plugin.getJars()))
+                .toList();
+    }
+
     private Collection<ServiceOrigin> findPluginOrigins()
     {
+        final Path pluginsDirectory = this.config.getPluginsDirectory();
         if (!Files.isDirectory(pluginsDirectory))
         {
             return Collections.emptyList();
@@ -108,7 +107,7 @@ class ServiceLoaderFactory
         catch (final IOException exception)
         {
             throw new UncheckedIOException(
-                    "Failed to list plugin directories in '" + this.pluginsDirectory + "': " + exception.getMessage(),
+                    "Failed to list plugin directories in '" + pluginsDirectory + "': " + exception.getMessage(),
                     exception);
         }
     }

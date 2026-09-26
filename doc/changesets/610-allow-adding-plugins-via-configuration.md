@@ -20,10 +20,15 @@ reporting.
 
 In scope:
 
-* A public builder API in `core` to configure plugin JARs: `Oft.builder().addPlugin(...).build()`.
-* Support for **multiple JARs per plugin**: each `addPlugin(Path... jars)` call forms one
-  plugin loaded through a single `ChildFirstClassLoader`, matching the existing
+* A public builder API in `core` to configure plugin JARs: `Oft.builder().addPlugin(name, jars...).build()`.
+* Support for **multiple JARs per plugin**: each `addPlugin(String name, Path... jars)` call forms
+  one named plugin loaded through a single `ChildFirstClassLoader`, matching the existing
   `$HOME/.oft/plugins/<plugin-name>/*.jar` semantics.
+* Support for **multiple plugins in one configured plugin**: a plugin's JARs may contain several
+  service providers, and OFT loads all of them.
+* A `ServiceLoaderConfig` object that collects the service loader settings (plugin directory,
+  class path search, configured plugins) so the service loader API stays stable when new options
+  are added.
 * Explicitly configured plugins are loaded **in addition to** the default plugin directory.
 * Built-in providers continue to load from the current class path, so configuring a plugin
   no longer makes built-in importers/exporters/reporters disappear.
@@ -49,17 +54,17 @@ Keep the existing plugin-loading internals (`ServiceLoaderFactory`, `ServiceOrig
 hide them behind the package-private boundary. Thread the configured plugin groups from the
 public facade down to the three factory loaders:
 
-1. `OftBuilder` (new, public, in `core`) collects plugin groups as `List<List<Path>>` and
-   builds an `OftRunner` backed by a `ServiceFactory` that carries the groups.
-2. `ServiceFactory` passes the groups to `ImporterFactoryLoader`, `ExporterFactoryLoader`,
-   and `ReporterFactoryLoader`.
-3. Those loaders call a new public `InitializingServiceLoader.load(Class<T>, C, List<List<Path>>)`
-   overload, which builds a `ServiceLoaderFactory` that appends one `ServiceOrigin.forJars(group)`
+1. `OftBuilder` (new, public, in `core`) collects named plugins and builds an `OftRunner`
+   backed by a `ServiceFactory` that carries a `ServiceLoaderConfig`.
+2. `ServiceFactory` passes the `ServiceLoaderConfig` to `ImporterFactoryLoader`,
+   `ExporterFactoryLoader`, and `ReporterFactoryLoader`.
+3. Those loaders call a new public `InitializingServiceLoader.load(Class<T>, C, ServiceLoaderConfig)`
+   overload, which builds a `ServiceLoaderFactory` that appends one `ServiceOrigin.forJars(name, jars)`
    per configured plugin after the default-directory origins.
 
 `Oft.create()` remains for backward compatibility and delegates to the builder with no
-configured plugins. Validation of configured paths happens in `OftBuilder.addPlugin(...)`
-so invalid input is rejected at the API boundary.
+configured plugins. Validation of configured paths happens in `Plugin.of(...)` so invalid input
+is rejected at the API boundary.
 
 ## Task List
 
@@ -78,25 +83,32 @@ so invalid input is rejected at the API boundary.
 
 ### Implementation
 
-- [ ] Add public `OftBuilder` in `core` with `addPlugin(Path... jars)` (reject null/empty
-      groups and non-existent or non-`.jar` paths with `IllegalArgumentException`) and `build()`
+- [ ] Add public `Plugin` type in `core` with `Plugin.of(String name, Path... jars)` (reject
+      null/blank name, empty JAR list, and non-existent or non-`.jar` paths with
+      `IllegalArgumentException`)
+- [ ] Add public `ServiceLoaderConfig` in `core` collecting the plugin directory, class path
+      search flag, and configured plugins, with a builder and `toBuilder()`
+- [ ] Add public `OftBuilder` in `core` with `addPlugin(String name, Path... jars)` and `build()`
 - [ ] Add `Oft.builder()` returning `OftBuilder`; keep `Oft.create()` delegating to the builder
-- [ ] Extend `ServiceLoaderFactory` to accept additional plugin groups and append one
-      `ServiceOrigin.forJars(group)` per group in `findServiceOrigins()`
-- [ ] Add public `InitializingServiceLoader.load(Class<T>, C, List<List<Path>>)` overload
+- [ ] Refactor `ServiceLoaderFactory` to consume `ServiceLoaderConfig` and append one
+      `ServiceOrigin.forJars(name, jars)` per configured plugin in `findServiceOrigins()`
+- [ ] Add public `InitializingServiceLoader.load(Class<T>, C, ServiceLoaderConfig)` overload
 - [ ] Add constructor overloads to `ImporterFactoryLoader`, `ExporterFactoryLoader`, and
-      `ReporterFactoryLoader` that accept plugin groups
-- [ ] Add `ServiceFactory(List<List<Path>> plugins)` constructor and keep the no-arg constructor
+      `ReporterFactoryLoader` that accept a `ServiceLoaderConfig`
+- [ ] Add `ServiceFactory(ServiceLoaderConfig)` constructor and keep the no-arg constructor
       for `Oft.create()`
 
 ### Verification
 
-- [ ] `ServiceLoaderFactoryTest`: grouped JARs produce a single origin; configured origins are
-      appended after default-directory origins
-- [ ] `InitializingServiceLoaderTest`: the new overload forwards configured plugin groups
-- [ ] New `OftBuilderTest`: parameter validation (null, empty, missing, non-JAR) and build wiring
+- [ ] `ServiceLoaderFactoryTest`: configured plugin produces a named origin; multiple JARs in
+      one plugin share one origin; multiple configured plugins produce multiple origins;
+      configured origins are appended after default-directory origins
+- [ ] `InitializingServiceLoaderTest`: the new overload forwards the service loader configuration
+- [ ] New `PluginTest`: parameter validation (null/blank name, empty, missing, non-JAR)
+- [ ] New `OftBuilderTest`: build wiring
 - [ ] `ServiceLoaderFactoryIT` (product): load a real plugin JAR from a configured path and
-      assert the plugin loads while built-in reporters remain available
+      assert the plugin loads while built-in reporters remain available; load two plugins from
+      one `addPlugin(...)` call and assert both are loaded
 - [ ] Keep the OpenFastTrace trace clean (`./oft-self-trace.sh`)
 - [ ] Keep required build and plugin verification tasks green (`mvn -T 1C verify`)
 

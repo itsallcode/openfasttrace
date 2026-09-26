@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.TestAbortedException;
 
+import net.bytebuddy.build.Plugin;
+
 /**
  * Test for {@link ServiceLoaderFactory} from module {@code core}. This test
  * must be located in module {@code product} (which includes all plugin modules)
@@ -42,7 +44,46 @@ class ServiceLoaderFactoryIT
 
     private Loader<ReporterFactory> createLoader()
     {
-        return new ServiceLoaderFactory(tempDir, false).createLoader(ReporterFactory.class);
+        return new ServiceLoaderFactory(ServiceLoaderConfig.builder()
+                .pluginsDirectory(tempDir)
+                .searchCurrentClasspath(false)
+                .build()).createLoader(ReporterFactory.class);
+    }
+
+    // [itest->dsn~plugins.loading.configuration~1]
+    @Test
+    void loadMultiplePluginsFromOneConfiguredPlugin() throws IOException
+    {
+        final Path plaintextJar = findPluginJar(Path.of("../reporter/plaintext/target"),
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d+\\.\\d+\\.\\d+\\.jar"));
+        final Path htmlJar = findPluginJar(Path.of("../reporter/html/target"),
+                Pattern.compile("openfasttrace-reporter-html-\\d+\\.\\d+\\.\\d+\\.jar"));
+        final ServiceLoaderConfig config = ServiceLoaderConfig.builder()
+                .pluginsDirectory(tempDir)
+                .searchCurrentClasspath(false)
+                .addPlugin(Plugin.of("reporters", plaintextJar, htmlJar))
+                .build();
+        try (Loader<ReporterFactory> loader = new ServiceLoaderFactory(config).createLoader(ReporterFactory.class))
+        {
+            final List<ReporterFactory> services = loader.load().toList();
+            final List<String> serviceClassNames = services.stream()
+                    .map(service -> service.getClass().getName())
+                    .toList();
+            assertAll(
+                    () -> assertThat(services, hasSize(2)),
+                    () -> assertThat(serviceClassNames, hasItem(
+                            "org.itsallcode.openfasttrace.report.plaintext.PlaintextReporterFactory")),
+                    () -> assertThat(serviceClassNames, hasItem(
+                            "org.itsallcode.openfasttrace.report.html.HtmlReporterFactory")));
+        }
+    }
+
+    private Path findPluginJar(final Path targetDir, final Pattern filePattern) throws IOException
+    {
+        return findMatchingFile(targetDir, filePattern)
+                .orElseThrow(() -> new AssertionError(
+                        "Did not find file matching '" + filePattern + "' in '" + targetDir
+                                + "'. Ensure the module was built with 'mvn package'."));
     }
 
     @Test
@@ -77,7 +118,8 @@ class ServiceLoaderFactoryIT
 
     private Optional<Path> findMatchingFile(final Path dir, final Pattern filePattern) throws IOException
     {
-        try(final Stream<Path> files = Files.list(dir)) {
+        try (final Stream<Path> files = Files.list(dir))
+        {
             return files.filter(file -> filePattern.matcher(file.getFileName().toString()).matches())
                     .findFirst();
         }

@@ -37,7 +37,3 @@ This tells OFT to read all known specification files from the directory "import/
 If you want to also import specification items that do not have any tags, add a single underscore "_" as the first entry in the comma-separated list of tags:
 
     oft convert -t _,AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
-
----
-
-← [Delegating Requirement Coverage](delegating_requirement_coverage.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Filtering by Status](filtering_by_status.md) →

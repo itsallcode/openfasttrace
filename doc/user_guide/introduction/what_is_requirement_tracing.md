@@ -21,7 +21,3 @@ After you are done you want to make sure everything is in order. Instead of chec
 OFT comes back with a result that one of your features is not covered. You realize that you indeed forgot that one, write two new user stories and link them to the so far uncovered feature. This time OFT comes back with an assuring "OK".
 
 Step-by-step you repeat this pattern for your design document and all resulting artifacts.
-
----
-
-← [Who Should Read This Document?](who_should_read_this_document.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) →

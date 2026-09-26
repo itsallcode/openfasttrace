@@ -26,7 +26,3 @@ The document is also helpful for people who just want to get an insight on what 
 * People responsible for picking tools (who we recommend should be users too)
 
 Of course, requirement engineering and tracing are useful outside the software domains too.
-
----
-
-← [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [What is Requirement Tracing?](what_is_requirement_tracing.md) →

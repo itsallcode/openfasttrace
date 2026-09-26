@@ -47,7 +47,3 @@ To avoid confusion, it is best to have all forwards in a separate section with t
     * `dsn-->impl:req~bar~1`
     * `dsn-->impl:req~zoo~2`
     * `…`
-
----
-
-← [Excluding Parts of a Specification Document for OFT Parsing](excluding_parts_of_a_specification_document_for_oft_parsing.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Distributing the Detailing Work](distributing_the_detailing_work.md) →

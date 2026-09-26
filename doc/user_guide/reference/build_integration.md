@@ -12,7 +12,3 @@ To integrate requirement tracing with OFT into your CI build, we recommend using
 
 * [openfasttrace-maven-plugin](https://github.com/itsallcode/openfasttrace-maven-plugin)
 * [openfasttrace-gradle](https://github.com/itsallcode/openfasttrace-gradle)
-
----
-
-← [OFT Command Line](oft_command_line.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Input Format Support](input_format_support.md) →

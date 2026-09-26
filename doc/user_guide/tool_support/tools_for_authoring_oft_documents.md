@@ -36,7 +36,3 @@ Typical features include:
 * Templates for OFT specification items
 * Run configurations for OFT traces
 * In-IDE trace report
-
----
-
-← [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Templates for IDEs](templates_for_ides.md) →

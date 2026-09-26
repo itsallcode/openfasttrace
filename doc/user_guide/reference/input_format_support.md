@@ -168,7 +168,3 @@ The SpecObject format is extended with support of namespaces to allow adding cus
     </ext:extension>
 </specdocument>
 ```
-
----
-
-← [Build Integration](build_integration.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Console Tracing Report](console_tracing_report.md) →

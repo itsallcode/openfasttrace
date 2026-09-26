@@ -25,7 +25,3 @@ ReStructured text example:
     This part is ignored by OFT.
     .. oft:on
     Here OFT scans again.
-
----
-
-← [Writing a Specification](writing_a_specification.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Delegating Requirement Coverage](delegating_requirement_coverage.md) →

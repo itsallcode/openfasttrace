@@ -133,7 +133,3 @@ The available color schemes are
     -l, --log-level <log level>
     
 Log level for console logging. One of `OFF`, `SEVERE`, `WARNING`, `INFO`, `CONFIG`, `FINE`, `FINER`, `FINEST`, `ALL`. Defaults to `WARNING`.
-
----
-
-← [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Build Integration](build_integration.md) →

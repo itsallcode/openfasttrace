@@ -13,7 +13,3 @@ While plain text reports are perfect for debugging your tracing chain, sometimes
 ```sh
 oft trace -o html
 ```
-
----
-
-← [Tracing the Whole Chain in the Same File System](tracing_the_whole_chain_in_the_same_file_system.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Understanding and Fixing Broken Requirement Branches](understanding_and_fixing_broken_requirement_branches.md) →

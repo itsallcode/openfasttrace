@@ -15,7 +15,3 @@ Below you find a few short examples of how to use the OFT API. For details check
 
 * [Using OFT From Java](using_oft_from_java.md)
 * [Exit Codes](exit_codes.md)
-
----
-
-← [XML Tracing Report](../reference/xml_tracing_report.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Using OFT From Java](using_oft_from_java.md) →

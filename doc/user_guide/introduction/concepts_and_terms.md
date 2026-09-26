@@ -62,7 +62,3 @@ Examples:
 If you change a requirement that lists all browsers that an HTML export needs to be compatible with, you made a semantic change and should raise the revision number.
 
 If, on the other hand, you only added a missing period at the end of a sentence, the requirement content did not really change and there is no need to invalidate existing coverage.
-
----
-
-← [Why do I Need Requirement Tracing?](why_do_i_need_requirement_tracing.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Introduction](introduction.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Installation](../installation/installation.md) →

@@ -58,7 +58,3 @@ To make it easier to run, add an alias to your `.bashrc` or `.zshrc`:
 ```bash
 alias oft='java -jar /path/to/openfasttrace-<version>.jar'
 ```
-
----
-
-← [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; [macOS Installation](macos.md) →

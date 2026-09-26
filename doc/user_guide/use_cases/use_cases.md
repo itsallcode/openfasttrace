@@ -20,7 +20,3 @@ The following use cases describe common tasks and workflows when using OpenFastT
 * **[Tracing the Whole Chain in the Same File System](tracing_the_whole_chain_in_the_same_file_system.md)**: Perform a full trace in small projects where all artifacts are located under a common root directory.
 * **[HTML Tracing Reports](html_tracing_reports.md)**: Generate visually appealing HTML reports for management or quality assessments.
 * **[Understanding and Fixing Broken Requirement Branches](understanding_and_fixing_broken_requirement_branches.md)**: Identify and resolve issues in the traceability graph to ensure all requirements are properly linked.
-
----
-
-← [Windows Installation](../installation/windows.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Writing a Specification](writing_a_specification.md) →

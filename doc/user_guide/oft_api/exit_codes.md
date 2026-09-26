@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Exit Codes
 parent: OFT API
 grand_parent: User Guide

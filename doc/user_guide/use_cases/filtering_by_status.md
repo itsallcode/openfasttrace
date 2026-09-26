@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Filtering by Status
 parent: Use Cases
 grand_parent: User Guide

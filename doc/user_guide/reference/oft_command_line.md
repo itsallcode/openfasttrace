@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: OFT Command Line
 parent: Reference
 grand_parent: User Guide

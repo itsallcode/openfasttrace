@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Input Format Support
 parent: Reference
 grand_parent: User Guide

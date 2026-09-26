@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Introduction
 parent: User Guide
 has_children: true

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Templates for IDEs
 parent: Tool Support
 grand_parent: User Guide

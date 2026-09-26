@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: HTML Tracing Reports
 parent: Use Cases
 grand_parent: User Guide

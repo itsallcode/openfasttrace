@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Writing a Specification
 parent: Use Cases
 grand_parent: User Guide

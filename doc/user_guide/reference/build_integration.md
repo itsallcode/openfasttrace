@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Build Integration
 parent: Reference
 grand_parent: User Guide

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Specification
 nav_order: 4
 has_children: true

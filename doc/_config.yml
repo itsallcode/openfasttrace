@@ -61,6 +61,10 @@ include:
 
 defaults:
   - scope:
+      path: ""
+    values:
+      layout: docs
+  - scope:
       path: "changes"
     values:
       nav_exclude: true

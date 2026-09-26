@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Windows Installation
 parent: Installation
 grand_parent: User Guide

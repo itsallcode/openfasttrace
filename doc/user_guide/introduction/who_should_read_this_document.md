@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Who Should Read This Document?
 parent: Introduction
 grand_parent: User Guide

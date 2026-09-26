@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Tools for Authoring OFT Documents
 parent: Tool Support
 grand_parent: User Guide

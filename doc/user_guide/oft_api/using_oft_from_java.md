@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Using OFT From Java
 parent: OFT API
 grand_parent: User Guide

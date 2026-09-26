@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Use Cases
 parent: User Guide
 has_children: true

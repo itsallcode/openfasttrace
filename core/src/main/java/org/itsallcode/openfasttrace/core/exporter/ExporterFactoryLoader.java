@@ -63,11 +63,11 @@ public class ExporterFactoryLoader
         final List<ExporterFactory> matchingExporters = getMatchingFactories(outputFormat);
         return switch (matchingExporters.size())
         {
-        case 0 -> throw new ExporterException(
-                "Found no matching exporter for output format '" + outputFormat + "'");
-        case 1 -> matchingExporters.get(0);
-        default -> throw new ExporterException("Found more than one matching exporter for output format '"
-                + outputFormat + "'");
+            case 0 -> throw new ExporterException(
+                    "Found no matching exporter for output format '" + outputFormat + "'");
+            case 1 -> matchingExporters.get(0);
+            default -> throw new ExporterException("Found more than one matching exporter for output format '"
+                    + outputFormat + "'");
         };
     }
 

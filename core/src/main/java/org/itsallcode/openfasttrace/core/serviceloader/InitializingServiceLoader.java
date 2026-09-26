@@ -44,7 +44,32 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
     public static <T extends Initializable<C>, C> Loader<T> load(
             final Class<T> serviceType, final C context)
     {
-        final ServiceLoaderFactory loaderFactory = ServiceLoaderFactory.createDefault();
+        return load(serviceType, context, ServiceLoaderConfig.createDefault());
+    }
+
+    /**
+     * Create a new {@link InitializingServiceLoader} using the given service
+     * loader configuration.
+     * 
+     * @param <T>
+     *            service type.
+     * @param <C>
+     *            service context type.
+     * @param serviceType
+     *            type of the services to load.
+     * @param context
+     *            context with which to initialize the newly created service
+     *            instances.
+     * @param config
+     *            configuration for the service loader, e.g. additional plugins
+     *            configured at runtime.
+     * @return an {@link InitializingServiceLoader} for type <code>T</code>
+     */
+    // [impl->dsn~plugins.loading.configuration~1]
+    public static <T extends Initializable<C>, C> Loader<T> load(
+            final Class<T> serviceType, final C context, final ServiceLoaderConfig config)
+    {
+        final ServiceLoaderFactory loaderFactory = new ServiceLoaderFactory(config);
         return new InitializingServiceLoader<>(loaderFactory.createLoader(serviceType), context);
     }
 

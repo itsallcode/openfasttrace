@@ -158,7 +158,7 @@ org.eclipse.jdt.core.formatter.indent_empty_lines=false
 org.eclipse.jdt.core.formatter.indent_statements_compare_to_block=true
 org.eclipse.jdt.core.formatter.indent_statements_compare_to_body=true
 org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_cases=true
-org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch=false
+org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch=true
 org.eclipse.jdt.core.formatter.indentation.size=4
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_enum_constant=insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_field=insert
@@ -166,6 +166,7 @@ org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_local_variabl
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_method=insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_package=insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_parameter=do not insert
+org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_record_parameter=do not insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_annotation_on_type=insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_label=do not insert
 org.eclipse.jdt.core.formatter.insert_new_line_after_opening_brace_in_array_initializer=do not insert

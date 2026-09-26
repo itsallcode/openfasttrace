@@ -52,14 +52,30 @@ interface ServiceOrigin extends AutoCloseable
     // [impl->dsn~plugins.loading.separate-classloader~1]
     static ServiceOrigin forJars(final List<Path> jars)
     {
-        return new JarFileOrigin(jars, createClassLoader(jars));
+        return new JarFileOrigin(jars, createClassLoader(getClassLoaderName(jars), jars));
     }
 
-    private static URLClassLoader createClassLoader(final List<Path> jars)
+    /**
+     * Create a service origin for a named plugin consisting of a list of JAR
+     * files.
+     * 
+     * @param name
+     *            name of the plugin, used for the ClassLoader name
+     * @param jars
+     *            list of paths to JAR files
+     * @return a service origin for the JAR files
+     */
+    // [impl->dsn~plugins.loading.configuration~1]
+    static ServiceOrigin forJars(final String name, final List<Path> jars)
+    {
+        return new JarFileOrigin(jars, createClassLoader("PluginClassLoader-" + name, jars));
+    }
+
+    private static URLClassLoader createClassLoader(final String name, final List<Path> jars)
     {
         final URL[] urls = jars.stream().map(ServiceOrigin::toUrl)
                 .toArray(URL[]::new);
-        return new ChildFirstClassLoader(getClassLoaderName(jars), urls, getBaseClassLoader());
+        return new ChildFirstClassLoader(name, urls, getBaseClassLoader());
     }
 
     private static String getClassLoaderName(final List<Path> jars)

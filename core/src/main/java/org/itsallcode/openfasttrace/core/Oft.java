@@ -125,4 +125,15 @@ public interface Oft
     {
         return new OftRunner();
     }
+
+    /**
+     * Create a builder for configuring an {@link Oft} instance, e.g. to add
+     * plugins at runtime.
+     * 
+     * @return a new {@link OftBuilder}
+     */
+    static OftBuilder builder()
+    {
+        return new OftBuilder();
+    }
 }

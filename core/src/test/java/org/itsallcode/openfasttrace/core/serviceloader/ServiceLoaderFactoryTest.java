@@ -28,14 +28,22 @@ class ServiceLoaderFactoryTest
 
     private ServiceLoaderFactory factory()
     {
-        return new ServiceLoaderFactory(tempDir, true);
+        return new ServiceLoaderFactory(config(tempDir, true));
+    }
+
+    private static ServiceLoaderConfig config(final Path pluginsDirectory, final boolean searchCurrentClasspath)
+    {
+        return ServiceLoaderConfig.builder()
+                .pluginsDirectory(pluginsDirectory)
+                .searchCurrentClasspath(searchCurrentClasspath)
+                .build();
     }
 
     @Test
     void findServiceSkipCurrentClassLoader()
     {
         final Path missingDirectory = tempDir.resolve("missing-dir");
-        assertThat(new ServiceLoaderFactory(missingDirectory, false).findServiceOrigins(), empty());
+        assertThat(new ServiceLoaderFactory(config(missingDirectory, false)).findServiceOrigins(), empty());
     }
 
     @Test
@@ -127,5 +135,75 @@ class ServiceLoaderFactoryTest
                         equalTo("JarClassLoader-plugin1.jar")),
                 () -> assertThat(origins.get(1).getClassLoader().getName(),
                         equalTo("JarClassLoader-plugin2.jar")));
+    }
+
+    // [utest->dsn~plugins.loading.configuration~1]
+    @Test
+    void findServiceOriginsConfiguredPlugin() throws IOException
+    {
+        final Path jar = createJar("configured.jar");
+        final ServiceLoaderFactory factory = new ServiceLoaderFactory(
+                config(tempDir, true).toBuilder().addPlugin(Plugin.of("my-plugin", jar)).build());
+        final List<ServiceOrigin> origins = factory.findServiceOrigins();
+        assertAll(() -> assertThat(origins, hasSize(2)),
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("PluginClassLoader-my-plugin")));
+    }
+
+    // [utest->dsn~plugins.loading.configuration~1]
+    @Test
+    void findServiceOriginsConfiguredPluginWithMultipleJars() throws IOException
+    {
+        final Path jar1 = createJar("plugin.jar");
+        final Path jar2 = createJar("dependency.jar");
+        final ServiceLoaderFactory factory = new ServiceLoaderFactory(
+                config(tempDir, true).toBuilder().addPlugin(Plugin.of("my-plugin", jar1, jar2)).build());
+        final List<ServiceOrigin> origins = factory.findServiceOrigins();
+        assertAll(() -> assertThat(origins, hasSize(2)),
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("PluginClassLoader-my-plugin")));
+    }
+
+    // [utest->dsn~plugins.loading.configuration~1]
+    @Test
+    void findServiceOriginsMultipleConfiguredPlugins() throws IOException
+    {
+        final Path jar1 = createJar("plugin1.jar");
+        final Path jar2 = createJar("plugin2.jar");
+        final ServiceLoaderFactory factory = new ServiceLoaderFactory(config(tempDir, true).toBuilder()
+                .addPlugin(Plugin.of("plugin-one", jar1))
+                .addPlugin(Plugin.of("plugin-two", jar2))
+                .build());
+        final List<ServiceOrigin> origins = factory.findServiceOrigins();
+        assertAll(() -> assertThat(origins, hasSize(3)),
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("PluginClassLoader-plugin-one")),
+                () -> assertThat(origins.get(1).getClassLoader().getName(),
+                        equalTo("PluginClassLoader-plugin-two")));
+    }
+
+    // [utest->dsn~plugins.loading.configuration~1]
+    @Test
+    void findServiceOriginsConfiguredPluginsAppendedAfterPluginDirectory() throws IOException
+    {
+        final Path pluginDir = tempDir.resolve("plugin1");
+        Files.createDirectories(pluginDir);
+        Files.createFile(pluginDir.resolve("plugin1.jar"));
+        final Path configuredJar = createJar("configured.jar");
+        final ServiceLoaderFactory factory = new ServiceLoaderFactory(
+                config(tempDir, true).toBuilder().addPlugin(Plugin.of("configured", configuredJar)).build());
+        final List<ServiceOrigin> origins = factory.findServiceOrigins();
+        assertAll(() -> assertThat(origins, hasSize(3)),
+                () -> assertThat(origins.get(0).getClassLoader().getName(),
+                        equalTo("JarClassLoader-plugin1.jar")),
+                () -> assertThat(origins.get(1).getClassLoader().getName(),
+                        equalTo("PluginClassLoader-configured")));
+    }
+
+    private Path createJar(final String fileName) throws IOException
+    {
+        final Path jar = tempDir.resolve(fileName);
+        Files.createFile(jar);
+        return jar;
     }
 }

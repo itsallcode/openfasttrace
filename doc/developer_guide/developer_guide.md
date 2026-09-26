@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Developer Guide
 nav_order: 3
 has_children: true

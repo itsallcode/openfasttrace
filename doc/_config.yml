@@ -7,6 +7,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-include-cache
+  - jekyll-relative-links
 
 # Site settings
 url: "https://openfasttrace.itsallcode.org"
@@ -59,6 +60,10 @@ include:
   - assets
 
 defaults:
+  - scope:
+      path: ""
+    values:
+      layout: docs
   - scope:
       path: "changes"
     values:

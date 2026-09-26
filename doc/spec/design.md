@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Design
 nav_order: 2
 parent: Specification

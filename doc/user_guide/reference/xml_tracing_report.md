@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: XML Tracing Report
 parent: Reference
 grand_parent: User Guide
@@ -173,7 +173,3 @@ are described by the element `<dependencies>`:
 The `<dependencies>` element provides a `<dependsOnSpecObject>` element for each referenced requirement. The 
 `<dependsOnSpecObject>` element lists requirement ID with the element `<id>`, the requirement version with `<version>` 
 and the requirement type with the element `<doctype>`.
-
----
-
-← [Report Summary](report_summary.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [OFT API](../oft_api/oft_api.md) →

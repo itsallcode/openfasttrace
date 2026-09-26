@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Windows Installation
 parent: Installation
 grand_parent: User Guide
@@ -38,7 +38,3 @@ To make it easier to run, create a batch file named `oft.bat` in a directory tha
 @echo off
 java -jar "C:\path\to\openfasttrace-<version>.jar" %*
 ```
-
----
-
-← [macOS Installation](macos.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Installation](installation.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Use Cases](../use_cases/use_cases.md) →

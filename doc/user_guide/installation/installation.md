@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Installation
 parent: User Guide
 has_children: true
@@ -25,7 +25,3 @@ Depending on your operating system, there are different ways to install OpenFast
 *   **[Linux Installation](linux.md)** (Debian, Ubuntu, and others)
 *   **[macOS Installation](macos.md)**
 *   **[Windows Installation](windows.md)**
-
----
-
-← [Concepts and Terms](../introduction/concepts_and_terms.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Linux Installation](linux.md) →

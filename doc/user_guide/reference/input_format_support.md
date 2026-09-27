@@ -107,6 +107,7 @@ recognized file types:
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
 * TypeScript (`.ts`)
+* Visual Basic (`.vb`)
 * Windows batch files (`.bat`)
 
 **Configuration and Serialization Formats** 

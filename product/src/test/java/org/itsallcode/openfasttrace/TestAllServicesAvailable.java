@@ -69,7 +69,7 @@ class TestAllServicesAvailable
 
     @ParameterizedTest
     @CsvSource(
-    { "md", "oreqm", "java", "feature", "zip" })
+    { "md", "oreqm", "java", "feature", "vb", "zip" })
     void importerAvailable(final String suffix)
     {
         final InputFile file = RealFileInput.forPath(Paths.get("file." + suffix));

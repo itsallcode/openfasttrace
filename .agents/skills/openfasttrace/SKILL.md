@@ -47,13 +47,13 @@ Needs: dsn, impl, utest
 Implementation covering design in a C++ file:
 
 ```C++
-\\ [impl -> dsn~hash-sum-calculation~1]
+// [impl -> dsn~hash-sum-calculation~1]
 ```
 
 Unit test in a Java file:
 
 ```shell
-\\ [utest -> dsn~hash-sum-calculation~1]
+// [utest -> dsn~hash-sum-calculation~1]
 ```
 
 Coverage in a YMAL file (e.g., GitHub workflow)

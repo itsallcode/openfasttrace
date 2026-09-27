@@ -45,6 +45,7 @@ color_scheme: light
 
 # Exclude list
 exclude:
+  - man
   - vendor
   - .bundle
   - .jekyll-cache

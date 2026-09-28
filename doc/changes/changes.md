@@ -1,10 +1,11 @@
 ---
-layout: default
+layout: docs
 title: Changelog
 nav_order: 8
 ---
 
 # Changes
+
 
 * [4.11.0](changes_4.11.0.md)
 * [4.10.0](changes_4.10.0.md)

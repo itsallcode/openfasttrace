@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Terminology
 nav_order: 5
 ---

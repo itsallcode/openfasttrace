@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Tool Support
 parent: User Guide
 has_children: true
@@ -11,7 +11,3 @@ has_toc: false
 
 * [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md)
 * [Templates for IDEs](templates_for_ides.md)
-
----
-
-← [Exit Codes](../oft_api/exit_codes.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md) →

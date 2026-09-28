@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Templates for IDEs
 parent: Tool Support
 grand_parent: User Guide
@@ -9,7 +9,3 @@ nav_order: 2
 ### Templates for IDEs
 
 You can create OpenFastTrace artifacts faster with templates for your IDE. See [the list of available IDE Templates](https://github.com/itsallcode/openfasttrace-ide-templates).
-
----
-
-← [Tools for Authoring OFT Documents](tools_for_authoring_oft_documents.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Product Lifecycle](../product_lifecycle/product_lifecycle.md) →

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Using OFT From Java
 parent: OFT API
 grand_parent: User Guide
@@ -124,7 +124,3 @@ Each of those classes comes with a builder which is called like this:
 ```java
 ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
-
----
-
-← [OFT API](oft_api.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [OFT API](oft_api.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Exit Codes](exit_codes.md) →

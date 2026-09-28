@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Product Lifecycle
 parent: User Guide
 has_children: true
@@ -55,7 +55,3 @@ Please refer to our [security policy](../../../SECURITY.md) for details on coord
 ### Retaining Updates
 
 Itsallcode.org distributes updates via GitHub releases. Even if the project should be archived, the releases remain accessible for download. Itsallcode.org will keep each security update accessible for at least 10 years.
-
----
-
-← [Templates for IDEs](../tool_support/templates_for_ides.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [User Guide](../user_guide.md)

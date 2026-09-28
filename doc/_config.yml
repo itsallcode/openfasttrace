@@ -7,6 +7,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-include-cache
+  - jekyll-relative-links
 
 # Site settings
 url: "https://openfasttrace.itsallcode.org"
@@ -16,9 +17,12 @@ baseurl: ""
 logo: "assets/images/openfasttrace_logo.svg"
 
 # Aux links for the sidebar
-aux_links:
-  "OpenFastTrace on GitHub":
-    - https://github.com/itsallcode/openfasttrace
+nav_external_links:
+  - title: AI Skills
+    url: https://github.com/itsallcode/openfasttrace-ai-skills
+  - title: OpenFastTraace on GitHub
+    url: https://github.com/itsallcode/openfasttrace
+
 
 # GitHub edit link
 gh_edit_link: true
@@ -59,6 +63,10 @@ include:
   - assets
 
 defaults:
+  - scope:
+      path: ""
+    values:
+      layout: docs
   - scope:
       path: "changes"
     values:

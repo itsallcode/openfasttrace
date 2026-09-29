@@ -35,7 +35,8 @@ class TestTagImporterFactory extends AbstractImporterFactoryTestBase<TagImporter
                 "foo.rs", "foo.sh", "foo.sv", "foo.v", "foo.inc", "foo.yaml", "foo.yml", "foo.xhtml", "foo.xml",
                 "foo.zsh",
                 "foo.clj", "foo.kt", "foo.scala",
-                "foo.pu", "foo.puml", "foo.plantuml", "foo.go", "foo.robot", "foo.tf", "foo.tfvars", "foo.toml");
+                "foo.pu", "foo.puml", "foo.plantuml", "foo.go", "foo.robot", "foo.tf", "foo.tfvars", "foo.toml",
+                "foo.vb");
     }
 
     @Override

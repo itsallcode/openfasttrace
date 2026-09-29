@@ -1,0 +1,27 @@
+{% if page.parent %}
+  {% assign sibling_pages = site.pages | where: "parent", page.parent %}
+  {% assign parent_page = site.pages | where: "title", page.parent | first %}
+{% else %}
+  {% assign sibling_pages = site.pages | where_exp: "item", "item.parent == nil" %}
+  {% assign parent_page = nil %}
+{% endif %}
+{% assign sibling_pages = sibling_pages | where_exp: "item", "item.nav_order" | where_exp: "item", "item.nav_exclude != true" | sort: "nav_order" %}
+{% assign current_index = nil %}
+{% for sibling in sibling_pages %}
+  {% if sibling.url == page.url %}{% assign current_index = forloop.index0 %}{% endif %}
+{% endfor %}
+{% if current_index != nil %}
+{% assign next_index = current_index | plus: 1 %}
+{% if current_index > 0 %}
+{% assign previous_index = current_index | minus: 1 %}
+{% assign previous_page = sibling_pages[previous_index] %}
+{% endif %}
+{% assign next_page = sibling_pages[next_index] %}
+{% if previous_page or parent_page or next_page %}
+<nav class="lateral-navigation" aria-label="Lateral navigation">
+  {% if previous_page %}&larr;&nbsp;<a href="{{ previous_page.url | relative_url }}"> {{ previous_page.title }}</a>{% endif %}
+  {% if parent_page and previous_page %} &nbsp;&bull;&nbsp; {% endif %}{% if parent_page %} &uarr;&nbsp;<a href="{{ parent_page.url | relative_url }}"> {{ parent_page.title }}</a>{% endif %}
+  {% if next_page and (parent_page or previous_page) %} &nbsp;&bull;&nbsp; {% endif %}{% if next_page %}<a href="{{ next_page.url | relative_url }}">{{ next_page.title }}&nbsp;&rarr;</a>{% endif %}
+</nav>
+{% endif %}
+{% endif %}

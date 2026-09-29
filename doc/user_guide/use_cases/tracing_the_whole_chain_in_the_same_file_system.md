@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Tracing the Whole Chain in the Same File System
 parent: Use Cases
 grand_parent: User Guide
@@ -48,7 +48,3 @@ By default, this will produce a plain text trace that displays details of all de
 
 See also:
 * [Tracing Options](../reference/oft_command_line.md#tracing-options) for controlling the tracing output
-
----
-
-← [Tracing the Whole Chain](tracing_the_whole_chain.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [HTML Tracing Reports](html_tracing_reports.md) →

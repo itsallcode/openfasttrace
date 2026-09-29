@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Quality Requirements
 nav_order: 3
 parent: Specification

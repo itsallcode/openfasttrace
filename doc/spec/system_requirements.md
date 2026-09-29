@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: System Requirements
 nav_order: 1
 parent: Specification

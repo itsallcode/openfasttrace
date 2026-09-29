@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Understanding and Fixing Broken Requirement Branches
 parent: Use Cases
 grand_parent: User Guide
@@ -84,7 +84,3 @@ If you see "covered shallow" on an incoming link, this means that there is at le
 | Duplicate        | Two items have the same ID                                               | ❌  |
 
 Duplicate links are special. They don't have a clear direction, since OFT cannot tell which [specification item](../../terminology.md#specification-item) is the original and which one is the duplicate. In either case, you are most likely looking at a copy & past error again. Handle this with care and check if you maybe forgot to adapt other aspects of the copy too, not only the ID.
-
----
-
-← [HTML Tracing Reports](html_tracing_reports.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Use Cases](use_cases.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Reference](../reference/reference.md) →

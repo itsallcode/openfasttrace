@@ -20,6 +20,9 @@ class ServiceLoaderFactoryTest
     @TempDir
     Path tempDir;
 
+    @TempDir
+    Path configuredJarsDir;
+
     @Test
     void noPluginJar()
     {
@@ -194,7 +197,7 @@ class ServiceLoaderFactoryTest
 
     private Path createJar(final String fileName) throws IOException
     {
-        final Path jar = tempDir.resolve(fileName);
+        final Path jar = configuredJarsDir.resolve(fileName);
         Files.createFile(jar);
         return jar;
     }

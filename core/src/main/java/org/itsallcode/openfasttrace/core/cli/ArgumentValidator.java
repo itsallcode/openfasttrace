@@ -5,9 +5,11 @@ import static java.util.Arrays.asList;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 
 /**
  * The {@link ArgumentValidator} checks whether the command line arguments given
@@ -83,7 +85,8 @@ public class ArgumentValidator
     private boolean validateConvertCommand()
     {
         final String format = Objects.requireNonNull(this.arguments.getOutputFormat(), "<null>");
-        if (!new ExporterFactoryLoader(null, null).isFormatSupported(format))
+        if (!new ExporterFactoryLoader(new ExporterContext(), ServiceLoaderConfig.createDefault())
+                .isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
             return false;

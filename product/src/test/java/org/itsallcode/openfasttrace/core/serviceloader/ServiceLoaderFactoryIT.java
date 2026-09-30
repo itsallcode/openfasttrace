@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.TestAbortedException;
 
-import net.bytebuddy.build.Plugin;
-
 /**
  * Test for {@link ServiceLoaderFactory} from module {@code core}. This test
  * must be located in module {@code product} (which includes all plugin modules)

@@ -26,7 +26,7 @@ To use OpenFastTrace as a dependency in your [Maven](https://maven.apache.org) p
     <dependency>
         <groupId>org.itsallcode.openfasttrace</groupId>
         <artifactId>openfasttrace</artifactId>
-        <version>4.9.0</version>
+        <version>4.11.0</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>
@@ -38,7 +38,7 @@ To use OpenFastTrace as a dependency in your [Gradle](https://gradle.org/) proje
 
 ```groovy
 dependencies {
-    compile "org.itsallcode.openfasttrace:openfasttrace:4.9.0"
+    compile "org.itsallcode.openfasttrace:openfasttrace:4.11.0"
 }
 ```
 

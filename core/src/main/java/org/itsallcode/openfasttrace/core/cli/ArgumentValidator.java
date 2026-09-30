@@ -2,9 +2,7 @@ package org.itsallcode.openfasttrace.core.cli;
 
 import static java.util.Arrays.asList;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
@@ -85,7 +83,7 @@ public class ArgumentValidator
     private boolean validateConvertCommand()
     {
         final String format = Objects.requireNonNull(this.arguments.getOutputFormat(), "<null>");
-        if (!new ExporterFactoryLoader(null).isFormatSupported(format))
+        if (!new ExporterFactoryLoader(null, null).isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
             return false;

@@ -4,10 +4,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.ReportSettings;
-import org.itsallcode.openfasttrace.api.core.LinkedSpecificationItem;
-import org.itsallcode.openfasttrace.api.core.SpecificationItem;
-import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportSettings;
+import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 
 /**
  * Provides convenient methods for importing, tracing and reporting.
@@ -19,10 +18,10 @@ public class OftRunner implements Oft
     /** Create a new instance. */
     public OftRunner()
     {
-        this(new ServiceFactory());
+        this(new ServiceFactory(ServiceLoaderConfig.createDefault()));
     }
 
-    OftRunner(ServiceFactory serviceFactory)
+    OftRunner(final ServiceFactory serviceFactory)
     {
         this.serviceFactory = serviceFactory;
     }

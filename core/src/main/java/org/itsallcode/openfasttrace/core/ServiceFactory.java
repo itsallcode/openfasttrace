@@ -19,7 +19,10 @@ class ServiceFactory
 {
     private final ServiceLoaderConfig serviceLoaderConfig;
 
-    @Deprecated
+    /**
+     * @deprecated Use {@link #ServiceFactory(ServiceLoaderConfig)} instead.
+     */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     ServiceFactory()
     {
         this(ServiceLoaderConfig.createDefault());

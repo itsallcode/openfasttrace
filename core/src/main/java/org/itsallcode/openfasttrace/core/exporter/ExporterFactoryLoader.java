@@ -25,7 +25,7 @@ public class ExporterFactoryLoader
     public ExporterFactoryLoader(final ExporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ExporterFactory.class, context));
+        this(InitializingServiceLoader.load(ExporterFactory.class, context, ServiceLoaderConfig.createDefault()));
     }
 
     /**

@@ -10,6 +10,7 @@ import org.itsallcode.openfasttrace.api.importer.ImporterContext;
 import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.api.importer.input.RealFileInput;
+import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -41,7 +42,8 @@ class ImporterFactoryLoaderClassloaderIT
         try
         {
             Thread.currentThread().setContextClassLoader(limitedClassLoader);
-            final ImporterFactoryLoader loaderWithLimitedTccl = new ImporterFactoryLoader(context);
+            final ImporterFactoryLoader loaderWithLimitedTccl = new ImporterFactoryLoader(context,
+                    ServiceLoaderConfig.createDefault());
             final InputFile file = RealFileInput.forPath(Paths.get("test.md"));
             final ImporterException exception = assertThrows(ImporterException.class,
                     () -> loaderWithLimitedTccl.getImporterFactory(file));

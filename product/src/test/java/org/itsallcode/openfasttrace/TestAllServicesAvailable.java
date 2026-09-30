@@ -22,6 +22,7 @@ import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.importer.ImporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,21 +51,21 @@ class TestAllServicesAvailable
         final ImporterContext contextMock = mock(ImporterContext.class,
                 withSettings().defaultAnswer(Answers.RETURNS_DEEP_STUBS));
 
-        return new ImporterFactoryLoader(contextMock);
+        return new ImporterFactoryLoader(contextMock, ServiceLoaderConfig.createDefault());
     }
 
     private static ExporterFactoryLoader createExporterLoader()
     {
         final ExporterContext contextMock = mock(ExporterContext.class,
                 withSettings().defaultAnswer(Answers.RETURNS_DEEP_STUBS));
-        return new ExporterFactoryLoader(contextMock);
+        return new ExporterFactoryLoader(contextMock, ServiceLoaderConfig.createDefault());
     }
 
     private static ReporterFactoryLoader createReporterLoader()
     {
         final ReporterContext contextMock = mock(ReporterContext.class,
                 withSettings().defaultAnswer(Answers.RETURNS_DEEP_STUBS));
-        return new ReporterFactoryLoader(contextMock);
+        return new ReporterFactoryLoader(contextMock, ServiceLoaderConfig.createDefault());
     }
 
     @ParameterizedTest

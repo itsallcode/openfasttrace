@@ -26,7 +26,7 @@ public class ReporterFactoryLoader
     public ReporterFactoryLoader(final ReporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ReporterFactory.class, context));
+        this(InitializingServiceLoader.load(ReporterFactory.class, context, ServiceLoaderConfig.createDefault()));
     }
 
     /**

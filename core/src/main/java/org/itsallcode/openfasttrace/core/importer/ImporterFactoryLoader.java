@@ -39,7 +39,7 @@ public class ImporterFactoryLoader
     public ImporterFactoryLoader(final ImporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ImporterFactory.class, context));
+        this(InitializingServiceLoader.load(ImporterFactory.class, context, ServiceLoaderConfig.createDefault()));
     }
 
     /**

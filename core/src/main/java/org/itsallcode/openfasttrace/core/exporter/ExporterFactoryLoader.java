@@ -19,7 +19,9 @@ public class ExporterFactoryLoader
      * 
      * @param context
      *            the context for the new loader.
+     * @deprecated Use {@link #ExporterFactoryLoader(ExporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ExporterFactoryLoader(final ExporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]

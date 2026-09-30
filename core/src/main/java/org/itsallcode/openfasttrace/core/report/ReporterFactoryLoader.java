@@ -20,7 +20,9 @@ public class ReporterFactoryLoader
      * @param context
      *            the context used for initializing new
      *            {@link ReporterFactory}s.
+     * @deprecated Use {@link #ReporterFactoryLoader(ReporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ReporterFactoryLoader(final ReporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
@@ -65,11 +67,11 @@ public class ReporterFactoryLoader
         final List<ReporterFactory> matchingReporters = getMatchingFactories(outputFormat);
         return switch (matchingReporters.size())
         {
-        case 0 -> throw new ExporterException(
-                "Found no matching reporter for output format '" + outputFormat + "'");
-        case 1 -> matchingReporters.get(0);
-        default -> throw new ReportException("Found more than one matching reporter for output format '"
-                + outputFormat + "'");
+            case 0 -> throw new ExporterException(
+                    "Found no matching reporter for output format '" + outputFormat + "'");
+            case 1 -> matchingReporters.get(0);
+            default -> throw new ReportException("Found more than one matching reporter for output format '"
+                    + outputFormat + "'");
         };
     }
 

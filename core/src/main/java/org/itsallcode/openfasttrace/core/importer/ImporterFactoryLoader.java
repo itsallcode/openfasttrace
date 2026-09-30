@@ -33,7 +33,9 @@ public class ImporterFactoryLoader
      * 
      * @param context
      *            context for the new loader
+     * @deprecated Use {@link #ImporterFactoryLoader(ImporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ImporterFactoryLoader(final ImporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]

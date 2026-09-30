@@ -40,9 +40,10 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
      *            context with which to initialize the newly created service
      *            instances.
      * @return an {@link InitializingServiceLoader} for type <code>T</code>
+     * @deprecated Use {@link #load(Class, Object, ServiceLoaderConfig)} instead.
      */
-    public static <T extends Initializable<C>, C> Loader<T> load(
-            final Class<T> serviceType, final C context)
+    @Deprecated(since = "4.11.0", forRemoval = true)
+    public static <T extends Initializable<C>, C> Loader<T> load(final Class<T> serviceType, final C context)
     {
         return load(serviceType, context, ServiceLoaderConfig.createDefault());
     }
@@ -66,8 +67,8 @@ public final class InitializingServiceLoader<T extends Initializable<C>, C> impl
      * @return an {@link InitializingServiceLoader} for type <code>T</code>
      */
     // [impl->dsn~plugins.loading.configuration~1]
-    public static <T extends Initializable<C>, C> Loader<T> load(
-            final Class<T> serviceType, final C context, final ServiceLoaderConfig config)
+    public static <T extends Initializable<C>, C> Loader<T> load(final Class<T> serviceType, final C context,
+            final ServiceLoaderConfig config)
     {
         final ServiceLoaderFactory loaderFactory = new ServiceLoaderFactory(config);
         return new InitializingServiceLoader<>(loaderFactory.createLoader(serviceType), context);

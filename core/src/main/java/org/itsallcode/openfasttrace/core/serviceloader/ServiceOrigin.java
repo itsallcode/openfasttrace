@@ -56,8 +56,7 @@ interface ServiceOrigin extends AutoCloseable
     }
 
     /**
-     * Create a service origin for a named plugin consisting of a list of JAR
-     * files.
+     * Create a service origin for a named plugin consisting of a list of JAR files.
      * 
      * @param name
      *            name of the plugin, used for the ClassLoader name

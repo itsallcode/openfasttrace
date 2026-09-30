@@ -131,10 +131,8 @@ class ServiceLoaderFactoryTest
         Files.createFile(pluginDir2.resolve("plugin2.jar"));
         final List<ServiceOrigin> origins = factory().findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(3)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(),
-                        equalTo("JarClassLoader-plugin1.jar")),
-                () -> assertThat(origins.get(1).getClassLoader().getName(),
-                        equalTo("JarClassLoader-plugin2.jar")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("JarClassLoader-plugin1.jar")),
+                () -> assertThat(origins.get(1).getClassLoader().getName(), equalTo("JarClassLoader-plugin2.jar")));
     }
 
     // [utest->dsn~plugins.loading.configuration~1]
@@ -146,8 +144,7 @@ class ServiceLoaderFactoryTest
                 config(tempDir, true).toBuilder().addPlugin(Plugin.of("my-plugin", jar)).build());
         final List<ServiceOrigin> origins = factory.findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(),
-                        equalTo("PluginClassLoader-my-plugin")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("PluginClassLoader-my-plugin")));
     }
 
     // [utest->dsn~plugins.loading.configuration~1]
@@ -160,8 +157,7 @@ class ServiceLoaderFactoryTest
                 config(tempDir, true).toBuilder().addPlugin(Plugin.of("my-plugin", jar1, jar2)).build());
         final List<ServiceOrigin> origins = factory.findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(2)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(),
-                        equalTo("PluginClassLoader-my-plugin")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("PluginClassLoader-my-plugin")));
     }
 
     // [utest->dsn~plugins.loading.configuration~1]
@@ -176,10 +172,8 @@ class ServiceLoaderFactoryTest
                 .build());
         final List<ServiceOrigin> origins = factory.findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(3)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(),
-                        equalTo("PluginClassLoader-plugin-one")),
-                () -> assertThat(origins.get(1).getClassLoader().getName(),
-                        equalTo("PluginClassLoader-plugin-two")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("PluginClassLoader-plugin-one")),
+                () -> assertThat(origins.get(1).getClassLoader().getName(), equalTo("PluginClassLoader-plugin-two")));
     }
 
     // [utest->dsn~plugins.loading.configuration~1]
@@ -194,10 +188,8 @@ class ServiceLoaderFactoryTest
                 config(tempDir, true).toBuilder().addPlugin(Plugin.of("configured", configuredJar)).build());
         final List<ServiceOrigin> origins = factory.findServiceOrigins();
         assertAll(() -> assertThat(origins, hasSize(3)),
-                () -> assertThat(origins.get(0).getClassLoader().getName(),
-                        equalTo("JarClassLoader-plugin1.jar")),
-                () -> assertThat(origins.get(1).getClassLoader().getName(),
-                        equalTo("PluginClassLoader-configured")));
+                () -> assertThat(origins.get(0).getClassLoader().getName(), equalTo("JarClassLoader-plugin1.jar")),
+                () -> assertThat(origins.get(1).getClassLoader().getName(), equalTo("PluginClassLoader-configured")));
     }
 
     private Path createJar(final String fileName) throws IOException

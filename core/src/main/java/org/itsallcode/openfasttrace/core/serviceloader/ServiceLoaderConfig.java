@@ -6,11 +6,8 @@ import java.util.*;
 /**
  * Configuration for the service loader.
  * <p>
- * This object collects all settings that control how OFT discovers and loads
- * services (importers, exporters, and reporters). It currently holds the plugin
- * directory, whether the current class path is searched, and the plugins
- * configured at runtime. Additional options can be added here in the future
- * without changing the service loader API.
+ * This object collects all settings that control how OFT discovers and loads services (importers, exporters, and
+ * reporters).
  */
 public final class ServiceLoaderConfig
 {
@@ -28,8 +25,8 @@ public final class ServiceLoaderConfig
     /**
      * Create the default configuration.
      * <p>
-     * The default configuration searches the current class path and the default
-     * plugin directory in the user's home and configures no additional plugins.
+     * The default configuration searches the current class path and the default plugin directory in the user's home
+     * {@code ~/.oft/plugins} and configures no additional plugins.
      * 
      * @return the default configuration
      */
@@ -111,8 +108,8 @@ public final class ServiceLoaderConfig
         }
 
         /**
-         * Set the directory that is searched for plugins. Default: the
-         * {@code .oft/plugins} directory in the user's home.
+         * Set the directory that is searched for plugins. Default: the {@code .oft/plugins} directory in the user's
+         * home.
          * 
          * @param pluginsDirectory
          *            the plugin directory
@@ -125,8 +122,7 @@ public final class ServiceLoaderConfig
         }
 
         /**
-         * Set whether the current class path is searched for services. Default:
-         * {@code true}.
+         * Set whether the current class path is searched for services. Default: {@code true}.
          * 
          * @param searchCurrentClasspath
          *            {@code true} if the current class path should be searched

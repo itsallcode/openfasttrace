@@ -8,8 +8,8 @@ import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 /**
  * Builder for creating {@link Oft} instances with custom configuration.
  * <p>
- * Use this builder to configure additional plugins that OFT should load at
- * runtime in addition to the plugins discovered from the default locations.
+ * Use this builder to configure additional plugins that OFT should load at runtime in addition to the plugins
+ * discovered from the default locations.
  */
 public final class OftBuilder
 {
@@ -23,10 +23,9 @@ public final class OftBuilder
     /**
      * Add a named plugin consisting of one or more JAR files.
      * <p>
-     * All JAR files passed in one call are loaded through the same separate
-     * ClassLoader, matching the semantics of a plugin directory under
-     * {@code $HOME/.oft/plugins/<plugin-name>/}. The JAR files may contain one
-     * or more service providers; OFT loads all of them.
+     * All JAR files passed in one call are loaded through the same separate ClassLoader, matching the semantics of a
+     * plugin directory under {@code $HOME/.oft/plugins/<plugin-name>/}. The JAR files may contain one or more service
+     * providers; OFT loads all of them.
      * 
      * @param name
      *            name of the plugin, used for the ClassLoader name and logging

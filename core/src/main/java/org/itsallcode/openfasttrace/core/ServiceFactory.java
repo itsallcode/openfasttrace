@@ -19,6 +19,7 @@ class ServiceFactory
 {
     private final ServiceLoaderConfig serviceLoaderConfig;
 
+    @Deprecated
     ServiceFactory()
     {
         this(ServiceLoaderConfig.createDefault());

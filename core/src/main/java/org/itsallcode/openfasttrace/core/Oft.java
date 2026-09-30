@@ -127,8 +127,7 @@ public interface Oft
     }
 
     /**
-     * Create a builder for configuring an {@link Oft} instance, e.g. to add
-     * plugins at runtime.
+     * Create a builder for configuring an {@link Oft} instance, e.g. to add plugins at runtime.
      * 
      * @return a new {@link OftBuilder}
      */

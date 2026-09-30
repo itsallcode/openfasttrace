@@ -13,6 +13,8 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 // [utest->dsn~plugins.loading.configuration~1]
 class PluginTest
 {
@@ -20,7 +22,7 @@ class PluginTest
     Path tempDir;
 
     @Test
-    void ofCreatesPluginWithNameAndJars() throws IOException
+    void testOfCreatesPluginWithNameAndJars() throws IOException
     {
         final Path jar = createJar("plugin.jar");
         final Plugin plugin = Plugin.of("my-plugin", jar);
@@ -30,7 +32,7 @@ class PluginTest
     }
 
     @Test
-    void ofSupportsMultipleJars() throws IOException
+    void testOfSupportsMultipleJars() throws IOException
     {
         final Path jar1 = createJar("plugin.jar");
         final Path jar2 = createJar("dependency.jar");
@@ -39,7 +41,7 @@ class PluginTest
     }
 
     @Test
-    void ofRejectsNullName() throws IOException
+    void testOfRejectsNullName() throws IOException
     {
         final Path jar = createJar("plugin.jar");
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -48,7 +50,7 @@ class PluginTest
     }
 
     @Test
-    void ofRejectsBlankName() throws IOException
+    void testOfRejectsBlankName() throws IOException
     {
         final Path jar = createJar("plugin.jar");
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -57,25 +59,23 @@ class PluginTest
     }
 
     @Test
-    void ofRejectsEmptyJarList()
+    void testOfRejectsEmptyJarList()
     {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> Plugin.of("my-plugin"));
-        assertThat(exception.getMessage(),
-                equalTo("At least one plugin JAR must be given for plugin 'my-plugin'."));
+        assertThat(exception.getMessage(), equalTo("At least one plugin JAR must be given for plugin 'my-plugin'."));
     }
 
     @Test
-    void ofRejectsNullJar()
+    void testOfRejectsNullJar()
     {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> Plugin.of("my-plugin", (Path) null));
-        assertThat(exception.getMessage(),
-                equalTo("Plugin JAR path must not be null for plugin 'my-plugin'."));
+        assertThat(exception.getMessage(), equalTo("Plugin JAR path must not be null for plugin 'my-plugin'."));
     }
 
     @Test
-    void ofRejectsMissingJar()
+    void testOfRejectsMissingJar()
     {
         final Path missing = tempDir.resolve("missing.jar");
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -85,7 +85,7 @@ class PluginTest
     }
 
     @Test
-    void ofRejectsNonJarFile() throws IOException
+    void testOfRejectsNonJarFile() throws IOException
     {
         final Path file = tempDir.resolve("plugin.txt");
         Files.createFile(file);
@@ -93,6 +93,12 @@ class PluginTest
                 () -> Plugin.of("my-plugin", file));
         assertThat(exception.getMessage(),
                 equalTo("Plugin file '" + file + "' of plugin 'my-plugin' is not a JAR file."));
+    }
+
+    @Test
+    void testEqualsContract()
+    {
+        EqualsVerifier.forClass(Plugin.class).verify();
     }
 
     private Path createJar(final String fileName) throws IOException

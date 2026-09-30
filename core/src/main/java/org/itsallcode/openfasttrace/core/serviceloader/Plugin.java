@@ -98,4 +98,25 @@ public final class Plugin
     {
         return "Plugin [name=" + this.name + ", jars=" + this.jars + "]";
     }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.name, this.jars);
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Plugin other = (Plugin) obj;
+        return Objects.equals(this.name, other.name) && Objects.equals(this.jars, other.jars);
+    }
 }

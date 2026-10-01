@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Tools for Authoring OFT Documents
 parent: Tool Support
 grand_parent: User Guide
@@ -48,7 +48,3 @@ Unlike a specific plugin for a single IDE, language servers provide a standardiz
 * [User Guide](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/user-guide/README.md)
 * [Demo](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/demo/README.md)
 * [Releases](https://github.com/fgorke/openfasttrace-language-server/releases)
-
----
-
-← [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Tool Support](tool_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Templates for IDEs](templates_for_ides.md) →

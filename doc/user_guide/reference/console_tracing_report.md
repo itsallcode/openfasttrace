@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: Console Tracing Report
 parent: Reference
 grand_parent: User Guide
@@ -82,7 +82,3 @@ The ID of the implementation comes from the Tag Importer and is for its most par
 In the square brackets you find the status of the link.
 
 Just in case you are wondering about the extra spaces in some places of the report, those exist as padding to align multiple similar items in lists.
-
----
-
-← [Input Format Support](input_format_support.md) &nbsp;&nbsp;•&nbsp;&nbsp; ↑ [Reference](reference.md) &nbsp;&nbsp;•&nbsp;&nbsp; [Report Summary](report_summary.md) →

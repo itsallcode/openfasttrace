@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs
 title: About us
 nav_order: 7
 ---

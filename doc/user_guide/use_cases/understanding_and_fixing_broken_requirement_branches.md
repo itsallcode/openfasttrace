@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Understanding and Fixing Broken Requirement Branches
 parent: Use Cases
 grand_parent: User Guide

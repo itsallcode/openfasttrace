@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: XML Tracing Report
 parent: Reference
 grand_parent: User Guide

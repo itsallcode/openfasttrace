@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Excluding Parts of a Specification Document for OFT Parsing
 parent: Use Cases
 grand_parent: User Guide

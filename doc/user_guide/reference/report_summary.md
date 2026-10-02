@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Report Summary
 parent: Reference
 grand_parent: User Guide

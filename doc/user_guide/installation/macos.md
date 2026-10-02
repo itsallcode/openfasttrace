@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: macOS Installation
 parent: Installation
 grand_parent: User Guide

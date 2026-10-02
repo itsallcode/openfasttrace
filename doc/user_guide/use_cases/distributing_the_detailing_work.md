@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Distributing the Detailing Work
 parent: Use Cases
 grand_parent: User Guide

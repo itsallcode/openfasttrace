@@ -14,21 +14,21 @@ The following editors and integrated development environments are well suited fo
 |------------------------------------------------------|:-----------------------:|:-------:|:-------:|:---------------:|:--------------:|
 | [CLion](https://www.jetbrains.com/clion/)            |            y            |    y    |    y    |        y        |       y        |
 | [Gedit](https://wiki.gnome.org/Apps/Gedit)           |            y            |         |         |                 |                |
-| [Eclipse](https://eclipse.org)                       |            y            |    y    |    y    |        y        |       y        |
-| [IntelliJ](https://www.jetbrains.com/idea/)          |            y            |    y    |    y    |        y        |                |
+| [Eclipse](https://eclipse.org)                       |            y            |    y    |    y    |        y        |       y¹⁾      |
+| [IntelliJ](https://www.jetbrains.com/idea/)          |            y            |    y    |    y    |        y        |       y        |
 | [PyCharm](https://www.jetbrains.com/pycharm/)        |            y            |         |         |                 |       y        |
 | [Vim](https://www.vim.org/)                          |            y            |         |         |                 |                |
-| [Visual Studio Code](https://code.visualstudio.com/) |            y            |    y    |    y    |        y        |                |
+| [Visual Studio Code](https://code.visualstudio.com/) |            y            |    y    |    y    |        y        |       y¹⁾      |
 
 Please note that some IDEs may require additional plugins to support Markdown features.
 
-#### IDE Plugins
+¹⁾ Support via language server
 
-We offer plugins for the following popular IDEs.
+#### JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)
 
-* [JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
+We offer a plugin for the [JetBrains IDEs (CLion, PyCharm, IntelliJ, etc.)](https://github.com/itsallcode/openfasttrace-intellij-plugin)
 
-Typical features include:
+Features include:
 
 * Syntax highlighting for OFT specification item IDs
 * Symbol search for OFT specification items
@@ -36,3 +36,15 @@ Typical features include:
 * Templates for OFT specification items
 * Run configurations for OFT traces
 * In-IDE trace report
+
+#### Third-Party Plugins
+
+Check out the [OpenFastTrace Language Server](https://github.com/fgorke/openfasttrace-language-server) written by [@fgorke](https://github.com/fgorke).
+
+A big thank-you to [@fgorke](https://github.com/fgorke) for developing the OpenFastTrace Language Server!
+
+Unlike a specific plugin for a single IDE, language servers provide a standardized way to integrate language features across different IDEs (e.g., VS Code or the JetBrains IDEs).
+
+* [User Guide](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/user-guide/README.md)
+* [Demo](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/demo/README.md)
+* [Releases](https://github.com/fgorke/openfasttrace-language-server/releases)

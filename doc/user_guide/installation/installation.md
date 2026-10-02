@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Installation
 parent: User Guide
 has_children: true

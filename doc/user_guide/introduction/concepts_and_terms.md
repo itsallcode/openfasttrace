@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Concepts and Terms
 parent: Introduction
 grand_parent: User Guide

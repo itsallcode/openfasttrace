@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: OFT API
 parent: User Guide
 has_children: true

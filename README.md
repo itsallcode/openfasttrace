@@ -73,7 +73,7 @@ Sonarcloud status:
 
 If you want to use OFT, you have the choice between using it as part of your build process — typically with Maven or Gradle. Or you can run OFT from the command line.
 
-Check the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.md) for detailed information on how to use OpenFastTrace.
+Check the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.html) for detailed information on how to use OpenFastTrace.
 
 ## Installation
 
@@ -84,7 +84,7 @@ Note that only the latest version of OFT is actively supported.
 
 ### Installation
 
-You can get OFT via our [Debian APT repository](https://itsallcode/itsallcode-apt-repository), through [Homebrew](https://formulae.brew.sh/formula/openfasttrace), as [Maven plugin](https://central.sonatype.com/artifact/org.itsallcode/openfasttrace-maven-plugin) or [Gradle plugin](https://plugins.gradle.org/plugin/org.itsallcode.openfasttrace). Or you can get the [jar archive]((https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest)) via [releases on GitHub](releases).
+You can get OFT via our [Debian APT repository](https://github.com/itsallcode/itsallcode-apt-repository), through [Homebrew](https://formulae.brew.sh/formula/openfasttrace), as [Maven plugin](https://central.sonatype.com/artifact/org.itsallcode/openfasttrace-maven-plugin) or [Gradle plugin](https://plugins.gradle.org/plugin/org.itsallcode.openfasttrace). Or you can get the [jar archive](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest) via [releases on GitHub](https://github.com/itsallcode/openfasttrace/releases).
 
 Check the chapter about [Installation](https://openfasttrace.itsallcode.org/user_guide/installation/installation.html) in the user guide for details.
 
@@ -100,7 +100,7 @@ java -jar product/target/openfasttrace-4.10.0.jar trace /path/to/directory/being
 
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).
 
-For more details about how to run OFT please consult the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.md).
+For more details about how to run OFT please consult the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.html).
 
 ### Download and Execute in Continuous Integration
 
@@ -108,6 +108,6 @@ If you want to run OFT in a CI build, you can use the OFT wrapper script [oftw.s
 
 ## Development
 
-If you want to learn how to build OpenFastTrace, please check our [Developer Guide](https://openfasttrace.itsallcode.org/developer_guide/developer_guide.md).
+If you want to learn how to build OpenFastTrace, please check our [Developer Guide](https://openfasttrace.itsallcode.org/developer_guide/developer_guide.html).
 
 You would like to contribute to OFT? Please check out our [Contributor Guide](CONTRIBUTING.md) to get started. 

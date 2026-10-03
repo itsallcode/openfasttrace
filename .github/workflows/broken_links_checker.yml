@@ -20,6 +20,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+      # Asset directories in agent skills contain template relative links that only resolve when applied by the skill.
+      - name: Exclude skill asset directories
+        run: |
+          find . -type d \( -path '*/.agents/skills/*/assets*' -o -path '*/.agent/skills/*/assets*' \) -prune -exec rm -rf {} +
       # The Autosar TLS certificate cannot be validated from GitHub Actions.
       - name: Configure broken links checker
         run: |

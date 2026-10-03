@@ -6,7 +6,7 @@ permalink: /
 description: OpenFastTrace is a requirement tracing suite for Agile Development.
 ---
 
-# <img src="assets/images/openfasttrace_logo.svg" alt="OFT logo" width="150"/> OpenFastTrace
+#     OpenFastTrace
 
 ## What is OpenFastTrace?
 
@@ -30,7 +30,7 @@ Below you see a screenshot of an HTML tracing report where OFT traces itself. Yo
 ## Project Information
 
 * [💻 GitHub Repository](https://github.com/itsallcode/openfasttrace)
-* [📦 Maven Central](https://search.maven.org/search?q=g:org.itsallcode.openfasttrace%20a:openfasttrace)
+* [📦 Maven Central](https://repo1.maven.org/maven2/org/itsallcode/)
 * [📽️ Introduction Video](https://www.youtube.com/watch?v=tlzMT6RaVWA)
 * [🛗 Elevator Pitch](https://github.com/itsallcode/openfasttrace-demo/tree/main?tab=readme-ov-file#elevator-pitch)
 * [📢 Blog](https://blog.itsallcode.org/)

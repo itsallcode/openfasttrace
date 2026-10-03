@@ -1,15 +1,12 @@
 package org.itsallcode.openfasttrace.core.importer;
 
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.itsallcode.openfasttrace.api.importer.*;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.Loader;
+import org.itsallcode.openfasttrace.core.serviceloader.*;
 
 /**
  * This class is responsible for finding the matching {@link ImporterFactory}
@@ -36,11 +33,28 @@ public class ImporterFactoryLoader
      * 
      * @param context
      *            context for the new loader
+     * @deprecated Use {@link #ImporterFactoryLoader(ImporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ImporterFactoryLoader(final ImporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ImporterFactory.class, context));
+        this(InitializingServiceLoader.load(ImporterFactory.class, context, ServiceLoaderConfig.createDefault()));
+    }
+
+    /**
+     * Create a new loader for the given context that uses the given service
+     * loader configuration.
+     * 
+     * @param context
+     *            context for the new loader
+     * @param config
+     *            configuration for the service loader
+     */
+    // [impl->dsn~plugins.loading.configuration~1]
+    public ImporterFactoryLoader(final ImporterContext context, final ServiceLoaderConfig config)
+    {
+        this(InitializingServiceLoader.load(ImporterFactory.class, context, config));
     }
 
     /**

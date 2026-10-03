@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.report.*;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.Loader;
+import org.itsallcode.openfasttrace.core.serviceloader.*;
 
 /**
  * This class is responsible for finding the matching {@link ReporterFactory}
@@ -21,11 +20,29 @@ public class ReporterFactoryLoader
      * @param context
      *            the context used for initializing new
      *            {@link ReporterFactory}s.
+     * @deprecated Use {@link #ReporterFactoryLoader(ReporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ReporterFactoryLoader(final ReporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ReporterFactory.class, context));
+        this(InitializingServiceLoader.load(ReporterFactory.class, context, ServiceLoaderConfig.createDefault()));
+    }
+
+    /**
+     * Create a new {@link ReporterFactoryLoader} that uses the given service
+     * loader configuration.
+     * 
+     * @param context
+     *            the context used for initializing new
+     *            {@link ReporterFactory}s.
+     * @param config
+     *            configuration for the service loader
+     */
+    // [impl->dsn~plugins.loading.configuration~1]
+    public ReporterFactoryLoader(final ReporterContext context, final ServiceLoaderConfig config)
+    {
+        this(InitializingServiceLoader.load(ReporterFactory.class, context, config));
     }
 
     private ReporterFactoryLoader(final Loader<ReporterFactory> serviceLoader)
@@ -50,10 +67,10 @@ public class ReporterFactoryLoader
         final List<ReporterFactory> matchingReporters = getMatchingFactories(outputFormat);
         return switch (matchingReporters.size())
         {
-        case 0 -> throw new ExporterException(
+            case 0 -> throw new ExporterException(
                     "Found no matching reporter for output format '" + outputFormat + "'");
-        case 1 -> matchingReporters.get(0);
-        default -> throw new ReportException("Found more than one matching reporter for output format '"
+            case 1 -> matchingReporters.get(0);
+            default -> throw new ReportException("Found more than one matching reporter for output format '"
                     + outputFormat + "'");
         };
     }

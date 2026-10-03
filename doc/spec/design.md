@@ -192,6 +192,39 @@ Covers:
 
 Needs: impl, utest, itest
 
+### Configuring Plugins Programmatically
+`dsn~plugins.loading.configuration~1`
+
+API users configure additional plugins via `Oft.builder().addPlugin(String name, Path... jars).build()`.
+
+Each `addPlugin(...)` call defines one named plugin consisting of one or more JAR files. OFT
+loads each configured plugin through a single separate ClassLoader, matching the semantics of
+a plugin directory under `$HOME/.oft/plugins/<plugin-name>/`. A plugin's JAR files may contain
+one or more service providers; OFT loads all of them.
+
+The plugin configuration is collected in a `ServiceLoaderConfig` object that is passed to the
+service loader. This object also holds the other service loader settings (the plugin directory
+and whether the current class path is searched), so that additional options can be added
+without changing the service loader API.
+
+Configured plugins are loaded in addition to the plugins discovered from the default
+locations. Plugins included with OFT are still loaded from the current ClassPath, so
+configuring a plugin does not remove the built-in importers, exporters, and reporters.
+
+Rationale:
+
+* Embedders that resolve plugins through their own dependency mechanism cannot install them
+  in the predefined directory.
+* Grouping JARs per plugin preserves the class loader isolation between plugins.
+* A dedicated configuration object keeps the service loader API stable when new options are
+  added.
+
+Covers:
+
+* [`req~plugins.loading.configuration~1`](system_requirements.md#configuring-plugins-programmatically)
+
+Needs: impl, utest, itest
+
 ### Plugin Loader Uses Separate ClassLoaders
 `dsn~plugins.loading.separate-classloader~1`
 

@@ -1102,6 +1102,26 @@ Covers:
 
 Needs: dsn
 
+#### Configuring Plugins Programmatically
+`req~plugins.loading.configuration~1`
+
+Embedders using the OFT Java API can pass named plugins to OFT at runtime instead of relying
+on the predefined plugin installation directory. A plugin consists of a name and one or more
+JAR files.
+
+Rationale:
+
+* Embedders that resolve plugins through their own dependency mechanism (e.g. a build tool
+  plugin) cannot install them in the predefined directory.
+* A public API avoids fragile workarounds such as replacing the thread context class loader.
+* A plugin may consist of multiple JARs, so the API must allow grouping JARs into one plugin.
+* A plugin's JARs may contain multiple service providers that OFT must all load.
+
+Covers:
+* [feat~plugins~1](#third-party-plugins)
+
+Needs: dsn
+
 #### Supported Plugin Types
 `req~plugins.types~1`
 

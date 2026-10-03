@@ -124,3 +124,23 @@ Each of those classes comes with a builder which is called like this:
 ```java
 ReportSettings settings = ReportSettings.builder().newline(Newline.UNIX).build();
 ```
+
+#### Adding Plugins From Java
+
+By default OFT loads plugins from the predefined plugin directory (see [Plugins](../../plugins.md)). When you embed OFT and resolve plugins through your own dependency mechanism, you can pass plugin JARs to OFT at runtime using the `Oft` builder:
+
+```java
+final Oft oft = Oft.builder()
+        .addPlugin("my-plugin", Path.of("path/to/my-plugin.jar"))
+        .build();
+```
+
+Each `addPlugin(name, jars...)` call defines one named plugin. All JARs passed in one call are loaded through the same separate ClassLoader, so you can pass a plugin together with its dependencies:
+
+```java
+final Oft oft = Oft.builder()
+        .addPlugin("my-plugin", Path.of("my-plugin.jar"), Path.of("my-plugin-dependency.jar"))
+        .build();
+```
+
+A plugin's JARs may contain multiple service providers (importers, exporters, reporters); OFT loads all of them. Configured plugins are loaded in addition to the plugins from the default plugin directory, and the built-in importers, exporters, and reporters remain available.

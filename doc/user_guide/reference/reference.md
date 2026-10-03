@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Reference
 parent: User Guide
 has_children: true

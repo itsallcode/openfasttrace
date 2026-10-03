@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: What is Requirement Tracing?
 parent: Introduction
 grand_parent: User Guide

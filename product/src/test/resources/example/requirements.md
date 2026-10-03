@@ -23,3 +23,7 @@ Needs: src
 ## Sql
 `req~sql-source~1`
 Needs: src
+
+## Visual Basic
+`req~vb-source~1`
+Needs: src

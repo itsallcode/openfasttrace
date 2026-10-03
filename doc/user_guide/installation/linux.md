@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Linux Installation
 parent: Installation
 grand_parent: User Guide

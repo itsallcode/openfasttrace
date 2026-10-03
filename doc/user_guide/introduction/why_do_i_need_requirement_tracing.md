@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Why do I Need Requirement Tracing?
 parent: Introduction
 grand_parent: User Guide

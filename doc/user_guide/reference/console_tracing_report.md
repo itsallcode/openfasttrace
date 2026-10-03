@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Console Tracing Report
 parent: Reference
 grand_parent: User Guide

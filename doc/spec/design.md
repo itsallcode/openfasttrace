@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Design
 nav_order: 2
 parent: Specification
@@ -1508,7 +1508,7 @@ Clean-up in every importer individually. That was the case up to and including O
 The following documents or are referenced in this specification.
 
 [bib.srs]: system_requirements.md "OpenFastTrace System Requirement Specification"
-[bib.terminology]: terminology.md "OpenFastTrace Terminology"
+[bib.terminology]: ../terminology.md "OpenFastTrace Terminology"
 [bib.abnf]: ftp://ftp.rfc-editor.org/in-notes/std/std68.txt "Augmented BNF for Syntax Specifications: ABNF"
 [bib.arc42]: http://arc42.org
 

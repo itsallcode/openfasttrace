@@ -20,7 +20,7 @@ logo: "assets/images/openfasttrace_logo.svg"
 nav_external_links:
   - title: AI Skills
     url: https://github.com/itsallcode/openfasttrace-ai-skills
-  - title: OpenFastTraace on GitHub
+  - title: OpenFastTrace on GitHub
     url: https://github.com/itsallcode/openfasttrace
 
 
@@ -66,7 +66,7 @@ defaults:
   - scope:
       path: ""
     values:
-      layout: docs
+      layout: default
   - scope:
       path: "changes"
     values:

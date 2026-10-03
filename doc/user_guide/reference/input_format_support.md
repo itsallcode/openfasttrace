@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Input Format Support
 parent: Reference
 grand_parent: User Guide
@@ -107,6 +107,7 @@ recognized file types:
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
 * TypeScript (`.ts`)
+* Visual Basic (`.vb`)
 * Windows batch files (`.bat`)
 
 **Configuration and Serialization Formats** 

@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Product Lifecycle
 parent: User Guide
 has_children: true

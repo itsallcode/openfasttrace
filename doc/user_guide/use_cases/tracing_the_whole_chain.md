@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: default
 title: Tracing the Whole Chain
 parent: Use Cases
 grand_parent: User Guide

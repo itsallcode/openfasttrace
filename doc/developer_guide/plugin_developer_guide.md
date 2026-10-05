@@ -10,7 +10,7 @@ This guide describes how to develop [plugins](../plugins.md) for OpenFastTrace (
 
 ## Initial Setup
 
-1. Create a new Java project and add dependency [`org.itsallcode.openfasttrace:openfasttrace-api`](https://search.maven.org/artifact/org.itsallcode.openfasttrace/openfasttrace-api):
+1. Create a new Java project and add dependency [`org.itsallcode.openfasttrace:openfasttrace-api`](https://repo1.maven.org/maven2/org/itsallcode/openfasttrace/openfasttrace-api/):
    ```xml
    <dependency>
        <groupId>org.itsallcode.openfasttrace</groupId>

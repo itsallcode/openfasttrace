@@ -46,12 +46,10 @@ public final class Plugin
         {
             throw new IllegalArgumentException("At least one plugin JAR must be given for plugin '" + name + "'.");
         }
-        final List<Path> validatedJars = new ArrayList<>(jars.length);
-        for (final Path jar : jars)
-        {
-            validatedJars.add(validateJar(name, jar));
-        }
-        return new Plugin(name, Collections.unmodifiableList(validatedJars));
+        final List<Path> validatedJars = Arrays.stream(jars)
+                .map(jar -> validateJar(name, jar))
+                .toList();
+        return new Plugin(name, validatedJars);
     }
 
     private static Path validateJar(final String name, final Path jar)

@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class MarkdownSpanConverterTest
 {
@@ -73,6 +75,22 @@ class MarkdownSpanConverterTest
     }
 
     // [utest->dsn~reporting.html.escape-html~1]
+    @ParameterizedTest(name = "Line ''{0}'' converted to HTML ''{1}''")
+    @MethodSource("provideSpecialTestCases")
+    void assertConvertedSpecial(final String inputLine, final String expected)
+    {
+        assertThat(MarkdownSpanConverter.convertLineContent(inputLine), equalTo(expected));
+    }
+
+    private static java.util.stream.Stream<Arguments> provideSpecialTestCases()
+    {
+        return java.util.stream.Stream.of(
+            Arguments.of("`a`, `b`0`c`", "<code>a</code>, <code>b</code>0<code>c</code>"),
+            Arguments.of("`x` `y`0`z`", "<code>x</code> <code>y</code>0<code>z</code>"),
+            Arguments.of("    indented\n0`backtick`", "<pre>    indented\n</pre>0<code>backtick</code>")
+        );
+    }
+
     @ParameterizedTest(name = "Line ''{0}'' escaped as HTML ''{1}''")
     @CsvSource(
     {

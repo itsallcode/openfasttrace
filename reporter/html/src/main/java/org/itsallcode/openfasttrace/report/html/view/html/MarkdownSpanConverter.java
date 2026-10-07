@@ -70,11 +70,16 @@ final class MarkdownSpanConverter
 
     private static String restoreCodeSpans(String text, final List<String> codeSpans, final String delimiter)
     {
-        for (int i = 0; i < codeSpans.size(); i++)
+        final Pattern placeholderPattern = Pattern.compile(Pattern.quote(delimiter) + "(\\d+)" + Pattern.quote(delimiter));
+        final Matcher matcher = placeholderPattern.matcher(text);
+        final StringBuilder sb = new StringBuilder();
+        while (matcher.find())
         {
-            text = text.replace(delimiter + i + delimiter, codeSpans.get(i));
+            final int index = Integer.parseInt(matcher.group(1));
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(codeSpans.get(index)));
         }
-        return text;
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     static String escapeHtml(String text)

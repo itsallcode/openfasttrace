@@ -14,6 +14,10 @@ Fix typo and syntax in agent skills.
 
 - #612: Add support for Visual Basic in the source tag importer
 
+## Bugfixes
+
+- #574: Fixed invalid HTML when inline code contains underscores
+
 ## Documentation
 
 - #604: Fixed link to Product Lifecycle in SECURITY.md

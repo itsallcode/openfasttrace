@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.report.html.view.html;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -13,6 +14,7 @@ class MarkdownSpanConverterTest
     {
             "'    code\n', '<pre>    code\n</pre>'",
             "'    code_with_underscore\n', '<pre>    code_with_underscore\n</pre>'",
+            "'    code with `backticks` and _underscores_\n', '<pre>    code with `backticks` and _underscores_\n</pre>'",
             "'     code\n', '<pre>     code\n</pre>'",
             "'    code', '    code'",
             "`code`, <code>code</code>",
@@ -59,6 +61,15 @@ class MarkdownSpanConverterTest
     void assertConverted(final String inputLine, final String expected)
     {
         assertThat(MarkdownSpanConverter.convertLineContent(inputLine), equalTo(expected));
+    }
+
+    @Test
+    void testPlaceholderNoCollisionWithInputControlCharacters()
+    {
+        assertThat(MarkdownSpanConverter.convertLineContent("x \u00000\u0000 `y`"),
+                equalTo("x \u00000\u0000 <code>y</code>"));
+        assertThat(MarkdownSpanConverter.convertLineContent("`a` \u00001\u0000 `b`"),
+                equalTo("<code>a</code> \u00001\u0000 <code>b</code>"));
     }
 
     // [utest->dsn~reporting.html.escape-html~1]

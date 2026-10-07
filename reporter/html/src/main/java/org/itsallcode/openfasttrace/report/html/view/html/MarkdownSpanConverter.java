@@ -29,26 +29,37 @@ final class MarkdownSpanConverter
     static String convertLineContent(final String input)
     {
         String text = escapeHtml(input);
+        final String delimiter = createUniqueDelimiter(text);
         final List<String> codeSpans = new ArrayList<>();
         for (final RegexReplacement codeReplacement : CODE_REPLACEMENTS)
         {
-            text = extractCodeSpans(codeReplacement, text, codeSpans);
+            text = extractCodeSpans(codeReplacement, text, codeSpans, delimiter);
         }
         for (final RegexReplacement replacement : INLINE_MARKDOWN_REPLACEMENTS)
         {
             text = replacement.apply(text);
         }
-        return restoreCodeSpans(text, codeSpans);
+        return restoreCodeSpans(text, codeSpans, delimiter);
+    }
+
+    private static String createUniqueDelimiter(final String text)
+    {
+        String delimiter = "\u0000";
+        while (text.contains(delimiter))
+        {
+            delimiter += "\u0000";
+        }
+        return delimiter;
     }
 
     private static String extractCodeSpans(final RegexReplacement codeReplacement, final String input,
-            final List<String> codeSpans)
+            final List<String> codeSpans, final String delimiter)
     {
         final Matcher matcher = codeReplacement.pattern.matcher(input);
         final StringBuilder sb = new StringBuilder();
         while (matcher.find())
         {
-            final String placeholder = "\u0000" + codeSpans.size() + "\u0000";
+            final String placeholder = delimiter + codeSpans.size() + delimiter;
             final String converted = codeReplacement.apply(matcher.group());
             codeSpans.add(converted);
             matcher.appendReplacement(sb, Matcher.quoteReplacement(placeholder));
@@ -57,11 +68,11 @@ final class MarkdownSpanConverter
         return sb.toString();
     }
 
-    private static String restoreCodeSpans(String text, final List<String> codeSpans)
+    private static String restoreCodeSpans(String text, final List<String> codeSpans, final String delimiter)
     {
         for (int i = 0; i < codeSpans.size(); i++)
         {
-            text = text.replace("\u0000" + i + "\u0000", codeSpans.get(i));
+            text = text.replace(delimiter + i + delimiter, codeSpans.get(i));
         }
         return text;
     }

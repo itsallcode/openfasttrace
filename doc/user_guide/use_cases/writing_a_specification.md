@@ -177,6 +177,20 @@ is functionally equivalent to
 
 Tags are described in detail later in this document, see section [Distributing the Detailing Work](distributing_the_detailing_work.md#distributing-the-detailing-work).
 
+#### Notation in Multiline Text Blocks
+
+Multiline text blocks within specification items—specifically the `Description` (or implicit description text), `Rationale`, and `Comment`—support a subset of Markdown notation. When OpenFastTrace processes and renders these blocks (such as in HTML reports), the following markup elements are supported:
+
+* **Paragraphs**: Blocks of text are grouped into paragraphs separated by blank lines.
+* **Unordered Lists**: Lines starting with a bullet marker (`-`, `*`, or `+`) with up to three leading spaces create bulleted lists. Multi-line list items are supported by continuing text on following lines without an empty line in between.
+* **Ordered Lists**: Lines starting with numbers followed by a period (e.g., `1.`, `2.`) create numbered lists.
+* **Preformatted Blocks / Code**: Lines indented by at least four spaces are treated as preformatted text and rendered in `<pre>` blocks.
+* **Inline Code**: Text enclosed in backticks (`` `code` ``) is rendered as inline monospace code (`<code>`).
+* **Hyperlinks**: Markdown links in the format `[Link Text](URL)` are rendered as clickable links.
+* **Emphasis (Italics)**: Text surrounded by single asterisks (`*text*`) or single underscores (`_text_`) is formatted with emphasis (`<em>`).
+* **Strong (Bold)**: Text surrounded by double asterisks (`**text**`) or double underscores (`__text__`) is formatted in bold (`<strong>`).
+* **HTML Escaping**: Angle brackets (`<` and `>`) are automatically escaped (as `&lt;` and `&gt;`) so that code snippets, XML/HTML tags, or type parameters (such as `<T>`) are safely rendered without breaking the document structure.
+
 
 ### Quality Scenarios
 

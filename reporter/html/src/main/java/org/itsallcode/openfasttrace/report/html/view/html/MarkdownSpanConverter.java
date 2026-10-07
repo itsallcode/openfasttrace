@@ -1,6 +1,8 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class MarkdownSpanConverter
@@ -14,8 +16,9 @@ final class MarkdownSpanConverter
     private static final RegexReplacement EMPHASIZED_TEXT = RegexReplacement.create("([_*])(\\p{L}(?:.*\\p{L}))\\1",
             "<em>$2</em>");
 
-    private static final List<RegexReplacement> ALL_MARKDOWN_REPLACEMENTS = List.of(INDENTED_CODE, BACKTICK_QUOTED_CODE,
-            LINK, BOLD_TEXT, EMPHASIZED_TEXT);
+    private static final List<RegexReplacement> CODE_REPLACEMENTS = List.of(INDENTED_CODE, BACKTICK_QUOTED_CODE);
+    private static final List<RegexReplacement> INLINE_MARKDOWN_REPLACEMENTS = List.of(LINK, BOLD_TEXT,
+            EMPHASIZED_TEXT);
 
     // Prevent instantiation
     private MarkdownSpanConverter()
@@ -26,9 +29,39 @@ final class MarkdownSpanConverter
     static String convertLineContent(final String input)
     {
         String text = escapeHtml(input);
-        for (final RegexReplacement replacement : ALL_MARKDOWN_REPLACEMENTS)
+        final List<String> codeSpans = new ArrayList<>();
+        for (final RegexReplacement codeReplacement : CODE_REPLACEMENTS)
+        {
+            text = extractCodeSpans(codeReplacement, text, codeSpans);
+        }
+        for (final RegexReplacement replacement : INLINE_MARKDOWN_REPLACEMENTS)
         {
             text = replacement.apply(text);
+        }
+        return restoreCodeSpans(text, codeSpans);
+    }
+
+    private static String extractCodeSpans(final RegexReplacement codeReplacement, final String input,
+            final List<String> codeSpans)
+    {
+        final Matcher matcher = codeReplacement.pattern.matcher(input);
+        final StringBuilder sb = new StringBuilder();
+        while (matcher.find())
+        {
+            final String placeholder = "\u0000" + codeSpans.size() + "\u0000";
+            final String converted = codeReplacement.apply(matcher.group());
+            codeSpans.add(converted);
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(placeholder));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    private static String restoreCodeSpans(String text, final List<String> codeSpans)
+    {
+        for (int i = 0; i < codeSpans.size(); i++)
+        {
+            text = text.replace("\u0000" + i + "\u0000", codeSpans.get(i));
         }
         return text;
     }

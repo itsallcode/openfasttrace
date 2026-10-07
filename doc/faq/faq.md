@@ -1,7 +1,5 @@
 ---
-layout: default
 title: Frequently Asked Questions
-parent: Developer Guide
 nav_order: 7
 ---
 

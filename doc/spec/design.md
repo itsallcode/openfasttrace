@@ -198,7 +198,7 @@ Needs: impl, utest, itest
 API users configure additional plugins via `Oft.builder().addPlugin(String name, Path... jars).build()`.
 
 Each `addPlugin(...)` call defines one named plugin consisting of one or more JAR files. OFT
-loads each configured plugin through a single separate ClassLoader, matching the semantics of
+loads each configured plugin through a single separate ClassLoader, just like
 a plugin directory under `$HOME/.oft/plugins/<plugin-name>/`. A plugin's JAR files may contain
 one or more service providers; OFT loads all of them.
 

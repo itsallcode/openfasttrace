@@ -8,8 +8,7 @@ import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 /**
  * Builder for creating {@link Oft} instances with custom configuration.
  * <p>
- * Use this builder to configure additional plugins that OFT should load at runtime in addition to the plugins
- * discovered from the default locations.
+ * Use this builder to create a new {@link Oft} instance with custom configuration.
  */
 public final class OftBuilder
 {

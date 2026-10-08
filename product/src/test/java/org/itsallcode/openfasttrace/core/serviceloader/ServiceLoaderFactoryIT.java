@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.core.serviceloader;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +13,11 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.itsallcode.openfasttrace.api.ReportSettings;
+import org.itsallcode.openfasttrace.api.core.Trace;
+import org.itsallcode.openfasttrace.api.report.ReportException;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
+import org.itsallcode.openfasttrace.core.Oft;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.opentest4j.TestAbortedException;
@@ -103,6 +108,33 @@ class ServiceLoaderFactoryIT
                     () -> assertThat(pluginClassLoader,
                             not(sameInstance(Thread.currentThread().getContextClassLoader()))));
         }
+    }
+
+    // [itest->dsn~plugins.loading.configuration~1]
+    @Test
+    void configuredPluginLoadedThroughBuilder() throws IOException
+    {
+        final Path plaintextJar = findPluginJar(Path.of("../reporter/plaintext/target"),
+                Pattern.compile("openfasttrace-reporter-plaintext-\\d+\\.\\d+\\.\\d+\\.jar"));
+        final Trace emptyTrace = Trace.builder().items(List.of()).defectItems(List.of()).build();
+        // Control: without a configured plugin the built-in "plain" reporter is found and succeeds
+        final Path controlReport = tempDir.resolve("control.txt");
+        Oft.create().reportToPath(emptyTrace, controlReport);
+        assertThat(Files.readString(controlReport), startsWith("ok - 0 total"));
+
+        // Configure same reporter as plugin, loading it a second time.
+        // With two plugins for the "plain" format fails.
+        final Oft oft = Oft.builder().addPlugin("plaintext", plaintextJar).build();
+        final Path plainReport = tempDir.resolve("plain.txt");
+        final ReportException exception = assertThrows(ReportException.class,
+                () -> oft.reportToPath(emptyTrace, plainReport));
+        assertThat(exception.getMessage(),
+                equalTo("Found more than one matching reporter for output format 'plain'"));
+
+        // Adding plugin does not remove other reporters: html reporter is still available.
+        final Path htmlReport = tempDir.resolve("report.html");
+        oft.reportToPath(emptyTrace, htmlReport, ReportSettings.builder().outputFormat("html").build());
+        assertThat(Files.readString(htmlReport), startsWith("<!DOCTYPE html>"));
     }
 
     private void preparePlugin(final Path targetDir, final Pattern filePattern) throws TestAbortedException, IOException

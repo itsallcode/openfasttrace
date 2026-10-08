@@ -150,6 +150,13 @@ class TestMarkdownConverter
     }
 
     @Test
+    void testConvertCodeWithUnderscores()
+    {
+        assertConverted("Workflows that run in `pull_request_target` context must not write `GITHUB_OUTPUT`.",
+                "<p>Workflows that run in <code>pull_request_target</code> context must not write <code>GITHUB_OUTPUT</code>.</p>");
+    }
+
+    @Test
     void testConvertLink()
     {
         assertConverted("See [link label](#link-target) for details.",

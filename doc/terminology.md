@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Terminology
 nav_order: 5
 ---
@@ -86,7 +85,7 @@ The atomic unit of a specification, representing a requirement, design decision,
 Unique identifier of a [specification item](#specification-item), consisting of [artifact type](#artifact-type), [name](#specification-item-name), and [revision](#specification-item-revision).
 
 ### Specification Item Name
-The unique name part of a [specification item ID](#specification-item-id).
+The unique name-part of a [specification item ID](#specification-item-id).
 
 ### Specification Item Revision
 Number in the [specification item ID](#specification-item-id) used to invalidate coverage when an item's meaning changes.
@@ -108,6 +107,14 @@ Label for categorizing [specification items](#specification-item), used for filt
 
 ### Terminating Specification Item
 A [specification item](#specification-item) that does not require further coverage (e.g., code, tests).
+
+Example:
+
+```
+"feat" ──needs──> "req" ──needs──> "dsn" ──needs──> "impl"  (terminates chain)
+                                             ├────> "utest" (terminates chain)
+                                             ╰────> "itest" (terminates chain)
+```
 
 ### Transitive Defect
 Coverage gap caused by an [undercovered](#undercovered) [provider](#coverage-provider) in the trace chain.

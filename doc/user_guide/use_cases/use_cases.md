@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Use Cases
 parent: User Guide
 has_children: true
@@ -14,6 +13,7 @@ The following use cases describe common tasks and workflows when using OpenFastT
 * **[Writing a Specification](writing_a_specification.md)**: Learn how to author requirement specifications using Markdown and OFT-readable specification items.
 * **[Excluding Parts of a Specification Document for OFT Parsing](excluding_parts_of_a_specification_document_for_oft_parsing.md)**: Use `oft:on|off` tokens to exclude specific sections or whole documents from being scanned by OFT.
 * **[Delegating Requirement Coverage](delegating_requirement_coverage.md)**: Use shorthand notation to forward the responsibility of covering a specification item to different artifact types.
+* **[Partial Tracing by Responsibility](partial_tracing_by_responsibility.md)**: Filter by artifact types to verify requirement coverage layer by layer according to team roles and responsibilities.
 * **[Distributing the Detailing Work](distributing_the_detailing_work.md)**: Use tags to split the architecture and distribute work across different teams.
 * **[Filtering by Status](filtering_by_status.md)**: Create reports that only include specification items matching specific maturity levels (e.g., approved).
 * **[Tracing the Whole Chain](tracing_the_whole_chain.md)**: Assess the coverage state of your entire product by tracing the full chain of artifacts.

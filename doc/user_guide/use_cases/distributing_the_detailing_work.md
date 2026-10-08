@@ -1,9 +1,8 @@
 ---
-layout: default
 title: Distributing the Detailing Work
 parent: Use Cases
 grand_parent: User Guide
-nav_order: 4
+nav_order: 5
 ---
 
 ### Distributing the Detailing Work

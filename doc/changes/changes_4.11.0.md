@@ -17,6 +17,10 @@ The user guide documentation now has automatic lateral navigation.
 * #610: Allow adding plugins via configuration using `Oft.builder().addPlugin(name, jars...)`
 * #612: Add support for Visual Basic in the source tag importer
 
+## Bugfixes
+
+- #574: Fixed invalid HTML when inline code contains underscores
+
 ## Documentation
 
 * #604: Fixed link to Product Lifecycle in SECURITY.md

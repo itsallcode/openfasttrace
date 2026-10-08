@@ -47,29 +47,29 @@ final class MarkdownSpanConverter
             final List<String> codeSpans)
     {
         final Matcher matcher = codeReplacement.pattern.matcher(input);
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         while (matcher.find())
         {
             final String placeholder = ZERO_SEPARATOR + codeSpans.size() + ZERO_SEPARATOR;
             final String converted = codeReplacement.apply(matcher.group());
             codeSpans.add(converted);
-            matcher.appendReplacement(sb, Matcher.quoteReplacement(placeholder));
+            matcher.appendReplacement(builder, Matcher.quoteReplacement(placeholder));
         }
-        matcher.appendTail(sb);
-        return sb.toString();
+        matcher.appendTail(builder);
+        return builder.toString();
     }
 
     private static String restoreCodeSpans(final String text, final List<String> codeSpans)
     {
         final Matcher matcher = PLACEHOLDER_PATTERN.matcher(text);
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         while (matcher.find())
         {
             final int index = Integer.parseInt(matcher.group(1));
-            matcher.appendReplacement(sb, Matcher.quoteReplacement(codeSpans.get(index)));
+            matcher.appendReplacement(builder, Matcher.quoteReplacement(codeSpans.get(index)));
         }
-        matcher.appendTail(sb);
-        return sb.toString();
+        matcher.appendTail(builder);
+        return builder.toString();
     }
 
     static String escapeHtml(String text)

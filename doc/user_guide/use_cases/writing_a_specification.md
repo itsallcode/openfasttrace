@@ -191,6 +191,10 @@ Multiline text blocks within specification items—specifically the `Description
 * **Strong (Bold)**: Text surrounded by double asterisks (`**text**`) or double underscores (`__text__`) is formatted in bold (`<strong>`).
 * **HTML Escaping**: Angle brackets (`<` and `>`) are automatically escaped (as `&lt;` and `&gt;`) so that code snippets, XML/HTML tags, or type parameters (such as `<T>`) are safely rendered without breaking the document structure.
 
+##### Constraints on Multiline Text Blocks
+
+* **No Zero Characters**: Original multiline texts must not contain zero characters (NUL / `\0`). Any zero characters present in the text are removed before rendering.
+
 
 ### Quality Scenarios
 

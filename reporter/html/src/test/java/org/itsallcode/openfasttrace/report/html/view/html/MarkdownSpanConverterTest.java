@@ -66,12 +66,12 @@ class MarkdownSpanConverterTest
     }
 
     @Test
-    void testPlaceholderNoCollisionWithInputControlCharacters()
+    void testZeroCharactersStrippedBeforeRendering()
     {
         assertThat(MarkdownSpanConverter.convertLineContent("x \u00000\u0000 `y`"),
-                equalTo("x \u00000\u0000 <code>y</code>"));
+                equalTo("x 0 <code>y</code>"));
         assertThat(MarkdownSpanConverter.convertLineContent("`a` \u00001\u0000 `b`"),
-                equalTo("<code>a</code> \u00001\u0000 <code>b</code>"));
+                equalTo("<code>a</code> 1 <code>b</code>"));
     }
 
     // [utest->dsn~reporting.html.escape-html~1]

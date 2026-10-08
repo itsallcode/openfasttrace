@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 final class MarkdownSpanConverter
 {
+    private static final String ZERO_SEPARATOR = "\0";
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile(ZERO_SEPARATOR + "(\\d+)" + ZERO_SEPARATOR);
     private static final RegexReplacement INDENTED_CODE = RegexReplacement.create("(    .*[\n])+", "<pre>$1</pre>");
     private static final RegexReplacement BACKTICK_QUOTED_CODE = RegexReplacement.create("`(.*?)`", "<code>$1</code>");
     private static final RegexReplacement LINK = RegexReplacement.create("\\[([^]]*?)\\]\\(([^)].*?)\\)",
@@ -28,38 +30,27 @@ final class MarkdownSpanConverter
     // [impl->dsn~reporting.html.escape-html~1]
     static String convertLineContent(final String input)
     {
-        String text = escapeHtml(input);
-        final String delimiter = createUniqueDelimiter(text);
+        String text = escapeHtml(input).replace(ZERO_SEPARATOR, "");
         final List<String> codeSpans = new ArrayList<>();
         for (final RegexReplacement codeReplacement : CODE_REPLACEMENTS)
         {
-            text = extractCodeSpans(codeReplacement, text, codeSpans, delimiter);
+            text = extractCodeSpans(codeReplacement, text, codeSpans);
         }
         for (final RegexReplacement replacement : INLINE_MARKDOWN_REPLACEMENTS)
         {
             text = replacement.apply(text);
         }
-        return restoreCodeSpans(text, codeSpans, delimiter);
-    }
-
-    private static String createUniqueDelimiter(final String text)
-    {
-        String delimiter = "\u0000";
-        while (text.contains(delimiter))
-        {
-            delimiter += "\u0000";
-        }
-        return delimiter;
+        return restoreCodeSpans(text, codeSpans);
     }
 
     private static String extractCodeSpans(final RegexReplacement codeReplacement, final String input,
-            final List<String> codeSpans, final String delimiter)
+            final List<String> codeSpans)
     {
         final Matcher matcher = codeReplacement.pattern.matcher(input);
         final StringBuilder sb = new StringBuilder();
         while (matcher.find())
         {
-            final String placeholder = delimiter + codeSpans.size() + delimiter;
+            final String placeholder = ZERO_SEPARATOR + codeSpans.size() + ZERO_SEPARATOR;
             final String converted = codeReplacement.apply(matcher.group());
             codeSpans.add(converted);
             matcher.appendReplacement(sb, Matcher.quoteReplacement(placeholder));
@@ -68,10 +59,9 @@ final class MarkdownSpanConverter
         return sb.toString();
     }
 
-    private static String restoreCodeSpans(String text, final List<String> codeSpans, final String delimiter)
+    private static String restoreCodeSpans(final String text, final List<String> codeSpans)
     {
-        final Pattern placeholderPattern = Pattern.compile(Pattern.quote(delimiter) + "(\\d+)" + Pattern.quote(delimiter));
-        final Matcher matcher = placeholderPattern.matcher(text);
+        final Matcher matcher = PLACEHOLDER_PATTERN.matcher(text);
         final StringBuilder sb = new StringBuilder();
         while (matcher.find())
         {

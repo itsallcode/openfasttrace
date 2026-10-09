@@ -170,6 +170,7 @@ public class RestructuredTextImporter extends AbstractLightWeightMarkupImporter
             transition(NEEDS_LINE , TAGS       , RstPattern.TAGS       , () -> {}                           ),
             transition(NEEDS_LINE , START      , RstPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
+            // [impl->dsn~md.tags-format~1]
             transition(TAGS       , TAGS       , RstPattern.TAG_ENTRY  , this::addTag                       ),
             transition(TAGS       , TITLE      , SECTION_TITLE         , () -> {endItem(); rememberTitle();}),
             transition(TAGS       , SPEC_ITEM  , RstPattern.ID         , this::beginItem                    ),

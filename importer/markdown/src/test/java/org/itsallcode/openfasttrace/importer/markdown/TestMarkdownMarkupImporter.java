@@ -342,4 +342,86 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                         .location("disable_parsing.md", 1)
                         .build()));
     }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testSingleLineTagsFormat()
+    {
+        assertImport("tags_single.md", """
+                req~single-line-tags~1
+                Tags: feature_1, Release_2_0, 42_tag
+                """, contains(item()
+                .id("req", "single-line-tags", 1)
+                .addTag("feature_1")
+                .addTag("Release_2_0")
+                .addTag("42_tag")
+                .location("tags_single.md", 1)
+                .build()));
+    }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testSingleLineTagsMalformedMixedList()
+    {
+        assertImport("tags_single_mixed.md", """
+                req~single-mixed-tags~1
+                Tags: valid_1, _invalid, valid_2, -bad, valid_3
+                """, contains(item()
+                .id("req", "single-mixed-tags", 1)
+                .addTag("valid_1")
+                .addTag("valid_2")
+                .addTag("valid_3")
+                .location("tags_single_mixed.md", 1)
+                .build()));
+    }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testSingleLineTagsAllMalformedProducesEmptyTags()
+    {
+        assertImport("tags_single_invalid.md", """
+                req~single-invalid-tags~1
+                Tags: _invalid, -bad, täg
+                """, contains(item()
+                .id("req", "single-invalid-tags", 1)
+                .location("tags_single_invalid.md", 1)
+                .build()));
+    }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testBulletedTagsFormat()
+    {
+        assertImport("tags_list.md", """
+                req~bulleted-tags~1
+                Tags:
+                * feature_1
+                * Release_2_0
+                * 42_tag
+                """, contains(item()
+                .id("req", "bulleted-tags", 1)
+                .addTag("feature_1")
+                .addTag("Release_2_0")
+                .addTag("42_tag")
+                .location("tags_list.md", 1)
+                .build()));
+    }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testBulletedTagsMalformedMixedList()
+    {
+        assertImport("tags_mixed.md", """
+                req~mixed-tags~1
+                Tags:
+                * valid_1
+                * _invalid
+                * valid_2
+                """, contains(item()
+                .id("req", "mixed-tags", 1)
+                .addTag("valid_1")
+                .addTag("valid_2")
+                .location("tags_mixed.md", 1)
+                .build()));
+    }
 }

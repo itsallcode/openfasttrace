@@ -159,6 +159,7 @@ class MarkdownImporter extends AbstractLightWeightMarkupImporter
                 transition(NEEDS_LIST , TAGS       , MdPattern.TAGS       , () -> {}                           ),
                 transition(NEEDS_LIST , START      , MdPattern.FORWARD    , () -> {endItem(); forward();}      ),
 
+                // [impl->dsn~md.tags-format~1]
                 transition(TAGS       , TAGS       , MdPattern.TAG_ENTRY  , this::addTag                       ),
                 transition(TAGS       , SPEC_ITEM  , MdPattern.ID         , this::beginItem                    ),
                 transition(TAGS       , TITLE      , SECTION_TITLE        , () -> {endItem(); rememberTitle();}),

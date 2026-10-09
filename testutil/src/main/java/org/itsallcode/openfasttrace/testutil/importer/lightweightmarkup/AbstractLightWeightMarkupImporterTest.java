@@ -218,22 +218,40 @@ public abstract class AbstractLightWeightMarkupImporterTest
                 Arguments.of("Tags: req,dsn", List.of("req", "dsn")),
                 Arguments.of("Tags: req,\tdsn\n", List.of("req", "dsn")),
                 Arguments.of("Tags:req,dsn", List.of("req", "dsn")),
+                Arguments.of("Tags: 1_req, 2", List.of("1_req", "2")),
+                Arguments.of("Tags: a", List.of("a")),
+                Arguments.of("Tags: 1", List.of("1")),
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")),
                 Arguments.of("Tags:\n * req\n * dsn\n", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req \n\t* dsn ", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req\n* dsn", List.of("req", "dsn")),
                 Arguments.of("Tags:\n* req_1\n* dsn_2", List.of("req_1", "dsn_2")),
+                Arguments.of("Tags:\n* 1_req\n* 2", List.of("1_req", "2")),
+                Arguments.of("Tags:\n* a\n* 1", List.of("a", "1")),
+                Arguments.of("Tags:\n+ req\n+ dsn", List.of("req", "dsn")),
+                Arguments.of("Tags:\n- req\n- dsn", List.of("req", "dsn")),
 
-                // Inconsistent behavior, see
-                // https://github.com/itsallcode/openfasttrace/issues/423
-                Arguments.of("Tags: _ ", List.of("_")),
-                Arguments.of("Tags: täg1, taeg2", List.of()),
-                Arguments.of("Tags: _tag1, taeg2", List.of("_tag1", "taeg2")),
-                Arguments.of("Tags: -dash, tag", List.of()),
-                Arguments.of("Tags:\n* tag1\n* täg2", List.of("tag1", "täg2")),
-                Arguments.of("Tags:\n* -tag1\n* täg2", List.of("-tag1", "täg2")));
+                // Regression test for #423:
+                // In both declaration variants, individual invalid tags are rejected while valid tags are imported.
+                Arguments.of("Tags: _ ", List.of()),
+                Arguments.of("Tags: täg1, taeg2", List.of("taeg2")),
+                Arguments.of("Tags: _tag1, taeg2", List.of("taeg2")),
+                Arguments.of("Tags: tag1, -tag2", List.of("tag1")),
+                Arguments.of("Tags: -dash, tag", List.of("tag")),
+                Arguments.of("Tags: tag1, tag-2", List.of("tag1")),
+                Arguments.of("Tags: tag1, tag#2", List.of("tag1")),
+                Arguments.of("Tags: tag1, tag 2", List.of("tag1")),
+                Arguments.of("Tags:\n* tag1\n* täg2", List.of("tag1")),
+                Arguments.of("Tags:\n* -tag1\n* täg2", List.of()),
+                Arguments.of("Tags:\n* _tag1\n* tag2", List.of("tag2")),
+                Arguments.of("Tags:\n* tag1\n* _tag2", List.of("tag1")),
+                Arguments.of("Tags:\n* tag1\n* -tag2", List.of("tag1")),
+                Arguments.of("Tags:\n* _", List.of()),
+                Arguments.of("Tags:\n* tag#1", List.of()),
+                Arguments.of("Tags:\n* tag 1", List.of()));
     }
 
+    // [utest -> dsn~md.tags-format~1]
     @ParameterizedTest
     @MethodSource("tags")
     void testTags(final String mdContent, final List<String> expected)

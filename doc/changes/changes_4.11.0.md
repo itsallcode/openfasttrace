@@ -19,7 +19,8 @@ The user guide documentation now has automatic lateral navigation.
 
 ## Bugfixes
 
-- #574: Fixed invalid HTML when inline code contains underscores
+* #423: Fixed tag parsing inconsistency in Markdown and reStructuredText importers
+* #574: Fixed invalid HTML when inline code contains underscores
 
 ## Documentation
 

@@ -1,5 +1,7 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
+import java.util.regex.Pattern;
+
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
 import org.itsallcode.openfasttrace.api.importer.Importer;
@@ -14,6 +16,9 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
  */
 public abstract class AbstractLightWeightMarkupImporter implements Importer, LineReaderCallback
 {
+    @SuppressWarnings("java:S5867") // Intentionally only allow ASCII letters in tags.
+    private static final Pattern TAG_PATTERN = Pattern.compile("\\p{Alnum}\\w*");
+
     /** File to be imported */
     protected final InputFile file;
     /** Listener for import events */
@@ -288,15 +293,21 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));
     }
 
+
     /**
      * Add one or more tags.
      */
+    // [impl->dsn~md.tags-format~1]
     protected void addTag()
     {
         final String tags = this.stateMachine.getLastToken();
         for (final String tag : tags.split(","))
         {
-            this.listener.addTag(tag.trim());
+            final String trimmed = tag.trim();
+            if (TAG_PATTERN.matcher(trimmed).matches())
+            {
+                this.listener.addTag(trimmed);
+            }
         }
     }
 

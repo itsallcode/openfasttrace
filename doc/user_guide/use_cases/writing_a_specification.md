@@ -175,7 +175,24 @@ is functionally equivalent to
 
 ##### `Tags`
 
-Tags are described in detail later in this document, see section [Distributing the Detailing Work](distributing_the_detailing_work.md#distributing-the-detailing-work).
+The `Tags` keyword assigns one or more tags to a specification item. Tags can be used to filter specification items during import and processing (see [Distributing the Detailing Work](distributing_the_detailing_work.md#distributing-the-detailing-work) and [Import options](../reference/oft_command_line.md#import-options)).
+
+Tags must consist of one or more characters. The first character must be an ASCII letter (`a-z`, `A-Z`) or digit (`0-9`), and subsequent characters may additionally contain underscores (`_`).
+
+`Tags` can be declared in two formats:
+
+**Variant a) Single-line comma-separated list**
+
+    Tags: AuthenticationProvider, ServiceDiscovery, MapProvider
+
+**Variant b) Itemized list**
+
+    Tags:
+    - AuthenticationProvider
+    - ServiceDiscovery
+    - MapProvider
+
+Bullet characters `*`, `+`, or `-` can be used for the itemized list. When importing tag declarations, any invalid or malformed tag entries are ignored, while all valid tags are imported.
 
 #### Notation in Multiline Text Blocks
 

@@ -18,6 +18,7 @@ import org.itsallcode.openfasttrace.api.exporter.ExporterException;
 import org.itsallcode.openfasttrace.api.report.*;
 import org.itsallcode.openfasttrace.core.report.ReportService;
 import org.itsallcode.openfasttrace.core.report.ReporterFactoryLoader;
+import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -95,7 +96,8 @@ class TestReportService
 
     private ReportService createService(final ReportSettings settings)
     {
-        return new ReportService(new ReporterFactoryLoader(new ReporterContext(settings)));
+        return new ReportService(
+                new ReporterFactoryLoader(new ReporterContext(settings), ServiceLoaderConfig.createDefault()));
     }
 
     private Path createReadOnlyFile(final Path tempDir) throws IOException

@@ -4,8 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.itsallcode.openfasttrace.api.exporter.*;
-import org.itsallcode.openfasttrace.core.serviceloader.InitializingServiceLoader;
-import org.itsallcode.openfasttrace.core.serviceloader.Loader;
+import org.itsallcode.openfasttrace.core.serviceloader.*;
 
 /**
  * This class is responsible for finding the matching {@link ExporterFactory}
@@ -20,11 +19,28 @@ public class ExporterFactoryLoader
      * 
      * @param context
      *            the context for the new loader.
+     * @deprecated Use {@link #ExporterFactoryLoader(ExporterContext, ServiceLoaderConfig)} instead.
      */
+    @Deprecated(since = "4.11.0", forRemoval = true)
     public ExporterFactoryLoader(final ExporterContext context)
     {
         // [impl->dsn~plugins.loading.plugin-types~1]
-        this(InitializingServiceLoader.load(ExporterFactory.class, context));
+        this(InitializingServiceLoader.load(ExporterFactory.class, context, ServiceLoaderConfig.createDefault()));
+    }
+
+    /**
+     * Create a new loader for the given context that uses the given service
+     * loader configuration.
+     * 
+     * @param context
+     *            the context for the new loader.
+     * @param config
+     *            configuration for the service loader
+     */
+    // [impl->dsn~plugins.loading.configuration~1]
+    public ExporterFactoryLoader(final ExporterContext context, final ServiceLoaderConfig config)
+    {
+        this(InitializingServiceLoader.load(ExporterFactory.class, context, config));
     }
 
     ExporterFactoryLoader(final Loader<ExporterFactory> serviceLoader)
@@ -49,13 +65,10 @@ public class ExporterFactoryLoader
         final List<ExporterFactory> matchingExporters = getMatchingFactories(outputFormat);
         return switch (matchingExporters.size())
         {
-        case 0 ->
-            throw new ExporterException(
+            case 0 -> throw new ExporterException(
                     "Found no matching exporter for output format '" + outputFormat + "'");
-        case 1 ->
-            matchingExporters.get(0);
-        default ->
-            throw new ExporterException("Found more than one matching exporter for output format '"
+            case 1 -> matchingExporters.get(0);
+            default -> throw new ExporterException("Found more than one matching exporter for output format '"
                     + outputFormat + "'");
         };
     }

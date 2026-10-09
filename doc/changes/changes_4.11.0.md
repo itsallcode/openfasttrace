@@ -19,7 +19,8 @@ The user guide documentation now has automatic lateral navigation.
 
 ## Bugfixes
 
-- #574: Fixed invalid HTML when inline code contains underscores
+* #401: Added regression test for RST parser corner case (issue was fixed already)
+* #574: Fixed invalid HTML when inline code contains underscores
 
 ## Documentation
 

@@ -1,9 +1,8 @@
 ---
-layout: default
 title: Filtering by Status
 parent: Use Cases
 grand_parent: User Guide
-nav_order: 5
+nav_order: 6
 ---
 
 ### Filtering by Status

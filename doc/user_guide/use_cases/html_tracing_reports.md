@@ -1,9 +1,8 @@
 ---
-layout: default
 title: HTML Tracing Reports
 parent: Use Cases
 grand_parent: User Guide
-nav_order: 8
+nav_order: 9
 ---
 
 ### HTML Tracing Reports

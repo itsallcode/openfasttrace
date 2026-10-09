@@ -1,9 +1,8 @@
 ---
-layout: default
 title: Tracing the Whole Chain in the Same File System
 parent: Use Cases
 grand_parent: User Guide
-nav_order: 7
+nav_order: 8
 ---
 
 ### Tracing the Whole Chain in the Same File System

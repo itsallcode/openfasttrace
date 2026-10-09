@@ -1,9 +1,8 @@
 ---
-layout: default
 title: Tracing the Whole Chain
 parent: Use Cases
 grand_parent: User Guide
-nav_order: 6
+nav_order: 7
 ---
 
 ### Tracing the Whole Chain

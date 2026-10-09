@@ -13,8 +13,8 @@ import org.itsallcode.openfasttrace.api.importer.ImporterFactory;
 import org.itsallcode.openfasttrace.api.report.ReporterContext;
 import org.itsallcode.openfasttrace.api.report.ReporterFactory;
 import org.itsallcode.openfasttrace.exporter.specobject.SpecobjectExporterFactory;
-import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.gherkin.GherkinImporterFactory;
+import org.itsallcode.openfasttrace.importer.markdown.MarkdownImporterFactory;
 import org.itsallcode.openfasttrace.importer.restructuredtext.RestructuredTextImporterFactory;
 import org.itsallcode.openfasttrace.importer.specobject.SpecobjectImporterFactory;
 import org.itsallcode.openfasttrace.importer.tag.TagImporterFactory;
@@ -36,7 +36,7 @@ class TestInitializingServiceLoader
     {
         final Object context = new Object();
         final Loader<InitializableServiceStub> voidServiceLoader = InitializingServiceLoader
-                .load(InitializableServiceStub.class, context);
+                .load(InitializableServiceStub.class, context, ServiceLoaderConfig.createDefault());
         final List<InitializableServiceStub> services = voidServiceLoader.load().toList();
         assertThat(services, emptyIterable());
         assertThat(voidServiceLoader.load().toList(), emptyIterable());
@@ -95,10 +95,10 @@ class TestInitializingServiceLoader
         }
     }
 
-    private <T extends Initializable<C>, C> List<T> getRegisteredServices(final Class<T> type,
-            final C context)
+    private <T extends Initializable<C>, C> List<T> getRegisteredServices(final Class<T> type, final C context)
     {
-        final Loader<T> serviceLoader = InitializingServiceLoader.load(type, context);
+        final Loader<T> serviceLoader = InitializingServiceLoader.load(type, context,
+                ServiceLoaderConfig.createDefault());
         return serviceLoader.load().toList();
     }
 

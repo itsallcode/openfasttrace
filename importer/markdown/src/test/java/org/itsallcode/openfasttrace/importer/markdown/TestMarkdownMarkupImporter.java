@@ -424,4 +424,25 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 .location("tags_mixed.md", 1)
                 .build()));
     }
+
+    // [utest->dsn~md.tags-format~1]
+    @Test
+    void testInlineAndBulletedTags()
+    {
+        assertImport("tags_inline_and_bulleted.md", """
+                req~inline-and-bulleted-tags~1
+                Tags: feature_1, feature_2
+                * 1st_bullet
+                + 2nd_bullet
+                - 3rd_bullet
+                """, contains(item()
+                .id("req", "inline-and-bulleted-tags", 1)
+                .addTag("feature_1")
+                .addTag("feature_2")
+                .addTag("1st_bullet")
+                .addTag("2nd_bullet")
+                .addTag("3rd_bullet")
+                .location("tags_inline_and_bulleted.md", 1)
+                .build()));
+    }
 }

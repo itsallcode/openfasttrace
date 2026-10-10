@@ -250,4 +250,70 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                         .location("disable_parsing.rst", 1)
                         .build()));
     }
+
+    // Regression test for GitHub Issue #401
+    // [utest->dsn~md.specification-item-title~1]
+    @ParameterizedTest
+    @ValueSource(strings = { "--------------", "##############" })
+    void testImportsMultipleItemsWithRstUnderlineHeadings(final String underline)
+    {
+        assertImport("tmp.rst", """
+                This is the main heading
+                ========================
+
+                The following are the requirements related to domain creation.
+
+                Item 1 heading
+                %s
+
+                `XenSSR~item1~1`
+
+                Description:
+                Item 1 descrip.
+
+                Rationale:
+                Item 1 rationale.
+
+                Item 2 heading
+                %s
+
+                `XenSSR~item2~1`
+
+                Description:
+                Item 2 descrip.
+
+                Rationale:
+                Item 2 rationale.
+
+                Item 3 heading
+                %s
+
+                `XenSSR~item3~1`
+
+                Description:
+                Item 3 descrip.
+
+                Rationale:
+                Item 3 rationale.
+                """.formatted(underline, underline, underline),
+                contains(
+                        item().id(createId("XenSSR", "item1", 1))
+                                .title("Item 1 heading")
+                                .description("Item 1 descrip.")
+                                .rationale("Item 1 rationale.")
+                                .location("tmp.rst", 9)
+                                .build(),
+                        item().id(createId("XenSSR", "item2", 1))
+                                .title("Item 2 heading")
+                                .description("Item 2 descrip.")
+                                .rationale("Item 2 rationale.")
+                                .location("tmp.rst", 20)
+                                .build(),
+                        item().id(createId("XenSSR", "item3", 1))
+                                .title("Item 3 heading")
+                                .description("Item 3 descrip.")
+                                .rationale("Item 3 rationale.")
+                                .location("tmp.rst", 31)
+                                .build()));
+    }
 }

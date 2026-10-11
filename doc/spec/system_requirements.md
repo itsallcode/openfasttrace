@@ -332,6 +332,22 @@ Covers:
 
 Needs: dsn
 
+##### Tag Format
+`req~tag-format~1`
+
+Tags assigned to specification items in lightweight markup documents must have one or more characters. The first character of a tag must be an ASCII letter or digit. Subsequent characters may additionally contain underscores (`_`). When importing tag declarations (single-line comma-separated lists or itemized lists), invalid tags are rejected while valid tags are imported.
+
+Rationale:
+
+The tag format is easy to parse and robust. It is also in line with what most other programs would consider a valid tag, which is important for interoperability.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+* [feat~rst-import~1](#restructured-text-rst-import)
+
+Needs: dsn
+
 #### Markdown
 
 Markdown is a simple ASCII-based markup format that is designed to be human-readable in the source. While it can be rendered into HTML, it is perfectly eye-friendly even before rendering.

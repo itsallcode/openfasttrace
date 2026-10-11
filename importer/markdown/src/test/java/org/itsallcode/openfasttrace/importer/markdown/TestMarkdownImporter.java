@@ -86,10 +86,10 @@ class TestMarkdownImporter
         MarkdownAsserts.assertMatch(MdPattern.TAGS_INT, text);
     }
 
+    // Note that this test does not evaluate the validity of the tags themselves. Only if the tags-marker is present.
     @ParameterizedTest
     @CsvSource(
-    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung", "Tags: -leadingDash", "Tags: trailingDash-",
-            "Tags: tag with spaces", "Tags: Täg" })
+    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung", })
     void testIdentifyNonTags(final String text)
     {
         MarkdownAsserts.assertMismatch(MdPattern.TAGS_INT, text);

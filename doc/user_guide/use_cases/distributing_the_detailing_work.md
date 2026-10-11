@@ -36,3 +36,13 @@ This tells OFT to read all known specification files from the directory "import/
 If you want to also import specification items that do not have any tags, add a single underscore "_" as the first entry in the comma-separated list of tags:
 
     oft convert -t _,AuthenticationProvider,ServiceDiscovery,MapProvider import/arch/ > arch_filtered_by_web_services.xml
+
+#### Tag Syntax and Formats
+
+Tags must start with an ASCII letter or digit and may contain letters, digits, and underscores (`_`). Tags can be defined either as a comma-separated list on a single line (`Tags: tag1, tag2`) or as an itemized bullet list:
+
+    Tags:
+    - AuthenticationProvider
+    - ServiceDiscovery
+
+When parsing tag declarations, individual invalid tags are ignored while valid tags are imported. For full syntax details, see [Writing a Specification](writing_a_specification.md#tags).

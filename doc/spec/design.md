@@ -1134,6 +1134,23 @@ Covers:
 
 Needs: impl, utest
 
+#### Markdown Tag Format
+`dsn~md.tags-format~1`
+
+The Markdown and reStructuredText Importers support defining tags for specification items using either a single-line comma-separated list or an itemized bullet list. During import, each declared tag is validated; invalid tags are rejected while all valid tags are imported.
+
+    tag = (ALPHA / DIGIT) *(ALPHA / DIGIT / "_")
+
+    tags-single-line = "Tags:" *WSP tag *("," *WSP tag)
+
+    tags-list = "Tags:" *(LINEBREAK *WSP ("*" / "+" / "-") *WSP tag)
+
+Covers:
+
+* `req~tag-format~1`
+
+Needs: impl, utest
+
 ### Coverage Tag Format
 
 #### Full Coverage Tag Format

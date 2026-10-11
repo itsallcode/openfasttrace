@@ -19,6 +19,7 @@ The user guide documentation now has automatic lateral navigation.
 
 ## Bugfixes
 
+* #401: Added regression test for RST parser corner case (issue was fixed already)
 * #423: Fixed tag parsing inconsistency in Markdown and reStructuredText importers
 * #574: Fixed invalid HTML when inline code contains underscores
 

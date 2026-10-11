@@ -16,8 +16,7 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
  */
 public abstract class AbstractLightWeightMarkupImporter implements Importer, LineReaderCallback
 {
-    @SuppressWarnings("java:S5867") // Intentionally only allow ASCII letters in tags.
-    private static final Pattern TAG_PATTERN = Pattern.compile("\\p{Alnum}\\w*");
+    private static final Pattern TAG_PATTERN = Pattern.compile(PatternConstants.TAG_PATTERN);
 
     /** File to be imported */
     protected final InputFile file;

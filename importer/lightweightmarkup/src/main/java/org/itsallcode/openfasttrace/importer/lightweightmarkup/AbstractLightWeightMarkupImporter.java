@@ -1,5 +1,6 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -16,6 +17,7 @@ import org.itsallcode.openfasttrace.importer.tag.common.LineReader.LineConsumer;
  */
 public abstract class AbstractLightWeightMarkupImporter implements Importer, LineReaderCallback
 {
+    private static final Logger LOGGER = Logger.getLogger(AbstractLightWeightMarkupImporter.class.getName());
     private static final Pattern TAG_PATTERN = Pattern.compile(PatternConstants.TAG_PATTERN);
 
     /** File to be imported */
@@ -302,10 +304,16 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         final String tags = this.stateMachine.getLastToken();
         for (final String tag : tags.split(","))
         {
-            final String trimmed = tag.trim();
-            if (TAG_PATTERN.matcher(trimmed).matches())
+            final String trimmedTag = tag.trim();
+            if (TAG_PATTERN.matcher(trimmedTag).matches())
             {
-                this.listener.addTag(trimmed);
+                this.listener.addTag(trimmedTag);
+            }
+            else
+            {
+                LOGGER.warning(() -> "Found invalid tag '" + trimmedTag + "' in '"+ this.file + ":"
+                        + this.currentContext.lineNumber() + "'. Tags must start with ASCII letter or number."
+                        + " Subsequent characters may additionally include underscore.");
             }
         }
     }

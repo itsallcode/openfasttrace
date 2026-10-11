@@ -329,8 +329,7 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
 
     // [utest->dsn~md.tags-format~1]
     @Test
-    void testBulletedTagsMalformedMixedList()
-    {
+    void testBulletedTagsMalformedMixedList() {
         assertImport("tags_mixed.rst", """
                 Mixed Tags
                 ==========
@@ -346,6 +345,8 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
                 .addTag("valid_2")
                 .location("tags_mixed.rst", 3)
                 .build()));
+    }
+
     // Regression test for GitHub Issue #401
     // [utest->dsn~md.specification-item-title~1]
     @ParameterizedTest

@@ -421,7 +421,7 @@ Needs: scn, dsn
 ##### Import Multi-line Full Coverage Tags
 `req~import.full-coverage-tag-multi-line~1`
 
-OFT imports full coverage tags whose list of covered IDs spans multiple comment lines in source files.
+OFT imports full coverage tags whose list of covered IDs spans multiple comment lines in source files and Gherkin feature files.
 
 Rationale:
 

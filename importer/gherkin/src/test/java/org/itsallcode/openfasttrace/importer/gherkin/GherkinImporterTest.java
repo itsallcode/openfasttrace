@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.gherkin;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.*;
 import org.itsallcode.openfasttrace.api.importer.ImportEventListener;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.ImportAssertions;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
@@ -363,6 +365,41 @@ class GherkinImporterTest
         events.verify(listener).setId(any(LocatedSpecificationItemId.class));
         events.verify(listener).addSpecificationItem(any(SpecificationItem.class));
         events.verify(listener).endSpecificationItem();
+    }
+
+    // [utest->dsn~gherkin.multi-line-comment-coverage-tags~1]
+    @Test
+    void testImportsMultiLineCommentCoverageTag()
+    {
+        final String source = """
+                # [%s,
+                #                      req~second~2,
+                #                      req~third~3]
+                @id:scn~ordinary~1
+                Scenario: ordinary
+                  Given a step
+                """.formatted("tst~login-test~1 -> req~first~1");
+        final List<SpecificationItem> items = importText(source);
+
+        assertThat(items, containsInAnyOrder(
+                hasProperty("id", hasToString("scn~ordinary~1")),
+                allOf(hasProperty("id", hasToString("tst~login-test~1")),
+                        hasProperty("coveredIds", contains(hasToString("req~first~1"), hasToString("req~second~2"),
+                                hasToString("req~third~3"))))));
+    }
+
+    // [utest->dsn~gherkin.multi-line-comment-coverage-tags~1]
+    @Test
+    void testRejectsMultiLineCommentCoverageTagInterruptedByExecutableLine()
+    {
+        final String source = """
+                # [%s,
+                Scenario: ordinary
+                # req~second~2]
+                """.formatted("tst~login-test~1 -> req~first~1");
+
+        final ImporterException exception = assertThrows(ImporterException.class, () -> importText(source));
+        assertThat(exception.getMessage(), containsString("specification.feature:2"));
     }
 
     private static List<SpecificationItem> importText(final String source)

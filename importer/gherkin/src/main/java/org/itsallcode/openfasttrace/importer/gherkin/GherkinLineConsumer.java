@@ -47,16 +47,13 @@ final class GherkinLineConsumer implements LineConsumer
     {
         this.file = file;
         this.listener = listener;
-        this.coverageTagParser = CoverageTagParser.create(null, file, listener);
+        this.coverageTagParser = CoverageTagParser.createWithMultiLineTags(null, file, listener);
     }
 
     @Override
     public void readLine(final int lineNumber, final String line)
     {
-        if (line.trim().startsWith("#"))
-        {
-            this.coverageTagParser.readLine(lineNumber, line);
-        }
+        readCoverageTags(lineNumber, line);
         final Matcher scenario = SCENARIO.matcher(line);
         if (scenario.matches())
         {
@@ -92,9 +89,25 @@ final class GherkinLineConsumer implements LineConsumer
         readMetadata(lineNumber, line);
     }
 
+    // [impl->dsn~gherkin.multi-line-comment-coverage-tags~1]
+    private void readCoverageTags(final int lineNumber, final String line)
+    {
+        if (line.trim().startsWith("#"))
+        {
+            this.coverageTagParser.readLine(lineNumber, line);
+        }
+        else
+        {
+            // Executable lines are never scanned for coverage tags. Passing an empty line instead lets a
+            // multi-line coverage tag that is still open fail instead of continuing across executable lines.
+            this.coverageTagParser.readLine(lineNumber, "");
+        }
+    }
+
     @Override
     public void finish()
     {
+        this.coverageTagParser.finish();
         endScenario();
     }
 

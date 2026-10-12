@@ -85,7 +85,7 @@ This is equivalent to writing all covered IDs on the first line. The item is loc
 
 If a tag ends with a comma but the following line does not continue the list or close it with `]`, OFT reports an error with the file and line instead of silently ignoring the tag.
 
-Multi-line tags are only supported by the Tag Importer. Coverage tags in Markdown, RST and Gherkin comments must stay on a single line.
+Multi-line tags are supported by the Tag Importer and in Gherkin comments. Coverage tags in Markdown and RST comments must stay on a single line.
 
 ##### Needed Coverage
 
@@ -177,6 +177,15 @@ The ID tag becomes the item location and the scenario header becomes its title; 
 
 Existing full coverage tags remain supported in Gherkin comments, for example `# [impl~login~1 -> dsn~authentication~1]`. OFT deliberately ignores coverage-tag-shaped text in executable Gherkin lines.
  
+A comment coverage tag can span several consecutive comment lines (see [Multi-line Tags](#multi-line-tags)):
+
+```gherkin
+# [tst~login-test~1 -> req~authentication~1,
+#                      req~session-timeout~2]
+```
+
+An executable or blank line inside such a tag is reported as an error.
+
 #### Markdown
 
 The main importer of OFT accepts Markdown files with the extensions `.md` and `.markdown`.

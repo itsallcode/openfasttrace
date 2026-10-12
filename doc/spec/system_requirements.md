@@ -418,6 +418,21 @@ Covers:
 
 Needs: scn, dsn
 
+##### Import Multi-line Full Coverage Tags
+`req~import.full-coverage-tag-multi-line~1`
+
+OFT imports full coverage tags whose list of covered IDs spans multiple comment lines in source files.
+
+Rationale:
+
+Source and test artifacts often cover many specification items. Listing them on a single line makes the tag hard to read and review. Spreading the list over several aligned lines keeps the coverage tag maintainable.
+
+Covers:
+
+* [feat~coverage-tag-import~2](#coverage-tag-import)
+
+Needs: dsn
+
 ##### Import Short Coverage Tag Format
 `req~import.short-coverage-tag-format~2`
 

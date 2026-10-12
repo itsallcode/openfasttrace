@@ -61,6 +61,32 @@ Examples:
 // [impl~validate-password~2->dsn~validate-authentication-request~1]
 ```
 
+##### Covering Multiple Items
+
+A single tag can cover several specification items. Separate the covered IDs with commas:
+
+```
+[ <covered-artifact-type> -> <specification-object-id> , <specification-object-id> ... ]
+```
+
+##### Multi-line Tags
+
+When a tag covers many items, you can spread the list of covered IDs over multiple comment lines:
+
+```ada
+-- [SRC~ICM45686-CORE~1->CPR~ICM45686-0001~1,
+--                       CPR~ICM45686-0002~1,
+--                       CPR~ICM45686-0010~1]
+```
+
+This is equivalent to writing all covered IDs on the first line. The item is located at the line where the tag starts. Needed coverage (`>> ...`) goes on the last line, before the closing bracket.
+
+> Note: Comment markers made of punctuation are supported (e.g. `--`, `//`, `#`, `*`, `'`, `;`, `%`, `!`). Comment markers made of letters, like Visual Basic's `REM`, are not.
+
+If a tag ends with a comma but the following line does not continue the list or close it with `]`, OFT reports an error with the file and line instead of silently ignoring the tag.
+
+Multi-line tags are only supported by the Tag Importer. Coverage tags in Markdown, RST and Gherkin comments must stay on a single line.
+
 ##### Needed Coverage
 
 When using UML models as design document files like UML models it is useful to add needed coverage as well. To do this, you can use the following format:

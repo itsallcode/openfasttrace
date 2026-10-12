@@ -26,7 +26,7 @@ class TagImporter implements Importer
     static TagImporter create(final PathConfig config, final InputFile file,
             final ImportEventListener listener)
     {
-        return new TagImporter(CoverageTagParser.create(config, file, listener), file);
+        return new TagImporter(CoverageTagParser.createWithMultiLineTags(config, file, listener), file);
     }
 
     @Override

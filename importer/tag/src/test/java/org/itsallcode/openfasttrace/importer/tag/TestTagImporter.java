@@ -2,7 +2,9 @@ package org.itsallcode.openfasttrace.importer.tag;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -16,10 +18,12 @@ import org.itsallcode.openfasttrace.api.core.SpecificationItem;
 import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 import org.itsallcode.openfasttrace.api.importer.ImporterContext;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -228,7 +232,30 @@ class TestTagImporter
                 noItemDetected("[impl~missing-forward~1->dsn~name2~2>>]"),
                 noItemDetected("[impl~trailing-comma~1->dsn~name2~2>>test,]"),
                 noItemDetected("[impl~duplicate-comma~1->dsn~name2~2>>test,,other]"),
-                noItemDetected("[impl~name1~1->dsn~name2~2>>test,other,]"));
+                noItemDetected("[impl~name1~1->dsn~name2~2>>test,other,]"),
+                // [utest->dsn~import.full-coverage-tag-multi-line~1]
+                parsedItem("[impl~component-core~1->llr~component-0001~1," + UNIX_NEWLINE
+                         + "                        llr~component-0002~1," + UNIX_NEWLINE
+                         + "                        llr~component-0010~1," + UNIX_NEWLINE
+                         + "                        llr~other_component-0999~1]" + UNIX_NEWLINE
+                         + "begining of the source code" + UNIX_NEWLINE
+                         + "that can be anything really",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~component-core~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-0001~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-0002~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-0010~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~other_component-0999~1"))),
+                parsedItem("[impl~component-core~1->llr~component-1000~1," + UNIX_NEWLINE
+                         + " llr~component-5896~1," + UNIX_NEWLINE
+                         + "   llr~component-1~1,llr~other_component~1]" + UNIX_NEWLINE
+                         + "begining of the source code" + UNIX_NEWLINE
+                         + "that can be anything really",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~component-core~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-1000~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-5896~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~component-1~1"))
+                                .addCoveredId(SpecificationItemId.parseId("llr~other_component~1"))),
+                noItemDetected("[" + "impl~name1~1->dsn~name2~2" + UNIX_NEWLINE + "dsn~name3~3" + "]"));
     }
 
     private static SpecificationItem.Builder itemACoveringB(final String id, final String coveredId)

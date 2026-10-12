@@ -1204,6 +1204,41 @@ Covers:
 
 Needs: impl, utest
 
+#### Full Coverage Tag Format Spanning Multiple Lines
+`dsn~import.full-coverage-tag-multi-line~1`
+
+The Tag importer imports full coverage tags whose list of covered IDs continues on following lines:
+
+    multi-line-full-tag = opening-line *continuation-line closing-line
+
+    opening-line = "[" *WSP reference *WSP "->" *WSP requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP "," *WSP EOL
+
+    continuation-line = *WSP [comment-marker *WSP] requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP "," *WSP EOL
+
+    closing-line = *WSP [comment-marker *WSP] requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP
+        [">>" *WSP artifact-type *WSP *("," *WSP artifact-type) *WSP] "]"
+
+    comment-marker = 1*(any character except letters, digits, whitespace, "[" and "]")
+
+A comma at the end of the opening line starts the multi-line tag. The importer removes the comment marker and whitespace at the start of each following line, joins the lines and imports the result like a single-line full coverage tag located at the opening line.
+
+If a following line is neither a continuation line nor a closing line, or if the file ends before the closing `]`, the import fails with an error naming the file and line.
+
+Markdown, RST and Gherkin comments only support single-line coverage tags.
+
+Rationale:
+
+Aligning covered IDs on separate lines keeps long coverage lists readable and reviewable. Requiring the trailing comma avoids changing how existing files with unclosed tag-like text are imported. Failing instead of ignoring a broken multi-line tag prevents silently losing coverage.
+
+Covers:
+
+* `req~import.full-coverage-tag-multi-line~1`
+
+Needs: impl, utest
+
 #### Full Coverage Tag Format Allows Specifying a Revision
 `dsn~import.full-coverage-tag-with-revision~1`
 

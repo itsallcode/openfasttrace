@@ -385,6 +385,20 @@ Covers:
 
 Needs: impl, utest
 
+#### Support Multi-line Coverage Tags in Comments
+`dsn~gherkin.multi-line-comment-coverage-tags~1`
+
+The Gherkin importer imports full coverage tags that span consecutive comment lines, using the shared multi-line coverage-tag parser (see `dsn~import.full-coverage-tag-multi-line~1`).
+
+An executable or blank line ends the comment block. If it occurs while a multi-line coverage tag is still open, the import fails with an error naming the file and line, because the tag would otherwise continue across executable Gherkin text.
+
+Covers:
+
+* `req~import.full-coverage-tag-multi-line~1`
+* `req~gherkin-comment-coverage-tags~1`
+
+Needs: impl, utest
+
 ### ReqM2 File Detection
 `dsn~import.reqm2-file-detection~1`
 
@@ -1201,6 +1215,41 @@ An item can cover multiple IDs. This avoids creating multiple IDs for the same i
 Covers:
 
 * `req~import.full-coverage-tag-format~2`
+
+Needs: impl, utest
+
+#### Full Coverage Tag Format Spanning Multiple Lines
+`dsn~import.full-coverage-tag-multi-line~1`
+
+The Tag importer and the Gherkin importer import full coverage tags whose list of covered IDs continues on following lines:
+
+    multi-line-full-tag = opening-line *continuation-line closing-line
+
+    opening-line = "[" *WSP reference *WSP "->" *WSP requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP "," *WSP EOL
+
+    continuation-line = *WSP [comment-marker *WSP] requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP "," *WSP EOL
+
+    closing-line = *WSP [comment-marker *WSP] requirement-id
+        *(*WSP "," *WSP requirement-id) *WSP
+        [">>" *WSP artifact-type *WSP *("," *WSP artifact-type) *WSP] "]"
+
+    comment-marker = 1*(any character except letters, digits, whitespace, "[" and "]")
+
+A comma at the end of the opening line starts the multi-line tag. The importer removes the comment marker and whitespace at the start of each following line, joins the lines and imports the result like a single-line full coverage tag located at the opening line.
+
+If a following line is neither a continuation line nor a closing line, or if the file ends before the closing `]`, the import fails with an error naming the file and line.
+
+Markdown and RST comments only support single-line coverage tags.
+
+Rationale:
+
+Aligning covered IDs on separate lines keeps long coverage lists readable and reviewable. Requiring the trailing comma avoids changing how existing files with unclosed tag-like text are imported. Failing instead of ignoring a broken multi-line tag prevents silently losing coverage.
+
+Covers:
+
+* `req~import.full-coverage-tag-multi-line~1`
 
 Needs: impl, utest
 

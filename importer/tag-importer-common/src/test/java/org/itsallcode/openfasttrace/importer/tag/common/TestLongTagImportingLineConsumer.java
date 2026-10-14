@@ -29,7 +29,7 @@ class TestLongTagImportingLineConsumer
         final String generatedNameTag = "[impl -> dsn~covered~2" + "]";
         final String readableNamesTag = "[impl -> dsn~first~2, dsn~second~3 >> utest" + "]";
         return Stream.of(
-                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~1]
+                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~2]
                 // [utest->dsn~import.full-coverage-tag-with-needed-coverage~1]
                 // [utest->dsn~import.full-coverage-tag-multiple-needed-coverage~1]
                 testCase(3, namedTag,
@@ -67,6 +67,23 @@ class TestLongTagImportingLineConsumer
         final SpecificationListBuilder listener = SpecificationListBuilder.create();
         new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
                 "😀 [impl~tag~1 -> dsn~covered~2" + "]");
+
+        final SpecificationItem item = listener.build().get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(2, 4, 14))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 18, 31))));
+    }
+
+    // [utest->dsn~md.specification-item-id-format~4]
+    // [utest->dsn~import.full-coverage-tag-with-name-and-revision~2]
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void testImportsLocatedLongTagIdsWithHashRevisionSeparator()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
+                "😀 [impl~tag#1 -> dsn~covered#2" + "]");
 
         final SpecificationItem item = listener.build().get(0);
 

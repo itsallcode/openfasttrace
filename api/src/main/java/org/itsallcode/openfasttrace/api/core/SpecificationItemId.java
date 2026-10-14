@@ -32,12 +32,14 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     /** Separator between name and revision in an item ID. */
     public static final String REVISION_SEPARATOR = "~";
+    /** Regexp pattern for accepted separators between name and revision. */
+    public static final String REVISION_SEPARATOR_PATTERN = "[~#]";
     static final int REVISION_WILDCARD = Integer.MIN_VALUE;
-    // [impl->dsn~md.specification-item-id-format~3]
+    // [impl->dsn~md.specification-item-id-format~4]
     private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
             + ITEM_NAME_PATTERN //
-            + REVISION_SEPARATOR //
+            + REVISION_SEPARATOR_PATTERN //
             + ITEM_REVISION_PATTERN;
     private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
@@ -174,7 +176,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
      */
     public static class Builder
     {
-        // [impl->dsn~md.specification-item-id-format~3]
+        // [impl->dsn~md.specification-item-id-format~4]
         private final String id;
         private String artifactType;
         private String name;
@@ -331,7 +333,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
                 else
                 {
                     throw new IllegalArgumentException("Invalid specification item ID format: \"" + this.id
-                            + "\". Format must be <arifact-type>~<requirement-name-or-number>~<revision>.");
+                            + "\". Format must be <artifact-type>~<requirement-name-or-number>(~|#)<revision>.");
                 }
             }
         }

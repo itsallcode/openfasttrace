@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * [utest->dsn~md.specification-item-id-format~3]
+ * [utest->dsn~md.specification-item-id-format~4]
  */
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId
@@ -24,6 +24,7 @@ class TestSpecificationItemId
     @CsvSource(value =
     {
             "type~name~42, type, name, 42",
+            "type~name#42, type, name, 42",
             "type~name-with-dash~42, type, name-with-dash, 42",
             "type~name.with.dot~42, type, name.with.dot, 42",
             "type~name-trailing-~42, type, name-trailing-, 42",
@@ -91,7 +92,7 @@ class TestSpecificationItemId
         final Throwable exception = assertThrows(IllegalArgumentException.class, () -> parseId(illegalId));
         assertThat(exception.getMessage(),
                 equalTo("Invalid specification item ID format: \"" + illegalId + "\". "
-                        + "Format must be <arifact-type>~<requirement-name-or-number>~<revision>."));
+                        + "Format must be <artifact-type>~<requirement-name-or-number>(~|#)<revision>."));
     }
 
     @Test
@@ -108,6 +109,14 @@ class TestSpecificationItemId
         final Builder builder = new Builder();
         builder.artifactType("dsn").name("dummy").revision(3);
         assertThat(builder.build().toString(), equalTo("dsn~dummy~3"));
+    }
+
+    @Test
+    void testHashRevisionSeparatorCreatesCanonicalId()
+    {
+        final SpecificationItemId id = parseId("dsn~dummy#3");
+        assertAll(() -> assertThat(id, equalTo(parseId("dsn~dummy~3"))),
+                () -> assertThat(id.toString(), equalTo("dsn~dummy~3")));
     }
 
     @Test

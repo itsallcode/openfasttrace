@@ -42,7 +42,7 @@ How many types you introduce, how you name and stack them is up to you. When we 
 
 The name part of the ID must be a character string consisting of Unicode letters and/or numbers separated by underscore (`_`), hyphen (`-`) or dot (`.`). Whitespaces are not allowed.
 
-* Names must start with a unicode letter
+* Names must start with a Unicode letter
 * Consecutive dots `.` are not allowed
 
 We recommend using a dot `.` to create a hierarchy of items:
@@ -55,7 +55,10 @@ We recommend using a dot `.` to create a hierarchy of items:
 
 The revision number of a specification item is a positive integer number that can be started at zero but by convention usually is started at one.
 
-The revision is intended to obsolete existing coverage links in case the content of a specification item semantically changed. Incrementing the revision voids all existing links to this item so that authors linking to the item know they have to check for changes and adapt the covering items.
+Separate the name and revision with either a tilde (`~`) or hash mark (`#`). For example, `req~example~1` and `req~example#1` identify the same item. Use
+the hash mark when writing an unquoted ID in Markdown to avoid the two tildes being rendered as strikethrough markup.
+
+The revision is intended to obsolete existing coverage links in case the content of a specification item changed semantically. Incrementing the revision voids all existing links to this item so that authors linking to the item know they have to check for changes and adapt the covering items.
 
 Examples:
 

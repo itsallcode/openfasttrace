@@ -23,6 +23,12 @@ Let's start with a minimal requirement:
 
 Simple as this. This is already a valid and complete OFT requirement. Of course, you can enrich the requirement with other information, but at the heart of it every requirement is an ID and a description.
 
+When writing an ID without backticks in Markdown, you can use `#` before the revision to avoid Markdown interpreting the two tildes as strikethrough markup:
+
+    req~this-is-the-id#1
+
+This is the same specification item ID as `req~this-is-the-id~1`.
+
 It is mostly a matter of taste whether you prefer your specification items to have a title or not. The same requirement above with a title looks like this:
 
     ### The Requirement Title

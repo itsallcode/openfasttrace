@@ -10,8 +10,12 @@ updates:
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "maven"
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "dependencies"
+    cooldown:
+      default-days: 7

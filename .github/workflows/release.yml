@@ -33,10 +33,11 @@ jobs:
 
       - name: Fail if not running on main branch
         if: ${{ github.ref != 'refs/heads/main' }}
-        uses: actions/github-script@v9
-        with:
-          script: |
-            core.setFailed('Not running on main branch, github.ref is ${{ github.ref }}. Please start this workflow only on main')
+        run: |
+          echo "Not running on main branch, github.ref is ${GITHUB_REF}. Please start this workflow only on main."
+          exit 1
+        env:
+          GITHUB_REF: ${{ github.ref }}
 
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v6

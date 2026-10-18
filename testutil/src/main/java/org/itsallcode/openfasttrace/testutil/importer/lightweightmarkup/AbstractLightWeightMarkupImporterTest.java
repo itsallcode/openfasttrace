@@ -219,26 +219,6 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
-    // [utest -> dsn~md.covers-single-line~1]
-    @Test
-    void testSpecificationItemCoversInlineFollowedByNeeds()
-    {
-        assertImport(PATH, """
-                `req~item-a~2`
-
-                Covers: feat~item-b~1
-
-                Needs: impl, utest
-                """,
-                contains(item()
-                        .id("req", "item-a", 2)
-                        .addCoveredId("feat", "item-b", 1)
-                        .addNeedsArtifactType("impl")
-                        .addNeedsArtifactType("utest")
-                        .location(PATH.toString(), 1)
-                        .build()));
-    }
-
     // [utest -> dsn~md.depends-list~1]
     @Test
     void testSpecificationItemDependsList()

@@ -84,7 +84,7 @@ Note that only the latest version of OFT is actively supported.
 
 ### Installation
 
-You can get OFT via our [Debian APT repository](https://github.com/itsallcode/itsallcode-apt-repository), through [Homebrew](https://formulae.brew.sh/formula/openfasttrace), as [Maven plugin](https://central.sonatype.com/artifact/org.itsallcode/openfasttrace-maven-plugin) or [Gradle plugin](https://plugins.gradle.org/plugin/org.itsallcode.openfasttrace). Or you can get the [jar archive](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest) via [releases on GitHub](https://github.com/itsallcode/openfasttrace/releases).
+You can get OFT via our [Debian APT repository](https://github.com/itsallcode/itsallcode-apt-repository), through [Homebrew](https://formulae.brew.sh/formula/openfasttrace), via [JBang](https://www.jbang.dev/), as [Maven plugin](https://central.sonatype.com/artifact/org.itsallcode/openfasttrace-maven-plugin) or [Gradle plugin](https://plugins.gradle.org/plugin/org.itsallcode.openfasttrace). Or you can get the [jar archive](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#JAR%20Manifest) via [releases on GitHub](https://github.com/itsallcode/openfasttrace/releases).
 
 Check the chapter about [Installation](https://openfasttrace.itsallcode.org/user_guide/installation/installation.html) in the user guide for details.
 
@@ -101,6 +101,16 @@ java -jar product/target/openfasttrace-4.10.0.jar trace /path/to/directory/being
 If you want to run OFT automatically as part of a continuous build, we recommend using our plugins for [Gradle](https://github.com/itsallcode/openfasttrace-gradle) and [Maven](https://github.com/itsallcode/openfasttrace-maven-plugin).
 
 For more details about how to run OFT please consult the [user guide](https://openfasttrace.itsallcode.org/user_guide/user_guide.html).
+
+### Run via JBang
+
+With [JBang](https://www.jbang.dev/) installed (`curl -Ls https://sh.jbang.dev | bash -s - app setup`, see [other installation options](https://www.jbang.dev/documentation/jbang/latest/installation.html)), you can run the latest OFT release without downloading it manually:
+
+```sh
+jbang oft@itsallcode/openfasttrace trace /path/to/directory/being/traced
+```
+
+`jbang app install oft@itsallcode/openfasttrace` installs it as `oft` command.
 
 ### Download and Execute in Continuous Integration
 

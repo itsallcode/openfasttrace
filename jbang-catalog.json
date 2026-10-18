@@ -1,0 +1,8 @@
+{
+  "aliases": {
+    "oft": {
+      "script-ref": "org.itsallcode.openfasttrace:openfasttrace:RELEASE",
+      "description": "OpenFastTrace requirement tracing"
+    }
+  }
+}

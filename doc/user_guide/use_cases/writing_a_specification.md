@@ -112,7 +112,23 @@ The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, 
 
 ##### `Covers`
 
-The `Covers` keyword states which items are covered by the current specification item. It is followed by a list of items that are covered, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
+The `Covers` keyword states which items are covered by the current specification item. It comes in two flavors: as one-liner or as list.
+
+**Variant a) one-line `covers`**
+
+    Covers: feat~rubber-ducky~1
+
+The referenced IDs can optionally be enclosed in backticks:
+
+    Covers: `feat~rubber-ducky~1`
+
+Or with multiple comma-separated items (with or without backticks):
+
+    Covers: `feat~rubber-ducky~1`, `feat~bathtub~1`
+
+**Variant b) as List**
+
+It is followed by a list of items that are covered, each one written on a new line starting with a bullet character (`+`, `*`, or `-`) followed by the referenced specification item id. 
 
 Given the Feature `feat~rubber-ducky~1` exists and needs a `req`. A requirement that covers that feature could be written as
 

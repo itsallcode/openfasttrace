@@ -1047,6 +1047,23 @@ Covers:
 
 Needs: impl, utest
 
+#### Markdown "Covers" Single Line
+`dsn~md.covers-single-line~1`
+
+The Markdown and reStructuredText Importers support defining covered specification items inline on the same line as the "Covers:" keyword.
+
+    covers-single-line = "Covers:" *WSP reference *("," *WSP reference)
+
+Rationale:
+
+When a specification item covers only one requirement, writing an unordered bullet list requires multiple lines and markdownlint requires blank lines around lists. Allowing an inline notation is more compact and convenient.
+
+Covers:
+
+* `req~markdown-standard-syntax~1`
+
+Needs: impl, utest
+
 #### Markdown "Depends" List
 `dsn~md.depends-list~1`
 

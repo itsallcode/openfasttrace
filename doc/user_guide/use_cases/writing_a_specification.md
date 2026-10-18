@@ -118,9 +118,13 @@ The `Covers` keyword states which items are covered by the current specification
 
     Covers: feat~rubber-ducky~1
 
-Or with multiple comma-separated items:
+The referenced IDs can optionally be enclosed in backticks:
 
-    Covers: feat~rubber-ducky~1, feat~bathtub~1
+    Covers: `feat~rubber-ducky~1`
+
+Or with multiple comma-separated items (with or without backticks):
+
+    Covers: `feat~rubber-ducky~1`, `feat~bathtub~1`
 
 **Variant b) as List**
 

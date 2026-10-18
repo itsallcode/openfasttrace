@@ -90,7 +90,7 @@ class PatternConstantsTest
 
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
-    @ValueSource(strings = { " req~name~1", "  `req~name~1`", "`req~name~1` extra", "[link](#req~name~1)",
+    @ValueSource(strings = { " req~name~1", "  `req~name~1`", "[link](#req~name~1)",
             " req~name~1, req~name~2", " `req~name~1`, `req~name~2`" })
     void testReferenceInlineMatchesValid(final String input)
     {

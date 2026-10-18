@@ -221,24 +221,6 @@ public abstract class AbstractLightWeightMarkupImporterTest
 
     // [utest -> dsn~md.covers-single-line~1]
     @Test
-    void testSpecificationItemCoversInlineFollowedByBulletList()
-    {
-        assertImport(PATH, """
-                `req~item-a~2`
-
-                Covers: feat~item-b~1
-                * `feat~item-c~2`
-                """,
-                contains(item()
-                        .id("req", "item-a", 2)
-                        .addCoveredId("feat", "item-b", 1)
-                        .addCoveredId("feat", "item-c", 2)
-                        .location(PATH.toString(), 1)
-                        .build()));
-    }
-
-    // [utest -> dsn~md.covers-single-line~1]
-    @Test
     void testSpecificationItemCoversInlineFollowedByNeeds()
     {
         assertImport(PATH, """

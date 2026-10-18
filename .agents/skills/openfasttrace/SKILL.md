@@ -74,6 +74,13 @@ Multiple coverage:
 // [dsn -> req~local-stability~1,arch~dimensional-input~1]
 ```
 
+Multi-line coverage (source files and Gherkin comments; a trailing comma continues the tag, leading comment markers and whitespace are ignored):
+
+```Java
+// [dsn~stability~1 -> req~local-stability~1,
+//                     arch~dimensional-input~1]
+```
+
 ## Tracing
 
 ## Syntax: Gherkin

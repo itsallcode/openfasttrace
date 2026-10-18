@@ -3,6 +3,7 @@ package org.itsallcode.openfasttrace.importer.tag.common;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.itsallcode.openfasttrace.api.core.*;
+import org.itsallcode.openfasttrace.api.importer.ImporterException;
 import org.itsallcode.openfasttrace.api.importer.SpecificationListBuilder;
 import org.itsallcode.openfasttrace.api.importer.input.InputFile;
 import org.itsallcode.openfasttrace.testutil.importer.input.StreamInput;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TestLongTagImportingLineConsumer
 {
@@ -88,6 +91,143 @@ class TestLongTagImportingLineConsumer
         assertAll(
                 () -> assertThat(item.getLocatedId().getRange(), is(nullValue())),
                 () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 12, 25))));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @ParameterizedTest
+    @ValueSource(strings = { "--", "//", "#", " *", "'", ";", "%", "!", "" })
+    void importsMultiLineTagWithCommentMarker(final String marker)
+    {
+        final List<SpecificationItem> items = importMultiLine(
+                marker + " [" + "impl~tag~1->dsn~first~1,",
+                marker + "                 dsn~second~2,",
+                marker + "                 dsn~third~3" + "]");
+
+        assertThat(items, hasSize(1));
+        final SpecificationItem item = items.get(0);
+        assertAll(
+                () -> assertThat(item.getId(), equalTo(SpecificationItemId.parseId("impl~tag~1"))),
+                () -> assertThat(item.getCoveredIds(), contains(SpecificationItemId.parseId("dsn~first~1"),
+                        SpecificationItemId.parseId("dsn~second~2"), SpecificationItemId.parseId("dsn~third~3"))),
+                () -> assertThat(item.getLocation().getLine(), equalTo(1)));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @Test
+    void importsMultiLineTagWithNeededCoverageOnLastLine()
+    {
+        final List<SpecificationItem> items = importMultiLine(
+                "-- [" + "impl~tag~1 -> dsn~first~2,",
+                "--                 dsn~second~3 >> utest, itest" + "]");
+
+        assertThat(items, hasSize(1));
+        assertAll(
+                () -> assertThat(items.get(0).getCoveredIds(), contains(SpecificationItemId.parseId("dsn~first~2"),
+                        SpecificationItemId.parseId("dsn~second~3"))),
+                () -> assertThat(items.get(0).getNeedsArtifactTypes(), contains("utest", "itest")));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @Test
+    void importsUnnamedMultiLineTagAsOneItemPerCoveredId()
+    {
+        final List<SpecificationItem> items = importMultiLine(
+                "// [" + "impl -> dsn~first~2,",
+                "//           dsn~second~3 >> utest" + "]");
+
+        assertThat(items.stream().map(SpecificationItem::getId).toList(),
+                contains(SpecificationItemId.parseId("impl~first~0"), SpecificationItemId.parseId("impl~second~0")));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void importsLocatedMultiLineTagIds()
+    {
+        final String secondLine = "//                  dsn~second~3" + "]";
+        final List<SpecificationItem> items = importMultiLine(
+                "// [" + "impl~tag~1 -> dsn~first~2,",
+                secondLine);
+
+        final SpecificationItem item = items.get(0);
+        final int secondStart = secondLine.indexOf("dsn~second~3");
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(0, 4, 14))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(0, 18, 29))),
+                () -> assertThat(item.getLocatedCoveredIds().get(1).getRange(),
+                        is(range(1, secondStart, secondStart + 12))));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @Test
+    void importsSingleLineTagsAroundMultiLineTag()
+    {
+        final List<SpecificationItem> items = importMultiLine(
+                "[" + "impl->dsn~before~1] [" + "impl~tag~1->dsn~first~1,",
+                "dsn~second~1] [" + "impl~after~1->dsn~after~1" + "]");
+
+        assertThat(items, hasSize(3));
+        assertAll(
+                () -> assertThat(items.get(0).getCoveredIds(), contains(SpecificationItemId.parseId("dsn~before~1"))),
+                () -> assertThat(items.get(1).getId(), equalTo(SpecificationItemId.parseId("impl~tag~1"))),
+                () -> assertThat(items.get(2).getId(), equalTo(SpecificationItemId.parseId("impl~after~1"))),
+                () -> assertThat(items.get(2).getLocation().getLine(), equalTo(2)));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @Test
+    void rejectsInvalidContinuationLine()
+    {
+        final LongTagImportingLineConsumer consumer = multiLineConsumer(SpecificationListBuilder.create());
+        consumer.readLine(1, "-- [" + "impl~tag~1->dsn~first~1,");
+        final ImporterException exception = assertThrows(ImporterException.class,
+                () -> consumer.readLine(2, "-- not an ID"));
+        assertThat(exception.getMessage(), containsString("started at line 1"));
+    }
+
+    // [utest->dsn~import.full-coverage-tag-multi-line~1]
+    @Test
+    void rejectsUnterminatedMultiLineTagAtEndOfFile()
+    {
+        final LongTagImportingLineConsumer consumer = multiLineConsumer(SpecificationListBuilder.create());
+        consumer.readLine(1, "-- [" + "impl~tag~1->dsn~first~1,");
+        consumer.readLine(2, "--                dsn~second~1,");
+        final ImporterException exception = assertThrows(ImporterException.class, consumer::finish);
+        assertThat(exception.getMessage(), containsString("not terminated"));
+    }
+
+    @Test
+    void ignoresUnclosedTagWithoutTrailingComma()
+    {
+        assertThat(importMultiLine("-- [" + "impl~tag~1->dsn~first~1", "-- dsn~second~1" + "]"), empty());
+    }
+
+    @Test
+    void ignoresMultiLineTagWhenDisabled()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        final LongTagImportingLineConsumer consumer = new LongTagImportingLineConsumer(inputFile(), listener);
+        consumer.readLine(1, "-- [" + "impl~tag~1->dsn~first~1,");
+        consumer.readLine(2, "--                dsn~second~1" + "]");
+        consumer.finish();
+        assertThat(listener.build(), empty());
+    }
+
+    private static List<SpecificationItem> importMultiLine(final String... lines)
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        final LongTagImportingLineConsumer consumer = multiLineConsumer(listener);
+        for (int i = 0; i < lines.length; i++)
+        {
+            consumer.readLine(i + 1, lines[i]);
+        }
+        consumer.finish();
+        return listener.build();
+    }
+
+    private static LongTagImportingLineConsumer multiLineConsumer(final SpecificationListBuilder listener)
+    {
+        return new LongTagImportingLineConsumer(inputFile(), listener, true);
     }
 
     private static SourceRange range(final int line, final int start, final int end)

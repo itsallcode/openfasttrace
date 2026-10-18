@@ -16,6 +16,7 @@ The user guide documentation now has automatic lateral navigation.
 
 * #610: Allow adding plugins via configuration using `Oft.builder().addPlugin(name, jars...)`
 * #612: Add support for Visual Basic in the source tag importer
+* #632: Allow full coverage tags in source files and Gherkin comments to span multiple lines
 
 ## Bugfixes
 

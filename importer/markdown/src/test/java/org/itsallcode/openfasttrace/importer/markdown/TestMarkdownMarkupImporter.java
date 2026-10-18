@@ -89,6 +89,23 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
                 () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18))));
     }
 
+    // [utest->dsn~located-specification-item-id-text-ranges~1]
+    @Test
+    void testImportsLocatedDeclarationCoverageAndDependencyIdsInline()
+    {
+        final SpecificationItem item = importText("""
+                req~subject~1
+                Covers: req~covered~2
+                Depends:
+                * req~dependency~3
+                """).get(0);
+
+        assertAll(
+                () -> assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(1, 8, 21))),
+                () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(3, 2, 18))));
+    }
+
     private static List<SpecificationItem> importText(final String source)
     {
         return ImportAssertions.runImporterOnText(Path.of("located.md"), source, importerFactory);

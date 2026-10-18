@@ -15,9 +15,11 @@ enum RstPattern
     // [impl->dsn~md.specification-item-title~1]
     // [impl->dsn~md.artifact-forwarding-notation~1]
     // [impl->dsn~md.tags-format~1]
+    // [impl->dsn~md.covers-single-line~1]
 
     // @formatter:off
     COMMENT("Comment:\\s*"),
+    COVERS_INT("Covers:" + PatternConstants.REFERENCE_INLINE),
     COVERS("Covers:\\s*"),
     COVERS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
     DEPENDS("Depends:\\s*"),

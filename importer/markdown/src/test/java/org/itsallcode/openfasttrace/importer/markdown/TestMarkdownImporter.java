@@ -95,6 +95,25 @@ class TestMarkdownImporter
         MarkdownAsserts.assertMismatch(MdPattern.TAGS_INT, text);
     }
 
+    // [utest->dsn~md.covers-single-line~1]
+    @ParameterizedTest
+    @CsvSource(
+    { "Covers: req~foo~1", "Covers: `req~foo~1`", "Covers:req~foo~1", "'Covers:  \treq~foo~1 '",
+            "Covers: req~foo~1, req~bar~2" })
+    void testIdentifyCoversInline(final String text)
+    {
+        MarkdownAsserts.assertMatch(MdPattern.COVERS_INT, text);
+    }
+
+    // [utest->dsn~md.covers-single-line~1]
+    @ParameterizedTest
+    @CsvSource(
+    { "Covers:", "#Covers: req~foo~1", "' Covers: req~foo~1'", "Covers: abc" })
+    void testIdentifyNonCoversInline(final String text)
+    {
+        MarkdownAsserts.assertMismatch(MdPattern.COVERS_INT, text);
+    }
+
     @Test
     void testRunImportHandlesIOException(@Mock final InputFile fileMock, @Mock final ImportEventListener listenerMock,
             @Mock final BufferedReader readerMock) throws IOException

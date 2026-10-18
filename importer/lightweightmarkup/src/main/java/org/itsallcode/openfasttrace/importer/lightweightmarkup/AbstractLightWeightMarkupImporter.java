@@ -1,6 +1,7 @@
 package org.itsallcode.openfasttrace.importer.lightweightmarkup;
 
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.*;
@@ -274,10 +275,35 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         this.listener.addCoveredId(locatedId(idText, SpecificationItemId.parseId(idText)));
     }
 
+    /**
+     * Add covered specification item IDs found on an inline "Covers:" line.
+     */
+    // [impl->dsn~md.covers-single-line~1]
+    protected void addInlineCoverage()
+    {
+        final String line = this.currentContext.currentLine();
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher(line);
+        final int colonIndex = line.indexOf(':');
+        if (colonIndex >= 0)
+        {
+            matcher.region(colonIndex + 1, line.length());
+        }
+        while (matcher.find())
+        {
+            final String idText = matcher.group();
+            final SpecificationItemId id = SpecificationItemId.parseId(idText);
+            this.listener.addCoveredId(locatedId(idText, id, matcher.start()));
+        }
+    }
+
     private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id)
     {
+        return locatedId(idText, id, this.currentContext.currentLine().indexOf(idText));
+    }
+
+    private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id, final int column)
+    {
         // [impl->dsn~located-specification-item-id-text-ranges~1]
-        final int column = this.currentContext.currentLine().indexOf(idText);
         final SourceRange range = new SourceRange(new SourcePosition(this.currentContext.lineNumber() - 1, column),
                 new SourcePosition(this.currentContext.lineNumber() - 1, column + idText.length()));
         final int artifactTypeEnd = idText.indexOf(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR);

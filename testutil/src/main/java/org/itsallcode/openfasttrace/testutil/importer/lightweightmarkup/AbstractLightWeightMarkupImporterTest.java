@@ -170,6 +170,111 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInline()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: feat~item-b~1
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInlineWithBackticks()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: `feat~item-b~1`
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInlineMultipleOnSingleLine()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: `feat~item-b~1`, `feat~item-c~2`
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .addCoveredId("feat", "item-c", 2)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInlineMultipleLines()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: feat~item-b~1
+                Covers: feat~item-c~2
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .addCoveredId("feat", "item-c", 2)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInlineFollowedByBulletList()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: feat~item-b~1
+                * `feat~item-c~2`
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .addCoveredId("feat", "item-c", 2)
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
+    // [utest -> dsn~md.covers-single-line~1]
+    @Test
+    void testSpecificationItemCoversInlineFollowedByNeeds()
+    {
+        assertImport(PATH, """
+                `req~item-a~2`
+
+                Covers: feat~item-b~1
+
+                Needs: impl, utest
+                """,
+                contains(item()
+                        .id("req", "item-a", 2)
+                        .addCoveredId("feat", "item-b", 1)
+                        .addNeedsArtifactType("impl")
+                        .addNeedsArtifactType("utest")
+                        .location(PATH.toString(), 1)
+                        .build()));
+    }
+
     // [utest -> dsn~md.depends-list~1]
     @Test
     void testSpecificationItemDependsList()

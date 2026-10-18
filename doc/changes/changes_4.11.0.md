@@ -1,4 +1,4 @@
-# OpenFastTrace 4.11.0, released 2026-10-??
+# OpenFastTrace 4.11.0, released 2026-10-18
 
 Code name: Configurable Plugins
 

@@ -38,7 +38,7 @@ jobs:
             ]
           }
           EOF
-      - uses: tcort/github-action-markdown-link-check@e047c5b37f24ab722bbef1a27b6fab7f96bc4068
+      - uses: tcort/github-action-markdown-link-check@4e4c260e171095fad9a1c53696167469187b72ce # master
         with:
           use-quiet-mode: "yes"
           use-verbose-mode: "no"

@@ -34,8 +34,7 @@ OpenFastTrace uses unified terminology for all documents. Please refer to the [c
 
 ### Syntax Notation
 
-Syntax definitions in this document use
-[Augmented Backus-Naur Form (ABNF)](https://www.rfc-editor.org/rfc/rfc5234.html).
+Syntax definitions in this document use [Augmented Backus-Naur Form (ABNF)](https://www.rfc-editor.org/rfc/rfc5234.html).
 The following Unicode character classes are used in syntax definitions:
 
     unicode-alpha = <Unicode character with the Alphabetic property>
@@ -141,10 +140,7 @@ Needs: dsn
 ### Located Specification Item IDs
 `req~located-specification-item-ids~1`
 
-For every imported declared, covered, and dependency specification item ID, OFT retains the individual source occurrence. For source text, positions
-are zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges. Where an ID component is generated or its source is unavailable, its component
-range is absent. Equal item IDs at distinct source occurrences remain distinct occurrences. Short coverage tags do not generate source
-ranges for their generated or covered IDs.
+For every imported declared, covered, and dependency specification item ID, OFT retains the individual source occurrence. For source text, positions are zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges. Where an ID component is generated or its source is unavailable, its component range is absent. Equal item IDs at distinct source occurrences remain distinct occurrences. Short coverage tags do not generate source ranges for their generated or covered IDs.
 
 Rationale:
 

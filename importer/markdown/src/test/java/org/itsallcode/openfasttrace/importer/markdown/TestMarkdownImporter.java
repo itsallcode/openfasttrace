@@ -21,10 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class TestMarkdownImporter
 {
-    // [utest->dsn~md.specification-item-id-format~3]
+    // [utest->dsn~md.specification-item-id-format~4]
     @ParameterizedTest
     @CsvSource(
-    { "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1",
+    { "req~foo~1<a id=\"req~foo~1\"></a>", "a~b~0", "req~test~1", "req~test#1",
             "req~test~999", "req~test.requirement~1", "req~test_underscore~1",
             "`req~test1~1`arbitrary text",
             // See https://github.com/itsallcode/openfasttrace/issues/366
@@ -35,7 +35,7 @@ class TestMarkdownImporter
         MarkdownAsserts.assertMatch(MdPattern.ID, text);
     }
 
-    // [utest->dsn~md.specification-item-id-format~3]
+    // [utest->dsn~md.specification-item-id-format~4]
     @ParameterizedTest
     @CsvSource(
     { "test~1", "req-test~1", "req~4test~1", "räq~test~1" })

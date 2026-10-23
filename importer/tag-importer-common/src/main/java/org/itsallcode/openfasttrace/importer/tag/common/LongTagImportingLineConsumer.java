@@ -57,55 +57,61 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     @Override
     public void processMatch(final Matcher matcher, final int lineNumber, final int lineMatchCount)
     {
-        final List<SpecificationItemId> coveredIds = parseCoveredIds(matcher.group(COVERED_IDS_GROUP));
+        final List<LocatedSpecificationItemId> locatedCoveredIds = locateCoveredIds(lineNumber, matcher);
+        final List<SpecificationItemId> coveredIds = locatedCoveredIds.stream()
+                .map(LocatedSpecificationItemId::getId)
+                .toList();
         final List<String> neededArtifactTypes = parseNeededArtifactTypes(matcher.group("neededArtifactTypes"));
         final List<SpecificationItemId> generatedIds = createItemIds(matcher, lineNumber, lineMatchCount, coveredIds,
                 neededArtifactTypes);
 
         if (generatedIds.size() > 1)
         {
-            assert generatedIds.size() == coveredIds.size();
+            assert generatedIds.size() == locatedCoveredIds.size();
             for (int i = 0; i < generatedIds.size(); i++)
             {
-                addSpecificationItem(lineNumber, matcher, generatedIds.get(i), List.of(coveredIds.get(i)), i,
+                addSpecificationItem(lineNumber, matcher, generatedIds.get(i), List.of(locatedCoveredIds.get(i)),
                         neededArtifactTypes);
             }
         }
         else
         {
-            addSpecificationItem(lineNumber, matcher, generatedIds.get(0), coveredIds, 0, neededArtifactTypes);
+            addSpecificationItem(lineNumber, matcher, generatedIds.get(0), locatedCoveredIds, neededArtifactTypes);
         }
     }
 
     private void addSpecificationItem(final int lineNumber, final Matcher matcher,
-            final SpecificationItemId generatedId, final List<SpecificationItemId> coveredIds,
-            final int firstCoveredIdIndex, final List<String> neededArtifactTypes)
+            final SpecificationItemId generatedId, final List<LocatedSpecificationItemId> coveredIds,
+            final List<String> neededArtifactTypes)
     {
         final SpecificationItem.Builder item = SpecificationItem.builder()
                 .id(locatedGeneratedId(lineNumber, matcher, generatedId))
                 .location(this.file.getPath(), lineNumber);
-        final Matcher coveredIdMatcher = SpecificationItemId.ID_PATTERN.matcher(matcher.group(COVERED_IDS_GROUP));
-        for (int i = 0; i < firstCoveredIdIndex; i++)
-        {
-            coveredIdMatcher.find();
-        }
-        for (final SpecificationItemId coveredId : coveredIds)
-        {
-            if (!coveredIdMatcher.find())
-            {
-                throw new IllegalStateException("Covered specification item ID is missing from the tag");
-            }
-            item.addCoveredId(locatedId(lineNumber, matcher.start(COVERED_IDS_GROUP), coveredIdMatcher, coveredId));
-        }
+        coveredIds.forEach(item::addCoveredId);
         neededArtifactTypes.forEach(item::addNeedsArtifactType);
         this.listener.addSpecificationItem(item.build());
-        logItem(lineNumber, coveredIds, neededArtifactTypes, generatedId);
+        logItem(lineNumber, coveredIds.stream().map(LocatedSpecificationItemId::getId).toList(), neededArtifactTypes,
+                generatedId);
+    }
+
+    // [impl->dsn~located-specification-item-id-tag-ranges~1]
+    private static List<LocatedSpecificationItemId> locateCoveredIds(final int lineNumber, final Matcher matcher)
+    {
+        final String coveredIdsText = matcher.group(COVERED_IDS_GROUP);
+        final int coveredIdsStart = matcher.start(COVERED_IDS_GROUP);
+        final Matcher idMatcher = SpecificationItemId.ID_PATTERN.matcher(coveredIdsText);
+        final List<LocatedSpecificationItemId> located = new ArrayList<>();
+        while (idMatcher.find())
+        {
+            located.add(locatedId(lineNumber, coveredIdsStart, idMatcher,
+                    SpecificationItemId.fromIdPatternMatcher(idMatcher)));
+        }
+        return located;
     }
 
     private static LocatedSpecificationItemId locatedGeneratedId(final int lineNumber, final Matcher matcher,
             final SpecificationItemId id)
     {
-        // [impl->dsn~located-specification-item-id-tag-ranges~1]
         if (matcher.group(CUSTOM_NAME_GROUP) == null)
         {
             return LocatedSpecificationItemId.builder().id(id).build();
@@ -135,19 +141,6 @@ class LongTagImportingLineConsumer extends AbstractRegexLineConsumer
     private static SourceRange sourceRange(final int lineNumber, final int start, final int end)
     {
         return new SourceRange(new SourcePosition(lineNumber - 1, start), new SourcePosition(lineNumber - 1, end));
-    }
-
-    private static List<SpecificationItemId> parseCoveredIds(final String input)
-    {
-        if (input == null)
-        {
-            return emptyList();
-        }
-        return Arrays.stream(input.split(","))
-                .map(String::trim)
-                .filter(Predicate.not(String::isEmpty))
-                .map(SpecificationItemId::parseId)
-                .toList();
     }
 
     private static List<String> parseNeededArtifactTypes(final String input)

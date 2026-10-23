@@ -23,8 +23,22 @@ Syntax definitions in this document use the [Augmented Backus-Naur Form][bib.abn
 
 The following definitions are used frequently throughout the document:
 
-* ANY - any valid character
-* LINEBREAK = the line break character of the platform
+    ANY - any valid character
+    LINEBREAK = the line break character of the platform
+
+    unicode-alpha = <Unicode character with the Alphabetic property>
+
+    unicode-word = unicode-alpha / unicode-nonspacing-mark /
+        unicode-spacing-combining-mark / unicode-decimal-digit /
+        unicode-connector-punctuation
+
+    unicode-nonspacing-mark = <Unicode character with the Mn property>
+
+    unicode-spacing-combining-mark = <Unicode character with the Mc property>
+
+    unicode-decimal-digit = <Unicode character with the Nd property>
+
+    unicode-connector-punctuation = <Unicode character with the Pc property>
 
 # Constraints
 
@@ -957,37 +971,40 @@ Needs: impl, utest
 ### Markdown-style Structures
 
 #### Markdown Specification Item ID Format
-`dsn~md.specification-item-id-format~3`
+`dsn~md.specification-item-id-format~4`
 
-A requirement ID has the following format
+A specification item ID has the following format:
 
-    requirement-id = type "~" id "~" revision
+    requirement-id = artifact-type "~" name revision-separator revision
 
-    type = 1*ALPHA
+    artifact-type = 1*ALPHA
 
-    id = id-fragment *("." id-fragment)
+    name = unicode-alpha *(unicode-word / "-")
+        *("." 1*(unicode-word / "-"))
 
-    id-fragment = UNICODE_ALPHA *(UNICODE_ALPHA / DIGIT / "_" / "-")
+    revision-separator = "~" / "#"
 
     revision = 1*DIGIT
 
 Rationale:
 
-* The ID may contain unicode letters to allow naming requirements using non-ASCII characters. This makes linking in formats like Markdown or HTML clean and easy.
+* The ID may contain Unicode letters to allow naming requirements using non-ASCII characters. This makes linking in formats like Markdown or HTML clean and easy.
 * Requirement type and revision must be immediately recognizable from the requirement ID.
-* The built-in revision number makes links break if a requirement is updated - a desired behavior.
+* The built-in revision number makes links break if a requirement is updated – a desired behavior.
+* `#` avoids Markdown interpreting an unquoted ID's two tildes as strikethrough markup.
 
 Comment:
 
-Note that the artifact type is integral part of the ID. That means that `dsn~my-requirement~1` is something completely different then `utest~my-requirement~1`. One of the benefits of making the artifact type mandatory part of the ID is that this allows for typical coverage chains like.
+Note that the artifact type is an integral part of the ID. That means that `dsn~my-requirement~1` is something completely different then `utest~my-requirement~1`. One of the benefits of making the artifact type mandatory part of the ID is that this allows for typical coverage chains like.
 
     req~my-requirement~2 -> dsn~my-requirement~4 -> impl~my-requirement~4
 
-Otherwise users would be forced to invent different names for each link in the chain.
+Otherwise, users would be forced to invent different names for each link in the chain.
 
 Covers:
 
 * `req~markdown-standard-syntax~1`
+* `req~specification-item-id-syntax~1`
 
 Needs: impl, utest
 
@@ -1176,7 +1193,7 @@ OFT imports coverage tags in the full tag format with a list of required/needed 
 
 Rationale:
 
-The Tag importer is the catch all solution for all file formats that don't have a dedicated importer. We want to allow specification items imported via Tag importer to be intermediate nodes in the specification tree, instead of limiting them to leaves in the specification tree. Because leaves can only cover other specification items, but not require coverage.
+The Tag importer is the catch-all solution for all file formats that don't have a dedicated importer. We want to allow specification items imported via Tag importer to be intermediate nodes in the specification tree, instead of limiting them to leaves in the specification tree. Because leaves can only cover other specification items but not require coverage.
 
 Especially when used for design document files like UML models, requiring coverage is useful.
 
@@ -1205,13 +1222,13 @@ Covers:
 Needs: impl, utest
 
 #### Full Coverage Tag Format Allows Specifying a Revision
-`dsn~import.full-coverage-tag-with-revision~1`
+`dsn~import.full-coverage-tag-with-revision~2`
 
 OFT imports full coverage tags with an optional revision:
 
-    full-tag-with-revision = "[" *WSP reference "~" "~" revision "->" requirement-id "]"
+    full-tag-with-revision = "[" *WSP reference "~" revision-separator revision "->" requirement-id "]"
 
-    full-tag-with-revision-with-needed-coverage = "[" *WSP reference "~" "~" revision *WSP "->" *WSP requirement-id
+    full-tag-with-revision-with-needed-coverage = "[" *WSP reference "~" revision-separator revision *WSP "->" *WSP requirement-id
     *WSP ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
 
 Rationale:
@@ -1221,20 +1238,21 @@ Specifying an explicit revision in coverage tags allows incrementing the revisio
 Covers:
 
 * `req~import.full-coverage-tag-format~2`
+* `req~specification-item-id-syntax~1`
 
 Needs: impl, utest
 
 #### Full Coverage Tag Format Allows Specifying Name and Revision
-`dsn~import.full-coverage-tag-with-name-and-revision~1`
+`dsn~import.full-coverage-tag-with-name-and-revision~2`
 
 OFT imports full coverage tags with optional name and revision:
 
     full-tag-with-name-and-revision =
-        "[" *WSP covering-artifact-type "~" covering-name "~" covering-revision
+        "[" *WSP covering-artifact-type "~" covering-name revision-separator covering-revision
         "->" covered-requirement-id "]"
 
     full-tag-with-name-and-revision-with-needed-coverage =
-        "[" *WSP covering-artifact-type "~" xxx "~" revision *WSP
+        "[" *WSP covering-artifact-type "~" xxx revision-separator revision *WSP
         "->" *WSP requirement-id *WSP
         ">>" *WSP artifact-type *WSP *("," *WSP artifact-type) "]"
 
@@ -1245,6 +1263,7 @@ Specifying an explicit name in coverage tags allows overriding the auto-generate
 Covers:
 
 * `req~import.full-coverage-tag-format~2`
+* `req~specification-item-id-syntax~1`
 
 Needs: impl, utest
 
@@ -1255,7 +1274,7 @@ OFT generates readable names without hash code ID for tags with needed coverage.
 
 Rationale:
 
-When you need to cover these items it's important that the name is predictable and does not change e.g. when the file changes.
+When you need to cover these items, it's important that the name is predictable and does not change e.g. when the file changes.
 
 Covers:
 
@@ -1385,7 +1404,7 @@ Needs: impl, itest
 #### Default Newline Format
 `dsn~cli.default-newline-format~1`
 
-If the user does not specify the newline format as parameter, the exporter uses the native newline format of the platform OFT is executed on.
+If the user does not specify the newline format as a parameter, the exporter uses the native newline format of the platform OFT is executed on.
 
 Covers:
 
@@ -1514,11 +1533,11 @@ Needs: impl, utest
 
 ### Why is This Architecture Relevant?
 
-Authors of importers need to be able to rely on these cleanups being done centrally, so that they don't have to implement them themselves.
+Authors of importers need to be able to rely on these cleanups being done centrally so that they don't have to implement them themselves.
 
 ### Alternatives Considered
 
-Clean-up in every importer individually. That was the case up to and including OFT 3.7.1 which turned out to make the importer more complex than necessary.
+Cleanup in every importer individually. That was the case up to and including OFT 3.7.1, which turned out to make the importer more complex than necessary.
 
 # Bibliography
 
@@ -1535,6 +1554,6 @@ The following documents or are referenced in this specification.
 * [OpenFastTrace Terminology][bib.terminology]
 * [Augmented BNF for Syntax Specifications: ABNF][bib.abnf], D. Crocker, P. Overell, January 2008
 
-## Web Sites
+## Websites
 
 * [arc42 - Ressources for software architects][bib.arc42], Dr. Gernot Starke, Dr. Peter Hruschka

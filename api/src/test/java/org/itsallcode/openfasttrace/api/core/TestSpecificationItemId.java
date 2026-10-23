@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.junit.jupiter.api.Test;
@@ -131,5 +133,50 @@ class TestSpecificationItemId
     void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItemId.class).verify();
+    }
+
+    @Test
+    void testFromIdPatternMatcherAfterMatches()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("dsn~dummy~3");
+        assertTrue(matcher.matches());
+        final SpecificationItemId id = SpecificationItemId.fromIdPatternMatcher(matcher);
+        assertAll(
+                () -> assertThat(id.getArtifactType(), equalTo("dsn")),
+                () -> assertThat(id.getName(), equalTo("dummy")),
+                () -> assertThat(id.getRevision(), equalTo(3)));
+    }
+
+    @Test
+    void testFromIdPatternMatcherAfterFind()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("prefix dsn~dummy~3 suffix");
+        assertTrue(matcher.find());
+        final SpecificationItemId id = SpecificationItemId.fromIdPatternMatcher(matcher);
+        assertAll(
+                () -> assertThat(id.getArtifactType(), equalTo("dsn")),
+                () -> assertThat(id.getName(), equalTo("dummy")),
+                () -> assertThat(id.getRevision(), equalTo(3)));
+    }
+
+    @Test
+    void testFromIdPatternMatcherRejectsWrongPattern()
+    {
+        final Matcher matcher = Pattern.compile("(\\p{Alpha}+)~(\\p{Alpha}+)~(\\d+)").matcher("dsn~dummy~3");
+        assertTrue(matcher.matches());
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> SpecificationItemId.fromIdPatternMatcher(matcher));
+        assertThat(exception.getMessage(),
+                equalTo("Matcher pattern must be SpecificationItemId.ID_PATTERN, but was '"
+                        + matcher.pattern() + "'"));
+    }
+
+    @Test
+    void testFromIdPatternMatcherUnmatchedThrowsIllegalStateException()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("dsn~dummy~3");
+        final IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> SpecificationItemId.fromIdPatternMatcher(matcher));
+        assertThat(exception.getMessage(), equalTo("No match found"));
     }
 }

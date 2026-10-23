@@ -107,6 +107,42 @@ class TestLongTagImportingLineConsumer
                 () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 12, 25))));
     }
 
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void importsSecondGeneratedItemCoveredIdRange()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
+                "😀 [impl -> dsn~first~2, dsn~second~3 >> utest" + "]");
+
+        final List<SpecificationItem> items = listener.build();
+        assertAll(
+                () -> assertThat(items, hasSize(2)),
+                () -> assertThat(items.get(0).getLocatedId().getRange(), is(nullValue())),
+                () -> assertThat(items.get(1).getLocatedId().getRange(), is(nullValue())),
+                () -> assertThat(items.get(0).getLocatedCoveredIds(), hasSize(1)),
+                () -> assertThat(items.get(1).getLocatedCoveredIds(), hasSize(1)),
+                () -> assertThat(items.get(0).getLocatedCoveredIds().get(0).getRange(), is(range(2, 12, 23))),
+                () -> assertThat(items.get(1).getLocatedCoveredIds().get(0).getRange(), is(range(2, 25, 37))));
+    }
+
+    // [utest->dsn~located-specification-item-id-tag-ranges~1]
+    @Test
+    void importsDuplicateCoveredIdsWithDistinctRanges()
+    {
+        final SpecificationListBuilder listener = SpecificationListBuilder.create();
+        new LongTagImportingLineConsumer(inputFile(), listener).readLine(3,
+                "😀 [impl~tag~1 -> dsn~same~1, dsn~same~1" + "]");
+
+        final SpecificationItem item = listener.build().get(0);
+        assertAll(
+                () -> assertThat(item.getLocatedCoveredIds(), hasSize(2)),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getId(),
+                        equalTo(item.getLocatedCoveredIds().get(1).getId())),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 18, 28))),
+                () -> assertThat(item.getLocatedCoveredIds().get(1).getRange(), is(range(2, 30, 40))));
+    }
+
     private static SourceRange range(final int line, final int start, final int end)
     {
         return new SourceRange(new SourcePosition(line, start), new SourcePosition(line, end));

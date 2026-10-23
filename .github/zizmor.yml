@@ -1,0 +1,8 @@
+# See https://docs.zizmor.sh/configuration/#settings
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        "actions/*": ref-pin
+        "github/codeql-action/*": ref-pin
+        "*": hash-pin

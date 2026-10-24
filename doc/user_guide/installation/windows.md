@@ -8,7 +8,26 @@ nav_order: 3
 
 ## Windows Installation
 
-On Windows, OpenFastTrace is typically run manually via the JAR file.
+On Windows, OpenFastTrace can be run via JBang or manually via the JAR file.
+
+### JBang
+
+[JBang](https://www.jbang.dev/) runs OpenFastTrace straight from Maven Central and downloads a suitable Java runtime if none is installed.
+
+1.  Install JBang (see the [JBang installation guide](https://www.jbang.dev/documentation/jbang/latest/installation.html) for other options):
+    ```powershell
+    iex "& { $(iwr -useb https://ps.jbang.dev) } app setup"
+    ```
+2.  Install OpenFastTrace as `oft` command:
+    ```powershell
+    jbang app install oft@itsallcode/openfasttrace
+    ```
+3.  Run OFT:
+    ```powershell
+    oft --help
+    ```
+
+To run OFT once without installing it, use `jbang oft@itsallcode/openfasttrace --help`.
 
 ### Manual Installation
 

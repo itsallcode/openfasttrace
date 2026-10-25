@@ -28,9 +28,13 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.[\\w-]+)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
-    /** Separator between artifact type and name in an item ID. */
+    /** Separator between the artifact type and name in an item ID. */
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
-    /** Separator between name and revision in an item ID. */
+    /**
+     * Separator between name and revision in an item ID.
+     * @deprecated with 4.12.0 we widened the accepted separators to include '#'.
+     */
+    @Deprecated(forRemoval = true, since = "4.12.0")
     public static final String REVISION_SEPARATOR = "~";
     /** Regexp pattern for accepted separators between name and revision. */
     public static final String REVISION_SEPARATOR_PATTERN = "[~#]";

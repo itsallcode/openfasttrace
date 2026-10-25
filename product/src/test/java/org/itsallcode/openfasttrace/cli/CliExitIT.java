@@ -27,7 +27,7 @@ class CliExitIT
                 .args(emptyList())
                 .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
                 .expectStdOut(emptyString())
-                .expectStdErr(equalTo("oft: Missing command\nAdd one of 'help','convert','trace'\n\n"))
+                .expectStdErr(equalTo("oft: Missing command\nAdd one of 'help','convert','trace','chains'\n\n"))
                 .verify();
     }
 
@@ -39,7 +39,7 @@ class CliExitIT
                 .expectedExitCode(ExitStatus.CLI_ERROR.getCode())
                 .expectStdOut(emptyString())
                 .expectStdErr(equalTo(
-                        "oft: 'unsupported' is not an OFT command.\nChoose one of 'help','convert','trace'.\n\n"))
+                        "oft: 'unsupported' is not an OFT command.\nChoose one of 'help','convert','trace','chains'.\n\n"))
                 .verify();
     }
 

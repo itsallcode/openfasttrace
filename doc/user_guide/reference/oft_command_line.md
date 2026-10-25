@@ -20,6 +20,7 @@ Where `command` is one of
 
 * `trace` - create a requirement trace document
 * `convert` - convert to a different requirements format
+* `chains` - display tracing chains in specifications
 * `help` - display a help message showing the command line usage and version of OFT
 
 and `option` is one or more of the options listed below.
@@ -94,6 +95,19 @@ One of
 * `specobject`
 
 Defaults to `specobject`.
+
+#### Chains Options
+
+    -o, --output-format <format>
+
+Format in which tracing chains are displayed.
+
+One of
+* `chains`
+* `csv`
+* `mermaid`
+
+Defaults to `chains`.
 
 #### Common Options
 

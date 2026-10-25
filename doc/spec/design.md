@@ -1290,12 +1290,13 @@ Needs: impl, utest
 
 The CLI expects one of the following commands as first unnamed command line parameter:
 
-    command = "trace" / "convert" / "help"
+    command = "trace" / "convert" / "chains" / "help"
 
 Covers:
 
 * `req~cli.tracing.command~1`
 * `req~cli.conversion.command~1`
+* `req~cli.chains.command~1`
 
 Needs: impl, itest
 
@@ -1458,6 +1459,43 @@ Covers:
 * `req~cli.conversion.default-output-format~1`
 
 Needs: impl, itest, utest
+
+### Tracing Chains Display
+
+#### Chains Output Format
+`dsn~cli.chains.output-format~1`
+
+The CLI accepts one of the following tracing chains formats as parameter:
+
+    chains-formats = "chains" / "csv" / "mermaid"
+
+Covers:
+
+* `req~cli.chains.output-format~1`
+
+Needs: impl, utest
+
+#### Default Chains Output Format
+`dsn~cli.chains.default-output-format~1`
+
+The CLI uses `chains` as default tracing chains format if none is given as a parameter.
+
+Covers:
+
+* `req~cli.chains.default-output-format~1`
+
+Needs: impl, utest
+
+#### Tracing Graph Extraction
+`dsn~chains.graph~1`
+
+OFT extracts graph transitions from imported specification items based on artifact types and their declared needs. Forwarding specification items participate normally in the graph without being skipped or highlighted.
+
+Covers:
+
+* `req~cli.chains.command~1`
+
+Needs: impl, utest
 
 ### Listing Plugins
 `dsn~cli.plugins.log~1`

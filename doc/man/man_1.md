@@ -43,6 +43,9 @@ fulfills that demand.
 : Convert requirements to another requirements format. The default format is
   `specobject`.
 
+`chains`
+: Display tracing chains in specifications. The default format is `chains`.
+
 `help`, `-h`, `--help`
 : Display command-line usage and the OFT version.
 
@@ -109,6 +112,12 @@ fulfills that demand.
 `-s`, `--show-origin`
 : Include the origin of each specification item, for example its file and line
   number.
+
+## CHAINS OPTIONS
+
+`-o`, `--output-format FORMAT`
+: Select the tracing chains format: `chains`, `csv`, or `mermaid`. The default
+  is `chains`.
 
 ## COMMON OPTIONS
 

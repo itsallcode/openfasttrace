@@ -1008,6 +1008,48 @@ Covers:
 
 Needs: dsn
 
+#### Tracing Chains Display
+
+##### Tracing Chains Command
+`req~cli.chains.command~1`
+
+OFT allows displaying tracing chains in the specifications via the command line.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+##### Chains Output Format
+`req~cli.chains.output-format~1`
+
+Users can select one of the following tracing chains output formats:
+
+* Chains (`chains`)
+* CSV (`csv`)
+* Mermaid (`mermaid`)
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+##### Default Chains Output Format
+`req~cli.chains.default-output-format~1`
+
+OFT uses `chains` as default tracing chains output format if the user does not select one.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
 #### Common
 
 ##### CLI Help

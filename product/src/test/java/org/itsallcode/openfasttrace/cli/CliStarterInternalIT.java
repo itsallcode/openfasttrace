@@ -36,6 +36,7 @@ class CliStarterInternalIT {
     private static final String HELP_COMMAND = "help";
     private static final String CONVERT_COMMAND = "convert";
     private static final String TRACE_COMMAND = "trace";
+    private static final String CHAINS_COMMAND = "chains";
     private static final String OUTPUT_FILE_PARAMETER = "--output-file";
     private static final String REPORT_VERBOSITY_PARAMETER = "--report-verbosity";
     private static final String OUTPUT_FORMAT_PARAMETER = "--output-format";
@@ -115,6 +116,31 @@ class CliStarterInternalIT {
         assertAll(
             () -> assertThat(status, equalTo(ExitStatus.OK)),
             () -> assertThat(getStdOut(), startsWith(SPECOBJECT_PREAMBLE))
+        );
+    }
+
+    @Test
+    // [itest->dsn~cli.command-selection~1]
+    void testChainsWithoutExplicitInputs() {
+        final ExitStatus status = runInternal(CHAINS_COMMAND);
+        assertThat(status, equalTo(ExitStatus.OK));
+    }
+
+    @Test
+    void testChainsWithDocSpec() {
+        final ExitStatus status = runInternal(CHAINS_COMMAND, DOC_DIR.toString());
+        assertAll(
+            () -> assertThat(status, equalTo(ExitStatus.OK)),
+            () -> assertThat(getStdOut(), containsString("feat -> req -> dsn"))
+        );
+    }
+
+    @Test
+    void testChainsCsvWithDocSpec() {
+        final ExitStatus status = runInternal(CHAINS_COMMAND, OUTPUT_FORMAT_PARAMETER, "csv", DOC_DIR.toString());
+        assertAll(
+            () -> assertThat(status, equalTo(ExitStatus.OK)),
+            () -> assertThat(getStdOut(), startsWith("from,to"))
         );
     }
 

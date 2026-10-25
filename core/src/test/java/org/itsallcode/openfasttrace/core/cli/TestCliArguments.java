@@ -13,6 +13,7 @@ import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.core.cli.commands.ChainsCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.exporter.ExporterConstants;
@@ -69,6 +70,15 @@ class TestCliArguments
         this.arguments.setUnnamedValues(List.of(TraceCommand.COMMAND_NAME));
         assertThat(this.arguments.getOutputFormat(),
                 equalTo(ReportConstants.DEFAULT_REPORT_FORMAT));
+    }
+
+    // [utest->dsn~cli.chains.default-output-format~1]
+    @Test
+    void getStandardOutputFormatForChains()
+    {
+        this.arguments.setUnnamedValues(List.of(ChainsCommand.COMMAND_NAME));
+        assertThat(this.arguments.getOutputFormat(),
+                equalTo(ChainsCommand.DEFAULT_OUTPUT_FORMAT));
     }
 
     @Test

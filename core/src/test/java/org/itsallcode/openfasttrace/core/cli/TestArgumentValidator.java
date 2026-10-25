@@ -30,7 +30,7 @@ class TestArgumentValidator
     @Test
     void testNoCommandGivenIsInvalid()
     {
-        assertValidatorResult("Missing command", "Add one of 'help','convert','trace'");
+        assertValidatorResult("Missing command", "Add one of 'help','convert','trace','chains'");
     }
 
     @Test
@@ -72,7 +72,33 @@ class TestArgumentValidator
     {
         cliArgs.setUnnamedValues(List.of("unknownCommand"));
         assertValidatorResult("'unknownCommand' is not an OFT command.",
-                "Choose one of 'help','convert','trace'.");
+                "Choose one of 'help','convert','trace','chains'.");
+    }
+
+    @Test
+    void testChainsCommandValidWithDefaults()
+    {
+        cliArgs.setUnnamedValues(List.of("chains"));
+        assertValidatorResult("", "");
+    }
+
+    // [utest->dsn~cli.chains.output-format~1]
+    @Test
+    void testChainsCommandValidWithCustomFormat()
+    {
+        cliArgs.setUnnamedValues(List.of("chains"));
+        cliArgs.setOutputFormat("csv");
+        assertValidatorResult("", "");
+    }
+
+    // [utest->dsn~cli.chains.output-format~1]
+    @Test
+    void testChainsCommandUnsupportedFormat()
+    {
+        cliArgs.setUnnamedValues(List.of("chains"));
+        cliArgs.setOutputFormat("unsupported");
+        assertValidatorResult("chains format 'unsupported' is not supported.",
+                "Choose one of 'chains', 'csv', 'mermaid'.");
     }
 
     private void assertValidatorResult(String expectedError, String expectedSuggestion)

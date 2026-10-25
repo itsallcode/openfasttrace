@@ -100,12 +100,14 @@ public class CliStarter
             return new ConvertCommand(this.arguments).run() ? OK : FAILURE;
         case TraceCommand.COMMAND_NAME:
             return new TraceCommand(this.arguments).run() ? OK : FAILURE;
+        case ChainsCommand.COMMAND_NAME:
+            return new ChainsCommand(this.arguments).run() ? OK : FAILURE;
         case HelpCommand.COMMAND_NAME:
             return new HelpCommand(true).run() ? OK : FAILURE;
         case MISSING_COMMAND:
         default:
             new HelpCommand(false).run();
-            printToStdError("Compand missing trying to execute OFT. Choose one of: trace, convert, help");
+            printToStdError("Compand missing trying to execute OFT. Choose one of: trace, convert, chains, help");
             return CLI_ERROR;
         }
     }

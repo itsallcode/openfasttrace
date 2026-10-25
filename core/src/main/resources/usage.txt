@@ -6,6 +6,7 @@ Usage:
 Commands:
   trace                        Create a trace document
   convert                      Convert to a different requirements format
+  chains                       Display tracing chains in specifications
 
 Tracing options:
   -o, --output-format          Report format, one of "plain", "html", "aspec"
@@ -26,6 +27,10 @@ Converting options:
                                Defaults to "specobject"
   -s, --show-origin            Show the origin of specification items
                                (e.g. file and line number)             
+
+Chains options:
+  -o, --output-format format   Tracing chains format, one of "chains",
+                               "csv", "mermaid". Defaults to "chains"             
 
 Common options: 
   -a, --wanted-artifact-types  Import only specification items contained in the

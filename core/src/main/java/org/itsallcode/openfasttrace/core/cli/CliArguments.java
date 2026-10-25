@@ -13,6 +13,7 @@ import org.itsallcode.openfasttrace.api.core.ItemStatus;
 import org.itsallcode.openfasttrace.api.core.Newline;
 import org.itsallcode.openfasttrace.api.report.ReportConstants;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.core.cli.commands.ChainsCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.ConvertCommand;
 import org.itsallcode.openfasttrace.core.cli.commands.TraceCommand;
 import org.itsallcode.openfasttrace.core.cli.logging.LogLevel;
@@ -153,6 +154,7 @@ public class CliArguments
     // [impl->dsn~cli.tracing.default-format~1]
     // [impl->dsn~cli.conversion.default-output-format~1]]
     // [impl->dsn~cli.tracing.output-format~1]
+    // [impl->dsn~cli.chains.default-output-format~1]
     public String getOutputFormat()
     {
         if (this.outputFormat == null)
@@ -165,6 +167,10 @@ public class CliArguments
             else if (command.isPresent() && command.get().equals(ConvertCommand.COMMAND_NAME))
             {
                 return ExporterConstants.DEFAULT_OUTPUT_FORMAT;
+            }
+            else if (command.isPresent() && command.get().equals(ChainsCommand.COMMAND_NAME))
+            {
+                return ChainsCommand.DEFAULT_OUTPUT_FORMAT;
             }
             else
             {

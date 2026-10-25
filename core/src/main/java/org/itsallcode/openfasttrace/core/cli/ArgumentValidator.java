@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.itsallcode.openfasttrace.api.exporter.ExporterContext;
 import org.itsallcode.openfasttrace.api.report.ReportVerbosity;
+import org.itsallcode.openfasttrace.core.chains.ChainsFormat;
 import org.itsallcode.openfasttrace.core.cli.commands.*;
 import org.itsallcode.openfasttrace.core.exporter.ExporterFactoryLoader;
 import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
@@ -18,7 +19,7 @@ import org.itsallcode.openfasttrace.core.serviceloader.ServiceLoaderConfig;
 public class ArgumentValidator
 {
     private static final List<String> AVAILABLE_COMMANDS = asList(HelpCommand.COMMAND_NAME, ConvertCommand.COMMAND_NAME,
-            TraceCommand.COMMAND_NAME);
+            TraceCommand.COMMAND_NAME, ChainsCommand.COMMAND_NAME);
 
     private final CliArguments arguments;
     private String error = "";
@@ -62,6 +63,10 @@ public class ArgumentValidator
         {
             return validateConvertCommand();
         }
+        else if (ChainsCommand.COMMAND_NAME.equals(command.get()))
+        {
+            return validateChainsCommand();
+        }
         else
         {
             this.error = "'" + command.orElse(null) + "' is not an OFT command.";
@@ -89,6 +94,18 @@ public class ArgumentValidator
                 .isFormatSupported(format))
         {
             this.error = "export format '" + format + "' is not supported.";
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateChainsCommand()
+    {
+        final String format = this.arguments.getOutputFormat();
+        if (!ChainsFormat.isSupported(format))
+        {
+            this.error = "chains format '" + format + "' is not supported.";
+            this.suggestion = "Choose one of 'chains', 'csv', 'mermaid'.";
             return false;
         }
         return true;

@@ -19,26 +19,10 @@ The terminology from the [central terminology document][bib.terminology] applies
 ## Conventions
 
 ### Syntax Definitions
+
 Syntax definitions in this document use the [Augmented Backus-Naur Form][bib.abnf].
 
-The following definitions are used frequently throughout the document:
-
-    ANY - any valid character
-    LINEBREAK = the line break character of the platform
-
-    unicode-alpha = <Unicode character with the Alphabetic property>
-
-    unicode-word = unicode-alpha / unicode-nonspacing-mark /
-        unicode-spacing-combining-mark / unicode-decimal-digit /
-        unicode-connector-punctuation
-
-    unicode-nonspacing-mark = <Unicode character with the Mn property>
-
-    unicode-spacing-combining-mark = <Unicode character with the Mc property>
-
-    unicode-decimal-digit = <Unicode character with the Nd property>
-
-    unicode-connector-punctuation = <Unicode character with the Pc property>
+See [System Requirements, section "Syntax Definitions"](system-requirements#syntax-definitions) for more details.
 
 # Constraints
 

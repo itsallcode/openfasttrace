@@ -98,6 +98,11 @@ class TestTagImporter
                         itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name2~3"))),
+                // [utest->dsn~md.specification-item-id-format~4]
+                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~2]
+                parsedItem("[impl~combined#1->dsn~name1#2" + "]",
+                        itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
+                                .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))),
                 parsedItem("[ impl~combined~1 -> dsn~name1~2 , dsn~name2~3 >> test" + "]",
                         itemBuilder().id(SpecificationItemId.parseId("impl~combined~1"))
                                 .addCoveredId(SpecificationItemId.parseId("dsn~name1~2"))
@@ -191,7 +196,7 @@ class TestTagImporter
                                 .addNeedsArtifactType("impl")
                                 .addNeedsArtifactType("test")),
 
-                // [utest->dsn~import.full-coverage-tag-with-revision~1]
+                // [utest->dsn~import.full-coverage-tag-with-revision~2]
                 parsedItem("[impl~~42->req~name~17" + "]",
                         itemACoveringB("impl~name-3433816440~42", "req~name~17")),
                 parsedItems("[impl~~42->req~name~17" + "][impl~~42->req~name~17" + "]",
@@ -199,12 +204,12 @@ class TestTagImporter
                         itemACoveringB("impl~name-1460579607~42", "req~name~17")),
 
                 noItemDetected("[impl~~-42->req~name~17]"),
-                // [utest->dsn~import.full-coverage-tag-with-revision~1]
+                // [utest->dsn~import.full-coverage-tag-with-revision~2]
                 parsedItem("[impl~~42->req~example_name~17>>test" + "]",
                         itemACoveringB("impl~example_name~42", "req~example_name~17")
                                 .addNeedsArtifactType("test")),
 
-                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~1]
+                // [utest->dsn~import.full-coverage-tag-with-name-and-revision~2]
                 parsedItem("[impl->dsn~name~2" + "]",
                         itemACoveringB("impl~name-1627661772~0", "dsn~name~2")),
                 parsedItem("[impl~name1~1->dsn~name2~2" + "]",

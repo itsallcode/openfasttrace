@@ -28,16 +28,22 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     public static final String ITEM_NAME_PATTERN = "(?U)(\\p{Alpha}[\\w-]*(?:\\.[\\w-]+)*+)";
     private static final String LEGACY_ID_NAME = "(\\p{Alpha}+)(?:~\\p{Alpha}+)?:"
             + ITEM_NAME_PATTERN;
-    /** Separator between artifact type and name in an item ID. */
+    /** Separator between the artifact type and name in an item ID. */
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
-    /** Separator between name and revision in an item ID. */
+    /**
+     * Separator between name and revision in an item ID.
+     * @deprecated with 4.12.0 we widened the accepted separators to include '#'.
+     */
+    @Deprecated(forRemoval = true, since = "4.12.0")
     public static final String REVISION_SEPARATOR = "~";
+    /** Regexp pattern for accepted separators between name and revision. */
+    public static final String REVISION_SEPARATOR_PATTERN = "[~#]";
     static final int REVISION_WILDCARD = Integer.MIN_VALUE;
-    // [impl->dsn~md.specification-item-id-format~3]
+    // [impl->dsn~md.specification-item-id-format~4]
     private static final String ID = "(\\p{Alpha}+)" //
             + ARTIFACT_TYPE_SEPARATOR //
             + ITEM_NAME_PATTERN //
-            + REVISION_SEPARATOR //
+            + REVISION_SEPARATOR_PATTERN //
             + ITEM_REVISION_PATTERN;
     private static final String LEGACY_ID = LEGACY_ID_NAME + ", *v" //
             + ITEM_REVISION_PATTERN;
@@ -138,6 +144,37 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     }
 
     /**
+     * Create a specification item ID from an already-matched {@link #ID_PATTERN}
+     * matcher.
+     * <p>
+     * The matcher must use {@link #ID_PATTERN} and must already have a current
+     * match from {@link Matcher#matches()} or {@link Matcher#find()}. This does
+     * not accept {@link #LEGACY_ID_PATTERN}.
+     * </p>
+     *
+     * @param matcher
+     *            an already-matched matcher whose pattern is {@link #ID_PATTERN}
+     * @return the specification item ID
+     * @throws IllegalArgumentException
+     *             if the matcher's pattern is not {@link #ID_PATTERN}, or if the
+     *             revision cannot be parsed
+     * @throws IllegalStateException
+     *             if the matcher has no current match
+     */
+    public static SpecificationItemId fromIdPatternMatcher(final Matcher matcher)
+    {
+        if (matcher.pattern() != ID_PATTERN)
+        {
+            throw new IllegalArgumentException(
+                    "Matcher pattern must be SpecificationItemId.ID_PATTERN, but was '"
+                            + matcher.pattern() + "'");
+        }
+        final Builder builder = new Builder();
+        builder.setIdPartsFromMatches(matcher);
+        return builder.build();
+    }
+
+    /**
      * Create a specification item ID
      *
      * @param artifactType
@@ -174,7 +211,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
      */
     public static class Builder
     {
-        // [impl->dsn~md.specification-item-id-format~3]
+        // [impl->dsn~md.specification-item-id-format~4]
         private final String id;
         private String artifactType;
         private String name;
@@ -331,7 +368,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
                 else
                 {
                     throw new IllegalArgumentException("Invalid specification item ID format: \"" + this.id
-                            + "\". Format must be <arifact-type>~<requirement-name-or-number>~<revision>.");
+                            + "\". Format must be <artifact-type>~<requirement-name-or-number>(~|#)<revision>.");
                 }
             }
         }
@@ -340,10 +377,10 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
         {
             this.artifactType = matcher.group(ARTIFACT_TYPE_MATCHING_GROUP);
             this.name = matcher.group(NAME_MATCHING_GROUP);
-            parseRevision(matcher.group(REVISION_MATCHING_GROUP));
+            parseRevision(matcher.group(REVISION_MATCHING_GROUP), matcher.group());
         }
 
-        private void parseRevision(final String text)
+        private void parseRevision(final String text, final String idText)
         {
             try
             {
@@ -352,7 +389,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
             catch (final NumberFormatException exception)
             {
                 throw new IllegalArgumentException(
-                        "Error parsing version number from specification item ID: \"" + this.id
+                        "Error parsing version number from specification item ID: \"" + idText
                                 + "\"",
                         exception);
             }

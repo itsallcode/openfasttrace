@@ -33,10 +33,7 @@ brew install openfasttrace
 
 [JBang](https://www.jbang.dev/) runs OpenFastTrace straight from Maven Central and downloads a suitable Java runtime if none is installed.
 
-1.  Install JBang (see the [JBang installation guide](https://www.jbang.dev/documentation/jbang/latest/installation.html) for other options):
-    ```bash
-    curl -Ls https://sh.jbang.dev | bash -s - app setup
-    ```
+1. Install JBang following the [JBang installation guide](https://www.jbang.dev/documentation/jbang/latest/installation.html)
 2.  Install OpenFastTrace as `oft` command:
     ```bash
     jbang app install oft@itsallcode/openfasttrace

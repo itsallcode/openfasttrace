@@ -104,7 +104,7 @@ For more details about how to run OFT please consult the [user guide](https://op
 
 ### Run via JBang
 
-With [JBang](https://www.jbang.dev/) installed (`curl -Ls https://sh.jbang.dev | bash -s - app setup`, see [other installation options](https://www.jbang.dev/documentation/jbang/latest/installation.html)), you can run the latest OFT release without downloading it manually:
+With [JBang](https://www.jbang.dev/) installed, you can run the latest OFT release without downloading it manually:
 
 ```sh
 jbang oft@itsallcode/openfasttrace trace /path/to/directory/being/traced

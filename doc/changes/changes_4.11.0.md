@@ -16,7 +16,7 @@ The user guide documentation now has automatic lateral navigation.
 
 * #610: Allow adding plugins via configuration using `Oft.builder().addPlugin(name, jars...)`
 * #612: Add support for Visual Basic in the source tag importer
-* n/a: Run OFT via JBang using `jbang oft@itsallcode/openfasttrace`
+* #641: Run OFT via JBang using `jbang oft@itsallcode/openfasttrace`
 
 ## Bugfixes
 

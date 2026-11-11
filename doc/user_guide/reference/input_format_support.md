@@ -93,7 +93,7 @@ recognized file types:
 * [Go](https://golang.org/) (`.go`)
 * Groovy (`.groovy`)
 * Java (`.java`, `.fxml`)
-* JavaScript (`.js`, `.ejs`, `.cjs`, `.mjs`)
+* JavaScript (`.js`, `.jsx`, `.ejs`, `.cjs`, `.mjs`)
 * Kotlin (`.kt`, `.kts`)
 * Lua (`.lua`)
 * Objective C (`.m`, `.mm`)
@@ -106,7 +106,7 @@ recognized file types:
 * Shell programming (`.sh`, `.bash`, `.zsh`)
 * Swift (`.swift`)
 * Terraform (`.tf`, `.tfvars`)
-* TypeScript (`.ts`)
+* TypeScript (`.ts`, `.tsx`)
 * Visual Basic (`.vb`)
 * Windows batch files (`.bat`)
 

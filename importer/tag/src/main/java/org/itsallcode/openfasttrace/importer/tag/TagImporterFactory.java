@@ -26,8 +26,8 @@ public class TagImporterFactory extends AbstractImporterFactory
             "json", "htm", "html", "xhtml", "xml", "yaml", "yml", // markup languages
             "fxml", "java", // Java
             "clj", "kt", "kts", "scala", // JVM languages
-            "js", "mjs", "cjs", "ejs", // JavaScript
-            "ts", // TypeScript
+            "js", "jsx", "mjs", "cjs", "ejs", // JavaScript
+            "ts", "tsx", // TypeScript
             "lua", // Lua
             "m", "mm", // Objective C
             "php", // PHP

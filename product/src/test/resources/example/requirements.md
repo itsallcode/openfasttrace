@@ -27,3 +27,11 @@ Needs: src
 ## Visual Basic
 `req~vb-source~1`
 Needs: src
+
+## JSX
+`req~jsx-source~1`
+Needs: src
+
+## TSX
+`req~tsx-source~1`
+Needs: src

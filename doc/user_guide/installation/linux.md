@@ -29,6 +29,22 @@ If you use Homebrew on Linux, you can install OpenFastTrace directly:
 brew install openfasttrace
 ```
 
+### JBang
+
+[JBang](https://www.jbang.dev/) runs OpenFastTrace straight from Maven Central and downloads a suitable Java runtime if none is installed.
+
+1. Install JBang following the [JBang installation guide](https://www.jbang.dev/documentation/jbang/latest/installation.html)
+2.  Install OpenFastTrace as `oft` command:
+    ```bash
+    jbang app install oft@itsallcode/openfasttrace
+    ```
+3.  Run OFT:
+    ```bash
+    oft --help
+    ```
+
+To run OFT once without installing it, use `jbang oft@itsallcode/openfasttrace --help`.
+
 ### Manual Installation
 
 If you prefer a manual setup, you can use the executable JAR file directly.

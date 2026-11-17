@@ -59,7 +59,7 @@ One of:
 
 Defaults to `plain`.
 
-    --v, --report-verbosity <level>
+    -v, --report-verbosity <level>
 
 The verbosity of the tracing report.
 

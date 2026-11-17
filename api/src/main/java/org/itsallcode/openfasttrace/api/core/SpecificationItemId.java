@@ -33,9 +33,11 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     /**
      * Separator between name and revision in an item ID.
      * @deprecated with 4.12.0 we widened the accepted separators to include '#'.
+     * Use {@link REVISION_SEPARATOR_PATTERN} for detection or {@link DEFAULT_REVISION_SEPARATOR} for output instead.
      */
     @Deprecated(forRemoval = true, since = "4.12.0")
     public static final String REVISION_SEPARATOR = "~";
+    public static final String DEFAULT_REVISION_SEPARATOR = "~";
     /** Regexp pattern for accepted separators between name and revision. */
     public static final String REVISION_SEPARATOR_PATTERN = "[~#]";
     static final int REVISION_WILDCARD = Integer.MIN_VALUE;
@@ -117,7 +119,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     @Override
     public String toString()
     {
-        return this.artifactType + ARTIFACT_TYPE_SEPARATOR + this.name + REVISION_SEPARATOR + this.revision;
+        return this.artifactType + ARTIFACT_TYPE_SEPARATOR + this.name + DEFAULT_REVISION_SEPARATOR + this.revision;
     }
 
     /**

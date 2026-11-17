@@ -18,11 +18,11 @@ The terminology from the [central terminology document][bib.terminology] applies
 
 ## Conventions
 
-### Syntax Definitions
+### Syntax Notation
 
 Syntax definitions in this document use the [Augmented Backus-Naur Form][bib.abnf].
 
-See [System Requirements, section "Syntax Definitions"](system-requirements#syntax-definitions) for more details.
+See [System Requirements, section "Syntax Definitions"](system_requirements.md#syntax-notation) for more details.
 
 # Constraints
 

@@ -37,6 +37,7 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
      */
     @Deprecated(forRemoval = true, since = "4.12.0")
     public static final String REVISION_SEPARATOR = "~";
+    /** Since 4.12.0 OFT supports "~" and "#" revision separators when reading. The default for writing remains "~". */
     public static final String DEFAULT_REVISION_SEPARATOR = "~";
     /** Regexp pattern for accepted separators between name and revision. */
     public static final String REVISION_SEPARATOR_PATTERN = "[~#]";

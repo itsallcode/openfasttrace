@@ -78,14 +78,19 @@ class TestMarkdownMarkupImporter extends AbstractLightWeightMarkupImporterTest
         final SpecificationItem item = importText("""
                 req~subject~1
                 Covers:
-                * req~covered~2
+                * req~covered#2
                 Depends:
-                * req~dependency~3
+                * req~dependency#3
                 """).get(0);
 
         assertAll(
                 () -> assertThat(item.getLocatedId().getRange(), is(range(0, 0, 13))),
+                () -> assertThat(item.getLocatedId().getArtifactTypeRange().orElseThrow(), is(range(0, 0, 3))),
+                () -> assertThat(item.getLocatedId().getNameRange().orElseThrow(), is(range(0, 4, 11))),
+                () -> assertThat(item.getLocatedId().getRevisionRange().orElseThrow(), is(range(0, 12, 13))),
                 () -> assertThat(item.getLocatedCoveredIds().get(0).getRange(), is(range(2, 2, 15))),
+                () -> assertThat(item.getLocatedCoveredIds().get(0).getNameRange().orElseThrow(),
+                        is(range(2, 6, 13))),
                 () -> assertThat(item.getLocatedDependOnIds().get(0).getRange(), is(range(4, 2, 18))));
     }
 

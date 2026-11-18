@@ -30,6 +30,18 @@ class TestRestructuredTextImporter extends AbstractLightWeightMarkupImporterTest
         super(1);
     }
 
+    // [utest->dsn~md.specification-item-id-format~4]
+    @Test
+    void testImportsHashRevisionSeparator()
+    {
+        assertImport("hash-revision.rst", """
+                Hash Revision
+                =============
+                req~hash-revision#1
+                """, contains(item().title("Hash Revision").id("req", "hash-revision", 1)
+                .location("hash-revision.rst", 3).build()));
+    }
+
     @Override
     protected ImporterFactory getImporterFactory()
     {

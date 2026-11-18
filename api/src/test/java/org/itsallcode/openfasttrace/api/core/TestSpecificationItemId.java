@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.createId;
 import static org.itsallcode.openfasttrace.api.core.SpecificationItemId.parseId;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId.Builder;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * [utest->dsn~md.specification-item-id-format~3]
+ * [utest->dsn~md.specification-item-id-format~4]
  */
 // [utest->dsn~specification-item-id~1]
 class TestSpecificationItemId
@@ -24,6 +26,7 @@ class TestSpecificationItemId
     @CsvSource(value =
     {
             "type~name~42, type, name, 42",
+            "type~name#42, type, name, 42",
             "type~name-with-dash~42, type, name-with-dash, 42",
             "type~name.with.dot~42, type, name.with.dot, 42",
             "type~name-trailing-~42, type, name-trailing-, 42",
@@ -91,7 +94,7 @@ class TestSpecificationItemId
         final Throwable exception = assertThrows(IllegalArgumentException.class, () -> parseId(illegalId));
         assertThat(exception.getMessage(),
                 equalTo("Invalid specification item ID format: \"" + illegalId + "\". "
-                        + "Format must be <arifact-type>~<requirement-name-or-number>~<revision>."));
+                        + "Format must be <artifact-type>~<requirement-name-or-number>(~|#)<revision>."));
     }
 
     @Test
@@ -111,6 +114,14 @@ class TestSpecificationItemId
     }
 
     @Test
+    void testHashRevisionSeparatorCreatesCanonicalId()
+    {
+        final SpecificationItemId id = parseId("dsn~dummy#3");
+        assertAll(() -> assertThat(id, equalTo(parseId("dsn~dummy~3"))),
+                () -> assertThat(id.toString(), equalTo("dsn~dummy~3")));
+    }
+
+    @Test
     void testToStringRevisionWildcard()
     {
         final Builder builder = new Builder();
@@ -122,5 +133,50 @@ class TestSpecificationItemId
     void testEqualsAndHashContract()
     {
         EqualsVerifier.forClass(SpecificationItemId.class).verify();
+    }
+
+    @Test
+    void testFromIdPatternMatcherAfterMatches()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("dsn~dummy~3");
+        assertTrue(matcher.matches());
+        final SpecificationItemId id = SpecificationItemId.fromIdPatternMatcher(matcher);
+        assertAll(
+                () -> assertThat(id.getArtifactType(), equalTo("dsn")),
+                () -> assertThat(id.getName(), equalTo("dummy")),
+                () -> assertThat(id.getRevision(), equalTo(3)));
+    }
+
+    @Test
+    void testFromIdPatternMatcherAfterFind()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("prefix dsn~dummy~3 suffix");
+        assertTrue(matcher.find());
+        final SpecificationItemId id = SpecificationItemId.fromIdPatternMatcher(matcher);
+        assertAll(
+                () -> assertThat(id.getArtifactType(), equalTo("dsn")),
+                () -> assertThat(id.getName(), equalTo("dummy")),
+                () -> assertThat(id.getRevision(), equalTo(3)));
+    }
+
+    @Test
+    void testFromIdPatternMatcherRejectsWrongPattern()
+    {
+        final Matcher matcher = Pattern.compile("(\\p{Alpha}+)~(\\p{Alpha}+)~(\\d+)").matcher("dsn~dummy~3");
+        assertTrue(matcher.matches());
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> SpecificationItemId.fromIdPatternMatcher(matcher));
+        assertThat(exception.getMessage(),
+                equalTo("Matcher pattern must be SpecificationItemId.ID_PATTERN, but was '"
+                        + matcher.pattern() + "'"));
+    }
+
+    @Test
+    void testFromIdPatternMatcherUnmatchedThrowsIllegalStateException()
+    {
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher("dsn~dummy~3");
+        final IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> SpecificationItemId.fromIdPatternMatcher(matcher));
+        assertThat(exception.getMessage(), equalTo("No match found"));
     }
 }

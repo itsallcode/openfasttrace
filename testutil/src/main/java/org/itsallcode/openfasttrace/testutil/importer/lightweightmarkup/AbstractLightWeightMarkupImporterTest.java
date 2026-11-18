@@ -52,9 +52,10 @@ public abstract class AbstractLightWeightMarkupImporterTest
      */
     protected abstract String formatTitle(final String title, int level);
 
-    // [utest -> dsn~md.specification-item-id-format~3]
+    // [utest -> dsn~md.specification-item-id-format~4]
     @CsvSource({
             "at~name~67, at, name, 67",
+            "at~name#67, at, name, 67",
             "longartifacttype~name.with.dots~123456789, longartifacttype, name.with.dots, 123456789",
             "a~b1.c1.d~0, a, b1.c1.d, 0"
     })
@@ -578,7 +579,7 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .build()));
     }
 
-    // [impl -> dsn~md.specification-item-id-format~3] with UTF-8
+    // [impl -> dsn~md.specification-item-id-format~4] with UTF-8
     @Test
     void testItemIdSupportsUTF8Characaters()
     {

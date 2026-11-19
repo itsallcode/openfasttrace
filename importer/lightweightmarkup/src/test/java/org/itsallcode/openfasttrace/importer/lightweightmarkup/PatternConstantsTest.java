@@ -101,7 +101,7 @@ class PatternConstantsTest
 
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
-    @ValueSource(strings = { "", "   ", "invalid", "not~an~id" })
+    @ValueSource(strings = { "", "   ", "invalid", "not~an~id", "also~not-an-id~3b", "someone~forgot~1a~comma-1 })
     void testReferenceInlineRejectsInvalid(final String input)
     {
         assertThat(PatternConstants.REFERENCE_INLINE, not(PatternMatcher.patternMatches(input)));

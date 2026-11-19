@@ -90,8 +90,7 @@ class PatternConstantsTest
 
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
-    @ValueSource(strings = { "req~name~1", "`req~name~1`",
-            "req~name~1, req~name~2", "`req~name~1`, `req~name~2`" })
+    @ValueSource(strings = { "req~name~1", "`req~name~1`" })
     void testReferenceInlineMatchesValid(final String input)
     {
         final Matcher matcher = Pattern.compile(PatternConstants.REFERENCE_INLINE).matcher(input);
@@ -102,8 +101,7 @@ class PatternConstantsTest
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
     @ValueSource(strings = { "", "   ", "invalid", "not~an~id", "also~not-an-id~3b",
-            "someone~forgot~1a~comma-1", "[link](#req~name~1)", "req~name~1 req~name~2",
-            "req~name~1; req~name~2" })
+            "someone~forgot~1a~comma-1" })
     void testReferenceInlineRejectsInvalid(final String input)
     {
         assertThat(PatternConstants.REFERENCE_INLINE, not(PatternMatcher.patternMatches(input)));

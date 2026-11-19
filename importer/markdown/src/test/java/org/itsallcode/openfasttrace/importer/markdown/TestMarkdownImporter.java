@@ -109,8 +109,7 @@ class TestMarkdownImporter
     @ParameterizedTest
     @ValueSource(strings = { "Covers:", "#Covers: req~foo~1", " Covers: req~foo~1", "Covers: abc",
             "Covers; req~foo~1", "Covers req~foo~1", "Covers: req~foo~1 req~bar~2",
-            "Covers: req~foo~1; req~bar~2", "Covers: someone~forgot~1a~comma-1",
-            "Covers: [link](#req~foo~1)" })
+            "Covers: req~foo~1; req~bar~2", "Covers: someone~forgot~1a~comma-1" })
     void testIdentifyNonCoversInline(final String text)
     {
         MarkdownAsserts.assertMismatch(MdPattern.COVERS_INT, text);

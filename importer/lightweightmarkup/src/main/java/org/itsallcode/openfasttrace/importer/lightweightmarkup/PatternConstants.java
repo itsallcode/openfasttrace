@@ -28,10 +28,9 @@ public final class PatternConstants
             + "(?:\\W.*)?";
 
     // [impl->dsn~md.covers-single-line~1]
-    /** Matches inline specification item ID reference. Capture group 1 holds the first ID. */
+    /** Matches inline specification item ID reference. Capture group 1 holds the ID. */
     public static final String REFERENCE_INLINE = "`?\\b("
-            + SpecificationItemId.ID_PATTERN + ")\\b`?"
-            + "(?:\\s*,\\s*`?\\b" + SpecificationItemId.ID_PATTERN + "\\b`?)*";
+            + SpecificationItemId.ID_PATTERN + ")\\b`?";
 
     private PatternConstants()
     {

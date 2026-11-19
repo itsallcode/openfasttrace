@@ -19,8 +19,7 @@ enum RstPattern
 
     // @formatter:off
     COMMENT("Comment:\\s*"),
-    COVERS_INT("Covers:\\s*" + PatternConstants.REFERENCE_INLINE
-            + "(?:\\s*,\\s*" + PatternConstants.REFERENCE_INLINE + ")*\\s*"),
+    COVERS_INT("Covers:\\s*" + PatternConstants.REFERENCE_INLINE_LIST + "\\s*"),
     COVERS("Covers:\\s*"),
     COVERS_REF(PatternConstants.REFERENCE_AFTER_BULLET),
     DEPENDS("Depends:\\s*"),

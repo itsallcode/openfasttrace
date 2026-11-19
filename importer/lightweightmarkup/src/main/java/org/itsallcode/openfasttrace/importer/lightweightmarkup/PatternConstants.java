@@ -27,10 +27,15 @@ public final class PatternConstants
             + "(" + SpecificationItemId.ID_PATTERN + ")"
             + "(?:\\W.*)?";
 
+    private static final String BOUNDED_ID = "\\b" + SpecificationItemId.ID_PATTERN + "\\b";
+
     // [impl->dsn~md.covers-single-line~1]
-    /** Matches inline specification item ID reference. Capture group 1 holds the ID. */
-    public static final String REFERENCE_INLINE = "`?\\b("
-            + SpecificationItemId.ID_PATTERN + ")\\b`?";
+    /** Matches an inline specification item ID reference (plain or enclosed in backticks). */
+    public static final String REFERENCE_INLINE = "(?:`" + BOUNDED_ID + "`|" + BOUNDED_ID + ")";
+
+    /** Matches a comma-separated list of inline specification item ID references. */
+    public static final String REFERENCE_INLINE_LIST = REFERENCE_INLINE
+            + "(?:\\s*,\\s*" + REFERENCE_INLINE + ")*";
 
     private PatternConstants()
     {

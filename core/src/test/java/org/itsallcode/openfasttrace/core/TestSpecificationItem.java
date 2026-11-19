@@ -28,7 +28,7 @@ class TestSpecificationItem
     static final String NAME = "foobar";
     static final int REVISION = 1;
     static final String ID_AS_TEXT = ARTIFACT_TYPE + SpecificationItemId.ARTIFACT_TYPE_SEPARATOR
-            + NAME + SpecificationItemId.REVISION_SEPARATOR + REVISION;
+            + NAME + SpecificationItemId.DEFAULT_REVISION_SEPARATOR + REVISION;
     static final SpecificationItemId ID = SpecificationItemId.parseId(ID_AS_TEXT);
     static final String DESCRIPTION = "This is a description\nwith multiple lines";
     static final String RATIONALE = "A rationale\nwith multiple lines";

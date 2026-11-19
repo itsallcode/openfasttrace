@@ -59,7 +59,7 @@ One of:
 
 Defaults to `plain`.
 
-    --v, --report-verbosity <level>
+    -v, --report-verbosity <level>
 
 The verbosity of the tracing report.
 
@@ -116,11 +116,11 @@ Defaults to the platform standard if not given.
 
 You can change the output color scheme.
 
-    -c, --color=<color scheme>
+    -c, --color-scheme <color scheme>
 
 The available color schemes are
 
-`black-and-white`
+`black_and_white`
 :: Plain black and white. On the console this also means no font styles used.
 
 `monochrome`

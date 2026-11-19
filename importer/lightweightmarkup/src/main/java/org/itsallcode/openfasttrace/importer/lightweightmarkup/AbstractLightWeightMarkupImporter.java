@@ -304,14 +304,17 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id, final int column)
     {
         // [impl->dsn~located-specification-item-id-text-ranges~1]
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher(idText);
+        if (!matcher.matches())
+        {
+            throw new IllegalArgumentException("Expected a current specification item ID: " + idText);
+        }
         final SourceRange range = new SourceRange(new SourcePosition(this.currentContext.lineNumber() - 1, column),
                 new SourcePosition(this.currentContext.lineNumber() - 1, column + idText.length()));
-        final int artifactTypeEnd = idText.indexOf(SpecificationItemId.ARTIFACT_TYPE_SEPARATOR);
-        final int revisionStart = idText.lastIndexOf(SpecificationItemId.REVISION_SEPARATOR) + 1;
         return LocatedSpecificationItemId.builder().id(id).range(range)
-                .artifactTypeRange(range(column, column + artifactTypeEnd))
-                .nameRange(range(column + artifactTypeEnd + 1, column + revisionStart - 1))
-                .revisionRange(range(column + revisionStart, column + idText.length())).build();
+                .artifactTypeRange(range(column + matcher.start(1), column + matcher.end(1)))
+                .nameRange(range(column + matcher.start(2), column + matcher.end(2)))
+                .revisionRange(range(column + matcher.start(3), column + matcher.end(3))).build();
     }
 
     private SourceRange range(final int start, final int end)

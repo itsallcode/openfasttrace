@@ -32,6 +32,25 @@ OFT aims to help developers independently of their platform. I should not matter
 
 OpenFastTrace uses unified terminology for all documents. Please refer to the [central terminology document](../terminology.md) for definitions of terms like [specification item](../terminology.md#specification-item), [coverage](../terminology.md#coverage), and [artifact](../terminology.md#artifact).
 
+### Syntax Notation
+
+Syntax definitions in this document use [Augmented Backus-Naur Form (ABNF)](https://www.rfc-editor.org/rfc/rfc5234.html).
+The following Unicode character classes are used in syntax definitions:
+
+    unicode-alpha = <Unicode character with the Alphabetic property>
+
+    unicode-word = unicode-alpha / unicode-nonspacing-mark /
+        unicode-spacing-combining-mark / unicode-decimal-digit /
+        unicode-connector-punctuation
+
+    unicode-nonspacing-mark = <Unicode character with the Mn property>
+
+    unicode-spacing-combining-mark = <Unicode character with the Mc property>
+
+    unicode-decimal-digit = <Unicode character with the Nd property>
+
+    unicode-connector-punctuation = <Unicode character with the Pc property>
+
 ## Features
 
 ### Requirement Tracing
@@ -121,19 +140,11 @@ Needs: dsn
 ### Located Specification Item IDs
 `req~located-specification-item-ids~1`
 
-For every imported declared, covered, and dependency specification item ID,
-OFT shall retain the individual source occurrence. For source text, positions
-shall be zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges.
-Where an ID component is generated or its source is unavailable, its component
-range shall be absent. Equal item IDs at distinct source occurrences shall
-remain distinct occurrences. Short coverage tags shall not generate source
-ranges for their generated or covered IDs.
+For every imported declared, covered, and dependency specification item ID, OFT retains the individual source occurrence. For source text, positions are zero-based UTF-16 offsets with start-inclusive, end-exclusive ranges. Where an ID component is generated or its source is unavailable, its component range is absent. Equal item IDs at distinct source occurrences remain distinct occurrences. Short coverage tags do not generate source ranges for their generated or covered IDs.
 
 Rationale:
 
-The exact location of an item ID is required for IDE plugins in order to support
-features like syntax highlighting, find occurrences, jump to definition and auto-complete.
-Adding this feature to OFT helps avoid code duplications and improves reliability.
+The exact location of an item ID is required for IDE plugins to support features like syntax highlighting, find occurrences, jump to definition and auto-complete. Adding this feature to OFT helps avoid code duplications and improves reliability.
 
 Needs: dsn
 
@@ -183,7 +194,7 @@ Needs: req
 
 ### Tracing Reports
 
-A tracing report is a representation of the results of the requirement tracing OFT performs. Depending on their use, reports can be designed to be human readable, machine readable or both.
+A tracing report is a representation of the results of the requirement tracing OFT performs. Depending on their use, reports can be designed to be human-readable, machine-readable or both.
 
 #### Console Reports
 
@@ -274,6 +285,30 @@ The "Depends" section contains a list of all specification item IDs that must be
 The "Needs" section list all artifact item types in which coverage for this item must be provided.
 
 Tags are a way to label an artifact intended for grouping.
+
+Covers:
+
+* [feat~requirement-tracing~1](#requirement-tracing)
+
+Needs: dsn
+
+#### Specification Item ID Syntax
+`req~specification-item-id-syntax~1`
+
+A specification item ID consists of an artifact type, an item name, and a numeric revision.
+
+    specification-item-id = artifact-type "~" name ("~" / "#") revision
+
+    artifact-type = 1*(ALPHA)
+
+    name = unicode-alpha *(unicode-word / "-")
+        *("." 1*(unicode-word / "-"))
+
+    revision = 1*(DIGIT)
+
+Rationale:
+
+The `#` spelling lets authors use IDs in Markdown without the two tildes being interpreted as strikethrough markup.
 
 Covers:
 

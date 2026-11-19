@@ -16,12 +16,14 @@ The user guide documentation now has automatic lateral navigation.
 
 * #610: Allow adding plugins via configuration using `Oft.builder().addPlugin(name, jars...)`
 * #612: Add support for Visual Basic in the source tag importer
+* #641: Run OFT via JBang using `jbang oft@itsallcode/openfasttrace`
 
 ## Bugfixes
 
 * #401: Added regression test for RST parser corner case (issue was fixed already)
 * #423: Fixed tag parsing inconsistency in Markdown and reStructuredText importers
 * #574: Fixed invalid HTML when inline code contains underscores
+* #630: Accept `#` as an alternative separator between specification item names and revisions
 
 ## Documentation
 

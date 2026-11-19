@@ -275,7 +275,33 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         this.listener.addCoveredId(locatedId(idText, SpecificationItemId.parseId(idText)));
     }
 
+    /**
+     * Add covered specification item IDs found on an inline "Covers:" line.
+     */
+    // [impl->dsn~md.covers-single-line~1]
+    protected void addInlineCoverage()
+    {
+        final String line = this.currentContext.currentLine();
+        final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher(line);
+        final int colonIndex = line.indexOf(':');
+        if (colonIndex >= 0)
+        {
+            matcher.region(colonIndex + 1, line.length());
+        }
+        while (matcher.find())
+        {
+            final String idText = matcher.group();
+            final SpecificationItemId id = SpecificationItemId.parseId(idText);
+            this.listener.addCoveredId(locatedId(idText, id, matcher.start()));
+        }
+    }
+
     private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id)
+    {
+        return locatedId(idText, id, this.currentContext.currentLine().indexOf(idText));
+    }
+
+    private LocatedSpecificationItemId locatedId(final String idText, final SpecificationItemId id, final int column)
     {
         // [impl->dsn~located-specification-item-id-text-ranges~1]
         final Matcher matcher = SpecificationItemId.ID_PATTERN.matcher(idText);
@@ -283,7 +309,6 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
         {
             throw new IllegalArgumentException("Expected a current specification item ID: " + idText);
         }
-        final int column = this.currentContext.currentLine().indexOf(idText);
         final SourceRange range = new SourceRange(new SourcePosition(this.currentContext.lineNumber() - 1, column),
                 new SourcePosition(this.currentContext.lineNumber() - 1, column + idText.length()));
         return LocatedSpecificationItemId.builder().id(id).range(range)

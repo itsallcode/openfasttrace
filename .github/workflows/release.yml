@@ -29,7 +29,7 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
 
   native-images:
-    needs: release-preflight
+    needs: validate-release-preconditions
     permissions:
       contents: read
     strategy:
@@ -37,10 +37,10 @@ jobs:
       matrix:
         include:
           - target: linux-x64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
             output: openfasttrace-linux-x64
           - target: linux-arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
             output: openfasttrace-linux-arm64
           - target: macos-arm64
             runner: macos-15
@@ -82,7 +82,7 @@ jobs:
 
   release:
     needs:
-      - release-preflight
+      - release-preconditions
       - native-images
     runs-on: ubuntu-latest
     defaults:

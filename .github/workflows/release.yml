@@ -17,6 +17,8 @@ on:
 jobs:
   release-preflight:
     runs-on: ubuntu-slim
+    permissions:
+      contents: read
     steps:
       - name: Fail if not running on main branch
         if: ${{ github.ref != 'refs/heads/main' }}

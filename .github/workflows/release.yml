@@ -62,7 +62,7 @@ jobs:
       - uses: graalvm/setup-graalvm@60e76998d25690099182b796e99b8804da582d90 # v1.6.10
         name: Set up GraalVM 25
         with:
-          version: '25.0'
+          version: '25.6'
           distribution: graalvm
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: maven

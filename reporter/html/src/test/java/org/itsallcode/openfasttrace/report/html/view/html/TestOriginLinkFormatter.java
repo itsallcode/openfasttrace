@@ -96,7 +96,7 @@ class TestOriginLinkFormatter
     void testFormatAbsoluteUnixPathWithSpecialCharactersMacOs()
     {
         assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
-                "<a href=\"file:///fo%20o/ba%CC%88r/baz\">/fo o/bär/baz</a>:12345678");
+                "<a href=\"file:///fo%20o/b%C3%A4r/baz\">/fo o/bär/baz</a>:12345678");
     }
 
     @Test

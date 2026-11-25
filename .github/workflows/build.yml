@@ -128,8 +128,8 @@ jobs:
         distribution: temurin
         java-version: 17
         server-id: ossindex
-        server-username: OSSINDEX_USERNAME
-        server-password: OSSINDEX_TOKEN
+        server-username-env-var: OSSINDEX_USERNAME
+        server-password-env-var: OSSINDEX_TOKEN
     - name: Ossindex
       run: |
         mvn -T 1C --errors --batch-mode test-compile \

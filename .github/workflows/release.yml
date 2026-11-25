@@ -43,7 +43,7 @@ jobs:
             runner: ubuntu-26.04-arm
             output: openfasttrace-linux-arm64
           - target: macos-arm64
-            runner: macos-15
+            runner: macos-26
             output: openfasttrace-macos-arm64
           - target: windows-x64
             runner: windows-2025

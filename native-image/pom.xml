@@ -93,6 +93,7 @@
                                 <buildArg>--future-defaults=all</buildArg>
                                 <!-- -O3 increases the native binary from 28MB to 37MB -->
                                 <buildArg>-O2</buildArg>
+                                <buildArg>--gc=G1</buildArg>
                                 <buildArg>${native.image.charset.option}</buildArg>
                             </buildArgs>
                         </configuration>

@@ -83,7 +83,7 @@
                             <mainClass>org.itsallcode.openfasttrace.core.cli.CliStarter</mainClass>
                             <imageName>${native.image.name}</imageName>
                             <fallback>false</fallback>
-                            <!-- [impl->dsn~cli.native-executable~1] -->
+                            <!-- [bld->dsn~cli.native-executable~1] -->
                             <buildArgs>
                                 <buildArg>--future-defaults=all</buildArg>
                                 <!-- -O3 increases the native binary from 28MB to 37MB -->

@@ -10,6 +10,17 @@ nav_order: 1
 
 There are several ways to install OpenFastTrace on Linux, depending on your distribution and preference.
 
+### Native Executable
+
+Download `openfasttrace-linux-x64` or `openfasttrace-linux-arm64` from the [GitHub Releases](https://github.com/itsallcode/openfasttrace/releases) page. The native executable does not require Java. Make it executable and run it:
+
+```bash
+chmod +x openfasttrace-linux-x64
+./openfasttrace-linux-x64 --help
+```
+
+Use the executable JAR below when you need third-party Java plugin JARs.
+
 ### Package Manager (APT - Debian, Ubuntu, etc.)
 
 For Debian-based systems, we provide an APT repository. This is the recommended way to keep OFT up to date.

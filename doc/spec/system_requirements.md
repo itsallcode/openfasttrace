@@ -1135,6 +1135,17 @@ Covers:
 
 Needs: dsn
 
+#### Native Command Line Executables
+`req~cli.native-executable~1`
+
+OpenFastTrace provides native command line executables for supported Linux, macOS, and Windows architectures. Native executables shall include all built-in importers, exporters, and reporters.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+
+Needs: dsn
+
 ### Third Party Plugins
 
 #### Loading Plugins

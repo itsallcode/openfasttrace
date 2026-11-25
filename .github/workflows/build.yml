@@ -140,8 +140,8 @@ jobs:
         OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
 
   native-image:
-    # [impl->dsn~cli.native-executable~1]
-    # [impl->dsn~cli.native-executable.support-built-in-plugins~1]
+    # [bld->dsn~cli.native-executable~1]
+    # [bld->dsn~cli.native-executable.support-built-in-plugins~1]
     permissions:
       contents: read
     strategy:

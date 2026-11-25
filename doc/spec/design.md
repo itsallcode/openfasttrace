@@ -1483,7 +1483,7 @@ Covers:
 
 * [`req~cli.native-executable~1`](system_requirements.md#native-command-line-executables)
 
-Needs: impl, itest
+Needs: itest, bld
 
 #### Native Binaries Include Plugins
 `dsn~cli.native-executable.support-built-in-plugins~1`
@@ -1494,7 +1494,7 @@ Covers:
 
 * [`req~cli.native-executable~1`](system_requirements.md#native-command-line-executables)
 
-Needs: impl, itest
+Needs: itest, bld
 
 # Quality Requirements
 

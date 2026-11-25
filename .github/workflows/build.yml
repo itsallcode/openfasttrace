@@ -165,6 +165,9 @@ jobs:
       run:
         shell: bash
     name: Native image ${{ matrix.target }}
+    concurrency:
+      group: ${{ github.workflow }}-native-${{ github.ref }}-${{ matrix.target }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
         with:

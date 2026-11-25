@@ -1,30 +1,24 @@
 package org.itsallcode.openfasttrace.nativeimage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.itsallcode.process.SimpleProcess;
+import org.itsallcode.process.SimpleProcessBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 class NativeImageIT
 {
@@ -46,7 +40,7 @@ class NativeImageIT
                 fixture.toString()));
         arguments.addAll(additionalInputs);
 
-        final String output = runNativeImage(temporaryDirectory, arguments.toArray(String[]::new));
+        final String output = runNativeImage(arguments.toArray(String[]::new));
 
         assertThat("imported item", output, containsString(expectedId));
     }
@@ -70,7 +64,7 @@ class NativeImageIT
         final Path archive = temporaryDirectory.resolve("sample.zip");
         createZipArchive(markdown, archive);
 
-        final String output = runNativeImage(temporaryDirectory, "trace", "--report-verbosity", "all",
+        final String output = runNativeImage("trace", "--report-verbosity", "all",
                 archive.toString());
 
         assertThat("item imported from archive", output, containsString("req~native-image-markdown~1"));
@@ -78,13 +72,14 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
     @ParameterizedTest
-    @ValueSource(strings = { "plain", "html", "aspec" })
+    @ValueSource(strings =
+    { "plain", "html", "aspec" })
     void testBuiltInReporterProducesItsOutput(final String format, @TempDir final Path temporaryDirectory)
             throws IOException, InterruptedException
     {
         final Path fixture = copyFixture("sample.md", temporaryDirectory);
 
-        final String output = runNativeImage(temporaryDirectory, "trace", "--report-verbosity", "all",
+        final String output = runNativeImage("trace", "--report-verbosity", "all",
                 "--output-format", format, fixture.toString());
 
         assertThat("report contains imported item", output, containsString("native-image-markdown"));
@@ -105,13 +100,13 @@ class NativeImageIT
     {
         final Path fixture = copyFixture("sample.md", temporaryDirectory);
 
-        final String output = runNativeImage(temporaryDirectory, "convert", "--output-format", "specobject",
+        final String output = runNativeImage("convert", "--output-format", "specobject",
                 fixture.toString());
 
         assertThat("SpecObject output", output, containsString("<specdocument"));
     }
 
-    private static String runNativeImage(final Path temporaryDirectory, final String... arguments)
+    private static String runNativeImage(final String... arguments)
             throws IOException, InterruptedException
     {
         final Path executable = nativeExecutablePath();
@@ -120,18 +115,12 @@ class NativeImageIT
         final List<String> command = new ArrayList<>();
         command.add(executable.toAbsolutePath().toString());
         command.addAll(List.of(arguments));
-        final Path outputFile = temporaryDirectory.resolve("native-image-output.txt");
-        final Process process = new ProcessBuilder(command)
+        final SimpleProcess<String> process = SimpleProcessBuilder.create()
+                .command(command)
                 .redirectErrorStream(true)
-                .redirectOutput(outputFile.toFile())
                 .start();
-
-        if (!process.waitFor(PROCESS_TIMEOUT.toSeconds(), TimeUnit.SECONDS))
-        {
-            process.destroyForcibly();
-            fail("Native executable did not finish within " + PROCESS_TIMEOUT);
-        }
-        final String output = Files.readString(outputFile);
+        process.waitForTermination(PROCESS_TIMEOUT);
+        final String output = process.getStdOut();
         assertThat("native executable output: " + output, process.exitValue(), equalTo(0));
         return output;
     }
@@ -140,12 +129,16 @@ class NativeImageIT
     {
         final String configuredPath = System.getProperty(NATIVE_IMAGE_PATH_PROPERTY, "target/openfasttrace");
         final Path executable = Path.of(configuredPath);
-        if (System.getProperty("os.name", "").toLowerCase().contains("windows")
-                && !configuredPath.toLowerCase().endsWith(".exe"))
+        if (isWindows() && !configuredPath.toLowerCase().endsWith(".exe"))
         {
             return Path.of(configuredPath + ".exe");
         }
         return executable;
+    }
+
+    private static boolean isWindows()
+    {
+        return System.getProperty("os.name", "").toLowerCase().contains("windows");
     }
 
     private static Path copyFixture(final String fixtureName, final Path targetDirectory) throws IOException

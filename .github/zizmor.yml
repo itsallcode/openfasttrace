@@ -5,5 +5,4 @@ rules:
       policies:
         "actions/*": ref-pin
         "github/codeql-action/*": ref-pin
-        "graalvm/setup-graalvm": ref-pin
         "*": hash-pin

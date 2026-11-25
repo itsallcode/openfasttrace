@@ -157,7 +157,7 @@ mvn -Dit.test=CliStarterIT failsafe:integration-test -projects product
 
 ### Build and Test a Native Executable
 
-Native builds use GraalVM Native Image 25. The project targets Java 17; set `GRAALVM_HOME` to a GraalVM 25 installation that includes `native-image`:
+Native builds use GraalVM Native Image 25. Set `GRAALVM_HOME` to a GraalVM 25 installation that includes `native-image`:
 
 ```sh
 export GRAALVM_HOME=/path/to/graalvm-jdk-25
@@ -165,7 +165,9 @@ export PATH="$GRAALVM_HOME/bin:$PATH"
 mvn --batch-mode -T 1C -Pnative-image -pl native-image -am verify
 ```
 
-The command builds the native-image module and its reactor dependencies, including the product, then runs their tests and the native executable's JUnit integration tests. It builds the executable in `native-image/target/openfasttrace`. To set a platform-specific name, pass `-Dnative.image.name=openfasttrace-linux-x64`. Build and test on the target operating system and architecture. Native executables include built-in plugins; use the executable JAR distribution when third-party Java plugin JARs are required.
+The Maven build selects the `native-image` module and builds the executable in `native-image/target/openfasttrace`, then runs JUnit smoke tests against it. To set a platform-specific name, pass `-Dnative.image.name=openfasttrace-linux-x64` to the command.
+
+Build and test on the target operating system and architecture. Native executables include plugins from the main OpenFastTrace project.
 
 ### Check for Dependency Updates
 
@@ -377,9 +379,9 @@ Legend:
 
 ### Why Two Parent POMs?
 
-As you can see in the table above, not all modules are intended to be deployed on Maven Central. The distinction is made by using two parent POMs. 
+As you can see in the table above, not all modules are intended to be deployed on Maven Central. The distinction is made by using two parent POMs.
 
-The base POM is `openfasttrace-parent`, it mainly contains common dependencies and build configuration. On top of that, `openfasttrace-mc-deployable-parent` adds signing and Maven central deployment. 
+The base POM is `openfasttrace-parent`, it mainly contains common dependencies and build configuration. On top of that, `openfasttrace-mc-deployable-parent` adds signing and Maven central deployment.
 
 This structure ensures that only user-facing components are published to Maven Central while keeping internal development tools and build infrastructure private.
 
@@ -399,7 +401,7 @@ Ensure that neither `testutil` nor any parent module is included.
 
 ### Verify Deployment Preconditions
 
-Configure Maven Central credentials in `~/.m2/settings.xml`: 
+Configure Maven Central credentials in `~/.m2/settings.xml`:
 
 ```xml
 <settings>

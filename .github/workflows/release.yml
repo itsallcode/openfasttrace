@@ -15,7 +15,7 @@ on:
         default: true
 
 jobs:
-  release-preflight:
+  validate-release-preconditions:
     runs-on: ubuntu-slim
     permissions:
       contents: read
@@ -82,7 +82,7 @@ jobs:
 
   release:
     needs:
-      - release-preconditions
+      - validate-release-preconditions
       - native-images
     runs-on: ubuntu-latest
     defaults:

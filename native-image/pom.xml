@@ -13,6 +13,7 @@
     </parent>
     <properties>
         <native.image.name>openfasttrace</native.image.name>
+        <native.image.charset.option>-H:-AddAllCharsets</native.image.charset.option>
     </properties>
     <dependencies>
         <dependency>
@@ -87,11 +88,24 @@
                                 <buildArg>--future-defaults=all</buildArg>
                                 <!-- -O3 increases the native binary from 28MB to 37MB -->
                                 <buildArg>-O2</buildArg>
+                                <buildArg>${native.image.charset.option}</buildArg>
                             </buildArgs>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>native-image-windows-charsets</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <!-- Windows' file system provider requires platform charsets such as Cp1252. -->
+                <native.image.charset.option>-H:+AddAllCharsets</native.image.charset.option>
+            </properties>
         </profile>
     </profiles>
 </project>

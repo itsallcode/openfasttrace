@@ -1,7 +1,8 @@
 package org.itsallcode.openfasttrace.nativeimage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +10,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.itsallcode.process.SimpleProcess;
 import org.itsallcode.process.SimpleProcessBuilder;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class NativeImageIT
 {
@@ -26,9 +27,26 @@ class NativeImageIT
     private static final Duration PROCESS_TIMEOUT = Duration.ofSeconds(60);
     private static final String NATIVE_IMAGE_PATH_PROPERTY = "native.image.path";
 
+    @BeforeAll
+    static void requireNativeExecutable()
+    {
+        final Path executable = nativeExecutablePath();
+        if (!Files.isRegularFile(executable))
+        {
+            throw new AssertionError("Native executable not found at " + executable
+                    + ". Build it with `mvn --batch-mode -T 1C -Pnative-image -pl native-image -am verify`.");
+        }
+    }
+
     // [itest->dsn~cli.native-executable~1]
     @ParameterizedTest
-    @MethodSource("builtInImporterFixtures")
+    @CsvSource(
+    {
+            "sample.md, req~native-image-markdown~1",
+            "sample.rst, req~native-image-rst~1",
+            "sample.oreqm, req~native-image-specobject~1",
+            "sample.feature, scn~native-image-gherkin~1",
+            "sample.java, impl~native-image-tag~1" })
     void testBuiltInImporterReadsItsFormat(final String fixtureName, final String expectedId,
             @TempDir final Path temporaryDirectory) throws IOException, InterruptedException
     {
@@ -45,16 +63,6 @@ class NativeImageIT
         assertThat("imported item", output, containsString(expectedId));
     }
 
-    static Stream<Arguments> builtInImporterFixtures()
-    {
-        return Stream.of(
-                Arguments.of("sample.md", "req~native-image-markdown~1"),
-                Arguments.of("sample.rst", "req~native-image-rst~1"),
-                Arguments.of("sample.oreqm", "req~native-image-specobject~1"),
-                Arguments.of("sample.feature", "scn~native-image-gherkin~1"),
-                Arguments.of("sample.java", "impl~native-image-tag~1"));
-    }
-
     // [itest->dsn~cli.native-executable~1]
     @Test
     void testBuiltInZipImporterReadsMarkdownEntry(@TempDir final Path temporaryDirectory)
@@ -64,33 +72,46 @@ class NativeImageIT
         final Path archive = temporaryDirectory.resolve("sample.zip");
         createZipArchive(markdown, archive);
 
-        final String output = runNativeImage("trace", "--report-verbosity", "all",
-                archive.toString());
+        final String output = runNativeImage("trace", "--report-verbosity", "all", archive.toString());
 
         assertThat("item imported from archive", output, containsString("req~native-image-markdown~1"));
     }
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
-    @ParameterizedTest
-    @ValueSource(strings =
-    { "plain", "html", "aspec" })
-    void testBuiltInReporterProducesItsOutput(final String format, @TempDir final Path temporaryDirectory)
+    @Test
+    void testBuiltInPlainReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
+            throws IOException, InterruptedException
+    {
+        final String output = runReporter(temporaryDirectory, "plain");
+        assertThat("report contains imported item", output, containsString("native-image-markdown"));
+    }
+
+    // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
+    @Test
+    void testBuiltInHtmlReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
+            throws IOException, InterruptedException
+    {
+        final String output = runReporter(temporaryDirectory, "html");
+        assertThat("HTML report contains imported item", output, containsString("native-image-markdown"));
+        assertThat("HTML report", output, containsString("<!DOCTYPE html>"));
+    }
+
+    // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
+    @Test
+    void testBuiltInAspecReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
+            throws IOException, InterruptedException
+    {
+        final String output = runReporter(temporaryDirectory, "aspec");
+        assertThat("SpecObject report contains imported item", output, containsString("native-image-markdown"));
+        assertThat("SpecObject report", output, containsString("<specdocument"));
+    }
+
+    private static String runReporter(final Path temporaryDirectory, final String format)
             throws IOException, InterruptedException
     {
         final Path fixture = copyFixture("sample.md", temporaryDirectory);
-
-        final String output = runNativeImage("trace", "--report-verbosity", "all",
-                "--output-format", format, fixture.toString());
-
-        assertThat("report contains imported item", output, containsString("native-image-markdown"));
-        if (format.equals("html"))
-        {
-            assertThat("HTML report", output, containsString("<!DOCTYPE html>"));
-        }
-        else if (format.equals("aspec"))
-        {
-            assertThat("SpecObject report", output, containsString("<specdocument"));
-        }
+        return runNativeImage("trace", "--report-verbosity", "all", "--output-format", format,
+                fixture.toString());
     }
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
@@ -110,7 +131,6 @@ class NativeImageIT
             throws IOException, InterruptedException
     {
         final Path executable = nativeExecutablePath();
-        assertThat("native executable exists at " + executable, Files.isRegularFile(executable), is(true));
 
         final List<String> command = new ArrayList<>();
         command.add(executable.toAbsolutePath().toString());
@@ -121,7 +141,8 @@ class NativeImageIT
                 .start();
         process.waitForTermination(PROCESS_TIMEOUT);
         final String output = process.getStdOut();
-        assertThat("native executable output: " + output, process.exitValue(), equalTo(0));
+        assertThat("Native executable exited with code " + process.exitValue() + ". Output: " + output,
+                process.exitValue(), equalTo(0));
         return output;
     }
 

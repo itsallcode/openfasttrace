@@ -67,12 +67,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: maven
 
-      - name: Build product dependencies
-        run: mvn --batch-mode -T 1C -pl product -am install -Dmaven.test.skip=true -Dossindex.skip=true
-
       - name: Build and test native image with Maven
         run: >-
-          mvn --batch-mode -Pnative-image -pl native-image verify
+          mvn --batch-mode -T 1C -Pnative-image -pl native-image -am verify
           -Dossindex.skip=true
           -Dnative.image.name=${{ matrix.output }}
 

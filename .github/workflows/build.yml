@@ -171,19 +171,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-java@v6
-        name: Set up Maven toolchain
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: maven
-
       - uses: graalvm/setup-graalvm@60e76998d25690099182b796e99b8804da582d90 # v1.6.10
         name: Set up GraalVM 25
         with:
           version: '25.0'
           distribution: graalvm
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
 
       - name: Build product dependencies
         run: mvn --batch-mode -T 1C -pl product -am install -Dmaven.test.skip=true -Dossindex.skip=true

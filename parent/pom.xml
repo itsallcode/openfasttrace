@@ -344,7 +344,6 @@
                 <configuration>
                     <release>${java.version}</release>
                     <charset>UTF-8</charset>
-                    <disableNoFonts>true</disableNoFonts>
                     <doclint><!-- Intentionally empty -->
                     </doclint>
                     <serialwarn>true</serialwarn>

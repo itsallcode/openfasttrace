@@ -48,7 +48,7 @@ class NativeImageIT
             "sample.feature, scn~native-image-gherkin~1",
             "sample.java, impl~native-image-tag~1" })
     void testBuiltInImporterReadsItsFormat(final String fixtureName, final String expectedId,
-            @TempDir final Path temporaryDirectory) throws IOException, InterruptedException
+            @TempDir final Path temporaryDirectory) throws IOException
     {
         final Path fixture = copyFixture(fixtureName, temporaryDirectory);
         final List<String> additionalInputs = fixtureName.equals("sample.java")
@@ -65,8 +65,7 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable~1]
     @Test
-    void testBuiltInZipImporterReadsMarkdownEntry(@TempDir final Path temporaryDirectory)
-            throws IOException, InterruptedException
+    void testBuiltInZipImporterReadsMarkdownEntry(@TempDir final Path temporaryDirectory) throws IOException
     {
         final Path markdown = copyFixture("sample.md", temporaryDirectory);
         final Path archive = temporaryDirectory.resolve("sample.zip");
@@ -79,8 +78,7 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
     @Test
-    void testBuiltInPlainReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
-            throws IOException, InterruptedException
+    void testBuiltInPlainReporterProducesItsOutput(@TempDir final Path temporaryDirectory) throws IOException
     {
         final String output = runReporter(temporaryDirectory, "plain");
         assertThat("report contains imported item", output, containsString("native-image-markdown"));
@@ -88,8 +86,7 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
     @Test
-    void testBuiltInHtmlReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
-            throws IOException, InterruptedException
+    void testBuiltInHtmlReporterProducesItsOutput(@TempDir final Path temporaryDirectory) throws IOException
     {
         final String output = runReporter(temporaryDirectory, "html");
         assertThat("HTML report contains imported item", output, containsString("native-image-markdown"));
@@ -98,16 +95,14 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
     @Test
-    void testBuiltInAspecReporterProducesItsOutput(@TempDir final Path temporaryDirectory)
-            throws IOException, InterruptedException
+    void testBuiltInAspecReporterProducesItsOutput(@TempDir final Path temporaryDirectory) throws IOException
     {
         final String output = runReporter(temporaryDirectory, "aspec");
         assertThat("SpecObject report contains imported item", output, containsString("native-image-markdown"));
         assertThat("SpecObject report", output, containsString("<specdocument"));
     }
 
-    private static String runReporter(final Path temporaryDirectory, final String format)
-            throws IOException, InterruptedException
+    private static String runReporter(final Path temporaryDirectory, final String format) throws IOException
     {
         final Path fixture = copyFixture("sample.md", temporaryDirectory);
         return runNativeImage("trace", "--report-verbosity", "all", "--output-format", format,
@@ -116,8 +111,7 @@ class NativeImageIT
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
     @Test
-    void testBuiltInSpecObjectExporterProducesDocument(@TempDir final Path temporaryDirectory)
-            throws IOException, InterruptedException
+    void testBuiltInSpecObjectExporterProducesDocument(@TempDir final Path temporaryDirectory) throws IOException
     {
         final Path fixture = copyFixture("sample.md", temporaryDirectory);
 
@@ -128,7 +122,6 @@ class NativeImageIT
     }
 
     private static String runNativeImage(final String... arguments)
-            throws IOException, InterruptedException
     {
         final Path executable = nativeExecutablePath();
 

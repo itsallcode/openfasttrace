@@ -31,6 +31,7 @@ readonly sbom_checksum_path="${sbom_path}.sha256"
 
 shopt -s nullglob
 native_assets=("$base_dir"/native-image/target/openfasttrace-*)
+# Expect binaries for Linux x86 + ARM, macOS ARM, Windows x86
 if [[ "${#native_assets[@]}" -ne 4 ]]; then
     echo "Expected 4 native images in native-image/target, found ${#native_assets[@]}" >&2
     exit 1

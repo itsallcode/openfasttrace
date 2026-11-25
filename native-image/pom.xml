@@ -14,6 +14,7 @@
     <properties>
         <native.image.name>openfasttrace</native.image.name>
         <native.image.charset.option>-H:-AddAllCharsets</native.image.charset.option>
+        <native.image.compiler.options></native.image.compiler.options>
     </properties>
     <dependencies>
         <dependency>
@@ -95,6 +96,7 @@
                                 <buildArg>-O2</buildArg>
                                 <buildArg>--gc=G1</buildArg>
                                 <buildArg>${native.image.charset.option}</buildArg>
+                                <buildArg>--native-compiler-options=${native.image.compiler.options}</buildArg>
                             </buildArgs>
                         </configuration>
                     </plugin>
@@ -111,6 +113,8 @@
             <properties>
                 <!-- Windows' file system provider requires platform charsets such as Cp1252. -->
                 <native.image.charset.option>-H:+AddAllCharsets</native.image.charset.option>
+                <!-- MSVC 14.52 reports C4815 for GraalVM generated flexible array members. -->
+                <native.image.compiler.options>/wd4815</native.image.compiler.options>
             </properties>
         </profile>
     </profiles>

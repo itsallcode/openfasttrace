@@ -155,6 +155,19 @@ Specify test class via system property `it.test` and module via command line opt
 mvn -Dit.test=CliStarterIT failsafe:integration-test -projects product
 ```
 
+### Build and Test a Native Executable
+
+Native builds use GraalVM Native Image 25. Keep the project's Java 17 toolchain configured, and set `GRAALVM_HOME` to a GraalVM 25 installation that includes `native-image`:
+
+```sh
+export GRAALVM_HOME=/path/to/graalvm-jdk-25
+export PATH="$GRAALVM_HOME/bin:$PATH"
+mvn --batch-mode -T 1C -pl product -am install -Dmaven.test.skip=true
+mvn --batch-mode -Pnative-image -pl native-image verify
+```
+
+The root Maven build selects the `native-image` module and builds the executable in `native-image/target/openfasttrace`, then runs JUnit integration tests against it. To set a platform-specific name, pass `-Dnative.image.name=openfasttrace-linux-x64` to the second command. Build and test on the target operating system and architecture. Native executables include built-in plugins; use the executable JAR distribution when third-party Java plugin JARs are required.
+
 ### Check for Dependency Updates
 
 ```sh

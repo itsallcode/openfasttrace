@@ -139,12 +139,74 @@ jobs:
         OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
         OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
 
+  native-image:
+    # [impl->dsn~cli.native-executable~1]
+    # [impl->dsn~cli.native-executable.support-built-in-plugins~1]
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-24.04
+            output: openfasttrace-linux-x64
+          - target: linux-arm64
+            runner: ubuntu-24.04-arm
+            output: openfasttrace-linux-arm64
+          - target: macos-arm64
+            runner: macos-15
+            output: openfasttrace-macos-arm64
+          - target: windows-x64
+            runner: windows-2025
+            output: openfasttrace-windows-x64
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    name: Native image ${{ matrix.target }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-java@v6
+        name: Set up Maven toolchain
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - uses: graalvm/setup-graalvm@v1
+        name: Set up GraalVM 25
+        with:
+          version: '25.0'
+          distribution: graalvm
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build product dependencies
+        run: mvn --batch-mode -T 1C -pl product -am install -Dmaven.test.skip=true -Dossindex.skip=true
+
+      - name: Build and test native image with Maven
+        run: >-
+          mvn --batch-mode -Pnative-image -pl native-image verify
+          -Dnative.image.name=${{ matrix.output }}
+
+      - name: Upload native image
+        uses: actions/upload-artifact@v7
+        with:
+          name: openfasttrace-native-${{ matrix.target }}
+          path: native-image/target/${{ matrix.output }}*
+          if-no-files-found: error
+
   build:
     permissions:
       contents: read
     needs:
     - matrix-build
     - ossindex
+    - native-image
     runs-on: ubuntu-slim
     steps:
       - run: echo "Build successful"

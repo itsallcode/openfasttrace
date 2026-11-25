@@ -1475,7 +1475,7 @@ Needs: impl
 ### Native Command Line Executables
 `dsn~cli.native-executable~1`
 
-The product module builds native command line executables from the shaded product JAR with GraalVM Native Image. Each executable is built and tested on a runner matching its target operating system and architecture. Native Image reachability metadata preserves the CLI's reflective argument setters.
+The dedicated `native-image` Maven module builds native command line executables from the product JAR with GraalVM Native Image 25 using the GraalVM Native Build Tools Maven plugin. The `native-image` Maven profile enables native compilation and integration tests; the default Maven build does not require GraalVM. Each executable is built and tested on a runner matching its target operating system and architecture. Native Image reachability metadata preserves the CLI's reflective argument setters.
 
 Native executables support built-in providers only.
 

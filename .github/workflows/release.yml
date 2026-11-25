@@ -67,10 +67,30 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: maven
 
+      - name: Configure GraalVM 25 Maven toolchain
+        run: |
+          mkdir -p "$HOME/.m2"
+          cat > "$HOME/.m2/toolchains.xml" <<EOF
+          <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 https://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>25</version>
+              </provides>
+              <configuration>
+                <jdkHome>${JAVA_HOME}</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
+
       - name: Build and test native image with Maven
         run: >-
           mvn --batch-mode -T 1C -Pnative-image -pl native-image -am verify
           -Dossindex.skip=true
+          -Djava.version=25
           -Dnative.image.name=${{ matrix.output }}
 
       - name: Upload native image

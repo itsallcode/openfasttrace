@@ -149,13 +149,13 @@ jobs:
       matrix:
         include:
           - target: linux-x64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
             output: openfasttrace-linux-x64
           - target: linux-arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
             output: openfasttrace-linux-arm64
           - target: macos-arm64
-            runner: macos-15
+            runner: macos-26
             output: openfasttrace-macos-arm64
           - target: windows-x64
             runner: windows-2025

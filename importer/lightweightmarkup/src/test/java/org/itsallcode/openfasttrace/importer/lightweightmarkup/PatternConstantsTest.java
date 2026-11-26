@@ -87,4 +87,30 @@ class PatternConstantsTest
     {
         assertThat(PatternConstants.REFERENCE_AFTER_BULLET, not(PatternMatcher.patternMatches(input)));
     }
+
+    // [utest->dsn~md.covers-single-line~1]
+    @ParameterizedTest
+    @ValueSource(strings = { "req~name~1", "`req~name~1`" })
+    void testReferenceInlineMatchesValid(final String input)
+    {
+        assertThat(PatternConstants.REFERENCE_INLINE, PatternMatcher.patternMatches(input));
+    }
+
+    // [utest->dsn~md.covers-single-line~1]
+    @ParameterizedTest
+    @ValueSource(strings = { "", "   ", "invalid", "not~an~id", "also~not-an-id~3b",
+            "someone~forgot~1a~comma-1", "`req~name~1", "req~name~1`" })
+    void testReferenceInlineRejectsInvalid(final String input)
+    {
+        assertThat(PatternConstants.REFERENCE_INLINE, not(PatternMatcher.patternMatches(input)));
+    }
+
+    // [utest->dsn~md.covers-single-line~1]
+    @ParameterizedTest
+    @ValueSource(strings = { "req~name~1", "`req~name~1`", "req~name~1, req~name~2",
+            "`req~name~1`, `req~name~2`", "`req~name~1`, req~name~2" })
+    void testReferenceInlineListMatchesValid(final String input)
+    {
+        assertThat(PatternConstants.REFERENCE_INLINE_LIST, PatternMatcher.patternMatches(input));
+    }
 }

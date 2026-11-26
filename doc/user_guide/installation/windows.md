@@ -10,6 +10,16 @@ nav_order: 3
 
 On Windows, OpenFastTrace can be run via JBang or manually via the JAR file.
 
+### Native Executable
+
+Download `openfasttrace-windows-x64.exe` from the [GitHub Releases](https://github.com/itsallcode/openfasttrace/releases) page and run it from PowerShell:
+
+```powershell
+.\openfasttrace-windows-x64.exe --help
+```
+
+The native executable does not require Java. Use the executable JAR below when you need third-party Java plugin JARs.
+
 ### JBang
 
 [JBang](https://www.jbang.dev/) runs OpenFastTrace straight from Maven Central and downloads a suitable Java runtime if none is installed.

@@ -30,6 +30,9 @@ if $oft_script trace \
     "$base_dir/reporter/html/src" \
     "$base_dir/reporter/aspec/src" \
     "$base_dir/product/src/test/java" \
+    "$base_dir/native-image/src/main" \
+    "$base_dir/native-image/src/test/java" \
+    "$base_dir/.github/workflows" \
     "$base_dir/api/src" \
     "$base_dir/exporter/specobject/src" \
     "$base_dir/exporter/common/src" \

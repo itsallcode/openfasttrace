@@ -1,15 +1,14 @@
 package org.itsallcode.openfasttrace.report.html.view.html;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkFormatter.formatAsBlock;
 import static org.itsallcode.openfasttrace.report.html.view.html.OriginLinkFormatter.formatAsSpan;
 
 import org.itsallcode.openfasttrace.api.core.Location;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.condition.*;
 
 class TestOriginLinkFormatter
 {
@@ -95,8 +94,12 @@ class TestOriginLinkFormatter
     @EnabledOnOs(OS.MAC)
     void testFormatAbsoluteUnixPathWithSpecialCharactersMacOs()
     {
-        assertPathAndLineRenderedToSpan("/fo o/bär/baz", 12345678,
-                "<a href=\"file:///fo%20o/ba%CC%88r/baz\">/fo o/bär/baz</a>:12345678");
+        // macOS filesystem providers may expose this path in NFC or NFD form;
+        // Path.toUri() preserves that form, so JDK and GraalVM builds can differ.
+        final String actual = formatAsSpan(Location.create("/fo o/bär/baz", 12345678));
+        assertThat(actual, anyOf(
+                equalTo("<span class=\"origin\"><a href=\"file:///fo%20o/b%C3%A4r/baz\">/fo o/bär/baz</a>:12345678</span>"),
+                equalTo("<span class=\"origin\"><a href=\"file:///fo%20o/ba%CC%88r/baz\">/fo o/bär/baz</a>:12345678</span>")));
     }
 
     @Test

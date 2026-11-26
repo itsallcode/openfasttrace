@@ -164,7 +164,7 @@ class NativeImageIT
     private static Path copyFixture(final String fixtureName, final Path targetDirectory) throws IOException
     {
         final Path target = targetDirectory.resolve(fixtureName);
-        try (InputStream fixture = requireNonNull(
+        try (final InputStream fixture = requireNonNull(
                 NativeImageIT.class.getResourceAsStream(RESOURCE_DIRECTORY + fixtureName)))
         {
             Files.copy(fixture, target);

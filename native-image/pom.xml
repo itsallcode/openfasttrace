@@ -17,20 +17,21 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.itsallcode</groupId>
-            <artifactId>simple-process</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.itsallcode.openfasttrace</groupId>
             <artifactId>openfasttrace</artifactId>
             <version>${revision}</version>
             <exclusions>
                 <exclusion>
+                    <!-- We only need the shaded fat JAR from the product module, not its dependencies -->
                     <groupId>org.itsallcode.openfasttrace</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.itsallcode</groupId>
+            <artifactId>simple-process</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

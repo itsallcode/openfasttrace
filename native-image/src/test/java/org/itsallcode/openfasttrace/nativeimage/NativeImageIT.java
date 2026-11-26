@@ -1,15 +1,18 @@
 package org.itsallcode.openfasttrace.nativeimage;
 
+import static java.util.Objects.requireNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -89,8 +92,9 @@ class NativeImageIT
     void testBuiltInHtmlReporterProducesItsOutput(@TempDir final Path temporaryDirectory) throws IOException
     {
         final String output = runReporter(temporaryDirectory, "html");
-        assertThat("HTML report contains imported item", output, containsString("native-image-markdown"));
-        assertThat("HTML report", output, containsString("<!DOCTYPE html>"));
+        assertAll(
+                () -> assertThat("HTML report contains imported item", output, containsString("native-image-markdown")),
+                () -> assertThat("HTML report", output, containsString("<!DOCTYPE html>")));
     }
 
     // [itest->dsn~cli.native-executable.support-built-in-plugins~1]
@@ -98,8 +102,10 @@ class NativeImageIT
     void testBuiltInAspecReporterProducesItsOutput(@TempDir final Path temporaryDirectory) throws IOException
     {
         final String output = runReporter(temporaryDirectory, "aspec");
-        assertThat("SpecObject report contains imported item", output, containsString("native-image-markdown"));
-        assertThat("SpecObject report", output, containsString("<specdocument"));
+        assertAll(
+                () -> assertThat("SpecObject report contains imported item", output,
+                        containsString("native-image-markdown")),
+                () -> assertThat("SpecObject report", output, containsString("<specdocument")));
     }
 
     private static String runReporter(final Path temporaryDirectory, final String format) throws IOException
@@ -158,7 +164,7 @@ class NativeImageIT
     private static Path copyFixture(final String fixtureName, final Path targetDirectory) throws IOException
     {
         final Path target = targetDirectory.resolve(fixtureName);
-        try (InputStream fixture = Objects.requireNonNull(
+        try (InputStream fixture = requireNonNull(
                 NativeImageIT.class.getResourceAsStream(RESOURCE_DIRECTORY + fixtureName)))
         {
             Files.copy(fixture, target);

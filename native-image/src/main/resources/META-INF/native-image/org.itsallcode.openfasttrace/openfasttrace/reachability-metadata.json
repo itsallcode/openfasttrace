@@ -1,0 +1,16 @@
+{
+  "reflection": [
+    {
+      "type": "org.itsallcode.openfasttrace.core.cli.CliArguments",
+      "allPublicMethods": true
+    }
+  ],
+  "resources": [
+    { "glob": "usage.txt" },
+    { "glob": "version.properties" },
+    { "glob": "css/report.css" },
+    { "glob": "META-INF/services/org.itsallcode.openfasttrace.api.importer.ImporterFactory" },
+    { "glob": "META-INF/services/org.itsallcode.openfasttrace.api.exporter.ExporterFactory" },
+    { "glob": "META-INF/services/org.itsallcode.openfasttrace.api.report.ReporterFactory" }
+  ]
+}

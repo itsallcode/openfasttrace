@@ -1489,6 +1489,30 @@ Covers:
 
 Needs: impl
 
+### Native Command Line Executables
+`dsn~cli.native-executable~1`
+
+The  `native-image` Maven module builds native command line executables from the product JAR using the GraalVM Native Build Tools Maven plugin. The `native-image` Maven profile enables native compilation and smoke tests. Each executable is built and tested on a runner matching its target operating system and architecture. Native Image reachability metadata preserves the CLI's reflective argument setters.
+
+Native executables support built-in providers only.
+
+Covers:
+
+* [`req~cli.native-executable~1`](system_requirements.md#native-command-line-executables)
+
+Needs: itest, bld
+
+#### Native Binaries Include Plugins
+`dsn~cli.native-executable.support-built-in-plugins~1`
+
+Native Binaries preserves the service-provider metadata to support all built-in importers, exporters, and reporters.
+
+Covers:
+
+* [`req~cli.native-executable~1`](system_requirements.md#native-command-line-executables)
+
+Needs: itest, bld
+
 # Quality Requirements
 
 See [Quality Requirements](design/quality_requirements.md).
@@ -1539,6 +1563,19 @@ Authors of importers need to be able to rely on these cleanups being done centra
 ### Alternatives Considered
 
 Cleanup in every importer individually. That was the case up to and including OFT 3.7.1, which turned out to make the importer more complex than necessary.
+
+## Should Native Binaries Load Plugins at Runtime?
+`dsn~cli.native-executable.does-not-support-loading-plugins-at-runtime~1`
+
+OFT allows loading third party plugins from JAR files in `~/.oft/plugins`.
+
+### Decision
+
+No. This would require a separate JVM or native plugins. This is out-of-scope for now.
+
+Comment:
+
+This is a negative requirement that does not need to be tested and we terminate it here.
 
 # Bibliography
 

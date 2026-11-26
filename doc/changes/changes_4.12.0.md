@@ -1,4 +1,4 @@
-# OpenFastTrace 4.12.0, released 2026-10-??
+# OpenFastTrace 4.12.0, released 2026-11-26
 
 Code name: Syntax usability and JSX and TSX tag importer
 
@@ -12,3 +12,4 @@ The source tag importer now supports JSX (`.jsx`) and TSX (`.tsx`) source files,
 
 * #638: Allow hash mark in addition to tilde as revision separator
 * #647: Add support for JSX and TSX in the source tag importer
+* #561: Build and publish native binaries for Linux (x64 and arm64), Windows (x64) and macOS (arm64)

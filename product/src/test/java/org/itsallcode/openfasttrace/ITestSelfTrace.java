@@ -67,9 +67,11 @@ class ITestSelfTrace
     private ImportSettings buildOftSettings()
     {
         final Path baseDir = getProjectBaseDir();
-        return ImportSettings.builder() //
-                .addInputs(baseDir.resolve("doc/spec/")) //
-                .addInputs(findInputDirectories(baseDir)) //
+        return ImportSettings.builder()
+                .addInputs(baseDir.resolve("doc/spec/"))
+                .addInputs(baseDir.resolve("product/pom.xml"))
+                .addInputs(baseDir.resolve("native-image/pom.xml"))
+                .addInputs(findInputDirectories(baseDir))
                 .build();
     }
 

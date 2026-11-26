@@ -29,6 +29,19 @@ readonly artifact_checksum_path="${artifact_path}.sha256"
 calculate_checksum "$sbom_path"
 readonly sbom_checksum_path="${sbom_path}.sha256"
 
+shopt -s nullglob
+native_assets=("$base_dir"/native-image/target/openfasttrace-*)
+# Expect binaries for Linux x86 + ARM, macOS ARM, Windows x86
+if [[ "${#native_assets[@]}" -ne 4 ]]; then
+    echo "Expected 4 native images in native-image/target, found ${#native_assets[@]}" >&2
+    exit 1
+fi
+native_release_assets=()
+for native_asset in "${native_assets[@]}"; do
+    calculate_checksum "$native_asset"
+    native_release_assets+=("$native_asset" "${native_asset}.sha256")
+done
+
 
 # Create GitHub release
 readonly changes_file="$base_dir/doc/changes/changes_${project_version}.md"
@@ -45,8 +58,10 @@ echo "Artifact file: $artifact_path"
 echo "Artifact checksum: $artifact_checksum_path"
 echo "SBOM file    : $sbom_path"
 echo "SBOM checksum: $sbom_checksum_path"
+printf 'Native asset : %s\n' "${native_assets[@]}"
 
 release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" \
-    "$artifact_path" "$artifact_checksum_path" "$sbom_path" "$sbom_checksum_path")
+    "$artifact_path" "$artifact_checksum_path" "$sbom_path" "$sbom_checksum_path" \
+    "${native_release_assets[@]}")
 readonly release_url
 echo "Release URL: $release_url"

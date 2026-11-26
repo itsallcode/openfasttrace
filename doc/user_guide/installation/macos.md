@@ -10,6 +10,17 @@ nav_order: 2
 
 OpenFastTrace can be installed on macOS using Homebrew, JBang or manually via a JAR file.
 
+### Native Executable
+
+Download the matching executable, `openfasttrace-macos-arm64` for Apple Silicon from the [GitHub Releases](https://github.com/itsallcode/openfasttrace/releases) page. The native executable does not require Java. Run it from Terminal:
+
+```bash
+chmod +x openfasttrace-macos-arm64
+./openfasttrace-macos-arm64 --help
+```
+
+Use the executable JAR below when you need third-party Java plugin JARs.
+
 ### Homebrew
 
 If you use Homebrew, you can install OpenFastTrace directly:

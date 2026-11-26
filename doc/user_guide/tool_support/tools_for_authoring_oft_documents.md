@@ -39,12 +39,10 @@ Features include:
 
 #### Third-Party Plugins
 
-Check out the [OpenFastTrace Language Server](https://github.com/fgorke/openfasttrace-language-server) written by [@fgorke](https://github.com/fgorke).
-
-A big thank-you to [@fgorke](https://github.com/fgorke) for developing the OpenFastTrace Language Server!
+Check out the [OpenFastTrace Language Server](https://github.com/itsallcode/openfasttrace-language-server). A big thank-you to [@fgorke](https://github.com/fgorke) for developing the OpenFastTrace Language Server!
 
 Unlike a specific plugin for a single IDE, language servers provide a standardized way to integrate language features across different IDEs (e.g., VS Code or the JetBrains IDEs).
 
-* [User Guide](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/user-guide/README.md)
-* [Demo](https://github.com/fgorke/openfasttrace-language-server/blob/main/doc/demo/README.md)
-* [Releases](https://github.com/fgorke/openfasttrace-language-server/releases)
+* [User Guide](https://github.com/itsallcode/openfasttrace-language-server/blob/main/doc/user-guide/README.md)
+* [Demo](https://github.com/itsallcode/openfasttrace-language-server/blob/main/doc/demo/README.md)
+* [Releases](https://github.com/itsallcode/openfasttrace-language-server/releases)

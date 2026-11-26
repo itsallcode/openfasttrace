@@ -128,8 +128,8 @@ jobs:
         distribution: temurin
         java-version: 17
         server-id: ossindex
-        server-username: OSSINDEX_USERNAME
-        server-password: OSSINDEX_TOKEN
+        server-username-env-var: OSSINDEX_USERNAME
+        server-password-env-var: OSSINDEX_TOKEN
     - name: Ossindex
       run: |
         mvn -T 1C --errors --batch-mode test-compile \
@@ -139,12 +139,89 @@ jobs:
         OSSINDEX_USERNAME: ${{ secrets.OSSINDEX_USERNAME }}
         OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
 
+  native-image:
+    # [bld->dsn~cli.native-executable~1]
+    # [bld->dsn~cli.native-executable.support-built-in-plugins~1]
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            runner: ubuntu-26.04
+            output: openfasttrace-linux-x64
+          - target: linux-arm64
+            runner: ubuntu-26.04-arm
+            output: openfasttrace-linux-arm64
+          - target: macos-arm64
+            runner: macos-26
+            output: openfasttrace-macos-arm64
+          - target: windows-x64
+            runner: windows-2025
+            output: openfasttrace-windows-x64
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    name: Native image ${{ matrix.target }}
+    concurrency:
+      group: ${{ github.workflow }}-native-${{ github.ref }}-${{ matrix.target }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: graalvm/setup-graalvm@60e76998d25690099182b796e99b8804da582d90 # v1.6.10
+        name: Set up GraalVM 25
+        with:
+          version: '25.6'
+          distribution: graalvm
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+
+      - name: Configure GraalVM 25 Maven toolchain
+        run: |
+          mkdir -p "$HOME/.m2"
+          cat > "$HOME/.m2/toolchains.xml" <<EOF
+          <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 https://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>25</version>
+              </provides>
+              <configuration>
+                <jdkHome>${JAVA_HOME}</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
+
+      - name: Build and test native image with Maven
+        run: >-
+          mvn --batch-mode -T 1C -Pnative-image -pl native-image -am verify
+          -Dossindex.skip=true
+          -Djava.version=25
+          -Dnative.image.name=${{ matrix.output }}
+
+      - name: Upload native image
+        uses: actions/upload-artifact@v7
+        with:
+          name: openfasttrace-native-${{ matrix.target }}
+          path: native-image/target/${{ matrix.output }}*
+          if-no-files-found: error
+
   build:
     permissions:
       contents: read
     needs:
     - matrix-build
     - ossindex
+    - native-image
     runs-on: ubuntu-slim
     steps:
       - run: echo "Build successful"

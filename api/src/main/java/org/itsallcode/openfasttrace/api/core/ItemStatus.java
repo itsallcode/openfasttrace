@@ -5,6 +5,7 @@ import java.util.Locale;
 /**
  * This enumeration represents the different statuses of an item.
  */
+// [impl->dsn~specification-item~4]
 public enum ItemStatus
 {
     /**
@@ -22,7 +23,11 @@ public enum ItemStatus
     /**
      * The item is rejected.
      */
-    REJECTED;
+    REJECTED,
+    /**
+     * The item declares an unknown status.
+     */
+    UNKNOWN;
 
     /**
      * Parses the given text and return the matching {@link ItemStatus}.
@@ -35,15 +40,32 @@ public enum ItemStatus
      */
     public static ItemStatus parseString(final String text)
     {
+        final ItemStatus status = parseOrUnknown(text);
+        if (status != UNKNOWN)
+        {
+            return status;
+        }
+        throw new IllegalArgumentException(
+                "Unrecognized specification item status: \"" + text + "\"");
+    }
+
+    /**
+     * Parses the given text and returns the matching {@link ItemStatus} or {@link #UNKNOWN}.
+     *
+     * @param text
+     *            the text to parse, e.g. {@code "APPROVED"}.
+     * @return the matching {@link ItemStatus}, or {@link #UNKNOWN} when no known status matches
+     */
+    public static ItemStatus parseOrUnknown(final String text)
+    {
         for (final ItemStatus value : values())
         {
-            if (text.equalsIgnoreCase(value.toString()))
+            if (value != UNKNOWN && text.equalsIgnoreCase(value.toString()))
             {
                 return value;
             }
         }
-        throw new IllegalArgumentException(
-                "Unrecognized specification item status: \"" + text + "\"");
+        return UNKNOWN;
     }
 
     @Override

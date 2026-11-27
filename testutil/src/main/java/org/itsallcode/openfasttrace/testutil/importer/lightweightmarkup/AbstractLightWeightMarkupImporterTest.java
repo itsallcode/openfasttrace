@@ -6,7 +6,12 @@ import static org.itsallcode.matcher.auto.AutoMatcher.contains;
 import static org.itsallcode.openfasttrace.testutil.core.ItemBuilderFactory.item;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -26,6 +31,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final String FILENAME = "the_file.md";
     private static final Path PATH = Path.of("/a/b/c.markdown");
+    private static final Logger LOGGER = Logger.getLogger(
+            "org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter");
     private static final String NL = System.lineSeparator();
     private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
     private final int titleLocationOffset;
@@ -626,6 +633,65 @@ public abstract class AbstractLightWeightMarkupImporterTest
                         .status(ItemStatus.DRAFT)
                         .location("status.MD", 1)
                         .build()));
+    }
+
+    // [utest->dsn~lightweight-markup.specification-item-status~2]
+    @Test
+    void testUnknownStatusIsRetainedAndLogsWarning()
+    {
+        final Level originalLevel = LOGGER.getLevel();
+        final RecordingLogHandler logHandler = new RecordingLogHandler();
+        LOGGER.setLevel(Level.WARNING);
+        LOGGER.addHandler(logHandler);
+        try
+        {
+            assertImport("status.md", """
+                    `req~unknown-status~1`
+                    Status: in review
+                    `req~approved-status~1`
+                    Status: approved
+                    """, contains(
+                    item().id("req", "unknown-status", 1).status(ItemStatus.UNKNOWN)
+                            .location("status.md", 1).build(),
+                    item().id("req", "approved-status", 1).status(ItemStatus.APPROVED)
+                            .location("status.md", 3).build()));
+        }
+        finally
+        {
+            LOGGER.removeHandler(logHandler);
+            LOGGER.setLevel(originalLevel);
+        }
+        assertThat(logHandler.containsWarning("Found unknown status 'in review'"), equalTo(true));
+    }
+
+    private static final class RecordingLogHandler extends Handler
+    {
+        private final List<LogRecord> records = new ArrayList<>();
+
+        @Override
+        public void publish(final LogRecord logRecord)
+        {
+            this.records.add(logRecord);
+        }
+
+        @Override
+        public void flush()
+        {
+            // Nothing to flush.
+        }
+
+        @Override
+        public void close()
+        {
+            // Nothing to close.
+        }
+
+        private boolean containsWarning(final String message)
+        {
+            return this.records.stream()
+                    .anyMatch(logRecord -> logRecord.getLevel() == Level.WARNING
+                            && logRecord.getMessage().contains(message));
+        }
     }
 
     // [impl -> dsn~md.specification-item-id-format~4] with UTF-8

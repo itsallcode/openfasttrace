@@ -456,6 +456,21 @@ Needs: impl, utest, itest
 
 RST and Markdown share a common underlying parser that operates on a line-by-line basis.
 
+##### Lightweight-Markup Specification-Item Status
+`dsn~lightweight-markup.specification-item-status~2`
+
+The shared line parser imports a `Status:` declaration as the current
+specification item's `ItemStatus` when its value is `approved`, `proposed`,
+`draft`, or `rejected`. For any other value, it assigns `UNKNOWN` and reports a
+warning.
+
+Covers:
+
+* `req~specification-item~3`
+* `req~report-unknown-lightweight-markup-statuses~1`
+
+Needs: impl, utest, itest
+
 ##### Markdown Comment Coverage Tags
 `dsn~markdown.comment-coverage-tags~1`
 
@@ -895,13 +910,14 @@ Needs: impl, utest
 ### Internal Data Structures
 
 #### Specification Item
-`dsn~specification-item~3`
+`dsn~specification-item~4`
 
 A `SpecificationItem` consists of the following parts:
 
 * ID (`SpecificationItemId`)
 * Title (`String`, optional)
-* Status (`Enum`, optional)
+* Status (`ItemStatus`: `APPROVED`, `PROPOSED`, `DRAFT`, `REJECTED`, or
+  `UNKNOWN`; optional)
 * Description (`String`, optional)
 * Rationale (`String`, optional)
 * Comment (`String`, optional)
@@ -918,7 +934,7 @@ See `req~forwarding_needed_coverage~1` for an explanation of the "forwards" fiel
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~3`
 * `req~forwarding_needed_coverage~1`
 
 Needs: impl, utest
@@ -933,7 +949,7 @@ This allows navigating between specification items.
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~3`
 
 Needs: impl, utest
 
@@ -948,7 +964,7 @@ A `SpecificationItemId` consists of:
 
 Covers:
 
-* `req~specification-item~2`
+* `req~specification-item~3`
 
 Needs: impl, utest
 

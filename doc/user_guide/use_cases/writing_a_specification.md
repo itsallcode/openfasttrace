@@ -107,14 +107,15 @@ Keywords are followed by a colon that separates the keyword from the content. De
 
 ##### `Status`
 
-The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, `rejected` to set the status of the item. The status can be used to filter specification items during import (see [Import options](../reference/oft_command_line.md#import-options)). Has to occur before the `Description`, `Rationale` or `Comment`. 
+The `Status` keyword takes a single value from `draft`, `proposed`, `approved`, `rejected` to set the status of the item.
+OFT reports a warning for any other value.
+The status can be used to filter specification items during import (see [Import options](../reference/oft_command_line.md#import-options)). Has to occur before the `Description`, `Rationale` or `Comment`.
 
     ### A draft spec items
     `req~draft-item~1`
     Status: draft
     
     This spec item is in the draft state and thus not considered final.
-   
 
 ##### `Covers`
 

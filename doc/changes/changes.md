@@ -6,7 +6,8 @@ nav_order: 9
 
 # Changes
 
-* [4.12.0](changes_4.12.0.md) unreleased
+* [4.12.1](changes_4.12.1.md) unreleased
+* [4.12.0](changes_4.12.0.md)
 * [4.11.0](changes_4.11.0.md)
 * [4.10.0](changes_4.10.0.md)
 * [4.9.0](changes_4.9.0.md)

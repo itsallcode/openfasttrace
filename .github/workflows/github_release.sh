@@ -30,13 +30,38 @@ calculate_checksum "$sbom_path"
 readonly sbom_checksum_path="${sbom_path}.sha256"
 
 shopt -s nullglob
-native_assets=()
 native_release_assets=()
-for native_asset in "$base_dir"/native-image/target/openfasttrace-*; do
-    [[ ${native_asset##*/} =~ ^openfasttrace-(linux|windows|macos)([-._].*)?$ ]] &&
-        native_assets+=("$native_asset")
-        calculate_checksum "$native_asset"
-        native_release_assets+=("$native_asset" "${native_asset}.sha256")
+package_native_binary() {
+    local native_binary="$1"
+    local temporary_directory
+    local package_path
+    temporary_directory=$(mktemp -d)
+    readonly temporary_directory
+    cp "$native_binary" "$temporary_directory/oft"
+
+    case "${native_binary##*/}" in
+        openfasttrace-windows*)
+            package_path="${native_binary%.exe}.zip"
+            (cd "$temporary_directory" && zip --quiet "$package_path" oft)
+            ;;
+        openfasttrace-linux* | openfasttrace-macos*)
+            package_path="${native_binary}.tar.gz"
+            tar --create --gzip --file "$package_path" --directory "$temporary_directory" oft
+            ;;
+        *)
+            rm -rf "$temporary_directory"
+            return 1
+            ;;
+    esac
+
+    rm -rf "$temporary_directory"
+    calculate_checksum "$package_path"
+    native_release_assets+=("$package_path" "${package_path}.sha256")
+}
+
+for native_binary in "$base_dir"/native-image/target/openfasttrace-*; do
+    [[ ${native_binary##*/} =~ ^openfasttrace-(linux|windows|macos)([-._].*)?$ ]] || continue
+    package_native_binary "$native_binary"
 done
 
 # Create GitHub release
@@ -56,7 +81,7 @@ echo "Artifact file    : $artifact_path"
 echo "Artifact checksum: $artifact_checksum_path"
 echo "SBOM file        : $sbom_path"
 echo "SBOM checksum    : $sbom_checksum_path"
-printf 'Platform binaries: %s\n' "${native_assets[@]}"
+printf 'Platform binary packages: %s\n' "${native_release_assets[@]}"
 
 release_url=$(gh release create --latest --title "$title" --notes "$notes" --target main "$tag" \
     "$artifact_path" "$artifact_checksum_path" "$sbom_path" "$sbom_checksum_path" \

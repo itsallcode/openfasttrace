@@ -69,6 +69,7 @@ class ITestSelfTrace
         final Path baseDir = getProjectBaseDir();
         return ImportSettings.builder()
                 .addInputs(baseDir.resolve("doc/spec/"))
+                .addInputs(baseDir.resolve(".github/workflows/"))
                 .addInputs(baseDir.resolve("product/pom.xml"))
                 .addInputs(baseDir.resolve("native-image/pom.xml"))
                 .addInputs(findInputDirectories(baseDir))

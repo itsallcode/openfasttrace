@@ -48,23 +48,27 @@ class ClassPathServiceLoaderTest
         when(serviceLoaderMock.stream()).thenReturn(Stream.of(providerMock));
         when(providerMock.get()).thenReturn(service);
         when(originMock.getClassLoader()).thenReturn(DummyServiceImpl.class.getClassLoader());
-        final List<DummyService> services = new ClassPathServiceLoader<>(originMock, serviceLoaderMock)
-                .load().toList();
-        assertThat(services, contains(sameInstance(service)));
+        try (ClassPathServiceLoader<DummyService> loader = new ClassPathServiceLoader<>(originMock, serviceLoaderMock))
+        {
+            final List<DummyService> services = loader.load().toList();
+            assertThat(services, contains(sameInstance(service)));
+        }
     }
 
     @Test
     void loadingIgnoresServicesFromOtherClassLoaders(@Mock final ServiceLoader<DummyService> serviceLoaderMock,
             @Mock final Provider<DummyService> providerMock, @Mock final ServiceOrigin originMock,
-            @Mock ClassLoader classLoaderMock)
+            @Mock final ClassLoader classLoaderMock)
     {
         final DummyServiceImpl service = new DummyServiceImpl();
         when(serviceLoaderMock.stream()).thenReturn(Stream.of(providerMock));
         when(providerMock.get()).thenReturn(service);
         when(originMock.getClassLoader()).thenReturn(classLoaderMock);
-        final List<DummyService> services = new ClassPathServiceLoader<>(originMock, serviceLoaderMock)
-                .load().toList();
-        assertThat(services, empty());
+        try (ClassPathServiceLoader<DummyService> loader = new ClassPathServiceLoader<>(originMock, serviceLoaderMock))
+        {
+            final List<DummyService> services = loader.load().toList();
+            assertThat(services, empty());
+        }
     }
 
     interface DummyService

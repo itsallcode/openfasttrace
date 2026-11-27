@@ -1,54 +1,65 @@
 package org.itsallcode.openfasttrace.testutil.core;
 
 import org.itsallcode.openfasttrace.api.core.SpecificationItem;
+import org.itsallcode.openfasttrace.api.core.SpecificationItem.Builder;
 import org.itsallcode.openfasttrace.api.core.SpecificationItemId;
 
 /**
- * The {@link ItemBuilderFactory} class provides convenience methods for creating instances of {@link SpecificationItem}.
+ * The {@link ItemBuilderFactory} class provides convenience methods for creating instances of
+ * {@link SpecificationItem}.
  */
-public final class ItemBuilderFactory {
-    private ItemBuilderFactory() {
+public final class ItemBuilderFactory
+{
+    private ItemBuilderFactory()
+    {
         // prevent instantiation.
     }
 
     /**
-     * Creates a new instance of {@link SpecificationItem.Builder}.
+     * Creates a new instance of {@link Builder}.
      *
-     * @return a new instance of {@link SpecificationItem.Builder}
+     * @return a new instance of {@link Builder}
      */
-    public static SpecificationItem.Builder item() {
+    public static Builder item()
+    {
         return SpecificationItem.builder();
     }
 
     /**
-     * Creates a new instance of {@link SpecificationItem.Builder} with the specified ID.
+     * Creates a new instance of {@link Builder} with the specified ID.
      *
-     * @param id ID of the specification item
+     * @param id
+     *            ID of the specification item
      *
-     * @return a new instance of {@link SpecificationItem.Builder} with the specified ID
+     * @return a new instance of {@link Builder} with the specified ID
      */
-    public static SpecificationItem.Builder itemWithId(SpecificationItemId id) {
+    public static Builder itemWithId(final SpecificationItemId id)
+    {
         return SpecificationItem.builder().id(id);
     }
 
     /**
-     * Returns a new instance of {@link SpecificationItem.Builder} with the default filename and the specified line.
+     * Returns a new instance of {@link Builder} with the default filename and the specified line.
      *
-     * @param line line number of the specification item in the file
+     * @param line
+     *            line number of the specification item in the file
      *
-     * @return a new instance of {@link SpecificationItem.Builder} with the default filename and the specified line
+     * @return a new instance of {@link Builder} with the default filename and the specified line
      */
-    public static SpecificationItem.Builder itemWithDefaultFilenameInLine(final int line) {
+    public static Builder itemWithDefaultFilenameInLine(final int line)
+    {
         return SpecificationItem.builder().location("file", line);
     }
 
     /**
      * Creates a copy of an item without source locations on its IDs.
      *
-     * @param item item to copy
+     * @param item
+     *            item to copy
      * @return copy without source locations on its IDs
      */
-    public static SpecificationItem withoutIdLocations(final SpecificationItem item) {
+    public static SpecificationItem withoutIdLocations(final SpecificationItem item)
+    {
         return item.toBuilder()
                 .id(item.getId())
                 .coveredIds(item.getCoveredIds())

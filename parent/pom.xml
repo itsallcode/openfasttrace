@@ -9,9 +9,8 @@
     <packaging>pom</packaging>
     <url>https://github.com/itsallcode/openfasttrace</url>
     <properties>
-        <revision>4.11.0</revision>
+        <revision>4.12.0</revision>
         <java.version>17</java.version>
-        <junit.version>6.1.0-M1</junit.version>
         <junit.version>6.1.3</junit.version>
         <maven.surefire.version>3.6.1</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -223,7 +222,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>5.24.0</version>
+                <version>5.25.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -538,6 +537,23 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.23.0</version>
+                <configuration>
+                    <ruleSet>
+                        <rules>
+                            <rule>
+                                <groupId>net.sourceforge.plantuml</groupId>
+                                <artifactId>plantuml</artifactId>
+                                <ignoreVersions>
+                                    <ignoreVersion>
+                                        <type>regex</type>
+                                        <!-- Ignore legacy numeric and year-based version schemes. -->
+                                        <version>[0-9]{4,}(\..*)?</version>
+                                    </ignoreVersion>
+                                </ignoreVersions>
+                            </rule>
+                        </rules>
+                    </ruleSet>
+                </configuration>
             </plugin>
             <plugin>
                 <!-- Deployment of this module is not required -->
@@ -677,9 +693,9 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>com.github.jeluard</groupId>
+                    <groupId>org.itsallcode</groupId>
                     <artifactId>plantuml-maven-plugin</artifactId>
-                    <version>1.2</version>
+                    <version>0.2</version>
                     <configuration>
                         <sourceFiles>
                             <directory>${basedir}/model/diagrams</directory>
@@ -694,7 +710,7 @@
                         <dependency>
                             <groupId>net.sourceforge.plantuml</groupId>
                             <artifactId>plantuml</artifactId>
-                            <version>1.2026.9</version>
+                            <version>1.2026.10</version>
                         </dependency>
                     </dependencies>
                 </plugin>

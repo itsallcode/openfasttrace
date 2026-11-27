@@ -32,8 +32,10 @@ public final class SpecificationItemId implements Comparable<SpecificationItemId
     public static final String ARTIFACT_TYPE_SEPARATOR = "~";
     /**
      * Separator between name and revision in an item ID.
+     * 
      * @deprecated with 4.12.0 we widened the accepted separators to include '#'.
-     * Use {@link REVISION_SEPARATOR_PATTERN} for detection or {@link DEFAULT_REVISION_SEPARATOR} for output instead.
+     *             Use {@link #REVISION_SEPARATOR_PATTERN} for detection or {@link #DEFAULT_REVISION_SEPARATOR} for
+     *             output instead.
      */
     @Deprecated(forRemoval = true, since = "4.12.0")
     public static final String REVISION_SEPARATOR = "~";

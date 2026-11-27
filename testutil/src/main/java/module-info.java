@@ -18,7 +18,7 @@ module org.itsallcode.openfasttrace.testutil
     requires transitive org.junit.jupiter.params;
     requires transitive org.mockito;
     requires transitive org.mockito.junit.jupiter;
-    requires java.logging;
+    requires transitive java.logging;
     requires transitive java.xml;
-    requires org.itsallcode.openfasttrace.api;
+    requires transitive org.itsallcode.openfasttrace.api;
 }

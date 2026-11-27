@@ -1516,7 +1516,7 @@ Needs: itest, bld
 #### Native Binary Release Packages
 `dsn~cli.native-executable.release-packaging~1`
 
-The GitHub release workflow creates compress archives containing the native executable called `oft`.
+The GitHub release workflow creates compressed archives containing the native executable called `oft`.
 Archives are `.tar.gz` for Linux and macOS or a `.zip` package for Windows. The workflow calculates the SHA-256 checksum of each compressed package.
 
 Covers:

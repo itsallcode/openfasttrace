@@ -538,6 +538,23 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.23.0</version>
+                <configuration>
+                    <ruleSet>
+                        <rules>
+                            <rule>
+                                <groupId>net.sourceforge.plantuml</groupId>
+                                <artifactId>plantuml</artifactId>
+                                <ignoreVersions>
+                                    <ignoreVersion>
+                                        <type>regex</type>
+                                        <!-- Ignore legacy numeric and year-based version schemes. -->
+                                        <version>[0-9]{4,}(\..*)?</version>
+                                    </ignoreVersion>
+                                </ignoreVersions>
+                            </rule>
+                        </rules>
+                    </ruleSet>
+                </configuration>
             </plugin>
             <plugin>
                 <!-- Deployment of this module is not required -->

@@ -31,6 +31,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
 {
     private static final String FILENAME = "the_file.md";
     private static final Path PATH = Path.of("/a/b/c.markdown");
+    private static final Logger LOGGER = Logger.getLogger(
+            "org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter");
     private static final String NL = System.lineSeparator();
     private static final Pattern TITLE_PLACEHOLDER = Pattern.compile("\\$\\{title\\(\"([^\"]+)\", (\\d+)\\)}");
     private final int titleLocationOffset;
@@ -637,12 +639,10 @@ public abstract class AbstractLightWeightMarkupImporterTest
     @Test
     void testUnknownStatusIsRetainedAndLogsWarning()
     {
-        final Logger logger = Logger.getLogger(
-                "org.itsallcode.openfasttrace.importer.lightweightmarkup.AbstractLightWeightMarkupImporter");
-        final Level originalLevel = logger.getLevel();
+        final Level originalLevel = LOGGER.getLevel();
         final RecordingLogHandler logHandler = new RecordingLogHandler();
-        logger.setLevel(Level.WARNING);
-        logger.addHandler(logHandler);
+        LOGGER.setLevel(Level.WARNING);
+        LOGGER.addHandler(logHandler);
         try
         {
             assertImport("status.md", """
@@ -658,8 +658,8 @@ public abstract class AbstractLightWeightMarkupImporterTest
         }
         finally
         {
-            logger.removeHandler(logHandler);
-            logger.setLevel(originalLevel);
+            LOGGER.removeHandler(logHandler);
+            LOGGER.setLevel(originalLevel);
         }
         assertThat(logHandler.containsWarning("Found unknown status 'in review'"), equalTo(true));
     }

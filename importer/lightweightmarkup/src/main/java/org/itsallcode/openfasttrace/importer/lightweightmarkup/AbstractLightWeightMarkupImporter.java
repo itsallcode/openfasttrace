@@ -173,15 +173,12 @@ public abstract class AbstractLightWeightMarkupImporter implements Importer, Lin
     // [impl->dsn~lightweight-markup.specification-item-status~2]
     protected void setStatus()
     {
-        final String status = this.stateMachine.getLastToken();
-        try
+        final String statusText = this.stateMachine.getLastToken();
+        final ItemStatus status = ItemStatus.parseOrUnknown(statusText);
+        this.listener.setStatus(status);
+        if (status == ItemStatus.UNKNOWN)
         {
-            this.listener.setStatus(ItemStatus.parseString(status));
-        }
-        catch (final IllegalArgumentException exception)
-        {
-            this.listener.setStatus(ItemStatus.UNKNOWN);
-            LOGGER.warning(() -> "Found unknown status '" + status + "' in '" + this.file + ":"
+            LOGGER.warning(() -> "Found unknown status '" + statusText + "' in '" + this.file + ":"
                     + this.currentContext.lineNumber() + "'.");
         }
     }

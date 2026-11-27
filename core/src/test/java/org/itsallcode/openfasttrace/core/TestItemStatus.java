@@ -30,4 +30,11 @@ class TestItemStatus
                 () -> ItemStatus.parseString("unknown"));
         assertThat(exception.getMessage(), equalTo("Unrecognized specification item status: \"unknown\""));
     }
+
+    // [utest->dsn~specification-item~4]
+    @Test
+    void testParseUnknownStringAsUnknown()
+    {
+        assertThat(ItemStatus.parseOrUnknown("in review"), equalTo(ItemStatus.UNKNOWN));
+    }
 }

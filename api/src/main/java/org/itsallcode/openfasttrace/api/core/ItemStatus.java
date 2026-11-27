@@ -40,6 +40,24 @@ public enum ItemStatus
      */
     public static ItemStatus parseString(final String text)
     {
+        final ItemStatus status = parseOrUnknown(text);
+        if (status != UNKNOWN)
+        {
+            return status;
+        }
+        throw new IllegalArgumentException(
+                "Unrecognized specification item status: \"" + text + "\"");
+    }
+
+    /**
+     * Parses the given text and returns the matching {@link ItemStatus} or {@link #UNKNOWN}.
+     *
+     * @param text
+     *            the text to parse, e.g. {@code "APPROVED"}.
+     * @return the matching {@link ItemStatus}, or {@link #UNKNOWN} when no known status matches
+     */
+    public static ItemStatus parseOrUnknown(final String text)
+    {
         for (final ItemStatus value : values())
         {
             if (value != UNKNOWN && text.equalsIgnoreCase(value.toString()))
@@ -47,8 +65,7 @@ public enum ItemStatus
                 return value;
             }
         }
-        throw new IllegalArgumentException(
-                "Unrecognized specification item status: \"" + text + "\"");
+        return UNKNOWN;
     }
 
     @Override

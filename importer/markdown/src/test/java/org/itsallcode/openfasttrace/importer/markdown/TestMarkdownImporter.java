@@ -48,7 +48,7 @@ class TestMarkdownImporter
     // [utest->dsn~md.specification-item-title~1]
     @ParameterizedTest
     @CsvSource(
-    { "#Title", "# Title", "###### Title", "#   Title", "# Änderung" })
+    { "'#Title'", "'# Title'", "'###### Title'", "'#   Title'", "'# Änderung'" })
     void testIdentifyTitle(final String text)
     {
         MarkdownAsserts.assertMatch(MdPattern.TITLE, text);
@@ -73,7 +73,7 @@ class TestMarkdownImporter
 
     @ParameterizedTest
     @CsvSource(
-    { "Needs:", "#Needs: abc", "' Needs: abc'", "Needs: önderung" })
+    { "Needs:", "'#Needs: abc'", "' Needs: abc'", "Needs: önderung" })
     void testIdentifyNonNeeds(final String text)
     {
         MarkdownAsserts.assertMismatch(MdPattern.NEEDS_INT, text);
@@ -90,7 +90,7 @@ class TestMarkdownImporter
     // Note that this test does not evaluate the validity of the tags themselves. Only if the tags-marker is present.
     @ParameterizedTest
     @CsvSource(
-    { "Tags:", "#Needs: abc", "' Needs: abc'", "Needs: änderung", })
+    { "Tags:", "'#Needs: abc'", "' Needs: abc'", "Needs: änderung", })
     void testIdentifyNonTags(final String text)
     {
         MarkdownAsserts.assertMismatch(MdPattern.TAGS_INT, text);
@@ -98,7 +98,8 @@ class TestMarkdownImporter
 
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
-    @ValueSource(strings = { "Covers: req~foo~1", "Covers: `req~foo~1`", "Covers:req~foo~1",
+    @ValueSource(strings =
+    { "Covers: req~foo~1", "Covers: `req~foo~1`", "Covers:req~foo~1",
             "Covers:  \treq~foo~1 ", "Covers: req~foo~1, req~bar~2", "Covers: `req~foo~1`, `req~bar~2`" })
     void testIdentifyCoversInline(final String text)
     {
@@ -107,7 +108,8 @@ class TestMarkdownImporter
 
     // [utest->dsn~md.covers-single-line~1]
     @ParameterizedTest
-    @ValueSource(strings = { "Covers:", "#Covers: req~foo~1", " Covers: req~foo~1", "Covers: abc",
+    @ValueSource(strings =
+    { "Covers:", "#Covers: req~foo~1", " Covers: req~foo~1", "Covers: abc",
             "Covers; req~foo~1", "Covers req~foo~1", "Covers: req~foo~1 req~bar~2",
             "Covers: req~foo~1; req~bar~2", "Covers: someone~forgot~1a~comma-1",
             "Covers: `req~foo~1", "Covers: req~foo~1`" })

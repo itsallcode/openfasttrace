@@ -165,6 +165,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
       - name: Create GitHub Release
+        # [bld->dsn~cli.native-executable.release-packaging~1]
         run: ./.github/workflows/github_release.sh
         env:
           GH_TOKEN: ${{ github.token }}

@@ -31,7 +31,6 @@ readonly sbom_checksum_path="${sbom_path}.sha256"
 
 shopt -s nullglob
 native_release_assets=()
-# [bld->dsn~cli.native-executable.release-packaging~1]
 package_native_binary() {
     local native_binary="$1"
     local temporary_directory

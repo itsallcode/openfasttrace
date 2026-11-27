@@ -1,4 +1,4 @@
-# OpenFastTrace 4.12.0, released 2026-11-26
+# OpenFastTrace 4.12.0, released 2026-11-27
 
 Code name: Syntax usability and JSX and TSX tag importer
 

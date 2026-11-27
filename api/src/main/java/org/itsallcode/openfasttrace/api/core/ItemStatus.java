@@ -5,6 +5,7 @@ import java.util.Locale;
 /**
  * This enumeration represents the different statuses of an item.
  */
+// [impl->dsn~specification-item~4]
 public enum ItemStatus
 {
     /**
@@ -22,7 +23,11 @@ public enum ItemStatus
     /**
      * The item is rejected.
      */
-    REJECTED;
+    REJECTED,
+    /**
+     * The item declares an unknown status.
+     */
+    UNKNOWN;
 
     /**
      * Parses the given text and return the matching {@link ItemStatus}.
@@ -37,7 +42,7 @@ public enum ItemStatus
     {
         for (final ItemStatus value : values())
         {
-            if (text.equalsIgnoreCase(value.toString()))
+            if (value != UNKNOWN && text.equalsIgnoreCase(value.toString()))
             {
                 return value;
             }

@@ -253,7 +253,7 @@ Needs: req
 ### Anatomy of Specification Items
 
 #### Specification Item
-`req~specification-item~2`
+`req~specification-item~3`
 
 A specification item consists of the following parts:
 
@@ -272,7 +272,8 @@ The ID is a unique key through which the specification item can be referenced. I
 
 The title is a short summary of the specification item, mostly intended to appear in overview lists.
 
-The status of the item is one of "approved", "proposed", "draft" and "rejected".
+If specified, the status of the item must be one of `approved`, `proposed`,
+`draft`, or `rejected`.
 
 The description contains the normative part of the specification.
 
@@ -375,6 +376,20 @@ Tags assigned to specification items in lightweight markup documents must have o
 Rationale:
 
 The tag format is easy to parse and robust. It is also in line with what most other programs would consider a valid tag, which is important for interoperability.
+
+Covers:
+
+* [feat~markdown-import~1](#markdown-import)
+* [feat~rst-import~1](#restructured-text-rst-import)
+
+Needs: dsn
+
+##### Report Unknown Lightweight-Markup Statuses
+`req~report-unknown-lightweight-markup-statuses~1`
+
+OFT reports a warning when a Markdown or reStructuredText parser encounters a
+`Status:` declaration whose value does not identify a known specification-item
+status.
 
 Covers:
 

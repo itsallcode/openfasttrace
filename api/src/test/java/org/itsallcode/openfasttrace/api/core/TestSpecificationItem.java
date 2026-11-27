@@ -17,7 +17,7 @@ class TestSpecificationItem
     private static final SpecificationItemId COVERED_ID = SpecificationItemId.parseId("feat~covered~2");
     private static final SpecificationItemId DEPEND_ON_ID = SpecificationItemId.parseId("req~dependency~3");
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuilderAcceptsLocatedIds()
     {
@@ -30,7 +30,7 @@ class TestSpecificationItem
                 () -> assertThat(item.getDependOnIds(), contains(DEPEND_ON_ID)));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testPreservesCompatibilityForUnlocatedIds()
     {
@@ -43,7 +43,7 @@ class TestSpecificationItem
                 () -> assertThat(item.getDependOnIds(), contains(DEPEND_ON_ID)));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testToBuilderPreservesAllValues()
     {
@@ -56,7 +56,7 @@ class TestSpecificationItem
         assertThat(item.toBuilder().build(), equalTo(item));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testToBuilderDoesNotModifyOriginalItem()
     {
@@ -70,7 +70,7 @@ class TestSpecificationItem
                 () -> assertThat(copy.getCoveredIds(), contains(COVERED_ID, DEPEND_ON_ID)));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuilderReplacesCoveredIds()
     {
@@ -80,7 +80,7 @@ class TestSpecificationItem
         assertThat(item.getCoveredIds(), contains(COVERED_ID));
     }
 
-    // [utest->dsn~specification-item~3]
+    // [utest->dsn~specification-item~4]
     @Test
     void testBuilderReplacesDependencyIds()
     {

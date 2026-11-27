@@ -341,6 +341,27 @@ class CliStarterInternalIT {
         );
     }
 
+    // [itest->dsn~lightweight-markup.specification-item-status~2]
+    @Test
+    void testTraceWithUnknownStatusReportsWarning(@TempDir final Path tempDir) throws IOException {
+        final Path specFile = tempDir.resolve("spec.md");
+        Files.writeString(specFile, """
+                `req~unknown-status~1`
+                Status: in review
+                """);
+
+        final ExitStatus status = runInternal(
+                TRACE_COMMAND, specFile.toString(),
+                OUTPUT_FILE_PARAMETER, this.outputFile.toString(),
+                REPORT_VERBOSITY_PARAMETER, "all");
+
+        assertAll(
+                () -> assertThat(status, equalTo(ExitStatus.OK)),
+                () -> assertOutputFileExists(true),
+                () -> assertThat(getStdErr(), containsString("Found unknown status 'in review'")),
+                () -> assertThat(getOutputFileContent(), containsString("unknown")));
+    }
+
     private void assertOutputFileContainsOldMacNewlines() {
         assertThat("Has old Mac newlines", getOutputFileContent().contains(CARRIAGE_RETURN),
                 equalTo(true));

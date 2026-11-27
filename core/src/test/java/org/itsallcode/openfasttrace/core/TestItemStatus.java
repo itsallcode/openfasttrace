@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 class TestItemStatus
 {
 
+    // [utest->dsn~specification-item~4]
     @Test
     void testParseString()
     {
@@ -21,9 +22,12 @@ class TestItemStatus
         assertThat(ItemStatus.parseString("ReJeCtEd"), equalTo(ItemStatus.REJECTED));
     }
 
+    // [utest->dsn~specification-item~4]
     @Test
     void testParseUnknownStringThrowsException()
     {
-        assertThrows(IllegalArgumentException.class, () -> ItemStatus.parseString("Unkown"));
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ItemStatus.parseString("unknown"));
+        assertThat(exception.getMessage(), equalTo("Unrecognized specification item status: \"unknown\""));
     }
 }

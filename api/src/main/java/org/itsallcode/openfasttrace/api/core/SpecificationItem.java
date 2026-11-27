@@ -6,7 +6,7 @@ import java.util.*;
  * A specification item that requires coverage from other items and provides
  * coverage for other items.
  */
-// [impl->dsn~specification-item~3]
+// [impl->dsn~specification-item~4]
 public final class SpecificationItem
 {
     private final LocatedSpecificationItemId id;

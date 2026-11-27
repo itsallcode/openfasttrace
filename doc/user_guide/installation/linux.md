@@ -12,11 +12,12 @@ There are several ways to install OpenFastTrace on Linux, depending on your dist
 
 ### Native Executable
 
-Download `openfasttrace-linux-x64` or `openfasttrace-linux-arm64` from the [GitHub Releases](https://github.com/itsallcode/openfasttrace/releases) page. The native executable does not require Java. Make it executable and run it:
+Download `openfasttrace-linux-x64.tar.gz` or `openfasttrace-linux-arm64.tar.gz` from the [GitHub Releases](https://github.com/itsallcode/openfasttrace/releases) page. Extract the archive, make the included `oft` executable runnable, and start it. The native executable does not require Java:
 
 ```bash
-chmod +x openfasttrace-linux-x64
-./openfasttrace-linux-x64 --help
+tar -xzf openfasttrace-linux-x64.tar.gz
+chmod +x oft
+./oft --help
 ```
 
 Use the executable JAR below when you need third-party Java plugin JARs.

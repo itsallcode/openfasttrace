@@ -1146,6 +1146,19 @@ Covers:
 
 Needs: dsn
 
+#### Native Command Line Executable Release Packages
+`req~cli.native-executable.release-packaging~1`
+
+OpenFastTrace distributes native command line executables as GitHub release packages.
+Linux and macOS packages use the `.tar.gz` format, Windows packages use the `.zip` format, and every package contains the executable named `oft`.
+Each package has a SHA-256 checksum file calculated from the compressed package.
+
+Covers:
+
+* [feat~command-line-interface~1](#command-line-interface)
+
+Needs: dsn
+
 ### Third Party Plugins
 
 #### Loading Plugins
